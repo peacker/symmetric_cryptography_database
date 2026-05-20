@@ -21,7 +21,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] Chaskey
 - [x] ChaCha
 - [ ] CIPHERUNICORN-A
-- [ ] CLEFIA
+- [x] CLEFIA
 - [ ] DESX
 - [x] DES
 - [ ] DFC
@@ -34,7 +34,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] IDEA
 - [ ] ICE
 - [ ] ISAAC
-- [ ] KASUMI
+- [x] KASUMI
 - [x] KATAN
 - [x] KTANTAN
 - [ ] Khazad
@@ -62,7 +62,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] Q
 - [ ] RC2
 - [x] RC5
-- [ ] RC6
+- [x] RC6
 - [x] Rijndael
 - [ ] Robin
 - [ ] SAFER
@@ -73,7 +73,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] SHACAL
 - [ ] SHARK
 - [ ] SKIPJACK
-- [ ] SM4
+- [x] SM4
 - [ ] SNOW 2.0
 - [ ] SNOW 3G
 - [ ] SPECKEY
@@ -84,7 +84,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] TEA
 - [ ] Threefish
 - [ ] TREYFER
-- [ ] TWINE
+- [x] TWINE
 - [x] Twofish
 - [ ] Two-key Triple DES
 - [ ] Three-key Triple DES

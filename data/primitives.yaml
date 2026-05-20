@@ -476,3 +476,119 @@ primitives:
       fixed_output_bits: 128
     standard_ids: []
 
+  # ── RC6 family ──────────────────────────────────────────────────────────
+  - id: rc6_32_20_16
+    name: RC6-32/20/16
+    family_id: rc6
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 20
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: rc6_32_20_24
+    name: RC6-32/20/24
+    family_id: rc6
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 20
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: rc6_32_20_32
+    name: RC6-32/20/32
+    family_id: rc6
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 20
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── SM4 family ──────────────────────────────────────────────────────────
+  - id: sm4_128
+    name: SM4
+    family_id: sm4
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 32
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids:
+      - gbt_32907_2016_sm4
+
+  # ── KASUMI family ───────────────────────────────────────────────────────
+  - id: kasumi_128
+    name: KASUMI
+    family_id: kasumi
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 8
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  # ── CLEFIA family ───────────────────────────────────────────────────────
+  - id: clefia_128
+    name: CLEFIA-128
+    family_id: clefia
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 18
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: clefia_192
+    name: CLEFIA-192
+    family_id: clefia
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 22
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: clefia_256
+    name: CLEFIA-256
+    family_id: clefia
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 26
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── TWINE family ────────────────────────────────────────────────────────
+  - id: twine_80
+    name: TWINE-80
+    family_id: twine
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 80
+      rounds: 36
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: twine_128
+    name: TWINE-128
+    family_id: twine
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 36
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+

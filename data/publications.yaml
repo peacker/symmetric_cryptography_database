@@ -289,3 +289,66 @@ publications:
     year: 2010
     venue: RFC 5794
     url: https://www.rfc-editor.org/rfc/rfc5794
+
+  - id: rivest_et_al_1998_rc6
+    kind: article
+    title: "The RC6 Block Cipher"
+    authors:
+      - Ronald L. Rivest
+      - Matt J. B. Robshaw
+      - Ray Sidney
+      - Yiqun Lisa Yin
+    year: 1998
+    venue: AES Candidate Submission
+    url: https://www.cerias.purdue.edu/apps/reports_and_papers/view/2029
+
+  - id: gbt_32907_2016_sm4
+    kind: standard
+    title: "GB/T 32907-2016: SM4 Block Cipher Algorithm"
+    authors: []
+    year: 2016
+    venue: Standardization Administration of China
+    organization: SAC
+    status: active
+    url: http://www.gmbz.org.cn/upload/2018-04-04/1522788048733065051.pdf
+
+  - id: yang_2021_sm_tls
+    kind: article
+    title: "ShangMi (SM) Cipher Suites for TLS 1.3"
+    authors:
+      - Paul Yang
+    year: 2021
+    venue: RFC 8998
+    url: https://www.rfc-editor.org/rfc/rfc8998
+
+  - id: ts_35_202_kasumi
+    kind: standard
+    title: "3GPP TS 35.202: Specification of the 3GPP Confidentiality and Integrity Algorithms; Document 2: KASUMI Specification"
+    authors: []
+    year: 2001
+    venue: 3GPP
+    organization: 3GPP
+    status: active
+    url: https://www.3gpp.org/ftp/Specs/archive/35_series/35.202/
+
+  - id: katagi_moriai_2011_clefia
+    kind: article
+    title: "The 128-Bit Blockcipher CLEFIA"
+    authors:
+      - Masanobu Katagi
+      - Shiho Moriai
+    year: 2011
+    venue: RFC 6114
+    url: https://www.rfc-editor.org/rfc/rfc6114
+
+  - id: suzaki_et_al_2012_twine
+    kind: article
+    title: "The TWINE Family of Lightweight Block Ciphers"
+    authors:
+      - Tomoyasu Suzaki
+      - Kazuhiko Minematsu
+      - Sumio Morioka
+      - Eiji Kobayashi
+    year: 2012
+    venue: FSE 2012
+    url: https://doi.org/10.1007/978-3-642-34047-5_13

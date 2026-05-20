@@ -426,3 +426,90 @@ rounds:
     notes: >
       ARIA alternates two substitution layers and a linear diffusion layer;
       round count depends on key length.
+
+  - id: rc6_round
+    name: RC6 Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        word_bits: 32
+      component_flow:
+        - component_id: xor
+        - component_id: mul_mod
+          params: {modulus: 4294967296}
+        - component_id: rotation_variable
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+      constant_injection: subkeys
+    notes: >
+      RC6 ARX-style round with data-dependent rotation and integer multiplication.
+
+  - id: sm4_round
+    name: SM4 Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        word_bits: 32
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: rotation_fixed
+        - component_id: xor
+      constant_injection: round_constants
+    notes: >
+      SM4 32-round update with tau non-linear substitution and linear diffusion.
+
+  - id: kasumi_round
+    name: KASUMI Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 64
+        branch_bits: 32
+      component_flow:
+        - component_id: xor
+        - component_id: and
+        - component_id: or
+        - component_id: rotation_fixed
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+      constant_injection: subkeys
+    notes: >
+      KASUMI Feistel round composed from FL and FO/FI subfunctions.
+
+  - id: clefia_round
+    name: CLEFIA GFN Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        branches: 4
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: binary_matrix_mul
+      constant_injection: subkeys
+    notes: >
+      CLEFIA uses a 4-branch generalized Feistel network in the data path.
+
+  - id: twine_round
+    name: TWINE Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 64
+        branches: 16
+        nibble_bits: 4
+      component_flow:
+        - component_id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - component_id: xor
+        - component_id: word_permutation
+          params: {word_size_bits: 4}
+      constant_injection: round_constants
+    notes: >
+      TWINE is a lightweight 16-branch generalized Feistel block cipher.

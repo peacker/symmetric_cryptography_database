@@ -676,3 +676,136 @@ families:
     standard_ids: []
     process_ids: []
     influences: []
+
+  - id: rc6
+    name: RC6
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids:
+      - generalized_feistel
+    round_ids:
+      - rc6_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: mul_mod
+          params: {modulus: 4294967296}
+        - id: rotation_variable
+        - id: add_mod
+          params: {modulus: 4294967296}
+    publication_ids:
+      - rivest_et_al_1998_rc6
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences:
+      - source_family_id: rc5
+        relation: improvement_of
+        note: RC6 extends RC5 with four registers and multiplication for faster diffusion.
+
+  - id: sm4
+    name: SM4
+    year: 2016
+    primitive_type: block_cipher
+    construction_ids: []
+    round_ids:
+      - sm4_round
+    target_applications:
+      - generic
+      - software
+      - hardware
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: rotation_fixed
+        - id: constant
+    publication_ids:
+      - yang_2021_sm_tls
+    standard_ids:
+      - gbt_32907_2016_sm4
+    process_ids: []
+    influences: []
+
+  - id: kasumi
+    name: KASUMI
+    year: 2001
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - kasumi_round
+    target_applications:
+      - mobile_networks
+      - hardware
+    characteristics:
+      block_size_bits: 64
+      components:
+        - id: xor
+        - id: and
+        - id: or
+        - id: rotation_fixed
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+    publication_ids:
+      - ts_35_202_kasumi
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: clefia
+    name: CLEFIA
+    year: 2007
+    primitive_type: block_cipher
+    construction_ids:
+      - generalized_feistel
+    round_ids:
+      - clefia_round
+    target_applications:
+      - constrained_hardware
+      - generic
+      - iot
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: binary_matrix_mul
+    publication_ids:
+      - katagi_moriai_2011_clefia
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: twine
+    name: TWINE
+    year: 2012
+    primitive_type: block_cipher
+    construction_ids:
+      - generalized_feistel
+    round_ids:
+      - twine_round
+    target_applications:
+      - constrained_hardware
+      - iot
+    characteristics:
+      block_size_bits: 64
+      components:
+        - id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - id: xor
+        - id: word_permutation
+          params: {word_size_bits: 4}
+        - id: constant
+    publication_ids:
+      - suzaki_et_al_2012_twine
+    standard_ids: []
+    process_ids: []
+    influences: []
