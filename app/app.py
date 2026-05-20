@@ -43,7 +43,7 @@ def load_primitives() -> pd.DataFrame:
             f.year,
             f.id   AS family_id,
             f.name AS family_name,
-            f.primitive_type,
+            pt.name AS primitive_type,
             p.fixed_input_bits,
             p.fixed_output_bits,
             GROUP_CONCAT(DISTINCT t.target)  AS targets,
@@ -51,6 +51,7 @@ def load_primitives() -> pd.DataFrame:
             GROUP_CONCAT(DISTINCT pr.name)   AS processes
         FROM primitives p
         JOIN families f ON f.id = p.family_id
+        JOIN primitive_types pt ON pt.id = f.primitive_type
         LEFT JOIN family_targets t       ON t.family_id    = f.id
         LEFT JOIN primitive_standards ps ON ps.primitive_id = p.id
         LEFT JOIN publications pub        ON pub.id = ps.standard_id
@@ -69,15 +70,19 @@ def load_families() -> pd.DataFrame:
     return pd.read_sql_query(
         """
         SELECT
-            f.id, f.name, f.year, f.primitive_type, f.notes,
+            f.id, f.name, f.year, pt.name AS primitive_type, f.notes,
             COUNT(p.id) AS instance_count,
             GROUP_CONCAT(DISTINCT p.name)    AS instances,
             GROUP_CONCAT(DISTINCT t.target)  AS targets,
+            GROUP_CONCAT(DISTINCT c.name)    AS constructions,
             GROUP_CONCAT(DISTINCT pub.title) AS standards,
             GROUP_CONCAT(DISTINCT pr.name)   AS processes
         FROM families f
+        JOIN primitive_types pt    ON pt.id = f.primitive_type
         LEFT JOIN primitives p      ON p.family_id  = f.id
         LEFT JOIN family_targets t  ON t.family_id  = f.id
+        LEFT JOIN family_constructions fc ON fc.family_id = f.id
+        LEFT JOIN constructions c        ON c.id = fc.construction_id
         LEFT JOIN family_standards fs ON fs.family_id = f.id
         LEFT JOIN publications pub    ON pub.id = fs.standard_id
         LEFT JOIN family_processes fp ON fp.family_id = f.id
@@ -97,12 +102,13 @@ def load_influences() -> pd.DataFrame:
         SELECT fi.source_family_id, sf.name AS source_name,
                fi.target_family_id, tf.name AS target_name,
                fi.relation, fi.note,
-               sf.primitive_type AS source_type,
+             pts.name AS source_type,
                sf.year AS source_year,
                tf.year AS target_year
         FROM family_influences fi
         JOIN families sf ON sf.id = fi.source_family_id
         JOIN families tf ON tf.id = fi.target_family_id
+         JOIN primitive_types pts ON pts.id = sf.primitive_type
         ORDER BY fi.source_family_id
         """,
         conn,
@@ -361,6 +367,8 @@ elif page == "Families":
             cols[0].metric("Instances", row["instance_count"])
             cols[1].write(f"**Applications:** {row['targets'] or '—'}")
             cols[2].write(f"**Standards:** {row['standards'] or '—'}")
+            if row.get("constructions"):
+                st.write(f"**Constructions:** {row['constructions']}")
             if row.get("instances"):
                 st.write(f"**Instance names:** {row['instances']}")
             if row.get("notes"):

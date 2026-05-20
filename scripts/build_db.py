@@ -56,6 +56,20 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (special_case_of) REFERENCES components(id)
         );
 
+        CREATE TABLE IF NOT EXISTS primitive_types (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            notes TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS constructions (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            special_case_of TEXT,
+            notes TEXT,
+            FOREIGN KEY (special_case_of) REFERENCES constructions(id)
+        );
+
         -- Families ---------------------------------------------------------
         CREATE TABLE IF NOT EXISTS families (
             id TEXT PRIMARY KEY,
@@ -63,7 +77,8 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             year INTEGER NOT NULL,
             primitive_type TEXT NOT NULL,
             notes TEXT,
-            characteristics_json TEXT NOT NULL
+            characteristics_json TEXT NOT NULL,
+            FOREIGN KEY (primitive_type) REFERENCES primitive_types(id) ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS family_targets (
@@ -80,6 +95,14 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             PRIMARY KEY (family_id, component_id),
             FOREIGN KEY (family_id)    REFERENCES families(id)   ON DELETE CASCADE,
             FOREIGN KEY (component_id) REFERENCES components(id) ON DELETE RESTRICT
+        );
+
+        CREATE TABLE IF NOT EXISTS family_constructions (
+            family_id TEXT NOT NULL,
+            construction_id TEXT NOT NULL,
+            PRIMARY KEY (family_id, construction_id),
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
+            FOREIGN KEY (construction_id) REFERENCES constructions(id) ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS family_publications (
@@ -147,9 +170,12 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         DELETE FROM family_processes;
         DELETE FROM family_standards;
         DELETE FROM family_publications;
+        DELETE FROM family_constructions;
         DELETE FROM family_components;
         DELETE FROM family_targets;
         DELETE FROM families;
+        DELETE FROM constructions;
+        DELETE FROM primitive_types;
         DELETE FROM components;
         DELETE FROM processes;
         DELETE FROM publications;
@@ -164,6 +190,8 @@ def main() -> None:
     families_doc     = load_yaml(DATA_DIR / "families.yaml")
     primitives_doc   = load_yaml(DATA_DIR / "primitives.yaml")
     components_doc   = load_yaml(DATA_DIR / "components.yaml")
+    constructions_doc = load_yaml(DATA_DIR / "constructions.yaml")
+    primitive_types_doc = load_yaml(DATA_DIR / "primitive_types.yaml")
     publications_doc = load_yaml(DATA_DIR / "publications.yaml")
     processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
 
@@ -203,6 +231,23 @@ def main() -> None:
                  comp.get("notes")),
             )
 
+        for primitive_type in primitive_types_doc.get("primitive_types", []):
+            conn.execute(
+                "INSERT INTO primitive_types (id, name, notes) VALUES (?, ?, ?)",
+                (primitive_type["id"], primitive_type["name"], primitive_type.get("notes")),
+            )
+
+        for construction in constructions_doc.get("constructions", []):
+            conn.execute(
+                "INSERT INTO constructions (id, name, special_case_of, notes) VALUES (?, ?, ?, ?)",
+                (
+                    construction["id"],
+                    construction["name"],
+                    construction.get("special_case_of"),
+                    construction.get("notes"),
+                ),
+            )
+
         for family in families_doc.get("families", []):
             c = family["characteristics"]
             conn.execute(
@@ -222,6 +267,11 @@ def main() -> None:
                     " VALUES (?, ?, ?)",
                     (family["id"], comp_ref["id"],
                      json.dumps(params, ensure_ascii=True) if params else None))
+            for construction_id in family.get("construction_ids", []):
+                conn.execute(
+                    "INSERT INTO family_constructions (family_id, construction_id) VALUES (?, ?)",
+                    (family["id"], construction_id),
+                )
             for pub_id in family.get("publication_ids", []):
                 conn.execute(
                     "INSERT INTO family_publications (family_id, publication_id) VALUES (?, ?)",

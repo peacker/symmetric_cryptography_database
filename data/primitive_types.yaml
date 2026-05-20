@@ -1,0 +1,17 @@
+version: 1
+
+primitive_types:
+  - id: block_cipher
+    name: Block Cipher
+
+  - id: tweakable_block_cipher
+    name: Tweakable Block Cipher
+
+  - id: permutation
+    name: Permutation
+
+  - id: compression_function
+    name: Compression Function
+
+  - id: update_function
+    name: Update Function

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/symmetric_primitives/primitive_types.schema.json",
+  "title": "Primitive Type Catalogue",
+  "type": "object",
+  "required": ["version", "primitive_types"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "primitive_types": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/primitive_type" }
+    }
+  },
+  "$defs": {
+    "primitive_type": {
+      "type": "object",
+      "required": ["id", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

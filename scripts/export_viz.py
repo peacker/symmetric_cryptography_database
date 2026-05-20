@@ -34,10 +34,11 @@ def main() -> None:
             """
             SELECT p.id AS primitive_id, p.name, f.year,
                    f.id AS family_id, f.name AS family_name,
-                   f.primitive_type,
+                 pt.name AS primitive_type,
                    p.fixed_input_bits, p.fixed_output_bits
             FROM primitives p
             JOIN families f ON f.id = p.family_id
+             JOIN primitive_types pt ON pt.id = f.primitive_type
             ORDER BY f.year, p.name
             """,
             VIZ_DIR / "timeline_primitives.csv",
@@ -107,10 +108,14 @@ def main() -> None:
             conn,
             """
             SELECT f.id AS family_id, f.name AS family_name,
-                   f.year, f.primitive_type,
+                 f.year, pt.name AS primitive_type,
+                 GROUP_CONCAT(DISTINCT c.name) AS constructions,
                    COUNT(p.id) AS instance_count
             FROM families f
+             JOIN primitive_types pt ON pt.id = f.primitive_type
             LEFT JOIN primitives p ON p.family_id = f.id
+             LEFT JOIN family_constructions fc ON fc.family_id = f.id
+             LEFT JOIN constructions c ON c.id = fc.construction_id
             GROUP BY f.id
             ORDER BY f.year, f.name
             """,

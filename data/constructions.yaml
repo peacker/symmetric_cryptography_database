@@ -1,0 +1,88 @@
+version: 1
+
+constructions:
+  - id: spn
+    name: Substitution-Permutation Network (SPN)
+    abbreviation: SPN
+    typical_primitive_types: [block_cipher]
+    placeholder_family_names: [Serpent, SKINNY]
+    notes: >
+      A round structure combining non-linear substitution layers with
+      permutation or linear diffusion layers.
+
+  - id: aligned_spn
+    name: Aligned Substitution-Permutation Network
+    abbreviation: Aligned SPN
+    special_case_of: spn
+    typical_primitive_types: [block_cipher]
+    placeholder_family_names: [Rijndael, Anubis]
+    notes: >
+      An SPN whose substitution and diffusion layers operate on aligned
+      words such as nibbles, bytes, or larger machine-oriented units.
+
+  - id: bit_based_spn
+    name: Bit-based Substitution-Permutation Network (bSPN)
+    abbreviation: bSPN
+    special_case_of: spn
+    typical_primitive_types: [block_cipher]
+    placeholder_family_names: [PRESENT, GIFT]
+    notes: >
+      An SPN whose diffusion layer is primarily expressed as a bit-level
+      permutation, common in lightweight hardware-oriented block ciphers.
+
+  - id: feistel
+    name: Feistel Network
+    abbreviation: F
+    typical_primitive_types: [block_cipher]
+    placeholder_family_names: [DES, Camellia]
+    notes: >
+      A structure that updates one half of the state using a round function
+      of the other half and then swaps roles between the halves.
+
+  - id: generalized_feistel
+    name: Generalized Feistel Network
+    abbreviation: GF
+    special_case_of: feistel
+    typical_primitive_types: [block_cipher]
+    placeholder_family_names: [CLEFIA, CAST-256]
+    notes: >
+      A Feistel-like structure with more than two branches or a more general
+      branch-update schedule.
+
+  - id: lay_massey
+    name: Lay-Massey Scheme
+    abbreviation: LM
+    typical_primitive_types: [block_cipher]
+    placeholder_family_names: [IDEA, FOX]
+    notes: >
+      A two-branch structure where the same mixing function perturbs both
+      halves in a symmetric manner.
+
+  - id: even_mansour
+    name: Even-Mansour Construction
+    abbreviation: EM
+    typical_primitive_types: [block_cipher, permutation]
+    placeholder_family_names: [PRINCE, LED]
+    notes: >
+      A key-alternating construction built around one or more public
+      permutations with key addition before and after permutation calls.
+
+  - id: davies_meyer
+    name: Davies-Meyer Construction
+    abbreviation: DM
+    typical_primitive_types: [compression_function]
+    placeholder_family_names: [MDC-2, Whirlpool-compression]
+    notes: >
+      A one-block-length compression-function construction derived from a
+      block cipher by XORing the block-cipher output with the input chaining
+      value.
+
+  - id: matyas_meyer_oseas
+    name: Matyas-Meyer-Oseas Construction
+    abbreviation: MMO
+    typical_primitive_types: [compression_function]
+    placeholder_family_names: [Miyaguchi-Preneel-variants, Snefru-style-compression]
+    notes: >
+      A one-block-length compression-function construction derived from a
+      block cipher, closely related to Davies-Meyer but using a different
+      assignment of message and chaining value roles.
