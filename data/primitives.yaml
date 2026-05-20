@@ -99,3 +99,266 @@ primitives:
       fixed_output_bits: 128
     standard_ids: []
 
+  # ── DES family ────────────────────────────────────────────────────────────
+  - id: des_56
+    name: DES
+    family_id: des
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 56
+      rounds: 16
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  # ── Blowfish family ───────────────────────────────────────────────────────
+  - id: blowfish_128
+    name: Blowfish-128
+    family_id: blowfish
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 16
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  # ── IDEA family ───────────────────────────────────────────────────────────
+  - id: idea_128
+    name: IDEA
+    family_id: idea
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 8
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  # ── TEA / XTEA families ──────────────────────────────────────────────────
+  - id: tea_128
+    name: TEA
+    family_id: tea
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 64
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: xtea_128
+    name: XTEA
+    family_id: xtea
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 64
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  # ── Twofish family ───────────────────────────────────────────────────────
+  - id: twofish_128
+    name: Twofish-128
+    family_id: twofish
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 16
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: twofish_192
+    name: Twofish-192
+    family_id: twofish
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 16
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: twofish_256
+    name: Twofish-256
+    family_id: twofish
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 16
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── Serpent family ───────────────────────────────────────────────────────
+  - id: serpent_128
+    name: Serpent-128
+    family_id: serpent
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 32
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: serpent_192
+    name: Serpent-192
+    family_id: serpent
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 32
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: serpent_256
+    name: Serpent-256
+    family_id: serpent
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 32
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── Camellia family ──────────────────────────────────────────────────────
+  - id: camellia_128
+    name: Camellia-128
+    family_id: camellia
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 18
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: camellia_192
+    name: Camellia-192
+    family_id: camellia
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 24
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: camellia_256
+    name: Camellia-256
+    family_id: camellia
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 24
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── SIMON / SPECK families ───────────────────────────────────────────────
+  - id: simon_64_128
+    name: SIMON-64/128
+    family_id: simon
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 44
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: simon_128_128
+    name: SIMON-128/128
+    family_id: simon
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 68
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: speck_64_128
+    name: SPECK-64/128
+    family_id: speck
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 27
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: speck_128_128
+    name: SPECK-128/128
+    family_id: speck
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 32
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── PRINCE / LED families ────────────────────────────────────────────────
+  - id: prince_128
+    name: PRINCE
+    family_id: prince
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 12
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: led_64_64
+    name: LED-64
+    family_id: led
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 64
+      rounds: 32
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: led_64_128
+    name: LED-128
+    family_id: led
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 48
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  # ── KATAN / KTANTAN families ─────────────────────────────────────────────
+  - id: katan_64_80
+    name: KATAN-64
+    family_id: katan
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 80
+      rounds: 254
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: ktantan_64_80
+    name: KTANTAN-64
+    family_id: ktantan
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 80
+      rounds: 254
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+

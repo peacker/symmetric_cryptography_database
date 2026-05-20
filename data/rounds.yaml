@@ -88,3 +88,246 @@ rounds:
     notes: >
       GIFT round with nibble S-box layer, bit permutation layer,
       and key/constant injection.
+
+  - id: des_round
+    name: DES Feistel Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 64
+        branch_bits: 32
+      component_flow:
+        - component_id: bit_permutation
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 6, output_bits: 4}
+        - component_id: bit_permutation
+      constant_injection: none
+    notes: >
+      DES Feistel round with expansion, subkey XOR, S-box substitution,
+      and P-permutation.
+
+  - id: blowfish_round
+    name: Blowfish Feistel Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 64
+        branch_bits: 32
+      component_flow:
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 32}
+        - component_id: xor
+      constant_injection: none
+    notes: >
+      Blowfish Feistel round using key-dependent S-boxes and ARX mixing in F.
+
+  - id: idea_round
+    name: IDEA Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 64
+        word_bits: 16
+      component_flow:
+        - component_id: add_mod
+          params: {modulus: 65536}
+        - component_id: mul_mod
+          params: {modulus: 65537}
+        - component_id: xor
+      constant_injection: none
+    notes: >
+      IDEA round using mixed-group operations (mod 2^16 addition,
+      mod 2^16+1 multiplication, XOR).
+
+  - id: tea_round
+    name: TEA Round Pair
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 64
+        word_bits: 32
+      component_flow:
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+        - component_id: xor
+        - component_id: shift_fixed
+          params: {amount: 4}
+        - component_id: shift_fixed
+          params: {amount: 5}
+        - component_id: constant
+      constant_injection: delta_constant
+    notes: >
+      One TEA cycle (two Feistel rounds) with delta constant accumulation.
+
+  - id: xtea_round
+    name: XTEA Round Pair
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 64
+        word_bits: 32
+      component_flow:
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+        - component_id: xor
+        - component_id: shift_fixed
+          params: {amount: 4}
+        - component_id: shift_fixed
+          params: {amount: 5}
+        - component_id: constant
+      constant_injection: delta_constant
+    notes: >
+      One XTEA cycle (two Feistel rounds) with revised key schedule.
+
+  - id: twofish_round
+    name: Twofish Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+      component_flow:
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: field_matrix_mul
+          params: {field_size: 256}
+        - component_id: xor
+        - component_id: rotation_fixed
+      constant_injection: subkeys
+    notes: >
+      Twofish round with key-dependent S-boxes, MDS mixing,
+      pseudo-Hadamard transform, and rotations.
+
+  - id: serpent_round
+    name: Serpent Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - component_id: binary_matrix_mul
+      constant_injection: round_key
+    notes: >
+      Serpent round with key mixing, bitslice 4x4 S-box layer,
+      and linear transformation.
+
+  - id: camellia_round
+    name: Camellia Feistel Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        branch_bits: 64
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: binary_matrix_mul
+        - component_id: xor
+      constant_injection: subkeys
+    notes: >
+      Camellia Feistel round using F-function S-box/linear layer;
+      FL/FLINV layers are inserted every six rounds.
+
+  - id: simon_round
+    name: SIMON Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits_options: [32, 48, 64, 96, 128]
+      component_flow:
+        - component_id: rotation_fixed
+        - component_id: and
+        - component_id: xor
+        - component_id: constant
+      constant_injection: z_sequence
+    notes: >
+      SIMON Feistel round using AND/XOR and rotations with round constants.
+
+  - id: speck_round
+    name: SPECK Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits_options: [32, 48, 64, 96, 128]
+      component_flow:
+        - component_id: rotation_fixed
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+        - component_id: xor
+      constant_injection: round_key
+    notes: >
+      SPECK ARX round using opposite-direction rotations, modular addition,
+      and XOR with round key.
+
+  - id: prince_round
+    name: PRINCE Core Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 64
+      component_flow:
+        - component_id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - component_id: binary_matrix_mul
+        - component_id: xor
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      PRINCE forward/backward core round with S-layer and linear mixing.
+
+  - id: led_round
+    name: LED Step Round
+    kind: step
+    spec:
+      state_model:
+        state_bits: 64
+      component_flow:
+        - component_id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - component_id: word_permutation
+          params: {word_size_bits: 4}
+        - component_id: field_matrix_mul
+          params: {field_size: 16}
+        - component_id: xor
+      constant_injection: step_constant
+    notes: >
+      LED step transformation (SubCells, ShiftRows, MixColumnsSerial,
+      AddConstants/AddRoundKey).
+
+  - id: katan_round
+    name: KATAN Update Round
+    kind: step
+    spec:
+      state_model:
+        state_bits_options: [32, 48, 64]
+      component_flow:
+        - component_id: lfsr
+        - component_id: nlfsr
+        - component_id: and
+        - component_id: xor
+        - component_id: constant
+      constant_injection: irregular_sequence
+    notes: >
+      KATAN round as coupled shift-register updates with non-linear taps.
+
+  - id: ktantan_round
+    name: KTANTAN Update Round
+    kind: step
+    spec:
+      state_model:
+        state_bits_options: [32, 48, 64]
+      component_flow:
+        - component_id: lfsr
+        - component_id: nlfsr
+        - component_id: and
+        - component_id: xor
+        - component_id: constant
+      constant_injection: irregular_sequence
+    notes: >
+      KTANTAN hardware-embedded-key update round; structurally related to KATAN.

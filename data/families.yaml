@@ -173,3 +173,372 @@ families:
         note: >
           GIFT explicitly builds on PRESENT's SPN structure, improving
           hardware efficiency and key-schedule simplicity.
+
+  - id: des
+    name: DES
+    year: 1977
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - des_round
+    target_applications:
+      - legacy
+      - generic
+    characteristics:
+      block_size_bits: 64
+      components:
+        - id: sbox
+          params: {input_bits: 6, output_bits: 4}
+        - id: bit_permutation
+        - id: xor
+    publication_ids:
+      - fips_46_3_1999_des
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: blowfish
+    name: Blowfish
+    year: 1993
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - blowfish_round
+    target_applications:
+      - software
+      - generic
+    characteristics:
+      block_size_bits: 64
+      components:
+        - id: sbox
+          params: {input_bits: 8, output_bits: 32}
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: xor
+    publication_ids:
+      - schneier_1994_blowfish
+    standard_ids: []
+    process_ids: []
+    influences:
+      - source_family_id: des
+        relation: inspired_by
+        note: Blowfish was proposed as a fast software-oriented DES replacement.
+
+  - id: idea
+    name: IDEA
+    year: 1991
+    primitive_type: block_cipher
+    construction_ids:
+      - lay_massey
+    round_ids:
+      - idea_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 64
+      components:
+        - id: add_mod
+          params: {modulus: 65536}
+        - id: mul_mod
+          params: {modulus: 65537}
+        - id: xor
+    publication_ids:
+      - lai_massey_1991_idea
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: tea
+    name: TEA
+    year: 1994
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - tea_round
+    target_applications:
+      - software
+      - embedded
+    characteristics:
+      block_size_bits: 64
+      components:
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: xor
+        - id: shift_fixed
+        - id: constant
+    publication_ids:
+      - needham_wheeler_1994_tea
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: xtea
+    name: XTEA
+    year: 1997
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - xtea_round
+    target_applications:
+      - software
+      - embedded
+    characteristics:
+      block_size_bits: 64
+      components:
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: xor
+        - id: shift_fixed
+        - id: constant
+    publication_ids:
+      - needham_wheeler_1997_xtea
+    standard_ids: []
+    process_ids: []
+    influences:
+      - source_family_id: tea
+        relation: improvement_of
+        note: XTEA improves TEA's key schedule and resistance to related-key attacks.
+
+  - id: twofish
+    name: Twofish
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - twofish_round
+    target_applications:
+      - software
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: field_matrix_mul
+          params: {field_size: 256}
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: xor
+        - id: rotation_fixed
+    publication_ids:
+      - schneier_et_al_1998_twofish
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences: []
+
+  - id: serpent
+    name: Serpent
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids:
+      - aligned_spn
+    round_ids:
+      - serpent_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - id: binary_matrix_mul
+        - id: xor
+        - id: constant
+    publication_ids:
+      - anderson_biham_knudsen_1998_serpent
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences: []
+
+  - id: camellia
+    name: Camellia
+    year: 2000
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - camellia_round
+    target_applications:
+      - generic
+      - software
+      - hardware
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: binary_matrix_mul
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
+    publication_ids:
+      - matsui_et_al_2004_camellia
+    standard_ids: []
+    process_ids: []
+    influences:
+      - source_family_id: des
+        relation: inspired_by
+        note: Camellia uses a strengthened Feistel design with modern diffusion layers.
+
+  - id: simon
+    name: SIMON
+    year: 2013
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - simon_round
+    target_applications:
+      - constrained_hardware
+      - iot
+    characteristics:
+      components:
+        - id: and
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
+    publication_ids:
+      - beaulieu_et_al_2013_simon_speck
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: speck
+    name: SPECK
+    year: 2013
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - speck_round
+    target_applications:
+      - software
+      - embedded
+    characteristics:
+      components:
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: xor
+        - id: rotation_fixed
+    publication_ids:
+      - beaulieu_et_al_2013_simon_speck
+    standard_ids: []
+    process_ids: []
+    influences:
+      - source_family_id: tea
+        relation: related_to
+        note: SPECK is an ARX-oriented lightweight design in the same broad family as TEA-like software ciphers.
+
+  - id: prince
+    name: PRINCE
+    year: 2012
+    primitive_type: block_cipher
+    construction_ids:
+      - aligned_spn
+    round_ids:
+      - prince_round
+    target_applications:
+      - constrained_hardware
+      - iot
+    characteristics:
+      block_size_bits: 64
+      components:
+        - id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - id: binary_matrix_mul
+        - id: xor
+        - id: constant
+    publication_ids:
+      - borghoff_et_al_2012_prince
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: led
+    name: LED
+    year: 2011
+    primitive_type: block_cipher
+    construction_ids:
+      - bit_based_spn
+    round_ids:
+      - led_round
+    target_applications:
+      - constrained_hardware
+      - iot
+    characteristics:
+      block_size_bits: 64
+      components:
+        - id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - id: field_matrix_mul
+          params: {field_size: 16}
+        - id: word_permutation
+          params: {word_size_bits: 4}
+        - id: xor
+        - id: constant
+    publication_ids:
+      - guo_et_al_2011_led
+    standard_ids: []
+    process_ids: []
+    influences:
+      - source_family_id: present
+        relation: inspired_by
+        note: LED follows a compact nibble-oriented SPN style suited for lightweight hardware.
+
+  - id: katan
+    name: KATAN
+    year: 2009
+    primitive_type: block_cipher
+    construction_ids: []
+    round_ids:
+      - katan_round
+    target_applications:
+      - constrained_hardware
+      - iot
+    characteristics:
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: and
+        - id: xor
+        - id: constant
+    publication_ids:
+      - de_canniere_et_al_2009_katan_ktantan
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: ktantan
+    name: KTANTAN
+    year: 2009
+    primitive_type: block_cipher
+    construction_ids: []
+    round_ids:
+      - ktantan_round
+    target_applications:
+      - constrained_hardware
+      - iot
+    characteristics:
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: and
+        - id: xor
+        - id: constant
+    publication_ids:
+      - de_canniere_et_al_2009_katan_ktantan
+    standard_ids: []
+    process_ids: []
+    influences:
+      - source_family_id: katan
+        relation: variant_of
+        note: KTANTAN is the fixed-key hardware-specialized sibling in the KATAN family.

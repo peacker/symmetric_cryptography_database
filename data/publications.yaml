@@ -91,3 +91,146 @@ publications:
     organization: NIST
     status: active
     url: https://csrc.nist.gov/publications
+
+  - id: fips_46_3_1999_des
+    kind: standard
+    title: "FIPS 46-3: Data Encryption Standard (DES)"
+    authors: []
+    year: 1999
+    venue: NIST
+    organization: NIST
+    status: withdrawn
+    url: https://csrc.nist.gov/pubs/fips/46-3/final
+
+  - id: schneier_1994_blowfish
+    kind: article
+    title: "Description of a New Variable-Length Key, 64-Bit Block Cipher (Blowfish)"
+    authors:
+      - Bruce Schneier
+    year: 1994
+    venue: Fast Software Encryption 1993
+    url: https://www.schneier.com/academic/blowfish/
+
+  - id: lai_massey_1991_idea
+    kind: article
+    title: "A Proposal for a New Block Encryption Standard"
+    authors:
+      - Xuejia Lai
+      - James L. Massey
+    year: 1991
+    venue: EUROCRYPT 1990
+    url: https://doi.org/10.1007/3-540-46877-3_35
+
+  - id: needham_wheeler_1994_tea
+    kind: article
+    title: "TEA, a Tiny Encryption Algorithm"
+    authors:
+      - Roger Needham
+      - David Wheeler
+    year: 1994
+    venue: Fast Software Encryption 1994
+    url: https://doi.org/10.1007/3-540-60590-8_29
+
+  - id: needham_wheeler_1997_xtea
+    kind: article
+    title: "Extensions to TEA (XTEA)"
+    authors:
+      - Roger Needham
+      - David Wheeler
+    year: 1997
+    venue: Technical Report
+    url: https://www.cix.co.uk/~klockstone/xtea.pdf
+
+  - id: schneier_et_al_1998_twofish
+    kind: article
+    title: "Twofish: A 128-Bit Block Cipher"
+    authors:
+      - Bruce Schneier
+      - John Kelsey
+      - Doug Whiting
+      - David Wagner
+      - Chris Hall
+      - Niels Ferguson
+    year: 1998
+    venue: AES Submission
+    url: https://www.schneier.com/academic/twofish/
+
+  - id: anderson_biham_knudsen_1998_serpent
+    kind: article
+    title: "Serpent: A Proposal for the Advanced Encryption Standard"
+    authors:
+      - Ross Anderson
+      - Eli Biham
+      - Lars Knudsen
+    year: 1998
+    venue: AES Submission
+    url: https://www.cl.cam.ac.uk/archive/rja14/Papers/serpent.pdf
+
+  - id: matsui_et_al_2004_camellia
+    kind: article
+    title: "A Description of the Camellia Encryption Algorithm"
+    authors:
+      - Mitsuru Matsui
+      - Junko Nakajima
+      - Shiho Moriai
+    year: 2004
+    venue: RFC 3713
+    url: https://www.rfc-editor.org/rfc/rfc3713
+
+  - id: beaulieu_et_al_2013_simon_speck
+    kind: article
+    title: "The SIMON and SPECK Families of Lightweight Block Ciphers"
+    authors:
+      - Ray Beaulieu
+      - Douglas Shors
+      - Jason Smith
+      - Stefan Treatman-Clark
+      - Bryan Weeks
+      - Louis Wingers
+    year: 2013
+    venue: ePrint
+    url: https://eprint.iacr.org/2013/404
+
+  - id: borghoff_et_al_2012_prince
+    kind: article
+    title: "PRINCE - A Low-Latency Block Cipher for Pervasive Computing Applications"
+    authors:
+      - Julia Borghoff
+      - Anne Canteaut
+      - Tim Güneysu
+      - Elif Bilge Kavun
+      - Miroslav Knežević
+      - Lars R. Knudsen
+      - Gregor Leander
+      - Ventzislav Nikov
+      - Christof Paar
+      - Christian Rechberger
+      - Peter Rombouts
+      - Søren S. Thomsen
+      - Tolga Yalçın
+    year: 2012
+    venue: ASIACRYPT 2012
+    url: https://www.iacr.org/archive/asiacrypt2012/76580403/76580403.pdf
+
+  - id: guo_et_al_2011_led
+    kind: article
+    title: "LED: A Lightweight Block Cipher"
+    authors:
+      - Jian Guo
+      - Thomas Peyrin
+      - Axel Poschmann
+      - Matt Robshaw
+    year: 2011
+    venue: CHES 2011
+    url: https://www.iacr.org/archive/ches2011/69170327/69170327.pdf
+
+  - id: de_canniere_et_al_2009_katan_ktantan
+    kind: article
+    title: "KATAN and KTANTAN - A Family of Small and Efficient Hardware-Oriented Block Ciphers"
+    authors:
+      - Christophe De Cannière
+      - Orr Dunkelman
+      - Miroslav Knežević
+    year: 2009
+    venue: CHES 2009
+    url: https://www.iacr.org/archive/ches2009/57470001/57470001.pdf
