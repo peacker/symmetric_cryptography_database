@@ -362,3 +362,117 @@ primitives:
       fixed_output_bits: 64
     standard_ids: []
 
+  # ── CAST family ─────────────────────────────────────────────────────────
+  - id: cast128_128
+    name: CAST-128
+    family_id: cast128
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 16
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: cast256_128
+    name: CAST-256-128
+    family_id: cast256
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 48
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: cast256_192
+    name: CAST-256-192
+    family_id: cast256
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 48
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: cast256_256
+    name: CAST-256-256
+    family_id: cast256
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 48
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── RC5 family ──────────────────────────────────────────────────────────
+  - id: rc5_32_12_16
+    name: RC5-32/12/16
+    family_id: rc5
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 12
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: rc5_32_16_16
+    name: RC5-32/16/16
+    family_id: rc5
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 16
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  # ── SEED family ─────────────────────────────────────────────────────────
+  - id: seed_128
+    name: SEED
+    family_id: seed
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 16
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── ARIA family ─────────────────────────────────────────────────────────
+  - id: aria_128
+    name: ARIA-128
+    family_id: aria
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 12
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: aria_192
+    name: ARIA-192
+    family_id: aria
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 14
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: aria_256
+    name: ARIA-256
+    family_id: aria
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 16
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+

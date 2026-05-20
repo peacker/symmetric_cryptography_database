@@ -10,13 +10,13 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] AES
 - [ ] Akelarre
 - [ ] Anubis
-- [ ] ARIA
+- [x] ARIA
 - [ ] ASCON
 - [ ] BEAR/LION
 - [ ] BelT
 - [ ] Blowfish
-- [ ] CAST-128
-- [ ] CAST-256
+- [x] CAST-128
+- [x] CAST-256
 - [x] Camellia
 - [ ] Chaskey
 - [x] ChaCha
@@ -61,7 +61,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] PRINCE
 - [ ] Q
 - [ ] RC2
-- [ ] RC5
+- [x] RC5
 - [ ] RC6
 - [x] Rijndael
 - [ ] Robin
@@ -69,7 +69,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] SAFER+
 - [x] SALSA
 - [ ] SC2000
-- [ ] SEED
+- [x] SEED
 - [ ] SHACAL
 - [ ] SHARK
 - [ ] SKIPJACK

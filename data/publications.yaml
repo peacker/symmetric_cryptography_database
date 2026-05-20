@@ -234,3 +234,58 @@ publications:
     year: 2009
     venue: CHES 2009
     url: https://www.iacr.org/archive/ches2009/57470001/57470001.pdf
+
+  - id: adams_1997_cast128
+    kind: article
+    title: "The CAST-128 Encryption Algorithm"
+    authors:
+      - Carlisle Adams
+    year: 1997
+    venue: RFC 2144
+    url: https://www.rfc-editor.org/rfc/rfc2144
+
+  - id: adams_gilchrist_1999_cast256
+    kind: article
+    title: "The CAST-256 Encryption Algorithm"
+    authors:
+      - Carlisle Adams
+      - June Gilchrist
+    year: 1999
+    venue: RFC 2612
+    url: https://www.rfc-editor.org/rfc/rfc2612
+
+  - id: baldwin_rivest_1996_rc5
+    kind: article
+    title: "The RC5, RC5-CBC, RC5-CBC-Pad, and RC5-CTS Algorithms"
+    authors:
+      - Robert Baldwin
+      - Ronald L. Rivest
+    year: 1996
+    venue: RFC 2040
+    url: https://www.rfc-editor.org/rfc/rfc2040
+
+  - id: lee_et_al_2005_seed
+    kind: article
+    title: "The SEED Encryption Algorithm"
+    authors:
+      - Hyangjin Lee
+      - Sungjae Lee
+      - Jaeho Yoon
+      - Donghyeon Cheon
+      - Jaeil Lee
+    year: 2005
+    venue: RFC 4269
+    url: https://www.rfc-editor.org/rfc/rfc4269
+
+  - id: lee_et_al_2010_aria
+    kind: article
+    title: "A Description of the ARIA Encryption Algorithm"
+    authors:
+      - Jungkeun Lee
+      - Jooyoung Lee
+      - Jaeheon Kim
+      - Daesung Kwon
+      - Choonsoo Kim
+    year: 2010
+    venue: RFC 5794
+    url: https://www.rfc-editor.org/rfc/rfc5794

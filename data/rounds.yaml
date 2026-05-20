@@ -331,3 +331,98 @@ rounds:
       constant_injection: irregular_sequence
     notes: >
       KTANTAN hardware-embedded-key update round; structurally related to KATAN.
+
+  - id: cast128_round
+    name: CAST-128 Feistel Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 64
+        branch_bits: 32
+      component_flow:
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+        - component_id: sub_mod
+          params: {modulus: 4294967296}
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 32}
+        - component_id: rotation_variable
+      constant_injection: subkeys
+    notes: >
+      CAST-128 round family uses key-dependent choice of F-function type
+      (add/sub/xor + data-dependent rotate + S-box mix) in a Feistel structure.
+
+  - id: cast256_round
+    name: CAST-256 Quad-Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        branch_bits: 32
+        branches: 4
+      component_flow:
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+        - component_id: sub_mod
+          params: {modulus: 4294967296}
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 32}
+        - component_id: rotation_variable
+      constant_injection: subkeys
+    notes: >
+      CAST-256 uses CAST-style round functions arranged in a 4-branch
+      generalized Feistel schedule.
+
+  - id: rc5_round
+    name: RC5 Data-Dependent Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits_options: [32, 64, 128]
+      component_flow:
+        - component_id: xor
+        - component_id: rotation_variable
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+      constant_injection: subkeys
+    notes: >
+      RC5 round core with XOR, data-dependent rotation, and modular addition.
+
+  - id: seed_round
+    name: SEED Feistel Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        branch_bits: 64
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+        - component_id: sub_mod
+          params: {modulus: 4294967296}
+        - component_id: rotation_fixed
+      constant_injection: subkeys
+    notes: >
+      SEED 16-round Feistel structure with keyed round function over two
+      32-bit words, using S-box layers and modular arithmetic.
+
+  - id: aria_round
+    name: ARIA Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: binary_matrix_mul
+      constant_injection: round_keys
+    notes: >
+      ARIA alternates two substitution layers and a linear diffusion layer;
+      round count depends on key length.

@@ -542,3 +542,137 @@ families:
       - source_family_id: katan
         relation: variant_of
         note: KTANTAN is the fixed-key hardware-specialized sibling in the KATAN family.
+
+  - id: cast128
+    name: CAST-128
+    year: 1997
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - cast128_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 64
+      components:
+        - id: sbox
+          params: {input_bits: 8, output_bits: 32}
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: sub_mod
+          params: {modulus: 4294967296}
+        - id: xor
+        - id: rotation_variable
+    publication_ids:
+      - adams_1997_cast128
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: cast256
+    name: CAST-256
+    year: 1999
+    primitive_type: block_cipher
+    construction_ids:
+      - generalized_feistel
+    round_ids:
+      - cast256_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: {input_bits: 8, output_bits: 32}
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: sub_mod
+          params: {modulus: 4294967296}
+        - id: xor
+        - id: rotation_variable
+    publication_ids:
+      - adams_gilchrist_1999_cast256
+    standard_ids: []
+    process_ids: []
+    influences:
+      - source_family_id: cast128
+        relation: generalization_of
+        note: CAST-256 extends CAST design ideas to 128-bit blocks and larger keying.
+
+  - id: rc5
+    name: RC5
+    year: 1994
+    primitive_type: block_cipher
+    construction_ids: []
+    round_ids:
+      - rc5_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      components:
+        - id: xor
+        - id: rotation_variable
+        - id: add_mod
+          params: {modulus: 4294967296}
+    publication_ids:
+      - baldwin_rivest_1996_rc5
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: seed
+    name: SEED
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - seed_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: sub_mod
+          params: {modulus: 4294967296}
+        - id: rotation_fixed
+    publication_ids:
+      - lee_et_al_2005_seed
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: aria
+    name: ARIA
+    year: 2003
+    primitive_type: block_cipher
+    construction_ids:
+      - aligned_spn
+    round_ids:
+      - aria_round
+    target_applications:
+      - generic
+      - software
+      - hardware
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: binary_matrix_mul
+    publication_ids:
+      - lee_et_al_2010_aria
+    standard_ids: []
+    process_ids: []
+    influences: []
