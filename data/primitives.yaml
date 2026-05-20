@@ -11,7 +11,6 @@ primitives:
       fixed_output_bits: 128
     standard_ids:
       - fips_197
-      - sp_800_38e
 
   - id: aes_192
     name: AES-192

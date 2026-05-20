@@ -56,7 +56,6 @@ families:
     publication_ids: []
     standard_ids:
       - fips_197
-      - sp_800_38e
     process_ids:
       - aes_competition_nist_1997_2000
     influences:

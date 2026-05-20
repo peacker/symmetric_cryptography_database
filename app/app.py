@@ -107,7 +107,7 @@ def load_families() -> pd.DataFrame:
         """
         SELECT
             f.id, f.name, f.year, pt.name AS primitive_type, f.notes,
-            COUNT(p.id) AS instance_count,
+            COUNT(DISTINCT p.id) AS instance_count,
             GROUP_CONCAT(DISTINCT p.name)    AS instances,
             GROUP_CONCAT(DISTINCT r.name)    AS rounds,
             GROUP_CONCAT(DISTINCT t.target)  AS targets,
