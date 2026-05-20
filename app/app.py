@@ -29,7 +29,27 @@ def get_connection() -> sqlite3.Connection:
     if not DB_PATH.exists():
         st.error("Database not found. Run `make build-db` first.")
         st.stop()
-    return sqlite3.connect(DB_PATH, check_same_thread=False)
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
+
+    # Backward-compatibility: older DB builds may miss primitive_types.
+    has_primitive_types = conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='primitive_types'"
+    ).fetchone()
+    if not has_primitive_types:
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS primitive_types ("
+            "id TEXT PRIMARY KEY, name TEXT NOT NULL, notes TEXT)"
+        )
+        conn.execute(
+            "INSERT OR IGNORE INTO primitive_types (id, name, notes) "
+            "SELECT DISTINCT primitive_type, "
+            "       REPLACE(UPPER(SUBSTR(primitive_type, 1, 1)) || SUBSTR(primitive_type, 2), '_', ' '), "
+            "       NULL "
+            "FROM families"
+        )
+        conn.commit()
+
+    return conn
 
 
 @st.cache_data
@@ -280,7 +300,7 @@ if page == "Timeline":
         tickangle=90,
     )
     fig.update_layout(margin=dict(l=0, r=0, t=20, b=0))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 elif page == "Influence Graph":
     st.header("Family Influence Network")
@@ -372,12 +392,12 @@ elif page == "Influence Graph":
             with st.expander("Edge table"):
                 st.dataframe(
                     influences[["source_name", "target_name", "relation", "note"]],
-                    use_container_width=True,
+                    width="stretch",
                 )
 
         except ImportError:
             st.warning("pyvis is not installed. Run `make setup` then restart the app.")
-            st.dataframe(influences, use_container_width=True)
+            st.dataframe(influences, width="stretch")
 
 elif page == "Size Analysis":
     st.header("Input vs Output Size")
@@ -423,12 +443,12 @@ elif page == "Size Analysis":
     )
     fig.update_traces(textposition="top center", marker_sizemin=14)
     fig.update_layout(showlegend=False, margin=dict(l=0, r=0, t=20, b=0))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     with st.expander("Aggregated size table"):
         st.dataframe(
             size_view.sort_values(["primitive_type", "fixed_input_bits", "fixed_output_bits"]),
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 
@@ -456,7 +476,7 @@ elif page == "Primitives Browser":
             "fixed_output_bits": "output (bits)",
             "rounds": "round templates",
         }),
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 
@@ -498,7 +518,7 @@ elif page == "Rounds":
     st.caption(f"{len(view)} round templates shown")
     st.dataframe(
         view[["id", "name", "kind", "family_count", "primitive_count", "round_hash"]],
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 
