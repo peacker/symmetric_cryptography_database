@@ -31,15 +31,17 @@ def validate_schema(doc: dict, schema_path: Path, label: str) -> bool:
 
 
 def main() -> None:
-    families_doc    = load_yaml(DATA_DIR / "families.yaml")
-    primitives_doc  = load_yaml(DATA_DIR / "primitives.yaml")
+    families_doc     = load_yaml(DATA_DIR / "families.yaml")
+    primitives_doc   = load_yaml(DATA_DIR / "primitives.yaml")
+    components_doc   = load_yaml(DATA_DIR / "components.yaml")
     publications_doc = load_yaml(DATA_DIR / "publications.yaml")
-    standards_doc   = load_yaml(DATA_DIR / "standards.yaml")
-    processes_doc   = load_yaml(DATA_DIR / "processes.yaml")
+    standards_doc    = load_yaml(DATA_DIR / "standards.yaml")
+    processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
 
     ok = True
     ok &= validate_schema(families_doc,   SCHEMA_DIR / "families.schema.json",   "families")
     ok &= validate_schema(primitives_doc, SCHEMA_DIR / "primitives.schema.json", "primitives")
+    ok &= validate_schema(components_doc, SCHEMA_DIR / "components.schema.json", "components")
     if not ok:
         raise SystemExit(1)
 
@@ -47,8 +49,15 @@ def main() -> None:
     standard_ids    = {s["id"] for s in standards_doc.get("standards", [])}
     process_ids     = {p["id"] for p in processes_doc.get("processes", [])}
     family_ids      = {f["id"] for f in families_doc.get("families", [])}
+    component_ids   = {c["id"] for c in components_doc.get("components", [])}
 
+    # Validate special_case_of self-references in components
     errors_found = False
+    for comp in components_doc.get("components", []):
+        ref = comp.get("special_case_of")
+        if ref and ref not in component_ids:
+            print(f"REFERENCE ERROR: component '{comp['id']}' has unknown special_case_of '{ref}'")
+            errors_found = True
 
     # Validate families
     for family in families_doc.get("families", []):
@@ -69,6 +78,11 @@ def main() -> None:
             src = edge["source_family_id"]
             if src not in family_ids:
                 print(f"REFERENCE ERROR: family '{fid}' has unknown influence source family '{src}'")
+                errors_found = True
+        for comp_ref in family.get("characteristics", {}).get("components", []):
+            cid = comp_ref["id"]
+            if cid not in component_ids:
+                print(f"REFERENCE ERROR: family '{fid}' references unknown component '{cid}'")
                 errors_found = True
 
     # Validate primitive instances

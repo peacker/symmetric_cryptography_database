@@ -1,0 +1,239 @@
+version: 1
+
+# Catalogue of cryptographic building blocks.
+#
+# Every component definition records what *kind* of operation it is;
+# parameterised components (e.g. field_matrix_mul, add_mod) list the
+# parameters a family entry must supply when referencing the component.
+#
+# Categories
+#   logical       – Boolean bitwise gates
+#   register      – Feedback shift registers
+#   substitution  – Non-linear lookup tables
+#   permutation   – Fixed bit/word rearrangements
+#   linear_layer  – Matrix-multiplication layers
+#   shift_rotation – Shifts and rotations (fixed or variable amount)
+#   arithmetic    – Modular integer arithmetic
+#   constant      – Injection of design-time constant values
+
+components:
+
+  # ── Logical ──────────────────────────────────────────────────────────────
+
+  - id: and
+    name: Bitwise AND
+    category: logical
+
+  - id: or
+    name: Bitwise OR
+    category: logical
+
+  - id: xor
+    name: Bitwise XOR
+    category: logical
+    notes: >
+      The most common mixing operation in symmetric cryptography.
+      XOR is its own inverse and has uniform difference distribution.
+
+  - id: not
+    name: Bitwise NOT
+    category: logical
+
+  # ── Feedback Shift Registers ─────────────────────────────────────────────
+
+  - id: lfsr
+    name: Linear Feedback Shift Register (LFSR)
+    category: register
+    parameters:
+      - name: length
+        description: "Register length in bits"
+        type: integer
+      - name: feedback_polynomial
+        description: "Feedback polynomial in hex or algebraic notation"
+        type: string
+    notes: >
+      A shift register whose input bit is a linear (XOR) combination of
+      previous state bits. When the feedback polynomial is primitive the
+      register produces a maximum-length sequence of period 2^n − 1.
+
+  - id: nlfsr
+    name: Non-Linear Feedback Shift Register (NLFSR)
+    category: register
+    parameters:
+      - name: length
+        description: "Register length in bits"
+        type: integer
+    notes: >
+      A shift register whose feedback function is non-linear, producing
+      sequences with higher algebraic complexity than an LFSR of the same
+      length.  Used in Grain, Trivium, and various hardware-oriented ciphers.
+
+  # ── Substitution ─────────────────────────────────────────────────────────
+
+  - id: sbox
+    name: Substitution Box (S-box)
+    category: substitution
+    parameters:
+      - name: input_bits
+        description: "Number of input bits (e.g. 4 for a 4-bit S-box, 8 for AES)"
+        type: integer
+      - name: output_bits
+        description: "Number of output bits; often equals input_bits"
+        type: integer
+    notes: >
+      A non-linear lookup table mapping n-bit inputs to m-bit outputs.
+      Provides the confusion property.  May be defined algebraically
+      (e.g. the AES S-box is the multiplicative inverse in GF(2^8) composed
+      with an affine map) or tabulated directly.
+
+  # ── Permutation ───────────────────────────────────────────────────────────
+
+  - id: bit_permutation
+    name: Bitwise Permutation
+    category: permutation
+    notes: >
+      A fixed, key-independent rearrangement of individual bit positions.
+      Provides diffusion at the bit level with very low hardware cost.
+      Examples: the P-layer in PRESENT, the bit permutation in GIFT.
+
+  - id: bit_reversal
+    name: Bit Reversal
+    category: permutation
+    special_case_of: bit_permutation
+    notes: >
+      A bitwise permutation that reverses the order of all bits in a word.
+      A special case of bit_permutation with the permutation π(i) = n−1−i.
+
+  - id: word_permutation
+    name: Word-wise Permutation
+    category: permutation
+    parameters:
+      - name: word_size_bits
+        description: "Size of each word in bits (e.g. 8 for byte-level)"
+        type: integer
+    notes: >
+      A fixed rearrangement of whole words (bytes, nibbles, 32-bit words, …).
+      Provides inter-column diffusion without mixing within a word.
+      Example: ShiftRows in AES rearranges bytes within a 4×4 byte state.
+
+  # ── Linear Layer (Matrix Multiplication) ─────────────────────────────────
+
+  - id: binary_matrix_mul
+    name: Binary Matrix Multiplication
+    category: linear_layer
+    notes: >
+      Multiplication of a state vector by a binary matrix over GF(2).
+      Each output bit is the XOR of a subset of input bits determined by
+      the matrix row.  Provides Maximum Distance Separable (MDS) diffusion
+      when the matrix is an MDS matrix.
+
+  - id: field_matrix_mul
+    name: Field Matrix Multiplication
+    category: linear_layer
+    parameters:
+      - name: field_size
+        description: >
+          Number of elements in the finite field, e.g. 256 for GF(2^8) or
+          16 for GF(2^4).  Must be a power of 2.
+        type: integer
+    notes: >
+      Multiplication of a state vector by a matrix whose entries are elements
+      of a finite extension field GF(2^n).  Provides MDS diffusion when an
+      MDS matrix is used.  The canonical example is MixColumns in AES, which
+      is multiplication over GF(2^8) (field_size = 256).
+
+  # ── Shift and Rotation ────────────────────────────────────────────────────
+
+  - id: rotation_fixed
+    name: Fixed Rotation
+    category: shift_rotation
+    parameters:
+      - name: amount
+        description: "Rotation distance in bits, fixed at design time"
+        type: integer
+    notes: >
+      Cyclic rotation of a word by a constant number of bit positions.
+      All bits are preserved; no information is lost.
+      A core ARX operation; used in Salsa20, ChaCha20, BLAKE, Threefish.
+
+  - id: shift_fixed
+    name: Fixed Shift
+    category: shift_rotation
+    parameters:
+      - name: amount
+        description: "Shift distance in bits, fixed at design time"
+        type: integer
+    notes: >
+      Logical (zero-filling) shift of a word by a constant number of bit
+      positions.  Bits shifted out are discarded; the vacated positions are
+      filled with zeros.
+
+  - id: rotation_variable
+    name: Variable Rotation
+    category: shift_rotation
+    notes: >
+      Cyclic rotation of a word by an amount determined at run time from the
+      data (data-dependent rotation).  Provides non-linearity because the
+      rotation amount is itself a function of the state.
+      Used in RC5, RC6, and related designs.
+
+  - id: shift_variable
+    name: Variable Shift
+    category: shift_rotation
+    notes: >
+      Logical shift of a word by an amount determined at run time from the
+      data.  Less common than variable rotation; used in some stream ciphers
+      and hash functions.
+
+  # ── Modular Arithmetic ────────────────────────────────────────────────────
+
+  - id: add_mod
+    name: Modular Addition
+    category: arithmetic
+    parameters:
+      - name: modulus
+        description: >
+          The modulus as an integer, e.g. 4294967296 for addition mod 2^32
+          or 18446744073709551616 for addition mod 2^64.
+        type: integer
+    notes: >
+      Integer addition modulo a power of two.  Provides non-linearity with
+      respect to XOR and is the "A" in ARX designs.
+      Example: Salsa20 and ChaCha20 use addition mod 2^32.
+
+  - id: sub_mod
+    name: Modular Subtraction
+    category: arithmetic
+    parameters:
+      - name: modulus
+        description: "The modulus as an integer"
+        type: integer
+    notes: >
+      Integer subtraction modulo a value.  Used as the inverse of modular
+      addition in decryption, and occasionally as a mixing primitive itself.
+
+  - id: mul_mod
+    name: Modular Multiplication
+    category: arithmetic
+    parameters:
+      - name: modulus
+        description: >
+          The modulus as an integer, e.g. 65537 for multiplication mod 2^16+1
+          as used in IDEA.
+        type: integer
+    notes: >
+      Integer multiplication modulo a value.  Provides very strong mixing
+      but is significantly slower than XOR or addition on most platforms.
+      The canonical example is IDEA, which multiplies mod 2^16 + 1.
+
+  # ── Constants ─────────────────────────────────────────────────────────────
+
+  - id: constant
+    name: Constant Injection
+    category: constant
+    notes: >
+      Injection of fixed design-time constants into the cipher state.
+      Includes round constants (e.g. AES RCON, PRESENT/GIFT round constants),
+      initialisation constants (e.g. the "expand 32-byte k" string in
+      Salsa20/ChaCha20), and domain-separation constants.
+      Prevents slide attacks and ensures distinct round transformations.

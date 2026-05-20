@@ -52,6 +52,16 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             notes TEXT
         );
 
+        CREATE TABLE IF NOT EXISTS components (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            category TEXT NOT NULL,
+            special_case_of TEXT,
+            parameters_json TEXT,
+            notes TEXT,
+            FOREIGN KEY (special_case_of) REFERENCES components(id)
+        );
+
         -- Families ---------------------------------------------------------
         CREATE TABLE IF NOT EXISTS families (
             id TEXT PRIMARY KEY,
@@ -69,18 +79,13 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE
         );
 
-        CREATE TABLE IF NOT EXISTS family_operations (
-            family_id TEXT NOT NULL,
-            operation TEXT NOT NULL,
-            PRIMARY KEY (family_id, operation),
-            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE
-        );
-
         CREATE TABLE IF NOT EXISTS family_components (
-            family_id TEXT NOT NULL,
-            component TEXT NOT NULL,
-            PRIMARY KEY (family_id, component),
-            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE
+            family_id    TEXT NOT NULL,
+            component_id TEXT NOT NULL,
+            params_json  TEXT,
+            PRIMARY KEY (family_id, component_id),
+            FOREIGN KEY (family_id)    REFERENCES families(id)   ON DELETE CASCADE,
+            FOREIGN KEY (component_id) REFERENCES components(id) ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS family_publications (
@@ -150,9 +155,9 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         DELETE FROM family_standards;
         DELETE FROM family_publications;
         DELETE FROM family_components;
-        DELETE FROM family_operations;
         DELETE FROM family_targets;
         DELETE FROM families;
+        DELETE FROM components;
         DELETE FROM processes;
         DELETE FROM standards;
         DELETE FROM publications;
@@ -164,11 +169,12 @@ def main() -> None:
     BUILD_DIR.mkdir(parents=True, exist_ok=True)
     DB_PATH.unlink(missing_ok=True)  # always rebuild from scratch
 
-    families_doc    = load_yaml(DATA_DIR / "families.yaml")
-    primitives_doc  = load_yaml(DATA_DIR / "primitives.yaml")
+    families_doc     = load_yaml(DATA_DIR / "families.yaml")
+    primitives_doc   = load_yaml(DATA_DIR / "primitives.yaml")
+    components_doc   = load_yaml(DATA_DIR / "components.yaml")
     publications_doc = load_yaml(DATA_DIR / "publications.yaml")
-    standards_doc   = load_yaml(DATA_DIR / "standards.yaml")
-    processes_doc   = load_yaml(DATA_DIR / "processes.yaml")
+    standards_doc    = load_yaml(DATA_DIR / "standards.yaml")
+    processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
 
     conn = sqlite3.connect(DB_PATH)
     try:
@@ -200,6 +206,18 @@ def main() -> None:
                  process.get("start_year"), process.get("end_year"), process.get("notes")),
             )
 
+        for comp in components_doc.get("components", []):
+            params = comp.get("parameters")
+            conn.execute(
+                "INSERT INTO components"
+                " (id, name, category, special_case_of, parameters_json, notes)"
+                " VALUES (?, ?, ?, ?, ?, ?)",
+                (comp["id"], comp["name"], comp["category"],
+                 comp.get("special_case_of"),
+                 json.dumps(params, ensure_ascii=True) if params else None,
+                 comp.get("notes")),
+            )
+
         for family in families_doc.get("families", []):
             c = family["characteristics"]
             conn.execute(
@@ -212,14 +230,13 @@ def main() -> None:
                 conn.execute(
                     "INSERT INTO family_targets (family_id, target) VALUES (?, ?)",
                     (family["id"], target))
-            for op in c.get("operations", []):
+            for comp_ref in c.get("components", []):
+                params = comp_ref.get("params")
                 conn.execute(
-                    "INSERT INTO family_operations (family_id, operation) VALUES (?, ?)",
-                    (family["id"], op))
-            for component in c.get("components", []):
-                conn.execute(
-                    "INSERT INTO family_components (family_id, component) VALUES (?, ?)",
-                    (family["id"], component))
+                    "INSERT INTO family_components (family_id, component_id, params_json)"
+                    " VALUES (?, ?, ?)",
+                    (family["id"], comp_ref["id"],
+                     json.dumps(params, ensure_ascii=True) if params else None))
             for pub_id in family.get("publication_ids", []):
                 conn.execute(
                     "INSERT INTO family_publications (family_id, publication_id) VALUES (?, ?)",

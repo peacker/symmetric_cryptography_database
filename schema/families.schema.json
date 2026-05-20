@@ -32,17 +32,28 @@
       },
       "additionalProperties": false
     },
+    "component_ref": {
+      "type": "object",
+      "required": ["id"],
+      "additionalProperties": false,
+      "properties": {
+        "id":     { "type": "string", "minLength": 1 },
+        "params": { "type": "object" }
+      }
+    },
     "characteristics": {
       "type": "object",
-      "required": ["operations", "components"],
+      "required": ["components"],
       "properties": {
         "block_size_bits":         { "type": "integer", "minimum": 1 },
         "block_size_bits_options": { "type": "array", "items": { "type": "integer", "minimum": 1 } },
         "state_size_bits":         { "type": "integer", "minimum": 1 },
         "key_size_bits_options":   { "type": "array", "items": { "type": "integer", "minimum": 1 } },
         "rounds_options":          { "type": "array", "items": { "type": "integer", "minimum": 1 } },
-        "operations":  { "type": "array", "items": { "type": "string", "minLength": 1 } },
-        "components":  { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        "components": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/component_ref" }
+        }
       },
       "additionalProperties": true
     },

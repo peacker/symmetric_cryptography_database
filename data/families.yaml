@@ -10,15 +10,15 @@ families:
       block_size_bits_options: [128, 192, 256]
       key_size_bits_options: [128, 192, 256]
       rounds_options: [10, 12, 14]
-      operations:
-        - substitution
-        - permutation
-        - finite_field_multiplication
       components:
-        - sbox
-        - mixcolumns
-        - shiftrows
-        - addroundkey
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: field_matrix_mul
+          params: {field_size: 256}
+        - id: word_permutation
+          params: {word_size_bits: 8}
+        - id: xor
+        - id: constant
     publication_ids:
       - daemen_rijmen_1998_rijndael
     standard_ids: []
@@ -41,15 +41,15 @@ families:
       block_size_bits: 128
       key_size_bits_options: [128, 192, 256]
       rounds_options: [10, 12, 14]
-      operations:
-        - substitution
-        - permutation
-        - finite_field_multiplication
       components:
-        - sbox
-        - mixcolumns
-        - shiftrows
-        - addroundkey
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: field_matrix_mul
+          params: {field_size: 256}
+        - id: word_permutation
+          params: {word_size_bits: 8}
+        - id: xor
+        - id: constant
     publication_ids:
       - fips_197_2001
     standard_ids:
@@ -71,12 +71,12 @@ families:
       - software
     characteristics:
       state_size_bits: 512
-      operations:
-        - addition_mod_2_32
-        - xor
-        - rotation
       components:
-        - quarterround
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
     publication_ids:
       - bernstein_2008_salsa20
     standard_ids: []
@@ -95,12 +95,12 @@ families:
       - software
     characteristics:
       state_size_bits: 512
-      operations:
-        - addition_mod_2_32
-        - xor
-        - rotation
       components:
-        - quarterround
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
     publication_ids:
       - bernstein_2008_chacha
     standard_ids: []
@@ -123,13 +123,12 @@ families:
       block_size_bits: 64
       key_size_bits_options: [80, 128]
       rounds_options: [31]
-      operations:
-        - substitution
-        - permutation
-        - xor
       components:
-        - sbox
-        - p_layer
+        - id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - id: bit_permutation
+        - id: xor
+        - id: constant
     publication_ids:
       - bogdanov_2007_present
     standard_ids: []
@@ -147,13 +146,12 @@ families:
       block_size_bits_options: [64, 128]
       key_size_bits_options: [128]
       rounds_options: [28, 40]
-      operations:
-        - substitution
-        - permutation
-        - xor
       components:
-        - sbox
-        - bit_permutation
+        - id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - id: bit_permutation
+        - id: xor
+        - id: constant
     publication_ids:
       - banik_2017_gift
     standard_ids: []
