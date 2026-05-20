@@ -22,15 +22,18 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] ChaCha
 - [ ] CIPHERUNICORN-A
 - [x] CLEFIA
+- [x] CRYPTON
 - [ ] DESX
 - [x] DES
-- [ ] DFC
-- [ ] E2
+- [x] DEAL
+- [x] DFC
+- [x] E2
 - [ ] FEAL
-- [ ] FROG
+- [x] FROG
 - [ ] GOST 28147-89 (Magma)
 - [x] GIFT
 - [ ] HIGHT
+- [x] HPC
 - [x] IDEA
 - [ ] ICE
 - [ ] ISAAC
@@ -45,8 +48,9 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] LEA-128
 - [ ] LEVIATHAN
 - [ ] LOKI
-- [ ] LOKI97
-- [ ] MARS
+- [x] LOKI97
+- [x] MAGENTA
+- [x] MARS
 - [ ] MCRYPTON
 - [ ] MIBS
 - [ ] MISTY1
@@ -66,10 +70,11 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] Rijndael
 - [ ] Robin
 - [ ] SAFER
-- [ ] SAFER+
+- [x] SAFER+
 - [x] SALSA
 - [ ] SC2000
 - [x] SEED
+- [x] Serpent
 - [ ] SHACAL
 - [ ] SHARK
 - [ ] SKIPJACK

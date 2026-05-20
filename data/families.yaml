@@ -596,7 +596,8 @@ families:
     publication_ids:
       - adams_gilchrist_1999_cast256
     standard_ids: []
-    process_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
     influences:
       - source_family_id: cast128
         relation: generalization_of
@@ -808,4 +809,303 @@ families:
       - suzaki_et_al_2012_twine
     standard_ids: []
     process_ids: []
+    influences: []
+
+  # ── AES Candidates ──────────────────────────────────────────────────────
+
+  - id: crypton
+    name: CRYPTON
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids:
+      - spn
+    round_ids:
+      - crypton_round
+    target_applications:
+      - generic
+      - software
+      - hardware
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: word_permutation
+          params: {word_size_bits: 8}
+        - id: binary_matrix_mul
+    publication_ids:
+      - lim_1998_crypton
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences: []
+
+  - id: deal
+    name: DEAL
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - deal_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: sbox
+          params: {input_bits: 6, output_bits: 4}
+        - id: bit_permutation
+    publication_ids:
+      - knudsen_1998_deal
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences:
+      - source_family_id: des
+        relation: inspired_by
+        note: DEAL uses DES as the round function in a Feistel network.
+
+  - id: dfc
+    name: DFC
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - dfc_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: mul_mod
+          params: {modulus: 9223372036854775807}
+        - id: add_mod
+          params: {modulus: 18446744073709551616}
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+    publication_ids:
+      - vaudenay_et_al_1998_dfc
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences: []
+    notes: >
+      DFC (Decorrelated Fast Cipher) uses decorrelation theory to provide
+      provable security against differential and linear cryptanalysis.
+
+  - id: e2
+    name: E2
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - e2_round
+    target_applications:
+      - generic
+      - software
+      - hardware
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: rotation_fixed
+        - id: add_mod
+          params: {modulus: 4294967296}
+    publication_ids:
+      - shimoyama_et_al_1998_e2
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences: []
+    notes: >
+      E2 (Efficient Encryption) by NTT uses a 12-round Feistel with
+      initial and final key mixing transformations (IT/FT).
+
+  - id: frog
+    name: FROG
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids: []
+    round_ids:
+      - frog_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: word_permutation
+          params: {word_size_bits: 8}
+    publication_ids:
+      - georgoudis_et_al_1998_frog
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences: []
+    notes: >
+      FROG generates key-dependent internal tables used as pseudo-random
+      permutations in each of the eight rounds.
+
+  - id: hpc
+    name: HPC
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids: []
+    round_ids:
+      - hpc_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: rotation_fixed
+    publication_ids:
+      - schroeppel_1998_hpc
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences: []
+    notes: >
+      The Hasty Pudding Cipher (HPC) supports variable block sizes from
+      a few bits up to and beyond 128 bits; the 128-bit block variant
+      (HPC-standard) is represented here.
+
+  - id: loki97
+    name: LOKI97
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - loki97_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: sbox
+          params: {input_bits: 13, output_bits: 8}
+        - id: rotation_fixed
+        - id: binary_matrix_mul
+    publication_ids:
+      - brown_et_al_1998_loki97
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences:
+      - source_family_id: des
+        relation: inspired_by
+        note: LOKI97 continues the LOKI series of Feistel designs from Australia.
+
+  - id: magenta
+    name: MAGENTA
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids:
+      - feistel
+    round_ids:
+      - magenta_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: field_matrix_mul
+          params: {field_size: 256}
+    publication_ids:
+      - jacobson_huber_1998_magenta
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences: []
+    notes: >
+      MAGENTA (Method for Assurance of Generally Networked Technical Architectures)
+      by Deutsche Telekom uses the PE function built over GF(2^8).
+
+  - id: mars
+    name: MARS
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids: []
+    round_ids:
+      - mars_round
+    target_applications:
+      - generic
+      - software
+      - hardware
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: add_mod
+          params: {modulus: 4294967296}
+        - id: xor
+        - id: mul_mod
+          params: {modulus: 4294967296}
+        - id: rotation_variable
+        - id: sbox
+          params: {input_bits: 8, output_bits: 32}
+        - id: rotation_fixed
+    publication_ids:
+      - burwick_et_al_1999_mars
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences: []
+    notes: >
+      MARS by IBM uses a heterogeneous structure: unkeyed mixing rounds,
+      forward keying rounds, and backward keying rounds with E-function.
+
+  - id: safer_plus
+    name: SAFER+
+    year: 1998
+    primitive_type: block_cipher
+    construction_ids:
+      - spn
+    round_ids:
+      - safer_plus_round
+    target_applications:
+      - generic
+      - software
+      - hardware
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: xor
+        - id: add_mod
+          params: {modulus: 256}
+        - id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - id: sub_mod
+          params: {modulus: 256}
+        - id: binary_matrix_mul
+    publication_ids:
+      - massey_et_al_1998_safer_plus
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
     influences: []

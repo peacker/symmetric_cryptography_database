@@ -592,3 +592,345 @@ primitives:
       fixed_output_bits: 64
     standard_ids: []
 
+  # ── AES Candidates ───────────────────────────────────────────────────────
+
+  # ── CRYPTON family ───────────────────────────────────────────────────────
+  - id: crypton_128
+    name: CRYPTON-128
+    family_id: crypton
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 12
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: crypton_192
+    name: CRYPTON-192
+    family_id: crypton
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 12
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: crypton_256
+    name: CRYPTON-256
+    family_id: crypton
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 12
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── DEAL family ──────────────────────────────────────────────────────────
+  - id: deal_128
+    name: DEAL-128
+    family_id: deal
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 6
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: deal_192
+    name: DEAL-192
+    family_id: deal
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 6
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: deal_256
+    name: DEAL-256
+    family_id: deal
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── DFC family ───────────────────────────────────────────────────────────
+  - id: dfc_128
+    name: DFC-128
+    family_id: dfc
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: dfc_192
+    name: DFC-192
+    family_id: dfc
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: dfc_256
+    name: DFC-256
+    family_id: dfc
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── E2 family ────────────────────────────────────────────────────────────
+  - id: e2_128
+    name: E2-128
+    family_id: e2
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 12
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: e2_192
+    name: E2-192
+    family_id: e2
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 12
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: e2_256
+    name: E2-256
+    family_id: e2
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 12
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── FROG family ──────────────────────────────────────────────────────────
+  - id: frog_128
+    name: FROG-128
+    family_id: frog
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: frog_192
+    name: FROG-192
+    family_id: frog
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: frog_256
+    name: FROG-256
+    family_id: frog
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── HPC family ───────────────────────────────────────────────────────────
+  - id: hpc_128
+    name: HPC-128
+    family_id: hpc
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: hpc_192
+    name: HPC-192
+    family_id: hpc
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: hpc_256
+    name: HPC-256
+    family_id: hpc
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── LOKI97 family ────────────────────────────────────────────────────────
+  - id: loki97_128
+    name: LOKI97-128
+    family_id: loki97
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 16
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: loki97_192
+    name: LOKI97-192
+    family_id: loki97
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 16
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: loki97_256
+    name: LOKI97-256
+    family_id: loki97
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 16
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── MAGENTA family ───────────────────────────────────────────────────────
+  - id: magenta_128
+    name: MAGENTA-128
+    family_id: magenta
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 6
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: magenta_192
+    name: MAGENTA-192
+    family_id: magenta
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: magenta_256
+    name: MAGENTA-256
+    family_id: magenta
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── MARS family ──────────────────────────────────────────────────────────
+  - id: mars_128
+    name: MARS-128
+    family_id: mars
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 32
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: mars_192
+    name: MARS-192
+    family_id: mars
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 32
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: mars_256
+    name: MARS-256
+    family_id: mars
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 32
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── SAFER+ family ────────────────────────────────────────────────────────
+  - id: safer_plus_128
+    name: SAFER+-128
+    family_id: safer_plus
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 8
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: safer_plus_192
+    name: SAFER+-192
+    family_id: safer_plus
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 12
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: safer_plus_256
+    name: SAFER+-256
+    family_id: safer_plus
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 16
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+

@@ -352,3 +352,123 @@ publications:
     year: 2012
     venue: FSE 2012
     url: https://doi.org/10.1007/978-3-642-34047-5_13
+
+  # ── AES Candidates ────────────────────────────────────────────────────────
+
+  - id: lim_1998_crypton
+    kind: article
+    title: "CRYPTON: A New 128-bit Block Cipher"
+    authors:
+      - Chae Hoon Lim
+    year: 1998
+    venue: AES Candidate Submission
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development
+
+  - id: knudsen_1998_deal
+    kind: article
+    title: "DEAL - A 128-bit Block Cipher"
+    authors:
+      - Lars R. Knudsen
+    year: 1998
+    venue: AES Candidate Submission
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development
+
+  - id: vaudenay_et_al_1998_dfc
+    kind: article
+    title: "Decorrelated Fast Cipher: An AES Candidate"
+    authors:
+      - Serge Vaudenay
+      - Henri Gilbert
+      - Mireille Girault
+      - Philippe Hoogvorst
+      - Fabrice Noilhan
+      - Thomas Pornin
+      - Guillaume Poupard
+      - Jacques Stern
+    year: 1998
+    venue: AES Candidate Submission
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development
+
+  - id: shimoyama_et_al_1998_e2
+    kind: article
+    title: "E2 - A New 128-bit Block Cipher"
+    authors:
+      - Takeshi Shimoyama
+      - Masahiko Takenaka
+      - Takeshi Kanda
+      - Mitsuru Matsui
+      - Shiho Moriai
+    year: 1998
+    venue: AES Candidate Submission
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development
+
+  - id: georgoudis_et_al_1998_frog
+    kind: article
+    title: "FROG"
+    authors:
+      - Dianelos Georgoudis
+      - Damian Leroux
+      - Billy Simon Chaves
+    year: 1998
+    venue: AES Candidate Submission
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development
+
+  - id: schroeppel_1998_hpc
+    kind: article
+    title: "The Hasty Pudding Cipher"
+    authors:
+      - Richard Schroeppel
+    year: 1998
+    venue: AES Candidate Submission
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development
+
+  - id: brown_et_al_1998_loki97
+    kind: article
+    title: "LOKI97"
+    authors:
+      - Lawrie Brown
+      - Josef Pieprzyk
+      - Jennifer Seberry
+    year: 1998
+    venue: AES Candidate Submission
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development
+
+  - id: jacobson_huber_1998_magenta
+    kind: article
+    title: "MAGENTA"
+    authors:
+      - Michael Jacobson Jr.
+      - Klaus Huber
+    year: 1998
+    venue: AES Candidate Submission
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development
+
+  - id: burwick_et_al_1999_mars
+    kind: article
+    title: "MARS - A Candidate Cipher for AES"
+    authors:
+      - Carolynn Burwick
+      - Don Coppersmith
+      - Edward D'Avignon
+      - Rosario Gennaro
+      - Shai Halevi
+      - Charanjit Jutla
+      - Stephen M. Matyas Jr.
+      - Luke O'Connor
+      - Mohammad Peyravian
+      - David Safford
+      - Nevenko Zunic
+    year: 1999
+    venue: AES Candidate Submission
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development
+
+  - id: massey_et_al_1998_safer_plus
+    kind: article
+    title: "SAFER+: An AES Submission"
+    authors:
+      - James L. Massey
+      - Gurgen Khachatrian
+      - Melsik Kuregian
+    year: 1998
+    venue: AES Candidate Submission
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development

@@ -1,3 +1,11 @@
+Timeline events:
+1997/01/02: NIST announces wish to choose a successor to DES to be known as AES - https://csrc.nist.gov/news/1997/announcing-development-of-fips-for-advanced-encryp
+1997/09/12: NIST AES call for proposals - https://csrc.nist.gov/news/1997/requesting-candidate-algorithm-nominations-for-aes
+1998/08: NIST organized AES1 conference
+1999/03: NIST organized AES2 conference
+
+
+Eras:
 | AES selection | 1997-2000 |
 | NESSIE selection | 2000-2003 |
 | ECRYPT & eSTREAM selection | 2004-2008 |

@@ -513,3 +513,193 @@ rounds:
       constant_injection: round_constants
     notes: >
       TWINE is a lightweight 16-branch generalized Feistel block cipher.
+
+  # ── AES Candidates ─────────────────────────────────────────────────────
+
+  - id: crypton_round
+    name: CRYPTON Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: word_permutation
+          params: {word_size_bits: 8}
+        - component_id: binary_matrix_mul
+      constant_injection: round_constants
+    notes: >
+      CRYPTON SPN round with byte substitution, word permutation,
+      and linear diffusion layer.
+
+  - id: deal_round
+    name: DEAL Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        branch_bits: 64
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 6, output_bits: 4}
+        - component_id: bit_permutation
+      constant_injection: subkeys
+    notes: >
+      DEAL Feistel round with DES as the inner round function;
+      each 128-bit round uses a full DES encryption on the 64-bit branch.
+
+  - id: dfc_round
+    name: DFC Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        branch_bits: 64
+      component_flow:
+        - component_id: mul_mod
+          params: {modulus: 9223372036854775807}
+        - component_id: add_mod
+          params: {modulus: 18446744073709551616}
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: xor
+      constant_injection: subkeys
+    notes: >
+      DFC Feistel round using affine mapping over near-prime field
+      combined with an S-box for decorrelation.
+
+  - id: e2_round
+    name: E2 Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        branch_bits: 64
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: rotation_fixed
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+      constant_injection: subkeys
+    notes: >
+      E2 Feistel round with initial and final key mixing layers (IT/FT)
+      and a bijective round function using S-boxes and byte operations.
+
+  - id: frog_round
+    name: FROG Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: word_permutation
+          params: {word_size_bits: 8}
+        - component_id: xor
+      constant_injection: internal_key
+    notes: >
+      FROG round uses a pseudo-random permutation derived from the key;
+      each of the eight rounds applies key-dependent byte permutations and S-boxes.
+
+  - id: hpc_round
+    name: HPC Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+      component_flow:
+        - component_id: xor
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: rotation_fixed
+      constant_injection: subkeys
+    notes: >
+      Hasty Pudding Cipher round using spice values and key-derived
+      tables; structure varies with block size (tiny/short/medium/standard/extended).
+
+  - id: loki97_round
+    name: LOKI97 Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        branch_bits: 64
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 13, output_bits: 8}
+        - component_id: rotation_fixed
+        - component_id: binary_matrix_mul
+      constant_injection: subkeys
+    notes: >
+      LOKI97 Feistel round with large permuted S-box (13-bit input),
+      linear transformation, and complex key schedule.
+
+  - id: magenta_round
+    name: MAGENTA Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        branch_bits: 64
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: field_matrix_mul
+          params: {field_size: 256}
+      constant_injection: subkeys
+    notes: >
+      MAGENTA Feistel round using the PE function built recursively
+      from GF(2^8) multiply and S-box operations.
+
+  - id: mars_round
+    name: MARS Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+        word_bits: 32
+      component_flow:
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+        - component_id: xor
+        - component_id: mul_mod
+          params: {modulus: 4294967296}
+        - component_id: rotation_variable
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 32}
+        - component_id: rotation_fixed
+      constant_injection: subkeys
+    notes: >
+      MARS heterogeneous structure: mixing phases use ARX; keying phases
+      use E-function with S-boxes, integer multiplication, and data-dependent rotations.
+
+  - id: safer_plus_round
+    name: SAFER+ Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+      component_flow:
+        - component_id: xor
+        - component_id: add_mod
+          params: {modulus: 256}
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: sub_mod
+          params: {modulus: 256}
+        - component_id: binary_matrix_mul
+      constant_injection: round_keys
+    notes: >
+      SAFER+ SPN round with alternating XOR/byte-add key mixing,
+      exponential/logarithm S-boxes, and Pseudo-Hadamard Transform (PHT) diffusion.
