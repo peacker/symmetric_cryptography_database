@@ -24,16 +24,7 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
         """
         PRAGMA foreign_keys = ON;
 
-        CREATE TABLE IF NOT EXISTS primitives (
-            id TEXT PRIMARY KEY,
-            name TEXT NOT NULL,
-            year INTEGER NOT NULL,
-            primitive_type TEXT NOT NULL,
-            fixed_input_bits INTEGER NOT NULL,
-            fixed_output_bits INTEGER NOT NULL,
-            characteristics_json TEXT NOT NULL
-        );
-
+        -- Reference tables -------------------------------------------------
         CREATE TABLE IF NOT EXISTS publications (
             id TEXT PRIMARY KEY,
             kind TEXT NOT NULL,
@@ -61,33 +52,81 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             notes TEXT
         );
 
-        CREATE TABLE IF NOT EXISTS primitive_targets (
-            primitive_id TEXT NOT NULL,
+        -- Families ---------------------------------------------------------
+        CREATE TABLE IF NOT EXISTS families (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            year INTEGER NOT NULL,
+            primitive_type TEXT NOT NULL,
+            notes TEXT,
+            characteristics_json TEXT NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS family_targets (
+            family_id TEXT NOT NULL,
             target TEXT NOT NULL,
-            PRIMARY KEY (primitive_id, target),
-            FOREIGN KEY (primitive_id) REFERENCES primitives(id) ON DELETE CASCADE
+            PRIMARY KEY (family_id, target),
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE
         );
 
-        CREATE TABLE IF NOT EXISTS primitive_operations (
-            primitive_id TEXT NOT NULL,
+        CREATE TABLE IF NOT EXISTS family_operations (
+            family_id TEXT NOT NULL,
             operation TEXT NOT NULL,
-            PRIMARY KEY (primitive_id, operation),
-            FOREIGN KEY (primitive_id) REFERENCES primitives(id) ON DELETE CASCADE
+            PRIMARY KEY (family_id, operation),
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE
         );
 
-        CREATE TABLE IF NOT EXISTS primitive_components (
-            primitive_id TEXT NOT NULL,
+        CREATE TABLE IF NOT EXISTS family_components (
+            family_id TEXT NOT NULL,
             component TEXT NOT NULL,
-            PRIMARY KEY (primitive_id, component),
-            FOREIGN KEY (primitive_id) REFERENCES primitives(id) ON DELETE CASCADE
+            PRIMARY KEY (family_id, component),
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE
         );
 
-        CREATE TABLE IF NOT EXISTS primitive_publications (
-            primitive_id TEXT NOT NULL,
+        CREATE TABLE IF NOT EXISTS family_publications (
+            family_id TEXT NOT NULL,
             publication_id TEXT NOT NULL,
-            PRIMARY KEY (primitive_id, publication_id),
-            FOREIGN KEY (primitive_id) REFERENCES primitives(id) ON DELETE CASCADE,
+            PRIMARY KEY (family_id, publication_id),
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
             FOREIGN KEY (publication_id) REFERENCES publications(id) ON DELETE RESTRICT
+        );
+
+        CREATE TABLE IF NOT EXISTS family_standards (
+            family_id TEXT NOT NULL,
+            standard_id TEXT NOT NULL,
+            PRIMARY KEY (family_id, standard_id),
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
+            FOREIGN KEY (standard_id) REFERENCES standards(id) ON DELETE RESTRICT
+        );
+
+        CREATE TABLE IF NOT EXISTS family_processes (
+            family_id TEXT NOT NULL,
+            process_id TEXT NOT NULL,
+            PRIMARY KEY (family_id, process_id),
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
+            FOREIGN KEY (process_id) REFERENCES processes(id) ON DELETE RESTRICT
+        );
+
+        CREATE TABLE IF NOT EXISTS family_influences (
+            source_family_id TEXT NOT NULL,
+            target_family_id TEXT NOT NULL,
+            relation TEXT NOT NULL,
+            note TEXT NOT NULL,
+            PRIMARY KEY (source_family_id, target_family_id, relation),
+            FOREIGN KEY (source_family_id) REFERENCES families(id) ON DELETE CASCADE,
+            FOREIGN KEY (target_family_id) REFERENCES families(id) ON DELETE CASCADE
+        );
+
+        -- Primitive instances ----------------------------------------------
+        CREATE TABLE IF NOT EXISTS primitives (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            family_id TEXT NOT NULL,
+            year INTEGER NOT NULL,
+            fixed_input_bits INTEGER NOT NULL,
+            fixed_output_bits INTEGER NOT NULL,
+            characteristics_json TEXT NOT NULL,
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS primitive_standards (
@@ -97,24 +136,6 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (primitive_id) REFERENCES primitives(id) ON DELETE CASCADE,
             FOREIGN KEY (standard_id) REFERENCES standards(id) ON DELETE RESTRICT
         );
-
-        CREATE TABLE IF NOT EXISTS primitive_processes (
-            primitive_id TEXT NOT NULL,
-            process_id TEXT NOT NULL,
-            PRIMARY KEY (primitive_id, process_id),
-            FOREIGN KEY (primitive_id) REFERENCES primitives(id) ON DELETE CASCADE,
-            FOREIGN KEY (process_id) REFERENCES processes(id) ON DELETE RESTRICT
-        );
-
-        CREATE TABLE IF NOT EXISTS primitive_influences (
-            source_primitive_id TEXT NOT NULL,
-            target_primitive_id TEXT NOT NULL,
-            relation TEXT NOT NULL,
-            note TEXT NOT NULL,
-            PRIMARY KEY (source_primitive_id, target_primitive_id, relation),
-            FOREIGN KEY (source_primitive_id) REFERENCES primitives(id) ON DELETE CASCADE,
-            FOREIGN KEY (target_primitive_id) REFERENCES primitives(id) ON DELETE CASCADE
-        );
         """
     )
 
@@ -122,28 +143,32 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
 def clear_tables(conn: sqlite3.Connection) -> None:
     conn.executescript(
         """
-        DELETE FROM primitive_influences;
-        DELETE FROM primitive_processes;
         DELETE FROM primitive_standards;
-        DELETE FROM primitive_publications;
-        DELETE FROM primitive_components;
-        DELETE FROM primitive_operations;
-        DELETE FROM primitive_targets;
+        DELETE FROM primitives;
+        DELETE FROM family_influences;
+        DELETE FROM family_processes;
+        DELETE FROM family_standards;
+        DELETE FROM family_publications;
+        DELETE FROM family_components;
+        DELETE FROM family_operations;
+        DELETE FROM family_targets;
+        DELETE FROM families;
         DELETE FROM processes;
         DELETE FROM standards;
         DELETE FROM publications;
-        DELETE FROM primitives;
         """
     )
 
 
 def main() -> None:
     BUILD_DIR.mkdir(parents=True, exist_ok=True)
+    DB_PATH.unlink(missing_ok=True)  # always rebuild from scratch
 
-    primitives_doc = load_yaml(DATA_DIR / "primitives.yaml")
+    families_doc    = load_yaml(DATA_DIR / "families.yaml")
+    primitives_doc  = load_yaml(DATA_DIR / "primitives.yaml")
     publications_doc = load_yaml(DATA_DIR / "publications.yaml")
-    standards_doc = load_yaml(DATA_DIR / "standards.yaml")
-    processes_doc = load_yaml(DATA_DIR / "processes.yaml")
+    standards_doc   = load_yaml(DATA_DIR / "standards.yaml")
+    processes_doc   = load_yaml(DATA_DIR / "processes.yaml")
 
     conn = sqlite3.connect(DB_PATH)
     try:
@@ -152,124 +177,84 @@ def main() -> None:
 
         for pub in publications_doc.get("publications", []):
             conn.execute(
-                """
-                INSERT INTO publications (id, kind, title, year, venue, url, authors_json)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                """,
-                (
-                    pub["id"],
-                    pub["kind"],
-                    pub["title"],
-                    pub["year"],
-                    pub.get("venue"),
-                    pub.get("url"),
-                    json.dumps(pub.get("authors", []), ensure_ascii=True),
-                ),
+                "INSERT INTO publications (id, kind, title, year, venue, url, authors_json)"
+                " VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (pub["id"], pub["kind"], pub["title"], pub["year"],
+                 pub.get("venue"), pub.get("url"),
+                 json.dumps(pub.get("authors", []), ensure_ascii=True)),
             )
 
         for std in standards_doc.get("standards", []):
             conn.execute(
-                """
-                INSERT INTO standards (id, name, organization, year, status)
-                VALUES (?, ?, ?, ?, ?)
-                """,
-                (
-                    std["id"],
-                    std["name"],
-                    std.get("organization"),
-                    std.get("year"),
-                    std.get("status"),
-                ),
+                "INSERT INTO standards (id, name, organization, year, status)"
+                " VALUES (?, ?, ?, ?, ?)",
+                (std["id"], std["name"], std.get("organization"),
+                 std.get("year"), std.get("status")),
             )
 
         for process in processes_doc.get("processes", []):
             conn.execute(
-                """
-                INSERT INTO processes (id, name, organizer, start_year, end_year, notes)
-                VALUES (?, ?, ?, ?, ?, ?)
-                """,
-                (
-                    process["id"],
-                    process["name"],
-                    process.get("organizer"),
-                    process.get("start_year"),
-                    process.get("end_year"),
-                    process.get("notes"),
-                ),
+                "INSERT INTO processes (id, name, organizer, start_year, end_year, notes)"
+                " VALUES (?, ?, ?, ?, ?, ?)",
+                (process["id"], process["name"], process.get("organizer"),
+                 process.get("start_year"), process.get("end_year"), process.get("notes")),
             )
+
+        for family in families_doc.get("families", []):
+            c = family["characteristics"]
+            conn.execute(
+                "INSERT INTO families (id, name, year, primitive_type, notes, characteristics_json)"
+                " VALUES (?, ?, ?, ?, ?, ?)",
+                (family["id"], family["name"], family["year"], family["primitive_type"],
+                 family.get("notes"), json.dumps(c, ensure_ascii=True)),
+            )
+            for target in family.get("target_applications", []):
+                conn.execute(
+                    "INSERT INTO family_targets (family_id, target) VALUES (?, ?)",
+                    (family["id"], target))
+            for op in c.get("operations", []):
+                conn.execute(
+                    "INSERT INTO family_operations (family_id, operation) VALUES (?, ?)",
+                    (family["id"], op))
+            for component in c.get("components", []):
+                conn.execute(
+                    "INSERT INTO family_components (family_id, component) VALUES (?, ?)",
+                    (family["id"], component))
+            for pub_id in family.get("publication_ids", []):
+                conn.execute(
+                    "INSERT INTO family_publications (family_id, publication_id) VALUES (?, ?)",
+                    (family["id"], pub_id))
+            for std_id in family.get("standard_ids", []):
+                conn.execute(
+                    "INSERT INTO family_standards (family_id, standard_id) VALUES (?, ?)",
+                    (family["id"], std_id))
+            for process_id in family.get("process_ids", []):
+                conn.execute(
+                    "INSERT INTO family_processes (family_id, process_id) VALUES (?, ?)",
+                    (family["id"], process_id))
+            for edge in family.get("influences", []):
+                conn.execute(
+                    "INSERT INTO family_influences"
+                    " (source_family_id, target_family_id, relation, note)"
+                    " VALUES (?, ?, ?, ?)",
+                    (edge["source_family_id"], family["id"],
+                     edge["relation"], edge["note"]))
 
         for primitive in primitives_doc.get("primitives", []):
             c = primitive["characteristics"]
             conn.execute(
-                """
-                INSERT INTO primitives (
-                    id, name, year, primitive_type,
-                    fixed_input_bits, fixed_output_bits, characteristics_json
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                """,
-                (
-                    primitive["id"],
-                    primitive["name"],
-                    primitive["year"],
-                    primitive["primitive_type"],
-                    c["fixed_input_bits"],
-                    c["fixed_output_bits"],
-                    json.dumps(c, ensure_ascii=True),
-                ),
+                "INSERT INTO primitives"
+                " (id, name, family_id, year, fixed_input_bits, fixed_output_bits,"
+                "  characteristics_json)"
+                " VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (primitive["id"], primitive["name"], primitive["family_id"],
+                 primitive["year"], c["fixed_input_bits"], c["fixed_output_bits"],
+                 json.dumps(c, ensure_ascii=True)),
             )
-
-            for target in primitive.get("target_applications", []):
-                conn.execute(
-                    "INSERT INTO primitive_targets (primitive_id, target) VALUES (?, ?)",
-                    (primitive["id"], target),
-                )
-
-            for op in c.get("operations", []):
-                conn.execute(
-                    "INSERT INTO primitive_operations (primitive_id, operation) VALUES (?, ?)",
-                    (primitive["id"], op),
-                )
-
-            for component in c.get("components", []):
-                conn.execute(
-                    "INSERT INTO primitive_components (primitive_id, component) VALUES (?, ?)",
-                    (primitive["id"], component),
-                )
-
-            for pub_id in primitive.get("publication_ids", []):
-                conn.execute(
-                    "INSERT INTO primitive_publications (primitive_id, publication_id) VALUES (?, ?)",
-                    (primitive["id"], pub_id),
-                )
-
             for std_id in primitive.get("standard_ids", []):
                 conn.execute(
                     "INSERT INTO primitive_standards (primitive_id, standard_id) VALUES (?, ?)",
-                    (primitive["id"], std_id),
-                )
-
-            for process_id in primitive.get("process_ids", []):
-                conn.execute(
-                    "INSERT INTO primitive_processes (primitive_id, process_id) VALUES (?, ?)",
-                    (primitive["id"], process_id),
-                )
-
-            for edge in primitive.get("influences", []):
-                conn.execute(
-                    """
-                    INSERT INTO primitive_influences (
-                        source_primitive_id, target_primitive_id, relation, note
-                    )
-                    VALUES (?, ?, ?, ?)
-                    """,
-                    (
-                        edge["source_primitive_id"],
-                        primitive["id"],
-                        edge["relation"],
-                        edge["note"],
-                    ),
-                )
+                    (primitive["id"], std_id))
 
         conn.commit()
         print(f"Database built: {DB_PATH}")
@@ -279,3 +264,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+

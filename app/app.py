@@ -27,10 +27,7 @@ st.set_page_config(
 @st.cache_resource
 def get_connection() -> sqlite3.Connection:
     if not DB_PATH.exists():
-        st.error(
-            "Database not found. Run `make build-db` first.",
-            icon="🚫",
-        )
+        st.error("Database not found. Run `make build-db` first.")
         st.stop()
     return sqlite3.connect(DB_PATH, check_same_thread=False)
 
@@ -44,20 +41,49 @@ def load_primitives() -> pd.DataFrame:
             p.id,
             p.name,
             p.year,
-            p.primitive_type,
+            f.id   AS family_id,
+            f.name AS family_name,
+            f.primitive_type,
             p.fixed_input_bits,
             p.fixed_output_bits,
             GROUP_CONCAT(DISTINCT t.target) AS targets,
             GROUP_CONCAT(DISTINCT s.name)   AS standards,
             GROUP_CONCAT(DISTINCT pr.name)  AS processes
         FROM primitives p
-        LEFT JOIN primitive_targets t     ON t.primitive_id  = p.id
-        LEFT JOIN primitive_standards ps  ON ps.primitive_id = p.id
-        LEFT JOIN standards s             ON s.id            = ps.standard_id
-        LEFT JOIN primitive_processes pp  ON pp.primitive_id = p.id
-        LEFT JOIN processes pr            ON pr.id           = pp.process_id
+        JOIN families f ON f.id = p.family_id
+        LEFT JOIN family_targets t     ON t.family_id  = f.id
+        LEFT JOIN primitive_standards ps ON ps.primitive_id = p.id
+        LEFT JOIN standards s            ON s.id = ps.standard_id
+        LEFT JOIN family_processes fp    ON fp.family_id = f.id
+        LEFT JOIN processes pr           ON pr.id = fp.process_id
         GROUP BY p.id
         ORDER BY p.year, p.name
+        """,
+        conn,
+    )
+
+
+@st.cache_data
+def load_families() -> pd.DataFrame:
+    conn = get_connection()
+    return pd.read_sql_query(
+        """
+        SELECT
+            f.id, f.name, f.year, f.primitive_type, f.notes,
+            COUNT(p.id) AS instance_count,
+            GROUP_CONCAT(DISTINCT p.name)  AS instances,
+            GROUP_CONCAT(DISTINCT t.target) AS targets,
+            GROUP_CONCAT(DISTINCT s.name)   AS standards,
+            GROUP_CONCAT(DISTINCT pr.name)  AS processes
+        FROM families f
+        LEFT JOIN primitives p      ON p.family_id  = f.id
+        LEFT JOIN family_targets t  ON t.family_id  = f.id
+        LEFT JOIN family_standards fs ON fs.family_id = f.id
+        LEFT JOIN standards s         ON s.id = fs.standard_id
+        LEFT JOIN family_processes fp ON fp.family_id = f.id
+        LEFT JOIN processes pr        ON pr.id = fp.process_id
+        GROUP BY f.id
+        ORDER BY f.year, f.name
         """,
         conn,
     )
@@ -68,9 +94,16 @@ def load_influences() -> pd.DataFrame:
     conn = get_connection()
     return pd.read_sql_query(
         """
-        SELECT source_primitive_id, target_primitive_id, relation, note
-        FROM primitive_influences
-        ORDER BY source_primitive_id
+        SELECT fi.source_family_id, sf.name AS source_name,
+               fi.target_family_id, tf.name AS target_name,
+               fi.relation, fi.note,
+               sf.primitive_type AS source_type,
+               sf.year AS source_year,
+               tf.year AS target_year
+        FROM family_influences fi
+        JOIN families sf ON sf.id = fi.source_family_id
+        JOIN families tf ON tf.id = fi.target_family_id
+        ORDER BY fi.source_family_id
         """,
         conn,
     )
@@ -82,10 +115,10 @@ def load_publications() -> pd.DataFrame:
     return pd.read_sql_query(
         """
         SELECT pub.id, pub.kind, pub.title, pub.year, pub.venue, pub.url,
-               GROUP_CONCAT(p.name, ', ') AS primitives
+               GROUP_CONCAT(DISTINCT f.name) AS families
         FROM publications pub
-        LEFT JOIN primitive_publications pp ON pp.publication_id = pub.id
-        LEFT JOIN primitives p              ON p.id              = pp.primitive_id
+        LEFT JOIN family_publications fp ON fp.publication_id = pub.id
+        LEFT JOIN families f             ON f.id = fp.family_id
         GROUP BY pub.id
         ORDER BY pub.year DESC
         """,
@@ -98,10 +131,12 @@ def load_publications() -> pd.DataFrame:
 st.sidebar.title("Symmetric Primitives DB")
 page = st.sidebar.radio(
     "View",
-    ["Timeline", "Influence Graph", "Size Analysis", "Primitives Browser", "References"],
+    ["Timeline", "Influence Graph", "Size Analysis",
+     "Primitives Browser", "Families", "References"],
 )
 
 primitives = load_primitives()
+families   = load_families()
 influences = load_influences()
 
 # ── Sidebar global filters ────────────────────────────────────────────────────
@@ -123,17 +158,21 @@ df = primitives[
 
 if page == "Timeline":
     st.header("Primitive Timeline")
-    st.caption("Each point is one primitive, coloured by type. Hover for details.")
+    st.caption(
+        "Each point is one **instance**, coloured by type. "
+        "Instances of the same family are shown in the same row."
+    )
 
     fig = px.strip(
         df,
         x="year",
         y="primitive_type",
-        color="primitive_type",
+        color="family_name",
         hover_name="name",
         hover_data={
             "year": True,
             "primitive_type": False,
+            "family_name": True,
             "fixed_input_bits": True,
             "fixed_output_bits": True,
             "targets": True,
@@ -142,6 +181,7 @@ if page == "Timeline":
         labels={
             "year": "Year",
             "primitive_type": "Type",
+            "family_name": "Family",
             "fixed_input_bits": "Input (bits)",
             "fixed_output_bits": "Output (bits)",
             "targets": "Applications",
@@ -150,11 +190,12 @@ if page == "Timeline":
         height=420,
     )
     fig.update_traces(marker_size=14, jitter=0)
-    fig.update_layout(showlegend=False, margin=dict(l=0, r=0, t=20, b=0))
+    fig.update_layout(margin=dict(l=0, r=0, t=20, b=0))
     st.plotly_chart(fig, use_container_width=True)
 
 elif page == "Influence Graph":
-    st.header("Design Influence Network")
+    st.header("Family Influence Network")
+    st.caption("Nodes are **families**; edges capture design lineage. Edge colour = relation type.")
 
     if influences.empty:
         st.info("No influence edges in the database yet.")
@@ -162,26 +203,6 @@ elif page == "Influence Graph":
         try:
             from pyvis.network import Network  # type: ignore
             import streamlit.components.v1 as components
-
-            net = Network(height="560px", width="100%", directed=True,
-                          bgcolor="#0e1117", font_color="white")
-            net.set_options("""
-            {
-              "physics": {
-                "barnesHut": { "gravitationalConstant": -8000, "springLength": 180 }
-              },
-              "edges": {
-                "arrows": { "to": { "enabled": true } },
-                "color": { "color": "#888" },
-                "font": { "size": 11, "color": "#ccc" }
-              },
-              "nodes": {
-                "shape": "dot",
-                "size": 20,
-                "font": { "size": 14 }
-              }
-            }
-            """)
 
             RELATION_COLOURS = {
                 "special_case_of":   "#ef553b",
@@ -191,26 +212,51 @@ elif page == "Influence Graph":
                 "generalization_of": "#ffa15a",
                 "related_to":        "#19d3f3",
             }
+            TYPE_COLOURS = {
+                "block_cipher":        "#4c78a8",
+                "tweakable_block_cipher": "#72b7b2",
+                "permutation":         "#f58518",
+                "compression_function":"#e45756",
+                "update_function":     "#54a24b",
+            }
 
-            all_nodes = set(influences["source_primitive_id"]) | set(
-                influences["target_primitive_id"]
-            )
-            for node in all_nodes:
-                row = primitives[primitives["id"] == node]
-                label = row["name"].iloc[0] if not row.empty else node
+            net = Network(height="560px", width="100%", directed=True,
+                          bgcolor="#0e1117", font_color="white")
+            net.set_options("""
+            {
+              "physics": {
+                "barnesHut": { "gravitationalConstant": -8000, "springLength": 200 }
+              },
+              "edges": {
+                "arrows": { "to": { "enabled": true } },
+                "color": { "color": "#888" },
+                "font": { "size": 11, "color": "#ccc" }
+              },
+              "nodes": {
+                "shape": "dot",
+                "size": 22,
+                "font": { "size": 14 }
+              }
+            }
+            """)
+
+            # Add all family nodes
+            for _, row in families.iterrows():
                 title = (
-                    f"{label}<br>Year: {row['year'].iloc[0]}<br>"
-                    f"Type: {row['primitive_type'].iloc[0]}"
-                    if not row.empty
-                    else node
+                    f"<b>{row['name']}</b><br>"
+                    f"Year: {row['year']}<br>"
+                    f"Type: {row['primitive_type']}<br>"
+                    f"Instances: {row['instances'] or '—'}"
                 )
-                net.add_node(node, label=label, title=title)
+                node_colour = TYPE_COLOURS.get(row["primitive_type"], "#888")
+                net.add_node(row["id"], label=row["name"],
+                             title=title, color=node_colour)
 
             for _, edge in influences.iterrows():
                 colour = RELATION_COLOURS.get(edge["relation"], "#888")
                 net.add_edge(
-                    edge["source_primitive_id"],
-                    edge["target_primitive_id"],
+                    edge["source_family_id"],
+                    edge["target_family_id"],
                     label=edge["relation"].replace("_", " "),
                     color=colour,
                     title=edge["note"],
@@ -221,31 +267,39 @@ elif page == "Influence Graph":
             net.save_graph(str(html_path))
             components.html(html_path.read_text(encoding="utf-8"), height=580)
 
+            # Colour legend
+            cols = st.columns(len(RELATION_COLOURS))
+            for col, (rel, colour) in zip(cols, RELATION_COLOURS.items()):
+                col.markdown(
+                    f'<span style="color:{colour}">■</span> {rel.replace("_", " ")}',
+                    unsafe_allow_html=True,
+                )
+
             with st.expander("Edge table"):
-                st.dataframe(influences, use_container_width=True)
+                st.dataframe(
+                    influences[["source_name", "target_name", "relation", "note"]],
+                    use_container_width=True,
+                )
 
         except ImportError:
-            st.warning(
-                "pyvis is not installed. Run `make setup` then restart the app."
-            )
+            st.warning("pyvis is not installed. Run `make setup` then restart the app.")
             st.dataframe(influences, use_container_width=True)
 
 elif page == "Size Analysis":
     st.header("Input vs Output Size")
-    st.caption(
-        "Bubble size is proportional to the output size. "
-        "Hover a point for full details."
-    )
+    st.caption("Bubble size ∝ output size. Hover for details.")
 
     fig = px.scatter(
         df,
         x="fixed_input_bits",
         y="fixed_output_bits",
         color="primitive_type",
+        symbol="family_name",
         size="fixed_output_bits",
         hover_name="name",
         hover_data={
             "year": True,
+            "family_name": True,
             "targets": True,
             "standards": True,
             "fixed_input_bits": True,
@@ -255,19 +309,20 @@ elif page == "Size Analysis":
             "fixed_input_bits": "Input size (bits)",
             "fixed_output_bits": "Output size (bits)",
             "primitive_type": "Type",
+            "family_name": "Family",
         },
         text="name",
-        height=500,
+        height=520,
     )
     fig.update_traces(textposition="top center", marker_sizemin=12)
     fig.update_layout(margin=dict(l=0, r=0, t=20, b=0))
     st.plotly_chart(fig, use_container_width=True)
 
 elif page == "Primitives Browser":
-    st.header("Primitives Browser")
+    st.header("Instances Browser")
 
     cols = st.columns([3, 1])
-    search = cols[0].text_input("Search by name", placeholder="e.g. AES, GIFT…")
+    search   = cols[0].text_input("Search by name", placeholder="e.g. AES, GIFT…")
     sort_col = cols[1].selectbox("Sort by", ["year", "name", "fixed_input_bits"])
 
     view = df.copy()
@@ -275,19 +330,38 @@ elif page == "Primitives Browser":
         view = view[view["name"].str.contains(search, case=False, na=False)]
     view = view.sort_values(sort_col)
 
-    st.caption(f"{len(view)} primitives shown")
+    st.caption(f"{len(view)} instances shown")
     st.dataframe(
-        view[
-            ["name", "year", "primitive_type", "fixed_input_bits",
-             "fixed_output_bits", "targets", "standards", "processes"]
-        ].rename(columns={
+        view[["name", "family_name", "year", "primitive_type",
+              "fixed_input_bits", "fixed_output_bits",
+              "targets", "standards", "processes"]]
+        .rename(columns={
+            "family_name": "family",
+            "primitive_type": "type",
             "fixed_input_bits": "input (bits)",
             "fixed_output_bits": "output (bits)",
-            "primitive_type": "type",
         }),
         use_container_width=True,
         hide_index=True,
     )
+
+elif page == "Families":
+    st.header("Families Browser")
+
+    fam_types = sorted(families["primitive_type"].dropna().unique())
+    sel_types = st.multiselect("Filter by type", fam_types, default=fam_types)
+    fam_view  = families[families["primitive_type"].isin(sel_types)].sort_values("year")
+
+    for _, row in fam_view.iterrows():
+        with st.expander(f"**{row['name']}** ({row['year']}) — {row['primitive_type']}"):
+            cols = st.columns(3)
+            cols[0].metric("Instances", row["instance_count"])
+            cols[1].write(f"**Applications:** {row['targets'] or '—'}")
+            cols[2].write(f"**Standards:** {row['standards'] or '—'}")
+            if row.get("instances"):
+                st.write(f"**Instance names:** {row['instances']}")
+            if row.get("notes"):
+                st.info(row["notes"])
 
 elif page == "References":
     st.header("Publications & Standards")
@@ -305,7 +379,7 @@ elif page == "References":
             st.write(f"**Kind:** {row['kind']}")
             if row.get("venue"):
                 st.write(f"**Venue:** {row['venue']}")
-            if row.get("primitives"):
-                st.write(f"**Used by:** {row['primitives']}")
+            if row.get("families"):
+                st.write(f"**Families:** {row['families']}")
             if row.get("url"):
                 st.markdown(f"[Link]({row['url']})")

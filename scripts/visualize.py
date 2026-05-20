@@ -72,7 +72,7 @@ def chart_influence_graph(edges: list[dict]) -> None:
 
     G = nx.DiGraph()
     for e in edges:
-        G.add_edge(e["source_primitive_id"], e["target_primitive_id"],
+        G.add_edge(e["source_family_id"], e["target_family_id"],
                    label=e["relation"])
 
     if not G.nodes:

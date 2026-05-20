@@ -28,42 +28,57 @@ def main() -> None:
 
     conn = sqlite3.connect(DB_PATH)
     try:
+        # Instances enriched with family metadata for timeline / scatter
         export_query(
             conn,
             """
-            SELECT id AS primitive_id, name, year, primitive_type,
-                   fixed_input_bits, fixed_output_bits
-            FROM primitives
-            ORDER BY year, name
+            SELECT p.id AS primitive_id, p.name, p.year,
+                   f.id AS family_id, f.name AS family_name,
+                   f.primitive_type,
+                   p.fixed_input_bits, p.fixed_output_bits
+            FROM primitives p
+            JOIN families f ON f.id = p.family_id
+            ORDER BY p.year, p.name
             """,
             VIZ_DIR / "timeline_primitives.csv",
         )
 
+        # Family-level influence edges
         export_query(
             conn,
             """
-            SELECT source_primitive_id, target_primitive_id, relation, note
-            FROM primitive_influences
-            ORDER BY source_primitive_id, target_primitive_id
+            SELECT fi.source_family_id,
+                   sf.name AS source_name,
+                   fi.target_family_id,
+                   tf.name AS target_name,
+                   fi.relation, fi.note
+            FROM family_influences fi
+            JOIN families sf ON sf.id = fi.source_family_id
+            JOIN families tf ON tf.id = fi.target_family_id
+            ORDER BY fi.source_family_id, fi.target_family_id
             """,
             VIZ_DIR / "influence_edges.csv",
         )
 
+        # Applications per instance (via family)
         export_query(
             conn,
             """
             SELECT p.id AS primitive_id, p.name, t.target
             FROM primitives p
-            JOIN primitive_targets t ON t.primitive_id = p.id
+            JOIN families f ON f.id = p.family_id
+            JOIN family_targets t ON t.family_id = f.id
             ORDER BY p.name, t.target
             """,
             VIZ_DIR / "primitive_targets.csv",
         )
 
+        # Instance-level standards
         export_query(
             conn,
             """
-            SELECT p.id AS primitive_id, p.name, s.id AS standard_id, s.name AS standard_name
+            SELECT p.id AS primitive_id, p.name,
+                   s.id AS standard_id, s.name AS standard_name
             FROM primitives p
             JOIN primitive_standards ps ON ps.primitive_id = p.id
             JOIN standards s ON s.id = ps.standard_id
@@ -72,16 +87,34 @@ def main() -> None:
             VIZ_DIR / "primitive_standards.csv",
         )
 
+        # Processes per instance (via family)
         export_query(
             conn,
             """
-            SELECT p.id AS primitive_id, p.name, pr.id AS process_id, pr.name AS process_name
+            SELECT p.id AS primitive_id, p.name,
+                   pr.id AS process_id, pr.name AS process_name
             FROM primitives p
-            JOIN primitive_processes pp ON pp.primitive_id = p.id
-            JOIN processes pr ON pr.id = pp.process_id
+            JOIN families f ON f.id = p.family_id
+            JOIN family_processes fp ON fp.family_id = f.id
+            JOIN processes pr ON pr.id = fp.process_id
             ORDER BY p.name, pr.name
             """,
             VIZ_DIR / "primitive_processes.csv",
+        )
+
+        # Family summary
+        export_query(
+            conn,
+            """
+            SELECT f.id AS family_id, f.name AS family_name,
+                   f.year, f.primitive_type,
+                   COUNT(p.id) AS instance_count
+            FROM families f
+            LEFT JOIN primitives p ON p.family_id = f.id
+            GROUP BY f.id
+            ORDER BY f.year, f.name
+            """,
+            VIZ_DIR / "families.csv",
         )
 
         print(f"Visualization exports created in: {VIZ_DIR}")

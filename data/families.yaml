@@ -1,0 +1,166 @@
+version: 1
+families:
+  - id: rijndael
+    name: Rijndael
+    year: 1998
+    primitive_type: block_cipher
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits_options: [128, 192, 256]
+      key_size_bits_options: [128, 192, 256]
+      rounds_options: [10, 12, 14]
+      operations:
+        - substitution
+        - permutation
+        - finite_field_multiplication
+      components:
+        - sbox
+        - mixcolumns
+        - shiftrows
+        - addroundkey
+    publication_ids:
+      - daemen_rijmen_1998_rijndael
+    standard_ids: []
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences: []
+    notes: >
+      Rijndael supports variable block sizes (128, 192, 256 bits) and
+      independently chosen key sizes. The AES standard restricts block size
+      to 128 bits and standardises three key sizes, making AES a special case.
+
+  - id: aes
+    name: AES
+    year: 2001
+    primitive_type: block_cipher
+    target_applications:
+      - generic
+      - storage
+    characteristics:
+      block_size_bits: 128
+      key_size_bits_options: [128, 192, 256]
+      rounds_options: [10, 12, 14]
+      operations:
+        - substitution
+        - permutation
+        - finite_field_multiplication
+      components:
+        - sbox
+        - mixcolumns
+        - shiftrows
+        - addroundkey
+    publication_ids:
+      - fips_197_2001
+    standard_ids:
+      - fips_197
+      - sp_800_38e
+    process_ids:
+      - aes_competition_nist_1997_2000
+    influences:
+      - source_family_id: rijndael
+        relation: special_case_of
+        note: AES fixes Rijndael's block size to 128 bits and standardises three key sizes.
+
+  - id: salsa
+    name: Salsa
+    year: 2008
+    primitive_type: update_function
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      state_size_bits: 512
+      operations:
+        - addition_mod_2_32
+        - xor
+        - rotation
+      components:
+        - quarterround
+    publication_ids:
+      - bernstein_2008_salsa20
+    standard_ids: []
+    process_ids: []
+    influences: []
+    notes: >
+      ARX design. Salsa20 is the full-round variant; Salsa20/12 and
+      Salsa20/8 are reduced-round speed-optimised variants.
+
+  - id: chacha
+    name: ChaCha
+    year: 2008
+    primitive_type: update_function
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      state_size_bits: 512
+      operations:
+        - addition_mod_2_32
+        - xor
+        - rotation
+      components:
+        - quarterround
+    publication_ids:
+      - bernstein_2008_chacha
+    standard_ids: []
+    process_ids: []
+    influences:
+      - source_family_id: salsa
+        relation: improvement_of
+        note: >
+          ChaCha reorganises the Salsa quarterround to achieve better diffusion
+          per round, improving resistance to differential cryptanalysis.
+
+  - id: present
+    name: PRESENT
+    year: 2007
+    primitive_type: block_cipher
+    target_applications:
+      - iot
+      - constrained_hardware
+    characteristics:
+      block_size_bits: 64
+      key_size_bits_options: [80, 128]
+      rounds_options: [31]
+      operations:
+        - substitution
+        - permutation
+        - xor
+      components:
+        - sbox
+        - p_layer
+    publication_ids:
+      - bogdanov_2007_present
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: gift
+    name: GIFT
+    year: 2017
+    primitive_type: block_cipher
+    target_applications:
+      - iot
+      - constrained_hardware
+    characteristics:
+      block_size_bits_options: [64, 128]
+      key_size_bits_options: [128]
+      rounds_options: [28, 40]
+      operations:
+        - substitution
+        - permutation
+        - xor
+      components:
+        - sbox
+        - bit_permutation
+    publication_ids:
+      - banik_2017_gift
+    standard_ids: []
+    process_ids: []
+    influences:
+      - source_family_id: present
+        relation: inspired_by
+        note: >
+          GIFT explicitly builds on PRESENT's SPN structure, improving
+          hardware efficiency and key-schedule simplicity.

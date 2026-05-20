@@ -1,167 +1,117 @@
 version: 1
 primitives:
-  - id: rijndael
-    name: Rijndael
-    year: 1998
-    primitive_type: block_cipher
-    target_applications:
-      - generic
-    characteristics:
-      block_size_bits: 128
-      key_size_bits_options: [128, 192, 256]
-      rounds_options: [10, 12, 14]
-      fixed_input_bits: 128
-      fixed_output_bits: 128
-      operations:
-        - substitution
-        - permutation
-        - finite_field_multiplication
-      components:
-        - sbox
-        - mixcolumns
-        - shiftrows
-        - addroundkey
-    publication_ids:
-      - daemen_rijmen_1998_rijndael
-    standard_ids: []
-    process_ids:
-      - aes_competition_nist_1997_2000
-    influences: []
-
+  # ── AES family ────────────────────────────────────────────────────────────
   - id: aes_128
     name: AES-128
+    family_id: aes
     year: 2001
-    primitive_type: block_cipher
-    target_applications:
-      - generic
-      - storage
     characteristics:
       block_size_bits: 128
-      key_size_bits_options: [128]
-      rounds_options: [10]
+      key_size_bits: 128
+      rounds: 10
       fixed_input_bits: 128
       fixed_output_bits: 128
-      operations:
-        - substitution
-        - permutation
-        - finite_field_multiplication
-      components:
-        - sbox
-        - mixcolumns
-        - shiftrows
-        - addroundkey
-    publication_ids:
-      - fips_197_2001
     standard_ids:
       - fips_197
       - sp_800_38e
-    process_ids:
-      - aes_competition_nist_1997_2000
-    influences:
-      - source_primitive_id: rijndael
-        relation: special_case_of
-        note: AES standard fixes a subset of Rijndael parameter choices.
 
+  - id: aes_192
+    name: AES-192
+    family_id: aes
+    year: 2001
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 12
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids:
+      - fips_197
+
+  - id: aes_256
+    name: AES-256
+    family_id: aes
+    year: 2001
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 14
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids:
+      - fips_197
+
+  # ── Salsa family ──────────────────────────────────────────────────────────
   - id: salsa20
     name: Salsa20
+    family_id: salsa
     year: 2008
-    primitive_type: update_function
-    target_applications:
-      - generic
-      - software
     characteristics:
       state_size_bits: 512
+      rounds: 20
       fixed_input_bits: 512
       fixed_output_bits: 512
-      operations:
-        - addition_mod_2_32
-        - xor
-        - rotation
-      components:
-        - quarterround
-    publication_ids:
-      - bernstein_2008_salsa20
     standard_ids: []
-    process_ids: []
-    influences: []
 
+  # ── ChaCha family ─────────────────────────────────────────────────────────
   - id: chacha20
     name: ChaCha20
+    family_id: chacha
     year: 2008
-    primitive_type: update_function
-    target_applications:
-      - generic
-      - software
     characteristics:
       state_size_bits: 512
+      rounds: 20
       fixed_input_bits: 512
       fixed_output_bits: 512
-      operations:
-        - addition_mod_2_32
-        - xor
-        - rotation
-      components:
-        - quarterround
-    publication_ids:
-      - bernstein_2008_chacha
     standard_ids: []
-    process_ids: []
-    influences:
-      - source_primitive_id: salsa20
-        relation: improvement_of
-        note: ChaCha modifies the round function ordering and diffusion strategy.
 
-  - id: present
-    name: PRESENT
+  # ── PRESENT family ────────────────────────────────────────────────────────
+  - id: present_80
+    name: PRESENT-80
+    family_id: present
     year: 2007
-    primitive_type: block_cipher
-    target_applications:
-      - iot
-      - constrained_hardware
     characteristics:
       block_size_bits: 64
-      key_size_bits_options: [80, 128]
-      rounds_options: [31]
+      key_size_bits: 80
+      rounds: 31
       fixed_input_bits: 64
       fixed_output_bits: 64
-      operations:
-        - substitution
-        - permutation
-        - xor
-      components:
-        - sbox
-        - p_layer
-    publication_ids:
-      - bogdanov_2007_present
     standard_ids: []
-    process_ids: []
-    influences: []
 
+  - id: present_128
+    name: PRESENT-128
+    family_id: present
+    year: 2007
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 31
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  # ── GIFT family ───────────────────────────────────────────────────────────
   - id: gift_64
     name: GIFT-64
+    family_id: gift
     year: 2017
-    primitive_type: block_cipher
-    target_applications:
-      - iot
-      - constrained_hardware
     characteristics:
       block_size_bits: 64
-      key_size_bits_options: [128]
-      rounds_options: [28]
+      key_size_bits: 128
+      rounds: 28
       fixed_input_bits: 64
       fixed_output_bits: 64
-      operations:
-        - substitution
-        - permutation
-        - xor
-      components:
-        - sbox
-        - bit_permutation
-    publication_ids:
-      - banik_2017_gift
     standard_ids: []
-    process_ids: []
-    influences:
-      - source_primitive_id: present
-        relation: inspired_by
-        note: GIFT design explicitly references efficiency and structure insights from PRESENT.
+
+  - id: gift_128
+    name: GIFT-128
+    family_id: gift
+    year: 2017
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 40
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
