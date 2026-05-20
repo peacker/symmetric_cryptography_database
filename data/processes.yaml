@@ -1,0 +1,15 @@
+version: 1
+processes:
+  - id: aes_competition_nist_1997_2000
+    name: AES Competition
+    organizer: NIST
+    start_year: 1997
+    end_year: 2000
+    notes: Process that selected Rijndael as AES.
+
+  - id: lightweight_crypto_nist_2018_2023
+    name: NIST Lightweight Cryptography Process
+    organizer: NIST
+    start_year: 2018
+    end_year: 2023
+    notes: Process culminating in ASCON standardization.
