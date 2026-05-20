@@ -19,6 +19,9 @@ export-viz:
 visualize:
 	$(PYTHON) scripts/visualize.py
 
+run-app: build-db
+	$(VENV)/bin/streamlit run app/app.py
+
 all: validate build-db export-viz visualize
 
 clean:
