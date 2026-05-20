@@ -1,0 +1,102 @@
+# Symmetric Primitive Family Coverage Checklist
+
+This is a planning list of known symmetric primitive/cipher families.
+
+- `[x]` means the family is already present in the database.
+- `[ ]` means it is not in the database yet.
+
+## Alphabetical List
+
+- [x] AES
+- [ ] Akelarre
+- [ ] Anubis
+- [ ] ARIA
+- [ ] ASCON
+- [ ] BEAR/LION
+- [ ] BelT
+- [ ] Blowfish
+- [ ] CAST-128
+- [ ] CAST-256
+- [x] Camellia
+- [ ] Chaskey
+- [x] ChaCha
+- [ ] CIPHERUNICORN-A
+- [ ] CLEFIA
+- [ ] DESX
+- [x] DES
+- [ ] DFC
+- [ ] E2
+- [ ] FEAL
+- [ ] FROG
+- [ ] GOST 28147-89 (Magma)
+- [x] GIFT
+- [ ] HIGHT
+- [x] IDEA
+- [ ] ICE
+- [ ] ISAAC
+- [ ] KASUMI
+- [x] KATAN
+- [x] KTANTAN
+- [ ] Khazad
+- [ ] KLEIN
+- [ ] Kuznyechik
+- [ ] LEA
+- [x] LED
+- [ ] LEA-128
+- [ ] LEVIATHAN
+- [ ] LOKI
+- [ ] LOKI97
+- [ ] MARS
+- [ ] MCRYPTON
+- [ ] MIBS
+- [ ] MISTY1
+- [ ] MMB
+- [ ] MULTI2
+- [ ] NOEKEON
+- [ ] Nimbus
+- [ ] PEA
+- [ ] PICARO
+- [ ] PRIDE
+- [x] PRESENT
+- [x] PRINCE
+- [ ] Q
+- [ ] RC2
+- [ ] RC5
+- [ ] RC6
+- [x] Rijndael
+- [ ] Robin
+- [ ] SAFER
+- [ ] SAFER+
+- [x] SALSA
+- [ ] SC2000
+- [ ] SEED
+- [ ] SHACAL
+- [ ] SHARK
+- [ ] SKIPJACK
+- [ ] SM4
+- [ ] SNOW 2.0
+- [ ] SNOW 3G
+- [ ] SPECKEY
+- [x] SIMON
+- [x] SPECK
+- [ ] SQUARE
+- [ ] TEA extensions (XXTEA/Corrected Block TEA)
+- [x] TEA
+- [ ] Threefish
+- [ ] TREYFER
+- [ ] TWINE
+- [x] Twofish
+- [ ] Two-key Triple DES
+- [ ] Three-key Triple DES
+- [ ] UEA2/ZUC
+- [ ] WAKE
+- [ ] XChaCha
+- [ ] XEX-based families (XTS lineage)
+- [x] XTEA
+- [ ] XXTEA
+
+## Notes
+
+- This list is intentionally broad and includes both classic and modern families.
+- Some entries are umbrella labels (for planning) and may be split into separate canonical families during ingestion.
+- Keep this file sorted alphabetically when adding/removing entries.

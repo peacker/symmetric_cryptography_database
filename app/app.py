@@ -89,6 +89,7 @@ def load_families() -> pd.DataFrame:
             f.id, f.name, f.year, pt.name AS primitive_type, f.notes,
             COUNT(p.id) AS instance_count,
             GROUP_CONCAT(DISTINCT p.name)    AS instances,
+            GROUP_CONCAT(DISTINCT r.name)    AS rounds,
             GROUP_CONCAT(DISTINCT t.target)  AS targets,
             GROUP_CONCAT(DISTINCT c.name)    AS constructions,
             GROUP_CONCAT(DISTINCT pub.title) AS standards,
@@ -96,6 +97,8 @@ def load_families() -> pd.DataFrame:
         FROM families f
         JOIN primitive_types pt    ON pt.id = f.primitive_type
         LEFT JOIN primitives p      ON p.family_id  = f.id
+        LEFT JOIN family_rounds fr  ON fr.family_id = f.id
+        LEFT JOIN rounds r          ON r.id = fr.round_id
         LEFT JOIN family_targets t  ON t.family_id  = f.id
         LEFT JOIN family_constructions fc ON fc.family_id = f.id
         LEFT JOIN constructions c        ON c.id = fc.construction_id
@@ -214,42 +217,68 @@ if selected_rounds:
 else:
     df = df.iloc[0:0]
 
+timeline_df = families[
+    families["primitive_type"].isin(selected_types)
+    & families["year"].between(*year_range)
+].copy()
+
+if selected_rounds:
+    selected_rounds_set = set(selected_rounds)
+    timeline_df = timeline_df[
+        timeline_df["rounds"].apply(
+            lambda v: bool(split_grouped_values(v) & selected_rounds_set)
+        )
+    ]
+else:
+    timeline_df = timeline_df.iloc[0:0]
+
 # ── Pages ─────────────────────────────────────────────────────────────────────
 
 if page == "Timeline":
-    st.header("Primitive Timeline")
+    st.header("Primitive Family Timeline")
     st.caption(
-        "Each point is one **instance**, coloured by type. "
-        "Instances of the same family are shown in the same row."
+        "Each point is one **family**. Labels are shown next to points, and "
+        "hover details include all known instances in that family."
     )
 
-    fig = px.strip(
-        df,
+    timeline_view = timeline_df.sort_values(["year", "name"]).copy()
+    timeline_view["year_rank"] = timeline_view.groupby("year").cumcount()
+    timeline_view["year_label"] = timeline_view["year"].astype(str)
+
+    fig = px.scatter(
+        timeline_view,
         x="year",
-        y="primitive_type",
-        color="family_name",
+        y="year_rank",
+        color="primitive_type",
+        symbol="primitive_type",
+        text="name",
         hover_name="name",
         hover_data={
             "year": True,
             "primitive_type": False,
-            "family_name": True,
-            "fixed_input_bits": True,
-            "fixed_output_bits": True,
+            "instance_count": True,
+            "instances": True,
             "targets": True,
             "standards": True,
+            "year_rank": False,
         },
         labels={
             "year": "Year",
             "primitive_type": "Type",
-            "family_name": "Family",
-            "fixed_input_bits": "Input (bits)",
-            "fixed_output_bits": "Output (bits)",
+            "instance_count": "Instances",
+            "instances": "Instance names",
             "targets": "Applications",
             "standards": "Standards",
         },
-        height=420,
+        height=560,
     )
-    fig.update_traces(marker_size=14, jitter=0)
+    fig.update_traces(textposition="top center", marker_size=12, textfont_size=10)
+    fig.update_yaxes(showticklabels=False, title_text="")
+    fig.update_xaxes(
+        tickmode="linear",
+        dtick=1,
+        tickangle=90,
+    )
     fig.update_layout(margin=dict(l=0, r=0, t=20, b=0))
     st.plotly_chart(fig, use_container_width=True)
 
@@ -352,36 +381,56 @@ elif page == "Influence Graph":
 
 elif page == "Size Analysis":
     st.header("Input vs Output Size")
-    st.caption("Bubble size ∝ output size. Hover for details.")
+    st.caption(
+        "Aggregated view: one marker per (type, input bits, output bits). "
+        "Marker size shows how many instances share that size pair."
+    )
+
+    size_view = (
+        df.groupby(["primitive_type", "fixed_input_bits", "fixed_output_bits"], dropna=False)
+        .agg(
+            instance_count=("id", "count"),
+            family_count=("family_id", "nunique"),
+            families=("family_name", lambda s: ", ".join(sorted(set(s.dropna()))[:8])),
+        )
+        .reset_index()
+    )
 
     fig = px.scatter(
-        df,
+        size_view,
         x="fixed_input_bits",
         y="fixed_output_bits",
+        size="instance_count",
         color="primitive_type",
-        symbol="family_name",
-        size="fixed_output_bits",
-        hover_name="name",
+        facet_col="primitive_type",
+        facet_col_wrap=2,
+        text="instance_count",
         hover_data={
-            "year": True,
-            "family_name": True,
-            "targets": True,
-            "standards": True,
             "fixed_input_bits": True,
             "fixed_output_bits": True,
+            "instance_count": True,
+            "family_count": True,
+            "families": True,
         },
         labels={
             "fixed_input_bits": "Input size (bits)",
             "fixed_output_bits": "Output size (bits)",
+            "instance_count": "Instances",
+            "family_count": "Families",
             "primitive_type": "Type",
-            "family_name": "Family",
         },
-        text="name",
-        height=520,
+        height=700,
     )
-    fig.update_traces(textposition="top center", marker_sizemin=12)
-    fig.update_layout(margin=dict(l=0, r=0, t=20, b=0))
+    fig.update_traces(textposition="top center", marker_sizemin=14)
+    fig.update_layout(showlegend=False, margin=dict(l=0, r=0, t=20, b=0))
     st.plotly_chart(fig, use_container_width=True)
+
+    with st.expander("Aggregated size table"):
+        st.dataframe(
+            size_view.sort_values(["primitive_type", "fixed_input_bits", "fixed_output_bits"]),
+            use_container_width=True,
+            hide_index=True,
+        )
 
 elif page == "Primitives Browser":
     st.header("Instances Browser")
