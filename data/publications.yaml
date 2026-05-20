@@ -10,14 +10,6 @@ publications:
     venue: NIST AES Submission
     url: https://csrc.nist.gov/projects/aes
 
-  - id: fips_197_2001
-    kind: standard
-    title: "FIPS 197: Advanced Encryption Standard (AES)"
-    authors: []
-    year: 2001
-    venue: NIST
-    url: https://csrc.nist.gov/publications/detail/fips/197/final
-
   - id: bernstein_2008_salsa20
     kind: article
     title: The Salsa20 family of stream ciphers
@@ -69,18 +61,33 @@ publications:
     venue: CHES 2017
     url: https://iacr.org/archive/ches2017/105290001/105290001.pdf
 
-  - id: nist_sp_800_38e_2010
+  # ── Normative standards ───────────────────────────────────────────────────
+  - id: fips_197
     kind: standard
-    title: "NIST SP 800-38E: XTS-AES for Storage Devices"
+    title: "FIPS 197: Advanced Encryption Standard (AES)"
+    authors: []
+    year: 2001
+    venue: NIST
+    organization: NIST
+    status: active
+    url: https://csrc.nist.gov/publications/detail/fips/197/final
+
+  - id: sp_800_38e
+    kind: standard
+    title: "NIST SP 800-38E: Recommendation for Block Cipher Modes of Operation: the XTS-AES Mode for Confidentiality on Storage Devices"
     authors: []
     year: 2010
     venue: NIST
+    organization: NIST
+    status: active
     url: https://csrc.nist.gov/publications/detail/sp/800-38e/final
 
-  - id: ascon_spec_2023
+  - id: sp_800_232
     kind: standard
-    title: "NIST SP 800-232: Ascon-Based Lightweight Cryptography Standards"
+    title: "NIST SP 800-232: Recommendations for the Initial Selection of Lightweight Cryptographic Standards"
     authors: []
     year: 2023
     venue: NIST
+    organization: NIST
+    status: active
     url: https://csrc.nist.gov/publications

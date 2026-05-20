@@ -35,7 +35,6 @@ def main() -> None:
     primitives_doc   = load_yaml(DATA_DIR / "primitives.yaml")
     components_doc   = load_yaml(DATA_DIR / "components.yaml")
     publications_doc = load_yaml(DATA_DIR / "publications.yaml")
-    standards_doc    = load_yaml(DATA_DIR / "standards.yaml")
     processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
 
     ok = True
@@ -46,7 +45,6 @@ def main() -> None:
         raise SystemExit(1)
 
     publication_ids = {p["id"] for p in publications_doc.get("publications", [])}
-    standard_ids    = {s["id"] for s in standards_doc.get("standards", [])}
     process_ids     = {p["id"] for p in processes_doc.get("processes", [])}
     family_ids      = {f["id"] for f in families_doc.get("families", [])}
     component_ids   = {c["id"] for c in components_doc.get("components", [])}
@@ -67,8 +65,8 @@ def main() -> None:
                 print(f"REFERENCE ERROR: family '{fid}' has unknown publication '{ref}'")
                 errors_found = True
         for ref in family.get("standard_ids", []):
-            if ref not in standard_ids:
-                print(f"REFERENCE ERROR: family '{fid}' has unknown standard '{ref}'")
+            if ref not in publication_ids:
+                print(f"REFERENCE ERROR: family '{fid}' has unknown standard '{ref}' (not in publications)")
                 errors_found = True
         for ref in family.get("process_ids", []):
             if ref not in process_ids:
@@ -92,8 +90,8 @@ def main() -> None:
             print(f"REFERENCE ERROR: instance '{pid}' has unknown family_id '{primitive['family_id']}'")
             errors_found = True
         for ref in primitive.get("standard_ids", []):
-            if ref not in standard_ids:
-                print(f"REFERENCE ERROR: instance '{pid}' has unknown standard '{ref}'")
+            if ref not in publication_ids:
+                print(f"REFERENCE ERROR: instance '{pid}' has unknown standard '{ref}' (not in publications)")
                 errors_found = True
 
     if errors_found:

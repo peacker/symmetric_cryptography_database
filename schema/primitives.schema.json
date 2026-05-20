@@ -35,12 +35,11 @@
         },
         "primitive": {
             "type": "object",
-            "required": ["id", "name", "family_id", "year", "characteristics", "standard_ids"],
+            "required": ["id", "name", "family_id", "characteristics", "standard_ids"],
             "properties": {
                 "id":        { "type": "string", "minLength": 1 },
                 "name":      { "type": "string", "minLength": 1 },
                 "family_id": { "type": "string", "minLength": 1 },
-                "year":      { "type": "integer", "minimum": 1900, "maximum": 2100 },
                 "characteristics": { "$ref": "#/$defs/characteristics" },
                 "standard_ids": {
                     "type": "array",

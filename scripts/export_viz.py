@@ -32,13 +32,13 @@ def main() -> None:
         export_query(
             conn,
             """
-            SELECT p.id AS primitive_id, p.name, p.year,
+            SELECT p.id AS primitive_id, p.name, f.year,
                    f.id AS family_id, f.name AS family_name,
                    f.primitive_type,
                    p.fixed_input_bits, p.fixed_output_bits
             FROM primitives p
             JOIN families f ON f.id = p.family_id
-            ORDER BY p.year, p.name
+            ORDER BY f.year, p.name
             """,
             VIZ_DIR / "timeline_primitives.csv",
         )
@@ -78,11 +78,11 @@ def main() -> None:
             conn,
             """
             SELECT p.id AS primitive_id, p.name,
-                   s.id AS standard_id, s.name AS standard_name
+                   pub.id AS standard_id, pub.title AS standard_name
             FROM primitives p
             JOIN primitive_standards ps ON ps.primitive_id = p.id
-            JOIN standards s ON s.id = ps.standard_id
-            ORDER BY p.name, s.name
+            JOIN publications pub ON pub.id = ps.standard_id
+            ORDER BY p.name, pub.title
             """,
             VIZ_DIR / "primitive_standards.csv",
         )

@@ -32,14 +32,8 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             year INTEGER NOT NULL,
             venue TEXT,
             url TEXT,
-            authors_json TEXT NOT NULL
-        );
-
-        CREATE TABLE IF NOT EXISTS standards (
-            id TEXT PRIMARY KEY,
-            name TEXT NOT NULL,
+            authors_json TEXT NOT NULL,
             organization TEXT,
-            year INTEGER,
             status TEXT
         );
 
@@ -100,8 +94,8 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             family_id TEXT NOT NULL,
             standard_id TEXT NOT NULL,
             PRIMARY KEY (family_id, standard_id),
-            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
-            FOREIGN KEY (standard_id) REFERENCES standards(id) ON DELETE RESTRICT
+            FOREIGN KEY (family_id)   REFERENCES families(id)      ON DELETE CASCADE,
+            FOREIGN KEY (standard_id) REFERENCES publications(id)  ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS family_processes (
@@ -127,7 +121,6 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
             family_id TEXT NOT NULL,
-            year INTEGER NOT NULL,
             fixed_input_bits INTEGER NOT NULL,
             fixed_output_bits INTEGER NOT NULL,
             characteristics_json TEXT NOT NULL,
@@ -138,8 +131,8 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             primitive_id TEXT NOT NULL,
             standard_id TEXT NOT NULL,
             PRIMARY KEY (primitive_id, standard_id),
-            FOREIGN KEY (primitive_id) REFERENCES primitives(id) ON DELETE CASCADE,
-            FOREIGN KEY (standard_id) REFERENCES standards(id) ON DELETE RESTRICT
+            FOREIGN KEY (primitive_id) REFERENCES primitives(id)   ON DELETE CASCADE,
+            FOREIGN KEY (standard_id)  REFERENCES publications(id) ON DELETE RESTRICT
         );
         """
     )
@@ -159,7 +152,6 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         DELETE FROM families;
         DELETE FROM components;
         DELETE FROM processes;
-        DELETE FROM standards;
         DELETE FROM publications;
         """
     )
@@ -173,7 +165,6 @@ def main() -> None:
     primitives_doc   = load_yaml(DATA_DIR / "primitives.yaml")
     components_doc   = load_yaml(DATA_DIR / "components.yaml")
     publications_doc = load_yaml(DATA_DIR / "publications.yaml")
-    standards_doc    = load_yaml(DATA_DIR / "standards.yaml")
     processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
 
     conn = sqlite3.connect(DB_PATH)
@@ -183,19 +174,13 @@ def main() -> None:
 
         for pub in publications_doc.get("publications", []):
             conn.execute(
-                "INSERT INTO publications (id, kind, title, year, venue, url, authors_json)"
-                " VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO publications"
+                " (id, kind, title, year, venue, url, authors_json, organization, status)"
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (pub["id"], pub["kind"], pub["title"], pub["year"],
                  pub.get("venue"), pub.get("url"),
-                 json.dumps(pub.get("authors", []), ensure_ascii=True)),
-            )
-
-        for std in standards_doc.get("standards", []):
-            conn.execute(
-                "INSERT INTO standards (id, name, organization, year, status)"
-                " VALUES (?, ?, ?, ?, ?)",
-                (std["id"], std["name"], std.get("organization"),
-                 std.get("year"), std.get("status")),
+                 json.dumps(pub.get("authors", []), ensure_ascii=True),
+                 pub.get("organization"), pub.get("status")),
             )
 
         for process in processes_doc.get("processes", []):
@@ -261,11 +246,11 @@ def main() -> None:
             c = primitive["characteristics"]
             conn.execute(
                 "INSERT INTO primitives"
-                " (id, name, family_id, year, fixed_input_bits, fixed_output_bits,"
+                " (id, name, family_id, fixed_input_bits, fixed_output_bits,"
                 "  characteristics_json)"
-                " VALUES (?, ?, ?, ?, ?, ?, ?)",
+                " VALUES (?, ?, ?, ?, ?, ?)",
                 (primitive["id"], primitive["name"], primitive["family_id"],
-                 primitive["year"], c["fixed_input_bits"], c["fixed_output_bits"],
+                 c["fixed_input_bits"], c["fixed_output_bits"],
                  json.dumps(c, ensure_ascii=True)),
             )
             for std_id in primitive.get("standard_ids", []):

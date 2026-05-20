@@ -7,9 +7,6 @@ families:
     target_applications:
       - generic
     characteristics:
-      block_size_bits_options: [128, 192, 256]
-      key_size_bits_options: [128, 192, 256]
-      rounds_options: [10, 12, 14]
       components:
         - id: sbox
           params: {input_bits: 8, output_bits: 8}
@@ -39,8 +36,6 @@ families:
       - storage
     characteristics:
       block_size_bits: 128
-      key_size_bits_options: [128, 192, 256]
-      rounds_options: [10, 12, 14]
       components:
         - id: sbox
           params: {input_bits: 8, output_bits: 8}
@@ -50,8 +45,7 @@ families:
           params: {word_size_bits: 8}
         - id: xor
         - id: constant
-    publication_ids:
-      - fips_197_2001
+    publication_ids: []
     standard_ids:
       - fips_197
       - sp_800_38e
@@ -121,8 +115,6 @@ families:
       - constrained_hardware
     characteristics:
       block_size_bits: 64
-      key_size_bits_options: [80, 128]
-      rounds_options: [31]
       components:
         - id: sbox
           params: {input_bits: 4, output_bits: 4}
@@ -143,9 +135,6 @@ families:
       - iot
       - constrained_hardware
     characteristics:
-      block_size_bits_options: [64, 128]
-      key_size_bits_options: [128]
-      rounds_options: [28, 40]
       components:
         - id: sbox
           params: {input_bits: 4, output_bits: 4}

@@ -40,24 +40,24 @@ def load_primitives() -> pd.DataFrame:
         SELECT
             p.id,
             p.name,
-            p.year,
+            f.year,
             f.id   AS family_id,
             f.name AS family_name,
             f.primitive_type,
             p.fixed_input_bits,
             p.fixed_output_bits,
-            GROUP_CONCAT(DISTINCT t.target) AS targets,
-            GROUP_CONCAT(DISTINCT s.name)   AS standards,
-            GROUP_CONCAT(DISTINCT pr.name)  AS processes
+            GROUP_CONCAT(DISTINCT t.target)  AS targets,
+            GROUP_CONCAT(DISTINCT pub.title) AS standards,
+            GROUP_CONCAT(DISTINCT pr.name)   AS processes
         FROM primitives p
         JOIN families f ON f.id = p.family_id
-        LEFT JOIN family_targets t     ON t.family_id  = f.id
+        LEFT JOIN family_targets t       ON t.family_id    = f.id
         LEFT JOIN primitive_standards ps ON ps.primitive_id = p.id
-        LEFT JOIN standards s            ON s.id = ps.standard_id
+        LEFT JOIN publications pub        ON pub.id = ps.standard_id
         LEFT JOIN family_processes fp    ON fp.family_id = f.id
         LEFT JOIN processes pr           ON pr.id = fp.process_id
         GROUP BY p.id
-        ORDER BY p.year, p.name
+        ORDER BY f.year, p.name
         """,
         conn,
     )
@@ -71,15 +71,15 @@ def load_families() -> pd.DataFrame:
         SELECT
             f.id, f.name, f.year, f.primitive_type, f.notes,
             COUNT(p.id) AS instance_count,
-            GROUP_CONCAT(DISTINCT p.name)  AS instances,
-            GROUP_CONCAT(DISTINCT t.target) AS targets,
-            GROUP_CONCAT(DISTINCT s.name)   AS standards,
-            GROUP_CONCAT(DISTINCT pr.name)  AS processes
+            GROUP_CONCAT(DISTINCT p.name)    AS instances,
+            GROUP_CONCAT(DISTINCT t.target)  AS targets,
+            GROUP_CONCAT(DISTINCT pub.title) AS standards,
+            GROUP_CONCAT(DISTINCT pr.name)   AS processes
         FROM families f
         LEFT JOIN primitives p      ON p.family_id  = f.id
         LEFT JOIN family_targets t  ON t.family_id  = f.id
         LEFT JOIN family_standards fs ON fs.family_id = f.id
-        LEFT JOIN standards s         ON s.id = fs.standard_id
+        LEFT JOIN publications pub    ON pub.id = fs.standard_id
         LEFT JOIN family_processes fp ON fp.family_id = f.id
         LEFT JOIN processes pr        ON pr.id = fp.process_id
         GROUP BY f.id
@@ -115,10 +115,13 @@ def load_publications() -> pd.DataFrame:
     return pd.read_sql_query(
         """
         SELECT pub.id, pub.kind, pub.title, pub.year, pub.venue, pub.url,
-               GROUP_CONCAT(DISTINCT f.name) AS families
+               pub.organization, pub.status,
+               GROUP_CONCAT(DISTINCT COALESCE(f.name, fs_f.name)) AS families
         FROM publications pub
         LEFT JOIN family_publications fp ON fp.publication_id = pub.id
         LEFT JOIN families f             ON f.id = fp.family_id
+        LEFT JOIN family_standards fs    ON fs.standard_id = pub.id
+        LEFT JOIN families fs_f          ON fs_f.id = fs.family_id
         GROUP BY pub.id
         ORDER BY pub.year DESC
         """,
@@ -377,6 +380,8 @@ elif page == "References":
     for _, row in view.iterrows():
         with st.expander(f"{row['year']} — {row['title']}"):
             st.write(f"**Kind:** {row['kind']}")
+            if row.get("organization"):
+                st.write(f"**Organization:** {row['organization']}  |  **Status:** {row.get('status') or '—'}")
             if row.get("venue"):
                 st.write(f"**Venue:** {row['venue']}")
             if row.get("families"):

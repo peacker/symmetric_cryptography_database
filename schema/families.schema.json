@@ -45,11 +45,8 @@
       "type": "object",
       "required": ["components"],
       "properties": {
-        "block_size_bits":         { "type": "integer", "minimum": 1 },
-        "block_size_bits_options": { "type": "array", "items": { "type": "integer", "minimum": 1 } },
-        "state_size_bits":         { "type": "integer", "minimum": 1 },
-        "key_size_bits_options":   { "type": "array", "items": { "type": "integer", "minimum": 1 } },
-        "rounds_options":          { "type": "array", "items": { "type": "integer", "minimum": 1 } },
+        "block_size_bits": { "type": "integer", "minimum": 1 },
+        "state_size_bits": { "type": "integer", "minimum": 1 },
         "components": {
           "type": "array",
           "items": { "$ref": "#/$defs/component_ref" }
