@@ -1,0 +1,90 @@
+version: 1
+
+rounds:
+  - id: rijndael_aes_round
+    name: Rijndael/AES Full Round
+    kind: full_round
+    spec:
+      state_model:
+        layout: 4x4_bytes
+        state_bits: 128
+      component_flow:
+        - component_id: sbox
+          params: {input_bits: 8, output_bits: 8}
+        - component_id: word_permutation
+          params: {word_size_bits: 8}
+        - component_id: field_matrix_mul
+          params: {field_size: 256}
+        - component_id: xor
+      constant_injection: round_constant
+    notes: >
+      Canonical AES-like round: SubBytes, ShiftRows, MixColumns,
+      AddRoundKey. Shared by Rijndael/AES variants modulo round count and
+      first/last-round details.
+
+  - id: salsa_quarterround
+    name: Salsa Quarterround
+    kind: quarterround
+    spec:
+      state_model:
+        word_bits: 32
+        words_touched: 4
+      component_flow:
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+        - component_id: xor
+        - component_id: rotation_fixed
+      rotation_constants: [7, 9, 13, 18]
+      constant_injection: none
+    notes: >
+      Salsa quarterround over four 32-bit words with fixed rotation
+      constants 7, 9, 13, 18.
+
+  - id: chacha_quarterround
+    name: ChaCha Quarterround
+    kind: quarterround
+    spec:
+      state_model:
+        word_bits: 32
+        words_touched: 4
+      component_flow:
+        - component_id: add_mod
+          params: {modulus: 4294967296}
+        - component_id: xor
+        - component_id: rotation_fixed
+      rotation_constants: [16, 12, 8, 7]
+      constant_injection: none
+    notes: >
+      ChaCha quarterround over four 32-bit words with fixed rotation
+      constants 16, 12, 8, 7.
+
+  - id: present_round
+    name: PRESENT Full Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 64
+      component_flow:
+        - component_id: xor
+        - component_id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - component_id: bit_permutation
+      constant_injection: round_counter
+    notes: >
+      PRESENT round with addRoundKey, 4-bit S-box layer, and P-layer.
+
+  - id: gift_round
+    name: GIFT Full Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits_options: [64, 128]
+      component_flow:
+        - component_id: sbox
+          params: {input_bits: 4, output_bits: 4}
+        - component_id: bit_permutation
+        - component_id: xor
+      constant_injection: round_constant
+    notes: >
+      GIFT round with nibble S-box layer, bit permutation layer,
+      and key/constant injection.

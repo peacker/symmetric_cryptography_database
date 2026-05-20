@@ -6,6 +6,8 @@ families:
     primitive_type: block_cipher
     construction_ids:
       - aligned_spn
+    round_ids:
+      - rijndael_aes_round
     target_applications:
       - generic
     characteristics:
@@ -35,6 +37,8 @@ families:
     primitive_type: block_cipher
     construction_ids:
       - aligned_spn
+    round_ids:
+      - rijndael_aes_round
     target_applications:
       - generic
       - storage
@@ -65,6 +69,8 @@ families:
     year: 2008
     primitive_type: update_function
     construction_ids: []
+    round_ids:
+      - salsa_quarterround
     target_applications:
       - generic
       - software
@@ -90,6 +96,8 @@ families:
     year: 2008
     primitive_type: update_function
     construction_ids: []
+    round_ids:
+      - chacha_quarterround
     target_applications:
       - generic
       - software
@@ -118,6 +126,8 @@ families:
     primitive_type: block_cipher
     construction_ids:
       - bit_based_spn
+    round_ids:
+      - present_round
     target_applications:
       - iot
       - constrained_hardware
@@ -141,6 +151,8 @@ families:
     primitive_type: block_cipher
     construction_ids:
       - bit_based_spn
+    round_ids:
+      - gift_round
     target_applications:
       - iot
       - constrained_hardware

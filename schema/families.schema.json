@@ -45,6 +45,10 @@
       "type": "string",
       "minLength": 1
     },
+    "round_id": {
+      "type": "string",
+      "minLength": 1
+    },
     "characteristics": {
       "type": "object",
       "required": ["components"],
@@ -63,6 +67,7 @@
       "required": [
         "id", "name", "year", "primitive_type",
         "construction_ids",
+        "round_ids",
         "target_applications", "characteristics",
         "publication_ids", "standard_ids", "process_ids", "influences"
       ],
@@ -77,6 +82,11 @@
         "construction_ids": {
           "type": "array",
           "items": { "$ref": "#/$defs/construction_id" }
+        },
+        "round_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/round_id" }
         },
         "target_applications": {
           "type": "array",

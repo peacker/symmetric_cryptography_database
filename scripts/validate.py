@@ -35,6 +35,7 @@ def main() -> None:
     primitives_doc   = load_yaml(DATA_DIR / "primitives.yaml")
     components_doc   = load_yaml(DATA_DIR / "components.yaml")
     constructions_doc = load_yaml(DATA_DIR / "constructions.yaml")
+    rounds_doc       = load_yaml(DATA_DIR / "rounds.yaml")
     primitive_types_doc = load_yaml(DATA_DIR / "primitive_types.yaml")
     publications_doc = load_yaml(DATA_DIR / "publications.yaml")
     processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
@@ -44,6 +45,7 @@ def main() -> None:
     ok &= validate_schema(primitives_doc, SCHEMA_DIR / "primitives.schema.json", "primitives")
     ok &= validate_schema(components_doc, SCHEMA_DIR / "components.schema.json", "components")
     ok &= validate_schema(constructions_doc, SCHEMA_DIR / "constructions.schema.json", "constructions")
+    ok &= validate_schema(rounds_doc, SCHEMA_DIR / "rounds.schema.json", "rounds")
     ok &= validate_schema(primitive_types_doc, SCHEMA_DIR / "primitive_types.schema.json", "primitive_types")
     if not ok:
         raise SystemExit(1)
@@ -53,6 +55,7 @@ def main() -> None:
     family_ids      = {f["id"] for f in families_doc.get("families", [])}
     component_ids   = {c["id"] for c in components_doc.get("components", [])}
     construction_ids = {c["id"] for c in constructions_doc.get("constructions", [])}
+    round_ids       = {r["id"] for r in rounds_doc.get("rounds", [])}
     primitive_type_ids = {t["id"] for t in primitive_types_doc.get("primitive_types", [])}
 
     # Validate special_case_of self-references in components
@@ -71,6 +74,15 @@ def main() -> None:
             )
             errors_found = True
 
+    for round_def in rounds_doc.get("rounds", []):
+        for step in round_def.get("spec", {}).get("component_flow", []):
+            component_id = step.get("component_id")
+            if component_id and component_id not in component_ids:
+                print(
+                    f"REFERENCE ERROR: round '{round_def['id']}' references unknown component '{component_id}'"
+                )
+                errors_found = True
+
     # Validate families
     for family in families_doc.get("families", []):
         fid = family["id"]
@@ -83,6 +95,12 @@ def main() -> None:
             if construction_id not in construction_ids:
                 print(
                     f"REFERENCE ERROR: family '{fid}' references unknown construction '{construction_id}'"
+                )
+                errors_found = True
+        for round_id in family.get("round_ids", []):
+            if round_id not in round_ids:
+                print(
+                    f"REFERENCE ERROR: family '{fid}' references unknown round '{round_id}'"
                 )
                 errors_found = True
         for ref in family.get("publication_ids", []):

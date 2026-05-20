@@ -46,12 +46,17 @@ def load_primitives() -> pd.DataFrame:
             pt.name AS primitive_type,
             p.fixed_input_bits,
             p.fixed_output_bits,
+            GROUP_CONCAT(DISTINCT r.id)      AS round_ids,
+            GROUP_CONCAT(DISTINCT r.name)    AS rounds,
+            GROUP_CONCAT(DISTINCT r.round_hash) AS round_hashes,
             GROUP_CONCAT(DISTINCT t.target)  AS targets,
             GROUP_CONCAT(DISTINCT pub.title) AS standards,
             GROUP_CONCAT(DISTINCT pr.name)   AS processes
         FROM primitives p
         JOIN families f ON f.id = p.family_id
         JOIN primitive_types pt ON pt.id = f.primitive_type
+        LEFT JOIN family_rounds fr        ON fr.family_id = f.id
+        LEFT JOIN rounds r                ON r.id = fr.round_id
         LEFT JOIN family_targets t       ON t.family_id    = f.id
         LEFT JOIN primitive_standards ps ON ps.primitive_id = p.id
         LEFT JOIN publications pub        ON pub.id = ps.standard_id
@@ -62,6 +67,17 @@ def load_primitives() -> pd.DataFrame:
         """,
         conn,
     )
+
+
+def split_grouped_values(value: object) -> set[str]:
+    if value is None:
+        return set()
+    if isinstance(value, float) and pd.isna(value):
+        return set()
+    text = str(value).strip()
+    if not text:
+        return set()
+    return {v.strip() for v in text.split(",") if v.strip()}
 
 
 @st.cache_data
@@ -135,24 +151,53 @@ def load_publications() -> pd.DataFrame:
     )
 
 
+@st.cache_data
+def load_rounds() -> pd.DataFrame:
+    conn = get_connection()
+    return pd.read_sql_query(
+        """
+        SELECT r.id, r.name, r.kind, r.round_hash, r.notes,
+               COUNT(DISTINCT f.id) AS family_count,
+               COUNT(DISTINCT p.id) AS primitive_count,
+               GROUP_CONCAT(DISTINCT f.name) AS families,
+               GROUP_CONCAT(DISTINCT p.name) AS primitives
+        FROM rounds r
+        LEFT JOIN family_rounds fr ON fr.round_id = r.id
+        LEFT JOIN families f ON f.id = fr.family_id
+        LEFT JOIN primitives p ON p.family_id = f.id
+        GROUP BY r.id
+        ORDER BY r.name
+        """,
+        conn,
+    )
+
+
 # ── Sidebar navigation ────────────────────────────────────────────────────────
 
 st.sidebar.title("Symmetric Primitives DB")
 page = st.sidebar.radio(
     "View",
     ["Timeline", "Influence Graph", "Size Analysis",
-     "Primitives Browser", "Families", "References"],
+    "Primitives Browser", "Families", "Rounds", "References"],
 )
 
 primitives = load_primitives()
 families   = load_families()
 influences = load_influences()
+rounds_df  = load_rounds()
 
 # ── Sidebar global filters ────────────────────────────────────────────────────
 
 with st.sidebar.expander("Filters", expanded=True):
     all_types = sorted(primitives["primitive_type"].dropna().unique())
     selected_types = st.multiselect("Primitive type", all_types, default=all_types)
+
+    all_rounds = sorted({
+        round_name
+        for grouped in primitives["rounds"]
+        for round_name in split_grouped_values(grouped)
+    })
+    selected_rounds = st.multiselect("Round template", all_rounds, default=all_rounds)
 
     year_min = int(primitives["year"].min())
     year_max = int(primitives["year"].max())
@@ -161,7 +206,13 @@ with st.sidebar.expander("Filters", expanded=True):
 df = primitives[
     primitives["primitive_type"].isin(selected_types)
     & primitives["year"].between(*year_range)
-]
+].copy()
+
+if selected_rounds:
+    selected_rounds_set = set(selected_rounds)
+    df = df[df["rounds"].apply(lambda v: bool(split_grouped_values(v) & selected_rounds_set))]
+else:
+    df = df.iloc[0:0]
 
 # ── Pages ─────────────────────────────────────────────────────────────────────
 
@@ -222,11 +273,16 @@ elif page == "Influence Graph":
                 "related_to":        "#19d3f3",
             }
             TYPE_COLOURS = {
-                "block_cipher":        "#4c78a8",
+                "Block Cipher": "#4c78a8",
+                "Tweakable Block Cipher": "#72b7b2",
+                "Permutation": "#f58518",
+                "Compression Function": "#e45756",
+                "Update Function": "#54a24b",
+                "block_cipher": "#4c78a8",
                 "tweakable_block_cipher": "#72b7b2",
-                "permutation":         "#f58518",
-                "compression_function":"#e45756",
-                "update_function":     "#54a24b",
+                "permutation": "#f58518",
+                "compression_function": "#e45756",
+                "update_function": "#54a24b",
             }
 
             net = Network(height="560px", width="100%", directed=True,
@@ -342,13 +398,14 @@ elif page == "Primitives Browser":
     st.caption(f"{len(view)} instances shown")
     st.dataframe(
         view[["name", "family_name", "year", "primitive_type",
-              "fixed_input_bits", "fixed_output_bits",
+              "fixed_input_bits", "fixed_output_bits", "rounds",
               "targets", "standards", "processes"]]
         .rename(columns={
             "family_name": "family",
             "primitive_type": "type",
             "fixed_input_bits": "input (bits)",
             "fixed_output_bits": "output (bits)",
+            "rounds": "round templates",
         }),
         use_container_width=True,
         hide_index=True,
@@ -371,6 +428,37 @@ elif page == "Families":
                 st.write(f"**Constructions:** {row['constructions']}")
             if row.get("instances"):
                 st.write(f"**Instance names:** {row['instances']}")
+            if row.get("notes"):
+                st.info(row["notes"])
+
+elif page == "Rounds":
+    st.header("Rounds Catalogue")
+    st.caption("Round templates and where they are reused across families and instances.")
+
+    kinds = sorted(rounds_df["kind"].dropna().unique())
+    selected_kinds = st.multiselect("Filter by kind", kinds, default=kinds)
+    search = st.text_input("Search rounds", placeholder="e.g. quarterround, AES…")
+
+    view = rounds_df[rounds_df["kind"].isin(selected_kinds)].copy()
+    if search:
+        view = view[
+            view["name"].str.contains(search, case=False, na=False)
+            | view["id"].str.contains(search, case=False, na=False)
+        ]
+
+    st.caption(f"{len(view)} round templates shown")
+    st.dataframe(
+        view[["id", "name", "kind", "family_count", "primitive_count", "round_hash"]],
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    for _, row in view.iterrows():
+        with st.expander(f"**{row['name']}** ({row['kind']})"):
+            st.write(f"**Round id:** {row['id']}")
+            st.write(f"**Hash:** {row['round_hash']}")
+            st.write(f"**Families:** {row.get('families') or '—'}")
+            st.write(f"**Primitives:** {row.get('primitives') or '—'}")
             if row.get("notes"):
                 st.info(row["notes"])
 

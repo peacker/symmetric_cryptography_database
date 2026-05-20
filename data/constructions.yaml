@@ -32,7 +32,7 @@ constructions:
 
   - id: feistel
     name: Feistel Network
-    abbreviation: F
+    abbreviation: FN
     typical_primitive_types: [block_cipher]
     placeholder_family_names: [DES, Camellia]
     notes: >
@@ -41,7 +41,7 @@ constructions:
 
   - id: generalized_feistel
     name: Generalized Feistel Network
-    abbreviation: GF
+    abbreviation: GFN
     special_case_of: feistel
     typical_primitive_types: [block_cipher]
     placeholder_family_names: [CLEFIA, CAST-256]

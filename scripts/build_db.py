@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import sqlite3
 from pathlib import Path
 
@@ -70,6 +71,15 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (special_case_of) REFERENCES constructions(id)
         );
 
+        CREATE TABLE IF NOT EXISTS rounds (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            kind TEXT NOT NULL,
+            spec_json TEXT NOT NULL,
+            round_hash TEXT NOT NULL,
+            notes TEXT
+        );
+
         -- Families ---------------------------------------------------------
         CREATE TABLE IF NOT EXISTS families (
             id TEXT PRIMARY KEY,
@@ -103,6 +113,15 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             PRIMARY KEY (family_id, construction_id),
             FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
             FOREIGN KEY (construction_id) REFERENCES constructions(id) ON DELETE RESTRICT
+        );
+
+        CREATE TABLE IF NOT EXISTS family_rounds (
+            family_id TEXT NOT NULL,
+            round_id TEXT NOT NULL,
+            role TEXT NOT NULL DEFAULT 'primary',
+            PRIMARY KEY (family_id, round_id),
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
+            FOREIGN KEY (round_id) REFERENCES rounds(id) ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS family_publications (
@@ -171,9 +190,11 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         DELETE FROM family_standards;
         DELETE FROM family_publications;
         DELETE FROM family_constructions;
+        DELETE FROM family_rounds;
         DELETE FROM family_components;
         DELETE FROM family_targets;
         DELETE FROM families;
+        DELETE FROM rounds;
         DELETE FROM constructions;
         DELETE FROM primitive_types;
         DELETE FROM components;
@@ -191,6 +212,7 @@ def main() -> None:
     primitives_doc   = load_yaml(DATA_DIR / "primitives.yaml")
     components_doc   = load_yaml(DATA_DIR / "components.yaml")
     constructions_doc = load_yaml(DATA_DIR / "constructions.yaml")
+    rounds_doc       = load_yaml(DATA_DIR / "rounds.yaml")
     primitive_types_doc = load_yaml(DATA_DIR / "primitive_types.yaml")
     publications_doc = load_yaml(DATA_DIR / "publications.yaml")
     processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
@@ -248,6 +270,23 @@ def main() -> None:
                 ),
             )
 
+        for round_def in rounds_doc.get("rounds", []):
+            spec = round_def.get("spec", {})
+            spec_json = json.dumps(spec, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+            round_hash = hashlib.sha256(spec_json.encode("utf-8")).hexdigest()
+            conn.execute(
+                "INSERT INTO rounds (id, name, kind, spec_json, round_hash, notes)"
+                " VALUES (?, ?, ?, ?, ?, ?)",
+                (
+                    round_def["id"],
+                    round_def["name"],
+                    round_def["kind"],
+                    spec_json,
+                    round_hash,
+                    round_def.get("notes"),
+                ),
+            )
+
         for family in families_doc.get("families", []):
             c = family["characteristics"]
             conn.execute(
@@ -271,6 +310,11 @@ def main() -> None:
                 conn.execute(
                     "INSERT INTO family_constructions (family_id, construction_id) VALUES (?, ?)",
                     (family["id"], construction_id),
+                )
+            for round_id in family.get("round_ids", []):
+                conn.execute(
+                    "INSERT INTO family_rounds (family_id, round_id, role) VALUES (?, ?, ?)",
+                    (family["id"], round_id, "primary"),
                 )
             for pub_id in family.get("publication_ids", []):
                 conn.execute(
