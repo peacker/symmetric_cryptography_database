@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 import yaml
@@ -11,6 +12,47 @@ from jsonschema import Draft202012Validator
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 SCHEMA_DIR = ROOT / "schema"
+TWEAKEY_EXPR_RE = re.compile(r"^([1-9][0-9]*)\s*-\s*key_size_bits$")
+
+
+def validate_range_field(characteristics: dict, base_field: str, pid: str) -> list[str]:
+    errors: list[str] = []
+    min_field = f"{base_field}_min"
+    max_field = f"{base_field}_max"
+
+    min_value = characteristics.get(min_field)
+    max_value = characteristics.get(max_field)
+    has_min = min_value is not None
+    has_max = max_value is not None
+
+    if has_min != has_max:
+        errors.append(
+            f"REFERENCE ERROR: instance '{pid}' must define both {min_field} and {max_field} together"
+        )
+        return errors
+
+    if has_min and has_max:
+        if not isinstance(min_value, int) or min_value <= 0:
+            errors.append(
+                f"REFERENCE ERROR: instance '{pid}' has invalid {min_field}='{min_value}'"
+            )
+        if not isinstance(max_value, int) or max_value <= 0:
+            errors.append(
+                f"REFERENCE ERROR: instance '{pid}' has invalid {max_field}='{max_value}'"
+            )
+        if isinstance(min_value, int) and isinstance(max_value, int) and min_value > max_value:
+            errors.append(
+                f"REFERENCE ERROR: instance '{pid}' has {min_field}={min_value} > {max_field}={max_value}"
+            )
+
+    base_value = characteristics.get(base_field)
+    if has_min and has_max and isinstance(base_value, int):
+        if not (min_value <= base_value <= max_value):
+            errors.append(
+                f"REFERENCE ERROR: instance '{pid}' has {base_field}={base_value} outside [{min_value}, {max_value}]"
+            )
+
+    return errors
 
 
 def load_yaml(path: Path) -> dict:
@@ -86,11 +128,6 @@ def main() -> None:
     # Validate families
     for family in families_doc.get("families", []):
         fid = family["id"]
-        if family["primitive_type"] not in primitive_type_ids:
-            print(
-                f"REFERENCE ERROR: family '{fid}' has unknown primitive_type '{family['primitive_type']}'"
-            )
-            errors_found = True
         for construction_id in family.get("construction_ids", []):
             if construction_id not in construction_ids:
                 print(
@@ -129,9 +166,67 @@ def main() -> None:
     # Validate primitive instances
     for primitive in primitives_doc.get("primitives", []):
         pid = primitive["id"]
+        characteristics = primitive.get("characteristics", {})
         if primitive["family_id"] not in family_ids:
             print(f"REFERENCE ERROR: instance '{pid}' has unknown family_id '{primitive['family_id']}'")
             errors_found = True
+        if primitive["primitive_type"] not in primitive_type_ids:
+            print(
+                f"REFERENCE ERROR: instance '{pid}' has unknown primitive_type '{primitive['primitive_type']}'"
+            )
+            errors_found = True
+        tweakey_size = characteristics.get("tweakey_size_bits")
+        if isinstance(tweakey_size, str):
+            expr_match = TWEAKEY_EXPR_RE.match(tweakey_size.strip())
+            if not expr_match:
+                print(
+                    f"REFERENCE ERROR: instance '{pid}' has invalid tweakey_size_bits expression '{tweakey_size}'"
+                )
+                errors_found = True
+            else:
+                total_bits = int(expr_match.group(1))
+                key_size = characteristics.get("key_size_bits")
+                key_min = characteristics.get("key_size_bits_min")
+                key_max = characteristics.get("key_size_bits_max")
+
+                has_scalar = isinstance(key_size, int) and key_size > 0
+                has_range = isinstance(key_min, int) and key_min > 0 and isinstance(key_max, int) and key_max > 0
+
+                if not has_scalar and not has_range:
+                    print(
+                        f"REFERENCE ERROR: instance '{pid}' uses tweakey_size_bits expression but has neither key_size_bits nor key_size_bits_min/max"
+                    )
+                    errors_found = True
+
+                if has_scalar and key_size > total_bits:
+                    print(
+                        f"REFERENCE ERROR: instance '{pid}' has key_size_bits={key_size} larger than tweakey total {total_bits}"
+                    )
+                    errors_found = True
+
+                if has_range and key_max > total_bits:
+                    print(
+                        f"REFERENCE ERROR: instance '{pid}' has key_size_bits_max={key_max} larger than tweakey total {total_bits}"
+                    )
+                    errors_found = True
+
+        range_base_fields = [
+            "block_size_bits",
+            "state_size_bits",
+            "key_size_bits",
+            "tweak_size_bits",
+            "tweakey_size_bits",
+            "iv_size_bits",
+            "nonce_size_bits",
+            "rounds",
+            "fixed_input_bits",
+            "fixed_output_bits",
+        ]
+        for base_field in range_base_fields:
+            for error in validate_range_field(characteristics, base_field, pid):
+                print(error)
+                errors_found = True
+
         for ref in primitive.get("standard_ids", []):
             if ref not in publication_ids:
                 print(f"REFERENCE ERROR: instance '{pid}' has unknown standard '{ref}' (not in publications)")

@@ -3,7 +3,7 @@ families:
   - id: rijndael
     name: Rijndael
     year: 1998
-    primitive_type: block_cipher
+    # primitive_type removed; now per-instance in primitives.yaml
     construction_ids:
       - aligned_spn
     round_ids:
@@ -13,11 +13,11 @@ families:
     characteristics:
       components:
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: field_matrix_mul
-          params: {field_size: 256}
+          params: { field_size: 256 }
         - id: word_permutation
-          params: {word_size_bits: 8}
+          params: { word_size_bits: 8 }
         - id: xor
         - id: constant
     publication_ids:
@@ -34,7 +34,7 @@ families:
   - id: aes
     name: AES
     year: 2001
-    primitive_type: block_cipher
+    # primitive_type removed; now per-instance in primitives.yaml
     construction_ids:
       - aligned_spn
     round_ids:
@@ -46,11 +46,11 @@ families:
       block_size_bits: 128
       components:
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: field_matrix_mul
-          params: {field_size: 256}
+          params: { field_size: 256 }
         - id: word_permutation
-          params: {word_size_bits: 8}
+          params: { word_size_bits: 8 }
         - id: xor
         - id: constant
     publication_ids: []
@@ -66,7 +66,7 @@ families:
   - id: salsa
     name: Salsa
     year: 2008
-    primitive_type: update_function
+    # primitive_type removed; now per-instance in primitives.yaml
     construction_ids: []
     round_ids:
       - salsa_quarterround
@@ -77,7 +77,7 @@ families:
       state_size_bits: 512
       components:
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_fixed
         - id: constant
@@ -93,7 +93,7 @@ families:
   - id: chacha
     name: ChaCha
     year: 2008
-    primitive_type: update_function
+    # primitive_type removed; now per-instance in primitives.yaml
     construction_ids: []
     round_ids:
       - chacha_quarterround
@@ -104,7 +104,7 @@ families:
       state_size_bits: 512
       components:
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_fixed
         - id: constant
@@ -122,7 +122,7 @@ families:
   - id: present
     name: PRESENT
     year: 2007
-    primitive_type: block_cipher
+    # primitive_type removed; now per-instance in primitives.yaml
     construction_ids:
       - bit_based_spn
     round_ids:
@@ -134,7 +134,7 @@ families:
       block_size_bits: 64
       components:
         - id: sbox
-          params: {input_bits: 4, output_bits: 4}
+          params: { input_bits: 4, output_bits: 4 }
         - id: bit_permutation
         - id: xor
         - id: constant
@@ -147,7 +147,7 @@ families:
   - id: gift
     name: GIFT
     year: 2017
-    primitive_type: block_cipher
+    # primitive_type removed; now per-instance in primitives.yaml
     construction_ids:
       - bit_based_spn
     round_ids:
@@ -158,7 +158,7 @@ families:
     characteristics:
       components:
         - id: sbox
-          params: {input_bits: 4, output_bits: 4}
+          params: { input_bits: 4, output_bits: 4 }
         - id: bit_permutation
         - id: xor
         - id: constant
@@ -176,7 +176,6 @@ families:
   - id: des
     name: DES
     year: 1977
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -188,7 +187,7 @@ families:
       block_size_bits: 64
       components:
         - id: sbox
-          params: {input_bits: 6, output_bits: 4}
+          params: { input_bits: 6, output_bits: 4 }
         - id: bit_permutation
         - id: xor
     publication_ids:
@@ -200,7 +199,6 @@ families:
   - id: blowfish
     name: Blowfish
     year: 1993
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -212,9 +210,9 @@ families:
       block_size_bits: 64
       components:
         - id: sbox
-          params: {input_bits: 8, output_bits: 32}
+          params: { input_bits: 8, output_bits: 32 }
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: xor
     publication_ids:
       - schneier_1994_blowfish
@@ -228,7 +226,6 @@ families:
   - id: idea
     name: IDEA
     year: 1991
-    primitive_type: block_cipher
     construction_ids:
       - lay_massey
     round_ids:
@@ -240,9 +237,9 @@ families:
       block_size_bits: 64
       components:
         - id: add_mod
-          params: {modulus: 65536}
+          params: { modulus: 65536 }
         - id: mul_mod
-          params: {modulus: 65537}
+          params: { modulus: 65537 }
         - id: xor
     publication_ids:
       - lai_massey_1991_idea
@@ -253,7 +250,6 @@ families:
   - id: tea
     name: TEA
     year: 1994
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -265,7 +261,7 @@ families:
       block_size_bits: 64
       components:
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: xor
         - id: shift_fixed
         - id: constant
@@ -278,7 +274,6 @@ families:
   - id: xtea
     name: XTEA
     year: 1997
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -290,7 +285,7 @@ families:
       block_size_bits: 64
       components:
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: xor
         - id: shift_fixed
         - id: constant
@@ -306,7 +301,6 @@ families:
   - id: twofish
     name: Twofish
     year: 1998
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -318,11 +312,11 @@ families:
       block_size_bits: 128
       components:
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: field_matrix_mul
-          params: {field_size: 256}
+          params: { field_size: 256 }
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_fixed
     publication_ids:
@@ -335,7 +329,6 @@ families:
   - id: serpent
     name: Serpent
     year: 1998
-    primitive_type: block_cipher
     construction_ids:
       - aligned_spn
     round_ids:
@@ -347,7 +340,7 @@ families:
       block_size_bits: 128
       components:
         - id: sbox
-          params: {input_bits: 4, output_bits: 4}
+          params: { input_bits: 4, output_bits: 4 }
         - id: binary_matrix_mul
         - id: xor
         - id: constant
@@ -361,7 +354,6 @@ families:
   - id: camellia
     name: Camellia
     year: 2000
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -374,7 +366,7 @@ families:
       block_size_bits: 128
       components:
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: binary_matrix_mul
         - id: xor
         - id: rotation_fixed
@@ -391,7 +383,6 @@ families:
   - id: simon
     name: SIMON
     year: 2013
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -414,7 +405,6 @@ families:
   - id: speck
     name: SPECK
     year: 2013
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -425,7 +415,7 @@ families:
     characteristics:
       components:
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_fixed
     publication_ids:
@@ -440,7 +430,6 @@ families:
   - id: prince
     name: PRINCE
     year: 2012
-    primitive_type: block_cipher
     construction_ids:
       - aligned_spn
     round_ids:
@@ -452,7 +441,7 @@ families:
       block_size_bits: 64
       components:
         - id: sbox
-          params: {input_bits: 4, output_bits: 4}
+          params: { input_bits: 4, output_bits: 4 }
         - id: binary_matrix_mul
         - id: xor
         - id: constant
@@ -465,7 +454,6 @@ families:
   - id: led
     name: LED
     year: 2011
-    primitive_type: block_cipher
     construction_ids:
       - bit_based_spn
     round_ids:
@@ -477,11 +465,11 @@ families:
       block_size_bits: 64
       components:
         - id: sbox
-          params: {input_bits: 4, output_bits: 4}
+          params: { input_bits: 4, output_bits: 4 }
         - id: field_matrix_mul
-          params: {field_size: 16}
+          params: { field_size: 16 }
         - id: word_permutation
-          params: {word_size_bits: 4}
+          params: { word_size_bits: 4 }
         - id: xor
         - id: constant
     publication_ids:
@@ -496,7 +484,6 @@ families:
   - id: katan
     name: KATAN
     year: 2009
-    primitive_type: block_cipher
     construction_ids: []
     round_ids:
       - katan_round
@@ -519,7 +506,6 @@ families:
   - id: ktantan
     name: KTANTAN
     year: 2009
-    primitive_type: block_cipher
     construction_ids: []
     round_ids:
       - ktantan_round
@@ -545,7 +531,6 @@ families:
   - id: cast128
     name: CAST-128
     year: 1997
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -557,11 +542,11 @@ families:
       block_size_bits: 64
       components:
         - id: sbox
-          params: {input_bits: 8, output_bits: 32}
+          params: { input_bits: 8, output_bits: 32 }
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: sub_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_variable
     publication_ids:
@@ -573,7 +558,6 @@ families:
   - id: cast256
     name: CAST-256
     year: 1999
-    primitive_type: block_cipher
     construction_ids:
       - generalized_feistel
     round_ids:
@@ -585,11 +569,11 @@ families:
       block_size_bits: 128
       components:
         - id: sbox
-          params: {input_bits: 8, output_bits: 32}
+          params: { input_bits: 8, output_bits: 32 }
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: sub_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_variable
     publication_ids:
@@ -605,7 +589,6 @@ families:
   - id: rc5
     name: RC5
     year: 1994
-    primitive_type: block_cipher
     construction_ids: []
     round_ids:
       - rc5_round
@@ -617,7 +600,7 @@ families:
         - id: xor
         - id: rotation_variable
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
     publication_ids:
       - baldwin_rivest_1996_rc5
     standard_ids: []
@@ -627,7 +610,6 @@ families:
   - id: seed
     name: SEED
     year: 1998
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -640,11 +622,11 @@ families:
       components:
         - id: xor
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: sub_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: rotation_fixed
     publication_ids:
       - lee_et_al_2005_seed
@@ -655,7 +637,6 @@ families:
   - id: aria
     name: ARIA
     year: 2003
-    primitive_type: block_cipher
     construction_ids:
       - aligned_spn
     round_ids:
@@ -669,7 +650,7 @@ families:
       components:
         - id: xor
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: binary_matrix_mul
     publication_ids:
       - lee_et_al_2010_aria
@@ -677,10 +658,34 @@ families:
     process_ids: []
     influences: []
 
+  - id: rc4
+    name: RC4
+    year: 1987
+    construction_ids: []
+    round_ids:
+      - rc4_ksa
+      - rc4_prga
+    target_applications:
+      - generic
+      - software
+      - tls
+      - wireless
+    characteristics:
+      components: []
+    publication_ids:
+      - rivest_1987_rc4
+    standard_ids: []
+    process_ids: []
+    influences: []
+    notes: >
+      RC4 (Rivest Cipher 4) is a stream cipher using a key scheduling
+      algorithm (KSA) followed by a pseudo-random generation algorithm (PRGA).
+      Despite historical use in TLS and WEP, RC4 has known weaknesses and is
+      deprecated for new applications.
+
   - id: rc6
     name: RC6
     year: 1998
-    primitive_type: block_cipher
     construction_ids:
       - generalized_feistel
     round_ids:
@@ -693,10 +698,10 @@ families:
       components:
         - id: xor
         - id: mul_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: rotation_variable
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
     publication_ids:
       - rivest_et_al_1998_rc6
     standard_ids: []
@@ -710,7 +715,6 @@ families:
   - id: sm4
     name: SM4
     year: 2016
-    primitive_type: block_cipher
     construction_ids: []
     round_ids:
       - sm4_round
@@ -723,7 +727,7 @@ families:
       components:
         - id: xor
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: rotation_fixed
         - id: constant
     publication_ids:
@@ -736,7 +740,6 @@ families:
   - id: kasumi
     name: KASUMI
     year: 2001
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -752,7 +755,7 @@ families:
         - id: or
         - id: rotation_fixed
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
     publication_ids:
       - ts_35_202_kasumi
     standard_ids: []
@@ -762,7 +765,6 @@ families:
   - id: clefia
     name: CLEFIA
     year: 2007
-    primitive_type: block_cipher
     construction_ids:
       - generalized_feistel
     round_ids:
@@ -776,7 +778,7 @@ families:
       components:
         - id: xor
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: binary_matrix_mul
     publication_ids:
       - katagi_moriai_2011_clefia
@@ -787,7 +789,6 @@ families:
   - id: twine
     name: TWINE
     year: 2012
-    primitive_type: block_cipher
     construction_ids:
       - generalized_feistel
     round_ids:
@@ -799,10 +800,10 @@ families:
       block_size_bits: 64
       components:
         - id: sbox
-          params: {input_bits: 4, output_bits: 4}
+          params: { input_bits: 4, output_bits: 4 }
         - id: xor
         - id: word_permutation
-          params: {word_size_bits: 4}
+          params: { word_size_bits: 4 }
         - id: constant
     publication_ids:
       - suzaki_et_al_2012_twine
@@ -815,7 +816,6 @@ families:
   - id: crypton
     name: CRYPTON
     year: 1998
-    primitive_type: block_cipher
     construction_ids:
       - spn
     round_ids:
@@ -829,9 +829,9 @@ families:
       components:
         - id: xor
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: word_permutation
-          params: {word_size_bits: 8}
+          params: { word_size_bits: 8 }
         - id: binary_matrix_mul
     publication_ids:
       - lim_1998_crypton
@@ -843,7 +843,6 @@ families:
   - id: deal
     name: DEAL
     year: 1998
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -856,7 +855,7 @@ families:
       components:
         - id: xor
         - id: sbox
-          params: {input_bits: 6, output_bits: 4}
+          params: { input_bits: 6, output_bits: 4 }
         - id: bit_permutation
     publication_ids:
       - knudsen_1998_deal
@@ -871,7 +870,6 @@ families:
   - id: dfc
     name: DFC
     year: 1998
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -884,11 +882,11 @@ families:
       components:
         - id: xor
         - id: mul_mod
-          params: {modulus: 9223372036854775807}
+          params: { modulus: 9223372036854775807 }
         - id: add_mod
-          params: {modulus: 18446744073709551616}
+          params: { modulus: 18446744073709551616 }
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
     publication_ids:
       - vaudenay_et_al_1998_dfc
     standard_ids: []
@@ -902,7 +900,6 @@ families:
   - id: e2
     name: E2
     year: 1998
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -916,10 +913,10 @@ families:
       components:
         - id: xor
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: rotation_fixed
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
     publication_ids:
       - shimoyama_et_al_1998_e2
     standard_ids: []
@@ -933,7 +930,6 @@ families:
   - id: frog
     name: FROG
     year: 1998
-    primitive_type: block_cipher
     construction_ids: []
     round_ids:
       - frog_round
@@ -945,9 +941,9 @@ families:
       components:
         - id: xor
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: word_permutation
-          params: {word_size_bits: 8}
+          params: { word_size_bits: 8 }
     publication_ids:
       - georgoudis_et_al_1998_frog
     standard_ids: []
@@ -961,7 +957,6 @@ families:
   - id: hpc
     name: HPC
     year: 1998
-    primitive_type: block_cipher
     construction_ids: []
     round_ids:
       - hpc_round
@@ -973,9 +968,9 @@ families:
       components:
         - id: xor
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: rotation_fixed
     publication_ids:
       - schroeppel_1998_hpc
@@ -991,7 +986,6 @@ families:
   - id: loki97
     name: LOKI97
     year: 1998
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -1004,7 +998,7 @@ families:
       components:
         - id: xor
         - id: sbox
-          params: {input_bits: 13, output_bits: 8}
+          params: { input_bits: 13, output_bits: 8 }
         - id: rotation_fixed
         - id: binary_matrix_mul
     publication_ids:
@@ -1020,7 +1014,6 @@ families:
   - id: magenta
     name: MAGENTA
     year: 1998
-    primitive_type: block_cipher
     construction_ids:
       - feistel
     round_ids:
@@ -1033,9 +1026,9 @@ families:
       components:
         - id: xor
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: field_matrix_mul
-          params: {field_size: 256}
+          params: { field_size: 256 }
     publication_ids:
       - jacobson_huber_1998_magenta
     standard_ids: []
@@ -1049,7 +1042,6 @@ families:
   - id: mars
     name: MARS
     year: 1998
-    primitive_type: block_cipher
     construction_ids: []
     round_ids:
       - mars_round
@@ -1061,13 +1053,13 @@ families:
       block_size_bits: 128
       components:
         - id: add_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: xor
         - id: mul_mod
-          params: {modulus: 4294967296}
+          params: { modulus: 4294967296 }
         - id: rotation_variable
         - id: sbox
-          params: {input_bits: 8, output_bits: 32}
+          params: { input_bits: 8, output_bits: 32 }
         - id: rotation_fixed
     publication_ids:
       - burwick_et_al_1999_mars
@@ -1082,7 +1074,6 @@ families:
   - id: safer_plus
     name: SAFER+
     year: 1998
-    primitive_type: block_cipher
     construction_ids:
       - spn
     round_ids:
@@ -1096,11 +1087,11 @@ families:
       components:
         - id: xor
         - id: add_mod
-          params: {modulus: 256}
+          params: { modulus: 256 }
         - id: sbox
-          params: {input_bits: 8, output_bits: 8}
+          params: { input_bits: 8, output_bits: 8 }
         - id: sub_mod
-          params: {modulus: 256}
+          params: { modulus: 256 }
         - id: binary_matrix_mul
     publication_ids:
       - massey_et_al_1998_safer_plus
@@ -1108,3 +1099,239 @@ families:
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
+
+  # ── Low-Latency And Memory-Encryption Ciphers ───────────────────────────
+
+  - id: aradi
+    name: ARADI
+    year: 2024
+    construction_ids:
+      - aligned_spn
+    round_ids:
+      - aradi_round
+    target_applications:
+      - memory_encryption
+      - hardware
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: binary_matrix_mul
+        - id: xor
+        - id: constant
+    publication_ids:
+      - greene_motley_weeks_2024_aradi
+    standard_ids: []
+    process_ids: []
+    influences: []
+
+  - id: bipbip
+    name: BipBip
+    year: 2023
+    # primitive_type removed; now per-instance in primitives.yaml
+    construction_ids: []
+    round_ids:
+      - bipbip_round
+    target_applications:
+      - memory_encryption
+      - constrained_hardware
+    characteristics:
+      block_size_bits: 24
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: xor
+        - id: constant
+    publication_ids:
+      - belkheyar_et_al_2023_bipbip
+    standard_ids: []
+    process_ids: []
+    influences: []
+    notes: >
+      BipBip targets C3 pointer encryption and uses a 24-bit block with a 40-bit tweak.
+
+  - id: qarma
+    name: QARMA
+    year: 2016
+    # primitive_type removed; now per-instance in primitives.yaml
+    construction_ids:
+      - even_mansour
+    round_ids:
+      - qarma_round
+    target_applications:
+      - memory_encryption
+      - hardware
+    characteristics:
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: binary_matrix_mul
+        - id: xor
+        - id: constant
+    publication_ids:
+      - avanzi_2016_qarma
+    standard_ids: []
+    process_ids: []
+    influences:
+      - source_family_id: prince
+        relation: inspired_by
+        note: QARMA extends reflection-cipher ideas from PRINCE by adding tweak input.
+
+  - id: qarmav2
+    name: QARMAv2
+    year: 2023
+    # primitive_type removed; now per-instance in primitives.yaml
+    construction_ids:
+      - even_mansour
+    round_ids:
+      - qarmav2_round
+    target_applications:
+      - memory_encryption
+      - hardware
+    characteristics:
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: binary_matrix_mul
+        - id: xor
+        - id: constant
+    publication_ids:
+      - avanzi_et_al_2023_qarmav2
+    standard_ids: []
+    process_ids: []
+    influences:
+      - source_family_id: qarma
+        relation: variant_of
+        note: QARMAv2 redesigns QARMA with revised bounds and wider tweak support.
+    notes: >
+      QARMAv2 includes 64-bit and 128-bit block variants; the design supports two-block tweaks
+      and also analyzes a single-block tweak setting.
+
+  - id: scarf
+    name: SCARF
+    year: 2023
+    construction_ids: []
+    round_ids:
+      - scarf_round
+    target_applications:
+      - memory_encryption
+      - hardware
+    characteristics:
+      block_size_bits: 10
+      components:
+        - id: sbox
+          params: { input_bits: 5, output_bits: 5 }
+        - id: xor
+        - id: constant
+    publication_ids:
+      - canale_et_al_2023_scarf
+    standard_ids: []
+    process_ids: []
+    influences: []
+    notes: >
+      SCARF is a dedicated cache-randomization cipher with a very small 10-bit
+      block size and heavy key-dependency over few rounds.
+
+  - id: ulbc
+    name: uLBC
+    year: 2025
+    construction_ids:
+      - aligned_spn
+    round_ids:
+      - ulbc_round
+    target_applications:
+      - memory_encryption
+      - constrained_hardware
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: word_permutation
+          params: { word_size_bits: 4 }
+        - id: xor
+        - id: constant
+    publication_ids:
+      - liu_et_al_2025_ulbc
+    standard_ids: []
+    process_ids: []
+    influences: []
+    notes: >
+      this family operates with 128-bit blocks and supports key lengths of either 128 or 256 bits. 
+      Additionally, a tweakable variant with a 384-bit tweakey is available.
+
+  - id: blink
+    name: Blink
+    year: 2025
+    construction_ids: []
+    round_ids:
+      - blink_round
+    target_applications:
+      - memory_encryption
+      - hardware
+    characteristics:
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: xor
+        - id: constant
+    publication_ids:
+      - wang_et_al_2025_blink
+    standard_ids: []
+    process_ids: []
+    influences: []
+    notes: >
+      Blink is instantiated with 64-bit and 128-bit blocks, and with tweak lengths of one or
+      two blocks.
+
+  - id: chilow
+    name: ChiLow
+    year: 2025
+    construction_ids: []
+    round_ids:
+      - chilow_round
+    target_applications:
+      - memory_encryption
+      - embedded
+    characteristics:
+      components:
+        - id: xor
+        - id: binary_matrix_mul
+        - id: constant
+    publication_ids:
+      - belkheyar_et_al_2025_chilow
+    standard_ids: []
+    process_ids: []
+    influences: []
+    notes: >
+      The ChiLow family includes 32-bit and 40-bit tweakable block-cipher variants for embedded
+      code encryption.
+
+  - id: msx
+    name: MSX
+    year: 2026
+    construction_ids:
+      - generalized_feistel
+    round_ids:
+      - msx_round
+    target_applications:
+      - microcontrollers
+      - embedded
+      - software
+    characteristics:
+      components:
+        - id: mul_mod
+          params: { modulus: 4294967296 }
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+    publication_ids:
+      - minematsu_et_al_2026_msx
+    standard_ids: []
+    process_ids: []
+    influences: []
+    notes: >
+      MSX includes MSX-64 and MSX-128 families, with key sizes 128 and 256 bits depending on
+      the instance.

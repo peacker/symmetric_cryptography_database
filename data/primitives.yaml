@@ -4,6 +4,7 @@ primitives:
   - id: aes_128
     name: AES-128
     family_id: aes
+    primitive_type: block_cipher
     characteristics:
       key_size_bits: 128
       rounds: 10
@@ -15,6 +16,7 @@ primitives:
   - id: aes_192
     name: AES-192
     family_id: aes
+    primitive_type: block_cipher
     characteristics:
       key_size_bits: 192
       rounds: 12
@@ -26,6 +28,7 @@ primitives:
   - id: aes_256
     name: AES-256
     family_id: aes
+    primitive_type: block_cipher
     characteristics:
       key_size_bits: 256
       rounds: 14
@@ -36,28 +39,45 @@ primitives:
 
   # ── Salsa family ──────────────────────────────────────────────────────────
   - id: salsa20
-    name: Salsa20
+    name: Salsa20 Block Function
     family_id: salsa
+    primitive_type: permutation
     characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 64
       rounds: 20
       fixed_input_bits: 512
       fixed_output_bits: 512
     standard_ids: []
+    notes: >-
+      Salsa20 block function takes a 256-bit key, 64-bit nonce,
+      and a 64-bit block counter to produce a 512-bit (64-byte) output.
+      Applies 20 quarterrounds in a symmetric pattern.
 
   # ── ChaCha family ─────────────────────────────────────────────────────────
   - id: chacha20
-    name: ChaCha20
+    name: ChaCha20 Block Function
     family_id: chacha
+    primitive_type: permutation
     characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 96
+      block_count_bits: 32
       rounds: 20
       fixed_input_bits: 512
       fixed_output_bits: 512
-    standard_ids: []
+    standard_ids:
+      - rfc_8439
+    notes: >-
+      ChaCha20 block function per RFC 8439: takes a 256-bit key, 96-bit nonce,
+      and 32-bit block counter to produce a 512-bit (64-byte) output.
+      Applies 20 quarterrounds (10 double-rounds) in a symmetric pattern.
 
   # ── PRESENT family ────────────────────────────────────────────────────────
   - id: present_80
     name: PRESENT-80
     family_id: present
+    primitive_type: block_cipher
     characteristics:
       key_size_bits: 80
       rounds: 31
@@ -68,6 +88,7 @@ primitives:
   - id: present_128
     name: PRESENT-128
     family_id: present
+    primitive_type: block_cipher
     characteristics:
       key_size_bits: 128
       rounds: 31
@@ -79,6 +100,7 @@ primitives:
   - id: gift_64
     name: GIFT-64
     family_id: gift
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -90,6 +112,7 @@ primitives:
   - id: gift_128
     name: GIFT-128
     family_id: gift
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -102,6 +125,7 @@ primitives:
   - id: des_56
     name: DES
     family_id: des
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 56
@@ -114,6 +138,7 @@ primitives:
   - id: blowfish_128
     name: Blowfish-128
     family_id: blowfish
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -126,6 +151,7 @@ primitives:
   - id: idea_128
     name: IDEA
     family_id: idea
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -138,6 +164,7 @@ primitives:
   - id: tea_128
     name: TEA
     family_id: tea
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -149,6 +176,7 @@ primitives:
   - id: xtea_128
     name: XTEA
     family_id: xtea
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -161,6 +189,7 @@ primitives:
   - id: twofish_128
     name: Twofish-128
     family_id: twofish
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -172,6 +201,7 @@ primitives:
   - id: twofish_192
     name: Twofish-192
     family_id: twofish
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -183,6 +213,7 @@ primitives:
   - id: twofish_256
     name: Twofish-256
     family_id: twofish
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -195,6 +226,7 @@ primitives:
   - id: serpent_128
     name: Serpent-128
     family_id: serpent
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -206,6 +238,7 @@ primitives:
   - id: serpent_192
     name: Serpent-192
     family_id: serpent
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -217,6 +250,7 @@ primitives:
   - id: serpent_256
     name: Serpent-256
     family_id: serpent
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -229,6 +263,7 @@ primitives:
   - id: camellia_128
     name: Camellia-128
     family_id: camellia
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -240,6 +275,7 @@ primitives:
   - id: camellia_192
     name: Camellia-192
     family_id: camellia
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -251,6 +287,7 @@ primitives:
   - id: camellia_256
     name: Camellia-256
     family_id: camellia
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -263,6 +300,7 @@ primitives:
   - id: simon_64_128
     name: SIMON-64/128
     family_id: simon
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -274,6 +312,7 @@ primitives:
   - id: simon_128_128
     name: SIMON-128/128
     family_id: simon
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -285,6 +324,7 @@ primitives:
   - id: speck_64_128
     name: SPECK-64/128
     family_id: speck
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -296,6 +336,7 @@ primitives:
   - id: speck_128_128
     name: SPECK-128/128
     family_id: speck
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -308,6 +349,7 @@ primitives:
   - id: prince_128
     name: PRINCE
     family_id: prince
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -319,6 +361,7 @@ primitives:
   - id: led_64_64
     name: LED-64
     family_id: led
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 64
@@ -330,6 +373,7 @@ primitives:
   - id: led_64_128
     name: LED-128
     family_id: led
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -342,6 +386,7 @@ primitives:
   - id: katan_64_80
     name: KATAN-64
     family_id: katan
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 80
@@ -353,6 +398,7 @@ primitives:
   - id: ktantan_64_80
     name: KTANTAN-64
     family_id: ktantan
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 80
@@ -365,6 +411,7 @@ primitives:
   - id: cast128_128
     name: CAST-128
     family_id: cast128
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -376,6 +423,7 @@ primitives:
   - id: cast256_128
     name: CAST-256-128
     family_id: cast256
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -387,6 +435,7 @@ primitives:
   - id: cast256_192
     name: CAST-256-192
     family_id: cast256
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -398,6 +447,7 @@ primitives:
   - id: cast256_256
     name: CAST-256-256
     family_id: cast256
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -410,6 +460,7 @@ primitives:
   - id: rc5_32_12_16
     name: RC5-32/12/16
     family_id: rc5
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -421,6 +472,7 @@ primitives:
   - id: rc5_32_16_16
     name: RC5-32/16/16
     family_id: rc5
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -433,6 +485,7 @@ primitives:
   - id: seed_128
     name: SEED
     family_id: seed
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -445,6 +498,7 @@ primitives:
   - id: aria_128
     name: ARIA-128
     family_id: aria
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -456,6 +510,7 @@ primitives:
   - id: aria_192
     name: ARIA-192
     family_id: aria
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -467,6 +522,7 @@ primitives:
   - id: aria_256
     name: ARIA-256
     family_id: aria
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -479,6 +535,7 @@ primitives:
   - id: rc6_32_20_16
     name: RC6-32/20/16
     family_id: rc6
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -490,6 +547,7 @@ primitives:
   - id: rc6_32_20_24
     name: RC6-32/20/24
     family_id: rc6
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -501,6 +559,7 @@ primitives:
   - id: rc6_32_20_32
     name: RC6-32/20/32
     family_id: rc6
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -513,6 +572,7 @@ primitives:
   - id: sm4_128
     name: SM4
     family_id: sm4
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -526,6 +586,7 @@ primitives:
   - id: kasumi_128
     name: KASUMI
     family_id: kasumi
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -538,6 +599,7 @@ primitives:
   - id: clefia_128
     name: CLEFIA-128
     family_id: clefia
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -549,6 +611,7 @@ primitives:
   - id: clefia_192
     name: CLEFIA-192
     family_id: clefia
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -560,6 +623,7 @@ primitives:
   - id: clefia_256
     name: CLEFIA-256
     family_id: clefia
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -572,6 +636,7 @@ primitives:
   - id: twine_80
     name: TWINE-80
     family_id: twine
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 80
@@ -583,6 +648,7 @@ primitives:
   - id: twine_128
     name: TWINE-128
     family_id: twine
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 64
       key_size_bits: 128
@@ -597,6 +663,7 @@ primitives:
   - id: crypton_128
     name: CRYPTON-128
     family_id: crypton
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -608,6 +675,7 @@ primitives:
   - id: crypton_192
     name: CRYPTON-192
     family_id: crypton
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -619,6 +687,7 @@ primitives:
   - id: crypton_256
     name: CRYPTON-256
     family_id: crypton
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -631,6 +700,7 @@ primitives:
   - id: deal_128
     name: DEAL-128
     family_id: deal
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -642,6 +712,7 @@ primitives:
   - id: deal_192
     name: DEAL-192
     family_id: deal
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -653,6 +724,7 @@ primitives:
   - id: deal_256
     name: DEAL-256
     family_id: deal
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -665,6 +737,7 @@ primitives:
   - id: dfc_128
     name: DFC-128
     family_id: dfc
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -676,6 +749,7 @@ primitives:
   - id: dfc_192
     name: DFC-192
     family_id: dfc
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -687,6 +761,7 @@ primitives:
   - id: dfc_256
     name: DFC-256
     family_id: dfc
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -699,6 +774,7 @@ primitives:
   - id: e2_128
     name: E2-128
     family_id: e2
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -710,6 +786,7 @@ primitives:
   - id: e2_192
     name: E2-192
     family_id: e2
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -721,6 +798,7 @@ primitives:
   - id: e2_256
     name: E2-256
     family_id: e2
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -733,6 +811,7 @@ primitives:
   - id: frog_128
     name: FROG-128
     family_id: frog
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -744,6 +823,7 @@ primitives:
   - id: frog_192
     name: FROG-192
     family_id: frog
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -755,6 +835,7 @@ primitives:
   - id: frog_256
     name: FROG-256
     family_id: frog
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -767,6 +848,7 @@ primitives:
   - id: hpc_128
     name: HPC-128
     family_id: hpc
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -778,6 +860,7 @@ primitives:
   - id: hpc_192
     name: HPC-192
     family_id: hpc
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -789,6 +872,7 @@ primitives:
   - id: hpc_256
     name: HPC-256
     family_id: hpc
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -801,6 +885,7 @@ primitives:
   - id: loki97_128
     name: LOKI97-128
     family_id: loki97
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -812,6 +897,7 @@ primitives:
   - id: loki97_192
     name: LOKI97-192
     family_id: loki97
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -823,6 +909,7 @@ primitives:
   - id: loki97_256
     name: LOKI97-256
     family_id: loki97
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -835,6 +922,7 @@ primitives:
   - id: magenta_128
     name: MAGENTA-128
     family_id: magenta
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -846,6 +934,7 @@ primitives:
   - id: magenta_192
     name: MAGENTA-192
     family_id: magenta
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -857,6 +946,7 @@ primitives:
   - id: magenta_256
     name: MAGENTA-256
     family_id: magenta
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -869,6 +959,7 @@ primitives:
   - id: mars_128
     name: MARS-128
     family_id: mars
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -880,6 +971,7 @@ primitives:
   - id: mars_192
     name: MARS-192
     family_id: mars
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -891,6 +983,7 @@ primitives:
   - id: mars_256
     name: MARS-256
     family_id: mars
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -903,6 +996,7 @@ primitives:
   - id: safer_plus_128
     name: SAFER+-128
     family_id: safer_plus
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
@@ -914,6 +1008,7 @@ primitives:
   - id: safer_plus_192
     name: SAFER+-192
     family_id: safer_plus
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 192
@@ -925,6 +1020,7 @@ primitives:
   - id: safer_plus_256
     name: SAFER+-256
     family_id: safer_plus
+    primitive_type: block_cipher
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
@@ -933,3 +1029,309 @@ primitives:
       fixed_output_bits: 128
     standard_ids: []
 
+  # ── Low-Latency And Memory-Encryption families ──────────────────────────
+  - id: aradi_128_256
+    name: ARADI-128/256
+    family_id: aradi
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 16
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: bipbip_24_40_256
+    name: BipBip-24/40
+    family_id: bipbip
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 24
+      key_size_bits: 256
+      tweak_size_bits: 40
+      rounds: 11
+      fixed_input_bits: 24
+      fixed_output_bits: 24
+    standard_ids: []
+    notes: Full version denoted BipBip3,5,3 in the paper.
+
+  - id: qarma_64_128
+    name: QARMA-64-128
+    family_id: qarma
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      tweak_size_bits: 64
+      rounds: 16
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: qarma_128_256
+    name: QARMA-128-256
+    family_id: qarma
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      tweak_size_bits: 128
+      rounds: 24
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: qarmav2_64_128
+    name: QARMAv2-64-128
+    family_id: qarmav2
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      tweak_size_bits: 128
+      rounds: 16
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: qarmav2_128_128
+    name: QARMAv2-128-128
+    family_id: qarmav2
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      tweak_size_bits: 256
+      rounds: 24
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: qarmav2_128_192
+    name: QARMAv2-128-192
+    family_id: qarmav2
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      tweak_size_bits: 256
+      rounds: 24
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: qarmav2_128_256
+    name: QARMAv2-128-256
+    family_id: qarmav2
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      tweak_size_bits: 256
+      rounds: 24
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: scarf_10_240_48
+    name: SCARF-10/240
+    family_id: scarf
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 10
+      key_size_bits: 240
+      tweak_size_bits: 48
+      rounds: 8
+      fixed_input_bits: 10
+      fixed_output_bits: 10
+    standard_ids: []
+
+  - id: ulbc_128
+    name: uLBC-128
+    family_id: ulbc
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 18
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: ulbc_256
+    name: uLBC-256
+    family_id: ulbc
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 22
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: ulbc_384t
+    name: uLBC-384t
+    family_id: ulbc
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits_min: 128
+      key_size_bits_max: 384
+      tweakey_size_bits: 384-key_size_bits
+      rounds: 30
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+    notes: Minimum key length is 128 bits with variable key/tweak split.
+
+  - id: blink_64a
+    name: Blink-64a
+    family_id: blink
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 448
+      tweak_size_bits: 64
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: blink_64b
+    name: Blink-64b
+    family_id: blink
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 448
+      tweak_size_bits: 128
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: blink_128a
+    name: Blink-128a
+    family_id: blink
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 1024
+      tweak_size_bits: 128
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: blink_128b
+    name: Blink-128b
+    family_id: blink
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 1024
+      tweak_size_bits: 256
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: blink_128A
+    name: Blink-128A
+    family_id: blink
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 1280
+      tweak_size_bits: 128
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: blink_128B
+    name: Blink-128B
+    family_id: blink
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 1280
+      tweak_size_bits: 256
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: chilow_32
+    name: ChiLow-(32+tau)
+    family_id: chilow
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 32
+      key_size_bits: 128
+      tweak_size_bits: 64
+      rounds: 8
+      fixed_input_bits: 32
+      fixed_output_bits: 32
+    standard_ids: []
+
+  - id: chilow_40
+    name: ChiLow-40
+    family_id: chilow
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 40
+      key_size_bits: 128
+      tweak_size_bits: 64
+      rounds: 8
+      fixed_input_bits: 40
+      fixed_output_bits: 40
+    standard_ids: []
+
+  - id: msx_64_128
+    name: MSX-64/128
+    family_id: msx
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 14
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+    standard_ids: []
+
+  - id: msx_128_128
+    name: MSX-128/128
+    family_id: msx
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 18
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  - id: msx_128_256
+    name: MSX-128/256
+    family_id: msx
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 18
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    standard_ids: []
+
+  # ── RC4 family ────────────────────────────────────────────────────────────
+  - id: rc4_variable
+    name: RC4 (Variable Key)
+    family_id: rc4
+    primitive_type: stream_cipher
+    characteristics:
+      key_size_bits_min: 8
+      key_size_bits_max: 2048
+      fixed_input_bits: 1
+      fixed_output_bits: 64
+    standard_ids: []
+    notes: >-
+      RC4 is a stream cipher with variable key size (1–256 bytes).
+      The fixed_output_bits represents a standard 64-byte (512-bit) keystream unit.
+      Output length is typically determined by application needs.

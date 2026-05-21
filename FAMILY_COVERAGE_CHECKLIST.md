@@ -10,19 +10,24 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] AES
 - [ ] Akelarre
 - [ ] Anubis
+- [x] ARADI
 - [x] ARIA
 - [ ] ASCON
 - [ ] BEAR/LION
 - [ ] BelT
+- [x] BipBip
+- [x] Blink
 - [ ] Blowfish
 - [x] CAST-128
 - [x] CAST-256
 - [x] Camellia
 - [ ] Chaskey
 - [x] ChaCha
+- [x] ChiLow
 - [ ] CIPHERUNICORN-A
 - [x] CLEFIA
 - [x] CRYPTON
+- [ ] Deoxys
 - [ ] DESX
 - [x] DES
 - [x] DEAL
@@ -50,11 +55,14 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] LOKI
 - [x] LOKI97
 - [x] MAGENTA
+- [ ] MANTIS
 - [x] MARS
 - [ ] MCRYPTON
 - [ ] MIBS
+- [ ] MIDORI
 - [ ] MISTY1
 - [ ] MMB
+- [x] MSX
 - [ ] MULTI2
 - [ ] NOEKEON
 - [ ] Nimbus
@@ -63,7 +71,10 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] PRIDE
 - [x] PRESENT
 - [x] PRINCE
+- [ ] PRINCEv2
 - [ ] Q
+- [x] QARMA
+- [x] QARMAv2
 - [ ] RC2
 - [x] RC5
 - [x] RC6
@@ -72,18 +83,21 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] SAFER
 - [x] SAFER+
 - [x] SALSA
+- [x] SCARF
 - [ ] SC2000
 - [x] SEED
 - [x] Serpent
 - [ ] SHACAL
 - [ ] SHARK
+- [x] SIMON
+- [ ] Skinny
 - [ ] SKIPJACK
 - [x] SM4
 - [ ] SNOW 2.0
 - [ ] SNOW 3G
 - [ ] SPECKEY
-- [x] SIMON
 - [x] SPECK
+- [ ] SPEEDY
 - [ ] SQUARE
 - [ ] TEA extensions (XXTEA/Corrected Block TEA)
 - [x] TEA
@@ -94,6 +108,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] Two-key Triple DES
 - [ ] Three-key Triple DES
 - [ ] UEA2/ZUC
+- [x] uLBC
 - [ ] WAKE
 - [ ] XChaCha
 - [ ] XEX-based families (XTS lineage)

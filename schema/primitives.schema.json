@@ -25,21 +25,51 @@
             "required": ["fixed_input_bits", "fixed_output_bits"],
             "properties": {
                 "block_size_bits":   { "type": "integer", "minimum": 1 },
+                "block_size_bits_min": { "type": "integer", "minimum": 1 },
+                "block_size_bits_max": { "type": "integer", "minimum": 1 },
                 "state_size_bits":   { "type": "integer", "minimum": 1 },
+                "state_size_bits_min": { "type": "integer", "minimum": 1 },
+                "state_size_bits_max": { "type": "integer", "minimum": 1 },
                 "key_size_bits":     { "type": "integer", "minimum": 1 },
+                "key_size_bits_min": { "type": "integer", "minimum": 1 },
+                "key_size_bits_max": { "type": "integer", "minimum": 1 },
+                "tweak_size_bits":   { "type": "integer", "minimum": 1 },
+                "tweak_size_bits_min": { "type": "integer", "minimum": 1 },
+                "tweak_size_bits_max": { "type": "integer", "minimum": 1 },
+                "tweakey_size_bits": {
+                    "oneOf": [
+                        { "type": "integer", "minimum": 1 },
+                        { "type": "string", "pattern": "^[1-9][0-9]*\\s*-\\s*key_size_bits$" }
+                    ]
+                },
+                "tweakey_size_bits_min": { "type": "integer", "minimum": 1 },
+                "tweakey_size_bits_max": { "type": "integer", "minimum": 1 },
+                "iv_size_bits": { "type": "integer", "minimum": 1 },
+                "iv_size_bits_min": { "type": "integer", "minimum": 1 },
+                "iv_size_bits_max": { "type": "integer", "minimum": 1 },
+                "nonce_size_bits": { "type": "integer", "minimum": 1 },
+                "nonce_size_bits_min": { "type": "integer", "minimum": 1 },
+                "nonce_size_bits_max": { "type": "integer", "minimum": 1 },
                 "rounds":            { "type": "integer", "minimum": 1 },
+                "rounds_min":        { "type": "integer", "minimum": 1 },
+                "rounds_max":        { "type": "integer", "minimum": 1 },
                 "fixed_input_bits":  { "type": "integer", "minimum": 1 },
-                "fixed_output_bits": { "type": "integer", "minimum": 1 }
+                "fixed_input_bits_min": { "type": "integer", "minimum": 1 },
+                "fixed_input_bits_max": { "type": "integer", "minimum": 1 },
+                "fixed_output_bits": { "type": "integer", "minimum": 1 },
+                "fixed_output_bits_min": { "type": "integer", "minimum": 1 },
+                "fixed_output_bits_max": { "type": "integer", "minimum": 1 }
             },
             "additionalProperties": true
         },
         "primitive": {
             "type": "object",
-            "required": ["id", "name", "family_id", "characteristics", "standard_ids"],
+            "required": ["id", "name", "family_id", "primitive_type", "characteristics", "standard_ids"],
             "properties": {
                 "id":        { "type": "string", "minLength": 1 },
                 "name":      { "type": "string", "minLength": 1 },
                 "family_id": { "type": "string", "minLength": 1 },
+                "primitive_type": { "type": "string", "minLength": 1 },
                 "characteristics": { "$ref": "#/$defs/characteristics" },
                 "standard_ids": {
                     "type": "array",

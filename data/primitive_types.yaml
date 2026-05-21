@@ -15,3 +15,6 @@ primitive_types:
 
   - id: update_function
     name: Update Function
+
+  - id: stream_cipher
+    name: Stream Cipher

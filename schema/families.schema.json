@@ -65,7 +65,7 @@
     "family": {
       "type": "object",
       "required": [
-        "id", "name", "year", "primitive_type",
+        "id", "name", "year",
         "construction_ids",
         "round_ids",
         "target_applications", "characteristics",
@@ -75,10 +75,6 @@
         "id":   { "type": "string", "minLength": 1 },
         "name": { "type": "string", "minLength": 1 },
         "year": { "type": "integer", "minimum": 1900, "maximum": 2100 },
-        "primitive_type": {
-          "type": "string",
-          "minLength": 1
-        },
         "construction_ids": {
           "type": "array",
           "items": { "$ref": "#/$defs/construction_id" }

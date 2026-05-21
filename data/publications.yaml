@@ -168,7 +168,7 @@ publications:
 
   - id: matsui_et_al_2004_camellia
     kind: article
-    title: "A Description of the Camellia Encryption Algorithm"
+    title: "RFC 3713: A Description of the Camellia Encryption Algorithm"
     authors:
       - Mitsuru Matsui
       - Junko Nakajima
@@ -237,7 +237,7 @@ publications:
 
   - id: adams_1997_cast128
     kind: article
-    title: "The CAST-128 Encryption Algorithm"
+    title: "RFC 2144: The CAST-128 Encryption Algorithm"
     authors:
       - Carlisle Adams
     year: 1997
@@ -246,7 +246,7 @@ publications:
 
   - id: adams_gilchrist_1999_cast256
     kind: article
-    title: "The CAST-256 Encryption Algorithm"
+    title: "RFC 2612: The CAST-256 Encryption Algorithm"
     authors:
       - Carlisle Adams
       - June Gilchrist
@@ -256,7 +256,7 @@ publications:
 
   - id: baldwin_rivest_1996_rc5
     kind: article
-    title: "The RC5, RC5-CBC, RC5-CBC-Pad, and RC5-CTS Algorithms"
+    title: "RFC 2040: The RC5, RC5-CBC, RC5-CBC-Pad, and RC5-CTS Algorithms"
     authors:
       - Robert Baldwin
       - Ronald L. Rivest
@@ -266,7 +266,7 @@ publications:
 
   - id: lee_et_al_2005_seed
     kind: article
-    title: "The SEED Encryption Algorithm"
+    title: "RFC 4269: The SEED Encryption Algorithm"
     authors:
       - Hyangjin Lee
       - Sungjae Lee
@@ -279,7 +279,7 @@ publications:
 
   - id: lee_et_al_2010_aria
     kind: article
-    title: "A Description of the ARIA Encryption Algorithm"
+    title: "RFC 5794: A Description of the ARIA Encryption Algorithm"
     authors:
       - Jungkeun Lee
       - Jooyoung Lee
@@ -292,7 +292,7 @@ publications:
 
   - id: rivest_et_al_1998_rc6
     kind: article
-    title: "The RC6 Block Cipher"
+    title: "RFC 2138: The RC6 Block Cipher"
     authors:
       - Ronald L. Rivest
       - Matt J. B. Robshaw
@@ -314,7 +314,7 @@ publications:
 
   - id: yang_2021_sm_tls
     kind: article
-    title: "ShangMi (SM) Cipher Suites for TLS 1.3"
+    title: "RFC 8998: ShangMi (SM) Cipher Suites for TLS 1.3"
     authors:
       - Paul Yang
     year: 2021
@@ -333,7 +333,7 @@ publications:
 
   - id: katagi_moriai_2011_clefia
     kind: article
-    title: "The 128-Bit Blockcipher CLEFIA"
+    title: "RFC 6114: The 128-Bit Blockcipher CLEFIA"
     authors:
       - Masanobu Katagi
       - Shiho Moriai
@@ -472,3 +472,149 @@ publications:
     year: 1998
     venue: AES Candidate Submission
     url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development
+
+  # ── Low-Latency And Memory-Encryption Ciphers ───────────────────────────
+
+  - id: greene_motley_weeks_2024_aradi
+    kind: article
+    title: "ARADI and LLAMA: Low-Latency Cryptography for Memory Encryption"
+    authors:
+      - Patricia Greene
+      - Mark Motley
+      - Bryan Weeks
+    year: 2024
+    venue: Cryptology ePrint Archive
+    url: https://eprint.iacr.org/2024/1240
+
+  - id: belkheyar_et_al_2023_bipbip
+    kind: article
+    title: "BipBip: A Low-Latency Tweakable Block Cipher with Small Dimensions"
+    authors:
+      - Yanis Belkheyar
+      - Joan Daemen
+      - Christoph Dobraunig
+      - Santosh Ghosh
+      - Shahram Rasoolzadeh
+    year: 2023
+    venue: IACR Transactions on Cryptographic Hardware and Embedded Systems
+    url: https://tches.iacr.org/index.php/TCHES/article/view/9955/9458
+
+  - id: avanzi_2016_qarma
+    kind: article
+    title: "The QARMA Block Cipher Family"
+    authors:
+      - Roberto Avanzi
+    year: 2016
+    venue: Cryptology ePrint Archive
+    url: https://eprint.iacr.org/2016/444
+
+  - id: avanzi_et_al_2023_qarmav2
+    kind: article
+    title: "The QARMAv2 Family of Tweakable Block Ciphers"
+    authors:
+      - Roberto Avanzi
+      - Subhadeep Banik
+      - Orr Dunkelman
+      - Maria Eichlseder
+      - Shibam Ghosh
+      - Marcel Nageler
+      - Francesco Regazzoni
+    year: 2023
+    venue: Cryptology ePrint Archive
+    url: https://eprint.iacr.org/2023/929
+
+  - id: canale_et_al_2023_scarf
+    kind: article
+    title: "SCARF - A Low-Latency Block Cipher for Secure Cache-Randomization"
+    authors:
+      - Federico Canale
+      - Tim Guneysu
+      - Gregor Leander
+      - Jan Philipp Thoma
+      - Yosuke Todo
+      - Rei Ueno
+    year: 2023
+    venue: USENIX Security Symposium
+    url: https://www.usenix.org/system/files/usenixsecurity23-canale.pdf
+
+  - id: liu_et_al_2025_ulbc
+    kind: article
+    title: "Ultra Low-Latency Block Cipher uLBC"
+    authors:
+      - Guoxiao Liu
+      - Qingyuan Yu
+      - Liyuan Tang
+      - Shihe Ma
+      - Congming Wei
+      - Keting Jia
+      - Lingyue Qin
+      - Xiaoyang Dong
+      - Yantian Shen
+    year: 2025
+    venue: IACR Communications in Cryptology
+    url: https://cic.iacr.org/p/1/4/25
+
+  - id: wang_et_al_2025_blink
+    kind: article
+    title: "THF: Designing Low-Latency Tweakable Block Ciphers"
+    authors:
+      - Jianhua Wang
+      - Tao Huang
+      - Guang Zeng
+      - Tianyou Ding
+      - Shuang Wu
+      - Siwei Sun
+    year: 2025
+    venue: Cryptology ePrint Archive
+    url: https://eprint.iacr.org/2025/1314
+
+  - id: belkheyar_et_al_2025_chilow
+    kind: article
+    title: "ChiLow and ChiChi: New Constructions for Code Encryption"
+    authors:
+      - Yanis Belkheyar
+      - Patrick Derbez
+      - Shibam Ghosh
+      - Gregor Leander
+      - Silvia Mella
+      - Leo Perrin
+      - Shahram Rasoolzadeh
+      - Lukas Stennes
+      - Siwei Sun
+      - Gilles Van Assche
+      - Damian Vizar
+    year: 2025
+    venue: Cryptology ePrint Archive
+    url: https://eprint.iacr.org/2025/308
+
+  - id: minematsu_et_al_2026_msx
+    kind: article
+    title: "MSX: Lightweight Block Ciphers for Microcontrollers with High-assurance against Differential and Linear Attacks"
+    authors:
+      - Kazuhiko Minematsu
+      - Tomoyasu Suzaki
+      - Mostafizar Rahman
+      - Sahiba Suryawanshi
+      - Takanori Isobe
+    year: 2026
+    venue: IACR Communications in Cryptology
+    url: https://cic.iacr.org/p/2/4/32
+
+  - id: rfc_8439
+    kind: standard
+    title: "RFC 8439: ChaCha20 and Poly1305 for IETF Protocols"
+    authors:
+      - Yoav Nir
+      - Adam Langley
+    year: 2018
+    venue: RFC 8439
+    url: https://datatracker.ietf.org/doc/rfc8439/
+
+  - id: rivest_1987_rc4
+    kind: article
+    title: "RC4: A Stream Cipher"
+    authors:
+      - Ronald L. Rivest
+    year: 1987
+    venue: Cipher Design (RSA Secret-Key Cryptography Specifications)
+    url: https://en.wikipedia.org/wiki/RC4

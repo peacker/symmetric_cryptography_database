@@ -85,10 +85,8 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
             year INTEGER NOT NULL,
-            primitive_type TEXT NOT NULL,
             notes TEXT,
-            characteristics_json TEXT NOT NULL,
-            FOREIGN KEY (primitive_type) REFERENCES primitive_types(id) ON DELETE RESTRICT
+            characteristics_json TEXT NOT NULL
         );
 
         CREATE TABLE IF NOT EXISTS family_targets (
@@ -163,10 +161,12 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
             family_id TEXT NOT NULL,
+            primitive_type TEXT NOT NULL,
             fixed_input_bits INTEGER NOT NULL,
             fixed_output_bits INTEGER NOT NULL,
             characteristics_json TEXT NOT NULL,
-            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE RESTRICT
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE RESTRICT,
+            FOREIGN KEY (primitive_type) REFERENCES primitive_types(id) ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS primitive_standards (
@@ -290,9 +290,9 @@ def main() -> None:
         for family in families_doc.get("families", []):
             c = family["characteristics"]
             conn.execute(
-                "INSERT INTO families (id, name, year, primitive_type, notes, characteristics_json)"
-                " VALUES (?, ?, ?, ?, ?, ?)",
-                (family["id"], family["name"], family["year"], family["primitive_type"],
+                "INSERT INTO families (id, name, year, notes, characteristics_json)"
+                " VALUES (?, ?, ?, ?, ?)",
+                (family["id"], family["name"], family["year"],
                  family.get("notes"), json.dumps(c, ensure_ascii=True)),
             )
             for target in family.get("target_applications", []):
@@ -340,10 +340,10 @@ def main() -> None:
             c = primitive["characteristics"]
             conn.execute(
                 "INSERT INTO primitives"
-                " (id, name, family_id, fixed_input_bits, fixed_output_bits,"
+                " (id, name, family_id, primitive_type, fixed_input_bits, fixed_output_bits,"
                 "  characteristics_json)"
-                " VALUES (?, ?, ?, ?, ?, ?)",
-                (primitive["id"], primitive["name"], primitive["family_id"],
+                " VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (primitive["id"], primitive["name"], primitive["family_id"], primitive["primitive_type"],
                  c["fixed_input_bits"], c["fixed_output_bits"],
                  json.dumps(c, ensure_ascii=True)),
             )

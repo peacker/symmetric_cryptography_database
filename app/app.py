@@ -7,6 +7,8 @@ Run with:
 
 from __future__ import annotations
 
+import json
+import re
 import sqlite3
 from pathlib import Path
 
@@ -16,6 +18,7 @@ import streamlit as st
 
 ROOT = Path(__file__).resolve().parents[1]
 DB_PATH = ROOT / "build" / "symmetric_primitives.db"
+TWEAKEY_EXPR_RE = re.compile(r"^([1-9][0-9]*)\s*-\s*key_size_bits$")
 
 st.set_page_config(
     page_title="Symmetric Primitives Database",
@@ -29,27 +32,7 @@ def get_connection() -> sqlite3.Connection:
     if not DB_PATH.exists():
         st.error("Database not found. Run `make build-db` first.")
         st.stop()
-    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-
-    # Backward-compatibility: older DB builds may miss primitive_types.
-    has_primitive_types = conn.execute(
-        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='primitive_types'"
-    ).fetchone()
-    if not has_primitive_types:
-        conn.execute(
-            "CREATE TABLE IF NOT EXISTS primitive_types ("
-            "id TEXT PRIMARY KEY, name TEXT NOT NULL, notes TEXT)"
-        )
-        conn.execute(
-            "INSERT OR IGNORE INTO primitive_types (id, name, notes) "
-            "SELECT DISTINCT primitive_type, "
-            "       REPLACE(UPPER(SUBSTR(primitive_type, 1, 1)) || SUBSTR(primitive_type, 2), '_', ' '), "
-            "       NULL "
-            "FROM families"
-        )
-        conn.commit()
-
-    return conn
+    return sqlite3.connect(DB_PATH, check_same_thread=False)
 
 
 @st.cache_data
@@ -64,6 +47,7 @@ def load_primitives() -> pd.DataFrame:
             f.id   AS family_id,
             f.name AS family_name,
             pt.name AS primitive_type,
+            p.characteristics_json,
             p.fixed_input_bits,
             p.fixed_output_bits,
             GROUP_CONCAT(DISTINCT r.id)      AS round_ids,
@@ -74,7 +58,7 @@ def load_primitives() -> pd.DataFrame:
             GROUP_CONCAT(DISTINCT pr.name)   AS processes
         FROM primitives p
         JOIN families f ON f.id = p.family_id
-        JOIN primitive_types pt ON pt.id = f.primitive_type
+        JOIN primitive_types pt ON pt.id = p.primitive_type
         LEFT JOIN family_rounds fr        ON fr.family_id = f.id
         LEFT JOIN rounds r                ON r.id = fr.round_id
         LEFT JOIN family_targets t       ON t.family_id    = f.id
@@ -100,13 +84,89 @@ def split_grouped_values(value: object) -> set[str]:
     return {v.strip() for v in text.split(",") if v.strip()}
 
 
+def format_size_value(label: str, value: object) -> str | None:
+    if isinstance(value, int) and value > 0:
+        return f"{label}[{value}]"
+    if isinstance(value, str):
+        expr = value.strip()
+        expr_match = TWEAKEY_EXPR_RE.match(expr)
+        if expr_match:
+            total_bits = expr_match.group(1)
+            return f"{label}[{total_bits}-key_size_bits]"
+    return None
+
+
+def format_range_value(label: str, min_value: object, max_value: object) -> str | None:
+    if not isinstance(min_value, int) or min_value <= 0:
+        return None
+    if not isinstance(max_value, int) or max_value <= 0:
+        return None
+    if min_value == max_value:
+        return f"{label}[{min_value}]"
+    return f"{label}[{min_value}-{max_value}]"
+
+
+def format_inputs_bits(characteristics_json: object, fixed_input_bits: object) -> str:
+    parts: list[str] = []
+    seen_labels: set[str] = set()
+
+    if fixed_input_bits is not None and not (isinstance(fixed_input_bits, float) and pd.isna(fixed_input_bits)):
+        parts.append(f"message[{int(fixed_input_bits)}]")
+        seen_labels.add("message")
+
+    if characteristics_json is None:
+        return ", ".join(parts)
+    if isinstance(characteristics_json, float) and pd.isna(characteristics_json):
+        return ", ".join(parts)
+
+    try:
+        characteristics = json.loads(str(characteristics_json))
+    except (json.JSONDecodeError, TypeError):
+        return ", ".join(parts)
+
+    extra_inputs = [
+        ("fixed_input_bits", "message"),
+        ("key_size_bits", "key"),
+        ("tweak_size_bits", "tweak"),
+        ("tweakey_size_bits", "tweakey"),
+        ("iv_size_bits", "iv"),
+        ("nonce_size_bits", "nonce"),
+    ]
+    for field, label in extra_inputs:
+        range_rendered = format_range_value(
+            label,
+            characteristics.get(f"{field}_min"),
+            characteristics.get(f"{field}_max"),
+        )
+        if range_rendered and label not in seen_labels:
+            parts.append(range_rendered)
+            seen_labels.add(label)
+            continue
+
+        value = characteristics.get(field)
+        rendered = format_size_value(label, value)
+        if rendered and label not in seen_labels:
+            parts.append(rendered)
+            seen_labels.add(label)
+
+    return ", ".join(parts)
+
+
 @st.cache_data
 def load_families() -> pd.DataFrame:
     conn = get_connection()
     return pd.read_sql_query(
         """
         SELECT
-            f.id, f.name, f.year, pt.name AS primitive_type, f.notes,
+            f.id,
+            f.name,
+            f.year,
+            CASE WHEN COUNT(DISTINCT p.primitive_type) = 1
+                 THEN MAX(pt.name)
+                 ELSE 'Mixed'
+            END AS primitive_type,
+            GROUP_CONCAT(DISTINCT pt.name) AS constituent_types,
+            f.notes,
             COUNT(DISTINCT p.id) AS instance_count,
             GROUP_CONCAT(DISTINCT p.name)    AS instances,
             GROUP_CONCAT(DISTINCT r.name)    AS rounds,
@@ -115,8 +175,8 @@ def load_families() -> pd.DataFrame:
             GROUP_CONCAT(DISTINCT pub.title) AS standards,
             GROUP_CONCAT(DISTINCT pr.name)   AS processes
         FROM families f
-        JOIN primitive_types pt    ON pt.id = f.primitive_type
         LEFT JOIN primitives p      ON p.family_id  = f.id
+        LEFT JOIN primitive_types pt ON pt.id = p.primitive_type
         LEFT JOIN family_rounds fr  ON fr.family_id = f.id
         LEFT JOIN rounds r          ON r.id = fr.round_id
         LEFT JOIN family_targets t  ON t.family_id  = f.id
@@ -141,13 +201,18 @@ def load_influences() -> pd.DataFrame:
         SELECT fi.source_family_id, sf.name AS source_name,
                fi.target_family_id, tf.name AS target_name,
                fi.relation, fi.note,
-             pts.name AS source_type,
+             CASE WHEN COUNT(DISTINCT sp.primitive_type) = 1
+                  THEN MAX(pts.name)
+                  ELSE 'Mixed'
+             END AS source_type,
                sf.year AS source_year,
                tf.year AS target_year
         FROM family_influences fi
         JOIN families sf ON sf.id = fi.source_family_id
         JOIN families tf ON tf.id = fi.target_family_id
-         JOIN primitive_types pts ON pts.id = sf.primitive_type
+         LEFT JOIN primitives sp ON sp.family_id = sf.id
+         LEFT JOIN primitive_types pts ON pts.id = sp.primitive_type
+         GROUP BY fi.source_family_id, fi.target_family_id, fi.relation, fi.note, sf.name, tf.name, sf.year, tf.year
         ORDER BY fi.source_family_id
         """,
         conn,
@@ -230,6 +295,10 @@ df = primitives[
     primitives["primitive_type"].isin(selected_types)
     & primitives["year"].between(*year_range)
 ].copy()
+df["inputs_bits"] = df.apply(
+    lambda row: format_inputs_bits(row.get("characteristics_json"), row.get("fixed_input_bits")),
+    axis=1,
+)
 
 if selected_rounds:
     selected_rounds_set = set(selected_rounds)
@@ -237,8 +306,13 @@ if selected_rounds:
 else:
     df = df.iloc[0:0]
 
+def _family_matches_types(row: pd.Series, selected: set) -> bool:
+    """Return True if any of the family's constituent types is in selected."""
+    types = set(str(row["constituent_types"]).split(",")) if row["constituent_types"] else {row["primitive_type"]}
+    return bool(types & selected)
+
 timeline_df = families[
-    families["primitive_type"].isin(selected_types)
+    families.apply(_family_matches_types, axis=1, selected=set(selected_types))
     & families["year"].between(*year_range)
 ].copy()
 
@@ -467,12 +541,12 @@ elif page == "Primitives Browser":
     st.caption(f"{len(view)} instances shown")
     st.dataframe(
         view[["name", "family_name", "year", "primitive_type",
-              "fixed_input_bits", "fixed_output_bits", "rounds",
+              "inputs_bits", "fixed_output_bits", "rounds",
               "targets", "standards", "processes"]]
         .rename(columns={
             "family_name": "family",
             "primitive_type": "type",
-            "fixed_input_bits": "input (bits)",
+            "inputs_bits": "inputs[bits]",
             "fixed_output_bits": "output (bits)",
             "rounds": "round templates",
         }),
