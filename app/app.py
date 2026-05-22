@@ -14,10 +14,13 @@ from pathlib import Path
 
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 DB_PATH = ROOT / "build" / "symmetric_primitives.db"
+TIMELINE_PATH = ROOT / "data" / "timeline.yaml"
 TWEAKEY_EXPR_RE = re.compile(r"^([1-9][0-9]*)\s*-\s*key_size_bits$")
 
 st.set_page_config(
@@ -260,6 +263,86 @@ def load_rounds() -> pd.DataFrame:
     )
 
 
+def _event_position(date_token: str) -> float | None:
+    date_token = date_token.strip()
+
+    m_day = re.fullmatch(r"([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})", date_token)
+    if m_day:
+        year, month, day = (int(v) for v in m_day.groups())
+        if 1 <= month <= 12 and 1 <= day <= 31:
+            return year + (month - 1) / 12 + (day - 1) / 365
+        return None
+
+    m_month = re.fullmatch(r"([0-9]{4})/([0-9]{1,2})", date_token)
+    if m_month:
+        year, month = (int(v) for v in m_month.groups())
+        if 1 <= month <= 12:
+            return year + (month - 1) / 12
+        return None
+
+    m_year = re.fullmatch(r"([0-9]{4})", date_token)
+    if m_year:
+        return float(int(m_year.group(1)))
+
+    return None
+
+
+@st.cache_data
+def load_timeline_data() -> tuple[pd.DataFrame, pd.DataFrame]:
+    if not TIMELINE_PATH.exists():
+        return pd.DataFrame(), pd.DataFrame()
+
+    with TIMELINE_PATH.open("r", encoding="utf-8") as f:
+        payload = yaml.safe_load(f) or {}
+
+    eras = payload.get("eras", [])
+    events = payload.get("events", [])
+
+    era_rows = []
+    for era in eras:
+        try:
+            start_year = int(era.get("start_year"))
+            end_year = int(era.get("end_year"))
+        except (TypeError, ValueError):
+            continue
+        if end_year < start_year:
+            continue
+
+        era_rows.append(
+            {
+                "id": str(era.get("id", "")).strip(),
+                "name": str(era.get("name", "")).strip(),
+                "start_year": start_year,
+                "end_year": end_year,
+                "notes": str(era.get("notes", "")).strip(),
+            }
+        )
+
+    event_rows = []
+    for event in events:
+        date_token = str(event.get("date", "")).strip()
+        x_pos = _event_position(date_token)
+        if x_pos is None:
+            continue
+
+        year = int(date_token.split("/")[0])
+        title = str(event.get("title", "")).strip()
+        short_name = str(event.get("short_name", "")).strip() or title
+        event_rows.append(
+            {
+                "id": str(event.get("id", "")).strip(),
+                "date": date_token,
+                "year": year,
+                "x": x_pos,
+                "title": title,
+                "short_name": short_name,
+                "url": str(event.get("url", "")).strip(),
+            }
+        )
+
+    return pd.DataFrame(era_rows), pd.DataFrame(event_rows)
+
+
 # ── Sidebar navigation ────────────────────────────────────────────────────────
 
 st.sidebar.title("Symmetric Primitives DB")
@@ -335,9 +418,45 @@ if page == "Timeline":
         "hover details include all known instances in that family."
     )
 
+    timeline_eras, timeline_events = load_timeline_data()
+    controls = st.columns(2)
+    show_eras = controls[0].checkbox("Show eras", value=True)
+    show_events = controls[1].checkbox("Show timeline events", value=True)
+
     timeline_view = timeline_df.sort_values(["year", "name"]).copy()
     timeline_view["year_rank"] = timeline_view.groupby("year").cumcount()
     timeline_view["year_label"] = timeline_view["year"].astype(str)
+
+    if not timeline_eras.empty:
+        timeline_eras = timeline_eras[
+            (timeline_eras["end_year"] >= year_range[0])
+            & (timeline_eras["start_year"] <= year_range[1])
+        ].copy()
+
+    if not timeline_events.empty:
+        timeline_events = timeline_events[
+            timeline_events["year"].between(*year_range)
+        ].copy()
+
+    if not timeline_eras.empty:
+        era_rows = []
+        lane_ends: list[float] = []
+        for _, era in timeline_eras.sort_values(["start_year", "end_year", "name"]).iterrows():
+            start = float(era["start_year"])
+            end = float(era["end_year"])
+            lane = None
+            for idx, lane_end in enumerate(lane_ends):
+                if start > lane_end:
+                    lane = idx
+                    lane_ends[idx] = end
+                    break
+            if lane is None:
+                lane = len(lane_ends)
+                lane_ends.append(end)
+            row = era.to_dict()
+            row["era_lane"] = lane
+            era_rows.append(row)
+        timeline_eras = pd.DataFrame(era_rows)
 
     fig = px.scatter(
         timeline_view,
@@ -366,14 +485,116 @@ if page == "Timeline":
         },
         height=560,
     )
+
+    max_rank = int(timeline_view["year_rank"].max()) if not timeline_view.empty else 0
+    y_event = max_rank + 1.2
+    era_base_y = y_event + 0.9
+    era_lane_step = 0.9
+    max_era_lane = int(timeline_eras["era_lane"].max()) if not timeline_eras.empty and "era_lane" in timeline_eras.columns else -1
+    y_axis_max = y_event + 0.8
+
+    if show_eras and not timeline_eras.empty:
+        line_colour = "rgba(60, 60, 60, 0.55)"
+        for _, era in timeline_eras.sort_values(["era_lane", "start_year", "end_year"]).iterrows():
+            lane = int(era["era_lane"])
+            y_line = era_base_y + lane * era_lane_step
+            x0 = float(era["start_year"]) - 0.45
+            x1 = float(era["end_year"]) + 0.45
+            cap = 0.20
+
+            fig.add_shape(
+                type="line",
+                x0=x0,
+                x1=x1,
+                y0=y_line,
+                y1=y_line,
+                xref="x",
+                yref="y",
+                line={"color": line_colour, "width": 2},
+            )
+            fig.add_shape(
+                type="line",
+                x0=x0,
+                x1=x0,
+                y0=y_line - cap,
+                y1=y_line + cap,
+                xref="x",
+                yref="y",
+                line={"color": line_colour, "width": 2},
+            )
+            fig.add_shape(
+                type="line",
+                x0=x1,
+                x1=x1,
+                y0=y_line - cap,
+                y1=y_line + cap,
+                xref="x",
+                yref="y",
+                line={"color": line_colour, "width": 2},
+            )
+            fig.add_annotation(
+                x=(x0 + x1) / 2,
+                y=y_line + 0.25,
+                text=str(era["name"]),
+                showarrow=False,
+                font={"size": 10, "color": "rgba(45, 45, 45, 0.85)"},
+                xref="x",
+                yref="y",
+            )
+
+        y_axis_max = max(y_axis_max, era_base_y + (max_era_lane + 1) * era_lane_step + 0.8)
+
+    if show_events and not timeline_events.empty:
+        for _, event in timeline_events.iterrows():
+            fig.add_vline(
+                x=float(event["x"]),
+                line_color="rgba(100, 100, 100, 0.28)",
+                line_width=1,
+            )
+
+        event_hover = timeline_events.apply(
+            lambda row: (
+                f"{row['date']} ({row['short_name']}): {row['title']}"
+                if not row["url"]
+                else f"{row['date']} ({row['short_name']}): {row['title']}<br>{row['url']}"
+            ),
+            axis=1,
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=timeline_events["x"],
+                y=[y_event] * len(timeline_events),
+                mode="markers",
+                marker={"size": 6, "color": "rgba(90, 90, 90, 0.42)"},
+                hovertemplate="%{customdata}<extra></extra>",
+                customdata=event_hover,
+                name="Timeline events",
+                showlegend=False,
+            )
+        )
+        for _, event in timeline_events.iterrows():
+            fig.add_annotation(
+                x=float(event["x"]),
+                y=y_event + 0.06,
+                text=str(event["short_name"]),
+                showarrow=False,
+                textangle=-90,
+                xref="x",
+                yref="y",
+                font={"size": 9, "color": "rgba(70, 70, 70, 0.88)"},
+            )
+
+        y_axis_max = max(y_axis_max, y_event + 1.1)
+
     fig.update_traces(textposition="top center", marker_size=12, textfont_size=10)
-    fig.update_yaxes(showticklabels=False, title_text="")
+    fig.update_yaxes(showticklabels=False, title_text="", range=[-0.5, y_axis_max])
     fig.update_xaxes(
         tickmode="linear",
         dtick=1,
         tickangle=90,
     )
-    fig.update_layout(margin=dict(l=0, r=0, t=20, b=0))
+    fig.update_layout(margin=dict(l=0, r=0, t=36, b=0))
     st.plotly_chart(fig, width="stretch")
 
 elif page == "Influence Graph":

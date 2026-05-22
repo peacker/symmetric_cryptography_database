@@ -56,7 +56,26 @@ pip install -r requirements.txt
 make validate
 make build-db
 make export-viz
+make build-site
 ```
+
+The static site output is generated in `build/site/`.
+
+## GitHub Pages auto-deploy
+
+This repository is configured to publish a static dashboard to GitHub Pages whenever changes are pushed to `master` (or `main`):
+
+- workflow: `.github/workflows/pages.yml`
+- build command: `make build-site`
+- published artifact directory: `build/site/`
+
+One-time GitHub setup:
+
+1. Go to repository settings.
+2. Open **Pages**.
+3. Set source to **GitHub Actions**.
+
+After that, every merged PR into `master` will trigger a fresh static build and deployment.
 
 ## Governance and maintenance
 

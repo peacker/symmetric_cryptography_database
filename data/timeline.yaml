@@ -1,0 +1,138 @@
+version: 1
+
+eras:
+  - id: aes_selection
+    name: AES selection
+    start_year: 1997
+    end_year: 2000
+    notes: ""
+
+  - id: estream_selection
+    name: ECRYPT & eSTREAM selection
+    start_year: 2004
+    end_year: 2008
+    notes: ""
+
+  - id: arx_boom
+    name: boom of ARX designs
+    start_year: 2005
+    end_year: 2015
+    notes: >-
+      Boom of ARX started with the eSTREAM competition and continued through
+      SHA-3 selection. It slowed down once chipmakers began integrating
+      dedicated hardware acceleration for S-Box ciphers (notably AES-NI).
+
+  - id: sponge_genesis
+    name: Permutation-based cryptography genesis
+    start_year: 2007
+    end_year: 2012
+    notes: Introduction of Sponge and Duplex constructions.
+
+  - id: sha3_selection
+    name: SHA-3 selection
+    start_year: 2007
+    end_year: 2012
+    notes: ""
+
+  - id: caesar_selection
+    name: CAESAR selection
+    start_year: 2013
+    end_year: 2019
+    notes: ""
+
+  - id: phc_selection
+    name: PHC selection
+    start_year: 2013
+    end_year: 2015
+    notes: ""
+
+  - id: cacr_selection
+    name: CACR selection
+    start_year: 2018
+    end_year: 2020
+    notes: ""
+
+  - id: nist_lw_selection
+    name: NIST lightweight cryptography selection
+    start_year: 2019
+    end_year: 2023
+    notes: ""
+
+  - id: permutation_standardization
+    name: Permutation-based cryptography standardization
+    start_year: 2012
+    end_year: 2023
+    notes: SHA-3 and ASCON standardization.
+
+events:
+  - id: feal_arx
+    date: 1987
+    short_name: FEAL ARX
+    title: FEAL likely first ARX primitive (block cipher)
+    url: https://link.springer.com/chapter/10.1007/3-540-39118-5_24
+
+  - id: nist_aes_successor_announcement
+    date: 1997/01/02
+    short_name: AES notice
+    title: NIST announces intent to select a DES successor (AES)
+    url: https://csrc.nist.gov/news/1997/announcing-development-of-fips-for-advanced-encryp
+
+  - id: nist_aes_call
+    date: 1997/09/12
+    short_name: AES call
+    title: NIST AES call for proposals
+    url: https://csrc.nist.gov/news/1997/requesting-candidate-algorithm-nominations-for-aes
+
+  - id: aes1_candidates_announced
+    date: 1998/08/20
+    short_name: AES1 15 cands
+    title: NIST announces 15 AES candidates at AES1
+    url: ""
+
+  - id: aes1_conference
+    date: 1998/08
+    short_name: AES1 conf
+    title: AES1 conference
+    url: ""
+
+  - id: aes2_conference
+    date: 1999/03
+    short_name: AES2 conf
+    title: AES2 conference
+    url: ""
+
+  - id: aes_comment_period_closure
+    date: 1999/04/15
+    short_name: AES comments close
+    title: NIST closes public comment period for initial AES review
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/archived-crypto-projects/aes-development
+
+  - id: aes_finalists_announced
+    date: 1999/08
+    short_name: AES finalists
+    title: NIST announces 5 AES finalists
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/archived-crypto-projects/aes-development
+
+  - id: sponge_functions_article
+    date: 2007
+    short_name: Sponge paper
+    title: Sponge functions foundational paper
+    url: https://keccak.team/files/SpongeFunctions.pdf
+
+  - id: duplex_article
+    date: 2011/08/11
+    short_name: Duplex paper
+    title: Duplex construction paper
+    url: https://link.springer.com/chapter/10.1007/978-3-642-28496-0_19
+
+  - id: prince_intro
+    date: 2012
+    short_name: PRINCE intro
+    title: PRINCE low-latency block cipher introduced at ASIACRYPT
+    url: ""
+
+  - id: farfalle
+    date: 2017/01/01
+    short_name: Farfalle
+    title: Farfalle high-speed AE construction
+    url: https://eprint.iacr.org/2016/1188
