@@ -7,6 +7,7 @@ This is a planning list of known symmetric primitive/cipher families.
 
 ## Alphabetical List
 
+- [ ] ACE
 - [x] AES
 - [ ] Akelarre
 - [ ] ANT
@@ -18,6 +19,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] BEAR/LION
 - [ ] BelT
 - [x] BipBip
+- [ ] Bleep64
 - [x] Blink
 - [ ] Blowfish
 - [ ] BMGL
@@ -27,10 +29,14 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] ChaCha
 - [ ] Chaskey
 - [x] ChiLow
+- [ ] CiliPadi
 - [ ] CIPHERUNICORN-A
 - [ ] CIPHERUNICORN-E
+- [ ] CLAE
 - [x] CLEFIA
+- [ ] CLX
 - [ ] CMEA
+- [ ] COMET
 - [x] CRYPTON
 - [ ] CS-Cipher
 - [x] DEAL
@@ -38,34 +44,52 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] DES
 - [ ] DESX
 - [x] DFC
+- [ ] DryGASCON
 - [x] E2
+- [ ] Elephant
 - [ ] Enocoro-128v2
+- [ ] ESTATE
 - [ ] Fantomas / Robin
 - [ ] FEAL
 - [ ] FESH
+- [ ] FlexAEAD
+- [ ] ForkAE
+- [ ] Fountain
 - [x] FROG
+- [ ] GAGE and InGAGE
 - [x] GIFT
+- [ ] Gimli
 - [ ] GOST 28147-89 (Magma)
+- [ ] Grain-128
 - [ ] Grand Cru
+- [ ] HERN & HERON
 - [ ] HIGHT
 - [x] HPC
+- [ ] HyENA
 - [ ] ICE
 - [x] IDEA
 - [ ] ISAAC
+- [ ] ISAP
 - [x] KASUMI
 - [x] KATAN
 - [ ] KCipher-2
 - [ ] Khazad
 - [ ] KLEIN
+- [ ] KNOT
 - [x] KTANTAN
 - [ ] Kuznyechik
+- [ ] LAEM
 - [ ] LEA
 - [ ] LEA-128
 - [x] LED
 - [ ] LEVIATHAN
 - [ ] LILI-128
+- [ ] Lilliput-AE
+- [ ] Limdolen
+- [ ] LOCUS
 - [ ] LOKI
 - [x] LOKI97
+- [ ] LOTUS
 - [x] MAGENTA
 - [ ] MANTIS
 - [x] MARS
@@ -73,6 +97,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] MIBS
 - [ ] MIDORI
 - [ ] MISTY1
+- [ ] mixFeed
 - [ ] MMB
 - [x] MSX
 - [ ] MUGI
@@ -81,53 +106,76 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] Nimbus
 - [ ] NOEKEON
 - [ ] NUSH
+- [ ] ORANGE
+- [ ] Oribatida
 - [ ] ORYX
 - [ ] PEA
+- [ ] PHOTON
 - [ ] PICARO
 - [x] PRESENT
 - [ ] PRIDE
 - [x] PRINCE
 - [ ] PRINCEv2
+- [ ] Pyjamask
 - [ ] Q
+- [ ] Qameleon
 - [x] QARMA
 - [x] QARMAv2
+- [ ] Quartet
 - [ ] RC2
 - [x] RC4
 - [ ] RC4+
 - [ ] RC4A
 - [x] RC5
 - [x] RC6
+- [ ] REMUS
 - [x] Rijndael
+- [ ] Romulus
+- [ ] SAEAES
 - [ ] SAFER
 - [x] SAFER+
 - [ ] SAFER++
 - [x] SALSA
+- [ ] Saturnin
 - [ ] SC2000
 - [x] SCARF
 - [x] SEED
 - [x] Serpent
 - [ ] SHACAL
 - [ ] SHACAL2
+- [ ] Shamash & Shamashash
 - [ ] SHARK
 - [x] SIMON
-- [ ] Skinny
+- [ ] SIMPLE
+- [ ] SKINNY
 - [ ] SKIPJACK
 - [x] SM4
+- [ ] SNEIK
 - [ ] SNOW
 - [ ] SNOW 2.0
 - [ ] SNOW 3G
 - [ ] SOBER-t16
 - [ ] SOBER-t32
 - [ ] SOSEMANUK1
+- [ ] SPARKLE
 - [x] SPECK
 - [ ] SPECKEY
 - [ ] SPEEDY
+- [ ] SPIX
+- [ ] SpoC
+- [ ] Spook
 - [ ] Spritz
 - [ ] SQUARE
+- [ ] Subterranean 2.0
+- [ ] Sycon
 - [x] TEA
+- [ ] Thank Goodness It's Friday (TGIF)
 - [ ] Three-key Triple DES
 - [ ] Threefish
+- [ ] TinyJambu
 - [ ] TREYFER
+- [ ] Triad
+- [ ] TRIFLE
 - [ ] Trivium
 - [x] TWINE
 - [ ] Two-key Triple DES
@@ -136,13 +184,15 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] UEA2 / ZUC
 - [x] uLBC
 - [ ] VMPC
+- [ ] WAGE
 - [ ] WAKE
 - [ ] XChaCha
 - [x] XEX-based families (XTS lineage)
+- [ ] Xoodoo
 - [x] XTEA
 - [ ] XXTEA
 - [ ] XXTEA / Corrected Block TEA
-
+- [ ] Yarara and Coral
 ## Notes
 
 - This list is intentionally broad and includes both classic and modern families.
