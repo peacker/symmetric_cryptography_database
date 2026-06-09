@@ -14,7 +14,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] Anubis
 - [x] ARADI
 - [x] ARIA
-- [ ] ASCON
+- [x] ASCON
 - [ ] Ballet
 - [ ] BEAR/LION
 - [ ] BelT
@@ -110,7 +110,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] Oribatida
 - [ ] ORYX
 - [ ] PEA
-- [ ] PHOTON
+- [x] PHOTON
 - [ ] PICARO
 - [x] PRESENT
 - [ ] PRIDE
@@ -147,7 +147,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] SHARK
 - [x] SIMON
 - [ ] SIMPLE
-- [ ] SKINNY
+- [x] SKINNY
 - [ ] SKIPJACK
 - [x] SM4
 - [ ] SNEIK
@@ -157,7 +157,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] SOBER-t16
 - [ ] SOBER-t32
 - [ ] SOSEMANUK1
-- [ ] SPARKLE
+- [x] SPARKLE
 - [x] SPECK
 - [ ] SPECKEY
 - [ ] SPEEDY
@@ -172,7 +172,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] Thank Goodness It's Friday (TGIF)
 - [ ] Three-key Triple DES
 - [ ] Threefish
-- [ ] TinyJambu
+- [x] TinyJambu
 - [ ] TREYFER
 - [ ] Triad
 - [ ] TRIFLE
@@ -188,7 +188,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] WAKE
 - [ ] XChaCha
 - [x] XEX-based families (XTS lineage)
-- [ ] Xoodoo
+- [x] Xoodoo
 - [x] XTEA
 - [ ] XXTEA
 - [ ] XXTEA / Corrected Block TEA

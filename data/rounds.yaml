@@ -876,3 +876,111 @@ rounds:
     notes: >
       MSX generalized-Feistel/ARX-style round abstraction targeting efficient
       software on microcontrollers.
+
+  # ── NIST LWC Underlying Primitive Families ──────────────────────────────
+
+  - id: ascon_permutation_round
+    name: ASCON Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 320
+        lanes: 5
+        lane_bits: 64
+      component_flow:
+        - component_id: constant
+        - component_id: xor
+        - component_id: and
+        - component_id: not
+        - component_id: rotation_fixed
+      constant_injection: round_constant
+    notes: >
+      ASCON round abstraction with constant addition, nonlinear bit-sliced
+      substitution layer, and linear diffusion via lane rotations.
+
+  - id: photon_permutation_round
+    name: PHOTON Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 256
+      component_flow:
+        - component_id: constant
+        - component_id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - component_id: word_permutation
+          params: { word_size_bits: 4 }
+        - component_id: field_matrix_mul
+          params: { field_size: 16 }
+      constant_injection: round_constant
+    notes: >
+      PHOTON permutation round abstraction over a nibble state with
+      AddConstant, S-box, row/column permutation, and MixColumns-like diffusion.
+
+  - id: skinny_round
+    name: SKINNY Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits_options: [64, 128]
+      component_flow:
+        - component_id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - component_id: constant
+        - component_id: xor
+        - component_id: bit_permutation
+      constant_injection: round_tweakey
+    notes: >
+      SKINNY round abstraction with substitution layer, round constants,
+      tweakey injection, and lightweight permutation-based diffusion.
+
+  - id: sparkle_permutation_step
+    name: SPARKLE Permutation Step
+    kind: full_round
+    spec:
+      state_model:
+        state_bits_options: [256, 384, 512]
+      component_flow:
+        - component_id: add_mod
+          params: { modulus: 4294967296 }
+        - component_id: xor
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: step_constant
+    notes: >
+      SPARKLE step abstraction based on ARX Alzette boxes and a linear layer,
+      used in the SCHWAEMM/ESCH suite.
+
+  - id: tinyjambu_state_update
+    name: TinyJambu State Update
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+      component_flow:
+        - component_id: nlfsr
+        - component_id: and
+        - component_id: xor
+        - component_id: constant
+      constant_injection: key_bits
+    notes: >
+      TinyJambu state-update abstraction using NLFSR-like feedback and
+      key-dependent nonlinear terms.
+
+  - id: xoodoo_permutation_round
+    name: Xoodoo Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 384
+        planes: 3
+      component_flow:
+        - component_id: xor
+        - component_id: and
+        - component_id: not
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      Xoodoo round abstraction with theta-like mixing, chi-like nonlinearity,
+      and lane shifts across a 3-plane 384-bit state.

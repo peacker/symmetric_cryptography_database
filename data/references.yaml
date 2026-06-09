@@ -628,3 +628,76 @@ references:
     year: 1987
     venue: Cipher Design (RSA Secret-Key Cryptography Specifications)
     url: https://en.wikipedia.org/wiki/RC4
+
+  - id: ascon_submission_2019
+    kind: article
+    title: "Ascon v1.2 - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Christoph Dobraunig
+      - Maria Eichlseder
+      - Florian Mendel
+      - Martin Schlaffer
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://ascon.iaik.tugraz.at/
+
+  - id: skinny_2016
+    kind: article
+    title: "The SKINNY Family of Block Ciphers and its Low-Latency Variant MANTIS"
+    authors:
+      - Christof Beierle
+      - Jean-Philippe Aumasson
+      - Gregor Leander
+      - et al.
+    year: 2016
+    venue: CRYPTO 2016
+    url: https://doi.org/10.1007/978-3-662-53008-5_5
+
+  - id: tinyjambu_2019
+    kind: article
+    title: "TinyJAMBU: A Family of Lightweight Authenticated Encryption Algorithms"
+    authors:
+      - Hongjun Wu
+      - Tao Huang
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: xoodoo_2018
+    kind: article
+    title: "Xoodoo Cookbook"
+    authors:
+      - Joan Daemen
+      - Seth Hoffert
+      - Gilles Van Assche
+      - Ronny Van Keer
+    year: 2018
+    venue: Cryptology ePrint Archive
+    url: https://keccak.team/xoodoo.html
+
+  - id: sparkle_2020
+    kind: article
+    title: "SPARKLE: Lightweight Cryptographic Permutations"
+    authors:
+      - Christof Beierle
+      - Alex Biryukov
+      - Luan Cardoso dos Santos
+      - et al.
+    year: 2020
+    venue: NIST LWC Round 2
+    url: https://sparkle-lwc.github.io/
+
+  - id: photon_beetle_2021
+    kind: article
+    title: "PHOTON-Beetle Authenticated Encryption and Hashing"
+    authors:
+      - Zhenzhen Bao
+      - Avik Chakraborti
+      - Nilanjan Datta
+      - Jian Guo
+      - Mridul Nandi
+      - Thomas Peyrin
+      - Kan Yasuda
+    year: 2021
+    venue: NIST LWC Finalist Documentation
+    url: https://csrc.nist.gov/projects/lightweight-cryptography

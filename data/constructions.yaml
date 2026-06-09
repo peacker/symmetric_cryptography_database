@@ -142,3 +142,12 @@ constructions:
     notes: >
       An SPN-style design with explicit tweak influence in round processing,
       often optimized for lightweight or memory-encryption settings.
+
+  - id: sponge_permutation
+    name: Sponge Permutation Construction
+    abbreviation: SPC
+    typical_primitive_types: [permutation, update_function]
+    placeholder_family_names: [ASCON, Xoodoo, PHOTON]
+    notes: >
+      A permutation-centric construction used as the core of sponge and duplex
+      modes in hashing and authenticated encryption designs.

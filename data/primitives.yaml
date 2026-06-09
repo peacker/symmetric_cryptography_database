@@ -1324,3 +1324,78 @@ primitives:
       RC4 is a stream cipher with variable key size (1–256 bytes).
       The fixed_output_bits represents a standard 64-byte (512-bit) keystream unit.
       Output length is typically determined by application needs.
+
+  # ── NIST LWC Underlying Primitive Families ─────────────────────────────
+  - id: ascon_permutation_320
+    name: ASCON Permutation (320-bit)
+    family_id: ascon
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 320
+      rounds: 12
+      fixed_input_bits: 320
+      fixed_output_bits: 320
+
+  - id: photon_permutation_256
+    name: PHOTON Permutation (256-bit)
+    family_id: photon
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 256
+      rounds: 12
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: skinny_64_128
+    name: SKINNY-64-128
+    family_id: skinny
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      tweak_size_bits: 64
+      rounds: 32
+      fixed_input_bits: 64
+      fixed_output_bits: 64
+
+  - id: skinny_128_256
+    name: SKINNY-128-256
+    family_id: skinny
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      tweak_size_bits: 128
+      rounds: 48
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: sparkle_384
+    name: SPARKLE-384
+    family_id: sparkle
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 384
+      rounds: 8
+      fixed_input_bits: 384
+      fixed_output_bits: 384
+
+  - id: tinyjambu_128_state_update
+    name: TinyJambu-128 State Update
+    family_id: tinyjambu
+    primitive_type: update_function
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: xoodoo_permutation_384
+    name: Xoodoo Permutation (384-bit)
+    family_id: xoodoo
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 384
+      rounds: 12
+      fixed_input_bits: 384
+      fixed_output_bits: 384

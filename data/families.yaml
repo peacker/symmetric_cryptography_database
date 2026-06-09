@@ -1355,3 +1355,150 @@ families:
     notes: >
       MSX includes MSX-64 and MSX-128 families, with key sizes 128 and 256 bits depending on
       the instance.
+
+  # ── NIST LWC Underlying Primitive Families ─────────────────────────────
+
+  - id: ascon
+    name: ASCON
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - ascon_permutation_round
+    target_applications:
+      - iot
+      - software
+      - constrained_hardware
+    characteristics:
+      state_size_bits: 320
+      components:
+        - id: xor
+        - id: and
+        - id: not
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - ascon_submission_2019
+      - sp_800_232
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: photon
+    name: PHOTON
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - photon_permutation_round
+    target_applications:
+      - iot
+      - constrained_hardware
+      - software
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: constant
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: word_permutation
+          params: { word_size_bits: 4 }
+        - id: field_matrix_mul
+          params: { field_size: 16 }
+    reference_ids:
+      - photon_beetle_2021
+      - sp_800_232
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: skinny
+    name: SKINNY
+    construction_ids:
+      - tweakable_spn
+    round_ids:
+      - skinny_round
+    target_applications:
+      - iot
+      - constrained_hardware
+      - generic
+    characteristics:
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: constant
+        - id: xor
+        - id: bit_permutation
+    reference_ids:
+      - skinny_2016
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: sparkle
+    name: SPARKLE
+    construction_ids:
+      - arx_permutation_network
+    round_ids:
+      - sparkle_permutation_step
+    target_applications:
+      - iot
+      - software
+    characteristics:
+      components:
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - sparkle_2020
+      - sp_800_232
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: tinyjambu
+    name: TinyJambu
+    construction_ids:
+      - lfsr_nlfsr_register_network
+    round_ids:
+      - tinyjambu_state_update
+    target_applications:
+      - iot
+      - constrained_hardware
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: nlfsr
+        - id: and
+        - id: xor
+        - id: constant
+    reference_ids:
+      - tinyjambu_2019
+      - sp_800_232
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: xoodoo
+    name: Xoodoo
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - xoodoo_permutation_round
+    target_applications:
+      - iot
+      - software
+    characteristics:
+      state_size_bits: 384
+      components:
+        - id: xor
+        - id: and
+        - id: not
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - xoodoo_2018
+      - sp_800_232
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
