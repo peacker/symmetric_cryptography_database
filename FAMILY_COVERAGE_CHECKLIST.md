@@ -46,7 +46,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] DFC
 - [ ] DryGASCON
 - [x] E2
-- [ ] Elephant
+- [x] Elephant
 - [ ] Enocoro-128v2
 - [ ] ESTATE
 - [ ] Fantomas / Robin
@@ -58,9 +58,9 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] FROG
 - [ ] GAGE and InGAGE
 - [x] GIFT
-- [ ] Gimli
+- [x] Gimli
 - [ ] GOST 28147-89 (Magma)
-- [ ] Grain-128
+- [x] Grain-128
 - [ ] Grand Cru
 - [ ] HERN & HERON
 - [ ] HIGHT
@@ -69,7 +69,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] ICE
 - [x] IDEA
 - [ ] ISAAC
-- [ ] ISAP
+- [x] ISAP
 - [x] KASUMI
 - [x] KATAN
 - [ ] KCipher-2
@@ -130,7 +130,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] RC6
 - [ ] REMUS
 - [x] Rijndael
-- [ ] Romulus
+- [x] Romulus
 - [ ] SAEAES
 - [ ] SAFER
 - [x] SAFER+
@@ -166,7 +166,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] Spook
 - [ ] Spritz
 - [ ] SQUARE
-- [ ] Subterranean 2.0
+- [x] Subterranean 2.0
 - [ ] Sycon
 - [x] TEA
 - [ ] Thank Goodness It's Friday (TGIF)

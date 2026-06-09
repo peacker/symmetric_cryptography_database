@@ -1399,3 +1399,66 @@ primitives:
       rounds: 12
       fixed_input_bits: 384
       fixed_output_bits: 384
+
+  - id: elephant_permutation_160
+    name: Elephant Permutation (160-bit profile)
+    family_id: elephant
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 160
+      rounds: 80
+      fixed_input_bits: 160
+      fixed_output_bits: 160
+
+  - id: romulus_skinny_128_256
+    name: Romulus-SKINNY-128-256
+    family_id: romulus
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      tweak_size_bits: 128
+      rounds: 40
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: isap_permutation_320
+    name: ISAP Permutation (320-bit)
+    family_id: isap
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 320
+      rounds: 12
+      fixed_input_bits: 320
+      fixed_output_bits: 320
+
+  - id: grain_128_stream
+    name: Grain-128 Stream Core
+    family_id: grain_128
+    primitive_type: stream_cipher
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      state_size_bits: 256
+      fixed_input_bits: 1
+      fixed_output_bits: 64
+
+  - id: gimli_permutation_384
+    name: Gimli Permutation (384-bit)
+    family_id: gimli
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 384
+      rounds: 24
+      fixed_input_bits: 384
+      fixed_output_bits: 384
+
+  - id: subterranean_permutation_257
+    name: Subterranean Permutation (257-bit)
+    family_id: subterranean
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 257
+      rounds: 257
+      fixed_input_bits: 257
+      fixed_output_bits: 257

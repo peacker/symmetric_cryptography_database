@@ -701,3 +701,85 @@ references:
     year: 2021
     venue: NIST LWC Finalist Documentation
     url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: elephant_2019
+    kind: article
+    title: "Elephant v2 - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Tim Beyne
+      - Yu Long Chen
+      - Christoph Dobraunig
+      - Bart Mennink
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: romulus_2019
+    kind: article
+    title: "Romulus - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Tetsu Iwata
+      - Mustafa Khairallah
+      - Kazuhiko Minematsu
+      - Thomas Peyrin
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: isap_2019
+    kind: article
+    title: "ISAP v2 - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Christoph Dobraunig
+      - Maria Eichlseder
+      - Stefan Mangard
+      - Florian Mendel
+      - Bart Mennink
+      - Robert Primas
+      - Thomas Unterluggauer
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: grain_128aead_2019
+    kind: article
+    title: "Grain-128AEAD v2 - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Martin Hell
+      - Thomas Johansson
+      - Willi Meier
+      - Jonathan Sonnerup
+      - Hirotaka Yoshida
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: gimli_2017
+    kind: article
+    title: "Gimli : a cross-platform permutation"
+    authors:
+      - Daniel J. Bernstein
+      - Stefan Kolbl
+      - Stefan Lucks
+      - Pedro Maat Costa Massolino
+      - Florian Mendel
+      - Kashif Nawaz
+      - Tobias Schneider
+      - Peter Schwabe
+      - Francois-Xavier Standaert
+      - Yosuke Todo
+      - Benoit Viguier
+    year: 2017
+    venue: CHES 2017
+    url: https://gimli.cr.yp.to/
+
+  - id: subterranean_2019
+    kind: article
+    title: "Subterranean 2.0 - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Joan Daemen
+      - Pedro Maat Costa Massolino
+      - Yann Rotella
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography

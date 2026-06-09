@@ -984,3 +984,103 @@ rounds:
     notes: >
       Xoodoo round abstraction with theta-like mixing, chi-like nonlinearity,
       and lane shifts across a 3-plane 384-bit state.
+
+  - id: elephant_mode_step
+    name: Elephant Mode Step
+    kind: full_round
+    spec:
+      state_model:
+        state_bits_options: [160, 176, 200]
+      component_flow:
+        - component_id: xor
+        - component_id: and
+        - component_id: not
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: domain_constant
+    notes: >
+      Elephant mode step abstraction over lightweight permutation cores used
+      by Dumbo, Jumbo, and Delirium variants.
+
+  - id: romulus_skinny_step
+    name: Romulus SKINNY Step
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+      component_flow:
+        - component_id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - component_id: xor
+        - component_id: constant
+        - component_id: bit_permutation
+      constant_injection: tweakey
+    notes: >
+      Romulus round abstraction based on SKINNY-128 tweakey-based round
+      transformations.
+
+  - id: isap_permutation_step
+    name: ISAP Permutation Step
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 320
+      component_flow:
+        - component_id: xor
+        - component_id: and
+        - component_id: not
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      ISAP permutation step abstraction based on ASCON-like 320-bit
+      permutation rounds and domain-separated processing.
+
+  - id: grain_128_state_update
+    name: Grain-128 State Update
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 256
+      component_flow:
+        - component_id: lfsr
+        - component_id: nlfsr
+        - component_id: xor
+        - component_id: and
+      constant_injection: key_iv_mixing
+    notes: >
+      Grain-128 state update abstraction with coupled LFSR/NLFSR feedback
+      and nonlinear output filtering.
+
+  - id: gimli_permutation_round
+    name: Gimli Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 384
+      component_flow:
+        - component_id: add_mod
+          params: { modulus: 4294967296 }
+        - component_id: xor
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      Gimli round abstraction with ARX quarter-round style lane updates,
+      small swaps, and periodic constants.
+
+  - id: subterranean_duplex_round
+    name: Subterranean Duplex Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 257
+      component_flow:
+        - component_id: xor
+        - component_id: and
+        - component_id: not
+        - component_id: rotation_fixed
+      constant_injection: domain_bit
+    notes: >
+      Subterranean duplex round abstraction over a 257-bit state with
+      nonlinear chi-style update and bit-level diffusion.
