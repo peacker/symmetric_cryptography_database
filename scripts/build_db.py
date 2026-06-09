@@ -26,7 +26,7 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
         PRAGMA foreign_keys = ON;
 
         -- Reference tables -------------------------------------------------
-        CREATE TABLE IF NOT EXISTS publications (
+        CREATE TABLE IF NOT EXISTS "references" (
             id TEXT PRIMARY KEY,
             kind TEXT NOT NULL,
             title TEXT NOT NULL,
@@ -122,12 +122,12 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (round_id) REFERENCES rounds(id) ON DELETE RESTRICT
         );
 
-        CREATE TABLE IF NOT EXISTS family_publications (
+        CREATE TABLE IF NOT EXISTS family_references (
             family_id TEXT NOT NULL,
-            publication_id TEXT NOT NULL,
-            PRIMARY KEY (family_id, publication_id),
+            reference_id TEXT NOT NULL,
+            PRIMARY KEY (family_id, reference_id),
             FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
-            FOREIGN KEY (publication_id) REFERENCES publications(id) ON DELETE RESTRICT
+            FOREIGN KEY (reference_id) REFERENCES "references"(id) ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS family_standards (
@@ -135,7 +135,7 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             standard_id TEXT NOT NULL,
             PRIMARY KEY (family_id, standard_id),
             FOREIGN KEY (family_id)   REFERENCES families(id)      ON DELETE CASCADE,
-            FOREIGN KEY (standard_id) REFERENCES publications(id)  ON DELETE RESTRICT
+            FOREIGN KEY (standard_id) REFERENCES "references"(id)  ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS family_processes (
@@ -174,7 +174,7 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             standard_id TEXT NOT NULL,
             PRIMARY KEY (primitive_id, standard_id),
             FOREIGN KEY (primitive_id) REFERENCES primitives(id)   ON DELETE CASCADE,
-            FOREIGN KEY (standard_id)  REFERENCES publications(id) ON DELETE RESTRICT
+            FOREIGN KEY (standard_id)  REFERENCES "references"(id) ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS primitive_references (
@@ -182,7 +182,7 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             reference_id TEXT NOT NULL,
             PRIMARY KEY (primitive_id, reference_id),
             FOREIGN KEY (primitive_id) REFERENCES primitives(id)   ON DELETE CASCADE,
-            FOREIGN KEY (reference_id) REFERENCES publications(id) ON DELETE RESTRICT
+            FOREIGN KEY (reference_id) REFERENCES "references"(id) ON DELETE RESTRICT
         );
         """
     )
@@ -197,7 +197,7 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         DELETE FROM family_influences;
         DELETE FROM family_processes;
         DELETE FROM family_standards;
-        DELETE FROM family_publications;
+        DELETE FROM family_references;
         DELETE FROM family_constructions;
         DELETE FROM family_rounds;
         DELETE FROM family_components;
@@ -208,7 +208,7 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         DELETE FROM primitive_types;
         DELETE FROM components;
         DELETE FROM processes;
-        DELETE FROM publications;
+        DELETE FROM "references";
         """
     )
 
@@ -235,7 +235,7 @@ def main() -> None:
 
         for ref in references_doc.get("references", []):
             conn.execute(
-                "INSERT INTO publications"
+                "INSERT INTO \"references\""
                 " (id, kind, title, year, venue, url, authors_json, organization, status)"
                 " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (
@@ -357,7 +357,7 @@ def main() -> None:
                     std_ids_for_family.add(ref_id)
                 else:
                     conn.execute(
-                        "INSERT INTO family_publications (family_id, publication_id) VALUES (?, ?)",
+                        "INSERT INTO family_references (family_id, reference_id) VALUES (?, ?)",
                         (family["id"], ref_id),
                     )
             family_reference_ids[family["id"]] = refs_for_family

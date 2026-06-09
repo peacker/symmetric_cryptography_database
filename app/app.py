@@ -57,7 +57,7 @@ def load_primitives() -> pd.DataFrame:
             GROUP_CONCAT(DISTINCT r.name)    AS rounds,
             GROUP_CONCAT(DISTINCT r.round_hash) AS round_hashes,
             GROUP_CONCAT(DISTINCT t.target)  AS targets,
-            GROUP_CONCAT(DISTINCT pub.title) AS standards,
+            GROUP_CONCAT(DISTINCT ref.title) AS standards,
             GROUP_CONCAT(DISTINCT pr.name)   AS processes
         FROM primitives p
         JOIN families f ON f.id = p.family_id
@@ -66,7 +66,7 @@ def load_primitives() -> pd.DataFrame:
         LEFT JOIN rounds r                ON r.id = fr.round_id
         LEFT JOIN family_targets t       ON t.family_id    = f.id
         LEFT JOIN primitive_standards ps ON ps.primitive_id = p.id
-        LEFT JOIN publications pub        ON pub.id = ps.standard_id
+        LEFT JOIN "references" ref       ON ref.id = ps.standard_id
         LEFT JOIN family_processes fp    ON fp.family_id = f.id
         LEFT JOIN processes pr           ON pr.id = fp.process_id
         GROUP BY p.id
@@ -175,7 +175,7 @@ def load_families() -> pd.DataFrame:
             GROUP_CONCAT(DISTINCT r.name)    AS rounds,
             GROUP_CONCAT(DISTINCT t.target)  AS targets,
             GROUP_CONCAT(DISTINCT c.name)    AS constructions,
-            GROUP_CONCAT(DISTINCT pub.title) AS standards,
+            GROUP_CONCAT(DISTINCT ref.title) AS standards,
             GROUP_CONCAT(DISTINCT pr.name)   AS processes
         FROM families f
         LEFT JOIN primitives p      ON p.family_id  = f.id
@@ -186,7 +186,7 @@ def load_families() -> pd.DataFrame:
         LEFT JOIN family_constructions fc ON fc.family_id = f.id
         LEFT JOIN constructions c        ON c.id = fc.construction_id
         LEFT JOIN family_standards fs ON fs.family_id = f.id
-        LEFT JOIN publications pub    ON pub.id = fs.standard_id
+        LEFT JOIN "references" ref   ON ref.id = fs.standard_id
         LEFT JOIN family_processes fp ON fp.family_id = f.id
         LEFT JOIN processes pr        ON pr.id = fp.process_id
         GROUP BY f.id
@@ -223,20 +223,20 @@ def load_influences() -> pd.DataFrame:
 
 
 @st.cache_data
-def load_publications() -> pd.DataFrame:
+def load_references() -> pd.DataFrame:
     conn = get_connection()
     return pd.read_sql_query(
         """
-        SELECT pub.id, pub.kind, pub.title, pub.year, pub.venue, pub.url,
-               pub.organization, pub.status,
+         SELECT ref.id, ref.kind, ref.title, ref.year, ref.venue, ref.url,
+             ref.organization, ref.status,
                GROUP_CONCAT(DISTINCT COALESCE(f.name, fs_f.name)) AS families
-        FROM publications pub
-        LEFT JOIN family_publications fp ON fp.publication_id = pub.id
-        LEFT JOIN families f             ON f.id = fp.family_id
-        LEFT JOIN family_standards fs    ON fs.standard_id = pub.id
+         FROM "references" ref
+         LEFT JOIN family_references fr ON fr.reference_id = ref.id
+         LEFT JOIN families f             ON f.id = fr.family_id
+         LEFT JOIN family_standards fs    ON fs.standard_id = ref.id
         LEFT JOIN families fs_f          ON fs_f.id = fs.family_id
-        GROUP BY pub.id
-        ORDER BY pub.year DESC
+         GROUP BY ref.id
+         ORDER BY ref.year DESC
         """,
         conn,
     )
@@ -827,15 +827,15 @@ elif page == "Rounds":
                 st.info(row["notes"])
 
 elif page == "References":
-    st.header("Publications & Standards")
-    pubs = load_publications()
+    st.header("References & Standards")
+    refs = load_references()
 
     kind_filter = st.multiselect(
         "Kind",
-        sorted(pubs["kind"].unique()),
-        default=list(pubs["kind"].unique()),
+        sorted(refs["kind"].unique()),
+        default=list(refs["kind"].unique()),
     )
-    view = pubs[pubs["kind"].isin(kind_filter)].copy()
+    view = refs[refs["kind"].isin(kind_filter)].copy()
 
     for _, row in view.iterrows():
         with st.expander(f"{row['year']} — {row['title']}"):

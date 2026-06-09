@@ -78,12 +78,12 @@ def main() -> None:
         export_query(
             conn,
             """
-            SELECT p.id AS primitive_id, p.name,
-                   pub.id AS standard_id, pub.title AS standard_name
+                 SELECT p.id AS primitive_id, p.name,
+                     ref.id AS standard_id, ref.title AS standard_name
             FROM primitives p
             JOIN primitive_standards ps ON ps.primitive_id = p.id
-            JOIN publications pub ON pub.id = ps.standard_id
-            ORDER BY p.name, pub.title
+                JOIN "references" ref ON ref.id = ps.standard_id
+                 ORDER BY p.name, ref.title
             """,
             VIZ_DIR / "primitive_standards.csv",
         )

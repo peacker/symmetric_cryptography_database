@@ -15,7 +15,7 @@ This repository currently tracks fixed-size symmetric primitives (not variable-s
 Each primitive can store:
 
 - year of publication
-- reference publications (papers, standards)
+- references (papers, standards)
 - standardization processes/competitions
 - target applications (IoT, memory encryption, generic, etc.)
 - primitive type

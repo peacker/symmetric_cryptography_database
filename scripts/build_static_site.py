@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -78,7 +79,7 @@ def load_join_builder_dataset(conn: sqlite3.Connection) -> dict[str, object]:
         JOIN families f ON f.id = p.family_id
         LEFT JOIN primitive_types pt ON pt.id = p.primitive_type
         LEFT JOIN primitive_references pr ON pr.primitive_id = p.id
-        LEFT JOIN publications ref ON ref.id = pr.reference_id
+        LEFT JOIN "references" ref ON ref.id = pr.reference_id
         ORDER BY f.year, p.name, ref.year
         """,
     )
@@ -101,7 +102,7 @@ def load_join_builder_dataset(conn: sqlite3.Connection) -> dict[str, object]:
         'JOIN families f ON f.id = p.family_id '
         'LEFT JOIN primitive_types pt ON pt.id = p.primitive_type '
         'LEFT JOIN primitive_references pr ON pr.primitive_id = p.id '
-        'LEFT JOIN publications ref ON ref.id = pr.reference_id'
+        'LEFT JOIN "references" ref ON ref.id = pr.reference_id'
     )
 
     return {"columns": columns, "rows": rows, "baseSql": base_sql}
@@ -125,7 +126,9 @@ def build_site() -> None:
         "joinBuilder": builder_dataset,
     }
 
-    index_html = """<!doctype html>
+    cache_token = str(int(time.time()))
+
+    index_html = f"""<!doctype html>
 <html lang=\"en\">
   <head>
     <meta charset=\"utf-8\" />
@@ -134,9 +137,9 @@ def build_site() -> None:
     <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />
     <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />
     <link href=\"https://fonts.googleapis.com/css2?family=Archivo+SemiCondensed:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap\" rel=\"stylesheet\" />
-    <link rel=\"stylesheet\" href=\"styles.css\" />
-    <script src=\"data.js\" defer></script>
-    <script src=\"app.js\" defer></script>
+    <link rel=\"stylesheet\" href=\"styles.css?v={cache_token}\" />
+    <script src=\"data.js?v={cache_token}\" defer></script>
+    <script src=\"app.js?v={cache_token}\" defer></script>
   </head>
   <body>
     <main class=\"page\">
@@ -491,17 +494,29 @@ thead th {
 th .head-cell {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 0.4rem;
+  min-width: 0;
+  padding-right: 8px;
 }
 
-th button { all: unset; cursor: pointer; }
+th button {
+  all: unset;
+  cursor: pointer;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 th .resizer {
+  position: absolute;
+  top: 0;
+  right: 0;
   width: 12px;
   min-width: 12px;
-  align-self: stretch;
+  height: 100%;
   cursor: col-resize;
+  z-index: 3;
   border-left: 1px solid rgba(203, 232, 238, 0.3);
   background: linear-gradient(to right, rgba(203, 232, 238, 0.15), rgba(203, 232, 238, 0.45));
 }
