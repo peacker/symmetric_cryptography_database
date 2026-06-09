@@ -102,6 +102,16 @@ references:
     status: withdrawn
     url: https://csrc.nist.gov/pubs/fips/46-3/final
 
+  - id: fips_46_1977_des
+    kind: standard
+    title: "FIPS 46: Data Encryption Standard (DES)"
+    authors: []
+    year: 1977
+    venue: NIST
+    organization: NIST
+    status: withdrawn
+    url: https://csrc.nist.gov/pubs/fips/46/final
+
   - id: schneier_1994_blowfish
     kind: article
     title: "Description of a New Variable-Length Key, 64-Bit Block Cipher (Blowfish)"

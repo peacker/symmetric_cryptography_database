@@ -235,6 +235,7 @@ families:
         - id: bit_permutation
         - id: xor
     reference_ids:
+      - fips_46_1977_des
       - fips_46_3_1999_des
     process_ids: []
     influences: []
