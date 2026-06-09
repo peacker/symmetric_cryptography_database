@@ -1129,11 +1129,11 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     function groupsForFamily(familyId, mode) {
       if (mode === "primitive") {
         const values = Array.from(familyToTypes.get(familyId) || []);
-        return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["Unknown type"];
+        return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["No primitive instances tagged"];
       }
       if (mode === "construction") {
         const values = Array.from(familyToConstructions.get(familyId) || []);
-        return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["Unspecified construction"];
+        return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["No construction tagged"];
       }
       const values = Array.from(familyToTargets.get(familyId) || []);
       return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["Unspecified target"];

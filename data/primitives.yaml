@@ -1,5 +1,105 @@
 version: 1
 primitives:
+  # ── Rijndael family ──────────────────────────────────────────────────────
+  - id: rijndael_128_128
+    name: Rijndael-128/128
+    family_id: rijndael
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 10
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: rijndael_128_192
+    name: Rijndael-128/192
+    family_id: rijndael
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 12
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: rijndael_128_256
+    name: Rijndael-128/256
+    family_id: rijndael
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 14
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: rijndael_192_128
+    name: Rijndael-192/128
+    family_id: rijndael
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 192
+      key_size_bits: 128
+      rounds: 12
+      fixed_input_bits: 192
+      fixed_output_bits: 192
+
+  - id: rijndael_192_192
+    name: Rijndael-192/192
+    family_id: rijndael
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 192
+      key_size_bits: 192
+      rounds: 12
+      fixed_input_bits: 192
+      fixed_output_bits: 192
+
+  - id: rijndael_192_256
+    name: Rijndael-192/256
+    family_id: rijndael
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 192
+      key_size_bits: 256
+      rounds: 14
+      fixed_input_bits: 192
+      fixed_output_bits: 192
+
+  - id: rijndael_256_128
+    name: Rijndael-256/128
+    family_id: rijndael
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 128
+      rounds: 14
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: rijndael_256_192
+    name: Rijndael-256/192
+    family_id: rijndael
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 192
+      rounds: 14
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: rijndael_256_256
+    name: Rijndael-256/256
+    family_id: rijndael
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 14
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
   # ── AES family ────────────────────────────────────────────────────────────
   - id: aes_128
     name: AES-128

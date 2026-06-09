@@ -81,8 +81,64 @@ constructions:
     name: Matyas-Meyer-Oseas Construction
     abbreviation: MMO
     typical_primitive_types: [compression_function]
-    placeholder_family_names: [Miyaguchi-Preneel-variants, Snefru-style-compression]
+    placeholder_family_names:
+      [Miyaguchi-Preneel-variants, Snefru-style-compression]
     notes: >
       A one-block-length compression-function construction derived from a
       block cipher, closely related to Davies-Meyer but using a different
       assignment of message and chaining value roles.
+
+  - id: arx_permutation_network
+    name: ARX Permutation Network
+    abbreviation: ARX-PN
+    typical_primitive_types: [permutation, block_cipher, stream_cipher]
+    placeholder_family_names: [Salsa, ChaCha, RC5]
+    notes: >
+      A round-based structure built primarily from modular addition, XOR,
+      and fixed or data-dependent rotations.
+
+  - id: stream_state_update_generator
+    name: Stream State-Update Generator
+    abbreviation: SSUG
+    typical_primitive_types: [stream_cipher]
+    placeholder_family_names: [RC4]
+    notes: >
+      A keystream design based on repeated state updates and output extraction,
+      typically with separate key scheduling and generation phases.
+
+  - id: lfsr_nlfsr_register_network
+    name: LFSR/NLFSR Register Network
+    abbreviation: LRN
+    typical_primitive_types: [block_cipher, stream_cipher]
+    placeholder_family_names: [KATAN, KTANTAN]
+    notes: >
+      A bit-oriented structure driven by linear and nonlinear feedback-shift
+      register style state transitions and boolean mixing.
+
+  - id: key_dependent_table_network
+    name: Key-Dependent Table Network
+    abbreviation: KDTN
+    typical_primitive_types: [block_cipher]
+    placeholder_family_names: [FROG, HPC]
+    notes: >
+      A construction where round behavior is driven by key-derived tables or
+      key-dependent substitution/permutation components.
+
+  - id: heterogeneous_round_network
+    name: Heterogeneous Round Network
+    abbreviation: HRN
+    typical_primitive_types: [block_cipher]
+    placeholder_family_names: [MARS]
+    notes: >
+      A mixed-structure block-cipher design combining distinct round phases
+      and multiple transformation styles within one cipher.
+
+  - id: tweakable_spn
+    name: Tweakable Substitution-Permutation Network
+    abbreviation: TSPN
+    special_case_of: spn
+    typical_primitive_types: [tweakable_block_cipher]
+    placeholder_family_names: [BipBip, SCARF, Blink, ChiLow]
+    notes: >
+      An SPN-style design with explicit tweak influence in round processing,
+      often optimized for lightweight or memory-encryption settings.

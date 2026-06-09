@@ -9,41 +9,52 @@ This is a planning list of known symmetric primitive/cipher families.
 
 - [x] AES
 - [ ] Akelarre
+- [ ] ANT
 - [ ] Anubis
 - [x] ARADI
 - [x] ARIA
 - [ ] ASCON
+- [ ] Ballet
 - [ ] BEAR/LION
 - [ ] BelT
 - [x] BipBip
 - [x] Blink
 - [ ] Blowfish
+- [ ] BMGL
+- [x] Camellia
 - [x] CAST-128
 - [x] CAST-256
-- [x] Camellia
-- [ ] Chaskey
 - [x] ChaCha
+- [ ] Chaskey
 - [x] ChiLow
 - [ ] CIPHERUNICORN-A
+- [ ] CIPHERUNICORN-E
 - [x] CLEFIA
+- [ ] CMEA
 - [x] CRYPTON
+- [ ] CS-Cipher
 - [x] DEAL
 - [ ] Deoxys
 - [x] DES
 - [ ] DESX
 - [x] DFC
 - [x] E2
+- [ ] Enocoro-128v2
+- [ ] Fantomas / Robin
 - [ ] FEAL
+- [ ] FESH
 - [x] FROG
 - [x] GIFT
 - [ ] GOST 28147-89 (Magma)
+- [ ] Grand Cru
 - [ ] HIGHT
 - [x] HPC
-- [x] IDEA
 - [ ] ICE
+- [x] IDEA
 - [ ] ISAAC
 - [x] KASUMI
 - [x] KATAN
+- [ ] KCipher-2
 - [ ] Khazad
 - [ ] KLEIN
 - [x] KTANTAN
@@ -52,6 +63,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] LEA-128
 - [x] LED
 - [ ] LEVIATHAN
+- [ ] LILI-128
 - [ ] LOKI
 - [x] LOKI97
 - [x] MAGENTA
@@ -63,9 +75,13 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] MISTY1
 - [ ] MMB
 - [x] MSX
+- [ ] MUGI
+- [ ] MULTI-S01
 - [ ] MULTI2
 - [ ] Nimbus
 - [ ] NOEKEON
+- [ ] NUSH
+- [ ] ORYX
 - [ ] PEA
 - [ ] PICARO
 - [x] PRESENT
@@ -76,44 +92,56 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] QARMA
 - [x] QARMAv2
 - [ ] RC2
+- [x] RC4
+- [ ] RC4+
+- [ ] RC4A
 - [x] RC5
 - [x] RC6
 - [x] Rijndael
-- [ ] Fantomas / Robin
 - [ ] SAFER
 - [x] SAFER+
+- [ ] SAFER++
 - [x] SALSA
 - [ ] SC2000
 - [x] SCARF
 - [x] SEED
 - [x] Serpent
 - [ ] SHACAL
+- [ ] SHACAL2
 - [ ] SHARK
 - [x] SIMON
 - [ ] Skinny
 - [ ] SKIPJACK
 - [x] SM4
+- [ ] SNOW
 - [ ] SNOW 2.0
 - [ ] SNOW 3G
+- [ ] SOBER-t16
+- [ ] SOBER-t32
+- [ ] SOSEMANUK1
 - [x] SPECK
 - [ ] SPECKEY
 - [ ] SPEEDY
+- [ ] Spritz
 - [ ] SQUARE
 - [x] TEA
-- [ ] XXTEA / Corrected Block TEA
 - [ ] Three-key Triple DES
 - [ ] Threefish
 - [ ] TREYFER
+- [ ] Trivium
 - [x] TWINE
 - [ ] Two-key Triple DES
 - [x] Twofish
+- [ ] uBlock
 - [ ] UEA2 / ZUC
 - [x] uLBC
+- [ ] VMPC
 - [ ] WAKE
 - [ ] XChaCha
-- [ ] XEX-based families (XTS lineage)
+- [x] XEX-based families (XTS lineage)
 - [x] XTEA
 - [ ] XXTEA
+- [ ] XXTEA / Corrected Block TEA
 
 ## Notes
 

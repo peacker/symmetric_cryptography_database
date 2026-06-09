@@ -90,7 +90,8 @@ families:
   - id: salsa
     name: Salsa
     # primitive_type removed; now per-instance in primitives.yaml
-    construction_ids: []
+    construction_ids:
+      - arx_permutation_network
     round_ids:
       - salsa_quarterround
     target_applications:
@@ -122,7 +123,8 @@ families:
   - id: chacha
     name: ChaCha
     # primitive_type removed; now per-instance in primitives.yaml
-    construction_ids: []
+    construction_ids:
+      - arx_permutation_network
     round_ids:
       - chacha_quarterround
     target_applications:
@@ -531,7 +533,8 @@ families:
 
   - id: katan
     name: KATAN
-    construction_ids: []
+    construction_ids:
+      - lfsr_nlfsr_register_network
     round_ids:
       - katan_round
     target_applications:
@@ -551,7 +554,8 @@ families:
 
   - id: ktantan
     name: KTANTAN
-    construction_ids: []
+    construction_ids:
+      - lfsr_nlfsr_register_network
     round_ids:
       - ktantan_round
     target_applications:
@@ -630,7 +634,8 @@ families:
 
   - id: rc5
     name: RC5
-    construction_ids: []
+    construction_ids:
+      - arx_permutation_network
     round_ids:
       - rc5_round
     target_applications:
@@ -700,7 +705,8 @@ families:
 
   - id: rc4
     name: RC4
-    construction_ids: []
+    construction_ids:
+      - stream_state_update_generator
     round_ids:
       - rc4_ksa
       - rc4_prga
@@ -720,6 +726,11 @@ families:
       algorithm (KSA) followed by a pseudo-random generation algorithm (PRGA).
       Despite historical use in TLS and WEP, RC4 has known weaknesses and is
       deprecated for new applications.
+      RC4 is not defined by an official standard. 
+      It was originally a proprietary trade secret designed by 
+      Ron Rivest for RSA Security in 1987.
+      The algorithm was anonymously leaked to the internet in 1994 and 
+      became broadly known as "Alleged RC4" (often abbreviated as ARC4 or ARCFOUR).
 
   - id: rc6
     name: RC6
@@ -753,7 +764,8 @@ families:
 
   - id: sm4
     name: SM4
-    construction_ids: []
+    construction_ids:
+      - generalized_feistel
     round_ids:
       - sm4_round
     target_applications:
@@ -953,7 +965,8 @@ families:
 
   - id: frog
     name: FROG
-    construction_ids: []
+    construction_ids:
+      - key_dependent_table_network
     round_ids:
       - frog_round
     target_applications:
@@ -978,7 +991,8 @@ families:
 
   - id: hpc
     name: HPC
-    construction_ids: []
+    construction_ids:
+      - key_dependent_table_network
     round_ids:
       - hpc_round
     target_applications:
@@ -1058,7 +1072,8 @@ families:
 
   - id: mars
     name: MARS
-    construction_ids: []
+    construction_ids:
+      - heterogeneous_round_network
     round_ids:
       - mars_round
     target_applications:
@@ -1140,7 +1155,8 @@ families:
   - id: bipbip
     name: BipBip
     # primitive_type removed; now per-instance in primitives.yaml
-    construction_ids: []
+    construction_ids:
+      - tweakable_spn
     round_ids:
       - bipbip_round
     target_applications:
@@ -1221,7 +1237,8 @@ families:
 
   - id: scarf
     name: SCARF
-    construction_ids: []
+    construction_ids:
+      - tweakable_spn
     round_ids:
       - scarf_round
     target_applications:
@@ -1270,7 +1287,8 @@ families:
 
   - id: blink
     name: Blink
-    construction_ids: []
+    construction_ids:
+      - tweakable_spn
     round_ids:
       - blink_round
     target_applications:
@@ -1292,7 +1310,8 @@ families:
 
   - id: chilow
     name: ChiLow
-    construction_ids: []
+    construction_ids:
+      - tweakable_spn
     round_ids:
       - chilow_round
     target_applications:
