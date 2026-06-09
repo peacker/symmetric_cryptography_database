@@ -2,7 +2,6 @@ version: 1
 families:
   - id: rijndael
     name: Rijndael
-    year: 1998
     # primitive_type removed; now per-instance in primitives.yaml
     construction_ids:
       - aligned_spn
@@ -20,9 +19,8 @@ families:
           params: { word_size_bits: 8 }
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - daemen_rijmen_1998_rijndael
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
@@ -33,7 +31,6 @@ families:
 
   - id: aes
     name: AES
-    year: 2001
     # primitive_type removed; now per-instance in primitives.yaml
     construction_ids:
       - aligned_spn
@@ -53,8 +50,7 @@ families:
           params: { word_size_bits: 8 }
         - id: xor
         - id: constant
-    publication_ids: []
-    standard_ids:
+    reference_ids:
       - fips_197
     process_ids:
       - aes_competition_nist_1997_2000
@@ -65,7 +61,6 @@ families:
 
   - id: salsa
     name: Salsa
-    year: 2008
     # primitive_type removed; now per-instance in primitives.yaml
     construction_ids: []
     round_ids:
@@ -81,9 +76,8 @@ families:
         - id: xor
         - id: rotation_fixed
         - id: constant
-    publication_ids:
+    reference_ids:
       - bernstein_2008_salsa20
-    standard_ids: []
     process_ids: []
     influences: []
     notes: >
@@ -92,7 +86,6 @@ families:
 
   - id: chacha
     name: ChaCha
-    year: 2008
     # primitive_type removed; now per-instance in primitives.yaml
     construction_ids: []
     round_ids:
@@ -108,9 +101,8 @@ families:
         - id: xor
         - id: rotation_fixed
         - id: constant
-    publication_ids:
+    reference_ids:
       - bernstein_2008_chacha
-    standard_ids: []
     process_ids: []
     influences:
       - source_family_id: salsa
@@ -121,7 +113,6 @@ families:
 
   - id: present
     name: PRESENT
-    year: 2007
     # primitive_type removed; now per-instance in primitives.yaml
     construction_ids:
       - bit_based_spn
@@ -138,15 +129,13 @@ families:
         - id: bit_permutation
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - bogdanov_2007_present
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: gift
     name: GIFT
-    year: 2017
     # primitive_type removed; now per-instance in primitives.yaml
     construction_ids:
       - bit_based_spn
@@ -162,9 +151,8 @@ families:
         - id: bit_permutation
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - banik_2017_gift
-    standard_ids: []
     process_ids: []
     influences:
       - source_family_id: present
@@ -175,7 +163,6 @@ families:
 
   - id: des
     name: DES
-    year: 1977
     construction_ids:
       - feistel
     round_ids:
@@ -190,15 +177,13 @@ families:
           params: { input_bits: 6, output_bits: 4 }
         - id: bit_permutation
         - id: xor
-    publication_ids:
+    reference_ids:
       - fips_46_3_1999_des
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: blowfish
     name: Blowfish
-    year: 1993
     construction_ids:
       - feistel
     round_ids:
@@ -214,9 +199,8 @@ families:
         - id: add_mod
           params: { modulus: 4294967296 }
         - id: xor
-    publication_ids:
+    reference_ids:
       - schneier_1994_blowfish
-    standard_ids: []
     process_ids: []
     influences:
       - source_family_id: des
@@ -225,7 +209,6 @@ families:
 
   - id: idea
     name: IDEA
-    year: 1991
     construction_ids:
       - lay_massey
     round_ids:
@@ -241,15 +224,13 @@ families:
         - id: mul_mod
           params: { modulus: 65537 }
         - id: xor
-    publication_ids:
+    reference_ids:
       - lai_massey_1991_idea
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: tea
     name: TEA
-    year: 1994
     construction_ids:
       - feistel
     round_ids:
@@ -265,15 +246,13 @@ families:
         - id: xor
         - id: shift_fixed
         - id: constant
-    publication_ids:
+    reference_ids:
       - needham_wheeler_1994_tea
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: xtea
     name: XTEA
-    year: 1997
     construction_ids:
       - feistel
     round_ids:
@@ -289,9 +268,8 @@ families:
         - id: xor
         - id: shift_fixed
         - id: constant
-    publication_ids:
+    reference_ids:
       - needham_wheeler_1997_xtea
-    standard_ids: []
     process_ids: []
     influences:
       - source_family_id: tea
@@ -300,7 +278,6 @@ families:
 
   - id: twofish
     name: Twofish
-    year: 1998
     construction_ids:
       - feistel
     round_ids:
@@ -319,16 +296,14 @@ families:
           params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_fixed
-    publication_ids:
+    reference_ids:
       - schneier_et_al_1998_twofish
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
 
   - id: serpent
     name: Serpent
-    year: 1998
     construction_ids:
       - aligned_spn
     round_ids:
@@ -344,16 +319,14 @@ families:
         - id: binary_matrix_mul
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - anderson_biham_knudsen_1998_serpent
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
 
   - id: camellia
     name: Camellia
-    year: 2000
     construction_ids:
       - feistel
     round_ids:
@@ -371,9 +344,8 @@ families:
         - id: xor
         - id: rotation_fixed
         - id: constant
-    publication_ids:
+    reference_ids:
       - matsui_et_al_2004_camellia
-    standard_ids: []
     process_ids: []
     influences:
       - source_family_id: des
@@ -382,7 +354,6 @@ families:
 
   - id: simon
     name: SIMON
-    year: 2013
     construction_ids:
       - feistel
     round_ids:
@@ -396,15 +367,13 @@ families:
         - id: xor
         - id: rotation_fixed
         - id: constant
-    publication_ids:
+    reference_ids:
       - beaulieu_et_al_2013_simon_speck
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: speck
     name: SPECK
-    year: 2013
     construction_ids:
       - feistel
     round_ids:
@@ -418,9 +387,8 @@ families:
           params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_fixed
-    publication_ids:
+    reference_ids:
       - beaulieu_et_al_2013_simon_speck
-    standard_ids: []
     process_ids: []
     influences:
       - source_family_id: tea
@@ -429,7 +397,6 @@ families:
 
   - id: prince
     name: PRINCE
-    year: 2012
     construction_ids:
       - aligned_spn
     round_ids:
@@ -445,15 +412,13 @@ families:
         - id: binary_matrix_mul
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - borghoff_et_al_2012_prince
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: led
     name: LED
-    year: 2011
     construction_ids:
       - bit_based_spn
     round_ids:
@@ -472,9 +437,8 @@ families:
           params: { word_size_bits: 4 }
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - guo_et_al_2011_led
-    standard_ids: []
     process_ids: []
     influences:
       - source_family_id: present
@@ -483,7 +447,6 @@ families:
 
   - id: katan
     name: KATAN
-    year: 2009
     construction_ids: []
     round_ids:
       - katan_round
@@ -497,15 +460,13 @@ families:
         - id: and
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - de_canniere_et_al_2009_katan_ktantan
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: ktantan
     name: KTANTAN
-    year: 2009
     construction_ids: []
     round_ids:
       - ktantan_round
@@ -519,9 +480,8 @@ families:
         - id: and
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - de_canniere_et_al_2009_katan_ktantan
-    standard_ids: []
     process_ids: []
     influences:
       - source_family_id: katan
@@ -530,7 +490,6 @@ families:
 
   - id: cast128
     name: CAST-128
-    year: 1997
     construction_ids:
       - feistel
     round_ids:
@@ -549,15 +508,13 @@ families:
           params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_variable
-    publication_ids:
+    reference_ids:
       - adams_1997_cast128
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: cast256
     name: CAST-256
-    year: 1999
     construction_ids:
       - generalized_feistel
     round_ids:
@@ -576,9 +533,8 @@ families:
           params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_variable
-    publication_ids:
+    reference_ids:
       - adams_gilchrist_1999_cast256
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences:
@@ -588,7 +544,6 @@ families:
 
   - id: rc5
     name: RC5
-    year: 1994
     construction_ids: []
     round_ids:
       - rc5_round
@@ -601,15 +556,13 @@ families:
         - id: rotation_variable
         - id: add_mod
           params: { modulus: 4294967296 }
-    publication_ids:
+    reference_ids:
       - baldwin_rivest_1996_rc5
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: seed
     name: SEED
-    year: 1998
     construction_ids:
       - feistel
     round_ids:
@@ -628,15 +581,13 @@ families:
         - id: sub_mod
           params: { modulus: 4294967296 }
         - id: rotation_fixed
-    publication_ids:
+    reference_ids:
       - lee_et_al_2005_seed
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: aria
     name: ARIA
-    year: 2003
     construction_ids:
       - aligned_spn
     round_ids:
@@ -652,15 +603,13 @@ families:
         - id: sbox
           params: { input_bits: 8, output_bits: 8 }
         - id: binary_matrix_mul
-    publication_ids:
+    reference_ids:
       - lee_et_al_2010_aria
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: rc4
     name: RC4
-    year: 1987
     construction_ids: []
     round_ids:
       - rc4_ksa
@@ -672,9 +621,8 @@ families:
       - wireless
     characteristics:
       components: []
-    publication_ids:
+    reference_ids:
       - rivest_1987_rc4
-    standard_ids: []
     process_ids: []
     influences: []
     notes: >
@@ -685,7 +633,6 @@ families:
 
   - id: rc6
     name: RC6
-    year: 1998
     construction_ids:
       - generalized_feistel
     round_ids:
@@ -702,9 +649,8 @@ families:
         - id: rotation_variable
         - id: add_mod
           params: { modulus: 4294967296 }
-    publication_ids:
+    reference_ids:
       - rivest_et_al_1998_rc6
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences:
@@ -714,7 +660,6 @@ families:
 
   - id: sm4
     name: SM4
-    year: 2016
     construction_ids: []
     round_ids:
       - sm4_round
@@ -730,16 +675,14 @@ families:
           params: { input_bits: 8, output_bits: 8 }
         - id: rotation_fixed
         - id: constant
-    publication_ids:
+    reference_ids:
       - yang_2021_sm_tls
-    standard_ids:
       - gbt_32907_2016_sm4
     process_ids: []
     influences: []
 
   - id: kasumi
     name: KASUMI
-    year: 2001
     construction_ids:
       - feistel
     round_ids:
@@ -756,15 +699,13 @@ families:
         - id: rotation_fixed
         - id: sbox
           params: { input_bits: 8, output_bits: 8 }
-    publication_ids:
+    reference_ids:
       - ts_35_202_kasumi
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: clefia
     name: CLEFIA
-    year: 2007
     construction_ids:
       - generalized_feistel
     round_ids:
@@ -780,15 +721,13 @@ families:
         - id: sbox
           params: { input_bits: 8, output_bits: 8 }
         - id: binary_matrix_mul
-    publication_ids:
+    reference_ids:
       - katagi_moriai_2011_clefia
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: twine
     name: TWINE
-    year: 2012
     construction_ids:
       - generalized_feistel
     round_ids:
@@ -805,9 +744,8 @@ families:
         - id: word_permutation
           params: { word_size_bits: 4 }
         - id: constant
-    publication_ids:
+    reference_ids:
       - suzaki_et_al_2012_twine
-    standard_ids: []
     process_ids: []
     influences: []
 
@@ -815,7 +753,6 @@ families:
 
   - id: crypton
     name: CRYPTON
-    year: 1998
     construction_ids:
       - spn
     round_ids:
@@ -833,16 +770,14 @@ families:
         - id: word_permutation
           params: { word_size_bits: 8 }
         - id: binary_matrix_mul
-    publication_ids:
+    reference_ids:
       - lim_1998_crypton
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
 
   - id: deal
     name: DEAL
-    year: 1998
     construction_ids:
       - feistel
     round_ids:
@@ -857,9 +792,8 @@ families:
         - id: sbox
           params: { input_bits: 6, output_bits: 4 }
         - id: bit_permutation
-    publication_ids:
+    reference_ids:
       - knudsen_1998_deal
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences:
@@ -869,7 +803,6 @@ families:
 
   - id: dfc
     name: DFC
-    year: 1998
     construction_ids:
       - feistel
     round_ids:
@@ -887,9 +820,8 @@ families:
           params: { modulus: 18446744073709551616 }
         - id: sbox
           params: { input_bits: 8, output_bits: 8 }
-    publication_ids:
+    reference_ids:
       - vaudenay_et_al_1998_dfc
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
@@ -899,7 +831,6 @@ families:
 
   - id: e2
     name: E2
-    year: 1998
     construction_ids:
       - feistel
     round_ids:
@@ -917,9 +848,8 @@ families:
         - id: rotation_fixed
         - id: add_mod
           params: { modulus: 4294967296 }
-    publication_ids:
+    reference_ids:
       - shimoyama_et_al_1998_e2
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
@@ -929,7 +859,6 @@ families:
 
   - id: frog
     name: FROG
-    year: 1998
     construction_ids: []
     round_ids:
       - frog_round
@@ -944,9 +873,8 @@ families:
           params: { input_bits: 8, output_bits: 8 }
         - id: word_permutation
           params: { word_size_bits: 8 }
-    publication_ids:
+    reference_ids:
       - georgoudis_et_al_1998_frog
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
@@ -956,7 +884,6 @@ families:
 
   - id: hpc
     name: HPC
-    year: 1998
     construction_ids: []
     round_ids:
       - hpc_round
@@ -972,9 +899,8 @@ families:
         - id: sbox
           params: { input_bits: 8, output_bits: 8 }
         - id: rotation_fixed
-    publication_ids:
+    reference_ids:
       - schroeppel_1998_hpc
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
@@ -985,7 +911,6 @@ families:
 
   - id: loki97
     name: LOKI97
-    year: 1998
     construction_ids:
       - feistel
     round_ids:
@@ -1001,9 +926,8 @@ families:
           params: { input_bits: 13, output_bits: 8 }
         - id: rotation_fixed
         - id: binary_matrix_mul
-    publication_ids:
+    reference_ids:
       - brown_et_al_1998_loki97
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences:
@@ -1013,7 +937,6 @@ families:
 
   - id: magenta
     name: MAGENTA
-    year: 1998
     construction_ids:
       - feistel
     round_ids:
@@ -1029,9 +952,8 @@ families:
           params: { input_bits: 8, output_bits: 8 }
         - id: field_matrix_mul
           params: { field_size: 256 }
-    publication_ids:
+    reference_ids:
       - jacobson_huber_1998_magenta
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
@@ -1041,7 +963,6 @@ families:
 
   - id: mars
     name: MARS
-    year: 1998
     construction_ids: []
     round_ids:
       - mars_round
@@ -1061,9 +982,8 @@ families:
         - id: sbox
           params: { input_bits: 8, output_bits: 32 }
         - id: rotation_fixed
-    publication_ids:
+    reference_ids:
       - burwick_et_al_1999_mars
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
@@ -1073,7 +993,6 @@ families:
 
   - id: safer_plus
     name: SAFER+
-    year: 1998
     construction_ids:
       - spn
     round_ids:
@@ -1093,9 +1012,8 @@ families:
         - id: sub_mod
           params: { modulus: 256 }
         - id: binary_matrix_mul
-    publication_ids:
+    reference_ids:
       - massey_et_al_1998_safer_plus
-    standard_ids: []
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
@@ -1104,7 +1022,6 @@ families:
 
   - id: aradi
     name: ARADI
-    year: 2024
     construction_ids:
       - aligned_spn
     round_ids:
@@ -1120,15 +1037,13 @@ families:
         - id: binary_matrix_mul
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - greene_motley_weeks_2024_aradi
-    standard_ids: []
     process_ids: []
     influences: []
 
   - id: bipbip
     name: BipBip
-    year: 2023
     # primitive_type removed; now per-instance in primitives.yaml
     construction_ids: []
     round_ids:
@@ -1143,9 +1058,8 @@ families:
           params: { input_bits: 4, output_bits: 4 }
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - belkheyar_et_al_2023_bipbip
-    standard_ids: []
     process_ids: []
     influences: []
     notes: >
@@ -1153,7 +1067,6 @@ families:
 
   - id: qarma
     name: QARMA
-    year: 2016
     # primitive_type removed; now per-instance in primitives.yaml
     construction_ids:
       - even_mansour
@@ -1169,9 +1082,8 @@ families:
         - id: binary_matrix_mul
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - avanzi_2016_qarma
-    standard_ids: []
     process_ids: []
     influences:
       - source_family_id: prince
@@ -1180,7 +1092,6 @@ families:
 
   - id: qarmav2
     name: QARMAv2
-    year: 2023
     # primitive_type removed; now per-instance in primitives.yaml
     construction_ids:
       - even_mansour
@@ -1196,9 +1107,8 @@ families:
         - id: binary_matrix_mul
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - avanzi_et_al_2023_qarmav2
-    standard_ids: []
     process_ids: []
     influences:
       - source_family_id: qarma
@@ -1210,7 +1120,6 @@ families:
 
   - id: scarf
     name: SCARF
-    year: 2023
     construction_ids: []
     round_ids:
       - scarf_round
@@ -1224,9 +1133,8 @@ families:
           params: { input_bits: 5, output_bits: 5 }
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - canale_et_al_2023_scarf
-    standard_ids: []
     process_ids: []
     influences: []
     notes: >
@@ -1235,7 +1143,6 @@ families:
 
   - id: ulbc
     name: uLBC
-    year: 2025
     construction_ids:
       - aligned_spn
     round_ids:
@@ -1252,9 +1159,8 @@ families:
           params: { word_size_bits: 4 }
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - liu_et_al_2025_ulbc
-    standard_ids: []
     process_ids: []
     influences: []
     notes: >
@@ -1263,7 +1169,6 @@ families:
 
   - id: blink
     name: Blink
-    year: 2025
     construction_ids: []
     round_ids:
       - blink_round
@@ -1276,9 +1181,8 @@ families:
           params: { input_bits: 4, output_bits: 4 }
         - id: xor
         - id: constant
-    publication_ids:
+    reference_ids:
       - wang_et_al_2025_blink
-    standard_ids: []
     process_ids: []
     influences: []
     notes: >
@@ -1287,7 +1191,6 @@ families:
 
   - id: chilow
     name: ChiLow
-    year: 2025
     construction_ids: []
     round_ids:
       - chilow_round
@@ -1299,9 +1202,8 @@ families:
         - id: xor
         - id: binary_matrix_mul
         - id: constant
-    publication_ids:
+    reference_ids:
       - belkheyar_et_al_2025_chilow
-    standard_ids: []
     process_ids: []
     influences: []
     notes: >
@@ -1310,7 +1212,6 @@ families:
 
   - id: msx
     name: MSX
-    year: 2026
     construction_ids:
       - generalized_feistel
     round_ids:
@@ -1327,9 +1228,8 @@ families:
           params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_fixed
-    publication_ids:
+    reference_ids:
       - minematsu_et_al_2026_msx
-    standard_ids: []
     process_ids: []
     influences: []
     notes: >

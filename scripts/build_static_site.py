@@ -2,36 +2,13 @@
 
 from __future__ import annotations
 
-import csv
 import json
+import sqlite3
 from pathlib import Path
 
-import yaml
-
 ROOT = Path(__file__).resolve().parents[1]
-VIZ_DIR = ROOT / "build" / "viz"
-TIMELINE_PATH = ROOT / "data" / "timeline.yaml"
+DB_PATH = ROOT / "build" / "symmetric_primitives.db"
 SITE_DIR = ROOT / "build" / "site"
-
-
-def read_csv(path: Path) -> list[dict[str, str]]:
-    with path.open("r", encoding="utf-8", newline="") as f:
-        return list(csv.DictReader(f))
-
-
-def require_viz_file(name: str) -> Path:
-    path = VIZ_DIR / name
-    if not path.exists():
-        raise SystemExit(f"Missing {path}. Run make build-db export-viz first.")
-    return path
-
-
-def load_timeline_doc() -> dict[str, object]:
-    if not TIMELINE_PATH.exists():
-        return {}
-    with TIMELINE_PATH.open("r", encoding="utf-8") as f:
-        doc = yaml.safe_load(f) or {}
-    return doc if isinstance(doc, dict) else {}
 
 
 def write_text(path: Path, content: str) -> None:
@@ -39,35 +16,113 @@ def write_text(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
+def fetch_rows(conn: sqlite3.Connection, query: str) -> list[dict[str, object]]:
+    cur = conn.execute(query)
+    cols = [desc[0] for desc in cur.description]
+    return [{cols[i]: row[i] for i in range(len(cols))} for row in cur.fetchall()]
+
+
+def get_table_names(conn: sqlite3.Connection) -> list[str]:
+    rows = conn.execute(
+        """
+        SELECT name
+        FROM sqlite_master
+        WHERE type='table' AND name NOT LIKE 'sqlite_%'
+        ORDER BY name
+        """
+    ).fetchall()
+    return [r[0] for r in rows]
+
+
+def get_table_columns(conn: sqlite3.Connection, table_name: str) -> list[str]:
+    quoted = table_name.replace('"', '""')
+    rows = conn.execute(f'PRAGMA table_info("{quoted}")').fetchall()
+    return [r[1] for r in rows]
+
+
+def load_all_tables(conn: sqlite3.Connection) -> dict[str, dict[str, object]]:
+    out: dict[str, dict[str, object]] = {}
+    for table_name in get_table_names(conn):
+        cols = get_table_columns(conn, table_name)
+        quoted = table_name.replace('"', '""')
+        rows = fetch_rows(conn, f'SELECT * FROM "{quoted}"')
+        out[table_name] = {"columns": cols, "rows": rows, "rowCount": len(rows)}
+    return out
+
+
+def load_join_builder_dataset(conn: sqlite3.Connection) -> dict[str, object]:
+    rows = fetch_rows(
+        conn,
+        """
+        SELECT
+          p.id AS "primitive.id",
+          p.name AS "primitive.name",
+          p.primitive_type AS "primitive.type_id",
+          pt.name AS "primitive.type_name",
+          p.fixed_input_bits AS "primitive.fixed_input_bits",
+          p.fixed_output_bits AS "primitive.fixed_output_bits",
+          p.characteristics_json AS "primitive.characteristics_json",
+          f.id AS "family.id",
+          f.name AS "family.name",
+          f.year AS "family.year",
+          f.notes AS "family.notes",
+          ref.id AS "reference.id",
+          ref.title AS "reference.title",
+          ref.kind AS "reference.kind",
+          ref.year AS "reference.year",
+          ref.url AS "reference.url",
+          ref.venue AS "reference.venue",
+          ref.organization AS "reference.organization",
+          ref.status AS "reference.status"
+        FROM primitives p
+        JOIN families f ON f.id = p.family_id
+        LEFT JOIN primitive_types pt ON pt.id = p.primitive_type
+        LEFT JOIN primitive_references pr ON pr.primitive_id = p.id
+        LEFT JOIN publications ref ON ref.id = pr.reference_id
+        ORDER BY f.year, p.name, ref.year
+        """,
+    )
+
+    columns = list(rows[0].keys()) if rows else []
+
+    base_sql = (
+        'SELECT p.id AS "primitive.id", p.name AS "primitive.name", '
+        'p.primitive_type AS "primitive.type_id", pt.name AS "primitive.type_name", '
+        'p.fixed_input_bits AS "primitive.fixed_input_bits", '
+        'p.fixed_output_bits AS "primitive.fixed_output_bits", '
+        'p.characteristics_json AS "primitive.characteristics_json", '
+        'f.id AS "family.id", f.name AS "family.name", f.year AS "family.year", '
+        'f.notes AS "family.notes", ref.id AS "reference.id", '
+        'ref.title AS "reference.title", ref.kind AS "reference.kind", '
+        'ref.year AS "reference.year", ref.url AS "reference.url", '
+        'ref.venue AS "reference.venue", ref.organization AS "reference.organization", '
+        'ref.status AS "reference.status" '
+        'FROM primitives p '
+        'JOIN families f ON f.id = p.family_id '
+        'LEFT JOIN primitive_types pt ON pt.id = p.primitive_type '
+        'LEFT JOIN primitive_references pr ON pr.primitive_id = p.id '
+        'LEFT JOIN publications ref ON ref.id = pr.reference_id'
+    )
+
+    return {"columns": columns, "rows": rows, "baseSql": base_sql}
+
+
 def build_site() -> None:
-    timeline_rows = read_csv(require_viz_file("timeline_primitives.csv"))
-    edges_rows = read_csv(require_viz_file("influence_edges.csv"))
-    families_rows = read_csv(require_viz_file("families.csv"))
+    if not DB_PATH.exists():
+        raise SystemExit(f"Missing {DB_PATH}. Run make build-db first.")
 
-    timeline_doc = load_timeline_doc()
-    timeline_events = timeline_doc.get("events", [])
-    timeline_eras = timeline_doc.get("eras", [])
-
-    if not isinstance(timeline_events, list):
-        timeline_events = []
-    if not isinstance(timeline_eras, list):
-        timeline_eras = []
-
-    primitive_types = sorted({row.get("primitive_type", "") for row in timeline_rows if row.get("primitive_type")})
-    summary = {
-        "primitives": len(timeline_rows),
-        "families": len({row.get("family_id", "") for row in families_rows if row.get("family_id")}),
-        "influences": len(edges_rows),
-        "types": len(primitive_types),
-    }
+    with sqlite3.connect(DB_PATH) as conn:
+        all_tables = load_all_tables(conn)
+        builder_dataset = load_join_builder_dataset(conn)
 
     payload = {
-        "summary": summary,
-        "primitives": timeline_rows,
-        "families": families_rows,
-        "influences": edges_rows,
-        "timelineEvents": [e for e in timeline_events if isinstance(e, dict)],
-        "timelineEras": [e for e in timeline_eras if isinstance(e, dict)],
+        "summary": {
+            "tableCount": len(all_tables),
+            "totalRows": sum(t["rowCount"] for t in all_tables.values()),
+            "builderRows": len(builder_dataset["rows"]),
+        },
+        "tables": all_tables,
+        "joinBuilder": builder_dataset,
     }
 
     index_html = """<!doctype html>
@@ -75,78 +130,90 @@ def build_site() -> None:
   <head>
     <meta charset=\"utf-8\" />
     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
-    <title>Symmetric Primitives Database</title>
+    <title>Symmetric Cryptography Database</title>
     <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />
     <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />
-    <link href=\"https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap\" rel=\"stylesheet\" />
+    <link href=\"https://fonts.googleapis.com/css2?family=Archivo+SemiCondensed:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap\" rel=\"stylesheet\" />
     <link rel=\"stylesheet\" href=\"styles.css\" />
-    <script src=\"https://cdn.plot.ly/plotly-2.35.2.min.js\" defer></script>
     <script src=\"data.js\" defer></script>
     <script src=\"app.js\" defer></script>
   </head>
   <body>
-    <main class=\"shell\">
-      <section class=\"hero\">
-        <p class=\"eyebrow\">Cryptography knowledge base</p>
-        <h1>Symmetric Primitives Database</h1>
-        <p class=\"subtitle\">Static public dashboard built from curated YAML datasets.</p>
-      </section>
+    <main class=\"page\">
+      <header class=\"top-header panel\">
+        <section class=\"hero\">
+          <h1>Symmetric Cryptography Database</h1>
+        </section>
+        <nav class=\"navigator\" aria-label=\"Section navigation\">
+          <button type=\"button\" class=\"nav-tab is-active\" data-view-target=\"tables\">All SQLite Tables</button>
+          <button type=\"button\" class=\"nav-tab\" data-view-target=\"builder\">Custom Query Builder</button>
+        </nav>
+      </header>
 
-      <section class=\"stats\" id=\"stats\"></section>
+      <section class=\"panel meta\" id=\"summary\"></section>
 
-      <section class=\"panel\">
-        <h2>Timeline Explorer</h2>
-        <div class=\"controls\">
-          <label>Family type
-            <select id=\"typeFilter\" multiple size=\"5\" autocomplete=\"off\"></select>
+      <section class=\"panel view-panel is-active\" data-view=\"tables\">
+        <h2>All SQLite Tables</h2>
+        <div class=\"toolbar\">
+          <label class=\"toolbar-field\">Table
+            <select id=\"tableSelect\"></select>
           </label>
-          <label>Family
-            <select id=\"familyFilter\" multiple size=\"6\" autocomplete=\"off\"></select>
+          <label class=\"toolbar-field\">Search selected table
+            <input id=\"tableSearch\" type=\"search\" placeholder=\"Search all cells\" autocomplete=\"off\" />
           </label>
-          <label>Construction
-            <select id=\"constructionFilter\" multiple size=\"6\" autocomplete=\"off\"></select>
-          </label>
-          <label>Year range
-            <div class=\"inline-range\">
-              <input id=\"yearMin\" type=\"number\" placeholder=\"min\" />
-              <input id=\"yearMax\" type=\"number\" placeholder=\"max\" />
-            </div>
-          </label>
-          <label>Input bits range
-            <div class=\"inline-range\">
-              <input id=\"inputBitsMin\" type=\"number\" placeholder=\"min\" />
-              <input id=\"inputBitsMax\" type=\"number\" placeholder=\"max\" />
-            </div>
-          </label>
-          <label>Output bits range
-            <div class=\"inline-range\">
-              <input id=\"outputBitsMin\" type=\"number\" placeholder=\"min\" />
-              <input id=\"outputBitsMax\" type=\"number\" placeholder=\"max\" />
-            </div>
-          </label>
-          <label class=\"toggle\"><input id=\"showLabels\" type=\"checkbox\" checked /> Show cipher labels</label>
-          <label class=\"toggle\"><input id=\"showEvents\" type=\"checkbox\" checked /> Show timeline events</label>
-          <label class=\"toggle\"><input id=\"showEras\" type=\"checkbox\" checked /> Show eras</label>
-          <label>Timeline zoom
-            <div class=\"zoom-controls\">
-              <button id=\"zoomOut\" type=\"button\">-</button>
-              <input id=\"timelineZoom\" type=\"range\" min=\"60\" max=\"180\" value=\"100\" step=\"5\" />
-              <button id=\"zoomIn\" type=\"button\">+</button>
-            </div>
-          </label>
-          <button id=\"resetFilters\" type=\"button\">Reset filters</button>
         </div>
-        <div id=\"timelineChart\" class=\"chart\"></div>
+        <div class=\"table-wrap\"><table id=\"allTablesView\"><thead></thead><tbody></tbody></table></div>
       </section>
 
-      <section class=\"panel\">
-        <h2>Influence Graph</h2>
-        <div id=\"influenceChart\" class=\"chart\"></div>
-      </section>
+      <section class=\"panel view-panel\" data-view=\"builder\">
+        <h2>Custom Query Builder</h2>
+        <p class=\"small-note\">Base join: primitives + families + instance references</p>
+        <div class=\"builder-grid\">
+          <details class=\"collapsible\" open>
+            <summary>Filters</summary>
+            <div class=\"collapsible-body filters\">
+              <label>Primitive type
+                <div id=\"fPrimitiveType\" class=\"filter-checklist\"></div>
+              </label>
+              <label>Reference kind
+                <div id=\"fReferenceKind\" class=\"filter-checklist\"></div>
+              </label>
+              <label>Reference year min
+                <input id=\"fReferenceYearMin\" type=\"number\" />
+              </label>
+              <label>Reference year max
+                <input id=\"fReferenceYearMax\" type=\"number\" />
+              </label>
+              <label>Family name contains
+                <input id=\"fFamilyName\" type=\"search\" autocomplete=\"off\" />
+              </label>
+              <label>Reference title contains
+                <input id=\"fReferenceTitle\" type=\"search\" autocomplete=\"off\" />
+              </label>
+              <label class=\"inline-check\"><input id=\"fHasReferenceLink\" type=\"checkbox\" /> Only rows with reference URL</label>
+              <button id=\"resetFilters\" type=\"button\">Reset filters</button>
+            </div>
+          </details>
+          <details class=\"collapsible\" open>
+            <summary>Columns</summary>
+            <div class=\"collapsible-body\">
+              <div id=\"columnPicker\" class=\"column-picker\"></div>
+            </div>
+          </details>
+        </div>
 
-      <section class=\"panel\">
-        <h2>Research Timeline Events</h2>
-        <div id=\"events\" class=\"events\"></div>
+        <details class=\"collapsible\" open>
+          <summary>SQL Preview</summary>
+          <div class=\"collapsible-body\">
+            <div class=\"sql-box\">
+              <div class=\"sql-title\">SQL preview</div>
+              <pre id=\"sqlPreview\"></pre>
+            </div>
+          </div>
+        </details>
+        <p class=\"small-note\">Tip: drag the divider at the right edge of each header to resize columns.</p>
+
+        <div class=\"table-wrap\"><table id=\"builderView\"><thead></thead><tbody></tbody></table></div>
       </section>
     </main>
   </body>
@@ -154,641 +221,733 @@ def build_site() -> None:
 """
 
     styles_css = """:root {
-  --bg: #f7f8f2;
-  --card: #ffffff;
-  --ink: #16231a;
-  --muted: #5f6f64;
-  --accent: #0f766e;
-  --line: #d8ded8;
+  --bg: #f2efe5;
+  --bg-shade: #e5e0d0;
+  --panel: #fffef8;
+  --ink: #152021;
+  --muted: #4f6062;
+  --line: #cfcec0;
+  --accent: #0f4c5c;
+  --accent-soft: #d7eef2;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
+  font-family: "Archivo SemiCondensed", sans-serif;
   color: var(--ink);
-  font-family: "Outfit", sans-serif;
   background:
-    radial-gradient(circle at 20% 15%, #d8f0ea 0%, transparent 30%),
-    radial-gradient(circle at 90% 5%, #f4e8cb 0%, transparent 28%),
-    var(--bg);
+    radial-gradient(1000px 520px at 10% -10%, #e2d9be 0%, transparent 55%),
+    radial-gradient(920px 420px at 110% -30%, #bddde2 0%, transparent 60%),
+    linear-gradient(175deg, var(--bg) 0%, var(--bg-shade) 100%);
 }
 
-.shell {
-  width: min(98vw, 2200px);
+.page {
+  width: min(97vw, 1900px);
   margin: 0 auto;
-  padding: 2rem 1rem 3rem;
+  padding: 1.2rem 0.7rem 2rem;
+}
+
+.top-header {
+  position: sticky;
+  top: 0.4rem;
+  z-index: 6;
+  display: grid;
+  gap: 0.55rem;
+  background: color-mix(in srgb, var(--panel) 88%, #ffffff 12%);
+  backdrop-filter: blur(7px);
 }
 
 .hero h1 {
-  margin: 0.2rem 0;
-  font-family: "Space Grotesk", sans-serif;
-  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  margin: 0;
+  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
 }
 
-.eyebrow {
+.navigator {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav-tab {
+  width: auto;
   margin: 0;
+  border: 1px solid #b8d8de;
+  background: #eaf6f8;
+  color: #08323d;
+  border-radius: 999px;
+  padding: 0.32rem 0.72rem;
   font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--accent);
+  font-weight: 700;
 }
 
-.subtitle {
-  margin: 0;
-  color: var(--muted);
+.nav-tab:hover { background: #d7eef2; }
+
+.nav-tab.is-active {
+  border-color: #2c7d8f;
+  background: #c2e8ef;
+  color: #062a33;
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.75rem;
-  margin: 1.2rem 0;
-}
+.view-panel { display: none; }
+.view-panel.is-active { display: block; }
 
-.stat {
-  background: var(--card);
+.panel {
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 94%, #ffffff 6%);
+  margin-top: 0.85rem;
   padding: 0.9rem;
 }
 
-.stat .label {
-  color: var(--muted);
-  font-size: 0.82rem;
-}
+.panel h2, .panel h3 { margin: 0.2rem 0 0.6rem; }
 
-.stat .value {
-  font-size: 1.6rem;
-  font-family: "Space Grotesk", sans-serif;
-}
-
-.panel {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 1rem;
-  margin-top: 1rem;
-}
-
-.panel h2 {
-  margin: 0.3rem 0 1rem;
-  font-size: 1.2rem;
-}
-
-.controls {
+.meta {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.55rem 0.8rem;
-  margin-bottom: 0.9rem;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.55rem;
 }
 
-.controls label {
-  display: block;
-  font-size: 0.82rem;
-  color: var(--muted);
+.meta-item {
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  padding: 0.55rem;
 }
 
-.controls select,
-.controls input,
-.controls button {
+.meta-item .label { color: var(--muted); font-size: 0.82rem; }
+.meta-item .value { font-size: 1.35rem; font-weight: 700; }
+
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.6rem;
+}
+
+.toolbar-field { display: block; color: var(--muted); font-size: 0.85rem; }
+
+input, select, button {
   width: 100%;
+  font: inherit;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 0.42rem 0.5rem;
-  font: inherit;
-  color: var(--ink);
+  padding: 0.45rem 0.55rem;
   background: #fff;
+  color: var(--ink);
   margin-top: 0.25rem;
 }
 
-.controls select {
-  min-height: 6.2rem;
-}
+button { cursor: pointer; width: auto; background: var(--accent-soft); }
 
-.inline-range {
+.small-note { color: var(--muted); margin: 0 0 0.7rem; }
+
+.builder-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+.collapsible {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.collapsible summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.5rem 0.65rem;
+  font-weight: 700;
+  color: #11333d;
+  background: #eef6f7;
+  border-bottom: 1px solid #d6e4e6;
+}
+
+.collapsible summary::-webkit-details-marker {
+  display: none;
+}
+
+.collapsible summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 0.45rem;
+}
+
+.collapsible[open] summary::before {
+  content: "▾";
+}
+
+.collapsible-body {
+  padding: 0.55rem;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  gap: 0.45rem 0.7rem;
+}
+
+.inline-check { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.2rem; }
+.inline-check input { width: auto; margin: 0; }
+
+.filter-checklist {
+  max-height: 160px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.35rem 0.45rem;
+  background: #fff;
+  display: grid;
+  gap: 0.28rem;
+}
+
+.filter-checklist label {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.92rem;
+}
+
+.filter-checklist input { width: auto; margin: 0; }
+
+.column-picker {
+  max-height: 240px;
+  overflow: auto;
+  display: grid;
+  gap: 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.45rem;
+  background: #fff;
+}
+
+.column-group {
+  border: 1px solid #e4e1d2;
+  border-radius: 8px;
+  padding: 0.35rem;
+}
+
+.column-group-title { font-weight: 700; font-size: 0.88rem; }
+.column-item { display: flex; align-items: center; gap: 0.42rem; }
+.column-item input { width: auto; margin: 0; }
+
+.sql-box {
+  margin-top: 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.sql-title {
+  background: #12313b;
+  color: #f2fcfe;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.82rem;
+}
+
+pre {
+  margin: 0;
+  padding: 0.6rem;
+  max-height: 220px;
+  overflow: auto;
+  background: #fafbf9;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.81rem;
+  white-space: pre-wrap;
+}
+
+.table-wrap {
+  margin-top: 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: auto;
+  max-height: 62vh;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  min-width: 960px;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #0f2e37;
+  color: #f4fdff;
+  text-align: left;
+  border-bottom: 1px solid #0a2027;
+  padding: 0.45rem 0.5rem;
+  white-space: nowrap;
+}
+
+th .head-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 0.4rem;
 }
 
-.toggle {
-  display: flex !important;
-  align-items: center;
-  gap: 0.5rem;
+th button { all: unset; cursor: pointer; }
+
+th .resizer {
+  width: 12px;
+  min-width: 12px;
+  align-self: stretch;
+  cursor: col-resize;
+  border-left: 1px solid rgba(203, 232, 238, 0.3);
+  background: linear-gradient(to right, rgba(203, 232, 238, 0.15), rgba(203, 232, 238, 0.45));
 }
 
-.toggle input {
-  width: auto;
-  margin-top: 0;
+th .resizer:hover {
+  background: linear-gradient(to right, rgba(203, 232, 238, 0.28), rgba(203, 232, 238, 0.7));
 }
 
-.zoom-controls {
-  display: grid;
-  grid-template-columns: 42px 1fr 42px;
-  gap: 0.45rem;
-  align-items: center;
+tbody td {
+  border-bottom: 1px solid #ece9dc;
+  padding: 0.4rem 0.5rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: visible;
+  vertical-align: top;
 }
 
-.zoom-controls button {
-  padding: 0.35rem 0;
-  font-size: 1.1rem;
-  line-height: 1;
-}
+tbody tr:nth-child(even) td { background: #fbfaf5; }
 
-.chart {
-  min-height: 380px;
-}
+.codeish { font-family: "IBM Plex Mono", monospace; font-size: 0.84rem; }
 
-.events {
-  display: grid;
-  gap: 0.65rem;
-}
-
-.event {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 0.75rem;
-}
-
-.event .year {
-  font-family: "Space Grotesk", sans-serif;
-  color: var(--accent);
-}
-
-@media (max-width: 700px) {
-  .shell {
-    padding: 1rem 0.8rem 2rem;
-  }
+@media (max-width: 980px) {
+  .builder-grid { grid-template-columns: 1fr; }
+  .filters { grid-template-columns: 1fr; }
+  .navigator { gap: 0.4rem; }
+  .nav-tab { flex: 1 1 auto; text-align: center; justify-content: center; }
 }
 """
 
     app_js = """(function () {
   const data = window.__SPDB_DATA__;
-  if (!data) {
-    return;
+  if (!data) return;
+
+  function normalizeValue(value) {
+    if (value === null || value === undefined) return "";
+    if (Array.isArray(value)) return value.join(", ");
+    if (typeof value === "object") return JSON.stringify(value);
+    return String(value);
   }
 
-  function parseYear(value) {
-    if (typeof value === "number" && Number.isFinite(value)) {
-      return value;
+  function isNumericLike(value) {
+    if (typeof value === "number" && Number.isFinite(value)) return true;
+    if (typeof value !== "string") return false;
+    return /^-?\\d+(\\.\\d+)?$/.test(value.trim());
+  }
+
+  function compareValues(a, b) {
+    const aa = normalizeValue(a);
+    const bb = normalizeValue(b);
+    if (isNumericLike(aa) && isNumericLike(bb)) return Number(aa) - Number(bb);
+    return aa.localeCompare(bb, undefined, { sensitivity: "base" });
+  }
+
+  function escapeHtml(text) {
+    return String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;");
+  }
+
+  function isHttpUrl(text) {
+    return /^https?:\\/\\//i.test(String(text || "").trim());
+  }
+
+  function renderSummary() {
+    const host = document.getElementById("summary");
+    const rows = [
+      ["SQLite tables", data.summary.tableCount],
+      ["Rows across all tables", data.summary.totalRows],
+      ["Rows in builder join", data.summary.builderRows],
+    ];
+    host.innerHTML = rows
+      .map(([label, value]) => `<article class=\"meta-item\"><div class=\"label\">${label}</div><div class=\"value\">${value}</div></article>`)
+      .join("");
+  }
+
+  function setupNavigator() {
+    const tabs = Array.from(document.querySelectorAll(".nav-tab[data-view-target]"));
+    const views = Array.from(document.querySelectorAll(".view-panel[data-view]"));
+    if (!tabs.length || !views.length) return;
+
+    function activate(viewName) {
+      views.forEach((view) => {
+        view.classList.toggle("is-active", view.getAttribute("data-view") === viewName);
+      });
+      tabs.forEach((tab) => {
+        tab.classList.toggle("is-active", tab.getAttribute("data-view-target") === viewName);
+      });
     }
-    const text = String(value || "");
-    const match = text.match(/(\\d{4})/);
-    return match ? Number(match[1]) : NaN;
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        activate(tab.getAttribute("data-view-target") || "tables");
+      });
+    });
+
+    activate("tables");
   }
 
-  function asNumber(value) {
-    const n = Number(value);
+  function createTableView(tableId) {
+    const table = document.getElementById(tableId);
+    return {
+      table,
+      head: table.querySelector("thead"),
+      body: table.querySelector("tbody"),
+      sortKey: "",
+      sortDirection: "asc",
+      widths: {},
+    };
+  }
+
+  function renderGrid(view, columns, rows) {
+    if (!columns.length) {
+      view.head.innerHTML = "";
+      view.body.innerHTML = "";
+      return;
+    }
+
+    const sorted = [...rows];
+    if (view.sortKey) {
+      sorted.sort((a, b) => {
+        const cmp = compareValues(a[view.sortKey], b[view.sortKey]);
+        return view.sortDirection === "asc" ? cmp : -cmp;
+      });
+    }
+
+    const headHtml = columns
+      .map((col) => {
+        const marker = view.sortKey === col ? (view.sortDirection === "asc" ? "▲" : "▼") : "↕";
+        return [
+          `<th data-col=\"${col}\">`,
+          `<div class=\"head-cell\">`,
+          `<button type=\"button\" data-sort=\"${col}\"><span class=\"codeish\">${col}</span> <span>${marker}</span></button>`,
+          `<span class=\"resizer\" data-resize=\"${col}\"></span>`,
+          `</div>`,
+          `</th>`,
+        ].join("");
+      })
+      .join("");
+    view.head.innerHTML = `<tr>${headHtml}</tr>`;
+
+    const bodyHtml = sorted
+      .map((row) => {
+        const tds = columns
+          .map((col) => {
+            const text = normalizeValue(row[col]);
+            const escaped = escapeHtml(text);
+            if (String(col).toLowerCase().endsWith(".url") && isHttpUrl(text)) {
+              return `<td title=\"${escaped}\"><a href=\"${escaped}\" target=\"_blank\" rel=\"noopener noreferrer\">${escaped}</a></td>`;
+            }
+            return `<td title=\"${escaped}\">${escaped}</td>`;
+          })
+          .join("");
+        return `<tr>${tds}</tr>`;
+      })
+      .join("");
+    view.body.innerHTML = bodyHtml;
+
+    const ths = Array.from(view.head.querySelectorAll("th"));
+    ths.forEach((th, idx) => {
+      const col = th.getAttribute("data-col") || "";
+      if (!col) return;
+      if (!(col in view.widths)) {
+        let maxLen = 0;
+        sorted.slice(0, 120).forEach((row) => {
+          maxLen = Math.max(maxLen, normalizeValue(row[col]).length);
+        });
+        view.widths[col] = Math.max(90, Math.min(520, 24 + maxLen * 7.2));
+      }
+      const w = view.widths[col];
+      th.style.width = `${w}px`;
+      th.style.minWidth = `${w}px`;
+      th.style.maxWidth = `${w}px`;
+      Array.from(view.body.querySelectorAll("tr")).forEach((tr) => {
+        const td = tr.children[idx];
+        if (!td) return;
+        td.style.width = `${w}px`;
+        td.style.minWidth = `${w}px`;
+        td.style.maxWidth = `${w}px`;
+      });
+    });
+
+    Array.from(view.head.querySelectorAll("button[data-sort]")).forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-sort") || "";
+        if (!key) return;
+        if (view.sortKey === key) view.sortDirection = view.sortDirection === "asc" ? "desc" : "asc";
+        else {
+          view.sortKey = key;
+          view.sortDirection = "asc";
+        }
+        renderGrid(view, columns, rows);
+      });
+    });
+
+    Array.from(view.head.querySelectorAll(".resizer[data-resize]")).forEach((handle) => {
+      handle.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        const key = handle.getAttribute("data-resize") || "";
+        if (!key) return;
+        const th = handle.closest("th");
+        if (!th) return;
+        const startX = event.clientX;
+        const startW = th.getBoundingClientRect().width;
+
+        function onMove(moveEvent) {
+          view.widths[key] = Math.max(70, Math.round(startW + (moveEvent.clientX - startX)));
+          renderGrid(view, columns, rows);
+        }
+
+        function onUp() {
+          window.removeEventListener("mousemove", onMove);
+          window.removeEventListener("mouseup", onUp);
+        }
+
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("mouseup", onUp);
+      });
+    });
+  }
+
+  function setupAllTablesBrowser() {
+    const select = document.getElementById("tableSelect");
+    const search = document.getElementById("tableSearch");
+    const view = createTableView("allTablesView");
+    const names = Object.keys(data.tables).sort((a, b) => a.localeCompare(b));
+    select.innerHTML = names.map((name) => `<option value=\"${name}\">${name} (${data.tables[name].rowCount})</option>`).join("");
+
+    function refresh() {
+      const tableData = data.tables[select.value] || { columns: [], rows: [] };
+      const needle = (search.value || "").trim().toLowerCase();
+      const rows = !needle
+        ? tableData.rows
+        : tableData.rows.filter((row) => tableData.columns.some((col) => normalizeValue(row[col]).toLowerCase().includes(needle)));
+      renderGrid(view, tableData.columns, rows);
+    }
+
+    select.addEventListener("change", refresh);
+    search.addEventListener("input", refresh);
+    refresh();
+  }
+
+  function groupedColumns(columns) {
+    const by = new Map();
+    const out = [];
+    columns.forEach((col) => {
+      const i = col.indexOf(".");
+      const group = i < 0 ? "other" : col.slice(0, i);
+      const sub = i < 0 ? col : col.slice(i + 1);
+      if (!by.has(group)) {
+        const rec = { group, items: [] };
+        by.set(group, rec);
+        out.push(rec);
+      }
+      by.get(group).items.push({ key: col, sub });
+    });
+    return out;
+  }
+
+  function selectedChecklistValues(containerEl) {
+    if (!containerEl) return new Set();
+    const checked = Array.from(containerEl.querySelectorAll('input[type="checkbox"][data-value]:checked'));
+    return new Set(checked.map((n) => n.getAttribute("data-value") || "").filter(Boolean));
+  }
+
+  function renderFilterChecklist(containerEl, values) {
+    containerEl.innerHTML = values
+      .map((value) => {
+        const esc = escapeHtml(value);
+        return `<label><input type=\"checkbox\" data-value=\"${esc}\" /><span>${esc}</span></label>`;
+      })
+      .join("");
+  }
+
+  function parseOptionalNumber(value) {
+    const t = String(value || "").trim();
+    if (!t) return NaN;
+    const n = Number(t);
     return Number.isFinite(n) ? n : NaN;
   }
 
-  function selectedValues(selectEl) {
-    if (selectEl.dataset.touched !== "1") {
-      return new Set();
-    }
-    return new Set(Array.from(selectEl.selectedOptions).map((opt) => opt.value));
-  }
+  function setupBuilder() {
+    const builder = data.joinBuilder;
+    const view = createTableView("builderView");
 
-  function toOptionList(values) {
-    return Array.from(new Set(values.filter(Boolean))).sort((a, b) => a.localeCompare(b));
-  }
-
-  function populateSelect(selectEl, values) {
-    selectEl.innerHTML = values.map((value) => `<option value=\"${value}\">${value}</option>`).join("");
-    selectEl.selectedIndex = -1;
-    selectEl.dataset.touched = "0";
-  }
-
-  function clearMultiSelect(selectEl) {
-    Array.from(selectEl.options).forEach((opt) => {
-      opt.selected = false;
-    });
-  }
-
-  const statsHost = document.getElementById("stats");
-  const statRows = [
-    ["Primitive Instances", data.summary.primitives],
-    ["Families", data.summary.families],
-    ["Influence Links", data.summary.influences],
-    ["Primitive Types", data.summary.types],
-  ];
-  statsHost.innerHTML = statRows
-    .map(
-      ([label, value]) =>
-        `<article class=\"stat\"><div class=\"label\">${label}</div><div class=\"value\">${value}</div></article>`,
-    )
-    .join("");
-
-  const primitivesByFamily = new Map();
-  for (const p of data.primitives || []) {
-    const rec = {
-      input: asNumber(p.fixed_input_bits),
-      output: asNumber(p.fixed_output_bits),
+    const ui = {
+      primitiveType: document.getElementById("fPrimitiveType"),
+      referenceKind: document.getElementById("fReferenceKind"),
+      referenceYearMin: document.getElementById("fReferenceYearMin"),
+      referenceYearMax: document.getElementById("fReferenceYearMax"),
+      familyName: document.getElementById("fFamilyName"),
+      referenceTitle: document.getElementById("fReferenceTitle"),
+      hasReferenceLink: document.getElementById("fHasReferenceLink"),
+      resetFilters: document.getElementById("resetFilters"),
+      columnPicker: document.getElementById("columnPicker"),
+      sqlPreview: document.getElementById("sqlPreview"),
     };
-    if (!primitivesByFamily.has(p.family_id)) {
-      primitivesByFamily.set(p.family_id, []);
-    }
-    primitivesByFamily.get(p.family_id).push(rec);
-  }
 
-  const familyRows = (data.families || [])
-    .map((f) => {
-      const sizes = primitivesByFamily.get(f.family_id) || [];
-      const inputs = sizes.map((s) => s.input).filter(Number.isFinite);
-      const outputs = sizes.map((s) => s.output).filter(Number.isFinite);
+    const defaultColumns = [
+      "primitive.id", "primitive.name", "primitive.type_name", "family.name", "reference.title", "reference.year", "reference.url",
+    ].filter((c) => builder.columns.includes(c));
+    const visibleColumns = new Set(defaultColumns.length ? defaultColumns : builder.columns);
 
-      return {
-        ...f,
-        yearNum: parseYear(f.year),
-        inputMin: inputs.length ? Math.min(...inputs) : NaN,
-        inputMax: inputs.length ? Math.max(...inputs) : NaN,
-        outputMin: outputs.length ? Math.min(...outputs) : NaN,
-        outputMax: outputs.length ? Math.max(...outputs) : NaN,
-      };
-    })
-    .filter((f) => Number.isFinite(f.yearNum));
-
-  const allFamilyTypes = toOptionList(familyRows.map((f) => f.primitive_type));
-  const allFamilies = toOptionList(familyRows.map((f) => f.family_name));
-  const allConstructions = toOptionList(familyRows.map((f) => f.constructions));
-
-  const controls = {
-    typeFilter: document.getElementById("typeFilter"),
-    familyFilter: document.getElementById("familyFilter"),
-    constructionFilter: document.getElementById("constructionFilter"),
-    yearMin: document.getElementById("yearMin"),
-    yearMax: document.getElementById("yearMax"),
-    inputBitsMin: document.getElementById("inputBitsMin"),
-    inputBitsMax: document.getElementById("inputBitsMax"),
-    outputBitsMin: document.getElementById("outputBitsMin"),
-    outputBitsMax: document.getElementById("outputBitsMax"),
-    showLabels: document.getElementById("showLabels"),
-    showEvents: document.getElementById("showEvents"),
-    showEras: document.getElementById("showEras"),
-    timelineZoom: document.getElementById("timelineZoom"),
-    zoomOut: document.getElementById("zoomOut"),
-    zoomIn: document.getElementById("zoomIn"),
-    resetFilters: document.getElementById("resetFilters"),
-  };
-
-  populateSelect(controls.typeFilter, allFamilyTypes);
-  populateSelect(controls.familyFilter, allFamilies);
-  populateSelect(controls.constructionFilter, allConstructions);
-  clearMultiSelect(controls.typeFilter);
-  clearMultiSelect(controls.familyFilter);
-  clearMultiSelect(controls.constructionFilter);
-
-  const minYear = Math.min(...familyRows.map((f) => f.yearNum));
-  const maxYear = Math.max(...familyRows.map((f) => f.yearNum));
-  controls.yearMin.value = String(minYear);
-  controls.yearMax.value = String(maxYear);
-
-  const symbolPool = ["circle", "square", "diamond", "cross", "triangle-up", "triangle-down", "pentagon", "hexagon", "star"];
-  const familySymbols = new Map();
-  allFamilies.forEach((name, idx) => {
-    familySymbols.set(name, symbolPool[idx % symbolPool.length]);
-  });
-
-  const labelPositions = [
-    "top center",
-    "bottom center",
-    "middle left",
-    "middle right",
-  ];
-
-  function getZoomFactor() {
-    const pct = asNumber(controls.timelineZoom.value);
-    if (!Number.isFinite(pct) || pct <= 0) {
-      return 1;
-    }
-    return pct / 100;
-  }
-
-  function buildTimeline() {
-    const selectedTypes = selectedValues(controls.typeFilter);
-    const selectedFamilies = selectedValues(controls.familyFilter);
-    const selectedConstructions = selectedValues(controls.constructionFilter);
-
-    const yearMinFilter = asNumber(controls.yearMin.value);
-    const yearMaxFilter = asNumber(controls.yearMax.value);
-    const inMin = asNumber(controls.inputBitsMin.value);
-    const inMax = asNumber(controls.inputBitsMax.value);
-    const outMin = asNumber(controls.outputBitsMin.value);
-    const outMax = asNumber(controls.outputBitsMax.value);
-
-    const filtered = familyRows.filter((row) => {
-      if (selectedTypes.size && !selectedTypes.has(row.primitive_type)) return false;
-      if (selectedFamilies.size && !selectedFamilies.has(row.family_name)) return false;
-      if (selectedConstructions.size && !selectedConstructions.has(row.constructions || "")) return false;
-      if (Number.isFinite(yearMinFilter) && row.yearNum < yearMinFilter) return false;
-      if (Number.isFinite(yearMaxFilter) && row.yearNum > yearMaxFilter) return false;
-
-      if (Number.isFinite(inMin) && Number.isFinite(row.inputMax) && row.inputMax < inMin) return false;
-      if (Number.isFinite(inMax) && Number.isFinite(row.inputMin) && row.inputMin > inMax) return false;
-      if (Number.isFinite(outMin) && Number.isFinite(row.outputMax) && row.outputMax < outMin) return false;
-      if (Number.isFinite(outMax) && Number.isFinite(row.outputMin) && row.outputMin > outMax) return false;
-      return true;
-    });
-
-    const sorted = [...filtered].sort((a, b) => a.yearNum - b.yearNum || a.family_name.localeCompare(b.family_name));
-    const yearCounter = new Map();
-    const colorByType = new Map();
-    const palette = ["#0f766e", "#0ea5e9", "#b45309", "#4f46e5", "#7f1d1d", "#166534", "#9333ea"];
-    allFamilyTypes.forEach((type, idx) => colorByType.set(type, palette[idx % palette.length]));
-
-    const x = [];
-    const y = [];
-    const symbols = [];
-    const colors = [];
-    const text = [];
-    const textposition = [];
-    const customdata = [];
-    const zoom = getZoomFactor();
-    const markerSize = Math.max(5, 12 * zoom);
-    const textSize = Math.max(7, 11 * zoom);
-    const eventTextSize = Math.max(7, 10 * zoom);
-
-    for (const row of sorted) {
-      const inYearCount = yearCounter.get(row.yearNum) || 0;
-      yearCounter.set(row.yearNum, inYearCount + 1);
-      const yPos = inYearCount * 0.55;
-
-      x.push(row.yearNum);
-      y.push(yPos);
-      symbols.push(familySymbols.get(row.family_name) || "circle");
-      colors.push(colorByType.get(row.primitive_type) || "#334155");
-      text.push(row.family_name);
-      textposition.push(labelPositions[inYearCount % labelPositions.length]);
-      customdata.push([
-        row.primitive_type,
-        row.constructions || "-",
-        row.instance_count || "0",
-        Number.isFinite(row.inputMin) ? `${row.inputMin}-${row.inputMax}` : "-",
-        Number.isFinite(row.outputMin) ? `${row.outputMin}-${row.outputMax}` : "-",
-      ]);
+    function fillFilterOptions() {
+      const primitiveTypes = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["primitive.type_name"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+      const referenceKinds = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["reference.kind"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+      renderFilterChecklist(ui.primitiveType, primitiveTypes);
+      renderFilterChecklist(ui.referenceKind, referenceKinds);
     }
 
-    const traces = [
-      {
-        type: "scatter",
-        mode: controls.showLabels.checked ? "markers+text" : "markers",
-        x,
-        y,
-        text,
-        textposition,
-        textfont: { size: textSize },
-        marker: {
-          size: markerSize,
-          symbol: symbols,
-          color: colors,
-          line: { color: "#0f172a", width: 0.4 },
-        },
-        customdata,
-        hovertemplate:
-          "<b>%{text}</b><br>Year: %{x}<br>Family type: %{customdata[0]}<br>Construction: %{customdata[1]}<br>Instances: %{customdata[2]}<br>Input bits range: %{customdata[3]}<br>Output bits range: %{customdata[4]}<extra></extra>",
-        showlegend: false,
-      },
-    ];
+    function renderColumnPicker() {
+      const html = groupedColumns(builder.columns)
+        .map((group) => {
+          const items = group.items.map((item) => {
+            const checked = visibleColumns.has(item.key) ? "checked" : "";
+            return `<label class=\"column-item\"><input type=\"checkbox\" data-col=\"${item.key}\" data-group=\"${group.group}\" ${checked} /><span class=\"codeish\">${item.sub}</span></label>`;
+          }).join("");
+          return `<section class=\"column-group\"><label class=\"column-item column-group-title\"><input type=\"checkbox\" data-group-toggle=\"${group.group}\" /><span>${group.group}</span></label>${items}</section>`;
+        })
+        .join("");
+      ui.columnPicker.innerHTML = html;
 
-    const shapes = [];
-    const annotations = [];
-
-    if (controls.showEvents.checked) {
-      const events = (data.timelineEvents || [])
-        .map((e) => ({ ...e, yearNum: parseYear(e.date || e.year) }))
-        .filter((e) => Number.isFinite(e.yearNum));
-
-      events.forEach((event, idx) => {
-        shapes.push({
-          type: "line",
-          xref: "x",
-          yref: "paper",
-          x0: event.yearNum,
-          x1: event.yearNum,
-          y0: 0,
-          y1: 1,
-          line: {
-            color: "rgba(100,116,139,0.28)",
-            width: 1,
-          },
-          layer: "below",
+      Array.from(ui.columnPicker.querySelectorAll("input[data-group-toggle]")).forEach((toggle) => {
+        const group = toggle.getAttribute("data-group-toggle") || "";
+        const children = Array.from(ui.columnPicker.querySelectorAll(`input[data-group=\"${group}\"]`));
+        const selected = children.filter((c) => c.checked).length;
+        toggle.checked = selected === children.length && children.length > 0;
+        toggle.indeterminate = selected > 0 && selected < children.length;
+        toggle.addEventListener("change", () => {
+          children.forEach((child) => {
+            child.checked = toggle.checked;
+            const col = child.getAttribute("data-col") || "";
+            if (!col) return;
+            if (toggle.checked) visibleColumns.add(col);
+            else visibleColumns.delete(col);
+          });
+          if (!visibleColumns.size && builder.columns.length) visibleColumns.add(builder.columns[0]);
+          renderColumnPicker();
+          refresh();
         });
+      });
 
-        annotations.push({
-          x: event.yearNum,
-          y: 1.02 + (idx % 2) * 0.03,
-          yref: "paper",
-          xref: "x",
-          text: event.short_name || event.title || "event",
-          textangle: -45,
-          showarrow: false,
-          xanchor: "left",
-          yanchor: "bottom",
-          font: { size: eventTextSize, color: "#475569" },
+      Array.from(ui.columnPicker.querySelectorAll("input[data-col]")).forEach((input) => {
+        input.addEventListener("change", () => {
+          const col = input.getAttribute("data-col") || "";
+          if (!col) return;
+          if (input.checked) visibleColumns.add(col);
+          else {
+            visibleColumns.delete(col);
+            if (!visibleColumns.size && builder.columns.length) visibleColumns.add(builder.columns[0]);
+          }
+          renderColumnPicker();
+          refresh();
         });
       });
     }
 
-    if (controls.showEras.checked) {
-      const eras = (data.timelineEras || [])
-        .map((era) => ({
-          ...era,
-          start: parseYear(era.start_year),
-          end: parseYear(era.end_year),
-        }))
-        .filter((era) => Number.isFinite(era.start) && Number.isFinite(era.end));
+    function buildWhereClauses() {
+      const clauses = [];
+      const typeValues = selectedChecklistValues(ui.primitiveType);
+      if (typeValues.size) clauses.push(`\"primitive.type_name\" IN (${Array.from(typeValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
+      const refKindValues = selectedChecklistValues(ui.referenceKind);
+      if (refKindValues.size) clauses.push(`\"reference.kind\" IN (${Array.from(refKindValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
 
-      eras.forEach((era, idx) => {
-        const yBase = 1.10 + (idx % 4) * 0.065;
-        const cap = 0.012;
+      const ryMin = parseOptionalNumber(ui.referenceYearMin.value);
+      if (Number.isFinite(ryMin)) clauses.push(`\"reference.year\" >= ${ryMin}`);
+      const ryMax = parseOptionalNumber(ui.referenceYearMax.value);
+      if (Number.isFinite(ryMax)) clauses.push(`\"reference.year\" <= ${ryMax}`);
 
-        shapes.push({
-          type: "line",
-          xref: "x",
-          yref: "paper",
-          x0: era.start,
-          x1: era.end,
-          y0: yBase,
-          y1: yBase,
-          line: { color: "rgba(15,23,42,0.55)", width: 1.3 },
-          layer: "above",
-        });
-        shapes.push({
-          type: "line",
-          xref: "x",
-          yref: "paper",
-          x0: era.start,
-          x1: era.start,
-          y0: yBase - cap,
-          y1: yBase + cap,
-          line: { color: "rgba(15,23,42,0.55)", width: 1.3 },
-          layer: "above",
-        });
-        shapes.push({
-          type: "line",
-          xref: "x",
-          yref: "paper",
-          x0: era.end,
-          x1: era.end,
-          y0: yBase - cap,
-          y1: yBase + cap,
-          line: { color: "rgba(15,23,42,0.55)", width: 1.3 },
-          layer: "above",
-        });
+      const familyName = (ui.familyName.value || "").trim();
+      if (familyName) clauses.push(`\"family.name\" LIKE '%${familyName.replace(/'/g, "''")}%'`);
+      const referenceTitle = (ui.referenceTitle.value || "").trim();
+      if (referenceTitle) clauses.push(`\"reference.title\" LIKE '%${referenceTitle.replace(/'/g, "''")}%'`);
+      if (ui.hasReferenceLink.checked) clauses.push(`\"reference.url\" IS NOT NULL AND TRIM(\"reference.url\") <> ''`);
 
-        annotations.push({
-          x: (era.start + era.end) / 2,
-          y: yBase + 0.018,
-          yref: "paper",
-          xref: "x",
-          text: era.name || "Era",
-          showarrow: false,
-          font: { size: eventTextSize, color: "#1f2937" },
-        });
+      return clauses;
+    }
+
+    function filterRows(rows) {
+      const typeValues = selectedChecklistValues(ui.primitiveType);
+      const refKindValues = selectedChecklistValues(ui.referenceKind);
+      const ryMin = parseOptionalNumber(ui.referenceYearMin.value);
+      const ryMax = parseOptionalNumber(ui.referenceYearMax.value);
+      const familyName = (ui.familyName.value || "").trim().toLowerCase();
+      const referenceTitle = (ui.referenceTitle.value || "").trim().toLowerCase();
+
+      return rows.filter((row) => {
+        const typeName = normalizeValue(row["primitive.type_name"]);
+        if (typeValues.size && !typeValues.has(typeName)) return false;
+        const refKind = normalizeValue(row["reference.kind"]);
+        if (refKindValues.size && !refKindValues.has(refKind)) return false;
+
+        const referenceYear = Number(row["reference.year"]);
+        if (Number.isFinite(ryMin) && referenceYear < ryMin) return false;
+        if (Number.isFinite(ryMax) && referenceYear > ryMax) return false;
+
+        if (familyName && !normalizeValue(row["family.name"]).toLowerCase().includes(familyName)) return false;
+        if (referenceTitle && !normalizeValue(row["reference.title"]).toLowerCase().includes(referenceTitle)) return false;
+        if (ui.hasReferenceLink.checked && !normalizeValue(row["reference.url"]).trim()) return false;
+        return true;
       });
     }
 
-    const rangeMin = Number.isFinite(yearMinFilter) ? yearMinFilter : minYear;
-    const rangeMax = Number.isFinite(yearMaxFilter) ? yearMaxFilter : maxYear;
-    const center = (rangeMin + rangeMax) / 2;
-    const span = Math.max(1, (rangeMax - rangeMin) / zoom);
-    const xMin = center - span / 2;
-    const xMax = center + span / 2;
+    function refresh() {
+      const visible = builder.columns.filter((c) => visibleColumns.has(c));
+      const filtered = filterRows(builder.rows);
+      renderGrid(view, visible, filtered);
+      const whereClauses = buildWhereClauses();
+      const selectCols = visible.length ? visible.map((c) => `\"${c}\"`).join(", ") : "*";
+      const whereSql = whereClauses.length ? `\\nWHERE ${whereClauses.join("\\n  AND ")}` : "";
+      ui.sqlPreview.textContent = `SELECT ${selectCols}\\nFROM (${builder.baseSql})${whereSql};`;
+    }
 
-    Plotly.newPlot(
-      "timelineChart",
-      traces,
-      {
-        margin: { l: 50, r: 20, t: 220, b: 55 },
-        xaxis: { title: "Year", zeroline: false, range: [xMin, xMax] },
-        yaxis: {
-          title: "",
-          showticklabels: false,
-          gridcolor: "rgba(148,163,184,0.18)",
-          zeroline: false,
-        },
-        shapes,
-        annotations,
-        paper_bgcolor: "rgba(0,0,0,0)",
-        plot_bgcolor: "rgba(0,0,0,0)",
-      },
-      { responsive: true },
-    );
-  }
-
-  [controls.typeFilter, controls.familyFilter, controls.constructionFilter].forEach((selectEl) => {
-    selectEl.addEventListener("change", () => {
-      selectEl.dataset.touched = "1";
+    [ui.referenceYearMin, ui.referenceYearMax, ui.familyName, ui.referenceTitle, ui.hasReferenceLink].forEach((node) => {
+      node.addEventListener("change", refresh);
+      node.addEventListener("input", refresh);
     });
-  });
 
-  [
-    controls.typeFilter,
-    controls.familyFilter,
-    controls.constructionFilter,
-    controls.yearMin,
-    controls.yearMax,
-    controls.inputBitsMin,
-    controls.inputBitsMax,
-    controls.outputBitsMin,
-    controls.outputBitsMax,
-    controls.showLabels,
-    controls.showEvents,
-    controls.showEras,
-    controls.timelineZoom,
-  ].forEach((el) => {
-    el.addEventListener("change", buildTimeline);
-    el.addEventListener("input", buildTimeline);
-  });
-
-  controls.zoomOut.addEventListener("click", () => {
-    const current = asNumber(controls.timelineZoom.value) || 100;
-    controls.timelineZoom.value = String(Math.max(60, current - 10));
-    buildTimeline();
-  });
-
-  controls.zoomIn.addEventListener("click", () => {
-    const current = asNumber(controls.timelineZoom.value) || 100;
-    controls.timelineZoom.value = String(Math.min(180, current + 10));
-    buildTimeline();
-  });
-
-  controls.resetFilters.addEventListener("click", () => {
-    [controls.typeFilter, controls.familyFilter, controls.constructionFilter].forEach((selectEl) => {
-      clearMultiSelect(selectEl);
-      selectEl.selectedIndex = -1;
-      selectEl.dataset.touched = "0";
+    [ui.primitiveType, ui.referenceKind].forEach((container) => {
+      container.addEventListener("change", (event) => {
+        const target = event.target;
+        if (target && target.matches('input[type="checkbox"][data-value]')) refresh();
+      });
     });
-    controls.yearMin.value = String(minYear);
-    controls.yearMax.value = String(maxYear);
-    controls.inputBitsMin.value = "";
-    controls.inputBitsMax.value = "";
-    controls.outputBitsMin.value = "";
-    controls.outputBitsMax.value = "";
-    controls.showLabels.checked = true;
-    controls.showEvents.checked = true;
-    controls.showEras.checked = true;
-    controls.timelineZoom.value = "100";
-    buildTimeline();
-  });
 
-  buildTimeline();
+    ui.resetFilters.addEventListener("click", () => {
+      [ui.primitiveType, ui.referenceKind].forEach((container) => {
+        Array.from(container.querySelectorAll('input[type="checkbox"][data-value]')).forEach((box) => {
+          box.checked = false;
+        });
+      });
+      [ui.referenceYearMin, ui.referenceYearMax, ui.familyName, ui.referenceTitle].forEach((node) => { node.value = ""; });
+      ui.hasReferenceLink.checked = false;
+      refresh();
+    });
 
-  const nodes = new Set();
-  for (const edge of data.influences) {
-    if (edge.source_name) nodes.add(edge.source_name);
-    if (edge.target_name) nodes.add(edge.target_name);
-  }
-  const orderedNodes = Array.from(nodes);
-  const nodeIndex = new Map(orderedNodes.map((name, idx) => [name, idx]));
-
-  const source = [];
-  const target = [];
-  const value = [];
-  const label = [];
-  for (const edge of data.influences) {
-    const s = nodeIndex.get(edge.source_name);
-    const t = nodeIndex.get(edge.target_name);
-    if (s === undefined || t === undefined) continue;
-    source.push(s);
-    target.push(t);
-    value.push(1);
-    label.push(edge.relation || "influence");
+    fillFilterOptions();
+    renderColumnPicker();
+    refresh();
   }
 
-  Plotly.newPlot(
-    "influenceChart",
-    [
-      {
-        type: "sankey",
-        arrangement: "snap",
-        node: { label: orderedNodes, pad: 15, thickness: 16 },
-        link: { source, target, value, label },
-      },
-    ],
-    {
-      margin: { l: 10, r: 10, t: 5, b: 10 },
-      paper_bgcolor: "rgba(0,0,0,0)",
-      plot_bgcolor: "rgba(0,0,0,0)",
-    },
-    { responsive: true },
-  );
-
-  const eventsHost = document.getElementById("events");
-  const sortedEvents = [...(data.timelineEvents || [])].sort(
-    (a, b) => parseYear(a.date || a.year) - parseYear(b.date || b.year),
-  );
-  eventsHost.innerHTML = sortedEvents
-    .map((event) => {
-      const title = event.title || event.label || "Untitled event";
-      const year = event.date || event.year || "n/a";
-      const note = event.note || event.description || "";
-      return `<article class=\"event\"><div class=\"year\">${year}</div><strong>${title}</strong><div>${note}</div></article>`;
-    })
-    .join("");
+  renderSummary();
+  setupNavigator();
+  setupAllTablesBrowser();
+  setupBuilder();
 })();
 """
 

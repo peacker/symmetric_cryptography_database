@@ -1,5 +1,5 @@
 version: 1
-publications:
+references:
   - id: daemen_rijmen_1998_rijndael
     kind: article
     title: "AES Proposal: Rijndael"

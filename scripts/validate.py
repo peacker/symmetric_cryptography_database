@@ -79,7 +79,7 @@ def main() -> None:
     constructions_doc = load_yaml(DATA_DIR / "constructions.yaml")
     rounds_doc       = load_yaml(DATA_DIR / "rounds.yaml")
     primitive_types_doc = load_yaml(DATA_DIR / "primitive_types.yaml")
-    publications_doc = load_yaml(DATA_DIR / "publications.yaml")
+    references_doc = load_yaml(DATA_DIR / "references.yaml")
     processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
 
     ok = True
@@ -89,10 +89,11 @@ def main() -> None:
     ok &= validate_schema(constructions_doc, SCHEMA_DIR / "constructions.schema.json", "constructions")
     ok &= validate_schema(rounds_doc, SCHEMA_DIR / "rounds.schema.json", "rounds")
     ok &= validate_schema(primitive_types_doc, SCHEMA_DIR / "primitive_types.schema.json", "primitive_types")
+    ok &= validate_schema(references_doc, SCHEMA_DIR / "references.schema.json", "references")
     if not ok:
         raise SystemExit(1)
 
-    publication_ids = {p["id"] for p in publications_doc.get("publications", [])}
+    reference_ids = {r["id"] for r in references_doc.get("references", [])}
     process_ids     = {p["id"] for p in processes_doc.get("processes", [])}
     family_ids      = {f["id"] for f in families_doc.get("families", [])}
     component_ids   = {c["id"] for c in components_doc.get("components", [])}
@@ -140,13 +141,9 @@ def main() -> None:
                     f"REFERENCE ERROR: family '{fid}' references unknown round '{round_id}'"
                 )
                 errors_found = True
-        for ref in family.get("publication_ids", []):
-            if ref not in publication_ids:
-                print(f"REFERENCE ERROR: family '{fid}' has unknown publication '{ref}'")
-                errors_found = True
-        for ref in family.get("standard_ids", []):
-            if ref not in publication_ids:
-                print(f"REFERENCE ERROR: family '{fid}' has unknown standard '{ref}' (not in publications)")
+        for ref in family.get("reference_ids", []):
+            if ref not in reference_ids:
+                print(f"REFERENCE ERROR: family '{fid}' has unknown reference '{ref}'")
                 errors_found = True
         for ref in family.get("process_ids", []):
             if ref not in process_ids:
@@ -175,6 +172,10 @@ def main() -> None:
                 f"REFERENCE ERROR: instance '{pid}' has unknown primitive_type '{primitive['primitive_type']}'"
             )
             errors_found = True
+        for ref in primitive.get("reference_ids", []):
+            if ref not in reference_ids:
+                print(f"REFERENCE ERROR: instance '{pid}' has unknown reference '{ref}'")
+                errors_found = True
         tweakey_size = characteristics.get("tweakey_size_bits")
         if isinstance(tweakey_size, str):
             expr_match = TWEAKEY_EXPR_RE.match(tweakey_size.strip())
@@ -225,11 +226,6 @@ def main() -> None:
         for base_field in range_base_fields:
             for error in validate_range_field(characteristics, base_field, pid):
                 print(error)
-                errors_found = True
-
-        for ref in primitive.get("standard_ids", []):
-            if ref not in publication_ids:
-                print(f"REFERENCE ERROR: instance '{pid}' has unknown standard '{ref}' (not in publications)")
                 errors_found = True
 
     if errors_found:

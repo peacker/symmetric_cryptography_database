@@ -1,0 +1,82 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "references.schema.json",
+    "title": "References",
+    "type": "object",
+    "required": [
+        "version",
+        "references"
+    ],
+    "properties": {
+        "version": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "references": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/reference"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "$defs": {
+        "reference": {
+            "type": "object",
+            "required": [
+                "id",
+                "kind",
+                "title",
+                "year"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "kind": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "title": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "authors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
+                "year": {
+                    "type": "integer",
+                    "minimum": 1900,
+                    "maximum": 2100
+                },
+                "venue": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "organization": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "institution": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        }
+    }
+}

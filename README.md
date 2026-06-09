@@ -84,7 +84,7 @@ Recommended process:
 1. One primitive change per pull request when possible.
 2. Require `make validate` and `make build-db` in CI.
 3. Enforce stable IDs (never rename IDs, only deprecate).
-4. Track provenance in `publications.yaml` for every factual claim.
+4. Track provenance in `references.yaml` for every factual claim.
 5. Add explicit influence links only when a credible citation exists.
 
 ### Suggested review checklist

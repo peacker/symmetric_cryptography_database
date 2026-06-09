@@ -10,8 +10,6 @@ primitives:
       rounds: 10
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids:
-      - fips_197
 
   - id: aes_192
     name: AES-192
@@ -22,8 +20,6 @@ primitives:
       rounds: 12
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids:
-      - fips_197
 
   - id: aes_256
     name: AES-256
@@ -34,8 +30,6 @@ primitives:
       rounds: 14
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids:
-      - fips_197
 
   # ── Salsa family ──────────────────────────────────────────────────────────
   - id: salsa20
@@ -48,7 +42,6 @@ primitives:
       rounds: 20
       fixed_input_bits: 512
       fixed_output_bits: 512
-    standard_ids: []
     notes: >-
       Salsa20 block function takes a 256-bit key, 64-bit nonce,
       and a 64-bit block counter to produce a 512-bit (64-byte) output.
@@ -66,8 +59,6 @@ primitives:
       rounds: 20
       fixed_input_bits: 512
       fixed_output_bits: 512
-    standard_ids:
-      - rfc_8439
     notes: >-
       ChaCha20 block function per RFC 8439: takes a 256-bit key, 96-bit nonce,
       and 32-bit block counter to produce a 512-bit (64-byte) output.
@@ -83,7 +74,6 @@ primitives:
       rounds: 31
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: present_128
     name: PRESENT-128
@@ -94,7 +84,6 @@ primitives:
       rounds: 31
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   # ── GIFT family ───────────────────────────────────────────────────────────
   - id: gift_64
@@ -107,7 +96,6 @@ primitives:
       rounds: 28
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: gift_128
     name: GIFT-128
@@ -119,7 +107,6 @@ primitives:
       rounds: 40
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── DES family ────────────────────────────────────────────────────────────
   - id: des_56
@@ -132,7 +119,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   # ── Blowfish family ───────────────────────────────────────────────────────
   - id: blowfish_128
@@ -145,7 +131,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   # ── IDEA family ───────────────────────────────────────────────────────────
   - id: idea_128
@@ -158,7 +143,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   # ── TEA / XTEA families ──────────────────────────────────────────────────
   - id: tea_128
@@ -171,7 +155,6 @@ primitives:
       rounds: 64
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: xtea_128
     name: XTEA
@@ -183,7 +166,6 @@ primitives:
       rounds: 64
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   # ── Twofish family ───────────────────────────────────────────────────────
   - id: twofish_128
@@ -196,7 +178,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: twofish_192
     name: Twofish-192
@@ -208,7 +189,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: twofish_256
     name: Twofish-256
@@ -220,7 +200,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── Serpent family ───────────────────────────────────────────────────────
   - id: serpent_128
@@ -233,7 +212,6 @@ primitives:
       rounds: 32
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: serpent_192
     name: Serpent-192
@@ -245,7 +223,6 @@ primitives:
       rounds: 32
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: serpent_256
     name: Serpent-256
@@ -257,7 +234,6 @@ primitives:
       rounds: 32
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── Camellia family ──────────────────────────────────────────────────────
   - id: camellia_128
@@ -270,7 +246,6 @@ primitives:
       rounds: 18
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: camellia_192
     name: Camellia-192
@@ -282,7 +257,6 @@ primitives:
       rounds: 24
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: camellia_256
     name: Camellia-256
@@ -294,7 +268,6 @@ primitives:
       rounds: 24
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── SIMON / SPECK families ───────────────────────────────────────────────
   - id: simon_64_128
@@ -307,7 +280,6 @@ primitives:
       rounds: 44
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: simon_128_128
     name: SIMON-128/128
@@ -319,7 +291,6 @@ primitives:
       rounds: 68
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: speck_64_128
     name: SPECK-64/128
@@ -331,7 +302,6 @@ primitives:
       rounds: 27
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: speck_128_128
     name: SPECK-128/128
@@ -343,7 +313,6 @@ primitives:
       rounds: 32
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── PRINCE / LED families ────────────────────────────────────────────────
   - id: prince_128
@@ -356,7 +325,6 @@ primitives:
       rounds: 12
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: led_64_64
     name: LED-64
@@ -368,7 +336,6 @@ primitives:
       rounds: 32
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: led_64_128
     name: LED-128
@@ -380,7 +347,6 @@ primitives:
       rounds: 48
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   # ── KATAN / KTANTAN families ─────────────────────────────────────────────
   - id: katan_64_80
@@ -393,7 +359,6 @@ primitives:
       rounds: 254
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: ktantan_64_80
     name: KTANTAN-64
@@ -405,7 +370,6 @@ primitives:
       rounds: 254
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   # ── CAST family ─────────────────────────────────────────────────────────
   - id: cast128_128
@@ -418,7 +382,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: cast256_128
     name: CAST-256-128
@@ -430,7 +393,6 @@ primitives:
       rounds: 48
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: cast256_192
     name: CAST-256-192
@@ -442,7 +404,6 @@ primitives:
       rounds: 48
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: cast256_256
     name: CAST-256-256
@@ -454,7 +415,6 @@ primitives:
       rounds: 48
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── RC5 family ──────────────────────────────────────────────────────────
   - id: rc5_32_12_16
@@ -467,7 +427,6 @@ primitives:
       rounds: 12
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: rc5_32_16_16
     name: RC5-32/16/16
@@ -479,7 +438,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   # ── SEED family ─────────────────────────────────────────────────────────
   - id: seed_128
@@ -492,7 +450,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── ARIA family ─────────────────────────────────────────────────────────
   - id: aria_128
@@ -505,7 +462,6 @@ primitives:
       rounds: 12
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: aria_192
     name: ARIA-192
@@ -517,7 +473,6 @@ primitives:
       rounds: 14
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: aria_256
     name: ARIA-256
@@ -529,7 +484,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── RC6 family ──────────────────────────────────────────────────────────
   - id: rc6_32_20_16
@@ -542,7 +496,6 @@ primitives:
       rounds: 20
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: rc6_32_20_24
     name: RC6-32/20/24
@@ -554,7 +507,6 @@ primitives:
       rounds: 20
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: rc6_32_20_32
     name: RC6-32/20/32
@@ -566,7 +518,6 @@ primitives:
       rounds: 20
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── SM4 family ──────────────────────────────────────────────────────────
   - id: sm4_128
@@ -579,8 +530,6 @@ primitives:
       rounds: 32
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids:
-      - gbt_32907_2016_sm4
 
   # ── KASUMI family ───────────────────────────────────────────────────────
   - id: kasumi_128
@@ -593,7 +542,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   # ── CLEFIA family ───────────────────────────────────────────────────────
   - id: clefia_128
@@ -606,7 +554,6 @@ primitives:
       rounds: 18
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: clefia_192
     name: CLEFIA-192
@@ -618,7 +565,6 @@ primitives:
       rounds: 22
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: clefia_256
     name: CLEFIA-256
@@ -630,7 +576,6 @@ primitives:
       rounds: 26
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── TWINE family ────────────────────────────────────────────────────────
   - id: twine_80
@@ -643,7 +588,6 @@ primitives:
       rounds: 36
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: twine_128
     name: TWINE-128
@@ -655,7 +599,6 @@ primitives:
       rounds: 36
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   # ── AES Candidates ───────────────────────────────────────────────────────
 
@@ -670,7 +613,6 @@ primitives:
       rounds: 12
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: crypton_192
     name: CRYPTON-192
@@ -682,7 +624,6 @@ primitives:
       rounds: 12
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: crypton_256
     name: CRYPTON-256
@@ -694,7 +635,6 @@ primitives:
       rounds: 12
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── DEAL family ──────────────────────────────────────────────────────────
   - id: deal_128
@@ -707,7 +647,6 @@ primitives:
       rounds: 6
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: deal_192
     name: DEAL-192
@@ -719,7 +658,6 @@ primitives:
       rounds: 6
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: deal_256
     name: DEAL-256
@@ -731,7 +669,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── DFC family ───────────────────────────────────────────────────────────
   - id: dfc_128
@@ -744,7 +681,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: dfc_192
     name: DFC-192
@@ -756,7 +692,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: dfc_256
     name: DFC-256
@@ -768,7 +703,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── E2 family ────────────────────────────────────────────────────────────
   - id: e2_128
@@ -781,7 +715,6 @@ primitives:
       rounds: 12
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: e2_192
     name: E2-192
@@ -793,7 +726,6 @@ primitives:
       rounds: 12
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: e2_256
     name: E2-256
@@ -805,7 +737,6 @@ primitives:
       rounds: 12
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── FROG family ──────────────────────────────────────────────────────────
   - id: frog_128
@@ -818,7 +749,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: frog_192
     name: FROG-192
@@ -830,7 +760,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: frog_256
     name: FROG-256
@@ -842,7 +771,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── HPC family ───────────────────────────────────────────────────────────
   - id: hpc_128
@@ -855,7 +783,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: hpc_192
     name: HPC-192
@@ -867,7 +794,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: hpc_256
     name: HPC-256
@@ -879,7 +805,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── LOKI97 family ────────────────────────────────────────────────────────
   - id: loki97_128
@@ -892,7 +817,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: loki97_192
     name: LOKI97-192
@@ -904,7 +828,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: loki97_256
     name: LOKI97-256
@@ -916,7 +839,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── MAGENTA family ───────────────────────────────────────────────────────
   - id: magenta_128
@@ -929,7 +851,6 @@ primitives:
       rounds: 6
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: magenta_192
     name: MAGENTA-192
@@ -941,7 +862,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: magenta_256
     name: MAGENTA-256
@@ -953,7 +873,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── MARS family ──────────────────────────────────────────────────────────
   - id: mars_128
@@ -966,7 +885,6 @@ primitives:
       rounds: 32
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: mars_192
     name: MARS-192
@@ -978,7 +896,6 @@ primitives:
       rounds: 32
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: mars_256
     name: MARS-256
@@ -990,7 +907,6 @@ primitives:
       rounds: 32
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── SAFER+ family ────────────────────────────────────────────────────────
   - id: safer_plus_128
@@ -1003,7 +919,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: safer_plus_192
     name: SAFER+-192
@@ -1015,7 +930,6 @@ primitives:
       rounds: 12
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: safer_plus_256
     name: SAFER+-256
@@ -1027,7 +941,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── Low-Latency And Memory-Encryption families ──────────────────────────
   - id: aradi_128_256
@@ -1040,7 +953,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: bipbip_24_40_256
     name: BipBip-24/40
@@ -1053,7 +965,6 @@ primitives:
       rounds: 11
       fixed_input_bits: 24
       fixed_output_bits: 24
-    standard_ids: []
     notes: Full version denoted BipBip3,5,3 in the paper.
 
   - id: qarma_64_128
@@ -1067,7 +978,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: qarma_128_256
     name: QARMA-128-256
@@ -1080,7 +990,6 @@ primitives:
       rounds: 24
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: qarmav2_64_128
     name: QARMAv2-64-128
@@ -1093,7 +1002,6 @@ primitives:
       rounds: 16
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: qarmav2_128_128
     name: QARMAv2-128-128
@@ -1106,7 +1014,6 @@ primitives:
       rounds: 24
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: qarmav2_128_192
     name: QARMAv2-128-192
@@ -1119,7 +1026,6 @@ primitives:
       rounds: 24
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: qarmav2_128_256
     name: QARMAv2-128-256
@@ -1132,7 +1038,6 @@ primitives:
       rounds: 24
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: scarf_10_240_48
     name: SCARF-10/240
@@ -1145,7 +1050,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 10
       fixed_output_bits: 10
-    standard_ids: []
 
   - id: ulbc_128
     name: uLBC-128
@@ -1157,7 +1061,6 @@ primitives:
       rounds: 18
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: ulbc_256
     name: uLBC-256
@@ -1169,7 +1072,6 @@ primitives:
       rounds: 22
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: ulbc_384t
     name: uLBC-384t
@@ -1183,7 +1085,6 @@ primitives:
       rounds: 30
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
     notes: Minimum key length is 128 bits with variable key/tweak split.
 
   - id: blink_64a
@@ -1196,7 +1097,6 @@ primitives:
       tweak_size_bits: 64
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: blink_64b
     name: Blink-64b
@@ -1208,7 +1108,6 @@ primitives:
       tweak_size_bits: 128
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: blink_128a
     name: Blink-128a
@@ -1220,7 +1119,6 @@ primitives:
       tweak_size_bits: 128
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: blink_128b
     name: Blink-128b
@@ -1232,7 +1130,6 @@ primitives:
       tweak_size_bits: 256
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: blink_128A
     name: Blink-128A
@@ -1244,7 +1141,6 @@ primitives:
       tweak_size_bits: 128
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: blink_128B
     name: Blink-128B
@@ -1256,7 +1152,6 @@ primitives:
       tweak_size_bits: 256
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: chilow_32
     name: ChiLow-(32+tau)
@@ -1269,7 +1164,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 32
       fixed_output_bits: 32
-    standard_ids: []
 
   - id: chilow_40
     name: ChiLow-40
@@ -1282,7 +1176,6 @@ primitives:
       rounds: 8
       fixed_input_bits: 40
       fixed_output_bits: 40
-    standard_ids: []
 
   - id: msx_64_128
     name: MSX-64/128
@@ -1294,7 +1187,6 @@ primitives:
       rounds: 14
       fixed_input_bits: 64
       fixed_output_bits: 64
-    standard_ids: []
 
   - id: msx_128_128
     name: MSX-128/128
@@ -1306,7 +1198,6 @@ primitives:
       rounds: 18
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   - id: msx_128_256
     name: MSX-128/256
@@ -1318,7 +1209,6 @@ primitives:
       rounds: 18
       fixed_input_bits: 128
       fixed_output_bits: 128
-    standard_ids: []
 
   # ── RC4 family ────────────────────────────────────────────────────────────
   - id: rc4_variable
@@ -1330,7 +1220,6 @@ primitives:
       key_size_bits_max: 2048
       fixed_input_bits: 1
       fixed_output_bits: 64
-    standard_ids: []
     notes: >-
       RC4 is a stream cipher with variable key size (1–256 bytes).
       The fixed_output_bits represents a standard 64-byte (512-bit) keystream unit.

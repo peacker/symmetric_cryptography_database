@@ -102,13 +102,11 @@
             "required": [
                 "id",
                 "name",
-                "year",
                 "construction_ids",
                 "round_ids",
                 "target_applications",
                 "characteristics",
-                "publication_ids",
-                "standard_ids",
+                "reference_ids",
                 "process_ids",
                 "influences"
             ],
@@ -120,11 +118,6 @@
                 "name": {
                     "type": "string",
                     "minLength": 1
-                },
-                "year": {
-                    "type": "integer",
-                    "minimum": 1900,
-                    "maximum": 2100
                 },
                 "construction_ids": {
                     "type": "array",
@@ -149,14 +142,7 @@
                 "characteristics": {
                     "$ref": "#/$defs/characteristics"
                 },
-                "publication_ids": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "minLength": 1
-                    }
-                },
-                "standard_ids": {
+                "reference_ids": {
                     "type": "array",
                     "items": {
                         "type": "string",

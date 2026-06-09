@@ -84,7 +84,7 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
         CREATE TABLE IF NOT EXISTS families (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
-            year INTEGER NOT NULL,
+            year INTEGER,
             notes TEXT,
             characteristics_json TEXT NOT NULL
         );
@@ -176,6 +176,14 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (primitive_id) REFERENCES primitives(id)   ON DELETE CASCADE,
             FOREIGN KEY (standard_id)  REFERENCES publications(id) ON DELETE RESTRICT
         );
+
+        CREATE TABLE IF NOT EXISTS primitive_references (
+            primitive_id TEXT NOT NULL,
+            reference_id TEXT NOT NULL,
+            PRIMARY KEY (primitive_id, reference_id),
+            FOREIGN KEY (primitive_id) REFERENCES primitives(id)   ON DELETE CASCADE,
+            FOREIGN KEY (reference_id) REFERENCES publications(id) ON DELETE RESTRICT
+        );
         """
     )
 
@@ -183,6 +191,7 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
 def clear_tables(conn: sqlite3.Connection) -> None:
     conn.executescript(
         """
+        DELETE FROM primitive_references;
         DELETE FROM primitive_standards;
         DELETE FROM primitives;
         DELETE FROM family_influences;
@@ -214,7 +223,7 @@ def main() -> None:
     constructions_doc = load_yaml(DATA_DIR / "constructions.yaml")
     rounds_doc       = load_yaml(DATA_DIR / "rounds.yaml")
     primitive_types_doc = load_yaml(DATA_DIR / "primitive_types.yaml")
-    publications_doc = load_yaml(DATA_DIR / "publications.yaml")
+    references_doc = load_yaml(DATA_DIR / "references.yaml")
     processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
 
     conn = sqlite3.connect(DB_PATH)
@@ -222,16 +231,27 @@ def main() -> None:
         ensure_schema(conn)
         clear_tables(conn)
 
-        for pub in publications_doc.get("publications", []):
+        references_by_id = {r["id"]: r for r in references_doc.get("references", [])}
+
+        for ref in references_doc.get("references", []):
             conn.execute(
                 "INSERT INTO publications"
                 " (id, kind, title, year, venue, url, authors_json, organization, status)"
                 " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (pub["id"], pub["kind"], pub["title"], pub["year"],
-                 pub.get("venue"), pub.get("url"),
-                 json.dumps(pub.get("authors", []), ensure_ascii=True),
-                 pub.get("organization"), pub.get("status")),
+                (
+                    ref["id"],
+                    ref["kind"],
+                    ref["title"],
+                    ref["year"],
+                    ref.get("venue"),
+                    ref.get("url"),
+                    json.dumps(ref.get("authors", []), ensure_ascii=True),
+                    ref.get("organization") or ref.get("publisher") or ref.get("institution"),
+                    ref.get("status"),
+                ),
             )
+
+        family_reference_ids: dict[str, set[str]] = {}
 
         for process in processes_doc.get("processes", []):
             conn.execute(
@@ -289,10 +309,18 @@ def main() -> None:
 
         for family in families_doc.get("families", []):
             c = family["characteristics"]
+            ref_ids = family.get("reference_ids", [])
+            family_year_candidates = [
+                references_by_id[ref_id].get("year")
+                for ref_id in ref_ids
+                if ref_id in references_by_id and isinstance(references_by_id[ref_id].get("year"), int)
+            ]
+            family_year = min(family_year_candidates) if family_year_candidates else None
+
             conn.execute(
                 "INSERT INTO families (id, name, year, notes, characteristics_json)"
                 " VALUES (?, ?, ?, ?, ?)",
-                (family["id"], family["name"], family["year"],
+                (family["id"], family["name"], family_year,
                  family.get("notes"), json.dumps(c, ensure_ascii=True)),
             )
             for target in family.get("target_applications", []):
@@ -316,14 +344,23 @@ def main() -> None:
                     "INSERT INTO family_rounds (family_id, round_id, role) VALUES (?, ?, ?)",
                     (family["id"], round_id, "primary"),
                 )
-            for pub_id in family.get("publication_ids", []):
-                conn.execute(
-                    "INSERT INTO family_publications (family_id, publication_id) VALUES (?, ?)",
-                    (family["id"], pub_id))
-            for std_id in family.get("standard_ids", []):
-                conn.execute(
-                    "INSERT INTO family_standards (family_id, standard_id) VALUES (?, ?)",
-                    (family["id"], std_id))
+            std_ids_for_family: set[str] = set()
+            refs_for_family: set[str] = set()
+            for ref_id in ref_ids:
+                refs_for_family.add(ref_id)
+                ref_kind = str(references_by_id.get(ref_id, {}).get("kind", "")).lower()
+                if "standard" in ref_kind:
+                    conn.execute(
+                        "INSERT INTO family_standards (family_id, standard_id) VALUES (?, ?)",
+                        (family["id"], ref_id),
+                    )
+                    std_ids_for_family.add(ref_id)
+                else:
+                    conn.execute(
+                        "INSERT INTO family_publications (family_id, publication_id) VALUES (?, ?)",
+                        (family["id"], ref_id),
+                    )
+            family_reference_ids[family["id"]] = refs_for_family
             for process_id in family.get("process_ids", []):
                 conn.execute(
                     "INSERT INTO family_processes (family_id, process_id) VALUES (?, ?)",
@@ -338,6 +375,10 @@ def main() -> None:
 
         for primitive in primitives_doc.get("primitives", []):
             c = primitive["characteristics"]
+            primitive_ref_ids = set(primitive.get("reference_ids", []))
+            if not primitive_ref_ids:
+                primitive_ref_ids = set(family_reference_ids.get(primitive["family_id"], set()))
+
             conn.execute(
                 "INSERT INTO primitives"
                 " (id, name, family_id, primitive_type, fixed_input_bits, fixed_output_bits,"
@@ -347,10 +388,21 @@ def main() -> None:
                  c["fixed_input_bits"], c["fixed_output_bits"],
                  json.dumps(c, ensure_ascii=True)),
             )
-            for std_id in primitive.get("standard_ids", []):
+
+            for ref_id in sorted(primitive_ref_ids):
+                conn.execute(
+                    "INSERT INTO primitive_references (primitive_id, reference_id) VALUES (?, ?)",
+                    (primitive["id"], ref_id),
+                )
+
+            for ref_id in sorted(primitive_ref_ids):
+                ref_kind = str(references_by_id.get(ref_id, {}).get("kind", "")).lower()
+                if "standard" not in ref_kind:
+                    continue
                 conn.execute(
                     "INSERT INTO primitive_standards (primitive_id, standard_id) VALUES (?, ?)",
-                    (primitive["id"], std_id))
+                    (primitive["id"], ref_id),
+                )
 
         conn.commit()
         print(f"Database built: {DB_PATH}")
