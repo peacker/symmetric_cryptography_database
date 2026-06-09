@@ -148,12 +148,38 @@ def build_site() -> None:
           <h1>Symmetric Cryptography Database</h1>
         </section>
         <nav class=\"navigator\" aria-label=\"Section navigation\">
+          <button type=\"button\" class=\"nav-tab\" data-view-target=\"visualizations\">Family Visualizations</button>
           <button type=\"button\" class=\"nav-tab is-active\" data-view-target=\"tables\">All SQLite Tables</button>
           <button type=\"button\" class=\"nav-tab\" data-view-target=\"builder\">Custom Query Builder</button>
         </nav>
       </header>
 
       <section class=\"panel meta\" id=\"summary\"></section>
+
+      <section class=\"panel view-panel\" data-view=\"visualizations\">
+        <h2>Family Visualizations</h2>
+        <p class=\"small-note\">X axis = publication year. Y axis grouping is selectable.</p>
+        <div class=\"toolbar viz-toolbar\">
+          <label class=\"toolbar-field\">Group families by
+            <select id=\"vizGroupBy\">
+              <option value=\"primitive\">Primitive type</option>
+              <option value=\"construction\">Construction type</option>
+              <option value=\"target\">Target application</option>
+            </select>
+          </label>
+          <label class=\"inline-check\"><input id=\"vizShowArrows\" type=\"checkbox\" /> Show relation arrows</label>
+          <div class=\"viz-font-controls\" aria-label=\"Timeline font size\">
+            <button id=\"vizFontMinus\" type=\"button\">A-</button>
+            <button id=\"vizFontPlus\" type=\"button\">A+</button>
+            <button id=\"vizFontReset\" type=\"button\">Reset</button>
+            <span id=\"vizFontValue\" class=\"small-note\">12px</span>
+          </div>
+        </div>
+        <div class=\"viz-wrap\">
+          <svg id=\"familyViz\" role=\"img\" aria-label=\"Family timeline visualization\"></svg>
+        </div>
+        <p id=\"vizRelationInfo\" class=\"small-note viz-relation-info\">Hover a relation arrow to see relation details.</p>
+      </section>
 
       <section class=\"panel view-panel is-active\" data-view=\"tables\">
         <h2>All SQLite Tables</h2>
@@ -471,6 +497,80 @@ pre {
   max-height: 62vh;
 }
 
+.viz-toolbar {
+  grid-template-columns: minmax(220px, 360px) auto auto;
+  align-items: end;
+}
+
+.viz-font-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+}
+
+.viz-font-controls button {
+  width: auto;
+  margin-top: 0;
+}
+
+#vizFontValue {
+  margin: 0;
+  min-width: 3.2rem;
+  text-align: right;
+}
+
+.viz-wrap {
+  margin-top: 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  overflow: auto;
+}
+
+.viz-relation-info {
+  margin: 0.55rem 0 0;
+  min-height: 1.4rem;
+}
+
+#familyViz {
+  width: auto;
+  min-width: 920px;
+  height: 640px;
+  display: block;
+}
+
+.viz-axis {
+  stroke: #5d6d70;
+  stroke-width: 1.2;
+}
+
+.viz-grid {
+  stroke: #d7d8cf;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.viz-label {
+  fill: #2d4248;
+  font-size: 12px;
+}
+
+.viz-point {
+  fill: #1f77b4;
+  stroke: #ffffff;
+  stroke-width: 1.2;
+}
+
+.viz-text {
+  fill: #1f2b2e;
+  font-size: 12px;
+}
+
+.viz-edge {
+  stroke: rgba(76, 91, 95, 0.75);
+  fill: none;
+}
+
 table {
   width: 100%;
   border-collapse: separate;
@@ -543,6 +643,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
   .filters { grid-template-columns: 1fr; }
   .navigator { gap: 0.4rem; }
   .nav-tab { flex: 1 1 auto; text-align: center; justify-content: center; }
+  .viz-toolbar { grid-template-columns: 1fr; }
 }
 """
 
@@ -576,6 +677,17 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/\"/g, "&quot;");
+  }
+
+  function parseJsonArray(value) {
+    if (value === null || value === undefined || value === "") return [];
+    if (Array.isArray(value)) return value;
+    try {
+      const parsed = JSON.parse(String(value));
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      return [];
+    }
   }
 
   function isHttpUrl(text) {
@@ -959,10 +1071,346 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     refresh();
   }
 
+  function setupFamilyVisualization() {
+    const svg = document.getElementById("familyViz");
+    const groupBy = document.getElementById("vizGroupBy");
+    const showArrows = document.getElementById("vizShowArrows");
+    const fontMinus = document.getElementById("vizFontMinus");
+    const fontPlus = document.getElementById("vizFontPlus");
+    const fontReset = document.getElementById("vizFontReset");
+    const fontValue = document.getElementById("vizFontValue");
+    const relationInfoBox = document.getElementById("vizRelationInfo");
+    if (!svg || !groupBy || !showArrows || !fontMinus || !fontPlus || !fontReset || !fontValue || !relationInfoBox) return;
+
+    const BASE_FONT = 12;
+    let fontPx = BASE_FONT;
+
+    const tables = data.tables || {};
+    const families = (tables.families && tables.families.rows) || [];
+    const primitives = (tables.primitives && tables.primitives.rows) || [];
+    const primitiveTypes = (tables.primitive_types && tables.primitive_types.rows) || [];
+    const familyConstructions = (tables.family_constructions && tables.family_constructions.rows) || [];
+    const constructions = (tables.constructions && tables.constructions.rows) || [];
+    const familyTargets = (tables.family_targets && tables.family_targets.rows) || [];
+    const influences = (tables.family_influences && tables.family_influences.rows) || [];
+
+    const typeNameById = new Map(primitiveTypes.map((row) => [String(row.id), String(row.name)]));
+    const constructionNameById = new Map(constructions.map((row) => [String(row.id), String(row.name)]));
+
+    const familyToTypes = new Map();
+    primitives.forEach((row) => {
+      const familyId = String(row.family_id || "");
+      if (!familyId) return;
+      if (!familyToTypes.has(familyId)) familyToTypes.set(familyId, new Set());
+      const typeId = String(row.primitive_type || "");
+      const typeName = typeNameById.get(typeId) || typeId;
+      if (typeName) familyToTypes.get(familyId).add(typeName);
+    });
+
+    const familyToConstructions = new Map();
+    familyConstructions.forEach((row) => {
+      const familyId = String(row.family_id || "");
+      if (!familyId) return;
+      if (!familyToConstructions.has(familyId)) familyToConstructions.set(familyId, new Set());
+      const cid = String(row.construction_id || "");
+      const cname = constructionNameById.get(cid) || cid;
+      if (cname) familyToConstructions.get(familyId).add(cname);
+    });
+
+    const familyToTargets = new Map();
+    familyTargets.forEach((row) => {
+      const familyId = String(row.family_id || "");
+      if (!familyId) return;
+      if (!familyToTargets.has(familyId)) familyToTargets.set(familyId, new Set());
+      const target = String(row.target || "").trim();
+      if (target) familyToTargets.get(familyId).add(target);
+    });
+
+    function groupsForFamily(familyId, mode) {
+      if (mode === "primitive") {
+        const values = Array.from(familyToTypes.get(familyId) || []);
+        return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["Unknown type"];
+      }
+      if (mode === "construction") {
+        const values = Array.from(familyToConstructions.get(familyId) || []);
+        return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["Unspecified construction"];
+      }
+      const values = Array.from(familyToTargets.get(familyId) || []);
+      return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["Unspecified target"];
+    }
+
+    function relationInfo(edge) {
+      const relations = parseJsonArray(edge.relations_json);
+      const fallback = String(edge.relation || "").trim();
+      const effective = relations.length ? relations : (fallback ? [fallback] : []);
+      const label = effective.map((item) => String(item).replace(/_/g, " ")).join(", ");
+      return { count: Math.max(1, effective.length || 1), label: label || "related" };
+    }
+
+    function clearSvg() {
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+    }
+
+    function render() {
+      clearSvg();
+      relationInfoBox.textContent = "Hover a relation arrow to see relation details.";
+      const mode = groupBy.value;
+      const points = [];
+
+      families.forEach((family) => {
+        const year = Number(family.year);
+        if (!Number.isFinite(year)) return;
+        const familyId = String(family.id || "");
+        if (!familyId) return;
+        const groups = groupsForFamily(familyId, mode);
+        groups.forEach((group) => {
+          points.push({
+            familyId,
+            name: String(family.name || familyId),
+            year,
+            group,
+          });
+        });
+      });
+
+      if (!points.length) {
+        const msg = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        msg.setAttribute("x", "24");
+        msg.setAttribute("y", "40");
+        msg.setAttribute("class", "viz-label");
+        msg.textContent = "No family data available for visualization.";
+        svg.appendChild(msg);
+        return;
+      }
+
+      const groupLabels = Array.from(new Set(points.map((p) => p.group))).sort((a, b) => a.localeCompare(b));
+      const groupBase = new Map(groupLabels.map((label, idx) => [label, idx]));
+      points.sort((a, b) => a.group.localeCompare(b.group) || a.year - b.year || a.name.localeCompare(b.name));
+
+      const counters = new Map();
+      points.forEach((point) => {
+        const key = `${point.group}|${point.year}`;
+        const stack = counters.get(key) || 0;
+        point.yUnit = (groupBase.get(point.group) || 0) + stack * 0.46;
+        counters.set(key, stack + 1);
+      });
+
+      const minYear = Math.min(...points.map((p) => p.year));
+      const maxYear = Math.max(...points.map((p) => p.year));
+      const span = Math.max(1, maxYear - minYear);
+      const laneStep = Math.max(64, fontPx * 4.9);
+      const top = 26;
+      const bottom = 54;
+      const left = 220;
+      const right = 32;
+      const plotWidth = Math.max(980, (span + 1) * (42 + fontPx * 1.1));
+      const maxYUnit = Math.max(...points.map((p) => p.yUnit || 0));
+      const plotHeight = Math.max(320, (maxYUnit + 1) * laneStep + 10);
+      const width = left + plotWidth + right;
+      const height = top + plotHeight + bottom;
+
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.setAttribute("width", String(width));
+      svg.setAttribute("height", String(height));
+
+      function xFor(year) {
+        if (minYear === maxYear) return left + plotWidth / 2;
+        return left + ((year - minYear) / (maxYear - minYear)) * plotWidth;
+      }
+
+      function yFor(yUnit) {
+        return top + yUnit * laneStep;
+      }
+
+      const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+      const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+      marker.setAttribute("id", "vizArrowHead");
+      marker.setAttribute("markerWidth", "10");
+      marker.setAttribute("markerHeight", "7");
+      marker.setAttribute("markerUnits", "userSpaceOnUse");
+      marker.setAttribute("refX", "9");
+      marker.setAttribute("refY", "3.5");
+      marker.setAttribute("orient", "auto");
+      const markerPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      markerPath.setAttribute("d", "M0,0 L10,3.5 L0,7 z");
+      markerPath.setAttribute("fill", "rgba(76, 91, 95, 0.75)");
+      marker.appendChild(markerPath);
+      defs.appendChild(marker);
+      svg.appendChild(defs);
+
+      const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      yAxis.setAttribute("x1", String(left));
+      yAxis.setAttribute("x2", String(left));
+      yAxis.setAttribute("y1", String(top));
+      yAxis.setAttribute("y2", String(top + plotHeight));
+      yAxis.setAttribute("class", "viz-axis");
+      svg.appendChild(yAxis);
+
+      const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      xAxis.setAttribute("x1", String(left));
+      xAxis.setAttribute("x2", String(left + plotWidth));
+      xAxis.setAttribute("y1", String(top + plotHeight));
+      xAxis.setAttribute("y2", String(top + plotHeight));
+      xAxis.setAttribute("class", "viz-axis");
+      svg.appendChild(xAxis);
+
+      groupLabels.forEach((label) => {
+        const base = groupBase.get(label) || 0;
+        const y = yFor(base);
+        const guide = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        guide.setAttribute("x1", String(left));
+        guide.setAttribute("x2", String(left + plotWidth));
+        guide.setAttribute("y1", String(y));
+        guide.setAttribute("y2", String(y));
+        guide.setAttribute("class", "viz-grid");
+        svg.appendChild(guide);
+
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", String(left - 8));
+        text.setAttribute("y", String(y + 4));
+        text.setAttribute("text-anchor", "end");
+        text.setAttribute("class", "viz-label");
+        text.setAttribute("style", `font-size:${fontPx}px`);
+        text.textContent = label;
+        svg.appendChild(text);
+      });
+
+      const tickStep = span > 40 ? 5 : span > 20 ? 2 : 1;
+      for (let year = minYear; year <= maxYear; year += tickStep) {
+        const x = xFor(year);
+        const grid = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        grid.setAttribute("x1", String(x));
+        grid.setAttribute("x2", String(x));
+        grid.setAttribute("y1", String(top));
+        grid.setAttribute("y2", String(top + plotHeight));
+        grid.setAttribute("class", "viz-grid");
+        svg.appendChild(grid);
+
+        const tick = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        tick.setAttribute("x", String(x));
+        tick.setAttribute("y", String(top + plotHeight + 18));
+        tick.setAttribute("text-anchor", "middle");
+        tick.setAttribute("class", "viz-label");
+        tick.setAttribute("style", `font-size:${Math.max(10, fontPx - 1)}px`);
+        tick.textContent = String(year);
+        svg.appendChild(tick);
+      }
+
+      const pointPositions = points.map((point) => ({
+        ...point,
+        x: xFor(point.year),
+        y: yFor(point.yUnit || 0),
+      }));
+
+      const anchorByFamily = new Map();
+      pointPositions.forEach((point) => {
+        if (!anchorByFamily.has(point.familyId)) {
+          anchorByFamily.set(point.familyId, { sx: 0, sy: 0, count: 0 });
+        }
+        const anchor = anchorByFamily.get(point.familyId);
+        anchor.sx += point.x;
+        anchor.sy += point.y;
+        anchor.count += 1;
+      });
+
+      const hoverLines = [];
+      if (showArrows.checked) {
+        influences.forEach((edge) => {
+          const sourceId = String(edge.source_family_id || "");
+          const targetId = String(edge.target_family_id || "");
+          const source = anchorByFamily.get(sourceId);
+          const target = anchorByFamily.get(targetId);
+          if (!source || !target) return;
+
+          const sx = source.sx / source.count;
+          const sy = source.sy / source.count;
+          const tx = target.sx / target.count;
+          const ty = target.sy / target.count;
+
+          const rel = relationInfo(edge);
+          const width = 1.4 + (rel.count - 1) * 1.3;
+          const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          line.setAttribute("x1", String(sx));
+          line.setAttribute("y1", String(sy));
+          line.setAttribute("x2", String(tx));
+          line.setAttribute("y2", String(ty));
+          line.setAttribute("stroke-width", String(width));
+          line.setAttribute("marker-end", "url(#vizArrowHead)");
+          line.setAttribute("class", "viz-edge");
+          line.setAttribute("pointer-events", "none");
+
+          const hoverLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          hoverLine.setAttribute("x1", String(sx));
+          hoverLine.setAttribute("y1", String(sy));
+          hoverLine.setAttribute("x2", String(tx));
+          hoverLine.setAttribute("y2", String(ty));
+          hoverLine.setAttribute("stroke", "rgba(0,0,0,0.001)");
+          hoverLine.setAttribute("stroke-width", String(Math.max(12, width + 10)));
+          hoverLine.setAttribute("pointer-events", "all");
+
+          const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+          const hoverText = `${edge.source_family_id} -> ${edge.target_family_id} | Relations: ${rel.label} | ${normalizeValue(edge.note)}`;
+          title.textContent = hoverText;
+          hoverLine.appendChild(title);
+          hoverLine.addEventListener("mouseenter", () => {
+            relationInfoBox.textContent = hoverText;
+          });
+          hoverLine.addEventListener("mouseleave", () => {
+            relationInfoBox.textContent = "Hover a relation arrow to see relation details.";
+          });
+          svg.appendChild(line);
+          hoverLines.push(hoverLine);
+        });
+      }
+
+      pointPositions.forEach((point) => {
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", String(point.x));
+        circle.setAttribute("cy", String(point.y));
+        circle.setAttribute("r", "5.5");
+        circle.setAttribute("class", "viz-point");
+        const pointTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
+        pointTitle.textContent = `${point.name} (${point.year})\nGroup: ${point.group}`;
+        circle.appendChild(pointTitle);
+        svg.appendChild(circle);
+
+        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", String(point.x + 8));
+        label.setAttribute("y", String(point.y + 4));
+        label.setAttribute("text-anchor", "start");
+        label.setAttribute("class", "viz-text");
+        label.setAttribute("style", `font-size:${fontPx}px`);
+        label.textContent = point.name;
+        svg.appendChild(label);
+      });
+
+      hoverLines.forEach((hoverLine) => svg.appendChild(hoverLine));
+
+      fontValue.textContent = `${fontPx}px`;
+    }
+
+    groupBy.addEventListener("change", render);
+    showArrows.addEventListener("change", render);
+    fontMinus.addEventListener("click", () => {
+      fontPx = Math.max(8, fontPx - 1);
+      render();
+    });
+    fontPlus.addEventListener("click", () => {
+      fontPx = Math.min(18, fontPx + 1);
+      render();
+    });
+    fontReset.addEventListener("click", () => {
+      fontPx = BASE_FONT;
+      render();
+    });
+    render();
+  }
+
   renderSummary();
   setupNavigator();
   setupAllTablesBrowser();
   setupBuilder();
+  setupFamilyVisualization();
 })();
 """
 
