@@ -362,7 +362,7 @@ def load_timeline_data() -> tuple[pd.DataFrame, pd.DataFrame]:
 st.sidebar.title("Symmetric Primitives DB")
 page = st.sidebar.radio(
     "View",
-    ["Timeline", "Influence Graph", "Size Analysis",
+    ["Visualizations", "Timeline", "Influence Graph", "Size Analysis",
     "Primitives Browser", "Families", "Rounds", "References"],
 )
 
@@ -423,9 +423,163 @@ if selected_rounds:
 else:
     timeline_df = timeline_df.iloc[0:0]
 
+
+def _group_values_for_family(row: pd.Series, mode: str) -> list[str]:
+    if mode == "Primitive type":
+        value = str(row.get("primitive_type", "")).strip()
+        return [value] if value else ["Unknown"]
+    if mode == "Construction type":
+        values = sorted(split_grouped_values(row.get("constructions")))
+        return values if values else ["Unspecified construction"]
+    values = sorted(split_grouped_values(row.get("targets")))
+    return values if values else ["Unspecified target"]
+
+
+def _build_grouped_family_plot_frame(family_frame: pd.DataFrame, mode: str) -> pd.DataFrame:
+    rows: list[dict[str, object]] = []
+    for _, row in family_frame.iterrows():
+        for group_value in _group_values_for_family(row, mode):
+            rows.append(
+                {
+                    "family_id": row["id"],
+                    "name": row["name"],
+                    "year": int(row["year"]),
+                    "group": group_value,
+                    "primitive_type": row.get("primitive_type", ""),
+                    "constructions": row.get("constructions", ""),
+                    "targets": row.get("targets", ""),
+                    "instances": row.get("instances", ""),
+                    "notes": row.get("notes", ""),
+                }
+            )
+
+    plot_df = pd.DataFrame(rows)
+    if plot_df.empty:
+        return plot_df
+
+    group_order = sorted(plot_df["group"].dropna().astype(str).unique())
+    base_map = {label: idx for idx, label in enumerate(group_order)}
+    plot_df["group_base"] = plot_df["group"].map(base_map).astype(float)
+    plot_df["stack_index"] = plot_df.groupby(["group", "year"]).cumcount().astype(float)
+    plot_df["y"] = plot_df["group_base"] + plot_df["stack_index"] * 0.18
+    return plot_df
+
 # ── Pages ─────────────────────────────────────────────────────────────────────
 
-if page == "Timeline":
+if page == "Visualizations":
+    st.header("Database Visualizations")
+    st.caption(
+        "Families are placed by publication year. Choose how to group the y-axis and optionally overlay influence arrows."
+    )
+
+    grouping_mode = st.selectbox(
+        "Group families on Y-axis by",
+        ["Primitive type", "Construction type", "Target application"],
+        index=0,
+    )
+    show_relation_arrows = st.checkbox("Show relation arrows", value=False)
+
+    vis_base = timeline_df.dropna(subset=["year"]).copy()
+    vis_df = _build_grouped_family_plot_frame(vis_base, grouping_mode)
+
+    if vis_df.empty:
+        st.info("No families match the current filters.")
+    else:
+        fig = go.Figure()
+
+        fig.add_trace(
+            go.Scatter(
+                x=vis_df["year"],
+                y=vis_df["y"],
+                mode="markers+text",
+                text=vis_df["name"],
+                textposition="top center",
+                marker={"size": 11, "color": "#1f77b4", "line": {"color": "#ffffff", "width": 1}},
+                customdata=vis_df[["group", "primitive_type", "constructions", "targets", "instances"]],
+                hovertemplate=(
+                    "<b>%{text}</b><br>"
+                    "Year: %{x}<br>"
+                    "Group: %{customdata[0]}<br>"
+                    "Type: %{customdata[1]}<br>"
+                    "Constructions: %{customdata[2]}<br>"
+                    "Targets: %{customdata[3]}<br>"
+                    "Instances: %{customdata[4]}<extra></extra>"
+                ),
+                showlegend=False,
+                cliponaxis=False,
+            )
+        )
+
+        if show_relation_arrows and not influences.empty:
+            position_df = vis_df.groupby("family_id", as_index=False).agg(
+                x=("year", "first"),
+                y=("y", "mean"),
+                name=("name", "first"),
+            )
+            pos_map = {
+                row["family_id"]: (float(row["x"]), float(row["y"]))
+                for _, row in position_df.iterrows()
+            }
+
+            for _, edge in influences.iterrows():
+                source_id = edge["source_family_id"]
+                target_id = edge["target_family_id"]
+                if source_id not in pos_map or target_id not in pos_map:
+                    continue
+
+                relations = parse_json_list(edge.get("relations_json")) or [str(edge["relation"])]
+                relation_text = ", ".join(relations).replace("_", " ")
+                rel_count = max(1, len(relations))
+                width = 1.5 + (rel_count - 1) * 1.25
+                sx, sy = pos_map[source_id]
+                tx, ty = pos_map[target_id]
+                hover_text = (
+                    f"{edge['source_name']} -> {edge['target_name']}"
+                    f"<br>Relations: {relation_text}"
+                    f"<br>{edge['note']}"
+                )
+
+                fig.add_trace(
+                    go.Scatter(
+                        x=[sx, tx],
+                        y=[sy, ty],
+                        mode="lines",
+                        line={"color": "rgba(90, 90, 90, 0.65)", "width": width},
+                        hovertemplate="%{text}<extra></extra>",
+                        text=[hover_text, hover_text],
+                        showlegend=False,
+                    )
+                )
+                fig.add_annotation(
+                    x=tx,
+                    y=ty,
+                    ax=sx,
+                    ay=sy,
+                    xref="x",
+                    yref="y",
+                    axref="x",
+                    ayref="y",
+                    showarrow=True,
+                    arrowhead=3,
+                    arrowsize=1,
+                    arrowwidth=width,
+                    arrowcolor="rgba(90, 90, 90, 0.65)",
+                    text="",
+                )
+
+        group_labels = sorted(vis_df["group"].dropna().astype(str).unique())
+        tickvals = [float(i) for i in range(len(group_labels))]
+        fig.update_xaxes(tickmode="linear", dtick=1, title_text="Publication year")
+        fig.update_yaxes(
+            tickmode="array",
+            tickvals=tickvals,
+            ticktext=group_labels,
+            title_text=grouping_mode,
+        )
+        fig.update_layout(height=640, margin=dict(l=0, r=0, t=20, b=0))
+        st.plotly_chart(fig, width="stretch")
+
+elif page == "Timeline":
     st.header("Primitive Family Timeline")
     st.caption(
         "Each point is one **family**. Labels are shown next to points, and "
