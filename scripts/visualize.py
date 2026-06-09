@@ -72,8 +72,10 @@ def chart_influence_graph(edges: list[dict]) -> None:
 
     G = nx.DiGraph()
     for e in edges:
+        relations = e.get("relations_json") or ""
+        relation_label = e.get("relation") or relations
         G.add_edge(e["source_family_id"], e["target_family_id"],
-                   label=e["relation"])
+                   label=relation_label)
 
     if not G.nodes:
         print("No influence edges found; skipping graph.")

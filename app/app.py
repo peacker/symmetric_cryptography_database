@@ -87,6 +87,20 @@ def split_grouped_values(value: object) -> set[str]:
     return {v.strip() for v in text.split(",") if v.strip()}
 
 
+def parse_json_list(value: object) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, float) and pd.isna(value):
+        return []
+    try:
+        parsed = json.loads(str(value))
+    except (json.JSONDecodeError, TypeError):
+        return []
+    if isinstance(parsed, list):
+        return [str(item) for item in parsed if str(item).strip()]
+    return []
+
+
 def format_size_value(label: str, value: object) -> str | None:
     if isinstance(value, int) and value > 0:
         return f"{label}[{value}]"
@@ -201,9 +215,9 @@ def load_influences() -> pd.DataFrame:
     conn = get_connection()
     return pd.read_sql_query(
         """
-        SELECT fi.source_family_id, sf.name AS source_name,
-               fi.target_family_id, tf.name AS target_name,
-               fi.relation, fi.note,
+         SELECT fi.source_family_id, sf.name AS source_name,
+             fi.target_family_id, tf.name AS target_name,
+             fi.relation, fi.relations_json, fi.innovative_idea_ids_json, fi.note,
              CASE WHEN COUNT(DISTINCT sp.primitive_type) = 1
                   THEN MAX(pts.name)
                   ELSE 'Mixed'
@@ -215,7 +229,7 @@ def load_influences() -> pd.DataFrame:
         JOIN families tf ON tf.id = fi.target_family_id
          LEFT JOIN primitives sp ON sp.family_id = sf.id
          LEFT JOIN primitive_types pts ON pts.id = sp.primitive_type
-         GROUP BY fi.source_family_id, fi.target_family_id, fi.relation, fi.note, sf.name, tf.name, sf.year, tf.year
+         GROUP BY fi.source_family_id, fi.target_family_id, fi.relation, fi.relations_json, fi.innovative_idea_ids_json, fi.note, sf.name, tf.name, sf.year, tf.year
         ORDER BY fi.source_family_id
         """,
         conn,
@@ -609,6 +623,21 @@ elif page == "Influence Graph":
             import streamlit.components.v1 as components
 
             RELATION_COLOURS = {
+                "selection_of_possible_configurations": "#ffa15a",
+                "same_sbox": "#ef553b",
+                "same_sbox_size": "#ab63fa",
+                "same_key_schedule": "#636efa",
+                "same_state_layout": "#19d3f3",
+                "same_bit_based_permutation_layer": "#00cc96",
+                "similar_bit_based_permutation_layer": "#00cc96",
+                "same_mix_column": "#636efa",
+                "similar_mix_column": "#636efa",
+                "same_shift_row": "#00cc96",
+                "similar_shift_row": "#00cc96",
+                "same_round_function": "#e45756",
+                "same_round_constants": "#2a9d8f",
+                "improved_diffusion": "#f58518",
+                "inherits_alpha_reflexivity_structure": "#8c564b",
                 "special_case_of":   "#ef553b",
                 "improvement_of":    "#636efa",
                 "inspired_by":       "#00cc96",
@@ -662,13 +691,19 @@ elif page == "Influence Graph":
                              title=title, color=node_colour)
 
             for _, edge in influences.iterrows():
-                colour = RELATION_COLOURS.get(edge["relation"], "#888")
+                relations = parse_json_list(edge.get("relations_json")) or [str(edge["relation"])]
+                relation_label = ", ".join(relations).replace("_", " ")
+                idea_ids = parse_json_list(edge.get("innovative_idea_ids_json"))
+                edge_note = str(edge["note"])
+                if idea_ids:
+                    edge_note = f"{edge_note}<br>Innovative ideas: {', '.join(idea_ids)}"
+                colour = RELATION_COLOURS.get(relations[0], RELATION_COLOURS.get(edge["relation"], "#888"))
                 net.add_edge(
                     edge["source_family_id"],
                     edge["target_family_id"],
-                    label=edge["relation"].replace("_", " "),
+                    label=relation_label,
                     color=colour,
-                    title=edge["note"],
+                    title=edge_note,
                 )
 
             html_path = ROOT / "build" / "influence_graph.html"
@@ -685,8 +720,16 @@ elif page == "Influence Graph":
                 )
 
             with st.expander("Edge table"):
+                display_influences = influences.copy()
+                display_influences["relations"] = display_influences.apply(
+                    lambda row: ", ".join(parse_json_list(row.get("relations_json")) or [str(row["relation"])]).replace("_", " "),
+                    axis=1,
+                )
+                display_influences["innovative_idea_ids"] = display_influences["innovative_idea_ids_json"].apply(
+                    lambda value: ", ".join(parse_json_list(value)) if value else ""
+                )
                 st.dataframe(
-                    influences[["source_name", "target_name", "relation", "note"]],
+                    display_influences[["source_name", "target_name", "relations", "innovative_idea_ids", "note"]],
                     width="stretch",
                 )
 

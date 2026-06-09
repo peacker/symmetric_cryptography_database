@@ -86,7 +86,8 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             name TEXT NOT NULL,
             year INTEGER,
             notes TEXT,
-            characteristics_json TEXT NOT NULL
+            characteristics_json TEXT NOT NULL,
+            innovative_ideas_json TEXT NOT NULL
         );
 
         CREATE TABLE IF NOT EXISTS family_targets (
@@ -150,8 +151,10 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             source_family_id TEXT NOT NULL,
             target_family_id TEXT NOT NULL,
             relation TEXT NOT NULL,
+            relations_json TEXT NOT NULL,
+            innovative_idea_ids_json TEXT,
             note TEXT NOT NULL,
-            PRIMARY KEY (source_family_id, target_family_id, relation),
+            PRIMARY KEY (source_family_id, target_family_id),
             FOREIGN KEY (source_family_id) REFERENCES families(id) ON DELETE CASCADE,
             FOREIGN KEY (target_family_id) REFERENCES families(id) ON DELETE CASCADE
         );
@@ -309,6 +312,7 @@ def main() -> None:
 
         for family in families_doc.get("families", []):
             c = family["characteristics"]
+            innovative_ideas = family.get("innovative_ideas", [])
             ref_ids = family.get("reference_ids", [])
             family_year_candidates = [
                 references_by_id[ref_id].get("year")
@@ -318,10 +322,11 @@ def main() -> None:
             family_year = min(family_year_candidates) if family_year_candidates else None
 
             conn.execute(
-                "INSERT INTO families (id, name, year, notes, characteristics_json)"
-                " VALUES (?, ?, ?, ?, ?)",
-                (family["id"], family["name"], family_year,
-                 family.get("notes"), json.dumps(c, ensure_ascii=True)),
+                "INSERT INTO families (id, name, year, notes, characteristics_json, innovative_ideas_json)"
+                 " VALUES (?, ?, ?, ?, ?, ?)",
+                 (family["id"], family["name"], family_year,
+                  family.get("notes"), json.dumps(c, ensure_ascii=True),
+                  json.dumps(innovative_ideas, ensure_ascii=True)),
             )
             for target in family.get("target_applications", []):
                 conn.execute(
@@ -366,12 +371,18 @@ def main() -> None:
                     "INSERT INTO family_processes (family_id, process_id) VALUES (?, ?)",
                     (family["id"], process_id))
             for edge in family.get("influences", []):
+                relations = edge.get("relations") or ([edge["relation"]] if edge.get("relation") else [])
+                innovative_idea_ids = edge.get("innovative_idea_ids", [])
+                primary_relation = relations[0] if relations else "related_to"
                 conn.execute(
                     "INSERT INTO family_influences"
-                    " (source_family_id, target_family_id, relation, note)"
-                    " VALUES (?, ?, ?, ?)",
+                    " (source_family_id, target_family_id, relation, relations_json, innovative_idea_ids_json, note)"
+                    " VALUES (?, ?, ?, ?, ?, ?)",
                     (edge["source_family_id"], family["id"],
-                     edge["relation"], edge["note"]))
+                     primary_relation,
+                     json.dumps(relations, ensure_ascii=True),
+                     json.dumps(innovative_idea_ids, ensure_ascii=True) if innovative_idea_ids else None,
+                     edge["note"]))
 
         for primitive in primitives_doc.get("primitives", []):
             c = primitive["characteristics"]

@@ -52,7 +52,7 @@ def main() -> None:
                    sf.name AS source_name,
                    fi.target_family_id,
                    tf.name AS target_name,
-                   fi.relation, fi.note
+                 fi.relation, fi.relations_json, fi.innovative_idea_ids_json, fi.note
             FROM family_influences fi
             JOIN families sf ON sf.id = fi.source_family_id
             JOIN families tf ON tf.id = fi.target_family_id

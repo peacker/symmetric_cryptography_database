@@ -24,7 +24,7 @@
             "type": "object",
             "required": [
                 "source_family_id",
-                "relation",
+                "relations",
                 "note"
             ],
             "properties": {
@@ -32,16 +32,43 @@
                     "type": "string",
                     "minLength": 1
                 },
-                "relation": {
-                    "type": "string",
-                    "enum": [
-                        "special_case_of",
-                        "improvement_of",
-                        "inspired_by",
-                        "variant_of",
-                        "generalization_of",
-                        "related_to"
-                    ]
+                "relations": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "selection_of_possible_configurations",
+                            "same_sbox",
+                            "same_sbox_size",
+                            "same_key_schedule",
+                            "same_state_layout",
+                            "same_bit_based_permutation_layer",
+                            "similar_bit_based_permutation_layer",
+                            "same_mix_column",
+                            "similar_mix_column",
+                            "same_shift_row",
+                            "similar_shift_row",
+                            "same_round_function",
+                            "same_round_constants",
+                            "improved_diffusion",
+                            "inherits_alpha_reflexivity_structure",
+                            "inspired_by",
+                            "improvement_of",
+                            "variant_of",
+                            "generalization_of",
+                            "related_to"
+                        ]
+                    }
+                },
+                "innovative_idea_ids": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
                 },
                 "note": {
                     "type": "string",
@@ -69,6 +96,27 @@
         "construction_id": {
             "type": "string",
             "minLength": 1
+        },
+        "innovative_idea": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "note": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
         },
         "round_id": {
             "type": "string",
@@ -141,6 +189,12 @@
                 },
                 "characteristics": {
                     "$ref": "#/$defs/characteristics"
+                },
+                "innovative_ideas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/innovative_idea"
+                    }
                 },
                 "reference_ids": {
                     "type": "array",

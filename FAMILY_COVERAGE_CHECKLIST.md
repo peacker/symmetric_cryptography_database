@@ -27,16 +27,16 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] CIPHERUNICORN-A
 - [x] CLEFIA
 - [x] CRYPTON
-- [ ] Deoxys
-- [ ] DESX
-- [x] DES
 - [x] DEAL
+- [ ] Deoxys
+- [x] DES
+- [ ] DESX
 - [x] DFC
 - [x] E2
 - [ ] FEAL
 - [x] FROG
-- [ ] GOST 28147-89 (Magma)
 - [x] GIFT
+- [ ] GOST 28147-89 (Magma)
 - [ ] HIGHT
 - [x] HPC
 - [x] IDEA
@@ -44,13 +44,13 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] ISAAC
 - [x] KASUMI
 - [x] KATAN
-- [x] KTANTAN
 - [ ] Khazad
 - [ ] KLEIN
+- [x] KTANTAN
 - [ ] Kuznyechik
 - [ ] LEA
-- [x] LED
 - [ ] LEA-128
+- [x] LED
 - [ ] LEVIATHAN
 - [ ] LOKI
 - [x] LOKI97
@@ -64,12 +64,12 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] MMB
 - [x] MSX
 - [ ] MULTI2
-- [ ] NOEKEON
 - [ ] Nimbus
+- [ ] NOEKEON
 - [ ] PEA
 - [ ] PICARO
-- [ ] PRIDE
 - [x] PRESENT
+- [ ] PRIDE
 - [x] PRINCE
 - [ ] PRINCEv2
 - [ ] Q
@@ -79,12 +79,12 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] RC5
 - [x] RC6
 - [x] Rijndael
-- [ ] Robin
+- [ ] Fantomas / Robin
 - [ ] SAFER
 - [x] SAFER+
 - [x] SALSA
-- [x] SCARF
 - [ ] SC2000
+- [x] SCARF
 - [x] SEED
 - [x] Serpent
 - [ ] SHACAL
@@ -95,19 +95,19 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] SM4
 - [ ] SNOW 2.0
 - [ ] SNOW 3G
-- [ ] SPECKEY
 - [x] SPECK
+- [ ] SPECKEY
 - [ ] SPEEDY
 - [ ] SQUARE
-- [ ] TEA extensions (XXTEA/Corrected Block TEA)
 - [x] TEA
+- [ ] XXTEA / Corrected Block TEA
+- [ ] Three-key Triple DES
 - [ ] Threefish
 - [ ] TREYFER
 - [x] TWINE
-- [x] Twofish
 - [ ] Two-key Triple DES
-- [ ] Three-key Triple DES
-- [ ] UEA2/ZUC
+- [x] Twofish
+- [ ] UEA2 / ZUC
 - [x] uLBC
 - [ ] WAKE
 - [ ] XChaCha

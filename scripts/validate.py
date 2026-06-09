@@ -100,6 +100,7 @@ def main() -> None:
     construction_ids = {c["id"] for c in constructions_doc.get("constructions", [])}
     round_ids       = {r["id"] for r in rounds_doc.get("rounds", [])}
     primitive_type_ids = {t["id"] for t in primitive_types_doc.get("primitive_types", [])}
+    family_innovation_ids: dict[str, set[str]] = {}
 
     # Validate special_case_of self-references in components
     errors_found = False
@@ -129,6 +130,14 @@ def main() -> None:
     # Validate families
     for family in families_doc.get("families", []):
         fid = family["id"]
+        idea_ids: set[str] = set()
+        for idea in family.get("innovative_ideas", []):
+            idea_id = idea["id"]
+            if idea_id in idea_ids:
+                print(f"REFERENCE ERROR: family '{fid}' has duplicate innovative idea id '{idea_id}'")
+                errors_found = True
+            idea_ids.add(idea_id)
+        family_innovation_ids[fid] = idea_ids
         for construction_id in family.get("construction_ids", []):
             if construction_id not in construction_ids:
                 print(
@@ -154,6 +163,41 @@ def main() -> None:
             if src not in family_ids:
                 print(f"REFERENCE ERROR: family '{fid}' has unknown influence source family '{src}'")
                 errors_found = True
+            relations = edge.get("relations") or ([edge["relation"]] if edge.get("relation") else [])
+            if not relations:
+                print(f"REFERENCE ERROR: family '{fid}' has influence from '{src}' without any relations")
+                errors_found = True
+            for rel in relations:
+                if rel not in {
+                    "selection_of_possible_configurations",
+                    "same_sbox",
+                    "same_sbox_size",
+                    "same_key_schedule",
+                    "same_state_layout",
+                    "same_bit_based_permutation_layer",
+                    "similar_bit_based_permutation_layer",
+                    "same_mix_column",
+                    "similar_mix_column",
+                    "same_shift_row",
+                    "similar_shift_row",
+                    "same_round_function",
+                    "same_round_constants",
+                    "improved_diffusion",
+                    "inherits_alpha_reflexivity_structure",
+                    "inspired_by",
+                    "improvement_of",
+                    "variant_of",
+                    "generalization_of",
+                    "related_to",
+                }:
+                    print(f"REFERENCE ERROR: family '{fid}' has unknown influence relation '{rel}'")
+                    errors_found = True
+            for idea_id in edge.get("innovative_idea_ids", []):
+                if idea_id not in family_innovation_ids.get(src, set()):
+                    print(
+                        f"REFERENCE ERROR: family '{fid}' influence from '{src}' references unknown innovative idea '{idea_id}'"
+                    )
+                    errors_found = True
         for comp_ref in family.get("characteristics", {}).get("components", []):
             cid = comp_ref["id"]
             if cid not in component_ids:

@@ -24,6 +24,16 @@ families:
     process_ids:
       - aes_competition_nist_1997_2000
     influences: []
+    innovative_ideas:
+      - id: rijndael_8x8_sbox
+        name: 8x8 S-box
+        note: The byte-oriented S-box operating over GF(2^8) with affine inversion structure.
+      - id: rijndael_shift_rows
+        name: ShiftRows
+        note: The row-rotation diffusion step used in the state matrix.
+      - id: rijndael_mix_columns
+        name: MixColumns
+        note: The linear column-mixing layer that provides diffusion across bytes.
     notes: >
       Rijndael supports variable block sizes (128, 192, 256 bits) and
       independently chosen key sizes. The AES standard restricts block size
@@ -56,8 +66,26 @@ families:
       - aes_competition_nist_1997_2000
     influences:
       - source_family_id: rijndael
-        relation: special_case_of
+        relations:
+          - selection_of_possible_configurations
+          - same_sbox
+          - same_mix_column
+          - same_shift_row
+        innovative_idea_ids:
+          - rijndael_8x8_sbox
+          - rijndael_shift_rows
+          - rijndael_mix_columns
         note: AES fixes Rijndael's block size to 128 bits and standardises three key sizes.
+    innovative_ideas:
+      - id: rijndael_8x8_sbox
+        name: 8x8 S-box
+        note: The byte-oriented S-box operating over GF(2^8) with affine inversion structure.
+      - id: rijndael_shift_rows
+        name: ShiftRows
+        note: The row-rotation diffusion step used in the state matrix.
+      - id: rijndael_mix_columns
+        name: MixColumns
+        note: The linear column-mixing layer that provides diffusion across bytes.
 
   - id: salsa
     name: Salsa
@@ -80,6 +108,13 @@ families:
       - bernstein_2008_salsa20
     process_ids: []
     influences: []
+    innovative_ideas:
+      - id: salsa_arx_quarterround
+        name: ARX quarterround
+        note: The add-rotate-xor quarterround structure shared across Salsa family variants.
+      - id: salsa_column_diagonal_mixing
+        name: Column/diagonal mixing
+        note: The state reordering that alternates column and diagonal rounds for diffusion.
     notes: >
       ARX design. Salsa20 is the full-round variant; Salsa20/12 and
       Salsa20/8 are reduced-round speed-optimised variants.
@@ -106,7 +141,12 @@ families:
     process_ids: []
     influences:
       - source_family_id: salsa
-        relation: improvement_of
+        relations:
+          - improvement_of
+          - same_round_function
+        innovative_idea_ids:
+          - salsa_arx_quarterround
+          - salsa_column_diagonal_mixing
         note: >
           ChaCha reorganises the Salsa quarterround to achieve better diffusion
           per round, improving resistance to differential cryptanalysis.
@@ -133,6 +173,16 @@ families:
       - bogdanov_2007_present
     process_ids: []
     influences: []
+    innovative_ideas:
+      - id: present_4x4_sbox
+        name: 4x4 S-box
+        note: The compact nibble S-box that keeps the design hardware friendly.
+      - id: present_bit_permutation
+        name: Bit permutation layer
+        note: The fixed bit permutation that spreads nibble outputs across the state.
+      - id: present_round_constants
+        name: Round constants
+        note: The lightweight constant injection that prevents symmetry in the round structure.
 
   - id: gift
     name: GIFT
@@ -156,7 +206,14 @@ families:
     process_ids: []
     influences:
       - source_family_id: present
-        relation: inspired_by
+        relations:
+          - inspired_by
+          - same_sbox_size
+          - similar_bit_based_permutation_layer
+          - improved_diffusion
+        innovative_idea_ids:
+          - present_4x4_sbox
+          - present_bit_permutation
         note: >
           GIFT explicitly builds on PRESENT's SPN structure, improving
           hardware efficiency and key-schedule simplicity.
@@ -204,7 +261,8 @@ families:
     process_ids: []
     influences:
       - source_family_id: des
-        relation: inspired_by
+        relations:
+          - inspired_by
         note: Blowfish was proposed as a fast software-oriented DES replacement.
 
   - id: idea
@@ -250,6 +308,13 @@ families:
       - needham_wheeler_1994_tea
     process_ids: []
     influences: []
+    innovative_ideas:
+      - id: tea_arx_feistel
+        name: ARX Feistel round
+        note: The simple add-rotate-xor Feistel core that made TEA compact.
+      - id: tea_delta_constant_mixing
+        name: Delta constant mixing
+        note: The fixed delta constant used to vary the round sum.
 
   - id: xtea
     name: XTEA
@@ -273,7 +338,12 @@ families:
     process_ids: []
     influences:
       - source_family_id: tea
-        relation: improvement_of
+        relations:
+          - improvement_of
+          - same_round_function
+        innovative_idea_ids:
+          - tea_arx_feistel
+          - tea_delta_constant_mixing
         note: XTEA improves TEA's key schedule and resistance to related-key attacks.
 
   - id: twofish
@@ -349,7 +419,8 @@ families:
     process_ids: []
     influences:
       - source_family_id: des
-        relation: inspired_by
+        relations:
+          - inspired_by
         note: Camellia uses a strengthened Feistel design with modern diffusion layers.
 
   - id: simon
@@ -392,7 +463,8 @@ families:
     process_ids: []
     influences:
       - source_family_id: tea
-        relation: related_to
+        relations:
+          - related_to
         note: SPECK is an ARX-oriented lightweight design in the same broad family as TEA-like software ciphers.
 
   - id: prince
@@ -416,6 +488,13 @@ families:
       - borghoff_et_al_2012_prince
     process_ids: []
     influences: []
+    innovative_ideas:
+      - id: prince_alpha_reflexivity
+        name: Alpha-reflexivity
+        note: The reflection property used to mirror the encryption structure.
+      - id: prince_reflected_round_structure
+        name: Reflected round structure
+        note: The forward/backward round symmetry that enables low-latency decryption.
 
   - id: led
     name: LED
@@ -442,7 +521,11 @@ families:
     process_ids: []
     influences:
       - source_family_id: present
-        relation: inspired_by
+        relations:
+          - inspired_by
+          - same_sbox_size
+          - similar_mix_column
+          - similar_shift_row
         note: LED follows a compact nibble-oriented SPN style suited for lightweight hardware.
 
   - id: katan
@@ -485,7 +568,8 @@ families:
     process_ids: []
     influences:
       - source_family_id: katan
-        relation: variant_of
+        relations:
+          - variant_of
         note: KTANTAN is the fixed-key hardware-specialized sibling in the KATAN family.
 
   - id: cast128
@@ -539,7 +623,8 @@ families:
       - aes_competition_nist_1997_2000
     influences:
       - source_family_id: cast128
-        relation: generalization_of
+        relations:
+          - generalization_of
         note: CAST-256 extends CAST design ideas to 128-bit blocks and larger keying.
 
   - id: rc5
@@ -607,6 +692,10 @@ families:
       - lee_et_al_2010_aria
     process_ids: []
     influences: []
+    innovative_ideas:
+      - id: aria_bytewise_sbox
+        name: Bytewise S-box
+        note: The 8x8 substitution layer reused by later AES-like lightweight SPNs.
 
   - id: rc4
     name: RC4
@@ -655,7 +744,10 @@ families:
       - aes_competition_nist_1997_2000
     influences:
       - source_family_id: rc5
-        relation: improvement_of
+        relations:
+          - improvement_of
+          - same_round_function
+          - improved_diffusion
         note: RC6 extends RC5 with four registers and multiplication for faster diffusion.
 
   - id: sm4
@@ -798,7 +890,8 @@ families:
       - aes_competition_nist_1997_2000
     influences:
       - source_family_id: des
-        relation: inspired_by
+        relations:
+          - inspired_by
         note: DEAL uses DES as the round function in a Feistel network.
 
   - id: dfc
@@ -932,7 +1025,8 @@ families:
       - aes_competition_nist_1997_2000
     influences:
       - source_family_id: des
-        relation: inspired_by
+        relations:
+          - inspired_by
         note: LOKI97 continues the LOKI series of Feistel designs from Australia.
 
   - id: magenta
@@ -1087,7 +1181,12 @@ families:
     process_ids: []
     influences:
       - source_family_id: prince
-        relation: inspired_by
+        relations:
+          - inspired_by
+          - inherits_alpha_reflexivity_structure
+        innovative_idea_ids:
+          - prince_alpha_reflexivity
+          - prince_reflected_round_structure
         note: QARMA extends reflection-cipher ideas from PRINCE by adding tweak input.
 
   - id: qarmav2
@@ -1112,7 +1211,8 @@ families:
     process_ids: []
     influences:
       - source_family_id: qarma
-        relation: variant_of
+        relations:
+          - variant_of
         note: QARMAv2 redesigns QARMA with revised bounds and wider tweak support.
     notes: >
       QARMAv2 includes 64-bit and 128-bit block variants; the design supports two-block tweaks
