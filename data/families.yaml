@@ -1788,3 +1788,135 @@ families:
     process_ids:
       - lightweight_crypto_nist_2018_2023
     influences: []
+
+  - id: knot
+    name: KNOT
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - knot_permutation_round
+    target_applications:
+      - iot
+      - constrained_hardware
+      - software
+    characteristics:
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - knot_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: pyjamask
+    name: Pyjamask
+    construction_ids:
+      - aligned_spn
+    round_ids:
+      - pyjamask_round
+    target_applications:
+      - iot
+      - software
+    characteristics:
+      components:
+        - id: xor
+        - id: binary_matrix_mul
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - pyjamask_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: qameleon
+    name: Qameleon
+    construction_ids:
+      - tweakable_spn
+    round_ids:
+      - qameleon_round
+    target_applications:
+      - iot
+      - constrained_hardware
+    characteristics:
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: xor
+        - id: constant
+        - id: bit_permutation
+    reference_ids:
+      - qameleon_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: saturnin
+    name: Saturnin
+    construction_ids:
+      - aligned_spn
+    round_ids:
+      - saturnin_round
+    target_applications:
+      - iot
+      - software
+    characteristics:
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: xor
+        - id: binary_matrix_mul
+        - id: constant
+    reference_ids:
+      - saturnin_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: simple
+    name: SIMPLE
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - simple_permutation_round
+    target_applications:
+      - iot
+      - software
+    characteristics:
+      components:
+        - id: xor
+        - id: and
+        - id: not
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - simple_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: trifle
+    name: TRIFLE
+    construction_ids:
+      - tweakable_spn
+    round_ids:
+      - trifle_round
+    target_applications:
+      - iot
+      - constrained_hardware
+    characteristics:
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: xor
+        - id: constant
+        - id: bit_permutation
+    reference_ids:
+      - trifle_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []

@@ -1186,3 +1186,104 @@ rounds:
     notes: >
       Spook round abstraction over a permutation-driven mode with lightweight
       authenticated encryption targets.
+
+  - id: knot_permutation_round
+    name: KNOT Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits_options: [256, 384]
+      component_flow:
+        - component_id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - component_id: xor
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      KNOT permutation round abstraction with nibble-oriented nonlinearity and
+      lightweight diffusion for constrained environments.
+
+  - id: pyjamask_round
+    name: Pyjamask Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits_options: [96, 128]
+      component_flow:
+        - component_id: xor
+        - component_id: binary_matrix_mul
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      Pyjamask round abstraction using linear layer-heavy ARX-like operations
+      with lightweight software-oriented design.
+
+  - id: qameleon_round
+    name: Qameleon Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+      component_flow:
+        - component_id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - component_id: xor
+        - component_id: constant
+        - component_id: bit_permutation
+      constant_injection: round_tweakey
+    notes: >
+      Qameleon round abstraction as a tweakable lightweight block-cipher style
+      transformation with nibble-based nonlinearity.
+
+  - id: saturnin_round
+    name: Saturnin Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 256
+      component_flow:
+        - component_id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - component_id: xor
+        - component_id: binary_matrix_mul
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      Saturnin round abstraction with SPN-like nonlinear and linear layers over
+      a 256-bit state.
+
+  - id: simple_permutation_round
+    name: SIMPLE Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 256
+      component_flow:
+        - component_id: xor
+        - component_id: and
+        - component_id: not
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      SIMPLE round abstraction over a lightweight permutation core intended for
+      authenticated encryption in constrained settings.
+
+  - id: trifle_round
+    name: TRIFLE Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 128
+      component_flow:
+        - component_id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - component_id: xor
+        - component_id: constant
+        - component_id: bit_permutation
+      constant_injection: round_tweakey
+    notes: >
+      TRIFLE round abstraction for a lightweight tweakable block-cipher style
+      primitive used in NIST LWC submissions.

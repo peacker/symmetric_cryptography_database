@@ -1522,3 +1522,69 @@ primitives:
       rounds: 12
       fixed_input_bits: 256
       fixed_output_bits: 256
+
+  - id: knot_permutation_256
+    name: KNOT Permutation (256-bit)
+    family_id: knot
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 256
+      rounds: 52
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: pyjamask_128
+    name: Pyjamask-128
+    family_id: pyjamask
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 14
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: qameleon_128
+    name: Qameleon-128
+    family_id: qameleon
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      tweak_size_bits: 128
+      rounds: 16
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: saturnin_256
+    name: Saturnin-256
+    family_id: saturnin
+    primitive_type: block_cipher
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 16
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: simple_permutation_256
+    name: SIMPLE Permutation (256-bit)
+    family_id: simple
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 256
+      rounds: 12
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: trifle_128
+    name: TRIFLE-128
+    family_id: trifle
+    primitive_type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      tweak_size_bits: 64
+      rounds: 24
+      fixed_input_bits: 128
+      fixed_output_bits: 128

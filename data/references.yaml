@@ -853,3 +853,86 @@ references:
     year: 2019
     venue: NIST LWC Round 1 Submission
     url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: knot_2019
+    kind: article
+    title: "KNOT - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Wentao Zhang
+      - Tianyou Ding
+      - Bohan Yang
+      - Zhenzhen Bao
+      - Zejun Xiang
+      - Fulei Ji
+      - Xuefeng Zhao
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: pyjamask_2019
+    kind: article
+    title: "Pyjamask - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Dahmun Goudarzi
+      - Jeremy Jean
+      - Stefan Kolbl
+      - Thomas Peyrin
+      - Matthieu Rivain
+      - Yu Sasaki
+      - Siang Meng Sim
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: qameleon_2019
+    kind: article
+    title: "Qameleon - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Roberto Avanzi
+      - Subhadeep Banik
+      - Andrey Bogdanov
+      - Orr Dunkelman
+      - Senyang Huang
+      - Francesco Regazzoni
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: saturnin_2019
+    kind: article
+    title: "Saturnin - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Anne Canteaut
+      - Sebastien Duval
+      - Gaetan Leurent
+      - Maria Naya-Plasencia
+      - Leo Perrin
+      - Thomas Pornin
+      - Andre Schrottenloher
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: simple_2019
+    kind: article
+    title: "SIMPLE - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Shay Gueron
+      - Yehuda Lindell
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: trifle_2019
+    kind: article
+    title: "TRIFLE - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Nilanjan Datta
+      - Ashrujit Ghoshal
+      - Debdeep Mukhopadhyay
+      - Sikhar Patranabis
+      - Stjepan Picek
+      - Rajat Sadhukhan
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography

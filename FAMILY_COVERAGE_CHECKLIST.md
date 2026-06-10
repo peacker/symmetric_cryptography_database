@@ -75,7 +75,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] KCipher-2
 - [ ] Khazad
 - [ ] KLEIN
-- [ ] KNOT
+- [x] KNOT
 - [x] KTANTAN
 - [ ] Kuznyechik
 - [ ] LAEM
@@ -116,9 +116,9 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] PRIDE
 - [x] PRINCE
 - [ ] PRINCEv2
-- [ ] Pyjamask
+- [x] Pyjamask
 - [ ] Q
-- [ ] Qameleon
+- [x] Qameleon
 - [x] QARMA
 - [x] QARMAv2
 - [ ] Quartet
@@ -136,7 +136,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] SAFER+
 - [ ] SAFER++
 - [x] SALSA
-- [ ] Saturnin
+- [x] Saturnin
 - [ ] SC2000
 - [x] SCARF
 - [x] SEED
@@ -146,7 +146,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [ ] Shamash & Shamashash
 - [ ] SHARK
 - [x] SIMON
-- [ ] SIMPLE
+- [x] SIMPLE
 - [x] SKINNY
 - [ ] SKIPJACK
 - [x] SM4
@@ -175,7 +175,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] TinyJambu
 - [ ] TREYFER
 - [ ] Triad
-- [ ] TRIFLE
+- [x] TRIFLE
 - [ ] Trivium
 - [x] TWINE
 - [ ] Two-key Triple DES
