@@ -950,9 +950,17 @@ references:
 
   - id: ant_ref
     kind: paper
-    title: "ANT"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "ANT系列分组密码算法"
+    authors:
+      - "陈师尧"
+      - "樊燕红"
+      - "付勇"
+      - "黄鲁宁"
+      - "王美琴"
+    year: 2019
+    venue: "Journal of Cryptologic Research"
+    url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000338"
+    notes: "ANT block cipher family paper (DOI: 10.13868/j.cnki.jcr.000338)."
 
   - id: anubis_ref
     kind: paper
@@ -962,9 +970,18 @@ references:
 
   - id: ballet_ref
     kind: paper
-    title: "Ballet"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Ballet:一个软件实现友好的分组密码算法"
+    authors:
+      - "崔婷婷"
+      - "王美琴"
+      - "樊燕红"
+      - "胡凯"
+      - "付勇"
+      - "黄鲁宁"
+    year: 2019
+    venue: "Journal of Cryptologic Research"
+    url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000335"
+    notes: "Ballet block cipher family paper (DOI: 10.13868/j.cnki.jcr.000335)."
 
   - id: bear_lion_ref
     kind: paper
@@ -1088,9 +1105,18 @@ references:
 
   - id: fesh_ref
     kind: paper
-    title: "FESH"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "分组密码算法FESH"
+    authors:
+      - "贾珂婷"
+      - "董晓阳"
+      - "魏淙洺"
+      - "李铮"
+      - "周海波"
+      - "丛天硕"
+    year: 2019
+    venue: "Journal of Cryptologic Research"
+    url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000336"
+    notes: "FESH block cipher family paper (DOI: 10.13868/j.cnki.jcr.000336)."
 
   - id: flexaead_ref
     kind: paper
@@ -1556,9 +1582,16 @@ references:
 
   - id: ublock_ref
     kind: paper
-    title: "uBlock"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "分组密码uBlock"
+    authors:
+      - "吴文玲"
+      - "张蕾"
+      - "郑雅菲"
+      - "李灵琛"
+    year: 2019
+    venue: "Journal of Cryptologic Research"
+    url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000334"
+    notes: "uBlock block cipher family paper (DOI: 10.13868/j.cnki.jcr.000334)."
 
   - id: uea2_zuc_ref
     kind: paper
@@ -1607,4 +1640,91 @@ references:
     title: "Yarara and Coral"
     year: 2000
     notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: raindrop_ref
+    kind: paper
+    title: "Raindrop:面向硬件设计的分组密码算法"
+    authors:
+      - "李永清"
+      - "李木舟"
+      - "付勇"
+      - "樊燕红"
+      - "黄鲁宁"
+      - "王美琴"
+    year: 2019
+    venue: "Journal of Cryptologic Research"
+    url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000342"
+    notes: "Raindrop block cipher family paper (DOI: 10.13868/j.cnki.jcr.000342)."
+
+  - id: smba_ref
+    kind: paper
+    title: "SMBA分组密码算法"
+    authors:
+      - "王克"
+      - "贾文义"
+      - "黄念念"
+    year: 2019
+    venue: "Journal of Cryptologic Research"
+    url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000341"
+    notes: "SMBA block cipher family paper (DOI: 10.13868/j.cnki.jcr.000341)."
+
+  - id: fbc_ref
+    kind: paper
+    title: "轻量级分组密码算法FBC"
+    authors:
+      - "冯秀涛"
+      - "曾祥勇"
+      - "张凡"
+      - "曾光"
+      - "唐灯"
+      - "甘国华"
+      - "王永兴"
+    year: 2019
+    venue: "Journal of Cryptologic Research"
+    url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000340"
+    notes: "FBC block cipher family paper (DOI: 10.13868/j.cnki.jcr.000340)."
+
+  - id: nbc_ref
+    kind: paper
+    title: "NBC算法"
+    authors:
+      - "徐洪"
+      - "段明"
+      - "谭林"
+      - "戚文峰"
+      - "王中孝"
+    year: 2019
+    venue: "Journal of Cryptologic Research"
+    url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000339"
+    notes: "NBC block cipher family paper (DOI: 10.13868/j.cnki.jcr.000339)."
+
+  - id: tangram_ref
+    kind: paper
+    title: "TANGRAM:一个基于比特切片的适合多平台的分组密码"
+    authors:
+      - "张文涛"
+      - "季福磊"
+      - "丁天佑"
+      - "杨博翰"
+      - "赵雪锋"
+      - "向泽军"
+      - "包珍珍"
+      - "刘雷波"
+    year: 2019
+    venue: "Journal of Cryptologic Research"
+    url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000337"
+    notes: "TANGRAM block cipher family paper (DOI: 10.13868/j.cnki.jcr.000337)."
+
+  - id: spring_ref
+    kind: paper
+    title: "基于NFSR 的分组密码算法SPRING"
+    authors:
+      - "田甜"
+      - "戚文峰"
+      - "叶晨东"
+      - "谢晓锋"
+    year: 2019
+    venue: "Journal of Cryptologic Research"
+    url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000343"
+    notes: "SPRING block cipher paper (DOI: 10.13868/j.cnki.jcr.000343)."
 

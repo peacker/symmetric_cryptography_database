@@ -1967,24 +1967,164 @@ families:
   - id: ant
     name: ANT
     construction_ids:
-      - spn
+      - feistel
     round_ids:
       - ant_round
     target_applications:
-      - generic
+      - constrained_hardware
+      - lightweight
+      - software
     characteristics:
-      block_size_bits: 128
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: and
+        - id: rotation_fixed
         - id: xor
-        - id: constant
     reference_ids:
       - ant_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      ANT is a lightweight Feistel family with bit-based round functions composed
+      of AND, rotation, and XOR operations. Published variants are ANT-128/128,
+      ANT-128/256, and ANT-256/256.
+
+  - id: spring
+    name: SPRING
+    construction_ids:
+      - spn
+    round_ids:
+      - spring_round
+    target_applications:
+      - constrained_hardware
+      - lightweight
+      - software
+    characteristics:
+      components:
+        - id: nlfsr
+        - id: bit_permutation
+        - id: xor
+    reference_ids:
+      - spring_ref
+    process_ids: []
+    influences: []
+    notes: >
+      SPRING is an SP-structure block cipher family based on NFSR-derived
+      nonlinear operations. The paper specifies three variants: SPRING-128/128,
+      SPRING-128/256, and SPRING-256/256.
+
+  - id: raindrop
+    name: Raindrop
+    construction_ids:
+      - feistel
+    round_ids:
+      - raindrop_round
+    target_applications:
+      - constrained_hardware
+      - lightweight
+      - software
+    characteristics:
+      components:
+        - id: sbox
+        - id: bit_permutation
+        - id: xor
+    reference_ids:
+      - raindrop_ref
+    process_ids: []
+    influences: []
+    notes: >
+      Raindrop is a Feistel-family block cipher with SP-style round-function
+      components. The published variants are Raindrop-128/128, Raindrop-128/256,
+      and Raindrop-256/256.
+
+  - id: smba
+    name: SMBA
+    construction_ids:
+      - generalized_feistel
+    round_ids:
+      - smba_round
+    target_applications:
+      - generic
+      - software
+      - hardware
+    characteristics:
+      components:
+        - id: sbox
+        - id: bit_permutation
+        - id: xor
+    reference_ids:
+      - smba_ref
+    process_ids: []
+    influences: []
+    notes: >
+      SMBA is a block-cipher family with 128-bit and 256-bit block variants,
+      specified as SMBA-128/128, SMBA-128/256, and SMBA-256/256.
+
+  - id: fbc
+    name: FBC
+    construction_ids:
+      - generalized_feistel
+    round_ids:
+      - fbc_round
+    target_applications:
+      - constrained_hardware
+      - lightweight
+    characteristics:
+      components:
+        - id: sbox
+        - id: rotation_fixed
+        - id: xor
+    reference_ids:
+      - fbc_ref
+    process_ids: []
+    influences: []
+    notes: >
+      FBC is a lightweight generalized-Feistel family with versions FBC128-128,
+      FBC128-256, and FBC256-256.
+
+  - id: nbc
+    name: NBC
+    construction_ids:
+      - generalized_feistel
+    round_ids:
+      - nbc_round
+    target_applications:
+      - generic
+      - software
+      - hardware
+    characteristics:
+      components:
+        - id: sbox
+        - id: xor
+    reference_ids:
+      - nbc_ref
+    process_ids: []
+    influences: []
+    notes: >
+      NBC is a generalized-Feistel block cipher family with variants NBC-128/128,
+      NBC-128/256, and NBC-256/256.
+
+  - id: tangram
+    name: TANGRAM
+    construction_ids:
+      - spn
+    round_ids:
+      - tangram_round
+    target_applications:
+      - software
+      - hardware
+      - bitslice
+    characteristics:
+      components:
+        - id: sbox
+        - id: rotation_fixed
+        - id: xor
+    reference_ids:
+      - tangram_ref
+    process_ids: []
+    influences: []
+    notes: >
+      TANGRAM is a bit-sliced SP-network family including TANGRAM-128/128,
+      TANGRAM-128/256, and TANGRAM-256/256.
 
   - id: anubis
     name: Anubis
@@ -2011,24 +2151,24 @@ families:
   - id: ballet
     name: Ballet
     construction_ids:
-      - spn
+      - lay_massey
     round_ids:
       - ballet_round
     target_applications:
-      - generic
+      - software
+      - lightweight
     characteristics:
-      block_size_bits: 128
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: add_mod
+        - id: rotation_fixed
         - id: xor
-        - id: constant
     reference_ids:
       - ballet_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Ballet is an ARX-oriented block-cipher family with three variants:
+      Ballet-128/128, Ballet-128/256, and Ballet-256/256.
 
   - id: bear_lion
     name: BEAR/LION
@@ -2473,19 +2613,20 @@ families:
       - fesh_round
     target_applications:
       - generic
+      - software
+      - hardware
     characteristics:
-      block_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
         - id: bit_permutation
         - id: xor
-        - id: constant
     reference_ids:
       - fesh_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      FESH is an SPN-family block cipher with six published variants across 128-
+      and 256-bit block sizes.
 
   - id: flexaead
     name: FlexAEAD
@@ -4171,19 +4312,20 @@ families:
       - ublock_round
     target_applications:
       - generic
+      - software
+      - hardware
     characteristics:
-      block_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: word_permutation
         - id: xor
-        - id: constant
     reference_ids:
       - ublock_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      uBlock is a block-cipher family with variants uBlock-128/128,
+      uBlock-128/256, and uBlock-256/256.
 
   - id: uea2_zuc
     name: UEA2 / ZUC
@@ -4354,4 +4496,3 @@ families:
     process_ids: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
-

@@ -12,12 +12,12 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | ACE | ACE permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ace-spec.pdf | Full | no |
 | [x] | AES | AES | 2001 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf | Full | no |
 | [ ] | Akelarre | Akelarre | 1996 | https://sacworkshop.org/proc/SAC_96_002.pdf | PDF Page 3-16 | yes |
-| [ ] | ANT | ANT | TODO | TODO | TODO | no |
+| [x] | ANT | ANT | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000338 | Full | yes |
 | [ ] | Anubis | Anubis | TODO | TODO | TODO | yes |
 | [x] | ARADI | ARADI | 2024 | https://eprint.iacr.org/2024/1240 | TODO | yes |
 | [x] | ARIA | ARIA | 2010 | https://www.rfc-editor.org/rfc/rfc5794 | TODO | no |
 | [x] | ASCON | ASCON permutation | 2019 | https://ascon.iaik.tugraz.at/ | TODO | no |
-| [ ] | Ballet | Ballet | TODO | TODO | TODO | yes |
+| [x] | Ballet | Ballet | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
 | [ ] | BEAR/LION | BEAR/LION | TODO | TODO | TODO | no |
 | [ ] | BelT | BelT | TODO | TODO | TODO | no |
 | [x] | BipBip | BipBip | 2023 | https://tches.iacr.org/index.php/TCHES/article/view/9955/9458 | TODO | no |
@@ -54,7 +54,8 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | ESTATE | ESTATE | TODO | TODO | TODO | no |
 | [ ] | Fantomas / Robin | Fantomas / Robin | TODO | TODO | TODO | no |
 | [ ] | FEAL | FEAL | TODO | TODO | TODO | no |
-| [ ] | FESH | FESH | TODO | TODO | TODO | no |
+| [x] | FBC | FBC | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000340 | Full | yes |
+| [x] | FESH | FESH | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000336 | Full | yes |
 | [ ] | FlexAEAD | FlexAEAD | TODO | TODO | TODO | no |
 | [ ] | ForkAE | ForkAE | TODO | TODO | TODO | no |
 | [ ] | Fountain | Fountain | TODO | TODO | TODO | no |
@@ -108,6 +109,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | MULTI2 | MULTI2 | TODO | TODO | TODO | no |
 | [ ] | Nimbus | Nimbus | TODO | TODO | TODO | yes |
 | [ ] | NOEKEON | NOEKEON | TODO | TODO | TODO | yes |
+| [x] | NBC | NBC | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000339 | Full | yes |
 | [ ] | NUSH | NUSH | TODO | TODO | TODO | yes |
 | [ ] | ORANGE | ORANGE | TODO | TODO | TODO | no |
 | [ ] | Oribatida | Oribatida | TODO | TODO | TODO | no |
@@ -125,6 +127,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | QARMA | QARMA | 2016 | https://eprint.iacr.org/2016/444 | TODO | yes |
 | [x] | QARMAv2 | QARMAv2 | 2023 | https://eprint.iacr.org/2023/929 | TODO | yes |
 | [ ] | Quartet | Quartet | TODO | TODO | TODO | no |
+| [x] | Raindrop | Raindrop | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000342 | Full | yes |
 | [ ] | RC2 | RC2 | TODO | TODO | TODO | no |
 | [x] | RC4 | RC4 | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
 | [x] | RC4+ | RC4+ | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
@@ -153,6 +156,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SKINNY | SKINNY | 2016 | https://doi.org/10.1007/978-3-662-53008-5_5 | TODO | no |
 | [ ] | SKIPJACK | SKIPJACK | TODO | TODO | TODO | no |
 | [x] | SM4 | SM4 | 2021 | https://www.rfc-editor.org/rfc/rfc8998 | TODO | yes |
+| [x] | SMBA | SMBA | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000341 | Full | yes |
 | [x] | SNEIK | SNEIK | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [ ] | SNOW | SNOW | TODO | TODO | TODO | no |
 | [ ] | SNOW 2.0 | SNOW 2.0 | TODO | TODO | TODO | no |
@@ -167,11 +171,13 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SPIX | SPIX | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | SpoC | SpoC | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | Spook | Spook | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
+| [x] | SPRING | SPRING | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000343 | Full | yes |
 | [ ] | Spritz | Spritz | TODO | TODO | TODO | no |
 | [ ] | SQUARE | SQUARE | TODO | TODO | TODO | no |
 | [ ] | Subterranean 2.0 | Subterranean 2.0 | TODO | TODO | TODO | no |
 | [x] | Sycon | Sycon | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | TEA | TEA | 1994 | https://doi.org/10.1007/3-540-60590-8_29 | TODO | no |
+| [x] | TANGRAM | TANGRAM | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000337 | Full | yes |
 | [ ] | Thank Goodness It's Friday (TGIF) | Thank Goodness It's Friday (TGIF) | TODO | TODO | TODO | no |
 | [ ] | Three-key Triple DES | DES | TODO | TODO | TODO | no |
 | [ ] | Threefish | Threefish | TODO | TODO | TODO | no |
@@ -183,7 +189,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | TWINE | TWINE | 2012 | https://doi.org/10.1007/978-3-642-34047-5_13 | TODO | no |
 | [ ] | Two-key Triple DES | DES | TODO | TODO | TODO | no |
 | [x] | Twofish | Twofish | 1998 | https://www.schneier.com/academic/twofish/ | TODO | no |
-| [ ] | uBlock | uBlock | TODO | TODO | TODO | no |
+| [x] | uBlock | uBlock | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000334 | Full | yes |
 | [ ] | UEA2 / ZUC | ZUC | TODO | TODO | TODO | no |
 | [x] | uLBC | uLBC | 2025 | https://cic.iacr.org/p/1/4/25 | TODO | no |
 | [ ] | VMPC | VMPC | TODO | TODO | TODO | no |

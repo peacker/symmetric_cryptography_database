@@ -1616,8 +1616,8 @@ primitives:
       fixed_output_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
-  - id: ant_v1
-    name: ANT-v1
+  - id: ant_128_128
+    name: ANT-128/128
     family_id: ant
     primitive_type: block_cipher
     reference_ids:
@@ -1625,10 +1625,269 @@ primitives:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      rounds: 46
       fixed_input_bits: 128
       fixed_output_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: ant_128_256
+    name: ANT-128/256
+    family_id: ant
+    primitive_type: block_cipher
+    reference_ids:
+      - ant_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 48
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: ant_256_256
+    name: ANT-256/256
+    family_id: ant
+    primitive_type: block_cipher
+    reference_ids:
+      - ant_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 74
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: spring_128_128
+    name: SPRING-128/128
+    family_id: spring
+    primitive_type: block_cipher
+    reference_ids:
+      - spring_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 10
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: spring_128_256
+    name: SPRING-128/256
+    family_id: spring
+    primitive_type: block_cipher
+    reference_ids:
+      - spring_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 14
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: spring_256_256
+    name: SPRING-256/256
+    family_id: spring
+    primitive_type: block_cipher
+    reference_ids:
+      - spring_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 18
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: raindrop_128_128
+    name: Raindrop-128/128
+    family_id: raindrop
+    primitive_type: block_cipher
+    reference_ids:
+      - raindrop_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 60
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: raindrop_128_256
+    name: Raindrop-128/256
+    family_id: raindrop
+    primitive_type: block_cipher
+    reference_ids:
+      - raindrop_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 80
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: raindrop_256_256
+    name: Raindrop-256/256
+    family_id: raindrop
+    primitive_type: block_cipher
+    reference_ids:
+      - raindrop_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 100
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: smba_128_128
+    name: SMBA-128/128
+    family_id: smba
+    primitive_type: block_cipher
+    reference_ids:
+      - smba_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 18
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: smba_128_256
+    name: SMBA-128/256
+    family_id: smba
+    primitive_type: block_cipher
+    reference_ids:
+      - smba_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 24
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: smba_256_256
+    name: SMBA-256/256
+    family_id: smba
+    primitive_type: block_cipher
+    reference_ids:
+      - smba_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 24
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: fbc_128_128
+    name: FBC128-128
+    family_id: fbc
+    primitive_type: block_cipher
+    reference_ids:
+      - fbc_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 48
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: fbc_128_256
+    name: FBC128-256
+    family_id: fbc
+    primitive_type: block_cipher
+    reference_ids:
+      - fbc_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 64
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: fbc_256_256
+    name: FBC256-256
+    family_id: fbc
+    primitive_type: block_cipher
+    reference_ids:
+      - fbc_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 80
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: nbc_128_128
+    name: NBC-128/128
+    family_id: nbc
+    primitive_type: block_cipher
+    reference_ids:
+      - nbc_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 32
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: nbc_128_256
+    name: NBC-128/256
+    family_id: nbc
+    primitive_type: block_cipher
+    reference_ids:
+      - nbc_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 34
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: nbc_256_256
+    name: NBC-256/256
+    family_id: nbc
+    primitive_type: block_cipher
+    reference_ids:
+      - nbc_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 38
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: tangram_128_128
+    name: TANGRAM-128/128
+    family_id: tangram
+    primitive_type: block_cipher
+    reference_ids:
+      - tangram_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 44
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: tangram_128_256
+    name: TANGRAM-128/256
+    family_id: tangram
+    primitive_type: block_cipher
+    reference_ids:
+      - tangram_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 50
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: tangram_256_256
+    name: TANGRAM-256/256
+    family_id: tangram
+    primitive_type: block_cipher
+    reference_ids:
+      - tangram_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 82
+      fixed_input_bits: 256
+      fixed_output_bits: 256
 
   - id: anubis_v1
     name: Anubis-v1
@@ -1644,8 +1903,8 @@ primitives:
       fixed_output_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
-  - id: ballet_v1
-    name: Ballet-v1
+  - id: ballet_128_128
+    name: Ballet-128/128
     family_id: ballet
     primitive_type: block_cipher
     reference_ids:
@@ -1653,10 +1912,35 @@ primitives:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      rounds: 46
       fixed_input_bits: 128
       fixed_output_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: ballet_128_256
+    name: Ballet-128/256
+    family_id: ballet
+    primitive_type: block_cipher
+    reference_ids:
+      - ballet_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 48
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: ballet_256_256
+    name: Ballet-256/256
+    family_id: ballet
+    primitive_type: block_cipher
+    reference_ids:
+      - ballet_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 74
+      fixed_input_bits: 256
+      fixed_output_bits: 256
 
   - id: bear_lion_v1
     name: BEAR/LION-v1
@@ -1939,8 +2223,8 @@ primitives:
       fixed_output_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
-  - id: fesh_v1
-    name: FESH-v1
+  - id: fesh_128_128
+    name: FESH-128-128
     family_id: fesh
     primitive_type: block_cipher
     reference_ids:
@@ -1948,10 +2232,74 @@ primitives:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: fesh_128_192
+    name: FESH-128-192
+    family_id: fesh
+    primitive_type: block_cipher
+    reference_ids:
+      - fesh_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 20
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: fesh_128_256
+    name: FESH-128-256
+    family_id: fesh
+    primitive_type: block_cipher
+    reference_ids:
+      - fesh_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 20
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: fesh_256_256
+    name: FESH-256-256
+    family_id: fesh
+    primitive_type: block_cipher
+    reference_ids:
+      - fesh_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 24
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: fesh_256_384
+    name: FESH-256-384
+    family_id: fesh
+    primitive_type: block_cipher
+    reference_ids:
+      - fesh_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 384
+      rounds: 28
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: fesh_256_512
+    name: FESH-256-512
+    family_id: fesh
+    primitive_type: block_cipher
+    reference_ids:
+      - fesh_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 512
+      rounds: 28
+      fixed_input_bits: 256
+      fixed_output_bits: 256
 
   - id: flexaead_v1
     name: FlexAEAD-v1
@@ -3053,8 +3401,8 @@ primitives:
       fixed_output_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
-  - id: ublock_v1
-    name: uBlock-v1
+  - id: ublock_128_128
+    name: uBlock-128/128
     family_id: ublock
     primitive_type: block_cipher
     reference_ids:
@@ -3062,10 +3410,35 @@ primitives:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      rounds: 16
       fixed_input_bits: 128
       fixed_output_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: ublock_128_256
+    name: uBlock-128/256
+    family_id: ublock
+    primitive_type: block_cipher
+    reference_ids:
+      - ublock_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 24
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+
+  - id: ublock_256_256
+    name: uBlock-256/256
+    family_id: ublock
+    primitive_type: block_cipher
+    reference_ids:
+      - ublock_ref
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 24
+      fixed_input_bits: 256
+      fixed_output_bits: 256
 
   - id: uea2_zuc_v1
     name: UEA2 / ZUC-v1

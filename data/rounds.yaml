@@ -1305,11 +1305,13 @@ rounds:
 
   - id: ant_round
     name: ANT round
-    kind: other
+    kind: full_round
     spec:
       component_flow:
+        - component_id: and
+        - component_id: rotation_fixed
         - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
+    notes: Feistel round based on AND-Rotation-XOR (ARX-like bit-level design).
 
   - id: anubis_round
     name: Anubis round
@@ -1321,11 +1323,13 @@ rounds:
 
   - id: ballet_round
     name: Ballet round
-    kind: other
+    kind: full_round
     spec:
       component_flow:
+        - component_id: add_mod
+        - component_id: rotation_fixed
         - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
+    notes: ARX-style round used across Ballet variants.
 
   - id: bear_lion_round
     name: BEAR/LION round
@@ -1489,11 +1493,13 @@ rounds:
 
   - id: fesh_round
     name: FESH round
-    kind: other
+    kind: full_round
     spec:
       component_flow:
+        - component_id: sbox
+        - component_id: bit_permutation
         - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
+    notes: SPN round with substitution and permutation layers.
 
   - id: flexaead_round
     name: FlexAEAD round
@@ -2113,11 +2119,13 @@ rounds:
 
   - id: ublock_round
     name: uBlock round
-    kind: other
+    kind: full_round
     spec:
       component_flow:
+        - component_id: sbox
+        - component_id: word_permutation
         - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
+    notes: uBlock round uses 4-bit S-boxes and byte-level permutation layers.
 
   - id: uea2_zuc_round
     name: UEA2 / ZUC round
@@ -2183,3 +2191,64 @@ rounds:
         - component_id: xor
     notes: Generic placeholder round entry pending full parameter extraction.
 
+  - id: raindrop_round
+    name: Raindrop round
+    kind: full_round
+    spec:
+      component_flow:
+        - component_id: sbox
+        - component_id: bit_permutation
+        - component_id: xor
+    notes: Feistel-based round function with SP-style nonlinear and diffusion layers.
+
+  - id: smba_round
+    name: SMBA round
+    kind: full_round
+    spec:
+      component_flow:
+        - component_id: sbox
+        - component_id: bit_permutation
+        - component_id: xor
+    notes: Generalized-Feistel round with S-box and linear diffusion operations.
+
+  - id: fbc_round
+    name: FBC round
+    kind: full_round
+    spec:
+      component_flow:
+        - component_id: sbox
+        - component_id: rotation_fixed
+        - component_id: xor
+    notes: Generalized-Feistel round with nonlinear and word-rotation mixing.
+
+  - id: nbc_round
+    name: NBC round
+    kind: full_round
+    spec:
+      component_flow:
+        - component_id: sbox
+        - component_id: xor
+    notes: Generalized-Feistel round driven by a 16-bit S-box nonlinear layer.
+
+  - id: tangram_round
+    name: TANGRAM round
+    kind: full_round
+    spec:
+      component_flow:
+        - component_id: sbox
+        - component_id: rotation_fixed
+        - component_id: xor
+    notes: Bit-sliced SPN round with SubColumn and ShiftRow-style transforms.
+
+  - id: spring_round
+    name: SPRING round
+    kind: full_round
+    spec:
+      component_flow:
+        - component_id: nlfsr
+        - component_id: bit_permutation
+        - component_id: xor
+        - component_id: constant
+    notes: >
+      SPRING is an SP-style lightweight block cipher family using an
+      NFSR-based 32-bit nonlinear layer and permutation/key-mixing operations.
