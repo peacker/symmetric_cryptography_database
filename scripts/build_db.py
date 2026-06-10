@@ -165,8 +165,8 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             name TEXT NOT NULL,
             family_id TEXT NOT NULL,
             primitive_type TEXT NOT NULL,
-            fixed_input_bits INTEGER NOT NULL,
-            fixed_output_bits INTEGER NOT NULL,
+            block_size_bits INTEGER NOT NULL,
+            output_size_bits INTEGER NOT NULL,
             characteristics_json TEXT NOT NULL,
             FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE RESTRICT,
             FOREIGN KEY (primitive_type) REFERENCES primitive_types(id) ON DELETE RESTRICT
@@ -392,11 +392,11 @@ def main() -> None:
 
             conn.execute(
                 "INSERT INTO primitives"
-                " (id, name, family_id, primitive_type, fixed_input_bits, fixed_output_bits,"
+                " (id, name, family_id, primitive_type, block_size_bits, output_size_bits,"
                 "  characteristics_json)"
                 " VALUES (?, ?, ?, ?, ?, ?, ?)",
                 (primitive["id"], primitive["name"], primitive["family_id"], primitive["primitive_type"],
-                 c["fixed_input_bits"], c["fixed_output_bits"],
+                 c["block_size_bits"], c["output_size_bits"],
                  json.dumps(c, ensure_ascii=True)),
             )
 

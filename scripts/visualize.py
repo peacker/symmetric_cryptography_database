@@ -111,13 +111,13 @@ def chart_size_scatter(rows: list[dict]) -> None:
 
     fig, ax = plt.subplots(figsize=(8, 6))
     for r in rows:
-        ax.scatter(int(r["fixed_input_bits"]), int(r["fixed_output_bits"]),
+        ax.scatter(int(r["block_size_bits"]), int(r["output_size_bits"]),
                    c=colour_map[r["primitive_type"]], s=100, zorder=3)
-        ax.annotate(r["name"], (int(r["fixed_input_bits"]), int(r["fixed_output_bits"])),
+        ax.annotate(r["name"], (int(r["block_size_bits"]), int(r["output_size_bits"])),
                     textcoords="offset points", xytext=(5, 3), fontsize=8)
 
-    ax.set_xlabel("Fixed input size (bits)")
-    ax.set_ylabel("Fixed output size (bits)")
+    ax.set_xlabel("Block size (bits)")
+    ax.set_ylabel("Output size (bits)")
     ax.set_title("Primitive Input vs Output Size")
     patches = [mpatches.Patch(color=colour_map[t], label=t) for t in types]
     ax.legend(handles=patches, fontsize=8)

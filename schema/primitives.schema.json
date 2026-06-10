@@ -23,8 +23,8 @@
         "characteristics": {
             "type": "object",
             "required": [
-                "fixed_input_bits",
-                "fixed_output_bits"
+                "block_size_bits",
+                "output_size_bits"
             ],
             "properties": {
                 "block_size_bits": {
@@ -131,27 +131,15 @@
                     "type": "integer",
                     "minimum": 1
                 },
-                "fixed_input_bits": {
+                "output_size_bits": {
                     "type": "integer",
                     "minimum": 1
                 },
-                "fixed_input_bits_min": {
+                "output_size_bits_min": {
                     "type": "integer",
                     "minimum": 1
                 },
-                "fixed_input_bits_max": {
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "fixed_output_bits": {
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "fixed_output_bits_min": {
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "fixed_output_bits_max": {
+                "output_size_bits_max": {
                     "type": "integer",
                     "minimum": 1
                 }

@@ -264,8 +264,7 @@ def main() -> None:
             "iv_size_bits",
             "nonce_size_bits",
             "rounds",
-            "fixed_input_bits",
-            "fixed_output_bits",
+            "output_size_bits",
         ]
         for base_field in range_base_fields:
             for error in validate_range_field(characteristics, base_field, pid):

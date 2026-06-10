@@ -84,13 +84,14 @@ references:
 
   - id: sp_800_232
     kind: standard
-    title: "NIST SP 800-232: Recommendations for the Initial Selection of Lightweight Cryptographic Standards"
+    title: "NIST SP 800-232: Ascon-Based Lightweight Cryptography Standards for Constrained Devices: Authenticated Encryption, Hash, and Extendable Output Functions"
     authors: []
-    year: 2023
+    year: 2025
     venue: NIST
     organization: NIST
     status: active
-    url: https://csrc.nist.gov/publications
+    url: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-232.pdf
+    notes: Section 3 gives the official permutation name "Ascon-p".
 
   - id: fips_46_3_1999_des
     kind: standard
@@ -629,7 +630,20 @@ references:
     venue: Cipher Design (RSA Secret-Key Cryptography Specifications)
     url: https://en.wikipedia.org/wiki/RC4
 
-  - id: ascon_submission_2019
+  - id: ascon_caesar_submission_2016
+    kind: article
+    title: "Ascon v1.2"
+    authors:
+      - Christoph Dobraunig
+      - Maria Eichlseder
+      - Florian Mendel
+      - Martin Schlaffer
+    year: 2016
+    venue: CAESAR Submission
+    url: https://ascon.isec.tugraz.at/files/asconv12.pdf
+    notes: First appearance reference for the Ascon family and permutation.
+
+  - id: ascon_nist_lwc_submission_2021
     kind: article
     title: "Ascon v1.2 - Submission to NIST Lightweight Cryptography"
     authors:
@@ -637,9 +651,25 @@ references:
       - Maria Eichlseder
       - Florian Mendel
       - Martin Schlaffer
-    year: 2019
-    venue: NIST LWC Round 1 Submission
-    url: https://ascon.iaik.tugraz.at/
+    year: 2021
+    venue: NIST Lightweight Cryptography Submission
+    url: https://ascon.isec.tugraz.at/files/asconv12-nist.pdf
+
+  - id: ascon_joc_2021
+    kind: article
+    title: "Ascon v1.2: Lightweight Authenticated Encryption and Hashing"
+    year: 2021
+    venue: Journal of Cryptology
+    url: https://link.springer.com/content/pdf/10.1007/s00145-021-09398-9.pdf
+    notes: Specifies the original Ascon AEAD and hashing schemes (Hash and XOF) submitted to the NIST LWC project.
+
+  - id: ascon_ctrsa_2024
+    kind: article
+    title: "Ascon PRF and MAC"
+    year: 2024
+    venue: CT-RSA 2024
+    url: https://link.springer.com/chapter/10.1007/978-3-031-58868-6_15
+    notes: Specifies the Ascon pseudorandom functions and message authentication codes (PRF and MAC).
 
   - id: skinny_2016
     kind: article
@@ -1727,4 +1757,3 @@ references:
     venue: "Journal of Cryptologic Research"
     url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000343"
     notes: "SPRING block cipher paper (DOI: 10.13868/j.cnki.jcr.000343)."
-

@@ -9,8 +9,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 10
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: rijndael_128_192
     name: Rijndael-128/192
@@ -20,8 +19,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 12
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: rijndael_128_256
     name: Rijndael-128/256
@@ -31,8 +29,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 14
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: rijndael_192_128
     name: Rijndael-192/128
@@ -42,8 +39,7 @@ primitives:
       block_size_bits: 192
       key_size_bits: 128
       rounds: 12
-      fixed_input_bits: 192
-      fixed_output_bits: 192
+      output_size_bits: 192
 
   - id: rijndael_192_192
     name: Rijndael-192/192
@@ -53,8 +49,7 @@ primitives:
       block_size_bits: 192
       key_size_bits: 192
       rounds: 12
-      fixed_input_bits: 192
-      fixed_output_bits: 192
+      output_size_bits: 192
 
   - id: rijndael_192_256
     name: Rijndael-192/256
@@ -64,8 +59,7 @@ primitives:
       block_size_bits: 192
       key_size_bits: 256
       rounds: 14
-      fixed_input_bits: 192
-      fixed_output_bits: 192
+      output_size_bits: 192
 
   - id: rijndael_256_128
     name: Rijndael-256/128
@@ -75,8 +69,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 128
       rounds: 14
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: rijndael_256_192
     name: Rijndael-256/192
@@ -86,8 +79,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 192
       rounds: 14
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: rijndael_256_256
     name: Rijndael-256/256
@@ -97,8 +89,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 14
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   # ── AES family ────────────────────────────────────────────────────────────
   - id: aes_128
@@ -108,8 +99,8 @@ primitives:
     characteristics:
       key_size_bits: 128
       rounds: 10
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
 
   - id: aes_192
     name: AES-192
@@ -118,8 +109,8 @@ primitives:
     characteristics:
       key_size_bits: 192
       rounds: 12
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
 
   - id: aes_256
     name: AES-256
@@ -128,8 +119,8 @@ primitives:
     characteristics:
       key_size_bits: 256
       rounds: 14
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
 
   # ── Salsa family ──────────────────────────────────────────────────────────
   - id: salsa20
@@ -140,8 +131,8 @@ primitives:
       key_size_bits: 256
       nonce_size_bits: 64
       rounds: 20
-      fixed_input_bits: 512
-      fixed_output_bits: 512
+      block_size_bits: 512
+      output_size_bits: 512
     notes: >-
       Salsa20 block function takes a 256-bit key, 64-bit nonce,
       and a 64-bit block counter to produce a 512-bit (64-byte) output.
@@ -157,8 +148,8 @@ primitives:
       nonce_size_bits: 96
       block_count_bits: 32
       rounds: 20
-      fixed_input_bits: 512
-      fixed_output_bits: 512
+      block_size_bits: 512
+      output_size_bits: 512
     notes: >-
       ChaCha20 block function per RFC 8439: takes a 256-bit key, 96-bit nonce,
       and 32-bit block counter to produce a 512-bit (64-byte) output.
@@ -172,8 +163,8 @@ primitives:
     characteristics:
       key_size_bits: 80
       rounds: 31
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      block_size_bits: 64
+      output_size_bits: 64
 
   - id: present_128
     name: PRESENT-128
@@ -182,8 +173,8 @@ primitives:
     characteristics:
       key_size_bits: 128
       rounds: 31
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      block_size_bits: 64
+      output_size_bits: 64
 
   # ── GIFT family ───────────────────────────────────────────────────────────
   - id: gift_64
@@ -194,8 +185,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 28
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: gift_128
     name: GIFT-128
@@ -205,8 +195,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 40
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── DES family ────────────────────────────────────────────────────────────
   - id: des_56
@@ -217,8 +206,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 56
       rounds: 16
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   # ── Blowfish family ───────────────────────────────────────────────────────
   - id: blowfish_128
@@ -229,8 +217,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 16
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   # ── IDEA family ───────────────────────────────────────────────────────────
   - id: idea_128
@@ -241,8 +228,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 8
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   # ── TEA / XTEA families ──────────────────────────────────────────────────
   - id: tea_128
@@ -253,8 +239,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 64
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: xtea_128
     name: XTEA
@@ -264,8 +249,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 64
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   # ── Twofish family ───────────────────────────────────────────────────────
   - id: twofish_128
@@ -276,8 +260,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: twofish_192
     name: Twofish-192
@@ -287,8 +270,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: twofish_256
     name: Twofish-256
@@ -298,8 +280,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── Serpent family ───────────────────────────────────────────────────────
   - id: serpent_128
@@ -310,8 +291,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 32
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: serpent_192
     name: Serpent-192
@@ -321,8 +301,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 32
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: serpent_256
     name: Serpent-256
@@ -332,8 +311,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 32
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── Camellia family ──────────────────────────────────────────────────────
   - id: camellia_128
@@ -344,8 +322,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 18
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: camellia_192
     name: Camellia-192
@@ -355,8 +332,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 24
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: camellia_256
     name: Camellia-256
@@ -366,8 +342,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 24
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── SIMON / SPECK families ───────────────────────────────────────────────
   - id: simon_64_128
@@ -378,8 +353,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 44
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: simon_128_128
     name: SIMON-128/128
@@ -389,8 +363,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 68
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: speck_64_128
     name: SPECK-64/128
@@ -400,8 +373,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 27
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: speck_128_128
     name: SPECK-128/128
@@ -411,8 +383,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 32
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── PRINCE / LED families ────────────────────────────────────────────────
   - id: prince_128
@@ -423,8 +394,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 12
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: led_64_64
     name: LED-64
@@ -434,8 +404,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 64
       rounds: 32
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: led_64_128
     name: LED-128
@@ -445,8 +414,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 48
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   # ── KATAN / KTANTAN families ─────────────────────────────────────────────
   - id: katan_64_80
@@ -457,8 +425,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 80
       rounds: 254
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: ktantan_64_80
     name: KTANTAN-64
@@ -468,8 +435,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 80
       rounds: 254
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   # ── CAST family ─────────────────────────────────────────────────────────
   - id: cast128_128
@@ -480,8 +446,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 16
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: cast256_128
     name: CAST-256-128
@@ -491,8 +456,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 48
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: cast256_192
     name: CAST-256-192
@@ -502,8 +466,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 48
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: cast256_256
     name: CAST-256-256
@@ -513,8 +476,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 48
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── RC5 family ──────────────────────────────────────────────────────────
   - id: rc5_32_12_16
@@ -525,8 +487,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 12
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: rc5_32_16_16
     name: RC5-32/16/16
@@ -536,8 +497,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 16
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   # ── SEED family ─────────────────────────────────────────────────────────
   - id: seed_128
@@ -548,8 +508,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── ARIA family ─────────────────────────────────────────────────────────
   - id: aria_128
@@ -560,8 +519,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 12
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: aria_192
     name: ARIA-192
@@ -571,8 +529,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 14
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: aria_256
     name: ARIA-256
@@ -582,8 +539,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── RC6 family ──────────────────────────────────────────────────────────
   - id: rc6_32_20_16
@@ -594,8 +550,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 20
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: rc6_32_20_24
     name: RC6-32/20/24
@@ -605,8 +560,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 20
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: rc6_32_20_32
     name: RC6-32/20/32
@@ -616,8 +570,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 20
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── SM4 family ──────────────────────────────────────────────────────────
   - id: sm4_128
@@ -628,8 +581,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 32
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── KASUMI family ───────────────────────────────────────────────────────
   - id: kasumi_128
@@ -640,8 +592,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 8
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   # ── CLEFIA family ───────────────────────────────────────────────────────
   - id: clefia_128
@@ -652,8 +603,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 18
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: clefia_192
     name: CLEFIA-192
@@ -663,8 +613,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 22
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: clefia_256
     name: CLEFIA-256
@@ -674,8 +623,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 26
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── TWINE family ────────────────────────────────────────────────────────
   - id: twine_80
@@ -686,8 +634,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 80
       rounds: 36
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: twine_128
     name: TWINE-128
@@ -697,8 +644,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 36
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   # ── AES Candidates ───────────────────────────────────────────────────────
 
@@ -711,8 +657,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 12
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: crypton_192
     name: CRYPTON-192
@@ -722,8 +667,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 12
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: crypton_256
     name: CRYPTON-256
@@ -733,8 +677,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 12
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── DEAL family ──────────────────────────────────────────────────────────
   - id: deal_128
@@ -745,8 +688,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 6
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: deal_192
     name: DEAL-192
@@ -756,8 +698,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 6
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: deal_256
     name: DEAL-256
@@ -767,8 +708,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── DFC family ───────────────────────────────────────────────────────────
   - id: dfc_128
@@ -779,8 +719,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: dfc_192
     name: DFC-192
@@ -790,8 +729,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: dfc_256
     name: DFC-256
@@ -801,8 +739,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── E2 family ────────────────────────────────────────────────────────────
   - id: e2_128
@@ -813,8 +750,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 12
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: e2_192
     name: E2-192
@@ -824,8 +760,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 12
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: e2_256
     name: E2-256
@@ -835,8 +770,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 12
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── FROG family ──────────────────────────────────────────────────────────
   - id: frog_128
@@ -847,8 +781,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: frog_192
     name: FROG-192
@@ -858,8 +791,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: frog_256
     name: FROG-256
@@ -869,8 +801,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── HPC family ───────────────────────────────────────────────────────────
   - id: hpc_128
@@ -881,8 +812,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: hpc_192
     name: HPC-192
@@ -892,8 +822,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: hpc_256
     name: HPC-256
@@ -903,8 +832,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── LOKI97 family ────────────────────────────────────────────────────────
   - id: loki97_128
@@ -915,8 +843,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: loki97_192
     name: LOKI97-192
@@ -926,8 +853,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: loki97_256
     name: LOKI97-256
@@ -937,8 +863,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── MAGENTA family ───────────────────────────────────────────────────────
   - id: magenta_128
@@ -949,8 +874,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 6
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: magenta_192
     name: MAGENTA-192
@@ -960,8 +884,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: magenta_256
     name: MAGENTA-256
@@ -971,8 +894,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── MARS family ──────────────────────────────────────────────────────────
   - id: mars_128
@@ -983,8 +905,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 32
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: mars_192
     name: MARS-192
@@ -994,8 +915,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 32
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: mars_256
     name: MARS-256
@@ -1005,8 +925,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 32
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── SAFER+ family ────────────────────────────────────────────────────────
   - id: safer_plus_128
@@ -1017,8 +936,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 8
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: safer_plus_192
     name: SAFER+-192
@@ -1028,8 +946,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 12
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: safer_plus_256
     name: SAFER+-256
@@ -1039,8 +956,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── Low-Latency And Memory-Encryption families ──────────────────────────
   - id: aradi_128_256
@@ -1051,8 +967,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: bipbip_24_40_256
     name: BipBip-24/40
@@ -1063,8 +978,7 @@ primitives:
       key_size_bits: 256
       tweak_size_bits: 40
       rounds: 11
-      fixed_input_bits: 24
-      fixed_output_bits: 24
+      output_size_bits: 24
     notes: Full version denoted BipBip3,5,3 in the paper.
 
   - id: qarma_64_128
@@ -1076,8 +990,7 @@ primitives:
       key_size_bits: 128
       tweak_size_bits: 64
       rounds: 16
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: qarma_128_256
     name: QARMA-128-256
@@ -1088,8 +1001,7 @@ primitives:
       key_size_bits: 256
       tweak_size_bits: 128
       rounds: 24
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: qarmav2_64_128
     name: QARMAv2-64-128
@@ -1100,8 +1012,7 @@ primitives:
       key_size_bits: 128
       tweak_size_bits: 128
       rounds: 16
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: qarmav2_128_128
     name: QARMAv2-128-128
@@ -1112,8 +1023,7 @@ primitives:
       key_size_bits: 128
       tweak_size_bits: 256
       rounds: 24
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: qarmav2_128_192
     name: QARMAv2-128-192
@@ -1124,8 +1034,7 @@ primitives:
       key_size_bits: 192
       tweak_size_bits: 256
       rounds: 24
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: qarmav2_128_256
     name: QARMAv2-128-256
@@ -1136,8 +1045,7 @@ primitives:
       key_size_bits: 256
       tweak_size_bits: 256
       rounds: 24
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: scarf_10_240_48
     name: SCARF-10/240
@@ -1148,8 +1056,7 @@ primitives:
       key_size_bits: 240
       tweak_size_bits: 48
       rounds: 8
-      fixed_input_bits: 10
-      fixed_output_bits: 10
+      output_size_bits: 10
 
   - id: ulbc_128
     name: uLBC-128
@@ -1159,8 +1066,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 18
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: ulbc_256
     name: uLBC-256
@@ -1170,8 +1076,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 22
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: ulbc_384t
     name: uLBC-384t
@@ -1183,8 +1088,7 @@ primitives:
       key_size_bits_max: 384
       tweakey_size_bits: 384-key_size_bits
       rounds: 30
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Minimum key length is 128 bits with variable key/tweak split.
 
   - id: blink_64a
@@ -1195,8 +1099,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 448
       tweak_size_bits: 64
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: blink_64b
     name: Blink-64b
@@ -1206,8 +1109,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 448
       tweak_size_bits: 128
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: blink_128a
     name: Blink-128a
@@ -1217,8 +1119,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 1024
       tweak_size_bits: 128
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: blink_128b
     name: Blink-128b
@@ -1228,8 +1129,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 1024
       tweak_size_bits: 256
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: blink_128A
     name: Blink-128A
@@ -1239,8 +1139,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 1280
       tweak_size_bits: 128
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: blink_128B
     name: Blink-128B
@@ -1250,8 +1149,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 1280
       tweak_size_bits: 256
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: chilow_32
     name: ChiLow-(32+tau)
@@ -1262,8 +1160,7 @@ primitives:
       key_size_bits: 128
       tweak_size_bits: 64
       rounds: 8
-      fixed_input_bits: 32
-      fixed_output_bits: 32
+      output_size_bits: 32
 
   - id: chilow_40
     name: ChiLow-40
@@ -1274,8 +1171,7 @@ primitives:
       key_size_bits: 128
       tweak_size_bits: 64
       rounds: 8
-      fixed_input_bits: 40
-      fixed_output_bits: 40
+      output_size_bits: 40
 
   - id: msx_64_128
     name: MSX-64/128
@@ -1285,8 +1181,7 @@ primitives:
       block_size_bits: 64
       key_size_bits: 128
       rounds: 14
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: msx_128_128
     name: MSX-128/128
@@ -1296,8 +1191,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 18
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: msx_128_256
     name: MSX-128/256
@@ -1307,8 +1201,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 18
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   # ── RC4 family ────────────────────────────────────────────────────────────
   - id: rc4_variable
@@ -1318,8 +1211,8 @@ primitives:
     characteristics:
       key_size_bits_min: 8
       key_size_bits_max: 2048
-      fixed_input_bits: 1
-      fixed_output_bits: 64
+      block_size_bits: 1
+      output_size_bits: 64
     notes: >-
       RC4 is a stream cipher with variable key size (1–256 bytes).
       The fixed_output_bits represents a standard 64-byte (512-bit) keystream unit.
@@ -1327,14 +1220,21 @@ primitives:
 
   # ── NIST LWC Underlying Primitive Families ─────────────────────────────
   - id: ascon_permutation_320
-    name: ASCON Permutation (320-bit)
+    name: Ascon-p Permutation (320-bit)
     family_id: ascon
     primitive_type: permutation
+    reference_ids:
+      - ascon_caesar_submission_2016
+      - ascon_nist_lwc_submission_2021
+      - ascon_joc_2021
+      - ascon_ctrsa_2024
+      - sp_800_232
     characteristics:
       state_size_bits: 320
       rounds: 12
-      fixed_input_bits: 320
-      fixed_output_bits: 320
+      block_size_bits: 320
+      output_size_bits: 320
+    notes: Official NIST SP 800-232 name for the permutation is Ascon-p.
 
   - id: photon_permutation_256
     name: PHOTON Permutation (256-bit)
@@ -1343,8 +1243,8 @@ primitives:
     characteristics:
       state_size_bits: 256
       rounds: 12
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      block_size_bits: 256
+      output_size_bits: 256
 
   - id: skinny_64_128
     name: SKINNY-64-128
@@ -1355,8 +1255,7 @@ primitives:
       key_size_bits: 128
       tweak_size_bits: 64
       rounds: 32
-      fixed_input_bits: 64
-      fixed_output_bits: 64
+      output_size_bits: 64
 
   - id: skinny_128_256
     name: SKINNY-128-256
@@ -1367,8 +1266,7 @@ primitives:
       key_size_bits: 256
       tweak_size_bits: 128
       rounds: 48
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: sparkle_384
     name: SPARKLE-384
@@ -1377,8 +1275,8 @@ primitives:
     characteristics:
       state_size_bits: 384
       rounds: 8
-      fixed_input_bits: 384
-      fixed_output_bits: 384
+      block_size_bits: 384
+      output_size_bits: 384
 
   - id: tinyjambu_128_state_update
     name: TinyJambu-128 State Update
@@ -1387,8 +1285,8 @@ primitives:
     characteristics:
       state_size_bits: 128
       key_size_bits: 128
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
 
   - id: xoodoo_permutation_384
     name: Xoodoo Permutation (384-bit)
@@ -1397,8 +1295,8 @@ primitives:
     characteristics:
       state_size_bits: 384
       rounds: 12
-      fixed_input_bits: 384
-      fixed_output_bits: 384
+      block_size_bits: 384
+      output_size_bits: 384
 
   - id: elephant_permutation_160
     name: Elephant Permutation (160-bit profile)
@@ -1407,8 +1305,8 @@ primitives:
     characteristics:
       state_size_bits: 160
       rounds: 80
-      fixed_input_bits: 160
-      fixed_output_bits: 160
+      block_size_bits: 160
+      output_size_bits: 160
 
   - id: romulus_skinny_128_256
     name: Romulus-SKINNY-128-256
@@ -1419,8 +1317,7 @@ primitives:
       key_size_bits: 256
       tweak_size_bits: 128
       rounds: 40
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: isap_permutation_320
     name: ISAP Permutation (320-bit)
@@ -1429,8 +1326,8 @@ primitives:
     characteristics:
       state_size_bits: 320
       rounds: 12
-      fixed_input_bits: 320
-      fixed_output_bits: 320
+      block_size_bits: 320
+      output_size_bits: 320
 
   - id: grain_128_stream
     name: Grain-128 Stream Core
@@ -1440,8 +1337,8 @@ primitives:
       key_size_bits: 128
       nonce_size_bits: 96
       state_size_bits: 256
-      fixed_input_bits: 1
-      fixed_output_bits: 64
+      block_size_bits: 1
+      output_size_bits: 64
 
   - id: gimli_permutation_384
     name: Gimli Permutation (384-bit)
@@ -1450,8 +1347,8 @@ primitives:
     characteristics:
       state_size_bits: 384
       rounds: 24
-      fixed_input_bits: 384
-      fixed_output_bits: 384
+      block_size_bits: 384
+      output_size_bits: 384
 
   - id: subterranean_permutation_257
     name: Subterranean Permutation (257-bit)
@@ -1460,8 +1357,8 @@ primitives:
     characteristics:
       state_size_bits: 257
       rounds: 257
-      fixed_input_bits: 257
-      fixed_output_bits: 257
+      block_size_bits: 257
+      output_size_bits: 257
 
   - id: drygascon_permutation_320
     name: DryGASCON Permutation (320-bit)
@@ -1470,8 +1367,8 @@ primitives:
     characteristics:
       state_size_bits: 320
       rounds: 12
-      fixed_input_bits: 320
-      fixed_output_bits: 320
+      block_size_bits: 320
+      output_size_bits: 320
 
   - id: sneik_permutation_256
     name: SNEIK Permutation (256-bit)
@@ -1480,8 +1377,8 @@ primitives:
     characteristics:
       state_size_bits: 256
       rounds: 12
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      block_size_bits: 256
+      output_size_bits: 256
 
   - id: sycon_permutation_320
     name: Sycon Permutation (320-bit)
@@ -1490,8 +1387,8 @@ primitives:
     characteristics:
       state_size_bits: 320
       rounds: 14
-      fixed_input_bits: 320
-      fixed_output_bits: 320
+      block_size_bits: 320
+      output_size_bits: 320
 
   - id: spix_permutation_256
     name: SPIX Permutation (256-bit)
@@ -1500,8 +1397,8 @@ primitives:
     characteristics:
       state_size_bits: 256
       rounds: 10
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      block_size_bits: 256
+      output_size_bits: 256
 
   - id: spoc_permutation_256
     name: SpoC Permutation (256-bit)
@@ -1510,8 +1407,8 @@ primitives:
     characteristics:
       state_size_bits: 256
       rounds: 10
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      block_size_bits: 256
+      output_size_bits: 256
 
   - id: spook_permutation_256
     name: Spook Permutation (256-bit)
@@ -1520,8 +1417,8 @@ primitives:
     characteristics:
       state_size_bits: 256
       rounds: 12
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      block_size_bits: 256
+      output_size_bits: 256
 
   - id: knot_permutation_256
     name: KNOT Permutation (256-bit)
@@ -1530,8 +1427,8 @@ primitives:
     characteristics:
       state_size_bits: 256
       rounds: 52
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      block_size_bits: 256
+      output_size_bits: 256
 
   - id: pyjamask_128
     name: Pyjamask-128
@@ -1541,8 +1438,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 14
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: qameleon_128
     name: Qameleon-128
@@ -1553,8 +1449,7 @@ primitives:
       key_size_bits: 128
       tweak_size_bits: 128
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: saturnin_256
     name: Saturnin-256
@@ -1564,8 +1459,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 16
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: simple_permutation_256
     name: SIMPLE Permutation (256-bit)
@@ -1574,8 +1468,8 @@ primitives:
     characteristics:
       state_size_bits: 256
       rounds: 12
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      block_size_bits: 256
+      output_size_bits: 256
 
   - id: trifle_128
     name: TRIFLE-128
@@ -1586,8 +1480,7 @@ primitives:
       key_size_bits: 128
       tweak_size_bits: 64
       rounds: 24
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
   - id: ace_v1
     name: ACE-v1
     family_id: ace
@@ -1598,8 +1491,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: akelarre_v1
@@ -1612,8 +1504,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: ant_128_128
@@ -1626,8 +1517,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 46
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: ant_128_256
     name: ANT-128/256
@@ -1639,8 +1529,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 48
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: ant_256_256
     name: ANT-256/256
@@ -1652,8 +1541,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 74
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: spring_128_128
     name: SPRING-128/128
@@ -1665,8 +1553,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 10
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: spring_128_256
     name: SPRING-128/256
@@ -1678,8 +1565,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 14
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: spring_256_256
     name: SPRING-256/256
@@ -1691,8 +1577,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 18
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: raindrop_128_128
     name: Raindrop-128/128
@@ -1704,8 +1589,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 60
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: raindrop_128_256
     name: Raindrop-128/256
@@ -1717,8 +1601,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 80
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: raindrop_256_256
     name: Raindrop-256/256
@@ -1730,8 +1613,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 100
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: smba_128_128
     name: SMBA-128/128
@@ -1743,8 +1625,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 18
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: smba_128_256
     name: SMBA-128/256
@@ -1756,8 +1637,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 24
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: smba_256_256
     name: SMBA-256/256
@@ -1769,8 +1649,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 24
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: fbc_128_128
     name: FBC128-128
@@ -1782,8 +1661,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 48
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: fbc_128_256
     name: FBC128-256
@@ -1795,8 +1673,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 64
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: fbc_256_256
     name: FBC256-256
@@ -1808,8 +1685,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 80
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: nbc_128_128
     name: NBC-128/128
@@ -1821,8 +1697,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 32
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: nbc_128_256
     name: NBC-128/256
@@ -1834,8 +1709,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 34
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: nbc_256_256
     name: NBC-256/256
@@ -1847,8 +1721,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 38
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: tangram_128_128
     name: TANGRAM-128/128
@@ -1860,8 +1733,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 44
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: tangram_128_256
     name: TANGRAM-128/256
@@ -1873,8 +1745,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 50
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: tangram_256_256
     name: TANGRAM-256/256
@@ -1886,8 +1757,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 82
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: anubis_v1
     name: Anubis-v1
@@ -1899,8 +1769,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: ballet_128_128
@@ -1913,8 +1782,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 46
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: ballet_128_256
     name: Ballet-128/256
@@ -1926,8 +1794,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 48
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: ballet_256_256
     name: Ballet-256/256
@@ -1939,8 +1806,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 74
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: bear_lion_v1
     name: BEAR/LION-v1
@@ -1952,8 +1818,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: belt_v1
@@ -1966,8 +1831,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: bleep64_v1
@@ -1980,8 +1844,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: blowfish_2_v1
@@ -1994,8 +1857,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: bmgl_v1
@@ -2008,8 +1870,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: chaskey_v1
@@ -2021,8 +1882,8 @@ primitives:
     characteristics:
       state_size_bits: 256
       rounds: 1
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      block_size_bits: 256
+      output_size_bits: 256
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: cilipadi_v1
@@ -2034,8 +1895,8 @@ primitives:
     characteristics:
       state_size_bits: 256
       rounds: 1
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      block_size_bits: 256
+      output_size_bits: 256
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: cipherunicorn_a_v1
@@ -2048,8 +1909,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: cipherunicorn_e_v1
@@ -2062,8 +1922,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: clae_v1
@@ -2076,8 +1935,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: clx_v1
@@ -2090,8 +1948,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: cmea_v1
@@ -2104,8 +1961,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: comet_v1
@@ -2118,8 +1974,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: cs_cipher_v1
@@ -2132,8 +1987,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: deoxys_v1
@@ -2148,8 +2002,7 @@ primitives:
       tweak_size_bits: 128
       tweakey_size_bits: 256
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: desx_v1
@@ -2162,8 +2015,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: enocoro_128v2_v1
@@ -2177,8 +2029,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: estate_v1
@@ -2191,8 +2043,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: fantomas_robin_v1
@@ -2205,8 +2056,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: feal_v1
@@ -2219,8 +2069,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: fesh_128_128
@@ -2233,8 +2082,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: fesh_128_192
     name: FESH-128-192
@@ -2246,8 +2094,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 192
       rounds: 20
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: fesh_128_256
     name: FESH-128-256
@@ -2259,8 +2106,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 20
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: fesh_256_256
     name: FESH-256-256
@@ -2272,8 +2118,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 24
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: fesh_256_384
     name: FESH-256-384
@@ -2285,8 +2130,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 384
       rounds: 28
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: fesh_256_512
     name: FESH-256-512
@@ -2298,8 +2142,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 512
       rounds: 28
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: flexaead_v1
     name: FlexAEAD-v1
@@ -2311,8 +2154,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: forkae_v1
@@ -2325,8 +2167,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: fountain_v1
@@ -2339,8 +2180,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: gage_and_ingage_v1
@@ -2353,8 +2193,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: gost_28147_89_v1
@@ -2367,8 +2206,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: grand_cru_v1
@@ -2381,8 +2219,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: hern_and_heron_v1
@@ -2395,8 +2232,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: hight_v1
@@ -2409,8 +2245,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: hyena_v1
@@ -2423,8 +2258,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: ice_v1
@@ -2437,8 +2271,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: isaac_v1
@@ -2452,8 +2285,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: kcipher_2_v1
@@ -2467,8 +2300,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: khazad_v1
@@ -2481,8 +2314,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: klein_v1
@@ -2495,8 +2327,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: kuznyechik_v1
@@ -2509,8 +2340,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: laem_v1
@@ -2523,8 +2353,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: lea_v1
@@ -2537,8 +2366,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: lea_128_v1
@@ -2551,8 +2379,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: leviathan_v1
@@ -2566,8 +2393,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: lili_128_v1
@@ -2581,8 +2408,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: lilliput_ae_v1
@@ -2595,8 +2422,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: limdolen_v1
@@ -2609,8 +2435,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: locus_v1
@@ -2623,8 +2448,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: loki_v1
@@ -2637,8 +2461,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: lotus_v1
@@ -2651,8 +2474,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: mantis_v1
@@ -2667,8 +2489,7 @@ primitives:
       tweak_size_bits: 128
       tweakey_size_bits: 256
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: mcrypton_v1
@@ -2681,8 +2502,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: mibs_v1
@@ -2695,8 +2515,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: midori_v1
@@ -2709,8 +2528,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: misty1_v1
@@ -2723,8 +2541,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: mixfeed_v1
@@ -2737,8 +2554,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: mmb_v1
@@ -2751,8 +2567,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: mugi_v1
@@ -2766,8 +2581,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: multi_s01_v1
@@ -2781,8 +2596,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: multi2_v1
@@ -2795,8 +2610,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: nimbus_v1
@@ -2809,8 +2623,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: noekeon_v1
@@ -2823,8 +2636,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: nush_v1
@@ -2837,8 +2649,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: orange_v1
@@ -2851,8 +2662,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: oribatida_v1
@@ -2865,8 +2675,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: oryx_v1
@@ -2880,8 +2689,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: pea_v1
@@ -2894,8 +2703,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: picaro_v1
@@ -2908,8 +2716,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: pride_v1
@@ -2922,8 +2729,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: princev2_v1
@@ -2938,8 +2744,7 @@ primitives:
       tweak_size_bits: 128
       tweakey_size_bits: 256
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: q_v1
@@ -2952,8 +2757,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: quartet_v1
@@ -2966,8 +2770,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: rc2_v1
@@ -2980,8 +2783,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: rc4plus_v1
@@ -2995,8 +2797,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: rc4a_v1
@@ -3010,8 +2812,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: remus_v1
@@ -3024,8 +2826,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: saeaes_v1
@@ -3038,8 +2839,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: safer_v1
@@ -3052,8 +2852,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: saferpp_v1
@@ -3066,8 +2865,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: sc2000_v1
@@ -3080,8 +2878,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: shacal_v1
@@ -3094,8 +2891,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: shacal2_v1
@@ -3108,8 +2904,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: shamash_and_shamashash_v1
@@ -3122,8 +2917,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: shark_v1
@@ -3136,8 +2930,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: skipjack_v1
@@ -3150,8 +2943,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: snow_v1
@@ -3165,8 +2957,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: snow_2_0_v1
@@ -3180,8 +2972,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: snow_3g_v1
@@ -3195,8 +2987,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: sober_t16_v1
@@ -3210,8 +3002,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: sober_t32_v1
@@ -3225,8 +3017,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: sosemanuk1_v1
@@ -3240,8 +3032,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: speckey_v1
@@ -3254,8 +3046,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: speedy_v1
@@ -3268,8 +3059,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: spritz_v1
@@ -3283,8 +3073,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: square_v1
@@ -3297,8 +3087,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: thank_goodness_it_s_friday_v1
@@ -3311,8 +3100,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: three_key_triple_des_v1
@@ -3325,8 +3113,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: threefish_v1
@@ -3339,8 +3126,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: treyfer_v1
@@ -3353,8 +3139,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: triad_v1
@@ -3368,8 +3153,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: trivium_v1
@@ -3383,8 +3168,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: two_key_triple_des_v1
@@ -3397,8 +3182,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: ublock_128_128
@@ -3411,8 +3195,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 16
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: ublock_128_256
     name: uBlock-128/256
@@ -3424,8 +3207,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 256
       rounds: 24
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
 
   - id: ublock_256_256
     name: uBlock-256/256
@@ -3437,8 +3219,7 @@ primitives:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 24
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      output_size_bits: 256
 
   - id: uea2_zuc_v1
     name: UEA2 / ZUC-v1
@@ -3451,8 +3232,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: vmpc_v1
@@ -3466,8 +3247,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: wage_v1
@@ -3479,8 +3260,8 @@ primitives:
     characteristics:
       state_size_bits: 256
       rounds: 1
-      fixed_input_bits: 256
-      fixed_output_bits: 256
+      block_size_bits: 256
+      output_size_bits: 256
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: wake_v1
@@ -3494,8 +3275,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: xchacha_v1
@@ -3509,8 +3290,8 @@ primitives:
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      block_size_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: xxtea_v1
@@ -3523,8 +3304,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: xxtea_corrected_block_tea_v1
@@ -3537,8 +3317,7 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: yarara_and_coral_v1
@@ -3551,7 +3330,5 @@ primitives:
       block_size_bits: 128
       key_size_bits: 128
       rounds: 1
-      fixed_input_bits: 128
-      fixed_output_bits: 128
+      output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
-

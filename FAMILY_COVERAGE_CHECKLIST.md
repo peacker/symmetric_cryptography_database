@@ -16,7 +16,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | Anubis | Anubis | TODO | TODO | TODO | yes |
 | [x] | ARADI | ARADI | 2024 | https://eprint.iacr.org/2024/1240 | TODO | yes |
 | [x] | ARIA | ARIA | 2010 | https://www.rfc-editor.org/rfc/rfc5794 | TODO | no |
-| [x] | ASCON | ASCON permutation | 2019 | https://ascon.iaik.tugraz.at/ | TODO | no |
+| [x] | ASCON | ASCON permutation | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
 | [x] | Ballet | Ballet | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
 | [ ] | BEAR/LION | BEAR/LION | TODO | TODO | TODO | no |
 | [ ] | BelT | BelT | TODO | TODO | TODO | no |

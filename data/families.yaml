@@ -1377,11 +1377,15 @@ families:
         - id: rotation_fixed
         - id: constant
     reference_ids:
-      - ascon_submission_2019
+      - ascon_caesar_submission_2016
+      - ascon_nist_lwc_submission_2021
+      - ascon_joc_2021
+      - ascon_ctrsa_2024
       - sp_800_232
     process_ids:
       - lightweight_crypto_nist_2018_2023
     influences: []
+    notes: First appeared in the 2016 CAESAR submission. Subsequent references track the NIST LWC submission, the Journal of Cryptology AEAD/Hash/XOF specification, the CT-RSA 2024 PRF/MAC specification, and the final NIST standard.
 
   - id: photon
     name: PHOTON

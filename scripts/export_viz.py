@@ -35,7 +35,7 @@ def main() -> None:
             SELECT p.id AS primitive_id, p.name, f.year,
                    f.id AS family_id, f.name AS family_name,
                      pt.name AS primitive_type,
-                   p.fixed_input_bits, p.fixed_output_bits
+                   p.block_size_bits, p.output_size_bits
             FROM primitives p
             JOIN families f ON f.id = p.family_id
                  JOIN primitive_types pt ON pt.id = p.primitive_type

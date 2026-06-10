@@ -880,7 +880,7 @@ rounds:
   # ── NIST LWC Underlying Primitive Families ──────────────────────────────
 
   - id: ascon_permutation_round
-    name: ASCON Permutation Round
+    name: Ascon-p Round
     kind: full_round
     spec:
       state_model:
@@ -895,8 +895,9 @@ rounds:
         - component_id: rotation_fixed
       constant_injection: round_constant
     notes: >
-      ASCON round abstraction with constant addition, nonlinear bit-sliced
-      substitution layer, and linear diffusion via lane rotations.
+      Ascon-p round abstraction with constant addition, nonlinear bit-sliced
+      substitution layer, and linear diffusion via lane rotations. Section 3
+      of NIST SP 800-232 gives the official permutation name "Ascon-p".
 
   - id: photon_permutation_round
     name: PHOTON Permutation Round
