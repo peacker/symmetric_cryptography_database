@@ -7,192 +7,192 @@ This is a planning list of known symmetric primitive/cipher families.
 
 ## Alphabetical List
 
-- [ ] ACE
+- [x] ACE
 - [x] AES
-- [ ] Akelarre
-- [ ] ANT
-- [ ] Anubis
+- [x] Akelarre
+- [x] ANT
+- [x] Anubis
 - [x] ARADI
 - [x] ARIA
 - [x] ASCON
-- [ ] Ballet
-- [ ] BEAR/LION
-- [ ] BelT
+- [x] Ballet
+- [x] BEAR/LION
+- [x] BelT
 - [x] BipBip
-- [ ] Bleep64
+- [x] Bleep64
 - [x] Blink
-- [ ] Blowfish
-- [ ] BMGL
+- [x] Blowfish
+- [x] BMGL
 - [x] Camellia
 - [x] CAST-128
 - [x] CAST-256
 - [x] ChaCha
-- [ ] Chaskey
+- [x] Chaskey
 - [x] ChiLow
-- [ ] CiliPadi
-- [ ] CIPHERUNICORN-A
-- [ ] CIPHERUNICORN-E
-- [ ] CLAE
+- [x] CiliPadi
+- [x] CIPHERUNICORN-A
+- [x] CIPHERUNICORN-E
+- [x] CLAE
 - [x] CLEFIA
-- [ ] CLX
-- [ ] CMEA
-- [ ] COMET
+- [x] CLX
+- [x] CMEA
+- [x] COMET
 - [x] CRYPTON
-- [ ] CS-Cipher
+- [x] CS-Cipher
 - [x] DEAL
-- [ ] Deoxys
+- [x] Deoxys
 - [x] DES
-- [ ] DESX
+- [x] DESX
 - [x] DFC
 - [x] DryGASCON
 - [x] E2
 - [x] Elephant
-- [ ] Enocoro-128v2
-- [ ] ESTATE
-- [ ] Fantomas / Robin
-- [ ] FEAL
-- [ ] FESH
-- [ ] FlexAEAD
-- [ ] ForkAE
-- [ ] Fountain
+- [x] Enocoro-128v2
+- [x] ESTATE
+- [x] Fantomas / Robin
+- [x] FEAL
+- [x] FESH
+- [x] FlexAEAD
+- [x] ForkAE
+- [x] Fountain
 - [x] FROG
-- [ ] GAGE and InGAGE
+- [x] GAGE and InGAGE
 - [x] GIFT
 - [x] Gimli
-- [ ] GOST 28147-89 (Magma)
+- [x] GOST 28147-89 (Magma)
 - [x] Grain-128
-- [ ] Grand Cru
-- [ ] HERN & HERON
-- [ ] HIGHT
+- [x] Grand Cru
+- [x] HERN & HERON
+- [x] HIGHT
 - [x] HPC
-- [ ] HyENA
-- [ ] ICE
+- [x] HyENA
+- [x] ICE
 - [x] IDEA
-- [ ] ISAAC
+- [x] ISAAC
 - [x] ISAP
 - [x] KASUMI
 - [x] KATAN
-- [ ] KCipher-2
-- [ ] Khazad
-- [ ] KLEIN
+- [x] KCipher-2
+- [x] Khazad
+- [x] KLEIN
 - [x] KNOT
 - [x] KTANTAN
-- [ ] Kuznyechik
-- [ ] LAEM
-- [ ] LEA
-- [ ] LEA-128
+- [x] Kuznyechik
+- [x] LAEM
+- [x] LEA
+- [x] LEA-128
 - [x] LED
-- [ ] LEVIATHAN
-- [ ] LILI-128
-- [ ] Lilliput-AE
-- [ ] Limdolen
-- [ ] LOCUS
-- [ ] LOKI
+- [x] LEVIATHAN
+- [x] LILI-128
+- [x] Lilliput-AE
+- [x] Limdolen
+- [x] LOCUS
+- [x] LOKI
 - [x] LOKI97
-- [ ] LOTUS
+- [x] LOTUS
 - [x] MAGENTA
-- [ ] MANTIS
+- [x] MANTIS
 - [x] MARS
-- [ ] MCRYPTON
-- [ ] MIBS
-- [ ] MIDORI
-- [ ] MISTY1
-- [ ] mixFeed
-- [ ] MMB
+- [x] MCRYPTON
+- [x] MIBS
+- [x] MIDORI
+- [x] MISTY1
+- [x] mixFeed
+- [x] MMB
 - [x] MSX
-- [ ] MUGI
-- [ ] MULTI-S01
-- [ ] MULTI2
-- [ ] Nimbus
-- [ ] NOEKEON
-- [ ] NUSH
-- [ ] ORANGE
-- [ ] Oribatida
-- [ ] ORYX
-- [ ] PEA
+- [x] MUGI
+- [x] MULTI-S01
+- [x] MULTI2
+- [x] Nimbus
+- [x] NOEKEON
+- [x] NUSH
+- [x] ORANGE
+- [x] Oribatida
+- [x] ORYX
+- [x] PEA
 - [x] PHOTON
-- [ ] PICARO
+- [x] PICARO
 - [x] PRESENT
-- [ ] PRIDE
+- [x] PRIDE
 - [x] PRINCE
-- [ ] PRINCEv2
+- [x] PRINCEv2
 - [x] Pyjamask
-- [ ] Q
+- [x] Q
 - [x] Qameleon
 - [x] QARMA
 - [x] QARMAv2
-- [ ] Quartet
-- [ ] RC2
+- [x] Quartet
+- [x] RC2
 - [x] RC4
-- [ ] RC4+
-- [ ] RC4A
+- [x] RC4+
+- [x] RC4A
 - [x] RC5
 - [x] RC6
-- [ ] REMUS
+- [x] REMUS
 - [x] Rijndael
 - [x] Romulus
-- [ ] SAEAES
-- [ ] SAFER
+- [x] SAEAES
+- [x] SAFER
 - [x] SAFER+
-- [ ] SAFER++
+- [x] SAFER++
 - [x] SALSA
 - [x] Saturnin
-- [ ] SC2000
+- [x] SC2000
 - [x] SCARF
 - [x] SEED
 - [x] Serpent
-- [ ] SHACAL
-- [ ] SHACAL2
-- [ ] Shamash & Shamashash
-- [ ] SHARK
+- [x] SHACAL
+- [x] SHACAL2
+- [x] Shamash & Shamashash
+- [x] SHARK
 - [x] SIMON
 - [x] SIMPLE
 - [x] SKINNY
-- [ ] SKIPJACK
+- [x] SKIPJACK
 - [x] SM4
 - [x] SNEIK
-- [ ] SNOW
-- [ ] SNOW 2.0
-- [ ] SNOW 3G
-- [ ] SOBER-t16
-- [ ] SOBER-t32
-- [ ] SOSEMANUK1
+- [x] SNOW
+- [x] SNOW 2.0
+- [x] SNOW 3G
+- [x] SOBER-t16
+- [x] SOBER-t32
+- [x] SOSEMANUK1
 - [x] SPARKLE
 - [x] SPECK
-- [ ] SPECKEY
-- [ ] SPEEDY
+- [x] SPECKEY
+- [x] SPEEDY
 - [x] SPIX
 - [x] SpoC
 - [x] Spook
-- [ ] Spritz
-- [ ] SQUARE
+- [x] Spritz
+- [x] SQUARE
 - [x] Subterranean 2.0
 - [x] Sycon
 - [x] TEA
-- [ ] Thank Goodness It's Friday (TGIF)
-- [ ] Three-key Triple DES
-- [ ] Threefish
+- [x] Thank Goodness It's Friday (TGIF)
+- [x] Three-key Triple DES
+- [x] Threefish
 - [x] TinyJambu
-- [ ] TREYFER
-- [ ] Triad
+- [x] TREYFER
+- [x] Triad
 - [x] TRIFLE
-- [ ] Trivium
+- [x] Trivium
 - [x] TWINE
-- [ ] Two-key Triple DES
+- [x] Two-key Triple DES
 - [x] Twofish
-- [ ] uBlock
-- [ ] UEA2 / ZUC
+- [x] uBlock
+- [x] UEA2 / ZUC
 - [x] uLBC
-- [ ] VMPC
-- [ ] WAGE
-- [ ] WAKE
-- [ ] XChaCha
+- [x] VMPC
+- [x] WAGE
+- [x] WAKE
+- [x] XChaCha
 - [x] XEX-based families (XTS lineage)
 - [x] Xoodoo
 - [x] XTEA
-- [ ] XXTEA
-- [ ] XXTEA / Corrected Block TEA
-- [ ] Yarara and Coral
+- [x] XXTEA
+- [x] XXTEA / Corrected Block TEA
+- [x] Yarara and Coral
 ## Notes
 
 - This list is intentionally broad and includes both classic and modern families.

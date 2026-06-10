@@ -1287,3 +1287,899 @@ rounds:
     notes: >
       TRIFLE round abstraction for a lightweight tweakable block-cipher style
       primitive used in NIST LWC submissions.
+  - id: ace_round
+    name: ACE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: akelarre_round
+    name: Akelarre round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: ant_round
+    name: ANT round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: anubis_round
+    name: Anubis round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: ballet_round
+    name: Ballet round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: bear_lion_round
+    name: BEAR/LION round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: belt_round
+    name: BelT round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: bleep64_round
+    name: Bleep64 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: blowfish_2_round
+    name: Blowfish round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: bmgl_round
+    name: BMGL round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: chaskey_round
+    name: Chaskey round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: cilipadi_round
+    name: CiliPadi round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: cipherunicorn_a_round
+    name: CIPHERUNICORN-A round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: cipherunicorn_e_round
+    name: CIPHERUNICORN-E round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: clae_round
+    name: CLAE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: clx_round
+    name: CLX round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: cmea_round
+    name: CMEA round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: comet_round
+    name: COMET round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: cs_cipher_round
+    name: CS-Cipher round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: deoxys_round
+    name: Deoxys round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: desx_round
+    name: DESX round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: enocoro_128v2_round
+    name: Enocoro-128v2 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: estate_round
+    name: ESTATE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: fantomas_robin_round
+    name: Fantomas / Robin round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: feal_round
+    name: FEAL round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: fesh_round
+    name: FESH round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: flexaead_round
+    name: FlexAEAD round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: forkae_round
+    name: ForkAE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: fountain_round
+    name: Fountain round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: gage_and_ingage_round
+    name: GAGE and InGAGE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: gost_28147_89_round
+    name: GOST 28147-89 (Magma) round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: grand_cru_round
+    name: Grand Cru round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: hern_and_heron_round
+    name: HERN & HERON round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: hight_round
+    name: HIGHT round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: hyena_round
+    name: HyENA round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: ice_round
+    name: ICE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: isaac_round
+    name: ISAAC round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: kcipher_2_round
+    name: KCipher-2 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: khazad_round
+    name: Khazad round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: klein_round
+    name: KLEIN round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: kuznyechik_round
+    name: Kuznyechik round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: laem_round
+    name: LAEM round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: lea_round
+    name: LEA round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: lea_128_round
+    name: LEA-128 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: leviathan_round
+    name: LEVIATHAN round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: lili_128_round
+    name: LILI-128 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: lilliput_ae_round
+    name: Lilliput-AE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: limdolen_round
+    name: Limdolen round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: locus_round
+    name: LOCUS round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: loki_round
+    name: LOKI round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: lotus_round
+    name: LOTUS round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: mantis_round
+    name: MANTIS round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: mcrypton_round
+    name: MCRYPTON round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: mibs_round
+    name: MIBS round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: midori_round
+    name: MIDORI round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: misty1_round
+    name: MISTY1 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: mixfeed_round
+    name: mixFeed round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: mmb_round
+    name: MMB round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: mugi_round
+    name: MUGI round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: multi_s01_round
+    name: MULTI-S01 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: multi2_round
+    name: MULTI2 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: nimbus_round
+    name: Nimbus round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: noekeon_round
+    name: NOEKEON round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: nush_round
+    name: NUSH round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: orange_round
+    name: ORANGE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: oribatida_round
+    name: Oribatida round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: oryx_round
+    name: ORYX round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: pea_round
+    name: PEA round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: picaro_round
+    name: PICARO round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: pride_round
+    name: PRIDE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: princev2_round
+    name: PRINCEv2 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: q_round
+    name: Q round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: quartet_round
+    name: Quartet round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: rc2_round
+    name: RC2 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: rc4plus_round
+    name: RC4+ round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: rc4a_round
+    name: RC4A round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: remus_round
+    name: REMUS round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: saeaes_round
+    name: SAEAES round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: safer_round
+    name: SAFER round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: saferpp_round
+    name: SAFER++ round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: sc2000_round
+    name: SC2000 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: shacal_round
+    name: SHACAL round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: shacal2_round
+    name: SHACAL2 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: shamash_and_shamashash_round
+    name: Shamash & Shamashash round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: shark_round
+    name: SHARK round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: skipjack_round
+    name: SKIPJACK round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: snow_round
+    name: SNOW round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: snow_2_0_round
+    name: SNOW 2.0 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: snow_3g_round
+    name: SNOW 3G round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: sober_t16_round
+    name: SOBER-t16 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: sober_t32_round
+    name: SOBER-t32 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: sosemanuk1_round
+    name: SOSEMANUK1 round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: speckey_round
+    name: SPECKEY round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: speedy_round
+    name: SPEEDY round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: spritz_round
+    name: Spritz round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: square_round
+    name: SQUARE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: thank_goodness_it_s_friday_round
+    name: Thank Goodness It's Friday (TGIF) round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: three_key_triple_des_round
+    name: Three-key Triple DES round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: threefish_round
+    name: Threefish round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: treyfer_round
+    name: TREYFER round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: triad_round
+    name: Triad round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: trivium_round
+    name: Trivium round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: two_key_triple_des_round
+    name: Two-key Triple DES round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: ublock_round
+    name: uBlock round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: uea2_zuc_round
+    name: UEA2 / ZUC round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: vmpc_round
+    name: VMPC round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: wage_round
+    name: WAGE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: wake_round
+    name: WAKE round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: xchacha_round
+    name: XChaCha round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: xxtea_round
+    name: XXTEA round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: xxtea_corrected_block_tea_round
+    name: XXTEA / Corrected Block TEA round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+
+  - id: yarara_and_coral_round
+    name: Yarara and Coral round
+    kind: other
+    spec:
+      component_flow:
+        - component_id: xor
+    notes: Generic placeholder round entry pending full parameter extraction.
+

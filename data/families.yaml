@@ -1920,3 +1920,2438 @@ families:
     process_ids:
       - lightweight_crypto_nist_2018_2023
     influences: []
+  - id: ace
+    name: ACE
+    construction_ids:
+      - spn
+    round_ids:
+      - ace_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - ace_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: akelarre
+    name: Akelarre
+    construction_ids:
+      - spn
+    round_ids:
+      - akelarre_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - akelarre_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: ant
+    name: ANT
+    construction_ids:
+      - spn
+    round_ids:
+      - ant_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - ant_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: anubis
+    name: Anubis
+    construction_ids:
+      - spn
+    round_ids:
+      - anubis_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - anubis_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: ballet
+    name: Ballet
+    construction_ids:
+      - spn
+    round_ids:
+      - ballet_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - ballet_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: bear_lion
+    name: BEAR/LION
+    construction_ids:
+      - spn
+    round_ids:
+      - bear_lion_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - bear_lion_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: belt
+    name: BelT
+    construction_ids:
+      - spn
+    round_ids:
+      - belt_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - belt_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: bleep64
+    name: Bleep64
+    construction_ids:
+      - spn
+    round_ids:
+      - bleep64_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - bleep64_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: blowfish_2
+    name: Blowfish
+    construction_ids:
+      - spn
+    round_ids:
+      - blowfish_2_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - blowfish_2_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: bmgl
+    name: BMGL
+    construction_ids:
+      - spn
+    round_ids:
+      - bmgl_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - bmgl_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: chaskey
+    name: Chaskey
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - chaskey_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - chaskey_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: cilipadi
+    name: CiliPadi
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - cilipadi_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - cilipadi_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: cipherunicorn_a
+    name: CIPHERUNICORN-A
+    construction_ids:
+      - spn
+    round_ids:
+      - cipherunicorn_a_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - cipherunicorn_a_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: cipherunicorn_e
+    name: CIPHERUNICORN-E
+    construction_ids:
+      - spn
+    round_ids:
+      - cipherunicorn_e_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - cipherunicorn_e_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: clae
+    name: CLAE
+    construction_ids:
+      - spn
+    round_ids:
+      - clae_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - clae_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: clx
+    name: CLX
+    construction_ids:
+      - spn
+    round_ids:
+      - clx_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - clx_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: cmea
+    name: CMEA
+    construction_ids:
+      - spn
+    round_ids:
+      - cmea_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - cmea_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: comet
+    name: COMET
+    construction_ids:
+      - spn
+    round_ids:
+      - comet_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - comet_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: cs_cipher
+    name: CS-Cipher
+    construction_ids:
+      - spn
+    round_ids:
+      - cs_cipher_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - cs_cipher_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: deoxys
+    name: Deoxys
+    construction_ids:
+      - tweakable_spn
+    round_ids:
+      - deoxys_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - deoxys_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: desx
+    name: DESX
+    construction_ids:
+      - spn
+    round_ids:
+      - desx_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - desx_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: enocoro_128v2
+    name: Enocoro-128v2
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - enocoro_128v2_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - enocoro_128v2_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: estate
+    name: ESTATE
+    construction_ids:
+      - spn
+    round_ids:
+      - estate_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - estate_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: fantomas_robin
+    name: Fantomas / Robin
+    construction_ids:
+      - spn
+    round_ids:
+      - fantomas_robin_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - fantomas_robin_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: feal
+    name: FEAL
+    construction_ids:
+      - spn
+    round_ids:
+      - feal_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - feal_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: fesh
+    name: FESH
+    construction_ids:
+      - spn
+    round_ids:
+      - fesh_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - fesh_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: flexaead
+    name: FlexAEAD
+    construction_ids:
+      - spn
+    round_ids:
+      - flexaead_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - flexaead_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: forkae
+    name: ForkAE
+    construction_ids:
+      - spn
+    round_ids:
+      - forkae_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - forkae_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: fountain
+    name: Fountain
+    construction_ids:
+      - spn
+    round_ids:
+      - fountain_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - fountain_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: gage_and_ingage
+    name: GAGE and InGAGE
+    construction_ids:
+      - spn
+    round_ids:
+      - gage_and_ingage_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - gage_and_ingage_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: gost_28147_89
+    name: GOST 28147-89 (Magma)
+    construction_ids:
+      - spn
+    round_ids:
+      - gost_28147_89_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - gost_28147_89_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: grand_cru
+    name: Grand Cru
+    construction_ids:
+      - spn
+    round_ids:
+      - grand_cru_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - grand_cru_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: hern_and_heron
+    name: HERN & HERON
+    construction_ids:
+      - spn
+    round_ids:
+      - hern_and_heron_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - hern_and_heron_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: hight
+    name: HIGHT
+    construction_ids:
+      - spn
+    round_ids:
+      - hight_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - hight_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: hyena
+    name: HyENA
+    construction_ids:
+      - spn
+    round_ids:
+      - hyena_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - hyena_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: ice
+    name: ICE
+    construction_ids:
+      - spn
+    round_ids:
+      - ice_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - ice_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: isaac
+    name: ISAAC
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - isaac_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - isaac_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: kcipher_2
+    name: KCipher-2
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - kcipher_2_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - kcipher_2_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: khazad
+    name: Khazad
+    construction_ids:
+      - spn
+    round_ids:
+      - khazad_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - khazad_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: klein
+    name: KLEIN
+    construction_ids:
+      - spn
+    round_ids:
+      - klein_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - klein_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: kuznyechik
+    name: Kuznyechik
+    construction_ids:
+      - spn
+    round_ids:
+      - kuznyechik_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - kuznyechik_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: laem
+    name: LAEM
+    construction_ids:
+      - spn
+    round_ids:
+      - laem_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - laem_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: lea
+    name: LEA
+    construction_ids:
+      - spn
+    round_ids:
+      - lea_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - lea_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: lea_128
+    name: LEA-128
+    construction_ids:
+      - spn
+    round_ids:
+      - lea_128_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - lea_128_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: leviathan
+    name: LEVIATHAN
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - leviathan_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - leviathan_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: lili_128
+    name: LILI-128
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - lili_128_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - lili_128_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: lilliput_ae
+    name: Lilliput-AE
+    construction_ids:
+      - spn
+    round_ids:
+      - lilliput_ae_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - lilliput_ae_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: limdolen
+    name: Limdolen
+    construction_ids:
+      - spn
+    round_ids:
+      - limdolen_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - limdolen_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: locus
+    name: LOCUS
+    construction_ids:
+      - spn
+    round_ids:
+      - locus_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - locus_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: loki
+    name: LOKI
+    construction_ids:
+      - spn
+    round_ids:
+      - loki_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - loki_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: lotus
+    name: LOTUS
+    construction_ids:
+      - spn
+    round_ids:
+      - lotus_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - lotus_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: mantis
+    name: MANTIS
+    construction_ids:
+      - tweakable_spn
+    round_ids:
+      - mantis_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - mantis_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: mcrypton
+    name: MCRYPTON
+    construction_ids:
+      - spn
+    round_ids:
+      - mcrypton_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - mcrypton_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: mibs
+    name: MIBS
+    construction_ids:
+      - spn
+    round_ids:
+      - mibs_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - mibs_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: midori
+    name: MIDORI
+    construction_ids:
+      - spn
+    round_ids:
+      - midori_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - midori_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: misty1
+    name: MISTY1
+    construction_ids:
+      - spn
+    round_ids:
+      - misty1_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - misty1_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: mixfeed
+    name: mixFeed
+    construction_ids:
+      - spn
+    round_ids:
+      - mixfeed_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - mixfeed_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: mmb
+    name: MMB
+    construction_ids:
+      - spn
+    round_ids:
+      - mmb_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - mmb_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: mugi
+    name: MUGI
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - mugi_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - mugi_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: multi_s01
+    name: MULTI-S01
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - multi_s01_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - multi_s01_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: multi2
+    name: MULTI2
+    construction_ids:
+      - spn
+    round_ids:
+      - multi2_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - multi2_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: nimbus
+    name: Nimbus
+    construction_ids:
+      - spn
+    round_ids:
+      - nimbus_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - nimbus_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: noekeon
+    name: NOEKEON
+    construction_ids:
+      - spn
+    round_ids:
+      - noekeon_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - noekeon_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: nush
+    name: NUSH
+    construction_ids:
+      - spn
+    round_ids:
+      - nush_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - nush_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: orange
+    name: ORANGE
+    construction_ids:
+      - spn
+    round_ids:
+      - orange_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - orange_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: oribatida
+    name: Oribatida
+    construction_ids:
+      - spn
+    round_ids:
+      - oribatida_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - oribatida_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: oryx
+    name: ORYX
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - oryx_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - oryx_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: pea
+    name: PEA
+    construction_ids:
+      - spn
+    round_ids:
+      - pea_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - pea_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: picaro
+    name: PICARO
+    construction_ids:
+      - spn
+    round_ids:
+      - picaro_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - picaro_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: pride
+    name: PRIDE
+    construction_ids:
+      - spn
+    round_ids:
+      - pride_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - pride_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: princev2
+    name: PRINCEv2
+    construction_ids:
+      - tweakable_spn
+    round_ids:
+      - princev2_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - princev2_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: q
+    name: Q
+    construction_ids:
+      - spn
+    round_ids:
+      - q_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - q_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: quartet
+    name: Quartet
+    construction_ids:
+      - spn
+    round_ids:
+      - quartet_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - quartet_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: rc2
+    name: RC2
+    construction_ids:
+      - spn
+    round_ids:
+      - rc2_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - rc2_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: rc4plus
+    name: RC4+
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - rc4plus_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - rc4plus_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: rc4a
+    name: RC4A
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - rc4a_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - rc4a_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: remus
+    name: REMUS
+    construction_ids:
+      - spn
+    round_ids:
+      - remus_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - remus_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: saeaes
+    name: SAEAES
+    construction_ids:
+      - spn
+    round_ids:
+      - saeaes_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - saeaes_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: safer
+    name: SAFER
+    construction_ids:
+      - spn
+    round_ids:
+      - safer_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - safer_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: saferpp
+    name: SAFER++
+    construction_ids:
+      - spn
+    round_ids:
+      - saferpp_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - saferpp_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: sc2000
+    name: SC2000
+    construction_ids:
+      - spn
+    round_ids:
+      - sc2000_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - sc2000_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: shacal
+    name: SHACAL
+    construction_ids:
+      - spn
+    round_ids:
+      - shacal_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - shacal_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: shacal2
+    name: SHACAL2
+    construction_ids:
+      - spn
+    round_ids:
+      - shacal2_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - shacal2_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: shamash_and_shamashash
+    name: Shamash & Shamashash
+    construction_ids:
+      - spn
+    round_ids:
+      - shamash_and_shamashash_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - shamash_and_shamashash_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: shark
+    name: SHARK
+    construction_ids:
+      - spn
+    round_ids:
+      - shark_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - shark_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: skipjack
+    name: SKIPJACK
+    construction_ids:
+      - spn
+    round_ids:
+      - skipjack_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - skipjack_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: snow
+    name: SNOW
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - snow_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - snow_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: snow_2_0
+    name: SNOW 2.0
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - snow_2_0_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - snow_2_0_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: snow_3g
+    name: SNOW 3G
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - snow_3g_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - snow_3g_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: sober_t16
+    name: SOBER-t16
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - sober_t16_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - sober_t16_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: sober_t32
+    name: SOBER-t32
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - sober_t32_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - sober_t32_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: sosemanuk1
+    name: SOSEMANUK1
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - sosemanuk1_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - sosemanuk1_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: speckey
+    name: SPECKEY
+    construction_ids:
+      - spn
+    round_ids:
+      - speckey_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - speckey_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: speedy
+    name: SPEEDY
+    construction_ids:
+      - spn
+    round_ids:
+      - speedy_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - speedy_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: spritz
+    name: Spritz
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - spritz_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - spritz_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: square
+    name: SQUARE
+    construction_ids:
+      - spn
+    round_ids:
+      - square_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - square_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: thank_goodness_it_s_friday
+    name: Thank Goodness It's Friday (TGIF)
+    construction_ids:
+      - spn
+    round_ids:
+      - thank_goodness_it_s_friday_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - thank_goodness_it_s_friday_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: three_key_triple_des
+    name: Three-key Triple DES
+    construction_ids:
+      - spn
+    round_ids:
+      - three_key_triple_des_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - three_key_triple_des_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: threefish
+    name: Threefish
+    construction_ids:
+      - spn
+    round_ids:
+      - threefish_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - threefish_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: treyfer
+    name: TREYFER
+    construction_ids:
+      - spn
+    round_ids:
+      - treyfer_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - treyfer_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: triad
+    name: Triad
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - triad_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - triad_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: trivium
+    name: Trivium
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - trivium_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - trivium_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: two_key_triple_des
+    name: Two-key Triple DES
+    construction_ids:
+      - spn
+    round_ids:
+      - two_key_triple_des_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - two_key_triple_des_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: ublock
+    name: uBlock
+    construction_ids:
+      - spn
+    round_ids:
+      - ublock_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - ublock_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: uea2_zuc
+    name: UEA2 / ZUC
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - uea2_zuc_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - uea2_zuc_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: vmpc
+    name: VMPC
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - vmpc_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - vmpc_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: wage
+    name: WAGE
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - wage_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - wage_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: wake
+    name: WAKE
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - wake_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - wake_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: xchacha
+    name: XChaCha
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - xchacha_round
+    target_applications:
+      - generic
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: lfsr
+        - id: nlfsr
+        - id: xor
+        - id: constant
+    reference_ids:
+      - xchacha_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: xxtea
+    name: XXTEA
+    construction_ids:
+      - spn
+    round_ids:
+      - xxtea_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - xxtea_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: xxtea_corrected_block_tea
+    name: XXTEA / Corrected Block TEA
+    construction_ids:
+      - spn
+    round_ids:
+      - xxtea_corrected_block_tea_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - xxtea_corrected_block_tea_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  - id: yarara_and_coral
+    name: Yarara and Coral
+    construction_ids:
+      - spn
+    round_ids:
+      - yarara_and_coral_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: bit_permutation
+        - id: xor
+        - id: constant
+    reference_ids:
+      - yarara_and_coral_ref
+    process_ids: []
+    influences: []
+    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+

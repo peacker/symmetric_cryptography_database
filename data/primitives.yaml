@@ -1588,3 +1588,1597 @@ primitives:
       rounds: 24
       fixed_input_bits: 128
       fixed_output_bits: 128
+  - id: ace_v1
+    name: ACE-v1
+    family_id: ace
+    primitive_type: block_cipher
+    reference_ids:
+      - ace_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: akelarre_v1
+    name: Akelarre-v1
+    family_id: akelarre
+    primitive_type: block_cipher
+    reference_ids:
+      - akelarre_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: ant_v1
+    name: ANT-v1
+    family_id: ant
+    primitive_type: block_cipher
+    reference_ids:
+      - ant_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: anubis_v1
+    name: Anubis-v1
+    family_id: anubis
+    primitive_type: block_cipher
+    reference_ids:
+      - anubis_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: ballet_v1
+    name: Ballet-v1
+    family_id: ballet
+    primitive_type: block_cipher
+    reference_ids:
+      - ballet_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: bear_lion_v1
+    name: BEAR/LION-v1
+    family_id: bear_lion
+    primitive_type: block_cipher
+    reference_ids:
+      - bear_lion_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: belt_v1
+    name: BelT-v1
+    family_id: belt
+    primitive_type: block_cipher
+    reference_ids:
+      - belt_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: bleep64_v1
+    name: Bleep64-v1
+    family_id: bleep64
+    primitive_type: block_cipher
+    reference_ids:
+      - bleep64_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: blowfish_2_v1
+    name: Blowfish-v1
+    family_id: blowfish_2
+    primitive_type: block_cipher
+    reference_ids:
+      - blowfish_2_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: bmgl_v1
+    name: BMGL-v1
+    family_id: bmgl
+    primitive_type: block_cipher
+    reference_ids:
+      - bmgl_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: chaskey_v1
+    name: Chaskey-v1
+    family_id: chaskey
+    primitive_type: permutation
+    reference_ids:
+      - chaskey_ref
+    characteristics:
+      state_size_bits: 256
+      rounds: 1
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: cilipadi_v1
+    name: CiliPadi-v1
+    family_id: cilipadi
+    primitive_type: permutation
+    reference_ids:
+      - cilipadi_ref
+    characteristics:
+      state_size_bits: 256
+      rounds: 1
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: cipherunicorn_a_v1
+    name: CIPHERUNICORN-A-v1
+    family_id: cipherunicorn_a
+    primitive_type: block_cipher
+    reference_ids:
+      - cipherunicorn_a_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: cipherunicorn_e_v1
+    name: CIPHERUNICORN-E-v1
+    family_id: cipherunicorn_e
+    primitive_type: block_cipher
+    reference_ids:
+      - cipherunicorn_e_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: clae_v1
+    name: CLAE-v1
+    family_id: clae
+    primitive_type: block_cipher
+    reference_ids:
+      - clae_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: clx_v1
+    name: CLX-v1
+    family_id: clx
+    primitive_type: block_cipher
+    reference_ids:
+      - clx_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: cmea_v1
+    name: CMEA-v1
+    family_id: cmea
+    primitive_type: block_cipher
+    reference_ids:
+      - cmea_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: comet_v1
+    name: COMET-v1
+    family_id: comet
+    primitive_type: block_cipher
+    reference_ids:
+      - comet_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: cs_cipher_v1
+    name: CS-Cipher-v1
+    family_id: cs_cipher
+    primitive_type: block_cipher
+    reference_ids:
+      - cs_cipher_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: deoxys_v1
+    name: Deoxys-v1
+    family_id: deoxys
+    primitive_type: tweakable_block_cipher
+    reference_ids:
+      - deoxys_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      tweak_size_bits: 128
+      tweakey_size_bits: 256
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: desx_v1
+    name: DESX-v1
+    family_id: desx
+    primitive_type: block_cipher
+    reference_ids:
+      - desx_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: enocoro_128v2_v1
+    name: Enocoro-128v2-v1
+    family_id: enocoro_128v2
+    primitive_type: stream_cipher
+    reference_ids:
+      - enocoro_128v2_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: estate_v1
+    name: ESTATE-v1
+    family_id: estate
+    primitive_type: block_cipher
+    reference_ids:
+      - estate_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: fantomas_robin_v1
+    name: Fantomas / Robin-v1
+    family_id: fantomas_robin
+    primitive_type: block_cipher
+    reference_ids:
+      - fantomas_robin_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: feal_v1
+    name: FEAL-v1
+    family_id: feal
+    primitive_type: block_cipher
+    reference_ids:
+      - feal_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: fesh_v1
+    name: FESH-v1
+    family_id: fesh
+    primitive_type: block_cipher
+    reference_ids:
+      - fesh_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: flexaead_v1
+    name: FlexAEAD-v1
+    family_id: flexaead
+    primitive_type: block_cipher
+    reference_ids:
+      - flexaead_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: forkae_v1
+    name: ForkAE-v1
+    family_id: forkae
+    primitive_type: block_cipher
+    reference_ids:
+      - forkae_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: fountain_v1
+    name: Fountain-v1
+    family_id: fountain
+    primitive_type: block_cipher
+    reference_ids:
+      - fountain_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: gage_and_ingage_v1
+    name: GAGE and InGAGE-v1
+    family_id: gage_and_ingage
+    primitive_type: block_cipher
+    reference_ids:
+      - gage_and_ingage_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: gost_28147_89_v1
+    name: GOST 28147-89 (Magma)-v1
+    family_id: gost_28147_89
+    primitive_type: block_cipher
+    reference_ids:
+      - gost_28147_89_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: grand_cru_v1
+    name: Grand Cru-v1
+    family_id: grand_cru
+    primitive_type: block_cipher
+    reference_ids:
+      - grand_cru_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: hern_and_heron_v1
+    name: HERN & HERON-v1
+    family_id: hern_and_heron
+    primitive_type: block_cipher
+    reference_ids:
+      - hern_and_heron_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: hight_v1
+    name: HIGHT-v1
+    family_id: hight
+    primitive_type: block_cipher
+    reference_ids:
+      - hight_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: hyena_v1
+    name: HyENA-v1
+    family_id: hyena
+    primitive_type: block_cipher
+    reference_ids:
+      - hyena_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: ice_v1
+    name: ICE-v1
+    family_id: ice
+    primitive_type: block_cipher
+    reference_ids:
+      - ice_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: isaac_v1
+    name: ISAAC-v1
+    family_id: isaac
+    primitive_type: stream_cipher
+    reference_ids:
+      - isaac_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: kcipher_2_v1
+    name: KCipher-2-v1
+    family_id: kcipher_2
+    primitive_type: stream_cipher
+    reference_ids:
+      - kcipher_2_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: khazad_v1
+    name: Khazad-v1
+    family_id: khazad
+    primitive_type: block_cipher
+    reference_ids:
+      - khazad_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: klein_v1
+    name: KLEIN-v1
+    family_id: klein
+    primitive_type: block_cipher
+    reference_ids:
+      - klein_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: kuznyechik_v1
+    name: Kuznyechik-v1
+    family_id: kuznyechik
+    primitive_type: block_cipher
+    reference_ids:
+      - kuznyechik_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: laem_v1
+    name: LAEM-v1
+    family_id: laem
+    primitive_type: block_cipher
+    reference_ids:
+      - laem_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: lea_v1
+    name: LEA-v1
+    family_id: lea
+    primitive_type: block_cipher
+    reference_ids:
+      - lea_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: lea_128_v1
+    name: LEA-128-v1
+    family_id: lea_128
+    primitive_type: block_cipher
+    reference_ids:
+      - lea_128_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: leviathan_v1
+    name: LEVIATHAN-v1
+    family_id: leviathan
+    primitive_type: stream_cipher
+    reference_ids:
+      - leviathan_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: lili_128_v1
+    name: LILI-128-v1
+    family_id: lili_128
+    primitive_type: stream_cipher
+    reference_ids:
+      - lili_128_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: lilliput_ae_v1
+    name: Lilliput-AE-v1
+    family_id: lilliput_ae
+    primitive_type: block_cipher
+    reference_ids:
+      - lilliput_ae_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: limdolen_v1
+    name: Limdolen-v1
+    family_id: limdolen
+    primitive_type: block_cipher
+    reference_ids:
+      - limdolen_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: locus_v1
+    name: LOCUS-v1
+    family_id: locus
+    primitive_type: block_cipher
+    reference_ids:
+      - locus_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: loki_v1
+    name: LOKI-v1
+    family_id: loki
+    primitive_type: block_cipher
+    reference_ids:
+      - loki_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: lotus_v1
+    name: LOTUS-v1
+    family_id: lotus
+    primitive_type: block_cipher
+    reference_ids:
+      - lotus_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: mantis_v1
+    name: MANTIS-v1
+    family_id: mantis
+    primitive_type: tweakable_block_cipher
+    reference_ids:
+      - mantis_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      tweak_size_bits: 128
+      tweakey_size_bits: 256
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: mcrypton_v1
+    name: MCRYPTON-v1
+    family_id: mcrypton
+    primitive_type: block_cipher
+    reference_ids:
+      - mcrypton_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: mibs_v1
+    name: MIBS-v1
+    family_id: mibs
+    primitive_type: block_cipher
+    reference_ids:
+      - mibs_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: midori_v1
+    name: MIDORI-v1
+    family_id: midori
+    primitive_type: block_cipher
+    reference_ids:
+      - midori_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: misty1_v1
+    name: MISTY1-v1
+    family_id: misty1
+    primitive_type: block_cipher
+    reference_ids:
+      - misty1_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: mixfeed_v1
+    name: mixFeed-v1
+    family_id: mixfeed
+    primitive_type: block_cipher
+    reference_ids:
+      - mixfeed_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: mmb_v1
+    name: MMB-v1
+    family_id: mmb
+    primitive_type: block_cipher
+    reference_ids:
+      - mmb_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: mugi_v1
+    name: MUGI-v1
+    family_id: mugi
+    primitive_type: stream_cipher
+    reference_ids:
+      - mugi_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: multi_s01_v1
+    name: MULTI-S01-v1
+    family_id: multi_s01
+    primitive_type: stream_cipher
+    reference_ids:
+      - multi_s01_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: multi2_v1
+    name: MULTI2-v1
+    family_id: multi2
+    primitive_type: block_cipher
+    reference_ids:
+      - multi2_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: nimbus_v1
+    name: Nimbus-v1
+    family_id: nimbus
+    primitive_type: block_cipher
+    reference_ids:
+      - nimbus_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: noekeon_v1
+    name: NOEKEON-v1
+    family_id: noekeon
+    primitive_type: block_cipher
+    reference_ids:
+      - noekeon_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: nush_v1
+    name: NUSH-v1
+    family_id: nush
+    primitive_type: block_cipher
+    reference_ids:
+      - nush_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: orange_v1
+    name: ORANGE-v1
+    family_id: orange
+    primitive_type: block_cipher
+    reference_ids:
+      - orange_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: oribatida_v1
+    name: Oribatida-v1
+    family_id: oribatida
+    primitive_type: block_cipher
+    reference_ids:
+      - oribatida_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: oryx_v1
+    name: ORYX-v1
+    family_id: oryx
+    primitive_type: stream_cipher
+    reference_ids:
+      - oryx_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: pea_v1
+    name: PEA-v1
+    family_id: pea
+    primitive_type: block_cipher
+    reference_ids:
+      - pea_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: picaro_v1
+    name: PICARO-v1
+    family_id: picaro
+    primitive_type: block_cipher
+    reference_ids:
+      - picaro_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: pride_v1
+    name: PRIDE-v1
+    family_id: pride
+    primitive_type: block_cipher
+    reference_ids:
+      - pride_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: princev2_v1
+    name: PRINCEv2-v1
+    family_id: princev2
+    primitive_type: tweakable_block_cipher
+    reference_ids:
+      - princev2_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      tweak_size_bits: 128
+      tweakey_size_bits: 256
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: q_v1
+    name: Q-v1
+    family_id: q
+    primitive_type: block_cipher
+    reference_ids:
+      - q_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: quartet_v1
+    name: Quartet-v1
+    family_id: quartet
+    primitive_type: block_cipher
+    reference_ids:
+      - quartet_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: rc2_v1
+    name: RC2-v1
+    family_id: rc2
+    primitive_type: block_cipher
+    reference_ids:
+      - rc2_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: rc4plus_v1
+    name: RC4+-v1
+    family_id: rc4plus
+    primitive_type: stream_cipher
+    reference_ids:
+      - rc4plus_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: rc4a_v1
+    name: RC4A-v1
+    family_id: rc4a
+    primitive_type: stream_cipher
+    reference_ids:
+      - rc4a_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: remus_v1
+    name: REMUS-v1
+    family_id: remus
+    primitive_type: block_cipher
+    reference_ids:
+      - remus_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: saeaes_v1
+    name: SAEAES-v1
+    family_id: saeaes
+    primitive_type: block_cipher
+    reference_ids:
+      - saeaes_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: safer_v1
+    name: SAFER-v1
+    family_id: safer
+    primitive_type: block_cipher
+    reference_ids:
+      - safer_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: saferpp_v1
+    name: SAFER++-v1
+    family_id: saferpp
+    primitive_type: block_cipher
+    reference_ids:
+      - saferpp_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: sc2000_v1
+    name: SC2000-v1
+    family_id: sc2000
+    primitive_type: block_cipher
+    reference_ids:
+      - sc2000_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: shacal_v1
+    name: SHACAL-v1
+    family_id: shacal
+    primitive_type: block_cipher
+    reference_ids:
+      - shacal_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: shacal2_v1
+    name: SHACAL2-v1
+    family_id: shacal2
+    primitive_type: block_cipher
+    reference_ids:
+      - shacal2_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: shamash_and_shamashash_v1
+    name: Shamash & Shamashash-v1
+    family_id: shamash_and_shamashash
+    primitive_type: block_cipher
+    reference_ids:
+      - shamash_and_shamashash_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: shark_v1
+    name: SHARK-v1
+    family_id: shark
+    primitive_type: block_cipher
+    reference_ids:
+      - shark_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: skipjack_v1
+    name: SKIPJACK-v1
+    family_id: skipjack
+    primitive_type: block_cipher
+    reference_ids:
+      - skipjack_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: snow_v1
+    name: SNOW-v1
+    family_id: snow
+    primitive_type: stream_cipher
+    reference_ids:
+      - snow_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: snow_2_0_v1
+    name: SNOW 2.0-v1
+    family_id: snow_2_0
+    primitive_type: stream_cipher
+    reference_ids:
+      - snow_2_0_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: snow_3g_v1
+    name: SNOW 3G-v1
+    family_id: snow_3g
+    primitive_type: stream_cipher
+    reference_ids:
+      - snow_3g_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: sober_t16_v1
+    name: SOBER-t16-v1
+    family_id: sober_t16
+    primitive_type: stream_cipher
+    reference_ids:
+      - sober_t16_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: sober_t32_v1
+    name: SOBER-t32-v1
+    family_id: sober_t32
+    primitive_type: stream_cipher
+    reference_ids:
+      - sober_t32_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: sosemanuk1_v1
+    name: SOSEMANUK1-v1
+    family_id: sosemanuk1
+    primitive_type: stream_cipher
+    reference_ids:
+      - sosemanuk1_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: speckey_v1
+    name: SPECKEY-v1
+    family_id: speckey
+    primitive_type: block_cipher
+    reference_ids:
+      - speckey_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: speedy_v1
+    name: SPEEDY-v1
+    family_id: speedy
+    primitive_type: block_cipher
+    reference_ids:
+      - speedy_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: spritz_v1
+    name: Spritz-v1
+    family_id: spritz
+    primitive_type: stream_cipher
+    reference_ids:
+      - spritz_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: square_v1
+    name: SQUARE-v1
+    family_id: square
+    primitive_type: block_cipher
+    reference_ids:
+      - square_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: thank_goodness_it_s_friday_v1
+    name: Thank Goodness It's Friday (TGIF)-v1
+    family_id: thank_goodness_it_s_friday
+    primitive_type: block_cipher
+    reference_ids:
+      - thank_goodness_it_s_friday_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: three_key_triple_des_v1
+    name: Three-key Triple DES-v1
+    family_id: three_key_triple_des
+    primitive_type: block_cipher
+    reference_ids:
+      - three_key_triple_des_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: threefish_v1
+    name: Threefish-v1
+    family_id: threefish
+    primitive_type: block_cipher
+    reference_ids:
+      - threefish_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: treyfer_v1
+    name: TREYFER-v1
+    family_id: treyfer
+    primitive_type: block_cipher
+    reference_ids:
+      - treyfer_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: triad_v1
+    name: Triad-v1
+    family_id: triad
+    primitive_type: stream_cipher
+    reference_ids:
+      - triad_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: trivium_v1
+    name: Trivium-v1
+    family_id: trivium
+    primitive_type: stream_cipher
+    reference_ids:
+      - trivium_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: two_key_triple_des_v1
+    name: Two-key Triple DES-v1
+    family_id: two_key_triple_des
+    primitive_type: block_cipher
+    reference_ids:
+      - two_key_triple_des_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: ublock_v1
+    name: uBlock-v1
+    family_id: ublock
+    primitive_type: block_cipher
+    reference_ids:
+      - ublock_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: uea2_zuc_v1
+    name: UEA2 / ZUC-v1
+    family_id: uea2_zuc
+    primitive_type: stream_cipher
+    reference_ids:
+      - uea2_zuc_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: vmpc_v1
+    name: VMPC-v1
+    family_id: vmpc
+    primitive_type: stream_cipher
+    reference_ids:
+      - vmpc_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: wage_v1
+    name: WAGE-v1
+    family_id: wage
+    primitive_type: permutation
+    reference_ids:
+      - wage_ref
+    characteristics:
+      state_size_bits: 256
+      rounds: 1
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: wake_v1
+    name: WAKE-v1
+    family_id: wake
+    primitive_type: stream_cipher
+    reference_ids:
+      - wake_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: xchacha_v1
+    name: XChaCha-v1
+    family_id: xchacha
+    primitive_type: stream_cipher
+    reference_ids:
+      - xchacha_ref
+    characteristics:
+      state_size_bits: 128
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: xxtea_v1
+    name: XXTEA-v1
+    family_id: xxtea
+    primitive_type: block_cipher
+    reference_ids:
+      - xxtea_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: xxtea_corrected_block_tea_v1
+    name: XXTEA / Corrected Block TEA-v1
+    family_id: xxtea_corrected_block_tea
+    primitive_type: block_cipher
+    reference_ids:
+      - xxtea_corrected_block_tea_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: yarara_and_coral_v1
+    name: Yarara and Coral-v1
+    family_id: yarara_and_coral
+    primitive_type: block_cipher
+    reference_ids:
+      - yarara_and_coral_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 1
+      fixed_input_bits: 128
+      fixed_output_bits: 128
+    notes: Generic baseline instance; update with full paper-specific variants.
+

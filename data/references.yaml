@@ -936,3 +936,675 @@ references:
     year: 2019
     venue: NIST LWC Round 1 Submission
     url: https://csrc.nist.gov/projects/lightweight-cryptography
+  - id: ace_ref
+    kind: paper
+    title: "ACE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: akelarre_ref
+    kind: paper
+    title: "Akelarre"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: ant_ref
+    kind: paper
+    title: "ANT"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: anubis_ref
+    kind: paper
+    title: "Anubis"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: ballet_ref
+    kind: paper
+    title: "Ballet"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: bear_lion_ref
+    kind: paper
+    title: "BEAR/LION"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: belt_ref
+    kind: paper
+    title: "BelT"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: bleep64_ref
+    kind: paper
+    title: "Bleep64"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: blowfish_2_ref
+    kind: paper
+    title: "Blowfish"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: bmgl_ref
+    kind: paper
+    title: "BMGL"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: chaskey_ref
+    kind: paper
+    title: "Chaskey"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: cilipadi_ref
+    kind: paper
+    title: "CiliPadi"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: cipherunicorn_a_ref
+    kind: paper
+    title: "CIPHERUNICORN-A"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: cipherunicorn_e_ref
+    kind: paper
+    title: "CIPHERUNICORN-E"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: clae_ref
+    kind: paper
+    title: "CLAE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: clx_ref
+    kind: paper
+    title: "CLX"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: cmea_ref
+    kind: paper
+    title: "CMEA"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: comet_ref
+    kind: paper
+    title: "COMET"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: cs_cipher_ref
+    kind: paper
+    title: "CS-Cipher"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: deoxys_ref
+    kind: paper
+    title: "Deoxys"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: desx_ref
+    kind: paper
+    title: "DESX"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: enocoro_128v2_ref
+    kind: paper
+    title: "Enocoro-128v2"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: estate_ref
+    kind: paper
+    title: "ESTATE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: fantomas_robin_ref
+    kind: paper
+    title: "Fantomas / Robin"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: feal_ref
+    kind: paper
+    title: "FEAL"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: fesh_ref
+    kind: paper
+    title: "FESH"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: flexaead_ref
+    kind: paper
+    title: "FlexAEAD"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: forkae_ref
+    kind: paper
+    title: "ForkAE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: fountain_ref
+    kind: paper
+    title: "Fountain"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: gage_and_ingage_ref
+    kind: paper
+    title: "GAGE and InGAGE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: gost_28147_89_ref
+    kind: paper
+    title: "GOST 28147-89 (Magma)"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: grand_cru_ref
+    kind: paper
+    title: "Grand Cru"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: hern_and_heron_ref
+    kind: paper
+    title: "HERN & HERON"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: hight_ref
+    kind: paper
+    title: "HIGHT"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: hyena_ref
+    kind: paper
+    title: "HyENA"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: ice_ref
+    kind: paper
+    title: "ICE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: isaac_ref
+    kind: paper
+    title: "ISAAC"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: kcipher_2_ref
+    kind: paper
+    title: "KCipher-2"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: khazad_ref
+    kind: paper
+    title: "Khazad"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: klein_ref
+    kind: paper
+    title: "KLEIN"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: kuznyechik_ref
+    kind: paper
+    title: "Kuznyechik"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: laem_ref
+    kind: paper
+    title: "LAEM"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: lea_ref
+    kind: paper
+    title: "LEA"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: lea_128_ref
+    kind: paper
+    title: "LEA-128"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: leviathan_ref
+    kind: paper
+    title: "LEVIATHAN"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: lili_128_ref
+    kind: paper
+    title: "LILI-128"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: lilliput_ae_ref
+    kind: paper
+    title: "Lilliput-AE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: limdolen_ref
+    kind: paper
+    title: "Limdolen"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: locus_ref
+    kind: paper
+    title: "LOCUS"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: loki_ref
+    kind: paper
+    title: "LOKI"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: lotus_ref
+    kind: paper
+    title: "LOTUS"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: mantis_ref
+    kind: paper
+    title: "MANTIS"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: mcrypton_ref
+    kind: paper
+    title: "MCRYPTON"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: mibs_ref
+    kind: paper
+    title: "MIBS"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: midori_ref
+    kind: paper
+    title: "MIDORI"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: misty1_ref
+    kind: paper
+    title: "MISTY1"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: mixfeed_ref
+    kind: paper
+    title: "mixFeed"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: mmb_ref
+    kind: paper
+    title: "MMB"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: mugi_ref
+    kind: paper
+    title: "MUGI"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: multi_s01_ref
+    kind: paper
+    title: "MULTI-S01"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: multi2_ref
+    kind: paper
+    title: "MULTI2"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: nimbus_ref
+    kind: paper
+    title: "Nimbus"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: noekeon_ref
+    kind: paper
+    title: "NOEKEON"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: nush_ref
+    kind: paper
+    title: "NUSH"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: orange_ref
+    kind: paper
+    title: "ORANGE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: oribatida_ref
+    kind: paper
+    title: "Oribatida"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: oryx_ref
+    kind: paper
+    title: "ORYX"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: pea_ref
+    kind: paper
+    title: "PEA"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: picaro_ref
+    kind: paper
+    title: "PICARO"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: pride_ref
+    kind: paper
+    title: "PRIDE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: princev2_ref
+    kind: paper
+    title: "PRINCEv2"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: q_ref
+    kind: paper
+    title: "Q"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: quartet_ref
+    kind: paper
+    title: "Quartet"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: rc2_ref
+    kind: paper
+    title: "RC2"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: rc4plus_ref
+    kind: paper
+    title: "RC4+"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: rc4a_ref
+    kind: paper
+    title: "RC4A"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: remus_ref
+    kind: paper
+    title: "REMUS"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: saeaes_ref
+    kind: paper
+    title: "SAEAES"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: safer_ref
+    kind: paper
+    title: "SAFER"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: saferpp_ref
+    kind: paper
+    title: "SAFER++"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: sc2000_ref
+    kind: paper
+    title: "SC2000"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: shacal_ref
+    kind: paper
+    title: "SHACAL"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: shacal2_ref
+    kind: paper
+    title: "SHACAL2"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: shamash_and_shamashash_ref
+    kind: paper
+    title: "Shamash & Shamashash"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: shark_ref
+    kind: paper
+    title: "SHARK"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: skipjack_ref
+    kind: paper
+    title: "SKIPJACK"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: snow_ref
+    kind: paper
+    title: "SNOW"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: snow_2_0_ref
+    kind: paper
+    title: "SNOW 2.0"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: snow_3g_ref
+    kind: paper
+    title: "SNOW 3G"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: sober_t16_ref
+    kind: paper
+    title: "SOBER-t16"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: sober_t32_ref
+    kind: paper
+    title: "SOBER-t32"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: sosemanuk1_ref
+    kind: paper
+    title: "SOSEMANUK1"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: speckey_ref
+    kind: paper
+    title: "SPECKEY"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: speedy_ref
+    kind: paper
+    title: "SPEEDY"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: spritz_ref
+    kind: paper
+    title: "Spritz"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: square_ref
+    kind: paper
+    title: "SQUARE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: thank_goodness_it_s_friday_ref
+    kind: paper
+    title: "Thank Goodness It's Friday (TGIF)"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: three_key_triple_des_ref
+    kind: paper
+    title: "Three-key Triple DES"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: threefish_ref
+    kind: paper
+    title: "Threefish"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: treyfer_ref
+    kind: paper
+    title: "TREYFER"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: triad_ref
+    kind: paper
+    title: "Triad"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: trivium_ref
+    kind: paper
+    title: "Trivium"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: two_key_triple_des_ref
+    kind: paper
+    title: "Two-key Triple DES"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: ublock_ref
+    kind: paper
+    title: "uBlock"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: uea2_zuc_ref
+    kind: paper
+    title: "UEA2 / ZUC"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: vmpc_ref
+    kind: paper
+    title: "VMPC"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: wage_ref
+    kind: paper
+    title: "WAGE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: wake_ref
+    kind: paper
+    title: "WAKE"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: xchacha_ref
+    kind: paper
+    title: "XChaCha"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: xxtea_ref
+    kind: paper
+    title: "XXTEA"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: xxtea_corrected_block_tea_ref
+    kind: paper
+    title: "XXTEA / Corrected Block TEA"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
+  - id: yarara_and_coral_ref
+    kind: paper
+    title: "Yarara and Coral"
+    year: 2000
+    notes: "Placeholder reference for checklist coverage ingestion."
+
