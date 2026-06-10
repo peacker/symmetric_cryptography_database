@@ -783,3 +783,73 @@ references:
     year: 2019
     venue: NIST LWC Round 1 Submission
     url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: drygascon_2019
+    kind: article
+    title: "DryGASCON - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Sebastien Riou
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: sneik_2019
+    kind: article
+    title: "SNEIK - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Markku-Juhani O. Saarinen
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: sycon_2019
+    kind: article
+    title: "Sycon - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Sumanta Sarkar
+      - Kalikinkar Mandal
+      - Dhiman Saha
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: spix_2019
+    kind: article
+    title: "SPIX - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Riham AlTawy
+      - Guang Gong
+      - Morgan He
+      - Kalikinkar Mandal
+      - Raghvendra Rohit
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: spoc_2019
+    kind: article
+    title: "SpoC - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Riham AlTawy
+      - Guang Gong
+      - Morgan He
+      - Ashwin Jha
+      - Kalikinkar Mandal
+      - Mridul Nandi
+      - Raghvendra Rohit
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+
+  - id: spook_2019
+    kind: article
+    title: "Spook - Submission to NIST Lightweight Cryptography"
+    authors:
+      - Davide Bellizia
+      - Francesco Berti
+      - Olivier Bronchain
+      - Sebastien Duval
+      - Gregor Leander
+    year: 2019
+    venue: NIST LWC Round 1 Submission
+    url: https://csrc.nist.gov/projects/lightweight-cryptography

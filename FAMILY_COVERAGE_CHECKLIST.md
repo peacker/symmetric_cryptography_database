@@ -44,7 +44,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] DES
 - [ ] DESX
 - [x] DFC
-- [ ] DryGASCON
+- [x] DryGASCON
 - [x] E2
 - [x] Elephant
 - [ ] Enocoro-128v2
@@ -150,7 +150,7 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] SKINNY
 - [ ] SKIPJACK
 - [x] SM4
-- [ ] SNEIK
+- [x] SNEIK
 - [ ] SNOW
 - [ ] SNOW 2.0
 - [ ] SNOW 3G
@@ -161,13 +161,13 @@ This is a planning list of known symmetric primitive/cipher families.
 - [x] SPECK
 - [ ] SPECKEY
 - [ ] SPEEDY
-- [ ] SPIX
-- [ ] SpoC
-- [ ] Spook
+- [x] SPIX
+- [x] SpoC
+- [x] Spook
 - [ ] Spritz
 - [ ] SQUARE
 - [x] Subterranean 2.0
-- [ ] Sycon
+- [x] Sycon
 - [x] TEA
 - [ ] Thank Goodness It's Friday (TGIF)
 - [ ] Three-key Triple DES

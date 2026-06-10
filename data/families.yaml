@@ -1646,3 +1646,145 @@ families:
     process_ids:
       - lightweight_crypto_nist_2018_2023
     influences: []
+
+  - id: drygascon
+    name: DryGASCON
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - drygascon_permutation_round
+    target_applications:
+      - iot
+      - software
+    characteristics:
+      state_size_bits: 320
+      components:
+        - id: xor
+        - id: and
+        - id: not
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - drygascon_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences:
+      - source_family_id: ascon
+        relations:
+          - inspired_by
+        note: DryGASCON uses a GASCON-style permutation family closely related to ASCON design choices.
+
+  - id: sneik
+    name: SNEIK
+    construction_ids:
+      - arx_permutation_network
+    round_ids:
+      - sneik_permutation_round
+    target_applications:
+      - iot
+      - software
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - sneik_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: sycon
+    name: Sycon
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - sycon_permutation_round
+    target_applications:
+      - iot
+      - constrained_hardware
+    characteristics:
+      state_size_bits: 320
+      components:
+        - id: sbox
+          params: { input_bits: 5, output_bits: 5 }
+        - id: xor
+        - id: bit_permutation
+        - id: constant
+    reference_ids:
+      - sycon_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: spix
+    name: SPIX
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - spix_permutation_round
+    target_applications:
+      - iot
+      - software
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: xor
+        - id: and
+        - id: not
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - spix_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: spoc
+    name: SpoC
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - spoc_permutation_round
+    target_applications:
+      - iot
+      - software
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: xor
+        - id: and
+        - id: not
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - spoc_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []
+
+  - id: spook
+    name: Spook
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - spook_permutation_round
+    target_applications:
+      - iot
+      - software
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: xor
+        - id: and
+        - id: not
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - spook_2019
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
+    influences: []

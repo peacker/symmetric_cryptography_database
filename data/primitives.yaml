@@ -1462,3 +1462,63 @@ primitives:
       rounds: 257
       fixed_input_bits: 257
       fixed_output_bits: 257
+
+  - id: drygascon_permutation_320
+    name: DryGASCON Permutation (320-bit)
+    family_id: drygascon
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 320
+      rounds: 12
+      fixed_input_bits: 320
+      fixed_output_bits: 320
+
+  - id: sneik_permutation_256
+    name: SNEIK Permutation (256-bit)
+    family_id: sneik
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 256
+      rounds: 12
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: sycon_permutation_320
+    name: Sycon Permutation (320-bit)
+    family_id: sycon
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 320
+      rounds: 14
+      fixed_input_bits: 320
+      fixed_output_bits: 320
+
+  - id: spix_permutation_256
+    name: SPIX Permutation (256-bit)
+    family_id: spix
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 256
+      rounds: 10
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: spoc_permutation_256
+    name: SpoC Permutation (256-bit)
+    family_id: spoc
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 256
+      rounds: 10
+      fixed_input_bits: 256
+      fixed_output_bits: 256
+
+  - id: spook_permutation_256
+    name: Spook Permutation (256-bit)
+    family_id: spook
+    primitive_type: permutation
+    characteristics:
+      state_size_bits: 256
+      rounds: 12
+      fixed_input_bits: 256
+      fixed_output_bits: 256

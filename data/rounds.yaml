@@ -1084,3 +1084,105 @@ rounds:
     notes: >
       Subterranean duplex round abstraction over a 257-bit state with
       nonlinear chi-style update and bit-level diffusion.
+
+  - id: drygascon_permutation_round
+    name: DryGASCON Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 320
+      component_flow:
+        - component_id: xor
+        - component_id: and
+        - component_id: not
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      DryGASCON round abstraction over a GASCON-like permutation core for
+      dry sponge style authenticated encryption.
+
+  - id: sneik_permutation_round
+    name: SNEIK Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 256
+      component_flow:
+        - component_id: add_mod
+          params: { modulus: 4294967296 }
+        - component_id: xor
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      SNEIK round abstraction for a lightweight ARX-style permutation used
+      in the NIST LWC process.
+
+  - id: sycon_permutation_round
+    name: Sycon Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 320
+      component_flow:
+        - component_id: sbox
+          params: { input_bits: 5, output_bits: 5 }
+        - component_id: xor
+        - component_id: bit_permutation
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      Sycon round abstraction over a lightweight permutation with nonlinear
+      substitution and permutation-based diffusion.
+
+  - id: spix_permutation_round
+    name: SPIX Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 256
+      component_flow:
+        - component_id: xor
+        - component_id: and
+        - component_id: not
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      SPIX round abstraction based on a compact permutation core for
+      lightweight authenticated encryption.
+
+  - id: spoc_permutation_round
+    name: SpoC Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 256
+      component_flow:
+        - component_id: xor
+        - component_id: and
+        - component_id: not
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      SpoC round abstraction over a lightweight permutation core in a
+      sponge-like authenticated encryption design.
+
+  - id: spook_permutation_round
+    name: Spook Permutation Round
+    kind: full_round
+    spec:
+      state_model:
+        state_bits: 256
+      component_flow:
+        - component_id: xor
+        - component_id: and
+        - component_id: not
+        - component_id: rotation_fixed
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      Spook round abstraction over a permutation-driven mode with lightweight
+      authenticated encryption targets.
