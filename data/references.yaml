@@ -1821,3 +1821,72 @@ references:
     venue: "Journal of Cryptologic Research"
     url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000343"
     notes: "SPRING block cipher paper (DOI: 10.13868/j.cnki.jcr.000343)."
+
+  # ── Mode of Operation References ──────────────────────────────────────────
+  - id: gcm_ref
+    kind: paper
+    title: "The Galois/Counter Mode of Operation (GCM)"
+    authors:
+      - David A. McGrew
+      - John Viega
+    year: 2005
+    venue: NIST Special Publication 800-38D
+    url: https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38d.pdf
+    notes: "Authenticated encryption mode for block ciphers. NIST standard."
+
+  - id: chacha20_poly1305_ref
+    kind: paper
+    title: "ChaCha20 and Poly1305 for IETF Protocols"
+    authors:
+      - Adam Langley
+      - Anirudh Modadugu
+      - Daniel J. Bernstein
+    year: 2015
+    venue: "RFC 7539"
+    url: https://tools.ietf.org/html/rfc7539
+    notes: "AEAD mode combining ChaCha20 stream cipher and Poly1305 MAC."
+
+  - id: cbc_ref
+    kind: paper
+    title: "Recommendation for Block Cipher Modes of Operation"
+    authors:
+      - Morris Dworkin
+    year: 2001
+    venue: NIST Special Publication 800-38A
+    url: https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+    notes: "NIST specification for CBC mode and other block cipher modes."
+
+  - id: ctr_ref
+    kind: paper
+    title: "A Pseudorandom Encryption Mode"
+    authors:
+      - Mihir Bellare
+      - Andrey Desai
+      - David Pointcheval
+      - Phillip Rogaway
+    year: 2000
+    venue: Cryptology ePrint Archive
+    url: https://eprint.iacr.org/2000/057
+    notes: "Counter mode converts block ciphers to stream ciphers."
+
+  - id: hmac_ref
+    kind: paper
+    title: "HMAC: Keyed-Hashing for Message Authentication"
+    authors:
+      - Mihir Bellare
+      - Ran Canetti
+      - Hugo Krawczyk
+    year: 1997
+    venue: "RFC 2104"
+    url: https://tools.ietf.org/html/rfc2104
+    notes: "Universal construction for message authentication codes."
+
+  - id: pbkdf2_ref
+    kind: paper
+    title: "PKCS #5: Password-Based Cryptography Specification Version 2.0"
+    authors:
+      - Burt Kaliski
+    year: 2000
+    venue: "RFC 2898"
+    url: https://tools.ietf.org/html/rfc2898
+    notes: "Key derivation function for password-based encryption."

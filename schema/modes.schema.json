@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["version", "modes"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version"
+    },
+    "modes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "mode_type", "underlying_primitive_ids", "reference_ids"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$",
+            "description": "Unique identifier for the mode"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable name of the mode"
+          },
+          "mode_type": {
+            "type": "string",
+            "enum": ["AEAD", "ENC", "PRNG", "MAC", "KDF", "PBKDF", "HASH", "XOF", "KEYWRAP", "KEM"],
+            "description": "Type/category of the mode (authenticated encryption, encryption, PRF, etc.)"
+          },
+          "authors": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "List of mode authors"
+          },
+          "year": {
+            "type": "integer",
+            "description": "Year the mode was proposed/published"
+          },
+          "underlying_primitive_ids": {
+            "type": "array",
+            "items": {"type": "string"},
+            "minItems": 1,
+            "description": "IDs of primitives this mode is built upon (e.g., [rijndael_128_128] for GCM-AES)"
+          },
+          "reference_ids": {
+            "type": "array",
+            "items": {"type": "string"},
+            "minItems": 1,
+            "description": "IDs of references for this mode"
+          },
+          "target_applications": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["generic", "software", "hardware", "embedded", "automotive", "iot", "tls", "disk_encryption", "messaging"]
+            },
+            "description": "Target application domains"
+          },
+          "characteristics": {
+            "type": "object",
+            "description": "Mode-specific characteristics (nonce size, tag size, etc.)",
+            "properties": {
+              "nonce_size_bits": {"type": "integer"},
+              "nonce_size_bits_min": {"type": "integer"},
+              "nonce_size_bits_max": {"type": "integer"},
+              "tag_size_bits": {"type": "integer"},
+              "tag_size_bits_min": {"type": "integer"},
+              "tag_size_bits_max": {"type": "integer"},
+              "output_size_bits": {"type": "integer"},
+              "output_size_bits_min": {"type": "integer"},
+              "output_size_bits_max": {"type": "integer"},
+              "rate_bits": {"type": "integer"},
+              "capacity_bits": {"type": "integer"},
+              "personalization": {"type": "boolean"}
+            }
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes about the mode"
+          }
+        }
+      }
+    }
+  }
+}

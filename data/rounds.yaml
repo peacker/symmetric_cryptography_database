@@ -1402,14 +1402,6 @@ rounds:
         - component_id: xor
     notes: Generic placeholder round entry pending full parameter extraction.
 
-  - id: bmgl_round
-    name: BMGL round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
   - id: chaskey_round
     name: Chaskey round
     kind: other

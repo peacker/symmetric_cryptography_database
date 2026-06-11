@@ -203,6 +203,20 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | XXTEA / Corrected Block TEA | XXTEA | TODO | TODO | TODO | no |
 | [ ] | Yarara and Coral | Yarara and Coral | TODO | TODO | TODO | no |
 
+## Modes of Operation Coverage Checklist
+
+This section tracks modes of operation built on symmetric primitives.
+
+| status | mode | mode_type | spec_year | spec_url | underlying_primitives | pdf_available_in_repo |
+|---|---|---|---|---|---|---|
+| [x] | BMGL | PRNG | 2000 | https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.37.8270&rep=rep1&type=pdf | Rijndael | yes |
+| [x] | CBC (Cipher Block Chaining) | ENC | 1976 | NIST SP 800-38A | AES/Rijndael | no |
+| [x] | ChaCha20-Poly1305 | AEAD | 2008 | RFC 7539 | ChaCha20, Poly1305 | no |
+| [x] | CTR (Counter Mode) | ENC | 2001 | NIST SP 800-38A | AES/Rijndael | no |
+| [x] | GCM (Galois/Counter Mode) | AEAD | 2005 | NIST SP 800-38D | AES/Rijndael | no |
+| [x] | HMAC-SHA256 | MAC | 1997 | RFC 2104 | SHA-256 | no |
+| [x] | PBKDF2 | PBKDF | 2000 | RFC 2898 | HMAC-SHA256 | no |
+
 ## Notes
 
 - This list is intentionally broad and includes both classic and modern families.

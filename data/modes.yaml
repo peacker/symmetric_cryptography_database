@@ -1,0 +1,165 @@
+version: 1
+modes:
+  # ── BMGL PRNG ────────────────────────────────────────────────────────────
+  - id: bmgl
+    name: BMGL
+    mode_type: PRNG
+    authors:
+      - Johan Håstad
+      - Mats Näslund
+    year: 2000
+    underlying_primitive_ids:
+      - rijndael_128_128
+    reference_ids:
+      - bmgl_ref
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      output_size_bits: 128
+    notes: >
+      Synchronous keystream generator based on Rijndael with provable security
+      properties. Uses the block cipher Rijndael as the core cryptographic primitive.
+
+  # ── GCM (Galois/Counter Mode) ─────────────────────────────────────────────
+  - id: gcm
+    name: GCM (Galois/Counter Mode)
+    mode_type: AEAD
+    authors:
+      - David A. McGrew
+      - John Viega
+    year: 2005
+    underlying_primitive_ids:
+      - rijndael_128_128
+    reference_ids:
+      - gcm_ref
+    target_applications:
+      - generic
+      - software
+      - hardware
+      - tls
+    characteristics:
+      nonce_size_bits_min: 8
+      nonce_size_bits_max: 68719476735
+      tag_size_bits_min: 96
+      tag_size_bits_max: 128
+    notes: >
+      Authenticated encryption mode suitable for block ciphers. Standard for
+      TLS 1.2/1.3 and widely deployed.
+
+  # ── ChaCha20-Poly1305 ────────────────────────────────────────────────────
+  - id: chacha20_poly1305
+    name: ChaCha20-Poly1305
+    mode_type: AEAD
+    authors:
+      - Daniel J. Bernstein
+    year: 2008
+    underlying_primitive_ids:
+      - chacha20
+    reference_ids:
+      - chacha20_poly1305_ref
+    target_applications:
+      - generic
+      - software
+      - embedded
+      - tls
+      - messaging
+    characteristics:
+      nonce_size_bits: 96
+      tag_size_bits: 128
+    notes: >
+      AEAD combining ChaCha20 stream cipher with Poly1305 universal hash.
+      Commonly used in TLS and modern protocols.
+
+  # ── CBC (Cipher Block Chaining) ───────────────────────────────────────────
+  - id: cbc
+    name: CBC (Cipher Block Chaining)
+    mode_type: ENC
+    authors:
+      - William F. Ehrsam
+      - Carl H. Meyer
+      - John L. Smith
+      - William L. Tuchman
+    year: 1976
+    underlying_primitive_ids:
+      - rijndael_128_128
+    reference_ids:
+      - cbc_ref
+    target_applications:
+      - generic
+      - software
+      - hardware
+    characteristics:
+      nonce_size_bits: 128  # IV same size as block
+    notes: >
+      Classic mode of operation for block ciphers. Provides semantic security
+      but requires separate authentication (MAC).
+
+  # ── CTR (Counter Mode) ────────────────────────────────────────────────────
+  - id: ctr
+    name: CTR (Counter Mode)
+    mode_type: ENC
+    authors:
+      - Whitfield Diffie
+      - Martin E. Hellman
+    year: 2001
+    underlying_primitive_ids:
+      - rijndael_128_128
+    reference_ids:
+      - ctr_ref
+    target_applications:
+      - generic
+      - software
+      - hardware
+    characteristics:
+      nonce_size_bits_min: 1
+      nonce_size_bits_max: 127
+    notes: >
+      Converts block cipher to stream cipher. Allows parallel encryption and
+      random access to ciphertext.
+
+  # ── HMAC-SHA256 ───────────────────────────────────────────────────────────
+  - id: hmac_sha256
+    name: HMAC-SHA256
+    mode_type: MAC
+    authors:
+      - Mihir Bellare
+      - Ran Canetti
+      - Hugo Krawczyk
+    year: 1997
+    underlying_primitive_ids:
+      - rijndael_128_128
+    reference_ids:
+      - hmac_ref
+    target_applications:
+      - generic
+      - software
+      - hardware
+      - tls
+    characteristics:
+      tag_size_bits: 256
+      output_size_bits: 256
+    notes: >
+      Message authentication code based on SHA-256. Universal construction
+      with proven security bounds.
+
+  # ── PBKDF2 (Password-Based Key Derivation Function 2) ──────────────────────
+  - id: pbkdf2
+    name: PBKDF2
+    mode_type: PBKDF
+    authors:
+      - Burt Kaliski
+    year: 2000
+    underlying_primitive_ids:
+      - rijndael_128_128
+    reference_ids:
+      - pbkdf2_ref
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      output_size_bits_min: 64
+      output_size_bits_max: 4294967295
+    notes: >
+      Key derivation function for password-based encryption. Implements
+      HMAC-based key derivation with iteration count.

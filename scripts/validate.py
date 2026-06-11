@@ -81,6 +81,7 @@ def main() -> None:
     primitive_types_doc = load_yaml(DATA_DIR / "primitive_types.yaml")
     references_doc = load_yaml(DATA_DIR / "references.yaml")
     processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
+    modes_doc        = load_yaml(DATA_DIR / "modes.yaml")
 
     ok = True
     ok &= validate_schema(families_doc,   SCHEMA_DIR / "families.schema.json",   "families")
@@ -90,6 +91,7 @@ def main() -> None:
     ok &= validate_schema(rounds_doc, SCHEMA_DIR / "rounds.schema.json", "rounds")
     ok &= validate_schema(primitive_types_doc, SCHEMA_DIR / "primitive_types.schema.json", "primitive_types")
     ok &= validate_schema(references_doc, SCHEMA_DIR / "references.schema.json", "references")
+    ok &= validate_schema(modes_doc, SCHEMA_DIR / "modes.schema.json", "modes")
     if not ok:
         raise SystemExit(1)
 
@@ -99,6 +101,7 @@ def main() -> None:
     component_ids   = {c["id"] for c in components_doc.get("components", [])}
     construction_ids = {c["id"] for c in constructions_doc.get("constructions", [])}
     round_ids       = {r["id"] for r in rounds_doc.get("rounds", [])}
+    primitive_ids   = {p["id"] for p in primitives_doc.get("primitives", [])}
     primitive_type_ids = {t["id"] for t in primitive_types_doc.get("primitive_types", [])}
     family_innovation_ids: dict[str, set[str]] = {}
 
@@ -268,6 +271,30 @@ def main() -> None:
         ]
         for base_field in range_base_fields:
             for error in validate_range_field(characteristics, base_field, pid):
+                print(error)
+                errors_found = True
+
+    # Validate modes
+    for mode in modes_doc.get("modes", []):
+        mid = mode["id"]
+        for ref in mode.get("reference_ids", []):
+            if ref not in reference_ids:
+                print(f"REFERENCE ERROR: mode '{mid}' has unknown reference '{ref}'")
+                errors_found = True
+        for prim_id in mode.get("underlying_primitive_ids", []):
+            if prim_id not in primitive_ids:
+                print(f"REFERENCE ERROR: mode '{mid}' references unknown primitive '{prim_id}'")
+                errors_found = True
+        characteristics = mode.get("characteristics", {})
+        range_base_fields_mode = [
+            "nonce_size_bits",
+            "tag_size_bits",
+            "output_size_bits",
+            "rate_bits",
+            "capacity_bits",
+        ]
+        for base_field in range_base_fields_mode:
+            for error in validate_range_field(characteristics, base_field, mid):
                 print(error)
                 errors_found = True
 
