@@ -18,3 +18,9 @@ primitive_types:
 
   - id: stream_cipher
     name: Stream Cipher
+
+  - id: aead
+    name: Authenticated Encryption with Associated Data (AEAD)
+
+  - id: hash_function
+    name: Hash Function

@@ -1927,46 +1927,104 @@ families:
   - id: ace
     name: ACE
     construction_ids:
-      - spn
+      - sponge_permutation
     round_ids:
       - ace_round
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
+      - software
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 320
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: and
+        - id: rotation_fixed
         - id: xor
+        - id: word_permutation
+          params: { word_size_bits: 64 }
         - id: constant
     reference_ids:
-      - ace_ref
-    process_ids: []
+      - aagaard_et_al_2019_ace
+    process_ids:
+      - lightweight_crypto_nist_2018_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    innovative_ideas:
+      - id: ace_sb64_nonlinear_layer
+        name: SB-64 nonlinear layer
+        note: Applies reduced-round unkeyed Simeck-64 boxes inside each permutation step.
+      - id: ace_word_shuffle_320
+        name: 5-word shuffle
+        note: Uses the 64-bit word permutation pi=(3,2,0,4,1) between nonlinear layers.
+    notes: >
+      ACE is a 320-bit permutation used in the NIST LWC submission for
+      ACE-AE-128 and ACE-H-256. The permutation uses 16 steps, each using
+      SB-64 boxes (8-round Simeck-based nonlinear operation) on selected words.
 
   - id: akelarre
     name: Akelarre
     construction_ids:
-      - spn
+      - arx_permutation_network
     round_ids:
       - akelarre_round
     target_applications:
       - generic
+      - software
+      - hardware
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_variable
+    reference_ids:
+      - alvarez_et_al_1996_akelarre
+    process_ids: []
+    influences: []
+    innovative_ideas:
+      - id: akelarre_data_dependent_prime_rotation
+        name: Data-dependent prime-length rotation
+        note: Uses data/key-controlled 31-bit rotations in 32-bit words to avoid invariant rotations.
+      - id: akelarre_double_iterated_add_rotation
+        name: Double-iterated add-rotation core
+        note: Each round is built as 14 half-round rotations interleaved with 12 additions.
+    notes: >
+      Akelarre is a 128-bit iterated block cipher over four 32-bit words with
+      variable user key length (in 64-bit increments) and configurable round
+      count. The paper recommends 4 rounds with a 128-bit user key for most
+      applications.
+
+  - id: crisp
+    name: CRISP
+    construction_ids:
+      - feistel
+    round_ids:
+      - crisp_round
+    target_applications:
+      - generic
+      - software
     characteristics:
       block_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 11, output_bits: 8 }
         - id: xor
-        - id: constant
+        - id: bit_permutation
     reference_ids:
-      - akelarre_ref
+      - leech_1996_crisp
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    innovative_ideas:
+      - id: crisp_hardened_keyschedule_feedback
+        name: Hardened feedback key schedule
+        note: Uses CRISP itself in feedback mode as a PRNG to derive round subkeys.
+      - id: crisp_key_dependent_s2_tables
+        name: Key-dependent S2 tables
+        note: Generates five 8x32 S2 tables from key-dependent feedback outputs.
+    notes: >
+      CRISP is a 6-round Feistel cipher with 128-bit block and key sizes in the
+      evaluated design. The round function uses a 64->88-bit expansion,
+      subkey mixing, 11x8 S-boxes, and key-dependent S2 diffusion tables.
 
   - id: ant
     name: ANT
@@ -2133,24 +2191,43 @@ families:
   - id: anubis
     name: Anubis
     construction_ids:
-      - spn
+      - aligned_spn
     round_ids:
       - anubis_round
     target_applications:
       - generic
+      - software
+      - hardware
     characteristics:
       block_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: word_permutation
+          params: { word_size_bits: 8 }
+        - id: binary_matrix_mul
         - id: xor
         - id: constant
     reference_ids:
-      - anubis_ref
+      - barreto_rijmen_2000_anubis
     process_ids: []
-    influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    influences:
+      - source_family_id: rijndael
+        relations:
+          - inspired_by
+          - same_state_layout
+        note: Anubis follows a Rijndael-like byte-oriented wide-trail SPN design.
+    innovative_ideas:
+      - id: anubis_involutional_round_design
+        name: Involutional round design
+        note: Round components are chosen as involutions so decryption differs mainly in key schedule.
+      - id: anubis_wide_trail_key_schedule
+        name: Wide-trail key schedule
+        note: The key schedule is designed with wide-trail principles and rapid diffusion.
+    notes: >
+      Anubis is a 128-bit block cipher with key sizes 32N bits for N=4..10
+      (128 to 320 bits, step 32). The standard number of rounds is R=8+N,
+      giving 12 to 18 rounds.
 
   - id: ballet
     name: Ballet

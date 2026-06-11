@@ -966,17 +966,42 @@ references:
     year: 2019
     venue: NIST LWC Round 1 Submission
     url: https://csrc.nist.gov/projects/lightweight-cryptography
-  - id: ace_ref
+  - id: aagaard_et_al_2019_ace
     kind: paper
-    title: "ACE"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "ACE: An Authenticated Encryption and Hash Algorithm"
+    authors:
+      - Mark Aagaard
+      - Riham AlTawy
+      - Guang Gong
+      - Kalikinkar Mandal
+      - Raghvendra Rohit
+    year: 2019
+    venue: NIST Lightweight Cryptography (Round 1) Submission
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ace-spec.pdf
+    notes: "ACE specification and parameter set (ACE-AE-128, ACE-H-256, 320-bit permutation)."
 
-  - id: akelarre_ref
+  - id: alvarez_et_al_1996_akelarre
     kind: paper
-    title: "Akelarre"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Akelarre: A New Block Cipher Algorithm"
+    authors:
+      - Gonzalo Alvarez
+      - Dolores de la Guia
+      - Fausto Montoya
+      - Alberto Peinado
+    year: 1996
+    venue: Selected Areas in Cryptography (SAC 1996)
+    organization: SAC
+    notes: "Derived from symmetric_cryptography_database/references/1996-akelarre.pdf."
+
+  - id: leech_1996_crisp
+    kind: paper
+    title: "CRISP: A Feistel Cipher with Hardened Key-Scheduling"
+    authors:
+      - Marcus Leech
+    year: 1996
+    venue: Selected Areas in Cryptography (SAC 1996)
+    organization: SAC
+    notes: "Derived from symmetric_cryptography_database/references/1996-crisp.pdf."
 
   - id: ant_ref
     kind: paper
@@ -992,11 +1017,16 @@ references:
     url: "http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000338"
     notes: "ANT block cipher family paper (DOI: 10.13868/j.cnki.jcr.000338)."
 
-  - id: anubis_ref
+  - id: barreto_rijmen_2000_anubis
     kind: paper
-    title: "Anubis"
+    title: "The ANUBIS Block Cipher"
+    authors:
+      - Paulo S. L. M. Barreto
+      - Vincent Rijmen
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: NESSIE Submission
+    url: https://www.cosic.esat.kuleuven.be/nessie/workshop/submissions/anubis.zip
+    notes: "128-bit block cipher with key sizes 128..320 bits in 32-bit increments; rounds R=8+N."
 
   - id: ballet_ref
     kind: paper

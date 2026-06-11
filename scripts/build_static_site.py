@@ -60,8 +60,8 @@ def load_join_builder_dataset(conn: sqlite3.Connection) -> dict[str, object]:
           p.name AS "primitive.name",
           p.primitive_type AS "primitive.type_id",
           pt.name AS "primitive.type_name",
-          p.fixed_input_bits AS "primitive.fixed_input_bits",
-          p.fixed_output_bits AS "primitive.fixed_output_bits",
+          p.block_size_bits AS "primitive.fixed_input_bits",
+          p.output_size_bits AS "primitive.fixed_output_bits",
           p.characteristics_json AS "primitive.characteristics_json",
           f.id AS "family.id",
           f.name AS "family.name",
@@ -89,8 +89,8 @@ def load_join_builder_dataset(conn: sqlite3.Connection) -> dict[str, object]:
     base_sql = (
         'SELECT p.id AS "primitive.id", p.name AS "primitive.name", '
         'p.primitive_type AS "primitive.type_id", pt.name AS "primitive.type_name", '
-        'p.fixed_input_bits AS "primitive.fixed_input_bits", '
-        'p.fixed_output_bits AS "primitive.fixed_output_bits", '
+      'p.block_size_bits AS "primitive.fixed_input_bits", '
+      'p.output_size_bits AS "primitive.fixed_output_bits", '
         'p.characteristics_json AS "primitive.characteristics_json", '
         'f.id AS "family.id", f.name AS "family.name", f.year AS "family.year", '
         'f.notes AS "family.notes", ref.id AS "reference.id", '

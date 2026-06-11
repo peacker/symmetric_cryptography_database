@@ -1290,19 +1290,49 @@ rounds:
       primitive used in NIST LWC submissions.
   - id: ace_round
     name: ACE round
-    kind: other
+    kind: full_round
     spec:
+      state_model:
+        state_bits: 320
       component_flow:
+        - component_id: and
+        - component_id: rotation_fixed
         - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
+        - component_id: word_permutation
+          params: { word_size_bits: 64 }
+        - component_id: constant
+    notes: ACE-step abstraction over five 64-bit words with SB-64 nonlinear processing and word shuffling.
 
   - id: akelarre_round
     name: Akelarre round
-    kind: other
+    kind: full_round
     spec:
+      state_model:
+        state_bits: 128
       component_flow:
+        - component_id: rotation_variable
+        - component_id: add_mod
+          params: { modulus: 4294967296 }
         - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
+    notes: >
+      Round abstraction for Akelarre's addition-rotation structure over four
+      32-bit words (with data/key-dependent rotations).
+
+  - id: crisp_round
+    name: CRISP round
+    kind: full_round
+    spec:
+      state_model:
+        left_bits: 64
+        right_bits: 64
+      component_flow:
+        - component_id: bit_permutation
+        - component_id: sbox
+          params: { input_bits: 11, output_bits: 8 }
+        - component_id: xor
+    notes: >
+      Feistel round function with 64->88 expansion, subkey mixing, 11x8 S-boxes,
+      and key-dependent S2 post-processing.
 
   - id: ant_round
     name: ANT round
@@ -1316,11 +1346,19 @@ rounds:
 
   - id: anubis_round
     name: Anubis round
-    kind: other
+    kind: full_round
     spec:
+      state_model:
+        state_bits: 128
       component_flow:
+        - component_id: sbox
+          params: { input_bits: 8, output_bits: 8 }
+        - component_id: word_permutation
+          params: { word_size_bits: 8 }
+        - component_id: binary_matrix_mul
         - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
+        - component_id: constant
+    notes: Byte-oriented wide-trail SPN round abstraction with involutional design components.
 
   - id: ballet_round
     name: Ballet round

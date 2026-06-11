@@ -1481,31 +1481,85 @@ primitives:
       tweak_size_bits: 64
       rounds: 24
       output_size_bits: 128
-  - id: ace_v1
-    name: ACE-v1
+  - id: ace_permutation_320
+    name: ACE Permutation (320-bit)
     family_id: ace
-    primitive_type: block_cipher
+    primitive_type: permutation
     reference_ids:
-      - ace_ref
+      - aagaard_et_al_2019_ace
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      state_size_bits: 320
+      rounds: 16
+      block_size_bits: 320
+      output_size_bits: 320
+    notes: Core ACE permutation used by both AEAD and hash modes.
 
-  - id: akelarre_v1
-    name: Akelarre-v1
+  - id: ace_ae_128
+    name: ACE-AE-128
+    family_id: ace
+    primitive_type: aead
+    reference_ids:
+      - aagaard_et_al_2019_ace
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      nonce_size_bits: 128
+      rounds: 16
+      output_size_bits: 128
+    notes: AEAD mode with 64-bit rate and 128-bit authentication tag.
+
+  - id: ace_h_256
+    name: ACE-H-256
+    family_id: ace
+    primitive_type: hash_function
+    reference_ids:
+      - aagaard_et_al_2019_ace
+    characteristics:
+      state_size_bits: 320
+      block_size_bits: 64
+      iv_size_bits: 24
+      rounds: 16
+      output_size_bits: 256
+    notes: Hash mode based on the ACE permutation with 64-bit squeezing rate.
+
+  - id: akelarre_1r_64
+    name: Akelarre-1r/64
     family_id: akelarre
     primitive_type: block_cipher
     reference_ids:
-      - akelarre_ref
+      - alvarez_et_al_1996_akelarre
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 64
+      rounds: 1
+      output_size_bits: 128
+    notes: Small explicit operating point discussed in one-round analysis/tests.
+
+  - id: akelarre_4r_128
+    name: Akelarre-4r/128
+    family_id: akelarre
+    primitive_type: block_cipher
+    reference_ids:
+      - alvarez_et_al_1996_akelarre
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      rounds: 4
       output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+    notes: Recommended operating point proposed by the original paper.
+
+  - id: crisp_128_128
+    name: CRISP-128/128
+    family_id: crisp
+    primitive_type: block_cipher
+    reference_ids:
+      - leech_1996_crisp
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 6
+      output_size_bits: 128
+    notes: Evaluated CRISP configuration described in the paper.
 
   - id: ant_128_128
     name: ANT-128/128
@@ -1759,18 +1813,89 @@ primitives:
       rounds: 82
       output_size_bits: 256
 
-  - id: anubis_v1
-    name: Anubis-v1
+  - id: anubis_128_128
+    name: Anubis-128/128
     family_id: anubis
     primitive_type: block_cipher
     reference_ids:
-      - anubis_ref
+      - barreto_rijmen_2000_anubis
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      rounds: 12
       output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+
+  - id: anubis_128_160
+    name: Anubis-128/160
+    family_id: anubis
+    primitive_type: block_cipher
+    reference_ids:
+      - barreto_rijmen_2000_anubis
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 160
+      rounds: 13
+      output_size_bits: 128
+
+  - id: anubis_128_192
+    name: Anubis-128/192
+    family_id: anubis
+    primitive_type: block_cipher
+    reference_ids:
+      - barreto_rijmen_2000_anubis
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      rounds: 14
+      output_size_bits: 128
+
+  - id: anubis_128_224
+    name: Anubis-128/224
+    family_id: anubis
+    primitive_type: block_cipher
+    reference_ids:
+      - barreto_rijmen_2000_anubis
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 224
+      rounds: 15
+      output_size_bits: 128
+
+  - id: anubis_128_256
+    name: Anubis-128/256
+    family_id: anubis
+    primitive_type: block_cipher
+    reference_ids:
+      - barreto_rijmen_2000_anubis
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      rounds: 16
+      output_size_bits: 128
+
+  - id: anubis_128_288
+    name: Anubis-128/288
+    family_id: anubis
+    primitive_type: block_cipher
+    reference_ids:
+      - barreto_rijmen_2000_anubis
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 288
+      rounds: 17
+      output_size_bits: 128
+
+  - id: anubis_128_320
+    name: Anubis-128/320
+    family_id: anubis
+    primitive_type: block_cipher
+    reference_ids:
+      - barreto_rijmen_2000_anubis
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 320
+      rounds: 18
+      output_size_bits: 128
 
   - id: ballet_128_128
     name: Ballet-128/128
