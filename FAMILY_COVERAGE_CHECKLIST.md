@@ -11,7 +11,7 @@ This is a planning list of known symmetric primitive/cipher families.
 |---|---|---|---|---|---|---|
 | [x] | ACE | ACE permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ace-spec.pdf | Full | no |
 | [x] | AES | AES | 2001 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf | Full | no |
-| [ ] | Akelarre | Akelarre | 1996 | https://sacworkshop.org/proc/SAC_96_002.pdf | PDF Page 3-16 | yes |
+| [x] | Akelarre | Akelarre | 1996 | https://sacworkshop.org/proc/SAC_96_002.pdf | PDF Page 3-16 | yes |
 | [x] | ANT | ANT | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000338 | Full | yes |
 | [x] | Anubis | Anubis | 2000 | https://garykessler.net/library/crypto/Anubis.pdf | Full | yes |
 | [x] | ARADI | ARADI | 2024 | https://eprint.iacr.org/2024/1240 | TODO | yes |
@@ -39,7 +39,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | CLX | CLX | TODO | TODO | TODO | no |
 | [ ] | CMEA | CMEA | TODO | TODO | TODO | no |
 | [ ] | COMET | COMET | TODO | TODO | TODO | no |
-| [ ] | CRISP | 1996 | https://sacworkshop.org/proc/SAC_96_002.pdf | PDF Page 17-31 |
+| [x] | CRISP | 1996 | https://sacworkshop.org/proc/SAC_96_002.pdf | PDF Page 17-31 |
 | [x] | CRYPTON | CRYPTON | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [ ] | CS-Cipher | CS-Cipher | TODO | TODO | TODO | yes |
 | [x] | DEAL | DEAL | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
