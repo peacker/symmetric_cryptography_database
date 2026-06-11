@@ -1069,9 +1069,14 @@ references:
 
   - id: bmgl_ref
     kind: paper
-    title: "BMGL"
+    title: "BMGL: Synchronous Key-stream Generator with Provable Security"
+    authors:
+      - Johan Håstad
+      - Mats Näslund
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: NESSIE Submission
+    organization: Royal Institute of Technology / Ericsson Research
+    notes: "Stream cipher based on Rijndael with theoretical security guarantees."
 
   - id: chaskey_ref
     kind: paper

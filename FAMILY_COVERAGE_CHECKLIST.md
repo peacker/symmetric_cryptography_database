@@ -24,7 +24,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | Bleep64 | Bleep64 | TODO | TODO | TODO | no |
 | [x] | Blink | Blink | 2025 | https://eprint.iacr.org/2025/1314 | TODO | yes |
 | [x] | Blowfish | Blowfish | 1994 | https://www.schneier.com/academic/blowfish/ | TODO | no |
-| [ ] | BMGL | BMGL | TODO | TODO | TODO | yes |
+| [x] | BMGL | BMGL | 2000 | https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.37.8270&rep=rep1&type=pdf | Full | yes |
 | [x] | Camellia | Camellia | 2004 | https://www.rfc-editor.org/rfc/rfc3713 | TODO | no |
 | [x] | CAST-128 | CAST-128 | 1997 | https://www.rfc-editor.org/rfc/rfc2144 | TODO | no |
 | [x] | CAST-256 | CAST-256 | 1999 | https://www.rfc-editor.org/rfc/rfc2612 | TODO | no |

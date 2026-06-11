@@ -1988,7 +1988,7 @@ primitives:
   - id: bmgl_v1
     name: BMGL-v1
     family_id: bmgl
-    primitive_type: block_cipher
+    primitive_type: stream_cipher
     reference_ids:
       - bmgl_ref
     characteristics:
