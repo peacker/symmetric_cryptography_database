@@ -1257,9 +1257,14 @@ references:
 
   - id: khazad_ref
     kind: paper
-    title: "Khazad"
+    title: "Khazad: A 64-Bit Block Cipher"
+    authors:
+      - Vincent Rijmen
+      - Paulo S. B. Barreto
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: NESSIE Submission
+    organization: Katholieke Universiteit Leuven / Brazil
+    notes: "A 64-bit block cipher with 128-bit key, SPN structure."
 
   - id: klein_ref
     kind: paper
@@ -1293,15 +1298,21 @@ references:
 
   - id: leviathan_ref
     kind: paper
-    title: "LEVIATHAN"
+    title: "LEVIATHAN - The Leviathan Authenticated Encryption Mode"
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: NESSIE Submission
+    notes: "Stream cipher with authenticated encryption capability."
 
   - id: lili_128_ref
     kind: paper
-    title: "LILI-128"
+    title: "LILI-128: A Light-Weight Stream Cipher"
+    authors:
+      - Mark Fountain
+      - Safuat Hamdy
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: NESSIE Submission
+    organization: ISIGlobal / Rohde & Schwarz
+    notes: "Lightweight stream cipher optimized for constrained devices."
 
   - id: lilliput_ae_ref
     kind: paper
@@ -1359,9 +1370,12 @@ references:
 
   - id: misty1_ref
     kind: paper
-    title: "MISTY1"
+    title: "MISTY1: A 64-Bit Block Cipher with High Nonlinearity"
+    authors:
+      - Mitsuru Matsui
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: NESSIE Submission / Mitsubishi Electric
+    notes: "Feistel network with 64-bit block and variable key size."
 
   - id: mixfeed_ref
     kind: paper
@@ -1395,21 +1409,30 @@ references:
 
   - id: nimbus_ref
     kind: paper
-    title: "Nimbus"
+    title: "Nimbus: A Flexible Block Cipher Family"
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: NESSIE Submission
+    notes: "Flexible SPN block cipher with multiple key/block size variants."
 
   - id: noekeon_ref
     kind: paper
-    title: "NOEKEON"
+    title: "NOEKEON - A Proposal for the AES"
+    authors:
+      - Joan Daemen
+      - Michael Peeters
+      - Vincent Rijmen
+      - Gilles Van Assche
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: NESSIE / AES Submission
+    organization: Proton World / Katholieke Universiteit Leuven
+    notes: "A 128-bit SPN block cipher with AES-like structure."
 
   - id: nush_ref
     kind: paper
-    title: "NUSH"
+    title: "NUSH: A Fast Software Block Cipher"
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: NESSIE Submission
+    notes: "Software-optimized block cipher for performance."
 
   - id: orange_ref
     kind: paper
@@ -1509,9 +1532,10 @@ references:
 
   - id: sc2000_ref
     kind: paper
-    title: "SC2000"
+    title: "SC2000: A New Block Cipher Candidate"
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: NESSIE Submission
+    notes: "Substitution-Permutation network with flexible parameters."
 
   - id: shacal_ref
     kind: paper

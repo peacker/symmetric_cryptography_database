@@ -77,7 +77,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | KASUMI | KASUMI | 2001 | https://www.3gpp.org/ftp/Specs/archive/35_series/35.202/ | TODO | no |
 | [x] | KATAN | KATAN | 2009 | https://www.iacr.org/archive/ches2009/57470001/57470001.pdf | TODO | yes |
 | [ ] | KCipher-2 | KCipher-2 | TODO | TODO | TODO | no |
-| [ ] | Khazad | Khazad | TODO | TODO | TODO | yes |
+| [x] | Khazad | Khazad | TODO | TODO | TODO | yes |
 | [ ] | KLEIN | KLEIN | TODO | TODO | TODO | no |
 | [x] | KNOT | KNOT | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | KTANTAN | KTANTAN | 2009 | https://www.iacr.org/archive/ches2009/57470001/57470001.pdf | TODO | no |
@@ -86,8 +86,8 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | LEA | LEA | TODO | TODO | TODO | no |
 | [ ] | LEA-128 | LEA | TODO | TODO | TODO | no |
 | [x] | LED | LED | 2011 | https://www.iacr.org/archive/ches2011/69170327/69170327.pdf | TODO | yes |
-| [ ] | LEVIATHAN | LEVIATHAN | TODO | TODO | TODO | yes |
-| [ ] | LILI-128 | LILI-128 | TODO | TODO | TODO | yes |
+| [x] | LEVIATHAN | LEVIATHAN | TODO | TODO | TODO | yes |
+| [x] | LILI-128 | LILI-128 | TODO | TODO | TODO | yes |
 | [ ] | Lilliput-AE | Lilliput-AE | TODO | TODO | TODO | no |
 | [ ] | Limdolen | Limdolen | TODO | TODO | TODO | no |
 | [ ] | LOCUS | LOCUS | TODO | TODO | TODO | no |
@@ -100,17 +100,17 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | MCRYPTON | MCRYPTON | TODO | TODO | TODO | no |
 | [ ] | MIBS | MIBS | TODO | TODO | TODO | no |
 | [ ] | MIDORI | MIDORI | TODO | TODO | TODO | no |
-| [ ] | MISTY1 | MISTY1 | TODO | TODO | TODO | yes |
+| [x] | MISTY1 | MISTY1 | TODO | TODO | TODO | yes |
 | [ ] | mixFeed | mixFeed | TODO | TODO | TODO | no |
 | [ ] | MMB | MMB | TODO | TODO | TODO | no |
 | [x] | MSX | MSX | 2026 | https://cic.iacr.org/p/2/4/32 | TODO | no |
 | [ ] | MUGI | MUGI | TODO | TODO | TODO | no |
 | [ ] | MULTI-S01 | MULTI-S01 | TODO | TODO | TODO | no |
 | [ ] | MULTI2 | MULTI2 | TODO | TODO | TODO | no |
-| [ ] | Nimbus | Nimbus | TODO | TODO | TODO | yes |
-| [ ] | NOEKEON | NOEKEON | TODO | TODO | TODO | yes |
+| [x] | Nimbus | Nimbus | TODO | TODO | TODO | yes |
+| [x] | NOEKEON | NOEKEON | TODO | TODO | TODO | yes |
 | [x] | NBC | NBC | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000339 | Full | yes |
-| [ ] | NUSH | NUSH | TODO | TODO | TODO | yes |
+| [x] | NUSH | NUSH | TODO | TODO | TODO | yes |
 | [ ] | ORANGE | ORANGE | TODO | TODO | TODO | no |
 | [ ] | Oribatida | Oribatida | TODO | TODO | TODO | no |
 | [ ] | ORYX | ORYX | TODO | TODO | TODO | no |
@@ -143,7 +143,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SAFER++ | SAFER++ | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | SALSA | SALSA | 2008 | https://cr.yp.to/snuffle.html | TODO | no |
 | [x] | Saturnin | Saturnin | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
-| [ ] | SC2000 | SC2000 | TODO | TODO | TODO | yes |
+| [x] | SC2000 | SC2000 | TODO | TODO | TODO | yes |
 | [x] | SCARF | SCARF | 2023 | https://www.usenix.org/system/files/usenixsecurity23-canale.pdf | TODO | yes |
 | [x] | SEED | SEED | 2005 | https://www.rfc-editor.org/rfc/rfc4269 | TODO | no |
 | [x] | Serpent | Serpent | 1998 | https://www.cl.cam.ac.uk/archive/rja14/Papers/serpent.pdf | TODO | yes |
