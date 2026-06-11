@@ -41,7 +41,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | COMET | COMET | TODO | TODO | TODO | no |
 | [x] | CRISP | 1996 | https://sacworkshop.org/proc/SAC_96_002.pdf | PDF Page 17-31 |
 | [x] | CRYPTON | CRYPTON | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
-| [ ] | CS-Cipher | CS-Cipher | TODO | TODO | TODO | yes |
+| [x] | CS-Cipher | CS-Cipher | TODO | TODO | TODO | yes |
 | [x] | DEAL | DEAL | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [ ] | Deoxys | Deoxys | TODO | TODO | TODO | no |
 | [x] | DES | DES | 1977 | https://csrc.nist.gov/pubs/fips/46/final | TODO | no |

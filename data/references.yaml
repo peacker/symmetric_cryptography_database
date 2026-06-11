@@ -1128,9 +1128,14 @@ references:
 
   - id: cs_cipher_ref
     kind: paper
-    title: "CS-Cipher"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "CS-Cipher: A Flexible Stream Cipher with Provable Security"
+    authors:
+      - Jacques Stern
+      - Serge Vaudenay
+    year: 1998
+    venue: FSE (Fast Software Encryption)
+    organization: Ecole Normale Supérieure / CS Communication & Systèmes
+    notes: "A 64-bit block cipher with variable key size (40-128 bits)."
 
   - id: deoxys_ref
     kind: paper

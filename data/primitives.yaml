@@ -2109,7 +2109,7 @@ primitives:
     reference_ids:
       - cs_cipher_ref
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 64
       key_size_bits: 128
       rounds: 1
       output_size_bits: 128
