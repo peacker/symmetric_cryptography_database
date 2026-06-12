@@ -23,14 +23,7 @@ families:
       - daemen_rijmen_1998_rijndael
     process_ids:
       - aes_competition_nist_1997_2000
-    influences:
-      - source_family_id: square
-        relations:
-          - inspired_by
-          - same_state_layout
-          - similar_mix_column
-          - similar_shift_row
-        note: Rijndael builds on the wide-trail SPN approach introduced in SQUARE.
+    influences: []
     innovative_ideas:
       - id: rijndael_8x8_sbox
         name: 8x8 S-box
@@ -45,6 +38,7 @@ families:
       Rijndael supports variable block sizes (128, 192, 256 bits) and
       independently chosen key sizes. The AES standard restricts block size
       to 128 bits and standardises three key sizes, making AES a special case.
+      The design follows the wide-trail lineage pioneered by SHARK and SQUARE.
 
   - id: aes
     name: AES
@@ -2224,10 +2218,6 @@ families:
           - inspired_by
           - same_state_layout
         note: Anubis follows a Rijndael-like byte-oriented wide-trail SPN design.
-      - source_family_id: square
-        relations:
-          - inspired_by
-        note: Anubis inherits the wide-trail design lineage that originates in SQUARE.
     innovative_ideas:
       - id: anubis_involutional_round_design
         name: Involutional round design
@@ -2238,7 +2228,8 @@ families:
     notes: >
       Anubis is a 128-bit block cipher with key sizes 32N bits for N=4..10
       (128 to 320 bits, step 32). The standard number of rounds is R=8+N,
-      giving 12 to 18 rounds.
+      giving 12 to 18 rounds. It belongs to the Rijndael/SQUARE wide-trail
+      SPN design lineage.
 
   - id: ballet
     name: Ballet
@@ -2979,11 +2970,7 @@ families:
     reference_ids:
       - khazad_ref
     process_ids: []
-    influences:
-      - source_family_id: square
-        relations:
-          - inspired_by
-        note: Khazad follows the SQUARE/SHARK wide-trail SPN design lineage.
+    influences: []
     notes: Khazad is a wide-trail SPN block cipher family proposed in the NESSIE era.
 
   - id: klein

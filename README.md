@@ -47,6 +47,7 @@ Why this hybrid works:
 3. Build the SQLite database.
 4. Export visualization CSV files.
 5. Build the static site.
+6. Start the local app server.
 
 Example:
 
@@ -58,7 +59,10 @@ make validate
 make build-db
 make export-viz
 make build-site
+make run-app
 ```
+
+Then open http://localhost:8501/ in your browser.
 
 Or run everything in one shot:
 
