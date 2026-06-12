@@ -72,7 +72,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | HyENA | HyENA | TODO | TODO | TODO | no |
 | [x] | ICE | ICE | 1997 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/ice.pdf | Full | yes |
 | [x] | IDEA | IDEA | 1991 | https://doi.org/10.1007/3-540-46877-3_35 | TODO | no |
-| [x] | ISAAC | ISAAC | 1993 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/isaac.pdf | Full | yes |
+| [x] | ISAAC | ISAAC | 1997 | https://link.springer.com/chapter/10.1007/3-540-60865-6_41 | Full | yes |
 | [x] | ISAP | ISAP | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | KASUMI | KASUMI | 2001 | https://www.3gpp.org/ftp/Specs/archive/35_series/35.202/ | TODO | no |
 | [x] | KATAN | KATAN | 2009 | https://www.iacr.org/archive/ches2009/57470001/57470001.pdf | TODO | yes |

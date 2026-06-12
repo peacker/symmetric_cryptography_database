@@ -1272,10 +1272,10 @@ references:
     title: "ISAAC"
     authors:
       - Robert J. Jenkins Jr.
-    year: 1993
-    venue: "ISAAC design note"
-    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/isaac.pdf"
-    notes: "Derived from references/1993-isaac.pdf."
+    year: 1997
+    venue: "Fast Software Encryption 1997"
+    url: "https://link.springer.com/chapter/10.1007/3-540-60865-6_41"
+    notes: "Primary publication reference for ISAAC."
 
   - id: kcipher_2_ref
     kind: paper
