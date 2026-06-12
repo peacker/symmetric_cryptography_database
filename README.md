@@ -46,6 +46,7 @@ Why this hybrid works:
 2. Validate the datasets.
 3. Build the SQLite database.
 4. Export visualization CSV files.
+5. Build the static site.
 
 Example:
 
@@ -57,6 +58,12 @@ make validate
 make build-db
 make export-viz
 make build-site
+```
+
+Or run everything in one shot:
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt && make validate && make build-db && make export-viz && make build-site
 ```
 
 The static site output is generated in `build/site/`.
@@ -107,3 +114,10 @@ Generated CSV files in `build/viz/` can feed:
 ## Next-stage extension
 
 When you move to variable-size modes, add a `mode` entity and a relation table `mode_uses_primitive`, while keeping primitive records independent.
+
+## Similar projects
+
+`cryptospecs` was a collection of specifications and implementations of 
+block ciphers, stream ciphers, hash functions, and few asymmetric ciphers.
+While the main website https://code.google.com/archive/p/cryptospecs/ has been deprecated, 
+it can still be found at https://github.com/stamparm/cryptospecs/tree/master

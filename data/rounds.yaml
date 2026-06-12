@@ -2086,11 +2086,24 @@ rounds:
 
   - id: square_round
     name: SQUARE round
-    kind: other
+    kind: full_round
     spec:
+      state_model:
+        layout: 4x4_bytes
+        state_bits: 128
       component_flow:
+        - component_id: sbox
+          params: { input_bits: 8, output_bits: 8 }
+        - component_id: field_matrix_mul
+          params: { field_size: 256 }
+        - component_id: word_permutation
+          params: { word_size_bits: 8 }
         - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
+        - component_id: constant
+      constant_injection: round_constant
+    notes: >
+      SQUARE round abstraction with byte substitution, diffusion, transposition,
+      and round-key mixing over a 128-bit 4x4-byte state.
 
   - id: thank_goodness_it_s_friday_round
     name: Thank Goodness It's Friday (TGIF) round

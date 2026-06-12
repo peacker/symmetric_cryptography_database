@@ -3190,7 +3190,7 @@ primitives:
     notes: Generic baseline instance; update with full paper-specific variants.
 
   - id: square_v1
-    name: SQUARE-v1
+    name: SQUARE
     family_id: square
     primitive_type: block_cipher
     reference_ids:
@@ -3198,9 +3198,9 @@ primitives:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      rounds: 8
       output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+    notes: SQUARE as specified in the 1997 FSE paper.
 
   - id: thank_goodness_it_s_friday_v1
     name: Thank Goodness It's Friday (TGIF)-v1

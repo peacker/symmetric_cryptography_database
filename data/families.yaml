@@ -23,7 +23,14 @@ families:
       - daemen_rijmen_1998_rijndael
     process_ids:
       - aes_competition_nist_1997_2000
-    influences: []
+    influences:
+      - source_family_id: square
+        relations:
+          - inspired_by
+          - same_state_layout
+          - similar_mix_column
+          - similar_shift_row
+        note: Rijndael builds on the wide-trail SPN approach introduced in SQUARE.
     innovative_ideas:
       - id: rijndael_8x8_sbox
         name: 8x8 S-box
@@ -2217,6 +2224,10 @@ families:
           - inspired_by
           - same_state_layout
         note: Anubis follows a Rijndael-like byte-oriented wide-trail SPN design.
+      - source_family_id: square
+        relations:
+          - inspired_by
+        note: Anubis inherits the wide-trail design lineage that originates in SQUARE.
     innovative_ideas:
       - id: anubis_involutional_round_design
         name: Involutional round design
@@ -2968,8 +2979,12 @@ families:
     reference_ids:
       - khazad_ref
     process_ids: []
-    influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    influences:
+      - source_family_id: square
+        relations:
+          - inspired_by
+        note: Khazad follows the SQUARE/SHARK wide-trail SPN design lineage.
+    notes: Khazad is a wide-trail SPN block cipher family proposed in the NESSIE era.
 
   - id: klein
     name: KLEIN
@@ -4201,15 +4216,32 @@ families:
       block_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: word_permutation
+          params: { word_size_bits: 8 }
+        - id: field_matrix_mul
+          params: { field_size: 256 }
         - id: xor
         - id: constant
     reference_ids:
       - square_ref
     process_ids: []
-    influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    influences:
+      - source_family_id: shark
+        relations:
+          - inspired_by
+          - similar_mix_column
+        note: SQUARE adopts and refines the wide-trail SPN direction from SHARK.
+    innovative_ideas:
+      - id: square_wide_trail_spn
+        name: Wide-trail byte-oriented SPN
+        note: Early practical deployment of the wide-trail strategy with byte substitution and MDS diffusion.
+      - id: square_self_reciprocal_round
+        name: Self-reciprocal round structure
+        note: The round/key schedule design enables closely related encryption and decryption structures.
+    notes: >
+      SQUARE is a 128-bit block cipher with a 128-bit key and 8 rounds,
+      designed for resistance to differential and linear cryptanalysis.
 
   - id: thank_goodness_it_s_friday
     name: Thank Goodness It's Friday (TGIF)

@@ -1629,8 +1629,15 @@ references:
   - id: square_ref
     kind: paper
     title: "SQUARE"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    authors:
+      - Joan Daemen
+      - Lars R. Knudsen
+      - Vincent Rijmen
+    year: 1997
+    venue: "Fast Software Encryption (FSE 1997), LNCS 1267"
+    url: "https://link.springer.com/chapter/10.1007/BFb0052343"
+    publisher: "Springer"
+    notes: "Derived from symmetric_cryptography_database/references/1997-square.pdf."
 
   - id: thank_goodness_it_s_friday_ref
     kind: paper

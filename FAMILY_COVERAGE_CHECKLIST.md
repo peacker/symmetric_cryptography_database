@@ -173,7 +173,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Spook | Spook | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | SPRING | SPRING | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000343 | Full | yes |
 | [ ] | Spritz | Spritz | TODO | TODO | TODO | no |
-| [ ] | SQUARE | SQUARE | TODO | TODO | TODO | no |
+| [x] | SQUARE | SQUARE | 1997 | https://link.springer.com/chapter/10.1007/BFb0052343 | Full | yes |
 | [ ] | Subterranean 2.0 | Subterranean 2.0 | TODO | TODO | TODO | no |
 | [x] | Sycon | Sycon | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | TEA | TEA | 1994 | https://doi.org/10.1007/3-540-60590-8_29 | TODO | no |
