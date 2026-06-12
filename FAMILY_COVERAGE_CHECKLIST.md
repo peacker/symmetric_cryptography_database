@@ -45,7 +45,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | DEAL | DEAL | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [ ] | Deoxys | Deoxys | TODO | TODO | TODO | no |
 | [x] | DES | DES | 1977 | https://csrc.nist.gov/pubs/fips/46/final | TODO | no |
-| [ ] | DESX | DESX | TODO | TODO | TODO | no |
+| [x] | DESX | DESX | 1996 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/desx.pdf | Full | yes |
 | [x] | DFC | DFC | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | DryGASCON | GASCON permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | E2 | E2 | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
@@ -63,16 +63,16 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | GAGE and InGAGE | GAGE and InGAGE | TODO | TODO | TODO | no |
 | [x] | GIFT | GIFT | 2017 | https://iacr.org/archive/ches2017/105290001/105290001.pdf | TODO | no |
 | [x] | Gimli | Gimli | 2017 | https://gimli.cr.yp.to/ | TODO | no |
-| [ ] | GOST 28147-89 (Magma) | Magma | TODO | TODO | TODO | no |
+| [x] | GOST 28147-89 (Magma) | Magma | 1989 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/gost.pdf | Full | yes |
 | [x] | Grain-128 | Grain-128 | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [ ] | Grand Cru | Grand Cru | TODO | TODO | TODO | no |
 | [ ] | HERN & HERON | HERN & HERON | TODO | TODO | TODO | no |
 | [ ] | HIGHT | HIGHT | TODO | TODO | TODO | no |
 | [x] | HPC | HPC | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [ ] | HyENA | HyENA | TODO | TODO | TODO | no |
-| [ ] | ICE | ICE | TODO | TODO | TODO | no |
+| [x] | ICE | ICE | 1997 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/ice.pdf | Full | yes |
 | [x] | IDEA | IDEA | 1991 | https://doi.org/10.1007/3-540-46877-3_35 | TODO | no |
-| [ ] | ISAAC | ISAAC | TODO | TODO | TODO | no |
+| [x] | ISAAC | ISAAC | 1993 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/isaac.pdf | Full | yes |
 | [x] | ISAP | ISAP | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | KASUMI | KASUMI | 2001 | https://www.3gpp.org/ftp/Specs/archive/35_series/35.202/ | TODO | no |
 | [x] | KATAN | KATAN | 2009 | https://www.iacr.org/archive/ches2009/57470001/57470001.pdf | TODO | yes |

@@ -2124,11 +2124,11 @@ primitives:
     reference_ids:
       - desx_ref
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 64
+      key_size_bits: 184
+      rounds: 16
+      output_size_bits: 64
+    notes: Baseline DESX profile using DES core with input/output whitening keys.
 
   - id: enocoro_128v2_v1
     name: Enocoro-128v2-v1
@@ -2315,11 +2315,11 @@ primitives:
     reference_ids:
       - gost_28147_89_ref
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 64
+      key_size_bits: 256
+      rounds: 32
+      output_size_bits: 64
+    notes: Baseline GOST 28147-89 profile with 32 rounds and 256-bit key.
 
   - id: grand_cru_v1
     name: Grand Cru-v1
@@ -2380,11 +2380,11 @@ primitives:
     reference_ids:
       - ice_ref
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 64
+      key_size_bits: 64
+      rounds: 16
+      output_size_bits: 64
+    notes: Baseline ICE profile (16-round variant).
 
   - id: isaac_v1
     name: ISAAC-v1
@@ -2393,13 +2393,12 @@ primitives:
     reference_ids:
       - isaac_ref
     characteristics:
-      state_size_bits: 128
-      key_size_bits: 128
-      iv_size_bits: 128
-      rounds: 1
-      block_size_bits: 128
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      state_size_bits: 8192
+      key_size_bits: 256
+      rounds: 256
+      block_size_bits: 32
+      output_size_bits: 32
+    notes: Baseline ISAAC profile using 256-word internal state and 32-bit output words.
 
   - id: kcipher_2_v1
     name: KCipher-2-v1

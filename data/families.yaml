@@ -2560,24 +2560,23 @@ families:
   - id: desx
     name: DESX
     construction_ids:
-      - spn
+      - feistel
     round_ids:
       - desx_round
     target_applications:
       - generic
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 64
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
         - id: xor
-        - id: constant
+        - id: sbox
+          params: { input_bits: 6, output_bits: 4 }
+        - id: bit_permutation
     reference_ids:
       - desx_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: DESX applies key whitening around DES to improve brute-force resistance.
 
   - id: enocoro_128v2
     name: Enocoro-128v2
@@ -2782,24 +2781,25 @@ families:
   - id: gost_28147_89
     name: GOST 28147-89 (Magma)
     construction_ids:
-      - spn
+      - feistel
     round_ids:
       - gost_28147_89_round
     target_applications:
       - generic
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 64
       components:
+        - id: add_mod
+          params: { modulus: 4294967296 }
         - id: sbox
           params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: rotation_fixed
         - id: xor
-        - id: constant
     reference_ids:
       - gost_28147_89_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: GOST 28147-89 is a 32-round Feistel block cipher with a 256-bit key.
 
   - id: grand_cru
     name: Grand Cru
@@ -2892,24 +2892,23 @@ families:
   - id: ice
     name: ICE
     construction_ids:
-      - spn
+      - feistel
     round_ids:
       - ice_round
     target_applications:
       - generic
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 64
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
+          params: { input_bits: 10, output_bits: 8 }
         - id: bit_permutation
         - id: xor
-        - id: constant
     reference_ids:
       - ice_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: ICE is a DES-like software-oriented Feistel design with keyed permutation.
 
   - id: isaac
     name: ISAAC
@@ -2920,17 +2919,17 @@ families:
     target_applications:
       - generic
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 8192
       components:
-        - id: lfsr
-        - id: nlfsr
+        - id: add_mod
         - id: xor
-        - id: constant
+        - id: rotation_fixed
+        - id: word_permutation
     reference_ids:
       - isaac_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: ISAAC is a stream generator using indirection, accumulation, and mixing.
 
   - id: kcipher_2
     name: KCipher-2

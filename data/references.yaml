@@ -1145,9 +1145,14 @@ references:
 
   - id: desx_ref
     kind: paper
-    title: "DESX"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "How to Protect DES Against Exhaustive Key Search"
+    authors:
+      - Joe Kilian
+      - Phillip Rogaway
+    year: 1996
+    venue: "CRYPTO 1996"
+    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/desx.pdf"
+    notes: "Derived from references/1996-desx.pdf."
 
   - id: enocoro_128v2_ref
     kind: paper
@@ -1220,8 +1225,13 @@ references:
   - id: gost_28147_89_ref
     kind: paper
     title: "GOST 28147-89 (Magma)"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    authors:
+      - Josef Pieprzyk
+      - Leonid Tombak
+    year: 1989
+    venue: "GOST 28147-89 standard"
+    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/gost.pdf"
+    notes: "Derived from references/1989-gost_28147_89.pdf."
 
   - id: grand_cru_ref
     kind: paper
@@ -1250,14 +1260,22 @@ references:
   - id: ice_ref
     kind: paper
     title: "ICE"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    authors:
+      - Matthew Kwan
+    year: 1997
+    venue: "Fast Software Encryption 1997"
+    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/ice.pdf"
+    notes: "Derived from references/1997-ice.pdf."
 
   - id: isaac_ref
     kind: paper
     title: "ISAAC"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    authors:
+      - Robert J. Jenkins Jr.
+    year: 1993
+    venue: "ISAAC design note"
+    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/isaac.pdf"
+    notes: "Derived from references/1993-isaac.pdf."
 
   - id: kcipher_2_ref
     kind: paper
