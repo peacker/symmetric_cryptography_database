@@ -45,7 +45,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | DEAL | DEAL | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [ ] | Deoxys | Deoxys | TODO | TODO | TODO | no |
 | [x] | DES | DES | 1977 | https://csrc.nist.gov/pubs/fips/46/final | TODO | no |
-| [x] | DESX | DESX | 1996 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/desx.pdf | Full | yes |
+| [x] | DESX | DESX | 1996 | https://doi.org/10.1007/3-540-68697-5_9 | Full | yes |
 | [x] | DFC | DFC | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | DryGASCON | GASCON permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | E2 | E2 | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
@@ -53,7 +53,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | Enocoro-128v2 | Enocoro-128v2 | TODO | TODO | TODO | no |
 | [ ] | ESTATE | ESTATE | TODO | TODO | TODO | no |
 | [ ] | Fantomas / Robin | Fantomas / Robin | TODO | TODO | TODO | no |
-| [x] | FEAL | FEAL | 1987 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/feal.pdf | Full | yes |
+| [x] | FEAL | FEAL | 1987 | https://info.isl.ntt.co.jp/crypt/eng/archive/index.html | Full | yes |
 | [x] | FBC | FBC | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000340 | Full | yes |
 | [x] | FESH | FESH | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000336 | Full | yes |
 | [ ] | FlexAEAD | FlexAEAD | TODO | TODO | TODO | no |
@@ -63,14 +63,14 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | GAGE and InGAGE | GAGE and InGAGE | TODO | TODO | TODO | no |
 | [x] | GIFT | GIFT | 2017 | https://iacr.org/archive/ches2017/105290001/105290001.pdf | TODO | no |
 | [x] | Gimli | Gimli | 2017 | https://gimli.cr.yp.to/ | TODO | no |
-| [x] | GOST 28147-89 (Magma) | Magma | 1989 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/gost.pdf | Full | yes |
+| [x] | GOST 28147-89 (Magma) | Magma | 1989 | https://datatracker.ietf.org/doc/html/rfc5830 | Full | yes |
 | [x] | Grain-128 | Grain-128 | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [ ] | Grand Cru | Grand Cru | TODO | TODO | TODO | no |
 | [ ] | HERN & HERON | HERN & HERON | TODO | TODO | TODO | no |
 | [ ] | HIGHT | HIGHT | TODO | TODO | TODO | no |
 | [x] | HPC | HPC | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [ ] | HyENA | HyENA | TODO | TODO | TODO | no |
-| [x] | ICE | ICE | 1997 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/ice.pdf | Full | yes |
+| [x] | ICE | ICE | 1997 | https://doi.org/10.1007/BFb0052346 | Full | yes |
 | [x] | IDEA | IDEA | 1991 | https://doi.org/10.1007/3-540-46877-3_35 | TODO | no |
 | [x] | ISAAC | ISAAC | 1997 | https://link.springer.com/chapter/10.1007/3-540-60865-6_41 | Full | yes |
 | [x] | ISAP | ISAP | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
@@ -122,13 +122,13 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | PRINCE | PRINCE | 2012 | https://www.iacr.org/archive/asiacrypt2012/76580403/76580403.pdf | TODO | no |
 | [ ] | PRINCEv2 | PRINCEv2 | TODO | TODO | TODO | no |
 | [x] | Pyjamask | Pyjamask | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
-| [x] | Q | Q | 2000 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/q.pdf | Full | yes |
+| [x] | Q | Q | 2000 | https://web.archive.org/web/20070205001927/http://www.cosic.esat.kuleuven.ac.be/nessie/ | Full | yes |
 | [x] | Qameleon | Qameleon | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | QARMA | QARMA | 2016 | https://eprint.iacr.org/2016/444 | TODO | yes |
 | [x] | QARMAv2 | QARMAv2 | 2023 | https://eprint.iacr.org/2023/929 | TODO | yes |
 | [ ] | Quartet | Quartet | TODO | TODO | TODO | no |
 | [x] | Raindrop | Raindrop | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000342 | Full | yes |
-| [x] | RC2 | RC2 | 1998 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/rc2.pdf | Full | yes |
+| [x] | RC2 | RC2 | 1998 | https://datatracker.ietf.org/doc/html/rfc2268 | Full | yes |
 | [x] | RC4 | RC4 | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
 | [x] | RC4+ | RC4+ | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
 | [ ] | RC4A | RC4A | TODO | TODO | TODO | no |
@@ -150,15 +150,15 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SHACAL | SHACAL | 2000 | https://en.wikipedia.org/wiki/SHACAL | Full | yes |
 | [x] | SHACAL2 | SHACAL2 | 2001 | https://en.wikipedia.org/wiki/SHACAL | Full | yes |
 | [ ] | Shamash & Shamashash | Shamash & Shamashash | TODO | TODO | TODO | no |
-| [x] | SHARK | SHARK | 1996 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/shark.pdf | Full | yes |
+| [x] | SHARK | SHARK | 1996 | https://doi.org/10.1007/3-540-68697-5_11 | Full | yes |
 | [x] | SIMON | SIMON | 2013 | https://eprint.iacr.org/2013/404 | TODO | no |
 | [x] | SIMPLE | SIMPLE | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | SKINNY | SKINNY | 2016 | https://doi.org/10.1007/978-3-662-53008-5_5 | TODO | no |
-| [x] | SKIPJACK | SKIPJACK | 1998 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/skipjack.pdf | Full | yes |
+| [x] | SKIPJACK | SKIPJACK | 1998 | https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub185.pdf | Full | yes |
 | [x] | SM4 | SM4 | 2021 | https://www.rfc-editor.org/rfc/rfc8998 | TODO | yes |
 | [x] | SMBA | SMBA | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000341 | Full | yes |
 | [x] | SNEIK | SNEIK | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
-| [x] | SNOW | SNOW | 2001 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/snow10.pdf | Full | yes |
+| [x] | SNOW | SNOW | 2001 | https://web.archive.org/web/20201017161826/http://www.madchat.fr/crypto/hash-lib-algo/snow/snow10.pdf | Full | yes |
 | [x] | SNOW 2.0 | SNOW 2.0 | 2002 | https://link.springer.com/chapter/10.1007/3-540-36563-X_24 | Full | yes |
 | [x] | SNOW 3G | SNOW 3G | 2006 | https://web.archive.org/web/20200822072535/https://www.gsma.com/aboutus/wp-content/uploads/2014/12/snow3gspec.pdf | Full | yes |
 | [ ] | SOBER-t16 | SOBER-t16 | TODO | TODO | TODO | no |
@@ -185,7 +185,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | TREYFER | TREYFER | TODO | TODO | TODO | no |
 | [ ] | Triad | Triad | TODO | TODO | TODO | no |
 | [x] | TRIFLE | TRIFLE | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
-| [x] | Trivium | Trivium | 2006 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/trivium.pdf | Full | yes |
+| [x] | Trivium | Trivium | 2006 | https://web.archive.org/web/20180828163734/http://www.ecrypt.eu.org/stream/p3ciphers/trivium/trivium_p3.pdf | Full | yes |
 | [x] | TWINE | TWINE | 2012 | https://doi.org/10.1007/978-3-642-34047-5_13 | TODO | no |
 | [ ] | Two-key Triple DES | DES | TODO | TODO | TODO | no |
 | [x] | Twofish | Twofish | 1998 | https://www.schneier.com/academic/twofish/ | TODO | no |

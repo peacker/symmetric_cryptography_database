@@ -1151,7 +1151,7 @@ references:
       - Phillip Rogaway
     year: 1996
     venue: "CRYPTO 1996"
-    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/desx.pdf"
+    url: "https://doi.org/10.1007/3-540-68697-5_9"
     notes: "Derived from references/1996-desx.pdf."
 
   - id: enocoro_128v2_ref
@@ -1180,7 +1180,7 @@ references:
       - Shoji Miyaguchi
     year: 1987
     venue: "EUROCRYPT 1987"
-    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/feal.pdf"
+    url: "https://info.isl.ntt.co.jp/crypt/eng/archive/index.html"
     notes: "Derived from references/1987-feal.pdf."
 
   - id: fesh_ref
@@ -1230,7 +1230,7 @@ references:
       - Leonid Tombak
     year: 1989
     venue: "GOST 28147-89 standard"
-    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/gost.pdf"
+    url: "https://datatracker.ietf.org/doc/html/rfc5830"
     notes: "Derived from references/1989-gost_28147_89.pdf."
 
   - id: grand_cru_ref
@@ -1264,7 +1264,7 @@ references:
       - Matthew Kwan
     year: 1997
     venue: "Fast Software Encryption 1997"
-    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/ice.pdf"
+    url: "https://doi.org/10.1007/BFb0052346"
     notes: "Derived from references/1997-ice.pdf."
 
   - id: isaac_ref
@@ -1511,7 +1511,7 @@ references:
       - Leslie McBride
     year: 2000
     venue: "NESSIE Submission"
-    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/q.pdf"
+    url: "https://web.archive.org/web/20070205001927/http://www.cosic.esat.kuleuven.ac.be/nessie/"
     notes: "Derived from references/2000-q.pdf."
 
   - id: quartet_ref
@@ -1530,7 +1530,7 @@ references:
       - Matthew J. B. Robshaw
     year: 1998
     venue: "Fast Software Encryption"
-    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/rc2.pdf"
+    url: "https://datatracker.ietf.org/doc/html/rfc2268"
     notes: "Derived from references/1998-rc2.pdf."
 
   - id: rc4plus_ref
@@ -1615,7 +1615,7 @@ references:
       - Erik De Win
     year: 1996
     venue: "Fast Software Encryption"
-    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/shark.pdf"
+    url: "https://doi.org/10.1007/3-540-68697-5_11"
     notes: "Derived from references/1996-shark.pdf."
 
   - id: skipjack_ref
@@ -1625,7 +1625,7 @@ references:
       - National Security Agency
     year: 1998
     venue: "NIST declassification package"
-    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/skipjack.pdf"
+    url: "https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub185.pdf"
     notes: "Derived from references/1998-skipjack.pdf."
 
   - id: snow_ref
@@ -1636,7 +1636,7 @@ references:
       - Thomas Johansson
     year: 2001
     venue: "IETF SASC workshop contribution"
-    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/snow10.pdf"
+    url: "https://web.archive.org/web/20201017161826/http://www.madchat.fr/crypto/hash-lib-algo/snow/snow10.pdf"
     notes: "Derived from references/2001-snow10.pdf."
 
   - id: snow_2_0_ref
@@ -1747,7 +1747,7 @@ references:
       - Bart Preneel
     year: 2006
     venue: "eSTREAM submission"
-    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/trivium.pdf"
+    url: "https://web.archive.org/web/20180828163734/http://www.ecrypt.eu.org/stream/p3ciphers/trivium/trivium_p3.pdf"
     notes: "Derived from references/2006-trivium.pdf."
 
   - id: two_key_triple_des_ref
