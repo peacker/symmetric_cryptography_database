@@ -1550,15 +1550,26 @@ references:
 
   - id: rc4a_ref
     kind: paper
-    title: "RC4A"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Two Linear Distinguishing Attacks on VMPC and RC4A and Weakness of RC4 Family of Stream Ciphers"
+    authors:
+      - Alexander Maximov
+    year: 2007
+    venue: "IACR ePrint 2007/070"
+    url: "https://eprint.iacr.org/2007/070"
+    notes: "This paper analyzes RC4A and cites its original FSE 2004 introduction by Paul and Preneel; derived from references/2007-rc4a_distinguishing_attacks.pdf."
 
   - id: remus_ref
     kind: paper
-    title: "REMUS"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Duel of the Titans: The Romulus and Remus Families of Lightweight AEAD Algorithms"
+    authors:
+      - Tetsu Iwata
+      - Mustafa Khairallah
+      - Kazuhiko Minematsu
+      - Thomas Peyrin
+    year: 2019
+    venue: "IACR ePrint 2019/992"
+    url: "https://eprint.iacr.org/2019/992"
+    notes: "Derived from references/2019-remus_romulus.pdf."
 
   - id: saeaes_ref
     kind: paper
@@ -1795,9 +1806,14 @@ references:
 
   - id: treyfer_ref
     kind: paper
-    title: "TREYFER"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "A Related-Key Attack on TREYFER"
+    authors:
+      - Aleksandar Kircanski
+      - Amr M. Youssef
+    year: 2008
+    venue: "SECURWARE 2008"
+    url: "https://users.encs.concordia.ca/~youssef/Publications/Papers/A%20Related-Key%20Attack%20on%20TREYFER.pdf"
+    notes: "Derived from references/2009-treyfer_related_key_attack.pdf; includes the original TREYFER context (FSE 1997)."
 
   - id: triad_ref
     kind: paper

@@ -2920,26 +2920,26 @@ primitives:
     reference_ids:
       - rc4a_ref
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 4096
       key_size_bits: 128
-      iv_size_bits: 128
       rounds: 1
-      block_size_bits: 128
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 8
+      output_size_bits: 8
+    notes: Baseline RC4A keystream generator instance with two 256-byte permutations.
 
   - id: remus_v1
     name: REMUS-v1
     family_id: remus
-    primitive_type: block_cipher
+    primitive_type: aead
     reference_ids:
       - remus_ref
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
+      iv_size_bits: 128
       rounds: 1
       output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+    notes: Baseline REMUS AEAD instance as described in the Romulus/Remus family paper.
 
   - id: saeaes_v1
     name: SAEAES-v1
@@ -3250,11 +3250,11 @@ primitives:
     reference_ids:
       - treyfer_ref
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 64
+      key_size_bits: 64
+      rounds: 32
+      output_size_bits: 64
+    notes: Baseline TREYFER instance with 64-bit block/key and 32 rounds.
 
   - id: triad_v1
     name: Triad-v1

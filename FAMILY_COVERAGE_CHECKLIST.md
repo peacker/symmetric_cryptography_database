@@ -18,7 +18,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | ARIA | ARIA | 2010 | https://www.rfc-editor.org/rfc/rfc5794 | TODO | no |
 | [x] | ASCON | ASCON permutation | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
 | [x] | Ballet | Ballet | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
-| [ ] | BEAR/LION | BEAR/LION | TODO | TODO | TODO | no |
+| [ ] | BEAR/LION | BEAR/LION | TODO | https://www.cl.cam.ac.uk/archive/rja14/Papers/bear-lion.pdf | TODO | no |
 | [ ] | BelT | BelT | TODO | TODO | TODO | no |
 | [x] | BipBip | BipBip | 2023 | https://tches.iacr.org/index.php/TCHES/article/view/9955/9458 | TODO | no |
 | [ ] | Bleep64 | Bleep64 | TODO | TODO | TODO | no |
@@ -131,10 +131,10 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | RC2 | RC2 | 1998 | https://datatracker.ietf.org/doc/html/rfc2268 | Full | yes |
 | [x] | RC4 | RC4 | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
 | [x] | RC4+ | RC4+ | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
-| [ ] | RC4A | RC4A | TODO | TODO | TODO | no |
+| [x] | RC4A | RC4A | 2007 | https://eprint.iacr.org/2007/070 | Full | yes |
 | [x] | RC5 | RC5 | 1996 | https://www.rfc-editor.org/rfc/rfc2040 | TODO | no |
 | [x] | RC6 | RC6 | 1998 | https://www.cerias.purdue.edu/apps/reports_and_papers/view/2029 | TODO | no |
-| [ ] | REMUS | REMUS | TODO | TODO | TODO | no |
+| [x] | REMUS | REMUS | 2019 | https://eprint.iacr.org/2019/992 | Full | yes |
 | [x] | Rijndael | Rijndael | 1998 | https://csrc.nist.gov/projects/aes | TODO | no |
 | [x] | Romulus | Romulus | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [ ] | SAEAES | SAEAES | TODO | TODO | TODO | no |
@@ -182,7 +182,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | Three-key Triple DES | DES | TODO | TODO | TODO | no |
 | [x] | Threefish | Threefish | 2010 | https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf | Full | yes |
 | [x] | TinyJambu | TinyJambu | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
-| [ ] | TREYFER | TREYFER | TODO | TODO | TODO | no |
+| [x] | TREYFER | TREYFER | 2008 | https://users.encs.concordia.ca/~youssef/Publications/Papers/A%20Related-Key%20Attack%20on%20TREYFER.pdf | Full | yes |
 | [ ] | Triad | Triad | TODO | TODO | TODO | no |
 | [x] | TRIFLE | TRIFLE | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | Trivium | Trivium | 2006 | https://web.archive.org/web/20180828163734/http://www.ecrypt.eu.org/stream/p3ciphers/trivium/trivium_p3.pdf | Full | yes |

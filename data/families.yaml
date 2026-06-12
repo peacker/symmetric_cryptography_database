@@ -3779,32 +3779,37 @@ families:
       - rc4a_round
     target_applications:
       - generic
+      - software
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 4096
       components:
-        - id: lfsr
-        - id: nlfsr
+        - id: word_permutation
+          params: { word_size_bits: 8 }
+        - id: add_mod
+          params: { modulus: 256 }
         - id: xor
         - id: constant
     reference_ids:
       - rc4a_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: RC4A is an RC4-family byte-oriented stream cipher variant using two 256-byte permutations.
 
   - id: remus
     name: REMUS
     construction_ids:
-      - spn
+      - sponge_permutation
     round_ids:
       - remus_round
     target_applications:
       - generic
+      - lightweight
+      - iot
     characteristics:
       block_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
+          params: { input_bits: 8, output_bits: 8 }
         - id: bit_permutation
         - id: xor
         - id: constant
@@ -3812,7 +3817,7 @@ families:
       - remus_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: REMUS is a lightweight AEAD mode family introduced alongside Romulus and instantiated with Skinny-based primitives.
 
   - id: saeaes
     name: SAEAES
@@ -4338,24 +4343,27 @@ families:
   - id: treyfer
     name: TREYFER
     construction_ids:
-      - spn
+      - arx_permutation_network
     round_ids:
       - treyfer_round
     target_applications:
       - generic
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 64
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: add_mod
+          params: { modulus: 256 }
+        - id: rotation_fixed
         - id: xor
         - id: constant
     reference_ids:
       - treyfer_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: TREYFER is a very compact 64-bit lightweight block cipher/MAC design targeting constrained environments.
 
   - id: triad
     name: Triad
