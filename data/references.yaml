@@ -1662,15 +1662,25 @@ references:
 
   - id: sober_t16_ref
     kind: paper
-    title: "SOBER-t16"
+    title: "Primitive Specification and Supporting Documentation for SOBER-t16 Submission to NESSIE"
+    authors:
+      - Phillip Hawkes
+      - Gregory G. Rose
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: "NESSIE submission"
+    url: "https://web.archive.org/web/20110812013604/https://www.cosic.esat.kuleuven.be/nessie/workshop/submissions/sober-t16.zip"
+    notes: "Primary source is the archived NESSIE submission package; supporting analysis PDF is in references/2002-sober-t16_t32-distinguishing.pdf."
 
   - id: sober_t32_ref
     kind: paper
-    title: "SOBER-t32"
+    title: "Primitive Specification and Supporting Documentation for SOBER-t32 Submission to NESSIE"
+    authors:
+      - Phillip Hawkes
+      - Gregory G. Rose
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: "NESSIE submission"
+    url: "https://web.archive.org/web/20110812013604/https://www.cosic.esat.kuleuven.be/nessie/workshop/submissions/sober-t32.zip"
+    notes: "Primary source is the archived NESSIE submission package; supporting analysis PDF is in references/2004-sober-t16_t32-algebraic.pdf."
 
   - id: sosemanuk1_ref
     kind: paper

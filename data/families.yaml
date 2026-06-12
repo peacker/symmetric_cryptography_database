@@ -4097,17 +4097,18 @@ families:
     target_applications:
       - generic
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 272
       components:
         - id: lfsr
-        - id: nlfsr
+        - id: mul_mod
+        - id: add_mod
         - id: xor
         - id: constant
     reference_ids:
       - sober_t16_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: SOBER-t16 is a 16-bit word-oriented stream-cipher design submitted to NESSIE.
 
   - id: sober_t32
     name: SOBER-t32
@@ -4118,17 +4119,18 @@ families:
     target_applications:
       - generic
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 544
       components:
         - id: lfsr
-        - id: nlfsr
+        - id: mul_mod
+        - id: add_mod
         - id: xor
         - id: constant
     reference_ids:
       - sober_t32_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: SOBER-t32 is the 32-bit word-oriented SOBER variant submitted to NESSIE.
 
   - id: sosemanuk1
     name: SOSEMANUK1

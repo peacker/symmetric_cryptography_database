@@ -3111,13 +3111,13 @@ primitives:
     reference_ids:
       - sober_t16_ref
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 272
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      block_size_bits: 128
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 16
+      output_size_bits: 16
+    notes: Baseline SOBER-t16 instance as a 16-bit word-oriented keystream generator.
 
   - id: sober_t32_v1
     name: SOBER-t32-v1
@@ -3126,13 +3126,13 @@ primitives:
     reference_ids:
       - sober_t32_ref
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 544
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      block_size_bits: 128
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 32
+      output_size_bits: 32
+    notes: Baseline SOBER-t32 instance as a 32-bit word-oriented keystream generator.
 
   - id: sosemanuk1_v1
     name: SOSEMANUK1-v1

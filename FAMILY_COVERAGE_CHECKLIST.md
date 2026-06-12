@@ -161,8 +161,8 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SNOW | SNOW | 2001 | https://web.archive.org/web/20201017161826/http://www.madchat.fr/crypto/hash-lib-algo/snow/snow10.pdf | Full | yes |
 | [x] | SNOW 2.0 | SNOW 2.0 | 2002 | https://link.springer.com/chapter/10.1007/3-540-36563-X_24 | Full | yes |
 | [x] | SNOW 3G | SNOW 3G | 2006 | https://web.archive.org/web/20200822072535/https://www.gsma.com/aboutus/wp-content/uploads/2014/12/snow3gspec.pdf | Full | yes |
-| [ ] | SOBER-t16 | SOBER-t16 | TODO | TODO | TODO | no |
-| [ ] | SOBER-t32 | SOBER-t32 | TODO | TODO | TODO | no |
+| [x] | SOBER-t16 | SOBER-t16 | 2000 | https://web.archive.org/web/20110812013604/https://www.cosic.esat.kuleuven.be/nessie/workshop/submissions/sober-t16.zip | Full | yes |
+| [x] | SOBER-t32 | SOBER-t32 | 2000 | https://web.archive.org/web/20110812013604/https://www.cosic.esat.kuleuven.be/nessie/workshop/submissions/sober-t32.zip | Full | yes |
 | [ ] | SOSEMANUK1 | SOSEMANUK1 | TODO | TODO | TODO | no |
 | [x] | SPARKLE | SPARKLE | 2020 | https://sparkle-lwc.github.io/ | TODO | no |
 | [x] | SPECK | SPECK | 2013 | https://eprint.iacr.org/2013/404 | TODO | no |
