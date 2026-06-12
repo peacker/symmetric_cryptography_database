@@ -1684,9 +1684,24 @@ references:
 
   - id: sosemanuk1_ref
     kind: paper
-    title: "SOSEMANUK1"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "SOSEMANUK, a Fast Software-Oriented Stream Cipher"
+    authors:
+      - Come Berbain
+      - Olivier Billet
+      - Anne Canteaut
+      - Nicolas T. Courtois
+      - Henri Gilbert
+      - Louis Goubin
+      - Aline Gouget
+      - Louis Granboulan
+      - Cedric Lauradoux
+      - Marine Minier
+      - Thomas Pornin
+      - Herve Sibert
+    year: 2005
+    venue: "eSTREAM report 2005/027"
+    url: "https://web.archive.org/web/20120414020956/http://www.ecrypt.eu.org/stream/sosemanukpf.html"
+    notes: "Primary source is the archived eSTREAM profile page; source paper PDF is in references/2005-sosemanuk_p3.pdf."
 
   - id: speckey_ref
     kind: paper
@@ -1696,9 +1711,16 @@ references:
 
   - id: speedy_ref
     kind: paper
-    title: "SPEEDY"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "The SPEEDY Family of Block Ciphers"
+    authors:
+      - Gregor Leander
+      - Timo Moos
+      - Amir Moradi
+      - Siavash Rasoolzadeh
+    year: 2021
+    venue: "IACR Transactions on Cryptographic Hardware and Embedded Systems"
+    url: "https://doi.org/10.46586/tches.v2021.i4.510-545"
+    notes: "Derived from references/2021-speedy_tches.pdf."
 
   - id: spritz_ref
     kind: paper

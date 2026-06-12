@@ -163,11 +163,11 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SNOW 3G | SNOW 3G | 2006 | https://web.archive.org/web/20200822072535/https://www.gsma.com/aboutus/wp-content/uploads/2014/12/snow3gspec.pdf | Full | yes |
 | [x] | SOBER-t16 | SOBER-t16 | 2000 | https://web.archive.org/web/20110812013604/https://www.cosic.esat.kuleuven.be/nessie/workshop/submissions/sober-t16.zip | Full | yes |
 | [x] | SOBER-t32 | SOBER-t32 | 2000 | https://web.archive.org/web/20110812013604/https://www.cosic.esat.kuleuven.be/nessie/workshop/submissions/sober-t32.zip | Full | yes |
-| [ ] | SOSEMANUK1 | SOSEMANUK1 | TODO | TODO | TODO | no |
+| [x] | SOSEMANUK1 | SOSEMANUK1 | 2005 | https://web.archive.org/web/20120414020956/http://www.ecrypt.eu.org/stream/sosemanukpf.html | Full | yes |
 | [x] | SPARKLE | SPARKLE | 2020 | https://sparkle-lwc.github.io/ | TODO | no |
 | [x] | SPECK | SPECK | 2013 | https://eprint.iacr.org/2013/404 | TODO | no |
 | [ ] | SPECKEY | SPECKEY | TODO | TODO | TODO | no |
-| [ ] | SPEEDY | SPEEDY | TODO | TODO | TODO | no |
+| [x] | SPEEDY | SPEEDY | 2021 | https://doi.org/10.46586/tches.v2021.i4.510-545 | Full | yes |
 | [x] | SPIX | SPIX | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | SpoC | SpoC | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | Spook | Spook | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |

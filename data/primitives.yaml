@@ -3141,13 +3141,13 @@ primitives:
     reference_ids:
       - sosemanuk1_ref
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 384
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      block_size_bits: 128
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 32
+      output_size_bits: 32
+    notes: Baseline SOSEMANUK instance with 128-bit key and 128-bit IV.
 
   - id: speckey_v1
     name: SPECKEY-v1
@@ -3169,11 +3169,11 @@ primitives:
     reference_ids:
       - speedy_ref
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 192
+      key_size_bits: 192
+      rounds: 6
+      output_size_bits: 192
+    notes: Baseline SPEEDY-r-192 instance at 6 rounds for the paper's main low-latency target.
 
   - id: spritz_v1
     name: Spritz-v1

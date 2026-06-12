@@ -4141,17 +4141,19 @@ families:
     target_applications:
       - generic
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 384
       components:
         - id: lfsr
-        - id: nlfsr
+        - id: sbox
+          params: { input_bits: 8, output_bits: 8 }
+        - id: add_mod
         - id: xor
         - id: constant
     reference_ids:
       - sosemanuk1_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: SOSEMANUK is an eSTREAM software-profile stream cipher influenced by SNOW 2.0 and Serpent.
 
   - id: speckey
     name: SPECKEY
@@ -4184,10 +4186,10 @@ families:
     target_applications:
       - generic
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 192
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
+          params: { input_bits: 6, output_bits: 6 }
         - id: bit_permutation
         - id: xor
         - id: constant
@@ -4195,7 +4197,7 @@ families:
       - speedy_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: SPEEDY-r-192 is an ultra-low-latency block-cipher family with 6-bit S-boxes and bit-level diffusion.
 
   - id: spritz
     name: Spritz
