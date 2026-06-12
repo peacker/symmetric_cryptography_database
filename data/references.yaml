@@ -1169,9 +1169,14 @@ references:
 
   - id: feal_ref
     kind: paper
-    title: "FEAL"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Fast Data Encipherment Algorithm (FEAL)"
+    authors:
+      - Akihiro Shimizu
+      - Shoji Miyaguchi
+    year: 1987
+    venue: "EUROCRYPT 1987"
+    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/feal.pdf"
+    notes: "Derived from references/1987-feal.pdf."
 
   - id: fesh_ref
     kind: paper
@@ -1495,9 +1500,16 @@ references:
 
   - id: rc2_ref
     kind: paper
-    title: "RC2"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "On the Design and Security of RC2"
+    authors:
+      - Lars R. Knudsen
+      - Vincent Rijmen
+      - Ronald L. Rivest
+      - Matthew J. B. Robshaw
+    year: 1998
+    venue: "Fast Software Encryption"
+    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/rc2.pdf"
+    notes: "Derived from references/1998-rc2.pdf."
 
   - id: rc4plus_ref
     kind: paper
@@ -1562,15 +1574,27 @@ references:
 
   - id: shark_ref
     kind: paper
-    title: "SHARK"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "The Cipher SHARK"
+    authors:
+      - Vincent Rijmen
+      - Joan Daemen
+      - Bart Preneel
+      - Antoon Bosselaers
+      - Erik De Win
+    year: 1996
+    venue: "Fast Software Encryption"
+    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/shark.pdf"
+    notes: "Derived from references/1996-shark.pdf."
 
   - id: skipjack_ref
     kind: paper
-    title: "SKIPJACK"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "SKIPJACK and KEA Algorithm Specifications"
+    authors:
+      - National Security Agency
+    year: 1998
+    venue: "NIST declassification package"
+    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/skipjack.pdf"
+    notes: "Derived from references/1998-skipjack.pdf."
 
   - id: snow_ref
     kind: paper
@@ -1672,8 +1696,13 @@ references:
   - id: trivium_ref
     kind: paper
     title: "Trivium"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    authors:
+      - Christophe De Canniere
+      - Bart Preneel
+    year: 2006
+    venue: "eSTREAM submission"
+    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/trivium.pdf"
+    notes: "Derived from references/2006-trivium.pdf."
 
   - id: two_key_triple_des_ref
     kind: paper

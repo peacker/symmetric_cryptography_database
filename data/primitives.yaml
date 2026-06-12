@@ -2178,11 +2178,11 @@ primitives:
     reference_ids:
       - feal_ref
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 64
+      key_size_bits: 64
+      rounds: 8
+      output_size_bits: 64
+    notes: Baseline FEAL instance aligned to the classic FEAL-8 profile.
 
   - id: fesh_128_128
     name: FESH-128-128
@@ -2892,11 +2892,11 @@ primitives:
     reference_ids:
       - rc2_ref
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 64
       key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      rounds: 16
+      output_size_bits: 64
+    notes: Baseline RC2 instance with 128-bit key and the standard 16 rounds.
 
   - id: rc4plus_v1
     name: RC4+-v1
@@ -3039,11 +3039,11 @@ primitives:
     reference_ids:
       - shark_ref
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 64
       key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      rounds: 6
+      output_size_bits: 64
+    notes: Baseline SHARK instance with 64-bit block and 6 rounds.
 
   - id: skipjack_v1
     name: SKIPJACK-v1
@@ -3052,11 +3052,11 @@ primitives:
     reference_ids:
       - skipjack_ref
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 64
+      key_size_bits: 80
+      rounds: 32
+      output_size_bits: 64
+    notes: Baseline SKIPJACK instance from the declassified specification.
 
   - id: snow_v1
     name: SNOW-v1
@@ -3276,13 +3276,13 @@ primitives:
     reference_ids:
       - trivium_ref
     characteristics:
-      state_size_bits: 128
-      key_size_bits: 128
-      iv_size_bits: 128
-      rounds: 1
-      block_size_bits: 128
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      state_size_bits: 288
+      key_size_bits: 80
+      iv_size_bits: 80
+      rounds: 1152
+      block_size_bits: 1
+      output_size_bits: 1
+    notes: Baseline Trivium stream-cipher instance after standard warm-up phase.
 
   - id: two_key_triple_des_v1
     name: Two-key Triple DES-v1

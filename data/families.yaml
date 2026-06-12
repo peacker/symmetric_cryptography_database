@@ -2647,24 +2647,26 @@ families:
   - id: feal
     name: FEAL
     construction_ids:
-      - spn
+      - feistel
     round_ids:
       - feal_round
     target_applications:
       - generic
+      - software
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 64
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: add_mod
+          params: { modulus: 4294967296 }
         - id: xor
-        - id: constant
+        - id: rotation_fixed
     reference_ids:
       - feal_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      FEAL is a software-oriented Feistel family originally proposed as a fast
+      DES alternative with 64-bit block size.
 
   - id: fesh
     name: FESH
@@ -3719,24 +3721,27 @@ families:
   - id: rc2
     name: RC2
     construction_ids:
-      - spn
+      - feistel
     round_ids:
       - rc2_round
     target_applications:
       - generic
+      - software
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 64
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: add_mod
         - id: xor
-        - id: constant
+        - id: rotation_fixed
     reference_ids:
       - rc2_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      RC2 is a 64-bit block cipher with a variable-length key and a
+      software-oriented round function.
 
   - id: rc4plus
     name: RC4+
@@ -3959,46 +3964,52 @@ families:
   - id: shark
     name: SHARK
     construction_ids:
-      - spn
+      - aligned_spn
     round_ids:
       - shark_round
     target_applications:
       - generic
+      - software
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 64
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: field_matrix_mul
+          params: { field_size: 256 }
         - id: xor
         - id: constant
     reference_ids:
       - shark_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      SHARK is an early wide-trail style SPN with byte-oriented substitution
+      and MDS diffusion.
 
   - id: skipjack
     name: SKIPJACK
     construction_ids:
-      - spn
+      - feistel
     round_ids:
       - skipjack_round
     target_applications:
       - generic
+      - hardware
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 64
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: word_permutation
         - id: xor
-        - id: constant
     reference_ids:
       - skipjack_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      SKIPJACK is a 64-bit block cipher with an 80-bit key, used historically
+      in U.S. government key escrow systems.
 
   - id: snow
     name: SNOW
@@ -4342,23 +4353,26 @@ families:
   - id: trivium
     name: Trivium
     construction_ids:
-      - stream_state_update_generator
+      - lfsr_nlfsr_register_network
     round_ids:
       - trivium_round
     target_applications:
       - generic
+      - hardware
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 288
       components:
         - id: lfsr
         - id: nlfsr
+        - id: and
         - id: xor
-        - id: constant
     reference_ids:
       - trivium_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Trivium is a synchronous stream cipher with 80-bit key and 80-bit IV,
+      using a 288-bit internal state and nonlinear feedback.
 
   - id: two_key_triple_des
     name: Two-key Triple DES
