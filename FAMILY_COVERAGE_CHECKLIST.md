@@ -159,8 +159,8 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SMBA | SMBA | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000341 | Full | yes |
 | [x] | SNEIK | SNEIK | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | SNOW | SNOW | 2001 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/snow10.pdf | Full | yes |
-| [ ] | SNOW 2.0 | SNOW 2.0 | TODO | TODO | TODO | no |
-| [ ] | SNOW 3G | SNOW 3G | TODO | TODO | TODO | no |
+| [x] | SNOW 2.0 | SNOW 2.0 | 2002 | https://link.springer.com/chapter/10.1007/3-540-36563-X_24 | Full | yes |
+| [x] | SNOW 3G | SNOW 3G | 2006 | https://web.archive.org/web/20200822072535/https://www.gsma.com/aboutus/wp-content/uploads/2014/12/snow3gspec.pdf | Full | yes |
 | [ ] | SOBER-t16 | SOBER-t16 | TODO | TODO | TODO | no |
 | [ ] | SOBER-t32 | SOBER-t32 | TODO | TODO | TODO | no |
 | [ ] | SOSEMANUK1 | SOSEMANUK1 | TODO | TODO | TODO | no |

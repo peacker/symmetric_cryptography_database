@@ -3081,13 +3081,13 @@ primitives:
     reference_ids:
       - snow_2_0_ref
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 576
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      block_size_bits: 128
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 32
+      output_size_bits: 32
+    notes: Baseline SNOW 2.0 instance as a word-oriented keystream generator.
 
   - id: snow_3g_v1
     name: SNOW 3G-v1
@@ -3096,13 +3096,13 @@ primitives:
     reference_ids:
       - snow_3g_ref
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 608
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      block_size_bits: 128
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 32
+      output_size_bits: 32
+    notes: Baseline SNOW 3G instance as standardized in 3GPP TS 35.216.
 
   - id: sober_t16_v1
     name: SOBER-t16-v1

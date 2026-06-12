@@ -4051,17 +4051,19 @@ families:
     target_applications:
       - generic
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 576
       components:
         - id: lfsr
-        - id: nlfsr
+        - id: sbox
+          params: { input_bits: 8, output_bits: 8 }
+        - id: add_mod
         - id: xor
         - id: constant
     reference_ids:
       - snow_2_0_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: SNOW 2.0 stream-cipher family with a 16x32-bit LFSR and FSM-based nonlinear output filtering.
 
   - id: snow_3g
     name: SNOW 3G
@@ -4072,17 +4074,19 @@ families:
     target_applications:
       - generic
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 608
       components:
         - id: lfsr
-        - id: nlfsr
+        - id: sbox
+          params: { input_bits: 8, output_bits: 8 }
+        - id: add_mod
         - id: xor
         - id: constant
     reference_ids:
       - snow_3g_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: SNOW 3G stream-cipher family standardized by 3GPP for UEA2/UIA2.
 
   - id: sober_t16
     name: SOBER-t16

@@ -1641,15 +1641,24 @@ references:
 
   - id: snow_2_0_ref
     kind: paper
-    title: "SNOW 2.0"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "A New Version of the Stream Cipher SNOW"
+    authors:
+      - Thomas Johansson
+      - Patrik Ekdahl
+    year: 2002
+    venue: "FSE 2002"
+    url: "https://link.springer.com/chapter/10.1007/3-540-36563-X_24"
+    notes: "Primary bibliographic pointer for SNOW 2.0; local supporting PDF is references/2012-snow2_snow3g_sliding.pdf."
 
   - id: snow_3g_ref
     kind: paper
-    title: "SNOW 3G"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Specification of the 3GPP Confidentiality and Integrity Algorithms UEA2 & UIA2"
+    authors:
+      - 3GPP
+    year: 2006
+    venue: "3GPP TS 35.216"
+    url: "https://web.archive.org/web/20200822072535/https://www.gsma.com/aboutus/wp-content/uploads/2014/12/snow3gspec.pdf"
+    notes: "Derived from references/2006-snow3gspec.pdf."
 
   - id: sober_t16_ref
     kind: paper
