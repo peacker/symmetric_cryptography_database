@@ -1992,11 +1992,12 @@ primitives:
     reference_ids:
       - chaskey_ref
     characteristics:
-      state_size_bits: 256
-      rounds: 1
-      block_size_bits: 256
-      output_size_bits: 256
-    notes: Generic baseline instance; update with full paper-specific variants.
+      state_size_bits: 128
+      key_size_bits: 128
+      rounds: 8
+      block_size_bits: 128
+      output_size_bits: 128
+    notes: Baseline Chaskey-P permutation instance (8 rounds); 12-round variants are also used in the literature.
 
   - id: cilipadi_v1
     name: CiliPadi-v1
@@ -3182,13 +3183,13 @@ primitives:
     reference_ids:
       - spritz_ref
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 2048
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      block_size_bits: 128
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 8
+      output_size_bits: 8
+    notes: Baseline byte-oriented Spritz keystream generator instance.
 
   - id: square_v1
     name: SQUARE
@@ -3236,11 +3237,11 @@ primitives:
     reference_ids:
       - threefish_ref
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 256
+      key_size_bits: 256
+      rounds: 72
+      output_size_bits: 256
+    notes: Baseline Threefish-256 instance from the Skein specification.
 
   - id: treyfer_v1
     name: TREYFER-v1
@@ -3416,9 +3417,9 @@ primitives:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      rounds: 19
       output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+    notes: Baseline XXTEA instance for n=4 words (128-bit block), using q = 6 + 52/n rounds.
 
   - id: xxtea_corrected_block_tea_v1
     name: XXTEA / Corrected Block TEA-v1
@@ -3429,9 +3430,9 @@ primitives:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      rounds: 19
       output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+    notes: Baseline Corrected Block TEA instance for n=4 words (128-bit block).
 
   - id: yarara_and_coral_v1
     name: Yarara and Coral-v1

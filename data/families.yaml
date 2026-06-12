@@ -2344,14 +2344,18 @@ families:
   - id: chaskey
     name: Chaskey
     construction_ids:
-      - sponge_permutation
+      - arx_permutation_network
     round_ids:
       - chaskey_round
     target_applications:
       - generic
+      - software
+      - embedded
     characteristics:
-      state_size_bits: 256
+      state_size_bits: 128
       components:
+        - id: add_mod
+          params: { modulus: 4294967296 }
         - id: xor
         - id: rotation_fixed
         - id: constant
@@ -2359,7 +2363,7 @@ families:
       - chaskey_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: Chaskey is a 128-bit ARX permutation used inside an efficient MAC construction for 32-bit microcontrollers.
 
   - id: cilipadi
     name: CiliPadi
@@ -4208,17 +4212,19 @@ families:
     target_applications:
       - generic
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 2048
       components:
-        - id: lfsr
-        - id: nlfsr
+        - id: word_permutation
+          params: { word_size_bits: 8 }
+        - id: add_mod
+          params: { modulus: 256 }
         - id: xor
         - id: constant
     reference_ids:
       - spritz_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: Spritz is an RC4-style byte-oriented stream-cipher/hash design with a 256-byte permutation state.
 
   - id: square
     name: SQUARE
@@ -4306,24 +4312,28 @@ families:
   - id: threefish
     name: Threefish
     construction_ids:
-      - spn
+      - arx_permutation_network
     round_ids:
       - threefish_round
     target_applications:
       - generic
+      - software
+      - hardware
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 256
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: add_mod
+          params: { modulus: 18446744073709551616 }
+        - id: rotation_fixed
+        - id: word_permutation
+          params: { word_size_bits: 64 }
         - id: xor
         - id: constant
     reference_ids:
       - threefish_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: Threefish is the ARX tweakable block-cipher core used by Skein, with standardized 256/512/1024-bit variants.
 
   - id: treyfer
     name: TREYFER
@@ -4544,7 +4554,7 @@ families:
   - id: xxtea
     name: XXTEA
     construction_ids:
-      - spn
+      - arx_permutation_network
     round_ids:
       - xxtea_round
     target_applications:
@@ -4552,21 +4562,21 @@ families:
     characteristics:
       block_size_bits: 128
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: shift_fixed
         - id: xor
         - id: constant
     reference_ids:
       - xxtea_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: XXTEA (Corrected Block TEA) is a word-oriented ARX cipher operating on variable-length blocks.
 
   - id: xxtea_corrected_block_tea
     name: XXTEA / Corrected Block TEA
     construction_ids:
-      - spn
+      - arx_permutation_network
     round_ids:
       - xxtea_corrected_block_tea_round
     target_applications:
@@ -4574,16 +4584,16 @@ families:
     characteristics:
       block_size_bits: 128
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: shift_fixed
         - id: xor
         - id: constant
     reference_ids:
       - xxtea_corrected_block_tea_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: Corrected Block TEA variant from the Wheeler-Needham correction note (also known as XXTEA).
 
   - id: yarara_and_coral
     name: Yarara and Coral

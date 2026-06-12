@@ -1080,9 +1080,18 @@ references:
 
   - id: chaskey_ref
     kind: paper
-    title: "Chaskey"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Chaskey: An Efficient MAC Algorithm for 32-bit Microcontrollers"
+    authors:
+      - Nicky Mouha
+      - Bart Mennink
+      - Anthony Van Herrewege
+      - Dai Watanabe
+      - Bart Preneel
+      - Ingrid Verbauwhede
+    year: 2014
+    venue: "Selected Areas in Cryptography (SAC 2014), full version"
+    url: "https://eprint.iacr.org/2014/386"
+    notes: "Derived from references/2014-chaskey_eprint.pdf."
 
   - id: cilipadi_ref
     kind: paper
@@ -1733,9 +1742,14 @@ references:
 
   - id: spritz_ref
     kind: paper
-    title: "Spritz"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Spritz-a spongy RC4-like stream cipher and hash function"
+    authors:
+      - Ronald L. Rivest
+      - Jacob C. N. Schuldt
+    year: 2014
+    venue: "MIT CSAIL / AIST technical report"
+    url: "https://people.csail.mit.edu/rivest/pubs/RS14.pdf"
+    notes: "Derived from references/2014-spritz.pdf."
 
   - id: square_ref
     kind: paper
@@ -1764,9 +1778,20 @@ references:
 
   - id: threefish_ref
     kind: paper
-    title: "Threefish"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "The Skein Hash Function Family"
+    authors:
+      - Niels Ferguson
+      - Stefan Lucks
+      - Bruce Schneier
+      - Doug Whiting
+      - Mihir Bellare
+      - Tadayoshi Kohno
+      - Jon Callas
+      - Jesse Walker
+    year: 2010
+    venue: "Skein specification v1.3"
+    url: "https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf"
+    notes: "Threefish is the underlying block cipher in Skein; derived from references/2010-skein_threefish.pdf."
 
   - id: treyfer_ref
     kind: paper
@@ -1842,15 +1867,25 @@ references:
 
   - id: xxtea_ref
     kind: paper
-    title: "XXTEA"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Correction to XTEA"
+    authors:
+      - David J. Wheeler
+      - Roger M. Needham
+    year: 1998
+    venue: "University of Cambridge Computer Laboratory note"
+    url: "https://www.cix.co.uk/~klockstone/xxtea.pdf"
+    notes: "Derived from references/1998-xxtea.pdf."
 
   - id: xxtea_corrected_block_tea_ref
     kind: paper
-    title: "XXTEA / Corrected Block TEA"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Correction to XTEA"
+    authors:
+      - David J. Wheeler
+      - Roger M. Needham
+    year: 1998
+    venue: "University of Cambridge Computer Laboratory note"
+    url: "https://www.cix.co.uk/~klockstone/xxtea.pdf"
+    notes: "Corrected Block TEA (XXTEA) reference; derived from references/1998-xxtea.pdf."
 
   - id: yarara_and_coral_ref
     kind: paper

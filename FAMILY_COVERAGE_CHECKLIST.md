@@ -29,7 +29,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | CAST-128 | CAST-128 | 1997 | https://www.rfc-editor.org/rfc/rfc2144 | TODO | no |
 | [x] | CAST-256 | CAST-256 | 1999 | https://www.rfc-editor.org/rfc/rfc2612 | TODO | no |
 | [x] | ChaCha | ChaCha | 2008 | https://cr.yp.to/chacha.html | TODO | no |
-| [ ] | Chaskey | Chaskey | TODO | TODO | TODO | no |
+| [x] | Chaskey | Chaskey | 2014 | https://eprint.iacr.org/2014/386 | Full | yes |
 | [x] | ChiLow | ChiLow | 2025 | https://eprint.iacr.org/2025/308 | TODO | yes |
 | [ ] | CiliPadi | CiliPadi | TODO | TODO | TODO | no |
 | [ ] | CIPHERUNICORN-A | CIPHERUNICORN-A | TODO | TODO | TODO | no |
@@ -172,7 +172,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SpoC | SpoC | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | Spook | Spook | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | SPRING | SPRING | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000343 | Full | yes |
-| [ ] | Spritz | Spritz | TODO | TODO | TODO | no |
+| [x] | Spritz | Spritz | 2014 | https://people.csail.mit.edu/rivest/pubs/RS14.pdf | Full | yes |
 | [x] | SQUARE | SQUARE | 1997 | https://link.springer.com/chapter/10.1007/BFb0052343 | Full | yes |
 | [ ] | Subterranean 2.0 | Subterranean 2.0 | TODO | TODO | TODO | no |
 | [x] | Sycon | Sycon | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
@@ -180,7 +180,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | TANGRAM | TANGRAM | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000337 | Full | yes |
 | [ ] | Thank Goodness It's Friday (TGIF) | Thank Goodness It's Friday (TGIF) | TODO | TODO | TODO | no |
 | [ ] | Three-key Triple DES | DES | TODO | TODO | TODO | no |
-| [ ] | Threefish | Threefish | TODO | TODO | TODO | no |
+| [x] | Threefish | Threefish | 2010 | https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf | Full | yes |
 | [x] | TinyJambu | TinyJambu | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [ ] | TREYFER | TREYFER | TODO | TODO | TODO | no |
 | [ ] | Triad | Triad | TODO | TODO | TODO | no |
@@ -199,8 +199,8 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | XEX-based families (XTS lineage) | AES | TODO | TODO | TODO | no |
 | [x] | Xoodoo | Xoodoo | 2018 | https://keccak.team/xoodoo.html | TODO | no |
 | [x] | XTEA | XTEA | 1997 | https://www.cix.co.uk/~klockstone/xtea.pdf | TODO | yes |
-| [ ] | XXTEA | XXTEA | TODO | TODO | TODO | no |
-| [ ] | XXTEA / Corrected Block TEA | XXTEA | TODO | TODO | TODO | no |
+| [x] | XXTEA | XXTEA | 1998 | https://www.cix.co.uk/~klockstone/xxtea.pdf | Full | yes |
+| [x] | XXTEA / Corrected Block TEA | XXTEA | 1998 | https://www.cix.co.uk/~klockstone/xxtea.pdf | Full | yes |
 | [ ] | Yarara and Coral | Yarara and Coral | TODO | TODO | TODO | no |
 
 ## Modes of Operation Coverage Checklist
