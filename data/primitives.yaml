@@ -3233,15 +3233,16 @@ primitives:
   - id: thank_goodness_it_s_friday_v1
     name: Thank Goodness It's Friday (TGIF)-v1
     family_id: thank_goodness_it_s_friday
-    primitive_type: block_cipher
+    primitive_type: aead
     reference_ids:
       - thank_goodness_it_s_friday_ref
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      iv_size_bits: 128
+      rounds: 18
       output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+    notes: Baseline TGIF Round 1 AEAD instance (TGIF-N1 profile, 128-bit key/nonce/tag).
 
   - id: three_key_triple_des_v1
     name: Three-key Triple DES-v1
@@ -3285,17 +3286,17 @@ primitives:
   - id: triad_v1
     name: Triad-v1
     family_id: triad
-    primitive_type: stream_cipher
+    primitive_type: aead
     reference_ids:
       - triad_ref
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 256
       key_size_bits: 128
-      iv_size_bits: 128
-      rounds: 1
+      iv_size_bits: 96
+      rounds: 1024
       block_size_bits: 128
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      output_size_bits: 64
+    notes: Baseline Triad-AE instance from the NIST LWC Round 1 specification.
 
   - id: trivium_v1
     name: Trivium-v1

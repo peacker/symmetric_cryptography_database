@@ -178,12 +178,12 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Sycon | Sycon | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | TEA | TEA | 1994 | https://doi.org/10.1007/3-540-60590-8_29 | TODO | no |
 | [x] | TANGRAM | TANGRAM | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000337 | Full | yes |
-| [ ] | Thank Goodness It's Friday (TGIF) | Thank Goodness It's Friday (TGIF) | TODO | TODO | TODO | no |
+| [x] | Thank Goodness It's Friday (TGIF) | Thank Goodness It's Friday (TGIF) | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TGIF-spec.pdf | Full | yes |
 | [ ] | Three-key Triple DES | DES | TODO | TODO | TODO | no |
 | [x] | Threefish | Threefish | 2010 | https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf | Full | yes |
 | [x] | TinyJambu | TinyJambu | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | TREYFER | TREYFER | 2008 | https://users.encs.concordia.ca/~youssef/Publications/Papers/A%20Related-Key%20Attack%20on%20TREYFER.pdf | Full | yes |
-| [ ] | Triad | Triad | TODO | TODO | TODO | no |
+| [x] | Triad | Triad | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TRIAD-spec.pdf | Full | yes |
 | [x] | TRIFLE | TRIFLE | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | Trivium | Trivium | 2006 | https://web.archive.org/web/20180828163734/http://www.ecrypt.eu.org/stream/p3ciphers/trivium/trivium_p3.pdf | Full | yes |
 | [x] | TWINE | TWINE | 2012 | https://doi.org/10.1007/978-3-642-34047-5_13 | TODO | no |

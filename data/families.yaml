@@ -4273,11 +4273,13 @@ families:
   - id: thank_goodness_it_s_friday
     name: Thank Goodness It's Friday (TGIF)
     construction_ids:
-      - spn
+      - tweakable_spn
     round_ids:
       - thank_goodness_it_s_friday_round
     target_applications:
       - generic
+      - lightweight
+      - iot
     characteristics:
       block_size_bits: 128
       components:
@@ -4290,7 +4292,7 @@ families:
       - thank_goodness_it_s_friday_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: TGIF is a lightweight AEAD design based on a tweakable-SPN core TGIF-TBC and an authenticated-encryption mode.
 
   - id: three_key_triple_des
     name: Three-key Triple DES
@@ -4373,8 +4375,10 @@ families:
       - triad_round
     target_applications:
       - generic
+      - lightweight
+      - iot
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 256
       components:
         - id: lfsr
         - id: nlfsr
@@ -4384,7 +4388,7 @@ families:
       - triad_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: TRIAD is a stream-cipher-based construction providing both Triad-AE (AEAD) and Triad-HASH in the NIST LWC Round 1 submission.
 
   - id: trivium
     name: Trivium

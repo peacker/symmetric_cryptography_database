@@ -1782,9 +1782,19 @@ references:
 
   - id: thank_goodness_it_s_friday_ref
     kind: paper
-    title: "Thank Goodness It's Friday (TGIF)"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Thank Goodness It's Friday (TGIF) v1.0"
+    authors:
+      - Tetsu Iwata
+      - Mustafa Khairallah
+      - Kazuhiko Minematsu
+      - Thomas Peyrin
+      - Yu Sasaki
+      - Siang Meng Sim
+      - Ling Sun
+    year: 2019
+    venue: "NIST Lightweight Cryptography Standardization Process Round 1 Candidate"
+    url: "https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TGIF-spec.pdf"
+    notes: "Derived from references/2019-tgif-spec.pdf."
 
   - id: three_key_triple_des_ref
     kind: paper
@@ -1822,9 +1832,17 @@ references:
 
   - id: triad_ref
     kind: paper
-    title: "Triad"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "TRIAD v1 - A lightweight AEAD and hash function based on stream cipher"
+    authors:
+      - Subhadeep Banik
+      - Takanori Isobe
+      - Willi Meier
+      - Yosuke Todo
+      - Bin Zhang
+    year: 2019
+    venue: "NIST Lightweight Cryptography Standardization Process Round 1 Candidate"
+    url: "https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TRIAD-spec.pdf"
+    notes: "Derived from references/2019-triad-spec.pdf."
 
   - id: trivium_ref
     kind: paper
