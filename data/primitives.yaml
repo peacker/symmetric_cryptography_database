@@ -2867,9 +2867,9 @@ primitives:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      rounds: 16
       output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+    notes: Baseline Q instance from the NESSIE v2.00 proposal.
 
   - id: quartet_v1
     name: Quartet-v1
@@ -3064,13 +3064,13 @@ primitives:
     reference_ids:
       - snow_ref
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 576
       key_size_bits: 128
       iv_size_bits: 128
       rounds: 1
-      block_size_bits: 128
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 32
+      output_size_bits: 32
+    notes: Baseline SNOW 1.0 instance as a 32-bit word-oriented keystream generator.
 
   - id: snow_2_0_v1
     name: SNOW 2.0-v1

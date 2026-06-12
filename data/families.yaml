@@ -3676,7 +3676,7 @@ families:
   - id: q
     name: Q
     construction_ids:
-      - spn
+      - aligned_spn
     round_ids:
       - q_round
     target_applications:
@@ -3685,7 +3685,9 @@ families:
       block_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
+          params: { input_bits: 8, output_bits: 8 }
+        - id: word_permutation
+          params: { word_size_bits: 8 }
         - id: bit_permutation
         - id: xor
         - id: constant
@@ -3693,7 +3695,9 @@ families:
       - q_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Q is a 128-bit block cipher proposal for NESSIE, combining Rijndael-style
+      byte substitution with Serpent-inspired bitslice layers.
 
   - id: quartet
     name: Quartet
@@ -4019,17 +4023,20 @@ families:
     target_applications:
       - generic
     characteristics:
-      state_size_bits: 128
+      state_size_bits: 576
       components:
         - id: lfsr
-        - id: nlfsr
+        - id: sbox
+          params: { input_bits: 8, output_bits: 8 }
+        - id: add_mod
         - id: xor
-        - id: constant
     reference_ids:
       - snow_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      SNOW is a word-oriented stream cipher with a 16-word LFSR and a compact
+      finite-state machine designed for high software performance.
 
   - id: snow_2_0
     name: SNOW 2.0

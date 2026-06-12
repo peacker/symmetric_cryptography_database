@@ -1506,9 +1506,13 @@ references:
 
   - id: q_ref
     kind: paper
-    title: "Q"
+    title: "Q: A Proposal for NESSIE v2.00"
+    authors:
+      - Leslie McBride
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: "NESSIE Submission"
+    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/q.pdf"
+    notes: "Derived from references/2000-q.pdf."
 
   - id: quartet_ref
     kind: paper
@@ -1616,9 +1620,14 @@ references:
 
   - id: snow_ref
     kind: paper
-    title: "SNOW"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "SNOW - a new stream cipher?"
+    authors:
+      - Patrik Ekdahl
+      - Thomas Johansson
+    year: 2001
+    venue: "IETF SASC workshop contribution"
+    url: "https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/snow10.pdf"
+    notes: "Derived from references/2001-snow10.pdf."
 
   - id: snow_2_0_ref
     kind: paper

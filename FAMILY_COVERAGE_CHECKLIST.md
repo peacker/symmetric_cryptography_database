@@ -122,7 +122,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | PRINCE | PRINCE | 2012 | https://www.iacr.org/archive/asiacrypt2012/76580403/76580403.pdf | TODO | no |
 | [ ] | PRINCEv2 | PRINCEv2 | TODO | TODO | TODO | no |
 | [x] | Pyjamask | Pyjamask | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
-| [ ] | Q | Q | TODO | TODO | TODO | no |
+| [x] | Q | Q | 2000 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/q.pdf | Full | yes |
 | [x] | Qameleon | Qameleon | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | QARMA | QARMA | 2016 | https://eprint.iacr.org/2016/444 | TODO | yes |
 | [x] | QARMAv2 | QARMAv2 | 2023 | https://eprint.iacr.org/2023/929 | TODO | yes |
@@ -158,7 +158,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SM4 | SM4 | 2021 | https://www.rfc-editor.org/rfc/rfc8998 | TODO | yes |
 | [x] | SMBA | SMBA | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000341 | Full | yes |
 | [x] | SNEIK | SNEIK | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
-| [ ] | SNOW | SNOW | TODO | TODO | TODO | no |
+| [x] | SNOW | SNOW | 2001 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/snow10.pdf | Full | yes |
 | [ ] | SNOW 2.0 | SNOW 2.0 | TODO | TODO | TODO | no |
 | [ ] | SNOW 3G | SNOW 3G | TODO | TODO | TODO | no |
 | [ ] | SOBER-t16 | SOBER-t16 | TODO | TODO | TODO | no |
