@@ -1705,9 +1705,18 @@ references:
 
   - id: speckey_ref
     kind: paper
-    title: "SPECKEY"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Design Strategies for ARX with Provable Bounds: Sparx and LAX"
+    authors:
+      - Daniel Dinu
+      - Leo Perrin
+      - Aleksei Udovenko
+      - Vesselin Velichkov
+      - Johann Grossschadl
+      - Alex Biryukov
+    year: 2016
+    venue: "ASIACRYPT 2016 / IACR ePrint 2016/984"
+    url: "https://eprint.iacr.org/2016/984"
+    notes: "Section 3 introduces Speckey as one round of Speck-32 with key addition on the full state; later analysis also studies 3-round Speckey."
 
   - id: speedy_ref
     kind: paper

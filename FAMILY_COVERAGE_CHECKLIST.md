@@ -165,8 +165,8 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SOBER-t32 | SOBER-t32 | 2000 | https://web.archive.org/web/20110812013604/https://www.cosic.esat.kuleuven.be/nessie/workshop/submissions/sober-t32.zip | Full | yes |
 | [x] | SOSEMANUK1 | SOSEMANUK1 | 2005 | https://web.archive.org/web/20120414020956/http://www.ecrypt.eu.org/stream/sosemanukpf.html | Full | yes |
 | [x] | SPARKLE | SPARKLE | 2020 | https://sparkle-lwc.github.io/ | TODO | no |
-| [x] | SPECK | SPECK | 2013 | https://eprint.iacr.org/2013/404 | TODO | no |
-| [ ] | SPECKEY | SPECKEY | TODO | TODO | TODO | no |
+| [x] | SPECK | SPECK | 2013 | https://eprint.iacr.org/2013/404 | Full | yes |
+| [x] | SPECKEY | SPECKEY | 2016 | https://eprint.iacr.org/2016/984 | Full | yes |
 | [x] | SPEEDY | SPEEDY | 2021 | https://doi.org/10.46586/tches.v2021.i4.510-545 | Full | yes |
 | [x] | SPIX | SPIX | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | SpoC | SpoC | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |

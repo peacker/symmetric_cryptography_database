@@ -3152,15 +3152,15 @@ primitives:
   - id: speckey_v1
     name: SPECKEY-v1
     family_id: speckey
-    primitive_type: block_cipher
+    primitive_type: permutation
     reference_ids:
       - speckey_ref
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
+      block_size_bits: 32
+      key_size_bits: 32
       rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      output_size_bits: 32
+    notes: Baseline Speckey instance as defined in ePrint 2016/984; 3-round variants are also analyzed in the same source.
 
   - id: speedy_v1
     name: SPEEDY-v1

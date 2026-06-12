@@ -4158,24 +4158,24 @@ families:
   - id: speckey
     name: SPECKEY
     construction_ids:
-      - spn
+      - arx_permutation_network
     round_ids:
       - speckey_round
     target_applications:
       - generic
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 32
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: add_mod
+          params: { modulus: 65536 }
+        - id: rotation_fixed
         - id: xor
         - id: constant
     reference_ids:
       - speckey_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: Speckey is defined as a Speck-32-based keyed permutation round with key addition applied to the full 32-bit state.
 
   - id: speedy
     name: SPEEDY
