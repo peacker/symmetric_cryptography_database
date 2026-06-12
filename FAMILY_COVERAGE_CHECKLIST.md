@@ -147,8 +147,8 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SCARF | SCARF | 2023 | https://www.usenix.org/system/files/usenixsecurity23-canale.pdf | TODO | yes |
 | [x] | SEED | SEED | 2005 | https://www.rfc-editor.org/rfc/rfc4269 | TODO | no |
 | [x] | Serpent | Serpent | 1998 | https://www.cl.cam.ac.uk/archive/rja14/Papers/serpent.pdf | TODO | yes |
-| [ ] | SHACAL | SHACAL | TODO | TODO | TODO | no |
-| [ ] | SHACAL2 | SHACAL2 | TODO | TODO | TODO | no |
+| [x] | SHACAL | SHACAL | 2000 | https://en.wikipedia.org/wiki/SHACAL | Full | yes |
+| [x] | SHACAL2 | SHACAL2 | 2001 | https://en.wikipedia.org/wiki/SHACAL | Full | yes |
 | [ ] | Shamash & Shamashash | Shamash & Shamashash | TODO | TODO | TODO | no |
 | [x] | SHARK | SHARK | 1996 | https://github.com/stamparm/cryptospecs/blob/master/symmetrical/specs/shark.pdf | Full | yes |
 | [x] | SIMON | SIMON | 2013 | https://eprint.iacr.org/2013/404 | TODO | no |

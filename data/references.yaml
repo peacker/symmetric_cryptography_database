@@ -1579,14 +1579,24 @@ references:
   - id: shacal_ref
     kind: paper
     title: "SHACAL"
+    authors:
+      - Helena Handschuh
+      - David Naccache
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: "NESSIE Submission"
+    url: "https://en.wikipedia.org/wiki/SHACAL"
+    notes: "SHACAL-1 specification era reference; SHA baseline PDF is stored in references/2002-sha_fips180-2.pdf."
 
   - id: shacal2_ref
     kind: paper
     title: "SHACAL2"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    authors:
+      - Helena Handschuh
+      - David Naccache
+    year: 2001
+    venue: "NESSIE Submission"
+    url: "https://en.wikipedia.org/wiki/SHACAL"
+    notes: "SHACAL-2 specification era reference; SHA baseline PDF is stored in references/2002-sha_fips180-2.pdf."
 
   - id: shamash_and_shamashash_ref
     kind: paper

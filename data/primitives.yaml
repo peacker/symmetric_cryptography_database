@@ -2999,11 +2999,12 @@ primitives:
     reference_ids:
       - shacal_ref
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 160
+      key_size_bits_min: 128
+      key_size_bits_max: 512
+      rounds: 80
+      output_size_bits: 160
+    notes: Baseline SHACAL-1 profile.
 
   - id: shacal2_v1
     name: SHACAL2-v1
@@ -3012,11 +3013,12 @@ primitives:
     reference_ids:
       - shacal2_ref
     characteristics:
-      block_size_bits: 128
-      key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      block_size_bits: 256
+      key_size_bits_min: 128
+      key_size_bits_max: 512
+      rounds: 64
+      output_size_bits: 256
+    notes: Baseline SHACAL-2 profile.
 
   - id: shamash_and_shamashash_v1
     name: Shamash & Shamashash-v1

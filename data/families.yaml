@@ -3901,46 +3901,50 @@ families:
   - id: shacal
     name: SHACAL
     construction_ids:
-      - spn
+      - arx_permutation_network
     round_ids:
       - shacal_round
     target_applications:
       - generic
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 160
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: add_mod
         - id: xor
+        - id: and
+        - id: rotation_fixed
         - id: constant
     reference_ids:
       - shacal_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      SHACAL-1 is a block-cipher view of SHA-1 compression with 160-bit block
+      and SHA-style boolean/ARX round operations.
 
   - id: shacal2
     name: SHACAL2
     construction_ids:
-      - spn
+      - arx_permutation_network
     round_ids:
       - shacal2_round
     target_applications:
       - generic
     characteristics:
-      block_size_bits: 128
+      block_size_bits: 256
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: add_mod
         - id: xor
+        - id: and
+        - id: rotation_fixed
         - id: constant
     reference_ids:
       - shacal2_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      SHACAL-2 is a block-cipher view of SHA-256 compression with 256-bit block
+      and SHA-256 style ARX/boolean round operations.
 
   - id: shamash_and_shamashash
     name: Shamash & Shamashash
