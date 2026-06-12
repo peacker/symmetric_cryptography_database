@@ -40,7 +40,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | CLX | CLX | stream_cipher | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CLX-spec.pdf | Full | yes |
 | [ ] | CMEA | CMEA | stream_cipher | TODO | TODO | TODO | no |
 | [ ] | COMET | COMET | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/COMET-spec.pdf | Full | yes |
-| [x] | CRISP | 1996 | block_cipher | https://sacworkshop.org/proc/SAC_96_002.pdf | PDF Page 17-31 | TODO | no |
+| [x] | CRISP | CRISP | 1996 | block_cipher | https://sacworkshop.org/proc/SAC_96_002.pdf | PDF Page 17-31 | yes |
 | [x] | CRYPTON | CRYPTON | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | CS-Cipher | CS-Cipher | block_cipher | TODO | TODO | TODO | yes |
 | [x] | DEAL | DEAL | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
@@ -204,6 +204,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SPRING | SPRING | prng | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000343 | Full | yes |
 | [x] | Spritz | Spritz | stream_cipher | 2014 | https://people.csail.mit.edu/rivest/pubs/RS14.pdf | Full | yes |
 | [x] | SQUARE | SQUARE | block_cipher | 1997 | https://link.springer.com/chapter/10.1007/BFb0052343 | Full | yes |
+| [x] | Subterranean | Subterranean permutation | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf | Full | yes |
 | [ ] | Subterranean 2.0 | Subterranean 2.0 | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf | Full | yes |
 | [ ] | SUNDAE-GIFT | GIFT | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SUNDAE-GIFT-spec.pdf | Full | yes |
 | [x] | Sycon | Sycon | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
