@@ -2256,24 +2256,24 @@ families:
   - id: bear_lion
     name: BEAR/LION
     construction_ids:
-      - spn
+      - feistel
     round_ids:
       - bear_lion_round
     target_applications:
       - generic
+      - software
     characteristics:
       block_size_bits: 128
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
         - id: xor
+        - id: word_permutation
+          params: { word_size_bits: 32 }
         - id: constant
     reference_ids:
       - bear_lion_ref
     process_ids: []
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: BEAR/LION/LIONESS are broad-block block-cipher constructions composed from a stream cipher and hash function in Feistel-like rounds.
 
   - id: belt
     name: BelT

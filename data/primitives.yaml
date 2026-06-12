@@ -1934,7 +1934,7 @@ primitives:
       output_size_bits: 256
 
   - id: bear_lion_v1
-    name: BEAR/LION-v1
+    name: BEAR-v1
     family_id: bear_lion
     primitive_type: block_cipher
     reference_ids:
@@ -1942,9 +1942,35 @@ primitives:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
+      rounds: 3
       output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+    notes: Representative BEAR baseline instance modeled as a broad-block construction.
+
+  - id: lion_v1
+    name: LION-v1
+    family_id: bear_lion
+    primitive_type: block_cipher
+    reference_ids:
+      - bear_lion_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 3
+      output_size_bits: 128
+    notes: Representative LION baseline instance modeled as a broad-block construction.
+
+  - id: lioness_v1
+    name: LIONESS-v1
+    family_id: bear_lion
+    primitive_type: block_cipher
+    reference_ids:
+      - bear_lion_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 4
+      output_size_bits: 128
+    notes: Representative LIONESS baseline instance as the strengthened variant in the same construction lineage.
 
   - id: belt_v1
     name: BelT-v1

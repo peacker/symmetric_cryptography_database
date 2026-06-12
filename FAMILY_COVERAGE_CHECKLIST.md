@@ -18,7 +18,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | ARIA | ARIA | 2010 | https://www.rfc-editor.org/rfc/rfc5794 | TODO | no |
 | [x] | ASCON | ASCON permutation | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
 | [x] | Ballet | Ballet | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
-| [ ] | BEAR/LION | BEAR/LION | TODO | https://www.cl.cam.ac.uk/archive/rja14/Papers/bear-lion.pdf | TODO | no |
+| [x] | BEAR/LION | BEAR/LION | 1996 | https://www.cl.cam.ac.uk/archive/rja14/Papers/bear-lion.pdf | Full | yes |
 | [ ] | BelT | BelT | TODO | TODO | TODO | no |
 | [x] | BipBip | BipBip | 2023 | https://tches.iacr.org/index.php/TCHES/article/view/9955/9458 | TODO | no |
 | [ ] | Bleep64 | Bleep64 | TODO | TODO | TODO | no |

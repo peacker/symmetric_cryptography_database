@@ -1045,9 +1045,14 @@ references:
 
   - id: bear_lion_ref
     kind: paper
-    title: "BEAR/LION"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Two Practical and Provably Secure Block Ciphers: BEAR and LION"
+    authors:
+      - Ross Anderson
+      - Eli Biham
+    year: 1996
+    venue: "Fast Software Encryption (FSE 1996)"
+    url: "https://www.cl.cam.ac.uk/archive/rja14/Papers/bear-lion.pdf"
+    notes: "Primary source paper describing BEAR and LION as block-cipher constructions from a stream cipher and a hash function; local copy is references/1996-bear-lion-lioness.pdf."
 
   - id: belt_ref
     kind: paper
