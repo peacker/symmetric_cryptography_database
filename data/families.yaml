@@ -3972,23 +3972,46 @@ families:
     name: Shamash & Shamashash
     construction_ids:
       - spn
+      - sponge_permutation
     round_ids:
       - shamash_and_shamashash_round
     target_applications:
-      - generic
+      - lightweight_aead
+      - hash
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 320
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
         - id: xor
+        - id: sbox
+          params: { input_bits: 5, output_bits: 5, num_sboxes: 64 }
+        - id: rotation_fixed
+        - id: binary_matrix_mul
+          params: { matrix: "5x5_GF2" }
         - id: constant
     reference_ids:
-      - shamash_and_shamashash_ref
-    process_ids: []
+      - penazzi_2019_shamash
+    process_ids:
+      - nist_lwc_round1
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    innovative_ideas:
+      - id: shamash_sponge_aead_dual
+        name: Dual-purpose design covering both AEAD (Shamash) and hash (Shamashash)
+        note: >
+          Shamash is an AEAD with 128-bit key, 128-bit nonce, 128-bit tag, and 320-bit
+          state. Shamashash re-uses Shamash as a black box inside the BDPV sponge
+          construction to produce a 256-bit hash with 64-bit rate and 256-bit capacity.
+          The 320-bit permutation-based state = five 64-bit words W0..W4.
+      - id: shamash_5bit_sbox_layer
+        name: 64 parallel 5-bit S-boxes over the 320-bit state
+        note: >
+          The substitution layer applies 64 independent 5-bit-to-5-bit S-boxes across
+          all 320 state bits in parallel. The diffusion layer combines fixed rotations,
+          XOR mixing, and a 5×5 GF(2) matrix to provide full inter-word diffusion.
+    notes: >
+      Note: the checklist entry type says 'hash' but Shamash itself is an AEAD; Shamashash
+      is the associated 256-bit hash function. Both are derived from the same spec (§1 and §7
+      of the 2019 paper). Initialization uses 12 rounds; AD/encryption/finalization each use
+      9 (or 12 for finalization). Shamashash uses Shamash via the BDPV construction.
 
   - id: shark
     name: SHARK
@@ -5207,3 +5230,406 @@ families:
       dynamically updated S-box table, 2048 bits) + Shift register R (16 32-bit cells,
       512 bits) = 3040 bits total. Output: 32 bits per step. Key=80–256 bits (any multiple
       of 16 bits); IV=32–128 bits (primary reference values: key=128 bits, IV=64 bits).
+
+  - id: fnv_1
+    name: FNV-1
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - fnv1_byte_step
+    target_applications:
+      - hash_tables
+      - checksums
+      - data_lookup
+    characteristics:
+      state_size_bits: 64
+      components:
+        - id: mul_mod
+        - id: xor
+    reference_ids:
+      - fowler_1991_fnv1
+    process_ids: []
+    influences: []
+    innovative_ideas:
+      - id: fnv1_multiplicative_prime_mixing
+        name: Multiply-then-XOR per byte with FNV_prime and non-zero offset_basis
+        note: >
+          FNV-1 multiplies the n-bit accumulator by a carefully chosen prime (FNV_prime)
+          and XOR-s in each input byte. The non-zero offset_basis (introduced over FNV-0)
+          prevents trivial all-zero fixed points. 32-bit: FNV_prime=16777619,
+          offset_basis=2166136261; 64-bit: FNV_prime=1099511628211,
+          offset_basis=14695981039346656037.
+    notes: >
+      FNV-1 is a non-cryptographic, non-Merkle-Damgård hash designed for speed and
+      dispersion in hash tables and checksums. Output size n is a parameter (standard:
+      32, 64, 128, 256 bits); state = n-bit accumulator. Processes one byte at a time.
+      FNV-1a is a variant that XOR-s before multiplying (same prime and offset_basis),
+      providing slightly better dispersion for short inputs. Public domain.
+
+  - id: haval
+    name: HAVAL
+    construction_ids:
+      - davies_meyer
+    round_ids:
+      - haval_pass
+    target_applications:
+      - digital_signatures
+      - message_authentication
+      - checksums
+    characteristics:
+      block_size_bits: 1024
+      state_size_bits: 256
+      components:
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - zheng_1992_haval
+    process_ids: []
+    influences:
+      - source_family_id: md5
+        relations: [inspired_by]
+        note: HAVAL adopts the MD-family Merkle-Damgård structure and 32-bit word orientation.
+    innovative_ideas:
+      - id: haval_variable_passes
+        name: Variable pass count (3, 4, or 5) over each 1024-bit block
+        note: >
+          Each 1024-bit block is processed 3, 4, or 5 times (passes), each pass using a
+          different Boolean function and word permutation. This provides a security-performance
+          tradeoff: 3 passes (96 steps/block) is fastest; 5 passes (160 steps/block) is most
+          secure. Five Boolean functions f1..f5 are defined; passes 1..5 use f1..f5 in order.
+      - id: haval_variable_output
+        name: Variable output length (128, 160, 192, 224, 256 bits)
+        note: >
+          The final 256-bit chaining variable is optionally folded to produce shorter digests
+          by XOR-combining groups of 32-bit words. Pass count and digest length are both
+          embedded in the padding to prevent extension attacks.
+    notes: >
+      HAVAL (AUSCRYPT 1992, Zheng/Pieprzyk/Seberry) is a Merkle-Damgård hash with 1024-bit
+      blocks processed in 3, 4, or 5 passes of 32 word-operations each (96/128/160 total
+      steps). Chaining variable = 8 × 32-bit words (256 bits). Output reduced to 128, 160,
+      192, 224, or 256 bits. All 15 combinations are defined.
+
+  - id: md2
+    name: MD2
+    construction_ids:
+      - permutation_based_hash
+    round_ids:
+      - md2_compression_round
+    target_applications:
+      - digital_signatures
+      - message_authentication
+    characteristics:
+      block_size_bits: 128
+      state_size_bits: 384
+      components:
+        - id: sbox
+          params: { input_bits: 8, output_bits: 8, table_size: 256 }
+        - id: xor
+    reference_ids:
+      - kaliski_1992_md2
+    process_ids: []
+    influences: []
+    innovative_ideas:
+      - id: md2_pi_sbox
+        name: 256-byte permutation S derived from the digits of pi
+        note: >
+          MD2 uses a fixed 256-byte random permutation S (constructed from fractional
+          digits of pi) applied in 18 iterative rounds to mix the 48-byte state buffer,
+          providing nonlinearity without a key schedule.
+      - id: md2_checksum_preprocessing
+        name: 16-byte checksum appended before compression
+        note: >
+          MD2 prepends PKCS-style padding (1–16 bytes) and then appends a 16-byte
+          checksum of the padded message before running the main compression loop.
+          This binds the final hash to the complete message structure.
+    notes: >
+      MD2 (RFC 1319, 1992, Kaliski/RSA Laboratories) processes 16-byte (128-bit) blocks.
+      State X = 48 bytes = 384 bits (initialized to 0). Each block processed in 18 rounds
+      using the pi-derived S-table. Output = X[0..15] (128 bits). Designed for 8-bit
+      microprocessors; much slower than MD4/MD5. Deprecated for cryptographic use.
+
+  - id: md4
+    name: MD4
+    construction_ids:
+      - davies_meyer
+    round_ids:
+      - md4_round
+    target_applications:
+      - digital_signatures
+      - message_authentication
+    characteristics:
+      block_size_bits: 512
+      state_size_bits: 128
+      components:
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+        - id: and
+        - id: or
+        - id: not
+    reference_ids:
+      - rivest_1992_md4
+    process_ids: []
+    influences: []
+    innovative_ideas:
+      - id: md4_software_speed
+        name: Three rounds of 16 boolean-function operations on 32-bit words for maximum speed
+        note: >
+          MD4 uses three distinct Boolean functions (F=choice, G=majority, H=parity) applied
+          in 16 operations per round over a 512-bit message block, designed for maximum
+          software speed on 32-bit processors. Constants derived from sqrt(2) and sqrt(3)
+          are added in rounds 2 and 3.
+    notes: >
+      MD4 (RFC 1320, 1992, Rivest) processes 512-bit blocks in 3 rounds of 16 operations
+      each (48 total) on a 4-word (128-bit) chaining state A,B,C,D. The Merkle-Damgård
+      feedforward step XORs the original state back in after each block (Davies-Meyer mode).
+      Weaknesses found by Dobbertin (1995); deprecated.
+
+  - id: md5
+    name: MD5
+    construction_ids:
+      - davies_meyer
+    round_ids:
+      - md5_round
+    target_applications:
+      - digital_signatures
+      - message_authentication
+      - checksums
+    characteristics:
+      block_size_bits: 512
+      state_size_bits: 128
+      components:
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+        - id: and
+        - id: or
+        - id: not
+        - id: constant
+    reference_ids:
+      - rivest_1992_md5
+    process_ids: []
+    influences:
+      - source_family_id: md4
+        relations: [improvement_of]
+        note: >
+          MD5 adds a fourth round (function I), per-step sine-derived constants T[1..64],
+          and changed shift amounts relative to MD4 to improve security.
+    innovative_ideas:
+      - id: md5_sine_constants
+        name: 64 unique per-step constants derived from the sine function
+        note: >
+          MD5 uses T[i] = floor(4294967296 × |sin(i)|) for i=1..64, one constant per
+          step across all four rounds. These pseudo-random constants break symmetry and
+          prevent fixed-point attacks that affected MD4's simpler (or zero) round constants.
+    notes: >
+      MD5 (RFC 1321, 1992, Rivest) strengthens MD4 with a fourth round (function I) and
+      unique per-step sine-derived constants. Processes 512-bit blocks in 4 rounds of 16
+      operations each (64 total) on a 4-word (128-bit) state. Collisions found by Wang
+      et al. (2004); deprecated for cryptographic use.
+
+  - id: ripemd
+    name: RIPEMD
+    construction_ids:
+      - davies_meyer
+    round_ids:
+      - ripemd_round
+    target_applications:
+      - digital_signatures
+      - message_authentication
+    characteristics:
+      block_size_bits: 512
+      state_size_bits: 160
+      components:
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+        - id: and
+        - id: or
+        - id: not
+    reference_ids:
+      - dobbertin_1996_ripemd160
+    process_ids:
+      - eu_ripe_project
+    influences:
+      - source_family_id: md4
+        relations: [improvement_of]
+        note: >
+          RIPEMD extends the MD4 design with two parallel computation lines and five
+          rounds, addressing weaknesses found in MD4 and MD5.
+    innovative_ideas:
+      - id: ripemd_double_pipe
+        name: Two parallel independent computation lines merged at end of each block
+        note: >
+          RIPEMD-160 runs two independent lines (left and right) over the same 512-bit
+          block, using different round functions, constants, and message word orderings per
+          round. The final result merges both lines with the incoming chaining variable,
+          making a single-line attack insufficient to forge collisions.
+    notes: >
+      RIPEMD family developed in the EU RIPE project. The PDF in repo covers RIPEMD-160
+      (1996 paper, Dobbertin/Bosselaers/Preneel). RIPEMD-160: block=512 bits,
+      state=5×32=160 bits, 5 rounds × 16 steps = 80 operations per line, two parallel
+      lines. RIPEMD-128 uses 4 × 32-bit state (128 bits), 4 rounds × 16 steps per line.
+
+  - id: sha1_sha2
+    name: SHA-1 / SHA-2
+    construction_ids:
+      - davies_meyer
+    round_ids:
+      - sha_round
+    target_applications:
+      - digital_signatures
+      - message_authentication
+      - key_derivation
+      - random_number_generation
+    characteristics:
+      block_size_bits: 512
+      state_size_bits: 160
+      components:
+        - id: add_mod
+        - id: xor
+        - id: rotation_fixed
+        - id: shift_fixed
+        - id: and
+        - id: or
+        - id: not
+        - id: constant
+    reference_ids:
+      - nist_2002_fips180_2
+    process_ids:
+      - nist_standardization
+    influences:
+      - source_family_id: md4
+        relations: [improvement_of]
+        note: >
+          SHA-1 improves on MD4/MD5 with a 160-bit state and a cross-mixing message
+          schedule. SHA-2 extends to 256/384/512-bit digests and 64-bit words.
+    innovative_ideas:
+      - id: sha_message_schedule
+        name: Expanded message schedule mixing 16 input words into 80 (SHA-1) or 64/80 (SHA-2) scheduled words
+        note: >
+          SHA-1 generates 80 scheduled words via ROTL-1(W_{i-3} XOR W_{i-8} XOR W_{i-14}
+          XOR W_{i-16}). SHA-256/512 use σ-functions (mix of rotations and shifts) to
+          produce 64 or 80 words. This makes it infeasible to isolate single message word
+          positions, unlike MD4's direct word usage.
+      - id: sha2_wide_pipe
+        name: SHA-256/384/512 extended word widths and digest sizes for higher security
+        note: >
+          SHA-256 uses 8 × 32-bit words (256-bit state) with 64 rounds; SHA-512 uses
+          8 × 64-bit words (512-bit state) with 80 rounds. SHA-384 truncates the SHA-512
+          state to 384 bits. Per-round constants are derived from cube roots of the first
+          64 (SHA-256) or 80 (SHA-512) prime numbers.
+    notes: >
+      FIPS 180-2 (NIST, 2002) specifies SHA-1, SHA-256, SHA-384, and SHA-512.
+      SHA-1: block=512 bits, state=5×32=160 bits, 80 rounds. SHA-256: block=512 bits,
+      state=8×32=256 bits, 64 rounds. SHA-384: block=1024 bits, state=8×64=512 bits,
+      80 rounds. SHA-512: block=1024 bits, state=8×64=512 bits, 80 rounds. All use the
+      Merkle-Damgård construction with Davies-Meyer feedforward.
+
+  - id: tiger
+    name: Tiger
+    construction_ids:
+      - davies_meyer
+    round_ids:
+      - tiger_pass
+    target_applications:
+      - digital_signatures
+      - message_authentication
+      - content_addressable_storage
+    characteristics:
+      block_size_bits: 512
+      state_size_bits: 192
+      components:
+        - id: xor
+        - id: add_mod
+          params: { modulus: 18446744073709551616 }
+        - id: sub_mod
+          params: { modulus: 18446744073709551616 }
+        - id: mul_mod
+          params: { modulus: 18446744073709551616 }
+        - id: sbox
+          params: { input_bits: 8, output_bits: 64, num_sboxes: 4 }
+        - id: shift_fixed
+    reference_ids:
+      - anderson_1995_tiger
+    process_ids: []
+    influences:
+      - source_family_id: md4
+        relations: [inspired_by]
+        note: >
+          Tiger adopts the Merkle-Damgård outer structure with 512-bit blocks and
+          Davies-Meyer feedforward, but replaces 32-bit with 64-bit words and adds
+          a key schedule between passes.
+    innovative_ideas:
+      - id: tiger_sbox_8to64
+        name: Four S-boxes mapping 8 bits to 64 bits for 64-bit processor speed
+        note: >
+          Tiger's four S-boxes (t1..t4) each map 8 bits to 64 bits (4 × 256 entries × 8
+          bytes ≈ 8 KB total). On 64-bit processors, one table lookup provides the full
+          nonlinear mixing for one round step, producing a 64-bit output in a single
+          memory access.
+      - id: tiger_key_schedule_between_passes
+        name: Message key schedule (XOR + add + subtract) applied between each of three passes
+        note: >
+          Between Tiger's three passes, an invertible key schedule mixes all eight 64-bit
+          message words using XOR with fixed constants and 64-bit modular addition/subtraction.
+          This prevents sparse-input attacks and ensures each pass sees a different message
+          view without repeating the same linear transformation.
+    notes: >
+      Tiger (Anderson & Biham, 1995) was designed for fast hashing on 64-bit processors.
+      Processes 512-bit blocks (eight 64-bit words) through 3 passes of 8 rounds each
+      (24 rounds total). State = 3 × 64-bit (192 bits). Multipliers 5, 7, 9 are applied
+      per pass to the S-box outputs. Three output variants: Tiger/192 (full state),
+      Tiger/160 (first 160 bits), Tiger/128 (first 128 bits).
+
+  - id: whirlpool
+    name: Whirlpool
+    construction_ids:
+      - matyas_meyer_oseas
+    round_ids:
+      - whirlpool_cipher_round
+    target_applications:
+      - digital_signatures
+      - message_authentication
+      - key_derivation
+    characteristics:
+      block_size_bits: 512
+      state_size_bits: 512
+      components:
+        - id: sbox
+          params: { input_bits: 8, output_bits: 8 }
+        - id: rotation_fixed
+        - id: field_matrix_mul
+          params: { field: "GF(2^8)", matrix: "8x8_circulant" }
+        - id: xor
+    reference_ids:
+      - barreto_2003_whirlpool
+    process_ids:
+      - nessie_project
+    influences:
+      - source_family_id: rijndael
+        relations: [inspired_by]
+        note: >
+          Whirlpool adopts the Wide Trail design strategy (SubBytes, ShiftColumns,
+          MixRows) from AES/Rijndael for its internal cipher W, but uses a 512-bit state
+          and 512-bit key with 10 rounds.
+    innovative_ideas:
+      - id: whirlpool_miyaguchi_preneel
+        name: Miyaguchi-Preneel compression using a dedicated 512-bit block cipher W
+        note: >
+          Whirlpool uses H_i = W[H_{i-1}](m_i) XOR H_{i-1} XOR m_i, where W is a
+          dedicated 512-bit cipher (not a repurposed AES) with 10 rounds and AES-inspired
+          structure. The 8×8 MDS matrix over GF(2^8) achieves branch number 9, the
+          maximum possible for an 8×8 matrix.
+    notes: >
+      Whirlpool (Barreto & Rijmen, revised 2003) is a 512-bit hash using a dedicated
+      internal block cipher W with 10 rounds over an 8×8 GF(2^8) state matrix. Each round
+      of W: γ (8→8 S-box), π (column permutation), θ (8×8 circulant MDS over GF(2^8)),
+      σ[k] (key XOR). Key schedule = same round function with round constants. Compression
+      function = Miyaguchi-Preneel: H_i = W[H_{i-1}](m_i) ⊕ H_{i-1} ⊕ m_i.

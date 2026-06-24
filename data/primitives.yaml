@@ -3764,3 +3764,357 @@ primitives:
       Key=80–256 bits (any 16-bit multiple); IV=32–128 bits. Reference values (key=128,
       IV=64) used here. State = 15×32-bit LFSR L (480 bits) + 256-byte memory M (2048 bits)
       + 16×32-bit shift register R (512 bits) = 3040 bits. Output: 32 bits per step.
+
+  # ── FNV-1 ─────────────────────────────────────────────────────────────────
+  - id: fnv1_32
+    name: FNV-1 (32-bit)
+    family_id: fnv_1
+    primitive_type: hash
+    reference_ids:
+      - fowler_1991_fnv1
+    characteristics:
+      output_size_bits: 32
+      state_size_bits: 32
+    notes: >
+      32-bit FNV-1: offset_basis=2166136261, FNV_prime=16777619 (2^24 + 2^8 + 0x93).
+      State is a 32-bit accumulator. Per-byte step: hash = hash * FNV_prime; hash = hash XOR octet.
+      No traditional block structure (processes one byte at a time). Non-cryptographic.
+
+  - id: fnv1_64
+    name: FNV-1 (64-bit)
+    family_id: fnv_1
+    primitive_type: hash
+    reference_ids:
+      - fowler_1991_fnv1
+    characteristics:
+      output_size_bits: 64
+      state_size_bits: 64
+    notes: >
+      64-bit FNV-1: offset_basis=14695981039346656037, FNV_prime=1099511628211
+      (2^40 + 2^8 + 0xb3). State is a 64-bit accumulator. Per-byte step:
+      hash = hash * FNV_prime; hash = hash XOR octet. Non-cryptographic.
+
+  - id: fnv1a_32
+    name: FNV-1a (32-bit)
+    family_id: fnv_1
+    primitive_type: hash
+    reference_ids:
+      - fowler_1991_fnv1
+    characteristics:
+      output_size_bits: 32
+      state_size_bits: 32
+    notes: >
+      32-bit FNV-1a (XOR-then-multiply variant): same offset_basis and FNV_prime as
+      FNV-1 32-bit. Per-byte step: hash = hash XOR octet; hash = hash * FNV_prime.
+      Better dispersion than FNV-1 for short inputs. Non-cryptographic.
+
+  # ── HAVAL ─────────────────────────────────────────────────────────────────
+  - id: haval_3p_128
+    name: HAVAL-128/3
+    family_id: haval
+    primitive_type: hash
+    reference_ids:
+      - zheng_1992_haval
+    characteristics:
+      output_size_bits: 128
+      block_size_bits: 1024
+      state_size_bits: 256
+      rounds: 96
+    notes: >
+      HAVAL with 3 passes and 128-bit output. Block=1024 bits (32×32-bit words).
+      Chaining variable=8×32-bit words (256 bits). Each pass=32 steps; 3 passes=96 steps.
+      Final 256-bit state folded to 128 bits by XOR-combining word pairs. Digest length
+      and pass count are encoded in the last 10 bits of the padding word.
+
+  - id: haval_3p_256
+    name: HAVAL-256/3
+    family_id: haval
+    primitive_type: hash
+    reference_ids:
+      - zheng_1992_haval
+    characteristics:
+      output_size_bits: 256
+      block_size_bits: 1024
+      state_size_bits: 256
+      rounds: 96
+    notes: >
+      HAVAL with 3 passes and 256-bit output (no folding). Block=1024 bits.
+      Chaining variable=8×32-bit words (256 bits). 3 passes × 32 steps = 96 steps total.
+
+  - id: haval_5p_256
+    name: HAVAL-256/5
+    family_id: haval
+    primitive_type: hash
+    reference_ids:
+      - zheng_1992_haval
+    characteristics:
+      output_size_bits: 256
+      block_size_bits: 1024
+      state_size_bits: 256
+      rounds: 160
+    notes: >
+      HAVAL with 5 passes and 256-bit output; highest security variant.
+      Block=1024 bits. Chaining variable=8×32-bit words (256 bits).
+      5 passes × 32 steps = 160 steps total. Uses Boolean functions f1..f5, one per pass.
+
+  # ── MD2 ───────────────────────────────────────────────────────────────────
+  - id: md2_v1
+    name: MD2
+    family_id: md2
+    primitive_type: hash
+    reference_ids:
+      - kaliski_1992_md2
+    characteristics:
+      output_size_bits: 128
+      block_size_bits: 128
+      state_size_bits: 384
+      rounds: 18
+    notes: >
+      RFC 1319 (1992). Block=16 bytes=128 bits. State X=48 bytes=384 bits (three 16-byte
+      rows). Per-block: 18 rounds of mixing using the 256-byte pi-derived S permutation.
+      Preprocessing: PKCS-style padding (1–16 bytes) + 16-byte checksum appended.
+      Output = X[0..15] (first 16 bytes = 128 bits). Deprecated.
+
+  # ── MD4 ───────────────────────────────────────────────────────────────────
+  - id: md4_v1
+    name: MD4
+    family_id: md4
+    primitive_type: hash
+    reference_ids:
+      - rivest_1992_md4
+    characteristics:
+      output_size_bits: 128
+      block_size_bits: 512
+      state_size_bits: 128
+      rounds: 48
+    notes: >
+      RFC 1320 (1992). Block=512 bits (padded to 448 mod 512; then 64-bit length appended).
+      State=4×32-bit words A,B,C,D=128 bits. 3 rounds × 16 operations = 48 total.
+      Round 1: F(b,c,d)=(b AND c) OR ((NOT b) AND d); Round 2: G=(b AND c) OR (b AND d) OR (c AND d);
+      Round 3: H=b XOR c XOR d. Constants: 0, sqrt(2)×2^32, sqrt(3)×2^32. Deprecated.
+
+  # ── MD5 ───────────────────────────────────────────────────────────────────
+  - id: md5_v1
+    name: MD5
+    family_id: md5
+    primitive_type: hash
+    reference_ids:
+      - rivest_1992_md5
+    characteristics:
+      output_size_bits: 128
+      block_size_bits: 512
+      state_size_bits: 128
+      rounds: 64
+    notes: >
+      RFC 1321 (1992). Block=512 bits (same padding as MD4). State=4×32-bit A,B,C,D=128 bits.
+      4 rounds × 16 operations = 64 total. Functions: F(b,c,d)=(b AND c) OR ((NOT b) AND d);
+      G=(b AND d) OR (c AND (NOT d)); H=b XOR c XOR d; I=c XOR (b OR (NOT d)).
+      64 per-step constants T[i]=floor(4294967296×|sin(i)|). Deprecated (collisions 2004).
+
+  # ── RIPEMD ────────────────────────────────────────────────────────────────
+  - id: ripemd_128
+    name: RIPEMD-128
+    family_id: ripemd
+    primitive_type: hash
+    reference_ids:
+      - dobbertin_1996_ripemd160
+    characteristics:
+      output_size_bits: 128
+      block_size_bits: 512
+      state_size_bits: 128
+      rounds: 64
+    notes: >
+      RIPEMD-128: block=512 bits, state=4×32-bit words=128 bits. Two parallel lines each
+      with 4 rounds × 16 steps = 64 operations per line. Left and right outputs merged
+      with the chaining variable at the end of each block. Padding identical to MD4/MD5.
+
+  - id: ripemd_160
+    name: RIPEMD-160
+    family_id: ripemd
+    primitive_type: hash
+    reference_ids:
+      - dobbertin_1996_ripemd160
+    characteristics:
+      output_size_bits: 160
+      block_size_bits: 512
+      state_size_bits: 160
+      rounds: 80
+    notes: >
+      RIPEMD-160 (Dobbertin/Bosselaers/Preneel, 1996 FSE paper): block=512 bits,
+      state=5×32-bit words=160 bits. Two parallel lines each with 5 rounds × 16 steps
+      = 80 operations per line (160 total operations per block). The number of rounds
+      increased from 3 (original RIPEMD) to 5. Different Boolean functions and constants
+      are used in left and right lines. Outputs of both lines merged with chaining variable.
+
+  # ── SHA-1 / SHA-2 ─────────────────────────────────────────────────────────
+  - id: sha1_v1
+    name: SHA-1
+    family_id: sha1_sha2
+    primitive_type: hash
+    reference_ids:
+      - nist_2002_fips180_2
+    characteristics:
+      output_size_bits: 160
+      block_size_bits: 512
+      state_size_bits: 160
+      rounds: 80
+    notes: >
+      FIPS 180-2 (2002). Block=512 bits (padded to 448 mod 512; 64-bit length appended).
+      State=5×32-bit words (H0..H4)=160 bits. 80 rounds using schedule W[0..79]:
+      W[i]=W[i-3] XOR W[i-8] XOR W[i-14] XOR W[i-16] (ROTL-1 applied). Functions:
+      rounds 0-19: Ch(e,f,g); 20-39: Parity; 40-59: Maj; 60-79: Parity.
+      Constants K0..K3 derived from sqrt of 2,3,5,10. Deprecated for most uses.
+
+  - id: sha256_v1
+    name: SHA-256
+    family_id: sha1_sha2
+    primitive_type: hash
+    reference_ids:
+      - nist_2002_fips180_2
+    characteristics:
+      output_size_bits: 256
+      block_size_bits: 512
+      state_size_bits: 256
+      rounds: 64
+    notes: >
+      FIPS 180-2 (2002). Block=512 bits. State=8×32-bit words=256 bits.
+      64 rounds; message schedule W[0..63]: W[16..63]=σ1(W[t-2])+W[t-7]+σ0(W[t-15])+W[t-16]
+      where σ0=ROTR-7 XOR ROTR-18 XOR SHR-3, σ1=ROTR-17 XOR ROTR-19 XOR SHR-10.
+      Per-round uses Ch, Maj, Σ0 (ROTR-2 XOR ROTR-13 XOR ROTR-22), Σ1 (ROTR-6 XOR ROTR-11
+      XOR ROTR-25). 64 constants K[0..63] = cube roots of first 64 primes.
+
+  - id: sha384_v1
+    name: SHA-384
+    family_id: sha1_sha2
+    primitive_type: hash
+    reference_ids:
+      - nist_2002_fips180_2
+    characteristics:
+      output_size_bits: 384
+      block_size_bits: 1024
+      state_size_bits: 512
+      rounds: 80
+    notes: >
+      FIPS 180-2 (2002). Block=1024 bits. State=8×64-bit words=512 bits (truncated to 384
+      bits for output). 80 rounds; message schedule and round function identical to SHA-512
+      but uses different initial hash values IV. σ0=ROTR-1 XOR ROTR-8 XOR SHR-7;
+      σ1=ROTR-19 XOR ROTR-61 XOR SHR-6. 80 constants from cube roots of first 80 primes.
+
+  - id: sha512_v1
+    name: SHA-512
+    family_id: sha1_sha2
+    primitive_type: hash
+    reference_ids:
+      - nist_2002_fips180_2
+    characteristics:
+      output_size_bits: 512
+      block_size_bits: 1024
+      state_size_bits: 512
+      rounds: 80
+    notes: >
+      FIPS 180-2 (2002). Block=1024 bits (padded to 896 mod 1024; 128-bit length appended).
+      State=8×64-bit words=512 bits. 80 rounds; same structure as SHA-384 with full 512-bit
+      output. Message schedule expands 16 × 64-bit words to 80 words using 64-bit σ-functions.
+      80 constants K[0..79] = cube roots of first 80 prime numbers (64-bit).
+
+  # ── Shamash & Shamashash ──────────────────────────────────────────────────
+  - id: shamash_v1
+    name: Shamash v1
+    family_id: shamash_and_shamashash
+    primitive_type: aead
+    reference_ids:
+      - penazzi_2019_shamash
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 320
+    notes: >
+      NIST LWC Round 1 (2019). AEAD with 128-bit key, 128-bit nonce, 128-bit tag (minimum
+      64 bits). State=five 64-bit words W0..W4=320 bits. Initialization: 12 rounds;
+      AD absorption: 9 rounds per block; encryption: 9 rounds per block;
+      finalization: 9+3=12 rounds. Checklist entry type is 'hash' in error; Shamash is AEAD.
+
+  - id: shamashash_v1
+    name: Shamashash v1
+    family_id: shamash_and_shamashash
+    primitive_type: hash
+    reference_ids:
+      - penazzi_2019_shamash
+    characteristics:
+      output_size_bits: 256
+      state_size_bits: 320
+    notes: >
+      Defined in §7 of the Shamash spec. Hash function built on Shamash via the BDPV
+      sponge-to-hash construction. Output=256 bits. State=320 bits (same as Shamash).
+      Rate=64 bits; capacity=256 bits. Absorbs message in 64-bit chunks (with Shamash
+      as underlying permutation), then squeezes 256 bits of output.
+
+  # ── Tiger ─────────────────────────────────────────────────────────────────
+  - id: tiger_192
+    name: Tiger/192
+    family_id: tiger
+    primitive_type: hash
+    reference_ids:
+      - anderson_1995_tiger
+    characteristics:
+      output_size_bits: 192
+      block_size_bits: 512
+      state_size_bits: 192
+      rounds: 24
+    notes: >
+      Tiger (Anderson & Biham, 1995). Block=512 bits (eight 64-bit words x0..x7).
+      State=three 64-bit words a,b,c=192 bits. 3 passes × 8 rounds = 24 rounds total.
+      Multipliers per pass: 5 (pass 1), 7 (pass 2), 9 (pass 3). Four 8→64-bit S-boxes
+      t1..t4 (8 KB total). Key schedule (XOR + add/sub with constants) between passes.
+      Full 192-bit output.
+
+  - id: tiger_160
+    name: Tiger/160
+    family_id: tiger
+    primitive_type: hash
+    reference_ids:
+      - anderson_1995_tiger
+    characteristics:
+      output_size_bits: 160
+      block_size_bits: 512
+      state_size_bits: 192
+      rounds: 24
+    notes: >
+      Tiger/160: same computation as Tiger/192; output truncated to first 160 bits (words a,b
+      and first 32 bits of c). Internal state=192 bits. 3 passes × 8 rounds = 24 rounds.
+
+  - id: tiger_128
+    name: Tiger/128
+    family_id: tiger
+    primitive_type: hash
+    reference_ids:
+      - anderson_1995_tiger
+    characteristics:
+      output_size_bits: 128
+      block_size_bits: 512
+      state_size_bits: 192
+      rounds: 24
+    notes: >
+      Tiger/128: same computation as Tiger/192; output truncated to first 128 bits (words a,b).
+      Internal state=192 bits. 3 passes × 8 rounds = 24 rounds.
+
+  # ── Whirlpool ─────────────────────────────────────────────────────────────
+  - id: whirlpool_v1
+    name: Whirlpool
+    family_id: whirlpool
+    primitive_type: hash
+    reference_ids:
+      - barreto_2003_whirlpool
+    characteristics:
+      output_size_bits: 512
+      block_size_bits: 512
+      state_size_bits: 512
+      rounds: 10
+    notes: >
+      Barreto & Rijmen (revised May 2003). Block=512 bits (8×8 GF(2^8) matrix, 64 bytes).
+      State=512 bits. 10 rounds of the internal cipher W. Per round: γ (SubBytes, 8→8
+      S-box over GF(2^8)), π (ShiftColumns: cyclic shift of row i by i positions), θ (MixRows:
+      multiply each column by 8×8 circulant MDS matrix over GF(2^8), branch number 9),
+      σ[k] (AddRoundKey XOR). Key schedule uses same round function with round constants.
+      Compression: H_i = W[H_{i-1}](m_i) ⊕ H_{i-1} ⊕ m_i (Miyaguchi-Preneel).

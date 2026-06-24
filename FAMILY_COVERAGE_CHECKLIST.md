@@ -63,7 +63,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | FEAL-NX | FEAL-NX | block_cipher | 1997 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/fealnx.pdf | Full | yes |
 | [x] | FESH | FESH | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000336 | Full | yes |
 | [ ] | FlexAEAD | FlexAEAD | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/FlexAEAD-spec.pdf | Full | yes |
-| [ ] | FNV-1 | FNV-1 | hash | 1991 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/fnv1.pdf | Full | yes |
+| [x] | FNV-1 | FNV-1 | hash | 1991 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/fnv1.pdf | Full | yes |
 | [ ] | ForkAE | ForkAE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ForkAE-spec.pdf | Full | yes |
 | [ ] | Fountain | Fountain | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Fountain-spec.pdf | Full | yes |
 | [x] | FROG | FROG | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
@@ -76,7 +76,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Grain-128 | Grain-128 | stream_cipher | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [ ] | Grain-128AEAD | Grain-128 | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [ ] | Grand Cru | Grand Cru | block_cipher | TODO | TODO | TODO | no |
-| [ ] | HAVAL | HAVAL | hash | 1992 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/haval.pdf | Full | yes |
+| [x] | HAVAL | HAVAL | hash | 1992 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/haval.pdf | Full | yes |
 | [ ] | HC-128 | HC-128 | stream_cipher | 2004 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_4 | Full | yes |
 | [x] | HC-256 | HC-256 | stream_cipher | 2004 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/hc256.pdf | Full | yes |
 | [ ] | HERN & HERON | HERN & HERON | block_cipher | TODO | TODO | TODO | no |
@@ -115,9 +115,9 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | MANTIS | MANTIS | tweakable_block_cipher | TODO | TODO | TODO | no |
 | [x] | MARS | MARS | block_cipher | 1999 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
 | [ ] | MCRYPTON | MCRYPTON | block_cipher | TODO | TODO | TODO | no |
-| [ ] | MD2 | MD2 | hash | 1992 | https://www.rfc-editor.org/rfc/rfc1319 | TODO | yes |
-| [ ] | MD4 | MD4 | hash | 1990 | https://www.rfc-editor.org/rfc/rfc1320 | TODO | yes |
-| [ ] | MD5 | MD5 | hash | 1992 | https://www.rfc-editor.org/rfc/rfc1321 | TODO | yes |
+| [x] | MD2 | MD2 | hash | 1992 | https://www.rfc-editor.org/rfc/rfc1319 | Full | yes |
+| [x] | MD4 | MD4 | hash | 1990 | https://www.rfc-editor.org/rfc/rfc1320 | Full | yes |
+| [x] | MD5 | MD5 | hash | 1992 | https://www.rfc-editor.org/rfc/rfc1321 | Full | yes |
 | [ ] | MIBS | MIBS | block_cipher | TODO | TODO | TODO | no |
 | [x] | MICKEY | MICKEY | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/mickey.pdf | Full | yes |
 | [ ] | MIDORI | MIDORI | block_cipher | TODO | TODO | TODO | no |
@@ -163,7 +163,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | RC6 | RC6 | block_cipher | 1998 | https://www.cerias.purdue.edu/apps/reports_and_papers/view/2029 | TODO | yes |
 | [x] | REMUS | REMUS | aead | 2019 | https://eprint.iacr.org/2019/992 | Full | yes |
 | [x] | Rijndael | Rijndael | block_cipher | 1998 | https://csrc.nist.gov/projects/aes | TODO | yes |
-| [ ] | RIPEMD | RIPEMD | hash | 1995 | https://homes.esat.kuleuven.be/~bosselae/ripemd160.html | TODO | yes |
+| [x] | RIPEMD | RIPEMD | hash | 1995 | https://homes.esat.kuleuven.be/~bosselae/ripemd160.html | Full | yes |
 | [x] | Romulus | Romulus | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [ ] | SAEAES | SAEAES | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SAEAES-spec.pdf | Full | yes |
 | [x] | SAFER | SAFER | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
@@ -178,10 +178,10 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SEED | SEED | block_cipher | 2005 | https://www.rfc-editor.org/rfc/rfc4269 | TODO | no |
 | [x] | Serpent | Serpent | block_cipher | 1998 | https://www.cl.cam.ac.uk/archive/rja14/Papers/serpent.pdf | TODO | yes |
 | [x] | SFINKS | SFINKS | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/sfinks.pdf | Full | yes |
-| [ ] | SHA-1 / SHA-2 | SHA-1 / SHA-2 | hash | 2002 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf | TODO | yes |
+| [x] | SHA-1 / SHA-2 | SHA-1 / SHA-2 | hash | 2002 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf | Full | yes |
 | [x] | SHACAL | SHACAL | block_cipher | 2000 | https://en.wikipedia.org/wiki/SHACAL | Full | yes |
 | [x] | SHACAL2 | SHACAL2 | block_cipher | 2001 | https://en.wikipedia.org/wiki/SHACAL | Full | yes |
-| [ ] | Shamash & Shamashash | Shamash & Shamashash | hash | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ShamashAndShamashash-spec.pdf | Full | yes |
+| [x] | Shamash & Shamashash | Shamash & Shamashash | aead+hash | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ShamashAndShamashash-spec.pdf | Full | yes |
 | [x] | SHARK | SHARK | block_cipher | 1996 | https://doi.org/10.1007/3-540-68697-5_11 | Full | yes |
 | [x] | SIMON | SIMON | block_cipher | 2013 | https://eprint.iacr.org/2013/404 | TODO | no |
 | [x] | SIMPLE | SIMPLE | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
@@ -218,7 +218,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Thank Goodness It's Friday (TGIF) | Thank Goodness It's Friday (TGIF) | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TGIF-spec.pdf | Full | yes |
 | [ ] | Three-key Triple DES | DES | block_cipher | TODO | TODO | TODO | no |
 | [x] | Threefish | Threefish | block_cipher | 2010 | https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf | Full | yes |
-| [ ] | Tiger | Tiger | hash | 1995 | https://www.cl.cam.ac.uk/~rja14/Papers/tiger.pdf | TODO | yes |
+| [x] | Tiger | Tiger | hash | 1995 | https://www.cl.cam.ac.uk/~rja14/Papers/tiger.pdf | Full | yes |
 | [x] | TinyJambu | TinyJambu | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | TREYFER | TREYFER | block_cipher | 2008 | https://users.encs.concordia.ca/~youssef/Publications/Papers/A%20Related-Key%20Attack%20on%20TREYFER.pdf | Full | yes |
 | [x] | Triad | Triad | stream_cipher | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TRIAD-spec.pdf | Full | yes |
@@ -233,7 +233,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | VMPC | VMPC | stream_cipher | TODO | TODO | TODO | no |
 | [ ] | WAGE | WAGE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/WAGE-spec.pdf | Full | yes |
 | [ ] | WAKE | WAKE | stream_cipher | TODO | TODO | TODO | no |
-| [ ] | Whirlpool | Whirlpool | hash | 2003 | https://www.larc.usp.br/~pbarreto/whirlpool.zip | TODO | yes |
+| [x] | Whirlpool | Whirlpool | hash | 2003 | https://www.larc.usp.br/~pbarreto/whirlpool.zip | Full | yes |
 | [x] | XChaCha | ChaCha | stream_cipher | TODO | TODO | TODO | no |
 | [ ] | XEX-based families (XTS lineage) | AES | mode | TODO | TODO | TODO | no |
 | [x] | Xoodoo | Xoodoo | permutation | 2018 | https://keccak.team/xoodoo.html | TODO | no |

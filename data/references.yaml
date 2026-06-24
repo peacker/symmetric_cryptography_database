@@ -2269,3 +2269,102 @@ references:
     year: 2019
     venue: "NIST Lightweight Cryptography Standardization, Round 1"
     url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CLX-spec.pdf
+
+  - id: fowler_1991_fnv1
+    kind: article
+    title: "FNV Hash"
+    authors:
+      - Glenn Fowler
+      - Landon Curt Noll
+      - Phong Vo
+    year: 1991
+    venue: Technical note (public domain)
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/fnv1.pdf
+
+  - id: zheng_1992_haval
+    kind: article
+    title: "HAVAL — A One-Way Hashing Algorithm with Variable Length of Output"
+    authors:
+      - Yuliang Zheng
+      - Josef Pieprzyk
+      - Jennifer Seberry
+    year: 1992
+    venue: "Advances in Cryptology — AUSCRYPT'92, LNCS 718, Springer-Verlag, pp. 83-104"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/haval.pdf
+
+  - id: kaliski_1992_md2
+    kind: standard
+    title: "The MD2 Message-Digest Algorithm"
+    authors:
+      - B. Kaliski
+    year: 1992
+    venue: "RFC 1319, Internet Engineering Task Force (IETF)"
+    url: https://www.rfc-editor.org/rfc/rfc1319
+
+  - id: rivest_1992_md4
+    kind: standard
+    title: "The MD4 Message-Digest Algorithm"
+    authors:
+      - R. Rivest
+    year: 1992
+    venue: "RFC 1320, Internet Engineering Task Force (IETF)"
+    url: https://www.rfc-editor.org/rfc/rfc1320
+
+  - id: rivest_1992_md5
+    kind: standard
+    title: "The MD5 Message-Digest Algorithm"
+    authors:
+      - R. Rivest
+    year: 1992
+    venue: "RFC 1321, Internet Engineering Task Force (IETF)"
+    url: https://www.rfc-editor.org/rfc/rfc1321
+
+  - id: dobbertin_1996_ripemd160
+    kind: article
+    title: "RIPEMD-160: A Strengthened Version of RIPEMD"
+    authors:
+      - Hans Dobbertin
+      - Antoon Bosselaers
+      - Bart Preneel
+    year: 1996
+    venue: "Fast Software Encryption, LNCS 1039, Springer-Verlag, pp. 71-82"
+    url: https://homes.esat.kuleuven.be/~bosselae/ripemd160.html
+
+  - id: nist_2002_fips180_2
+    kind: standard
+    title: "Secure Hash Standard (SHS), FIPS PUB 180-2"
+    authors:
+      - National Institute of Standards and Technology (NIST)
+    year: 2002
+    venue: "Federal Information Processing Standards Publication 180-2, NIST"
+    url: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
+
+  - id: penazzi_2019_shamash
+    kind: article
+    title: "Shamash (and Shamashash)"
+    authors:
+      - Daniel Penazzi
+      - Miguel Montes
+    year: 2019
+    venue: "NIST Lightweight Cryptography Standardization, Round 1"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ShamashAndShamashash-spec.pdf
+
+  - id: anderson_1995_tiger
+    kind: article
+    title: "Tiger: A Fast New Hash Function"
+    authors:
+      - Ross Anderson
+      - Eli Biham
+    year: 1995
+    venue: "Fast Software Encryption, LNCS 1039, Springer-Verlag"
+    url: https://www.cl.cam.ac.uk/~rja14/Papers/tiger.pdf
+
+  - id: barreto_2003_whirlpool
+    kind: article
+    title: "The Whirlpool Hashing Function"
+    authors:
+      - Paulo S.L.M. Barreto
+      - Vincent Rijmen
+    year: 2003
+    venue: "Revised Technical Report (revised May 24, 2003)"
+    url: https://www.larc.usp.br/~pbarreto/whirlpool.zip
