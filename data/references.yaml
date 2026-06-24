@@ -2087,3 +2087,185 @@ references:
     venue: "RFC 2898"
     url: https://tools.ietf.org/html/rfc2898
     notes: "Key derivation function for password-based encryption."
+
+  # ── Newly added primitives (PDF-extracted) ────────────────────────────────
+  - id: daemen_1991_threeway
+    kind: article
+    title: "3-Way Block Cipher"
+    authors:
+      - Joan Daemen
+    year: 1991
+    venue: Technical note (Chapter 7 of Daemen PhD thesis, K.U. Leuven)
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/threeway.pdf
+
+  - id: blaze_schneier_1994_macguffin
+    kind: article
+    title: "The MacGuffin Block Cipher Algorithm"
+    authors:
+      - Matt Blaze
+      - Bruce Schneier
+    year: 1994
+    venue: "Fast Software Encryption (FSE 1994), LNCS 1008"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/macguffin.pdf
+
+  - id: miyaguchi_1997_fealnx
+    kind: article
+    title: "The FEAL Cipher Family"
+    authors:
+      - Shoji Miyaguchi
+    year: 1997
+    venue: "Lecture Notes in Computer Science (Springer)"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/fealnx.pdf
+
+  - id: sorkin_1983_lucifer
+    kind: article
+    title: "Lucifer, A Cryptographic Algorithm"
+    authors:
+      - Arthur Sorkin
+    year: 1983
+    venue: "Cryptologia, Vol. 8, No. 1"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/lucifer.pdf
+
+  - id: maximov_2002_mir1
+    kind: article
+    title: "A New Stream Cipher 'Mir-1'"
+    authors:
+      - Alexander Maximov
+    year: 2002
+    venue: Technical report
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/mir1.pdf
+
+  - id: gammel_2005_achterbahn
+    kind: article
+    title: "The Achterbahn Stream Cipher"
+    authors:
+      - Berndt M. Gammel
+      - "Rainer G\xF6ttfert"
+      - Oliver Kniffler
+    year: 2005
+    venue: "ECRYPT Stream Cipher Project (eSTREAM)"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/achterbahn.pdf
+
+  - id: hell_2005_grain
+    kind: article
+    title: "Grain - A Stream Cipher for Constrained Environments"
+    authors:
+      - Martin Hell
+      - Thomas Johansson
+      - Willi Meier
+    year: 2005
+    venue: "ECRYPT Stream Cipher Project (eSTREAM)"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/grain.pdf
+
+  - id: babbage_2005_mickey
+    kind: article
+    title: "The stream cipher MICKEY (version 1)"
+    authors:
+      - Steve Babbage
+      - Matthew Dodd
+    year: 2005
+    venue: "ECRYPT Stream Cipher Project (eSTREAM)"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/mickey.pdf
+
+  - id: berbain_2005_decim
+    kind: article
+    title: "DECIM, a new stream cipher for hardware applications"
+    authors:
+      - C. Berbain
+      - O. Billet
+      - A. Canteaut
+      - N. Courtois
+      - B. Debraize
+      - H. Gilbert
+      - L. Goubin
+      - A. Gouget
+      - L. Granboulan
+      - C. Lauradoux
+      - M. Minier
+      - T. Pornin
+      - H. Sibert
+    year: 2005
+    venue: "ECRYPT Stream Cipher Project (eSTREAM)"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/decim.pdf
+
+  - id: wu_2004_hc256
+    kind: article
+    title: "Stream Cipher HC-256"
+    authors:
+      - Hongjun Wu
+    year: 2004
+    venue: "Fast Software Encryption (FSE 2004) / ECRYPT eSTREAM"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/hc256.pdf
+
+  - id: boesgaard_2003_rabbit
+    kind: article
+    title: "The Stream Cipher Rabbit"
+    authors:
+      - Martin Boesgaard
+      - Mette Vesterager
+      - Thomas Christensen
+      - Erik Zenner
+    year: 2003
+    venue: "Fast Software Encryption (FSE 2003), LNCS 2887"
+    url: https://link.springer.com/chapter/10.1007/978-3-540-39887-5_31
+
+  - id: arnault_2005_ffcsr
+    kind: article
+    title: "F-FCSR: design of a new class of stream ciphers"
+    authors:
+      - "Fran\xE7ois Arnault"
+      - Thierry P. Berger
+    year: 2005
+    venue: "ECRYPT Stream Cipher Project (eSTREAM)"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/ffcsr.pdf
+
+  - id: rogaway_1997_seal
+    kind: article
+    title: "A Software-Optimized Encryption Algorithm"
+    authors:
+      - Phillip Rogaway
+      - Don Coppersmith
+    year: 1997
+    venue: "Journal of Cryptology (full version, last revised 1997)"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/seal.pdf
+
+  - id: johnson_1995_sapphire
+    kind: article
+    title: "The Sapphire II Stream Cipher"
+    authors:
+      - Michael Paul Johnson
+    year: 1995
+    venue: Technical note
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/sapphire.pdf
+
+  - id: braeken_2005_sfinks
+    kind: article
+    title: "SFINKS: A Synchronous Stream Cipher for Restricted Hardware Environments"
+    authors:
+      - An Braeken
+      - Joseph Lano
+      - Nele Mentens
+      - Bart Preneel
+      - Ingrid Verbauwhede
+    year: 2005
+    venue: "ECRYPT Stream Cipher Project (eSTREAM)"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/sfinks.pdf
+
+  - id: lancrypto_2005_yamb
+    kind: article
+    title: "LAN Crypto Submission to the ECRYPT Stream Cipher Project: Primitive Specification of Yamb"
+    authors:
+      - LAN Crypto
+    year: 2005
+    venue: "ECRYPT Stream Cipher Project (eSTREAM)"
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/yamb.pdf
+
+  - id: wu_huang_2019_clx
+    kind: article
+    title: "CLX: A Family of Lightweight Authenticated Encryption Algorithms"
+    authors:
+      - Hongjun Wu
+      - Tao Huang
+    year: 2019
+    venue: "NIST Lightweight Cryptography Standardization, Round 1"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CLX-spec.pdf

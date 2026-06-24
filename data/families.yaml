@@ -2454,24 +2454,37 @@ families:
   - id: clx
     name: CLX
     construction_ids:
-      - spn
+      - duplex_mode
+      - sponge_construction
     round_ids:
-      - clx_round
+      - clx_permutation_round
     target_applications:
       - generic
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: permutation
+          params: { min_state_bits: 160, max_state_bits: 320 }
         - id: xor
-        - id: constant
+        - id: and
     reference_ids:
-      - clx_ref
-    process_ids: []
+      - wu_huang_2019_clx
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    innovative_ideas:
+      - id: clx_duplex_keyed_permutation
+        name: Duplex-mode AEAD with keyed permutation
+        note: CLX's permutation P_{160+x,n} takes the secret key as part of the initial state in duplex mode, combining AEAD authentication and encryption in a single pass.
+    notes: >
+      CLX is a family of lightweight authenticated encryption algorithms submitted to
+      the NIST Lightweight Cryptography standardization (Round 1, 2019). Based on the
+      Duplex mode (for AEAD) and sponge mode (for hashing). The permutation P_{160+x,n}
+      has state width 160+x bits where x is the key size (128, 192, or 256 bits).
+      Variants: CLX-128Q/H, CLX-192Q/H, CLX-256Q/H (Q=high-speed, H=compact hardware).
+      NOTE: the FAMILY_COVERAGE_CHECKLIST.md incorrectly lists CLX as type stream_cipher;
+      the spec defines it as an AEAD algorithm.
 
   - id: cmea
     name: CMEA
@@ -4628,3 +4641,569 @@ families:
     process_ids: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+
+  # ── Newly added families (PDF-extracted) ─────────────────────────────────
+
+  - id: threeway
+    name: 3-Way
+    construction_ids:
+      - self_reciprocal_spn
+    round_ids:
+      - threeway_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 96
+      components:
+        - id: sbox
+          params: { input_bits: 3, output_bits: 3 }
+        - id: linear_transform
+          params: { name: theta }
+        - id: bit_permutation
+          params: { names: [pi_1, pi_2] }
+        - id: xor
+        - id: constant
+    reference_ids:
+      - daemen_1991_threeway
+    process_ids: []
+    influences: []
+    innovative_ideas:
+      - id: threeway_self_reciprocal
+        name: Self-reciprocal structure
+        note: Encryption and decryption use the same circuit; the cipher is its own inverse (except for the key schedule which is reversed).
+      - id: threeway_theta
+        name: Theta linear diffusion
+        note: >
+          Linear layer θ defined by the primitive polynomial e(x) = 1+x+x²+x³+x⁵+x⁶+x¹⁰
+          over GF(2), providing diffusion across 32-bit words of the 96-bit block.
+    notes: >
+      3-Way is a 96-bit block cipher designed by Joan Daemen (1991). Its self-reciprocal
+      structure means encryption and decryption share the same circuit, differing only in
+      the key schedule. The nonlinear layer γ operates on 3-bit S-boxes; the linear layer
+      θ provides diffusion; permutations π₁ and π₂ provide bit rearrangement. The block
+      is treated as three 32-bit words. Designed to resist differential and linear
+      cryptanalysis; the cipher performs 11 rounds.
+
+  - id: macguffin
+    name: MacGuffin
+    construction_ids:
+      - gufn
+    round_ids:
+      - macguffin_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 64
+      components:
+        - id: sbox
+          params: { input_bits: 6, output_bits: 2, count: 8 }
+        - id: xor
+        - id: permutation
+    reference_ids:
+      - blaze_schneier_1994_macguffin
+    process_ids: []
+    influences:
+      - source_family_id: des
+        relations:
+          - inspired_by
+        note: MacGuffin's 8 S-boxes (6→2 bits) are DES-derived, adapted for the GUFN structure.
+    innovative_ideas:
+      - id: macguffin_gufn
+        name: Generalized Unbalanced Feistel Network (GUFN)
+        note: >
+          MacGuffin introduced the GUFN where the 64-bit block is split into a 16-bit
+          target half and a 48-bit control half, unlike a standard balanced Feistel split.
+    notes: >
+      MacGuffin is a 64-bit block cipher designed by Matt Blaze and Bruce Schneier (FSE 1994).
+      It introduced the Generalized Unbalanced Feistel Network (GUFN): the 64-bit block is
+      split asymmetrically into a 16-bit "target" and a 48-bit "control" half. The round
+      function uses 8 DES-derived 6×2 S-boxes. Key=128 bits; 32 rounds. Later found to have
+      structural weaknesses related to the asymmetric GUFN construction.
+
+  - id: lucifer
+    name: Lucifer
+    construction_ids:
+      - spn
+    round_ids:
+      - lucifer_round
+    target_applications:
+      - generic
+    characteristics:
+      block_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4, count: 2, selection: key_bit_controlled }
+        - id: permutation
+        - id: xor
+    reference_ids:
+      - sorkin_1983_lucifer
+    process_ids: []
+    influences:
+      - source_family_id: des
+        relations:
+          - predecessor
+        note: DES was a simplified and modified descendant of Lucifer; IBM designed both.
+    innovative_ideas:
+      - id: lucifer_key_controlled_sbox
+        name: Key-controlled S-box selection
+        note: >
+          A single key-controlled bit selects between two different 4×4 S-boxes (S₀ and S₁)
+          at each bit position, making the substitution key-dependent.
+    notes: >
+      Lucifer was an early IBM cipher (circa 1971-1973), the precursor to DES. The Sorkin (1983)
+      description specifies a 128-bit block with 128-bit key and 16 rounds. The key controls
+      which of two 4-bit S-boxes (S₀ or S₁) is applied at each position per round. DES was
+      derived from a later, weakened variant of Lucifer with a smaller block (64 bits).
+
+  - id: mir_1
+    name: MIR-1
+    construction_ids:
+      - t_function
+    round_ids:
+      - mir_1_step
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      state_size_bits: 384
+      components:
+        - id: t_function
+        - id: add_mod
+          params: { modulus: 18446744073709551616 }
+        - id: xor
+        - id: shift_fixed
+    reference_ids:
+      - maximov_2002_mir1
+    process_ids: []
+    influences: []
+    innovative_ideas:
+      - id: mir_1_t_function_automaton
+        name: T-function automaton for guaranteed long period
+        note: >
+          MIR-1 uses a T-function operating on 64-bit registers to generate a provably
+          long-period keystream. A T-function's single-direction carry propagation guarantees
+          the period is at least 2^63.
+    notes: >
+      MIR-1 is a 64-bit-oriented synchronous stream cipher by Alexander Maximov (2002).
+      Despite being listed as block_cipher in some sources including this checklist, MIR-1
+      is explicitly described as a stream cipher in the original paper. Keystream is
+      generated by a T-function operating on 6 64-bit registers (4 loop-state registers
+      x₀–x₃ and 2 automaton registers A, B), yielding 64 keystream bits per round.
+      Total state = 6×64 = 384 bits. Key=128 bits, IV=64 bits.
+
+  - id: achterbahn
+    name: Achterbahn
+    construction_ids:
+      - nlfsr_combiner
+    round_ids:
+      - achterbahn_clock
+    target_applications:
+      - hardware
+      - constrained_hardware
+    characteristics:
+      state_size_bits: 211
+      components:
+        - id: nlfsr
+          params: { count: 8, lengths: [22, 23, 25, 26, 27, 28, 29, 31] }
+        - id: boolean_combiner
+          params: { inputs: 8, order: 4, degree: 3, correlation_immune: true }
+        - id: xor
+    reference_ids:
+      - gammel_2005_achterbahn
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences: []
+    innovative_ideas:
+      - id: achterbahn_nlfsr_combiner
+        name: NLFSR combiner with feedforward output functions
+        note: >
+          Eight primitive NLFSRs (lengths 22,23,25,26,27,28,29,31) each have modifiable
+          linear feedforward output functions combined by a degree-3, 4th-order correlation-immune
+          Boolean function R, configured during key/IV loading by a 9th register V.
+    notes: >
+      Achterbahn is a hardware-oriented binary synchronous stream cipher. The active
+      encryption state consists of 8 primitive binary NLFSRs of lengths 22, 23, 25, 26,
+      27, 28, 29, 31 bits (total 22+23+25+26+27+28+29+31 = 211 bits). A 9th register V
+      (64-bit NLFSR) is used only during key/IV loading to set the linear feedforward
+      output functions of the 8 driving NLFSRs; V does NOT change during encryption.
+      Output: combined by balanced Boolean function R (degree 3, 4th-order correlation
+      immune). Key=80 bits, IV=0 to 64 bits (multiples of 8). ECRYPT eSTREAM 2005.
+
+  - id: grain
+    name: Grain
+    construction_ids:
+      - nlfsr_lfsr_filter
+    round_ids:
+      - grain_clock
+    target_applications:
+      - hardware
+      - constrained_hardware
+      - iot
+    characteristics:
+      state_size_bits: 160
+      components:
+        - id: lfsr
+          params: { length: 80 }
+        - id: nlfsr
+          params: { length: 80 }
+        - id: boolean_filter
+          params: { inputs: 5, degree: 3 }
+        - id: xor
+    reference_ids:
+      - hell_2005_grain
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences:
+      - source_family_id: grain_128
+        relations:
+          - precursor_of
+        note: Grain (v0, 80-bit key) was later extended to Grain-128 (128-bit key) for higher security.
+    innovative_ideas:
+      - id: grain_lfsr_nlfsr_pair
+        name: Paired LFSR/NFSR for guaranteed minimum period with nonlinearity
+        note: >
+          The 80-bit LFSR provides the guaranteed minimum period while the 80-bit NFSR
+          (feedback masked by LFSR output) provides nonlinearity. Both share the same
+          initialization procedure.
+    notes: >
+      Grain (v0) is a hardware-oriented bit-serial stream cipher. State = 80-bit LFSR
+      (primitive polynomial f(x) of degree 80) + 80-bit NFSR (nonlinear feedback g(x))
+      = 160 bits total. Filter function h(x) of degree 3 on 5 taps (from both registers)
+      XORed with one NFSR bit yields 1 keystream bit per clock. Key=80 bits, IV=64 bits.
+      Key initialization clocks 160 times with output fed back. ECRYPT eSTREAM Phase 2,
+      hardware focus. Superseded by Grain-128 and Grain-128a.
+
+  - id: mickey
+    name: MICKEY
+    construction_ids:
+      - irregular_clock_register_pair
+    round_ids:
+      - mickey_clock
+    target_applications:
+      - hardware
+      - constrained_hardware
+    characteristics:
+      state_size_bits: 160
+      components:
+        - id: lfsr
+          params: { length: 80 }
+        - id: nlfsr
+          params: { length: 80 }
+        - id: xor
+    reference_ids:
+      - babbage_2005_mickey
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences: []
+    innovative_ideas:
+      - id: mickey_mutual_irregular_clocking
+        name: Mutual irregular clocking between register pair
+        note: >
+          Two 80-bit registers R (linear) and S (nonlinear) each generate a control bit
+          that governs the other's clocking behaviour; this mutual dependence provides
+          statistical properties superior to self-controlled clocking schemes.
+    notes: >
+      MICKEY (Mutual Irregular Clocking KEYstream generator) is a hardware-oriented
+      synchronous stream cipher by Babbage and Dodd (eSTREAM v1, 2005). Two 80-bit
+      registers R (linear) and S (nonlinear) mutually clock each other irregularly based
+      on CONTROL_BIT derived from their combined state. Output: z_i = r_0 ⊕ s_0 per clock.
+      Key=80 bits, IV=0 to 80 bits (variable). Maximum keystream per (K,IV) pair = 2^40 bits.
+
+  - id: decim
+    name: DECIM
+    construction_ids:
+      - filtered_lfsr_with_decimation
+    round_ids:
+      - decim_clock
+    target_applications:
+      - hardware
+    characteristics:
+      state_size_bits: 192
+      components:
+        - id: lfsr
+          params: { length: 192 }
+        - id: boolean_filter
+          params: { inputs: 7, symmetric: true }
+        - id: absg_decimation
+    reference_ids:
+      - berbain_2005_decim
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences: []
+    innovative_ideas:
+      - id: decim_absg_decimation
+        name: Adjacent Bit String Generator (ABSG) decimation
+        note: >
+          DECIM feeds filtered LFSR output into the ABSG mechanism which irregularly
+          decimates the bitstream, concealing the underlying linear LFSR structure
+          from algebraic and correlation attacks.
+    notes: >
+      DECIM is a binary additive synchronous stream cipher for hardware (eSTREAM 2005).
+      State = 192-bit maximum-length LFSR (primitive polynomial P(X) of degree 192).
+      The LFSR is filtered by a symmetric Boolean function f of 7 variables applied at
+      two tap sets, producing a 2-bit input to the ABSG decimation mechanism per clock.
+      Key=80 bits, IV=64 bits. Output rate is ~0.5 bits/clock due to decimation.
+
+  - id: hc_256
+    name: HC-256
+    construction_ids:
+      - table_update_stream
+    round_ids:
+      - hc256_step
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      state_size_bits: 65547
+      components:
+        - id: lookup_table
+          params: { count: 2, entries_per_table: 1024, entry_size_bits: 32 }
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+    reference_ids:
+      - wu_2004_hc256
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences: []
+    innovative_ideas:
+      - id: hc256_large_key_dependent_tables
+        name: Continuously updated large key-dependent tables
+        note: >
+          HC-256 maintains two 1024-entry 32-bit tables P and Q (32 KB total) that are
+          updated every step using nonlinear feedback. Every output word depends on
+          the current secret table state, making statistical attacks extremely costly.
+    notes: >
+      HC-256 is a software-efficient synchronous stream cipher by Hongjun Wu (FSE 2004
+      / eSTREAM). State: two 1024-entry 32-bit tables P and Q (65536 bits total) plus
+      11 bits of counter = 65547 bits. Each step updates one table entry via nonlinear
+      feedback and outputs one 32-bit keystream word via a table lookup XOR. Key=256 bits,
+      IV=256 bits. Security claim: 2^128 effort to distinguish from random.
+      HC-128 (128-bit key/IV) is a related but separate cipher not covered here.
+
+  - id: rabbit
+    name: Rabbit
+    construction_ids:
+      - coupled_counter_system
+    round_ids:
+      - rabbit_iteration
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      state_size_bits: 513
+      components:
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+        - id: counter
+          params: { count: 8, size_bits: 32 }
+    reference_ids:
+      - boesgaard_2003_rabbit
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences: []
+    innovative_ideas:
+      - id: rabbit_coupled_g_function
+        name: Coupled nonlinear counter g-function
+        note: >
+          Rabbit's 8 state variables are iterated by a coupled nonlinear g-function
+          g_j(x,y) = ((x+y)^2 ⊕ (x+y)^2>>32) mod 2^32 with counter mixing, preventing
+          straightforward linear algebraic attacks.
+    notes: >
+      Rabbit is a synchronous stream cipher first presented at FSE 2003 (eSTREAM software
+      focus). Internal state: 8 32-bit state variables x_{j,i}, 8 32-bit counter variables
+      c_{j,i}, and 1 carry bit φ = 513 bits total. Each iteration advances all 8 counters,
+      applies the coupled g-function, and outputs 128 keystream bits extracted from 8
+      state variables. Key=128 bits, IV=64 bits (optional IV setup applies 4 extra rounds).
+
+  - id: f_fcsr
+    name: F-FCSR
+    construction_ids:
+      - filtered_fcsr
+    round_ids:
+      - f_fcsr_step
+    target_applications:
+      - generic
+      - hardware
+    characteristics:
+      state_size_bits: 196
+      components:
+        - id: fcsr
+          params: { main_register_bits: 128, carry_register_bits: 68 }
+        - id: linear_filter
+          params: { type: xor }
+    reference_ids:
+      - arnault_2005_ffcsr
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences: []
+    innovative_ideas:
+      - id: f_fcsr_carry_nonlinearity
+        name: FCSR carry-based nonlinearity without explicit nonlinear filter
+        note: >
+          F-FCSR replaces LFSR XOR feedback with FCSR integer addition-with-carry,
+          providing inherent nonlinearity without requiring a complex Boolean filter.
+          The carry register acts as an implicit nonlinear element.
+    notes: >
+      F-FCSR (Filtered FCSR) is a stream cipher family based on Feedback with Carry Shift
+      Registers (FCSRs) by Arnault and Berger (eSTREAM 2005). Main FCSR: 128-bit main
+      register (k=128) + 68 carry cells (ℓ=68) = 196 bits total state. Keystream by
+      XOR-filtering selected FCSR cells (static filter: SF, or dynamic/key-dependent: DF).
+      Variants: F-FCSR-SF1, F-FCSR-SF8, F-FCSR-DF1, F-FCSR-DF8. Key=128 bits, IV=64 bits.
+      Later found to have cryptanalytic weaknesses (Knellwolf-Meier 2011).
+
+  - id: seal
+    name: SEAL
+    construction_ids:
+      - table_driven_prf
+    round_ids:
+      - seal_inner_iteration
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      components:
+        - id: lookup_table
+          params: { names: [T, R, S] }
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+    reference_ids:
+      - rogaway_1997_seal
+    process_ids: []
+    influences: []
+    innovative_ideas:
+      - id: seal_prf_stream
+        name: Length-increasing pseudorandom function as stream cipher
+        note: >
+          SEAL is a pseudorandom function family mapping a 32-bit position index n to
+          an arbitrarily long output (up to ~64 KB per index), enabling both sequential
+          streaming and random-access decryption.
+    notes: >
+      SEAL 3.0 (Software Encryption ALgorithm) is a software-optimized pseudorandom
+      function family by Rogaway and Coppersmith (1997). A 160-bit key is preprocessed
+      via SHA-1 into three tables (T: 512 32-bit words, R: 4 32-bit words, S: 256 32-bit
+      words). Given a 32-bit position index n, SEAL produces a pseudorandom stream using
+      64 inner iterations per block of up to 64×1024 bytes. Used as a stream cipher when
+      position index increments sequentially. Versions: 1.0 (1993), 2.0, 3.0 (1997).
+
+  - id: sapphire
+    name: Sapphire
+    construction_ids:
+      - permutation_based_stream
+    round_ids:
+      - sapphire_byte_step
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      state_size_bits: 2104
+      components:
+        - id: permutation_vector
+          params: { size: 256, entry_size_bits: 8 }
+        - id: xor
+        - id: add_mod
+          params: { modulus: 256 }
+    reference_ids:
+      - johnson_1995_sapphire
+    process_ids: []
+    influences:
+      - source_family_id: rc4
+        relations:
+          - similar_permutation_approach
+        note: Like RC4, Sapphire II uses a shuffled 256-byte permutation vector; unlike RC4 it adds plaintext/ciphertext feedback.
+    innovative_ideas:
+      - id: sapphire_pt_ct_feedback
+        name: Plaintext and ciphertext feedback into permutation state
+        note: >
+          Sapphire II feeds both the plaintext and the ciphertext back into permutation
+          shuffling each step, providing better resistance to known-plaintext attacks
+          compared to pure keystream generators and rudimentary authentication properties.
+    notes: >
+      Sapphire II Stream Cipher by Michael Paul Johnson (1995). State: 256-byte permutation
+      array cards[256] + indices a, b, c, d, m (5 bytes) + last_plain and last_cipher
+      (2 bytes) = 263 bytes = 2104 bits total. Per step, up to 5 permutation elements are
+      moved and 1 keystream byte is output, XORed with plaintext. Variable-length key
+      (≥64 bits recommended). Plaintext and ciphertext are fed back into shuffling,
+      providing implicit authentication. NOTE: the checklist spec year says 1995.
+
+  - id: sfinks
+    name: SFINKS
+    construction_ids:
+      - filtered_lfsr
+    round_ids:
+      - sfinks_clock
+    target_applications:
+      - hardware
+      - constrained_hardware
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: lfsr
+          params: { length: 256, polynomial_weight: 17 }
+        - id: inversion_sbox
+          params: { field: "GF(2^16)", degree: 15, nonlinearity: 65024 }
+        - id: xor
+    reference_ids:
+      - braeken_2005_sfinks
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences: []
+    innovative_ideas:
+      - id: sfinks_gf2_16_inversion
+        name: Inversion S-box over GF(2¹⁶) as nonlinear filter
+        note: >
+          SFINKS uses the multiplicative inverse function over GF(2^16) as its nonlinear
+          filter, achieving algebraic degree 15 and nonlinearity 65024 with a compact
+          hardware implementation.
+    notes: >
+      SFINKS is a hardware-oriented synchronous stream cipher by Braeken et al. (KU Leuven,
+      eSTREAM 2005). State: 256-bit Fibonacci LFSR (weight-17 primitive polynomial of degree
+      256) + 64-bit shift register SR + 64-bit MAC register. The nonlinear filter applies
+      the INV() function over GF(2^16) to 16 selected LFSR bits, producing 1 bit per clock.
+      Key=80 bits, IV=80 bits. Resynchronization: 128 clock cycles. Includes a 64-bit MAC
+      generation mechanism for message authentication.
+
+  - id: yamb
+    name: YAMB
+    construction_ids:
+      - lfsr_over_extension_field_with_memory
+    round_ids:
+      - yamb_step
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      state_size_bits: 3040
+      components:
+        - id: lfsr
+          params: { length: 15, word_size_bits: 32, field: "GF(2^32)" }
+        - id: lookup_table
+          params: { size_bytes: 256, dynamically_updated: true }
+        - id: shift_register
+          params: { length: 16, word_size_bits: 32 }
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+    reference_ids:
+      - lancrypto_2005_yamb
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences: []
+    innovative_ideas:
+      - id: yamb_word_lfsr_with_dynamic_sbox
+        name: Word-oriented LFSR over GF(2^32) with dynamically updated memory table
+        note: >
+          YAMB combines a 15-word LFSR over GF(2^32) with a 256-byte memory M that is
+          continuously updated during keystream generation, introducing nonlinearity via
+          the dynamic S-box lookup.
+    notes: >
+      YAMB is a synchronous stream cipher submitted to ECRYPT eSTREAM by LAN Crypto (2005).
+      Internal state: LFSR L (15 32-bit cells over GF(2^32), 480 bits) + Memory M (256 bytes
+      dynamically updated S-box table, 2048 bits) + Shift register R (16 32-bit cells,
+      512 bits) = 3040 bits total. Output: 32 bits per step. Key=80–256 bits (any multiple
+      of 16 bits); IV=32–128 bits (primary reference values: key=128 bits, IV=64 bits).

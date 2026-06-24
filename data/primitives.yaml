@@ -1481,6 +1481,7 @@ primitives:
       tweak_size_bits: 64
       rounds: 24
       output_size_bits: 128
+
   - id: ace_permutation_320
     name: ACE Permutation (320-bit)
     family_id: ace
@@ -2077,18 +2078,89 @@ primitives:
       output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
 
-  - id: clx_v1
-    name: CLX-v1
+  - id: clx_128
+    name: CLX-128
     family_id: clx
-    primitive_type: block_cipher
+    primitive_type: aead
     reference_ids:
-      - clx_ref
+      - wu_huang_2019_clx
     characteristics:
-      block_size_bits: 128
       key_size_bits: 128
-      rounds: 1
-      output_size_bits: 128
-    notes: Generic baseline instance; update with full paper-specific variants.
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 160
+
+  - id: clx_128q
+    name: CLX-128Q
+    family_id: clx
+    primitive_type: aead
+    reference_ids:
+      - wu_huang_2019_clx
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 192
+
+  - id: clx_128h
+    name: CLX-128H
+    family_id: clx
+    primitive_type: aead
+    reference_ids:
+      - wu_huang_2019_clx
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 192
+
+  - id: clx_192q
+    name: CLX-192Q
+    family_id: clx
+    primitive_type: aead
+    reference_ids:
+      - wu_huang_2019_clx
+    characteristics:
+      key_size_bits: 192
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 256
+
+  - id: clx_192h
+    name: CLX-192H
+    family_id: clx
+    primitive_type: aead
+    reference_ids:
+      - wu_huang_2019_clx
+    characteristics:
+      key_size_bits: 192
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 256
+
+  - id: clx_256q
+    name: CLX-256Q
+    family_id: clx
+    primitive_type: aead
+    reference_ids:
+      - wu_huang_2019_clx
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 320
+
+  - id: clx_256h
+    name: CLX-256H
+    family_id: clx
+    primitive_type: aead
+    reference_ids:
+      - wu_huang_2019_clx
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 320
 
   - id: cmea_v1
     name: CMEA-v1
@@ -3473,3 +3545,222 @@ primitives:
       rounds: 1
       output_size_bits: 128
     notes: Generic baseline instance; update with full paper-specific variants.
+
+  # ── Newly added primitives (PDF-extracted) ────────────────────────────────
+
+  - id: threeway_v1
+    name: 3-Way
+    family_id: threeway
+    primitive_type: block_cipher
+    reference_ids:
+      - daemen_1991_threeway
+    characteristics:
+      block_size_bits: 96
+      key_size_bits: 96
+      rounds: 11
+      output_size_bits: 96
+
+  - id: macguffin_v1
+    name: MacGuffin
+    family_id: macguffin
+    primitive_type: block_cipher
+    reference_ids:
+      - blaze_schneier_1994_macguffin
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 32
+      output_size_bits: 64
+
+  - id: feal_nx
+    name: FEAL-NX
+    family_id: feal
+    primitive_type: block_cipher
+    reference_ids:
+      - miyaguchi_1997_fealnx
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 32
+      output_size_bits: 64
+    notes: >
+      FEAL-NX is the 128-bit key variant of FEAL-N. N (number of rounds) is variable;
+      the paper's reference recommendation is N=32. Earlier FEAL-8 used 64-bit key.
+
+  - id: lucifer_v1
+    name: Lucifer
+    family_id: lucifer
+    primitive_type: block_cipher
+    reference_ids:
+      - sorkin_1983_lucifer
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 16
+      output_size_bits: 128
+
+  - id: mir_1_v1
+    name: MIR-1
+    family_id: mir_1
+    primitive_type: stream_cipher
+    reference_ids:
+      - maximov_2002_mir1
+    characteristics:
+      key_size_bits: 128
+      iv_size_bits: 64
+      state_size_bits: 384
+    notes: >
+      Checklist erroneously lists MIR-1 as block_cipher; the paper abstract explicitly
+      states it is a stream cipher. State = 6×64-bit registers (4 loop-state + 2 automaton).
+
+  - id: achterbahn_v1
+    name: Achterbahn
+    family_id: achterbahn
+    primitive_type: stream_cipher
+    reference_ids:
+      - gammel_2005_achterbahn
+    characteristics:
+      key_size_bits: 80
+      iv_size_bits: 64
+      state_size_bits: 211
+    notes: >
+      Active encryption state = 8 NLFSRs of lengths 22+23+25+26+27+28+29+31 = 211 bits.
+      A 9th 64-bit register V (non-active during encryption) is used only during key/IV
+      loading. IV can be 0–64 bits (multiples of 8); 64 bits is the maximum.
+
+  - id: grain_v0
+    name: Grain (v0)
+    family_id: grain
+    primitive_type: stream_cipher
+    reference_ids:
+      - hell_2005_grain
+    characteristics:
+      key_size_bits: 80
+      iv_size_bits: 64
+      state_size_bits: 160
+    notes: Initial Grain design (80-bit key/state); superseded by Grain-128 and Grain-128a.
+
+  - id: mickey_v1
+    name: MICKEY v1
+    family_id: mickey
+    primitive_type: stream_cipher
+    reference_ids:
+      - babbage_2005_mickey
+    characteristics:
+      key_size_bits: 80
+      iv_size_bits: 80
+      state_size_bits: 160
+    notes: IV is variable length 0–80 bits; maximum keystream per (K,IV) pair = 2^40 bits.
+
+  - id: decim_v1
+    name: DECIM
+    family_id: decim
+    primitive_type: stream_cipher
+    reference_ids:
+      - berbain_2005_decim
+    characteristics:
+      key_size_bits: 80
+      iv_size_bits: 64
+      state_size_bits: 192
+
+  - id: hc_256_v1
+    name: HC-256
+    family_id: hc_256
+    primitive_type: stream_cipher
+    reference_ids:
+      - wu_2004_hc256
+    characteristics:
+      key_size_bits: 256
+      iv_size_bits: 256
+      state_size_bits: 65547
+    notes: >
+      State = two 1024-entry 32-bit tables P and Q (65536 bits) plus an 11-bit step
+      counter = 65547 bits total. Output: 32 bits per step.
+
+  - id: rabbit_v1
+    name: Rabbit
+    family_id: rabbit
+    primitive_type: stream_cipher
+    reference_ids:
+      - boesgaard_2003_rabbit
+    characteristics:
+      key_size_bits: 128
+      iv_size_bits: 64
+      state_size_bits: 513
+    notes: >
+      State = 8×32-bit state vars + 8×32-bit counter vars + 1 carry bit = 513 bits.
+      IV setup is optional; without IV, internal counter initializes to zero.
+      Output: 128 bits per iteration.
+
+  - id: f_fcsr_sf8
+    name: F-FCSR-SF8
+    family_id: f_fcsr
+    primitive_type: stream_cipher
+    reference_ids:
+      - arnault_2005_ffcsr
+    characteristics:
+      key_size_bits: 128
+      iv_size_bits: 64
+      state_size_bits: 196
+    notes: >
+      Static filter variant outputting 8 bits per clock. State = 128-bit main FCSR
+      register + 68 carry cells = 196 bits. Also defined: SF1 (1 bit/clock), DF1/DF8
+      (dynamic/key-dependent filter variants).
+
+  - id: seal_30
+    name: SEAL 3.0
+    family_id: seal
+    primitive_type: stream_cipher
+    reference_ids:
+      - rogaway_1997_seal
+    characteristics:
+      key_size_bits: 160
+      iv_size_bits: 32
+    notes: >
+      Key is preprocessed via SHA-1 into tables T, R, S. The 32-bit "IV" is a position
+      index n (not a traditional nonce); no conventional internal state size applies.
+      Maximum output per index: 64×1024 bytes. This is technically a PRF family used
+      as a stream cipher.
+
+  - id: sapphire_ii
+    name: Sapphire II
+    family_id: sapphire
+    primitive_type: stream_cipher
+    reference_ids:
+      - johnson_1995_sapphire
+    characteristics:
+      state_size_bits: 2104
+    notes: >
+      Variable-length key (≥64 bits recommended). State = 256-byte permutation array
+      cards[256] + 5 index bytes (a,b,c,d,m) + 2 feedback bytes (last_plain, last_cipher)
+      = 263 bytes = 2104 bits. Key length is not fixed by the spec.
+
+  - id: sfinks_v1
+    name: SFINKS
+    family_id: sfinks
+    primitive_type: stream_cipher
+    reference_ids:
+      - braeken_2005_sfinks
+    characteristics:
+      key_size_bits: 80
+      iv_size_bits: 80
+      state_size_bits: 256
+    notes: >
+      State = 256-bit LFSR (weight-17 primitive polynomial of degree 256). Additional
+      64-bit SR and 64-bit MAC registers are used for MAC generation but are not part
+      of the core keystream generation state.
+
+  - id: yamb_v1
+    name: YAMB
+    family_id: yamb
+    primitive_type: stream_cipher
+    reference_ids:
+      - lancrypto_2005_yamb
+    characteristics:
+      key_size_bits: 128
+      iv_size_bits: 64
+      state_size_bits: 3040
+    notes: >
+      Key=80–256 bits (any 16-bit multiple); IV=32–128 bits. Reference values (key=128,
+      IV=64) used here. State = 15×32-bit LFSR L (480 bits) + 256-byte memory M (2048 bits)
+      + 16×32-bit shift register R (512 bits) = 3040 bits. Output: 32 bits per step.
