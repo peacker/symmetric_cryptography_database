@@ -102,8 +102,8 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | LED | LED | block_cipher | 2011 | https://www.iacr.org/archive/ches2011/69170327/69170327.pdf | TODO | yes |
 | [x] | LEVIATHAN | LEVIATHAN | stream_cipher | TODO | TODO | TODO | yes |
 | [x] | LILI-128 | LILI-128 | stream_cipher | TODO | TODO | TODO | yes |
-| [ ] | Lilliput-AE | Lilliput-AE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Lilliput-AE-spec.pdf | Full | yes |
-| [ ] | Limdolen | Limdolen | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Limdolen-spec.pdf | Full | yes |
+| [x] | Lilliput-AE | Lilliput-AE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Lilliput-AE-spec.pdf | Full | yes |
+| [x] | Limdolen | Limdolen | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Limdolen-spec.pdf | Full | yes |
 | [x] | LOCUS | LOCUS | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/LOTUS-AEAD-and-LOCUS-AEAD-spec.pdf | Full | yes |
 | [ ] | LOKI | LOKI | block_cipher | TODO | TODO | TODO | no |
 | [x] | LOKI97 | LOKI97 | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
@@ -123,7 +123,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | MIDORI | MIDORI | block_cipher | TODO | TODO | TODO | no |
 | [x] | MIR-1 | MIR-1 | stream_cipher | 2002 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/mir1.pdf | Full | yes |
 | [x] | MISTY1 | MISTY1 | block_cipher | TODO | TODO | TODO | yes |
-| [ ] | mixFeed | mixFeed | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/mixFeed-spec.pdf | Full | yes |
+| [x] | mixFeed | mixFeed | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/mixFeed-spec.pdf | Full | yes |
 | [ ] | MMB | MMB | block_cipher | TODO | TODO | TODO | no |
 | [x] | MSX | MSX | block_cipher | 2026 | https://cic.iacr.org/p/2/4/32 | TODO | no |
 | [ ] | MUGI | MUGI | stream_cipher | TODO | TODO | TODO | no |
@@ -135,8 +135,8 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | NLSv2 | NLSv2 | stream_cipher | 2004 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_6 | Full | yes |
 | [x] | NOEKEON | NOEKEON | block_cipher | TODO | TODO | TODO | yes |
 | [x] | NUSH | NUSH | stream_cipher | TODO | TODO | TODO | yes |
-| [ ] | ORANGE | ORANGE | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ORANGE-spec.pdf | Full | yes |
-| [ ] | Oribatida | Oribatida | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Oribatida-spec.pdf | Full | yes |
+| [x] | ORANGE | ORANGE | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ORANGE-spec.pdf | Full | yes |
+| [x] | Oribatida | Oribatida | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Oribatida-spec.pdf | Full | yes |
 | [ ] | ORYX | ORYX | stream_cipher | TODO | TODO | TODO | no |
 | [ ] | PEA | PEA | block_cipher | TODO | TODO | TODO | no |
 | [x] | PHOTON | PHOTON | permutation | 2021 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
@@ -151,7 +151,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Qameleon | Qameleon | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | QARMA | QARMA | tweakable_block_cipher | 2016 | https://eprint.iacr.org/2016/444 | TODO | yes |
 | [x] | QARMAv2 | QARMAv2 | tweakable_block_cipher | 2023 | https://eprint.iacr.org/2023/929 | TODO | yes |
-| [ ] | Quartet | Quartet | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Quartet-spec.pdf | Full | yes |
+| [x] | Quartet | Quartet | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Quartet-spec.pdf | Full | yes |
 | [x] | Rabbit | Rabbit | stream_cipher | 2003 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_7 | Full | yes |
 | [x] | Raindrop | Raindrop | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000342 | Full | yes |
 | [x] | RC2 | RC2 | block_cipher | 1998 | https://datatracker.ietf.org/doc/html/rfc2268 | Full | yes |
@@ -165,7 +165,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Rijndael | Rijndael | block_cipher | 1998 | https://csrc.nist.gov/projects/aes | TODO | yes |
 | [x] | RIPEMD | RIPEMD | hash | 1995 | https://homes.esat.kuleuven.be/~bosselae/ripemd160.html | Full | yes |
 | [x] | Romulus | Romulus | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
-| [ ] | SAEAES | SAEAES | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SAEAES-spec.pdf | Full | yes |
+| [x] | SAEAES | SAEAES | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SAEAES-spec.pdf | Full | yes |
 | [x] | SAFER | SAFER | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | SAFER+ | SAFER+ | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | SAFER++ | SAFER++ | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |

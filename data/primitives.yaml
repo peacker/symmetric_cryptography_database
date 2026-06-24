@@ -4441,3 +4441,189 @@ primitives:
       parallelizable mode. Key=128, nonce=128, tag=64. 64-bit blocks masked by α-multiplication
       in F_2^128. Provides RUP integrity. Differs from LOTUS-AEAD by using OCB-like (vs OTR-like)
       structure: each block processed independently (no chaining required for encryption).
+
+  # ── Lilliput-AE ──────────────────────────────────────────────────────────────
+  - id: lilliput_ii_128_v1
+    name: Lilliput-II-128
+    family_id: lilliput_ae
+    primitive_type: aead
+    reference_ids:
+      - adomnicai_2019_lilliput_ae
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 120
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Adomnicai et al. 2019. Primary member of Lilliput-AE. Nonce-misuse resistant mode (SCT-2).
+      Lilliput-TBC parameters: block n=128, key k=128, tweak t=128. Nonce |N|=120 bits (2^120 max queries).
+      Provides 128-bit security. Other members: Lilliput-I-128 (nonce-respecting, ΘCB3, nonce=120),
+      Lilliput-II-192 (k=192), Lilliput-II-256 (k=256).
+
+  # ── Limdolen ─────────────────────────────────────────────────────────────────
+  - id: limdolen_128_v1
+    name: Limdolen-128
+    family_id: limdolen
+    primitive_type: aead
+    reference_ids:
+      - mehner_2019_limdolen
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Mehner 2019. Primary member. AXR (AND, XOR, circle-rotation) round function; 16 rounds;
+      byte-oriented (max 8-bit operations). PMAC SIV-like AEAD construction. Expected 128-bit security.
+      Companion: Limdolen-256 (key=256, nonce=256, tag=256, 16 rounds, 256-bit security).
+
+  - id: limdolen_256_v1
+    name: Limdolen-256
+    family_id: limdolen
+    primitive_type: aead
+    reference_ids:
+      - mehner_2019_limdolen
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 256
+      tag_size_bits: 256
+      state_size_bits: 256
+    notes: >
+      Mehner 2019. Secondary member. Same AXR round function as Limdolen-128 but operating on 256-bit
+      blocks; 16 rounds; roughly 2× cost of Limdolen-128. Expected 256-bit security.
+
+  # ── mixFeed ───────────────────────────────────────────────────────────────────
+  - id: mixfeed_aes128_v1
+    name: mixFeed-AES128/128
+    family_id: mixfeed
+    primitive_type: aead
+    reference_ids:
+      - chakraborty_2019_mixfeed
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 120
+      tag_size_bits: 128
+      state_size_bits: 256
+    notes: >
+      Chakraborty and Nandi 2019. mixFeed instantiated with AES'128/128 (AES-128 with MixColumns added
+      to the final round). Block size n=128, key κ=128, nonce=120 (one byte less than n). Tag fixed at 128
+      (can be truncated). State = Y(128-bit block output) || K(128-bit evolving key) = 256 bits.
+      Nonce-dependent key: K_N ← E_K(N||0^8 1) or E_K(N||0^7 1) depending on AD presence.
+      IND-CPA data complexity 2^60, time 2^112. No conventional privacy under nonce misuse.
+
+  # ── ORANGE ───────────────────────────────────────────────────────────────────
+  - id: orange_zest_v1
+    name: ORANGE-Zest
+    family_id: orange
+    primitive_type: aead
+    reference_ids:
+      - chakraborty_2019_orange
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 384
+    notes: >
+      Chakraborty and Nandi 2019. Sponge AEAD using PHOTON256 (256-bit permutation, 12 rounds).
+      Full state absorption with dynamic 128-bit secret mask Y. Total state = PHOTON256 (256) + Y (128) = 384 = 3n bits.
+      Rate = 2n = 256 bits. Key=128, nonce=128, tag=128. IND-CPA data 2^64, time 2^128.
+      Hash companion: ORANGISH (output=256, squeeze rate=128). Field mult: x^128+x^7+x^2+x+1.
+
+  # ── Oribatida ────────────────────────────────────────────────────────────────
+  - id: oribatida_256_64_v1
+    name: Oribatida-256-64
+    family_id: oribatida
+    primitive_type: aead
+    reference_ids:
+      - bhattacharjee_2019_oribatida
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 256
+    notes: >
+      Bhattacharjee et al. 2019. Primary recommendation. Permutations: P=SimP-256-4 (34 rounds/step,
+      θ=4 steps), P'=SimP-256-2. State n=256=r+c=128+128. Mask s=64. Security parameter z=c+s=192.
+      Key k=128, nonce ν=128 (ν+k=n). Tag τ=128=r. RUP integrity. SimP: SIMON-based, no S-boxes.
+
+  - id: oribatida_192_96_v1
+    name: Oribatida-192-96
+    family_id: oribatida
+    primitive_type: aead
+    reference_ids:
+      - bhattacharjee_2019_oribatida
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 64
+      tag_size_bits: 96
+      state_size_bits: 192
+    notes: >
+      Bhattacharjee et al. 2019. Secondary recommendation. Permutations: P=SimP-192-4 (26 rounds/step,
+      θ=4 steps), P'=SimP-192-2. State n=192=r+c=96+96. Mask s=96. Security parameter z=c+s=192.
+      Key k=128, nonce ν=64 (ν+k=n=192). Tag τ=96=r. Smaller state than primary.
+
+  # ── Quartet ──────────────────────────────────────────────────────────────────
+  - id: quartet_v1
+    name: Quartet v1
+    family_id: quartet
+    primitive_type: aead
+    reference_ids:
+      - zhang_2019_quartet
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 128
+      state_size_bits: 256
+    notes: >
+      Zhang 2019. Primary member. Stream cipher-based AEAD; 4 × 64-bit lanes = 256-bit state F.
+      χ (AND+XOR, Keccak-like), ρ (32-bit word rotation), λ (64-bit rotation with r_{i,1},r_{i,2}),
+      τ (constants D_i), ζ (64-bit keystream output). Key=128, IV=96, tag=128. No attack faster
+      than 2^112. Generates keystream up to 2^64 bits. 8-bit constants D_0..D_3 used in τ.
+
+  - id: quartet_v1_64t
+    name: Quartet v1 (64-bit tag)
+    family_id: quartet
+    primitive_type: aead
+    reference_ids:
+      - zhang_2019_quartet
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 256
+    notes: >
+      Zhang 2019. Secondary member. Same construction as Quartet v1 but with 8-byte (64-bit) tag
+      instead of 16-byte (128-bit). Key=128, IV=96, tag=64.
+
+  # ── SAEAES ───────────────────────────────────────────────────────────────────
+  - id: saeaes128_64_128_v1
+    name: SAEAES128_64_128
+    family_id: saeaes
+    primitive_type: aead
+    reference_ids:
+      - naito_2019_saeaes
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 120
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Naito et al. 2019. Primary member. AES-128 instantiation of SAEB mode. Parameters: k=128,
+      n=128, r2=120 (nonce), r1=64 (AD block), r=64 (plaintext block), τ=128. State = n = 128 bits.
+      XOR-only, online, inverse-free. Hash subroutine processes nonce+AD; Core.Enc produces ciphertext+tag.
+      Security: 2^112 offline, 2^62 online encryption/decryption queries, 2^58 Hash queries.
+
+  - id: saeaes128_120_128_v1
+    name: SAEAES128_120_128
+    family_id: saeaes
+    primitive_type: aead
+    reference_ids:
+      - naito_2019_saeaes
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 120
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Naito et al. 2019. Secondary member with r1=120 (larger AD block). k=128, nonce r2=120,
+      r1=120, r=64, τ=128. Same AES-128 block cipher and SAEB mode as primary.

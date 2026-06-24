@@ -2527,3 +2527,92 @@ references:
     year: 2019
     venue: "NIST Lightweight Cryptography (Round 1 submission)"
     url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/LOTUS-AEAD-and-LOCUS-AEAD-spec.pdf
+
+  # ── Lilliput-AE ──────────────────────────────────────────────────────────────
+  - id: adomnicai_2019_lilliput_ae
+    kind: report
+    title: "Lilliput-AE: a New Lightweight Tweakable Block Cipher for Authenticated Encryption with Associated Data"
+    authors:
+      - Alexandre Adomnicai
+      - "Thierry P. Berger"
+      - Christophe Clavier
+      - Julien Francq
+      - Paul Huynh
+      - Virginie Lallemand
+      - "Kévin Le Gouguec"
+      - Marine Minier
+      - "Léo Reynaud"
+      - "Gaël Thomas"
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Lilliput-AE-spec.pdf
+
+  # ── Limdolen ─────────────────────────────────────────────────────────────────
+  - id: mehner_2019_limdolen
+    kind: report
+    title: "Limdolen: A Lightweight Authenticated Encryption Algorithm"
+    authors:
+      - "Carl E. Mehner"
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Limdolen-spec.pdf
+
+  # ── mixFeed ───────────────────────────────────────────────────────────────────
+  - id: chakraborty_2019_mixfeed
+    kind: report
+    title: "mixFeed"
+    authors:
+      - Bishwajit Chakraborty
+      - Mridul Nandi
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/mixFeed-spec.pdf
+
+  # ── ORANGE ───────────────────────────────────────────────────────────────────
+  - id: chakraborty_2019_orange
+    kind: report
+    title: "ORANGE"
+    authors:
+      - Bishwajit Chakraborty
+      - Mridul Nandi
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ORANGE-spec.pdf
+
+  # ── Oribatida ────────────────────────────────────────────────────────────────
+  - id: bhattacharjee_2019_oribatida
+    kind: report
+    title: "The Oribatida Family of Lightweight Authenticated Encryption Schemes"
+    authors:
+      - Arghya Bhattacharjee
+      - Eik List
+      - "Cuauhtemoc Mancillas López"
+      - Mridul Nandi
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Oribatida-spec.pdf
+
+  # ── Quartet ──────────────────────────────────────────────────────────────────
+  - id: zhang_2019_quartet
+    kind: report
+    title: "Quartet: A Lightweight Authenticated Cipher (v1)"
+    authors:
+      - Bin Zhang
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Quartet-spec.pdf
+
+  # ── SAEAES ───────────────────────────────────────────────────────────────────
+  - id: naito_2019_saeaes
+    kind: report
+    title: "SAEAES"
+    authors:
+      - Yusuke Naito
+      - Mitsuru Matsui
+      - Yasuyuki Sakai
+      - Daisuke Suzuki
+      - Kazuo Sakiyama
+      - Takeshi Sugawara
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SAEAES-spec.pdf

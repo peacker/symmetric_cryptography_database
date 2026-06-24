@@ -3229,46 +3229,62 @@ families:
   - id: lilliput_ae
     name: Lilliput-AE
     construction_ids:
-      - spn
+      - tweakable_spn
     round_ids:
-      - lilliput_ae_round
+      - lilliput_tbc_round
     target_applications:
-      - generic
+      - lightweight
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: word_permutation
+          params: { word_size_bits: 8 }
+        - id: binary_matrix_mul
         - id: xor
         - id: constant
     reference_ids:
-      - lilliput_ae_ref
-    process_ids: []
+      - adomnicai_2019_lilliput_ae
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Adomnicai et al. 2019. AEAD scheme based on Lilliput-TBC, a tweakable block cipher
+      derived from the Lilliput block cipher using an Extended Generalized Feistel Network
+      (EGFN) structure. Block size n=128, 8-bit S-box. Two modes: Lilliput-I (nonce-respecting,
+      ΘCB3) and Lilliput-II (nonce-misuse-resistant, SCT-2). Primary member: Lilliput-II-128
+      (key k=128, nonce |N|=120, tag τ=128). Tweakey width t=128 (Lilliput-II) or 192 (Lilliput-I).
 
   - id: limdolen
     name: Limdolen
     construction_ids:
-      - spn
+      - arx_permutation_network
     round_ids:
       - limdolen_round
     target_applications:
-      - generic
+      - lightweight
+      - iot
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 128
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: and
         - id: xor
+        - id: rotation_fixed
         - id: constant
     reference_ids:
-      - limdolen_ref
-    process_ids: []
+      - mehner_2019_limdolen
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Mehner 2019. PMAC SIV-like AEAD using AXR (AND, XOR, Rotation) round function.
+      Two family members: Limdolen-128 (key=128, nonce=128, tag=128, 16 rounds) and
+      Limdolen-256 (key=256, nonce=256, tag=256, 16 rounds). Primary: Limdolen-128.
+      Byte-oriented (8-bit max operations) for constrained devices. Pentagonal numbers
+      used as round constants. No S-box; uses AND instead of addition (AXR vs ARX).
 
   - id: locus
     name: LOCUS-AEAD
@@ -3461,24 +3477,33 @@ families:
   - id: mixfeed
     name: mixFeed
     construction_ids:
-      - spn
+      - stream_state_update_generator
     round_ids:
-      - mixfeed_round
+      - aes_prime_128_round
     target_applications:
-      - generic
+      - lightweight
+      - iot
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 256
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: binary_matrix_mul
+        - id: word_permutation
+          params: { word_size_bits: 8 }
         - id: xor
         - id: constant
     reference_ids:
-      - mixfeed_ref
-    process_ids: []
+      - chakraborty_2019_mixfeed
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Chakraborty and Nandi 2019. Minimally Xored Feedback (mixFeed) AEAD mode.
+      Based on AES'128/128 (AES-128 with MixColumns added to the final round). Block size n=128,
+      key κ=128, nonce=120 bits (one byte less than block), tag=128. State = Y(128) || K(128) = 256 bits;
+      nonce-dependent key update (K_N) per encryption query. Uses ciphertext feedback to update
+      the evolving key K. No conventional privacy security under nonce misuse.
 
   - id: mmb
     name: MMB
@@ -3635,46 +3660,65 @@ families:
   - id: orange
     name: ORANGE
     construction_ids:
-      - spn
+      - sponge_permutation
     round_ids:
-      - orange_round
+      - photon256_round
     target_applications:
-      - generic
+      - lightweight
+      - iot
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 384
       components:
         - id: sbox
           params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: word_permutation
+          params: { word_size_bits: 4 }
+        - id: field_matrix_mul
+          params: { field: "GF(2^4)", poly: "x^4+x+1" }
         - id: xor
         - id: constant
     reference_ids:
-      - orange_ref
-    process_ids: []
+      - chakraborty_2019_orange
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Chakraborty and Nandi 2019. Optimum RAte spoNGE (ORANGE) using PHOTON256 (256-bit, 12-round
+      permutation) as the underlying primitive. ORANGE-Zest (AEAD): key=128, nonce=128, tag=128.
+      State = PHOTON256 permutation state (256) + dynamic 128-bit mask Y = 3n=384 bits (n=128).
+      Rate = 2n=256 bits per permutation call. ORANGISH (hash): output=256 bits, tag-squeeze rate=128.
+      PHOTON256: 8×8 matrix of 4-bit cells, 4-bit S-box, ShiftRows, MixColumnSerial over GF(2^4)
+      with poly x^4+x+1. Field mult: poly x^128+x^7+x^2+x+1 for α-multiplication on 128-bit state.
 
   - id: oribatida
     name: Oribatida
     construction_ids:
-      - spn
+      - sponge_permutation
     round_ids:
-      - oribatida_round
+      - simp_round
     target_applications:
-      - generic
+      - lightweight
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 256
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: and
+        - id: rotation_fixed
         - id: xor
         - id: constant
     reference_ids:
-      - oribatida_ref
-    process_ids: []
+      - bhattacharjee_2019_oribatida
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Bhattacharjee, List, Mancillas-López, Nandi 2019. Keyed monkey-wrap duplex AEAD using the SimP
+      family of permutations (SIMON-based, no S-boxes). Primary: Oribatida-256-64 (SimP-256-4 + SimP-256-2,
+      key=128, nonce=128, tag=128, rate=128, capacity=128, mask=64, state=256). Secondary:
+      Oribatida-192-96 (SimP-192-4 + SimP-192-2, key=128, nonce=64, tag=96, state=192).
+      Security parameter z=c+s=192. Provides integrity under release of unverified plaintexts (RUP).
+      SimP round: AND, fixed rotations, XOR (SIMON-derived round function).
 
   - id: oryx
     name: ORYX
@@ -3814,24 +3858,31 @@ families:
   - id: quartet
     name: Quartet
     construction_ids:
-      - spn
+      - stream_state_update_generator
     round_ids:
       - quartet_round
     target_applications:
-      - generic
+      - lightweight
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 256
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: and
         - id: xor
+        - id: rotation_fixed
         - id: constant
     reference_ids:
-      - quartet_ref
-    process_ids: []
+      - zhang_2019_quartet
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Zhang 2019. Stream cipher-based AEAD with 4 × 64-bit lanes = 256-bit internal state.
+      Key=128, nonce/IV=96, tag=128 (primary) or 64. χ function (only non-linear step):
+      x_i ← x_i ⊕ (x_{i+2} ⊕ 1) · x_{i+1} — AND+XOR, analogous to Keccak χ but on 64-bit words.
+      ρ function: splits each 64-bit lane into two 32-bit words, rotates each left.
+      λ function: 64-bit rotation with params r_{i,1} and r_{i,2}. Output ζ: 64-bit keystream word.
+      State-updating function F; output function f. Generates keystream of up to 2^64 bits.
 
   - id: rc2
     name: RC2
@@ -3930,24 +3981,34 @@ families:
   - id: saeaes
     name: SAEAES
     construction_ids:
-      - spn
+      - stream_state_update_generator
     round_ids:
-      - saeaes_round
+      - aes_round
     target_applications:
-      - generic
+      - lightweight
+      - iot
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: binary_matrix_mul
+        - id: word_permutation
+          params: { word_size_bits: 8 }
         - id: xor
         - id: constant
     reference_ids:
-      - saeaes_ref
-    process_ids: []
+      - naito_2019_saeaes
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Naito et al. (Mitsubishi Electric / Univ. Electro-Communications) 2019. AES instantiation
+      of the SAEB (Small, Slim, Sponge-based AEAD from Block cipher) mode. Block size n=128,
+      10 members varying k∈{128,192,256}, r1∈{64,120}, τ∈{64,128}. Primary: SAEAES128_64_128
+      (k=128, nonce r2=120, plaintext-block r=64, tag τ=128). XOR-only, online, inverse-free,
+      minimum state (n bits). State sm or sa evolves through AES calls with XOR feedback.
+      SAEB Hash subroutine processes nonce+AD; Core.Enc/Dec processes plaintext/ciphertext.
 
   - id: safer
     name: SAFER
