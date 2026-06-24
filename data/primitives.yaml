@@ -4118,3 +4118,326 @@ primitives:
       multiply each column by 8×8 circulant MDS matrix over GF(2^8), branch number 9),
       σ[k] (AddRoundKey XOR). Key schedule uses same round function with round constants.
       Compression: H_i = W[H_{i-1}](m_i) ⊕ H_{i-1} ⊕ m_i (Miyaguchi-Preneel).
+
+  # ── Bleep64 ──────────────────────────────────────────────────────────────────
+  - id: bleep64_v1
+    name: Bleep64 v1
+    family_id: bleep64
+    primitive_type: aead
+    reference_ids:
+      - driscoll_2019_bleep64
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 192
+    notes: >
+      Primary instance (key=128, nonce=96, tag=64). LFSR state: 127-bit poly x^127+x^63+1
+      stored in two 64-bit registers L0, L1; nonlinear state words x (32-bit) and y (32-bit).
+      Total register storage = 192 bits. Two 32-bit words encrypted per iteration via
+      ones'-complement multiplication. Also supports key=192, nonce=32/64/96, tag=32-192.
+
+  # ── CiliPadi ─────────────────────────────────────────────────────────────────
+  - id: cilipadi_mild
+    name: CiliPadi-Mild
+    family_id: cilipadi
+    primitive_type: aead
+    reference_ids:
+      - zaba_2019_cilipadi
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 64
+      state_size_bits: 256
+    notes: >
+      Primary NIST submission. CiliPadi[n=256, r=64, a=18, b=16]. State=256 bits, rate=64 bits,
+      capacity=192 bits. Init/finalization: 18 rounds of P_256. AD/message: 16 rounds.
+      Permutation: AC + SC (4-bit S-box) + SR (ShiftRows) + MCS (MixColumnsSerial).
+
+  - id: cilipadi_medium
+    name: CiliPadi-Medium
+    family_id: cilipadi
+    primitive_type: aead
+    reference_ids:
+      - zaba_2019_cilipadi
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 96
+      state_size_bits: 384
+    notes: >
+      CiliPadi[n=384, r=96, a=20, b=18]. State=384 bits, rate=96 bits, capacity=288 bits.
+      Init/finalization: 20 rounds. AD/message: 18 rounds.
+
+  - id: cilipadi_hot
+    name: CiliPadi-Hot
+    family_id: cilipadi
+    primitive_type: aead
+    reference_ids:
+      - zaba_2019_cilipadi
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 128
+      tag_size_bits: 96
+      state_size_bits: 384
+    notes: >
+      CiliPadi[n=384, r=96, a=18, b=16]. Key=256 bits. State=384 bits, rate=96 bits.
+      Init/finalization: 18 rounds. AD/message: 16 rounds.
+
+  - id: cilipadi_extrahot
+    name: CiliPadi-ExtraHot
+    family_id: cilipadi
+    primitive_type: aead
+    reference_ids:
+      - zaba_2019_cilipadi
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 384
+    notes: >
+      CiliPadi[n=384, r=128, a=20, b=18]. Highest security variant. Key=256, tag=128.
+      State=384 bits, rate=128 bits, capacity=256 bits. 20 init rounds, 18 message rounds.
+
+  # ── CLAE ──────────────────────────────────────────────────────────────────────
+  - id: clae_v1
+    name: CLAE v1
+    family_id: clae
+    primitive_type: aead
+    reference_ids:
+      - liu_2019_clae
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 16
+    notes: >
+      Liu, Nepal, Pieprzyk, Susilo (CSIRO/UoW) 2019. Primary NIST submission. Key=128 bits fixed.
+      Internal state: 2 bytes (s0, s1) = 16 bits. Nonce and tag sizes configurable (L_n and L_t
+      bytes); NIST primary recommendation shown (128-bit security level). Byte-oriented processing:
+      each message byte paired with key-dependent byte from search(); ciphertext output = 2 bytes/byte.
+
+  # ── COMET ────────────────────────────────────────────────────────────────────
+  - id: comet_128
+    name: COMET-128
+    family_id: comet
+    primitive_type: aead
+    reference_ids:
+      - gueron_2019_comet
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 256
+    notes: >
+      Gueron, Jha, Nandi 2019. n=128, nonce r=128, key κ=128, tag t=128, counter p=64 bits.
+      State = Y(128 bits, block cipher output) || Z(128 bits, feedback register) = 256 bits.
+      Primary block cipher: AES-128 (10 rounds). Alt: CHAM-128/128 (80 rounds).
+
+  - id: comet_64
+    name: COMET-64
+    family_id: comet
+    primitive_type: aead
+    reference_ids:
+      - gueron_2019_comet
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 120
+      tag_size_bits: 64
+      state_size_bits: 192
+    notes: >
+      Gueron, Jha, Nandi 2019. n=64, nonce r=120, key κ=128, tag t=64, counter p=64 bits.
+      State = Y(64 bits) || Z(128 bits) = 192 bits. Block ciphers: CHAM-64/128 (80 rounds)
+      or Speck-64/128 (34 rounds).
+
+  # ── ESTATE ───────────────────────────────────────────────────────────────────
+  - id: estate_tweaes_v1
+    name: ESTATE_TweAES-128
+    family_id: estate
+    primitive_type: aead
+    reference_ids:
+      - chakraborti_2019_estate
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Primary NIST submission. Block n=128, key κ=128, tweak τ=4 bits, tag t=128, state=128 bits.
+      TweAES-128: AES-like (SubBytes 8-bit, ShiftRows, MixColumns, AddRoundKey) with 4-bit tweak
+      injected every 2 rounds, 10 rounds. Mode: FCBC*-like MAC then OFB encryption. Inverse-free.
+
+  - id: estate_twegiift_v1
+    name: ESTATE_TweGIFT-128
+    family_id: estate
+    primitive_type: aead
+    reference_ids:
+      - chakraborti_2019_estate
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Lightweight instantiation using TweGIFT-128 (tweakable GIFT-128) as the TBC.
+      Block n=128, key κ=128, tweak τ=4 bits, tag t=128. GIFT: 4-bit S-box SPN, 128-bit
+      bit permutation, 40 rounds. Same AEAD mode as ESTATE_TweAES-128.
+
+  # ── FlexAEAD ─────────────────────────────────────────────────────────────────
+  - id: flexaead_128
+    name: FlexAEAD-128
+    family_id: flexaead
+    primitive_type: aead
+    reference_ids:
+      - nascimento_2019_flexaead
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Nascimento, Xexéo 2019. Primary instance: nb=16 bytes (128-bit block), x=0 (128-bit key).
+      Rounds r = log2(nb) + 2 = log2(16) + 2 = 6. PF_K: BlockShuffle + 3 AES 8-bit S-box
+      layers + XOR subkeys (Feistel-like). 4 subkeys K1..K4 each 2×nb = 256 bits each.
+      Nonce and tag sizes per NIST primary recommendation (spec discusses 64-bit and 128-bit nonce).
+
+  # ── ForkAE ───────────────────────────────────────────────────────────────────
+  - id: forkae_paef_fs128_288
+    name: PAEF-ForkSkinny-128-288
+    family_id: forkae
+    primitive_type: aead
+    reference_ids:
+      - andreeva_2019_forkae
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 104
+      tag_size_bits: 128
+      state_size_bits: 288
+    notes: >
+      Primary NIST recommendation. ForkSkinny-128-288: forkcipher (128-bit block, 288-bit tweakey).
+      PAEF mode (fully parallelizable). Key=128, nonce=104, tag=128. Achieves 128-bit AE security.
+      Tweakey=288: nonce(104) + DS(3) + counter(53) + key(128). State shown = tweakey size.
+
+  - id: forkae_paef_fs64_192
+    name: PAEF-ForkSkinny-64-192
+    family_id: forkae
+    primitive_type: aead
+    reference_ids:
+      - andreeva_2019_forkae
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 48
+      tag_size_bits: 64
+      state_size_bits: 192
+    notes: >
+      ForkSkinny-64-192: 64-bit block, 192-bit tweakey. PAEF mode. Key=128, nonce=48, tag=64.
+      Achieves 64-bit AE security. Ultra-constrained environments.
+
+  # ── Fountain ─────────────────────────────────────────────────────────────────
+  - id: fountain_v1
+    name: Fountain v1
+    family_id: fountain
+    primitive_type: aead
+    reference_ids:
+      - zhang_2019_fountain
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 128
+      state_size_bits: 256
+    notes: >
+      Zhang (CAS) 2019. Primary: key=128, nonce/IV=96, tag=128 (16 bytes). Second: tag=64 (8 bytes).
+      Internal state F: 256 bits. Output function f: 16 state bits → 1 keystream bit.
+      Variable non-linear feedbacks. Keystream up to 2^64 bits. No attack faster than 2^112
+      in single-key model.
+
+  # ── GIFT-COFB ────────────────────────────────────────────────────────────────
+  - id: gift_cofb_v1
+    name: GIFT-COFB v1.0
+    family_id: gift
+    primitive_type: aead
+    reference_ids:
+      - banik_2019_gift_cofb
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 192
+    notes: >
+      Banik et al. 2019. COFB (COmbined FeedBack) mode on GIFT-128 (40-round bit-based SPN).
+      n=128, key κ=128, nonce=128, tag τ=128. AEAD state overhead = 1.5n = 192 bits:
+      Y=128 (block output) + Z=n/2=64 (feedback accumulator). Total including key: 1.5n+κ=320 bits.
+      GIFT-128: 4-bit SubCells S-box, PermBits (128-bit permutation), AddRoundKey, 40 rounds.
+      Field mult in F_2^64 (poly x^64+x^4+x^3+x+1). Inverse-free design.
+
+  # ── HyENA ────────────────────────────────────────────────────────────────────
+  - id: hyena_v1
+    name: HyENA v1
+    family_id: hyena
+    primitive_type: aead
+    reference_ids:
+      - chakraborti_2019_hyena
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 128
+      state_size_bits: 192
+    notes: >
+      Chakraborti, Datta, Jha, Nandi (NTT/ISI) 2019. Primary: HyENA with GIFT-128.
+      n=128, key κ=128, nonce r=96, tag t=128. State overhead ≈ 1.5n = 192 bits
+      (Y=128 block output + n/2=64 right half feedback). HyFB+: left=ciphertext FB, right=plaintext FB.
+      Single-pass, inverse-free; one GIFT-128 call per block.
+
+  # ── LAEM ─────────────────────────────────────────────────────────────────────
+  - id: laem_simon_128
+    name: LAEM-SIMON 128/128
+    family_id: laem
+    primitive_type: aead
+    reference_ids:
+      - sui_2019_laem
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Sui et al. (CAS) 2019. Primary: LAEM with SIMON 128/128 (block=128, key=128). Nonce=128,
+      tag=128 (t=n). SIMON 128/128: 68-round Feistel, round function (x<<<1 AND x<<<8) XOR y XOR (x<<<2).
+      Segmented-AE mode (OAE2 secure). Linear mix ρ(x,y)=(2x⊕y, 3x⊕y) in GF(2^128).
+      Also: SIMON 128/192 (key=192) and SIMON 128/256 (key=256).
+
+  # ── LOTUS-AEAD ───────────────────────────────────────────────────────────────
+  - id: lotus_twegiift64_v1
+    name: TweGIFT-64_LOTUS-AEAD
+    family_id: lotus
+    primitive_type: aead
+    reference_ids:
+      - chakraborti_2019_lotus_locus
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 64
+      state_size_bits: 64
+    notes: >
+      Primary NIST recommendation (Chakraborti et al. 2019). TweGIFT-64: n=64, tweak τ=4, key κ=128
+      (GIFT-64-128 + 4-bit tweak injection). LOTUS-AEAD: OTR-like 2-round Feistel structure, 4 TBC
+      calls per 128-bit di-block. Key=128, nonce=128, tag=64. Intermediate checksums for RUP integrity.
+      α-multiplication in F_2^128 (poly x^128+x^7+x^2+x+1) for nonce-dependent masking.
+
+  # ── LOCUS-AEAD ───────────────────────────────────────────────────────────────
+  - id: locus_twegiift64_v1
+    name: TweGIFT-64_LOCUS-AEAD
+    family_id: locus
+    primitive_type: aead
+    reference_ids:
+      - chakraborti_2019_lotus_locus
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 64
+      state_size_bits: 64
+    notes: >
+      Chakraborti et al. 2019. TweGIFT-64: n=64, τ=4, κ=128. LOCUS-AEAD: OCB-like fully
+      parallelizable mode. Key=128, nonce=128, tag=64. 64-bit blocks masked by α-multiplication
+      in F_2^128. Provides RUP integrity. Differs from LOTUS-AEAD by using OCB-like (vs OTR-like)
+      structure: each block processed independently (no chaining required for encryption).

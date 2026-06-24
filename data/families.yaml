@@ -2300,24 +2300,34 @@ families:
   - id: bleep64
     name: Bleep64
     construction_ids:
-      - spn
+      - lfsr_nlfsr_register_network
     round_ids:
       - bleep64_round
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 192
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: lfsr
+          params: { degree: 127, poly: "x^127 + x^63 + 1" }
+        - id: mul_mod
+          params: { modulus: 4294967296 }
+        - id: add_mod
+          params: { modulus: 4294967296 }
         - id: xor
         - id: constant
     reference_ids:
-      - bleep64_ref
-    process_ids: []
+      - driscoll_2019_bleep64
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Driscoll (Honeywell) 2019. Additive stream cipher + autokey product cipher for AEAD.
+      Core: 127-bit LFSR (poly x^127+x^63+1, split as L0||L1, two 64-bit halves) + two 32-bit
+      nonlinear state words x, y = 192 bits register storage. Key=128 bits (primary),
+      nonce=96 bits, tag=64 bits (primary). Uses ones'-complement multiplication of 32-bit words
+      as nonlinear filter. Processes two 32-bit words per iteration.
 
   - id: blowfish_2
     name: Blowfish
@@ -2370,20 +2380,30 @@ families:
     construction_ids:
       - sponge_permutation
     round_ids:
-      - cilipadi_round
+      - cilipadi_permutation_round
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
     characteristics:
       state_size_bits: 256
       components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: word_permutation
+        - id: field_matrix_mul
         - id: xor
-        - id: rotation_fixed
         - id: constant
     reference_ids:
-      - cilipadi_ref
-    process_ids: []
+      - zaba_2019_cilipadi
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Z'aba et al. (CyberSecurity Malaysia) 2019. AEAD based on MonkeyDuplex sponge construction.
+      Primary (CiliPadi-Mild): state=256 bits, rate r=64 bits, capacity=192 bits, key=128, nonce=128, tag=64.
+      Permutation P_n: AC (AddConstants) + SC (SubCells 4-bit S-box) + SR (ShiftRows) + MCS
+      (MixColumnsSerial). Init/finalization uses a rounds; AD/message uses b rounds.
+      Variants: Mild [256,64,18,16], Medium [384,96,20,18], Hot [384,96,18,16], ExtraHot [384,128,20,18].
 
   - id: cipherunicorn_a
     name: CIPHERUNICORN-A
@@ -2432,24 +2452,34 @@ families:
   - id: clae
     name: CLAE
     construction_ids:
-      - spn
+      - key_dependent_table_network
     round_ids:
       - clae_round
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 16
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: add_mod
+          params: { modulus: 256 }
+        - id: mul_mod
+          params: { modulus: 256 }
+        - id: shift_fixed
         - id: xor
-        - id: constant
     reference_ids:
-      - clae_ref
-    process_ids: []
+      - liu_2019_clae
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Liu, Nepal, Pieprzyk, Susilo (CSIRO/UoW) 2019. Configurable byte-oriented AEAD inspired by
+      the LWE problem. Internal state: 2 bytes (s0, s1) = 16 bits. Key=128 bits (16 bytes fixed).
+      Core: search(k,b,o) key-indexed byte lookup; vecIV() mixes nonce; spill()/spillA() propagate
+      ciphertext/AD into state. Operations: XOR, add mod 256, mul mod 256, bit shifts.
+      Tag and nonce sizes configurable (CRYPTO_ABYTES / CRYPTO_NPUBBYTES per NIST API).
 
   - id: clx
     name: CLX
@@ -2511,24 +2541,34 @@ families:
   - id: comet
     name: COMET
     construction_ids:
-      - spn
+      - stream_state_update_generator
     round_ids:
-      - comet_round
+      - comet_block_cipher_round
     target_applications:
+      - iot
+      - constrained_hardware
       - generic
     characteristics:
-      block_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: binary_matrix_mul
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: rotation_fixed
         - id: xor
         - id: constant
     reference_ids:
-      - comet_ref
-    process_ids: []
+      - gueron_2019_comet
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Gueron, Jha, Nandi 2019. COunter Mode Encryption with authentication Tag.
+      Two instantiations: COMET-128 (n=128, nonce=128, key=128, tag=128, state=256 bits
+      Y=128||Z=128) and COMET-64 (n=64, nonce=120, key=128, tag=64, state=192 bits Y=64||Z=128).
+      Block ciphers: AES-128 (primary, 10 rounds), CHAM-128/128 (80 rounds), CHAM-64/128 (80 rounds),
+      Speck-64/128 (34 rounds). CTR mode for encryption; feedback chain for MAC.
 
   - id: cs_cipher
     name: CS-Cipher
@@ -2619,24 +2659,32 @@ families:
   - id: estate
     name: ESTATE
     construction_ids:
-      - spn
+      - tweakable_spn
     round_ids:
-      - estate_round
+      - estate_tbc_round
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: binary_matrix_mul
+        - id: word_permutation
         - id: xor
         - id: constant
     reference_ids:
-      - estate_ref
-    process_ids: []
+      - chakraborti_2019_estate
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Chakraborti, Datta, Jha, Lopez, Nandi, Sasaki (NTT/ISI) 2019. Energy-efficient single-state
+      tweakable block cipher based AEAD (FCBC*-like MAC + OFB encryption). Block n=128, key κ=128,
+      tweak τ=4 bits, tag t=128, state=128 bits. Inverse-free design. TweAES-128 (primary):
+      AES-like rounds with 4-bit tweak injection every 2 rounds, 10 rounds.
+      Instantiations: ESTATE_TweAES-128 (primary), sESTATE_TweAES-128-6, ESTATE_TweGIFT-128.
 
   - id: fantomas_robin
     name: Fantomas / Robin
@@ -2710,68 +2758,88 @@ families:
   - id: flexaead
     name: FlexAEAD
     construction_ids:
-      - spn
+      - feistel
     round_ids:
       - flexaead_round
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
       components:
         - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+          params: { input_bits: 8, output_bits: 8 }
+        - id: word_permutation
         - id: xor
         - id: constant
     reference_ids:
-      - flexaead_ref
-    process_ids: []
+      - nascimento_2019_flexaead
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Nascimento, Xexéo (Petrobras/IME Brazil) 2019. Parameterized block cipher with integrated
+      authentication. PF_K: BlockShuffle + 3 AES 8-bit S-box layers + XOR (Feistel-like structure).
+      Key = 128 × 2^x bits (primary x=0: 128 bits). Block = nb bytes (primary nb=16, 128 bits).
+      Rounds r = log2(nb) + 2 (for nb=16: 6 rounds). Four subkeys K1..K4, each 2×nb bytes.
+      Supports 64-bit and 128-bit nonce; primary parameters per NIST LWC API.
 
   - id: forkae
     name: ForkAE
     construction_ids:
-      - spn
+      - tweakable_spn
     round_ids:
-      - forkae_round
+      - forkskinny_round
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
+      - short_messages
     characteristics:
-      block_size_bits: 128
       components:
         - id: sbox
           params: { input_bits: 4, output_bits: 4 }
         - id: bit_permutation
+        - id: lfsr
         - id: xor
         - id: constant
     reference_ids:
-      - forkae_ref
-    process_ids: []
+      - andreeva_2019_forkae
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Andreeva, Lallemand, Purnal, Reyhanitabar, Roy, Vizár 2019. AEAD using ForkSkinny, a
+      forkcipher (maps n-bit input to 2n-bit output simultaneously) based on SKINNY. Two AEAD
+      modes: PAEF (parallel, fully parallelizable) and SAEF (sequential, online). All instances
+      use key=128. Primary: PAEF-ForkSkinny-128-288 (block=128, tweakey=288, nonce=104, tag=128).
+      ForkSkinny: 4-bit S-box SPN with LFSR-based tweakey schedule (TWEAKEY approach).
 
   - id: fountain
     name: Fountain
     construction_ids:
-      - spn
+      - lfsr_nlfsr_register_network
     round_ids:
-      - fountain_round
+      - fountain_state_update
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 256
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: lfsr
+        - id: nlfsr
+        - id: and
         - id: xor
         - id: constant
     reference_ids:
-      - fountain_ref
-    process_ids: []
+      - zhang_2019_fountain
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Zhang (CAS Beijing) 2019. Stream cipher-based AEAD with variable non-linear feedbacks.
+      Internal state F: 256 bits. State update function F; output function f uses 16 state
+      bits to generate 1 keystream bit. Key=128 bits, nonce/IV=96 bits. Primary: tag=128 bits;
+      secondary: tag=64 bits. Keystream up to 2^64 bits. Secure in nonce-respecting setting.
 
   - id: gage_and_ingage
     name: GAGE and InGAGE
@@ -2887,24 +2955,32 @@ families:
   - id: hyena
     name: HyENA
     construction_ids:
-      - spn
+      - stream_state_update_generator
     round_ids:
-      - hyena_round
+      - hyena_hyfb_round
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 192
       components:
         - id: sbox
           params: { input_bits: 4, output_bits: 4 }
         - id: bit_permutation
+        - id: field_matrix_mul
         - id: xor
         - id: constant
     reference_ids:
-      - hyena_ref
-    process_ids: []
+      - chakraborti_2019_hyena
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Chakraborti, Datta, Jha, Nandi (NTT/ISI) 2019. Hybrid feedback-based ENcryption with
+      Authentication (HyFB mode) using GIFT-128. Block n=128, key κ=128, nonce r=96, tag t=128.
+      HyFB+: left=ciphertext feedback, right=plaintext feedback. State overhead ≈ 1.5n = 192 bits.
+      Single-pass, inverse-free; one GIFT-128 call per data block.
+      F_2^64 field mult (poly x^64+x^4+x^3+x+1) for masking.
 
   - id: ice
     name: ICE
@@ -3038,24 +3114,31 @@ families:
   - id: laem
     name: LAEM
     construction_ids:
-      - spn
+      - feistel
     round_ids:
-      - laem_round
+      - laem_simon_round
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 128
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: and
         - id: xor
+        - id: rotation_fixed
+        - id: shift_fixed
         - id: constant
     reference_ids:
-      - laem_ref
-    process_ids: []
+      - sui_2019_laem
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Sui, Wu, Zhang, Zhang (CAS Beijing) 2019. Lightweight Authentication Encryption Mode
+      using SIMON block cipher as the underlying primitive. Primary: LAEM-SIMON 128/128
+      (block=128, key=128, nonce=128, tag=128). Also SIMON 128/192 and 128/256.
+      Mode: Segmented-AE with linear mix ρ(x,y)=(2x⊕y, 3x⊕y) over GF(2^n). Online,
+      parallelizable, OAE2 provably secure. SIMON: Feistel with AND-XOR-rotate round function.
 
   - id: lea
     name: LEA
@@ -3188,15 +3271,16 @@ families:
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
   - id: locus
-    name: LOCUS
+    name: LOCUS-AEAD
     construction_ids:
-      - spn
+      - tweakable_spn
     round_ids:
-      - locus_round
+      - twegifit64_round
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 64
       components:
         - id: sbox
           params: { input_bits: 4, output_bits: 4 }
@@ -3204,10 +3288,15 @@ families:
         - id: xor
         - id: constant
     reference_ids:
-      - locus_ref
-    process_ids: []
+      - chakraborti_2019_lotus_locus
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OCB-like fully parallelizable AEAD using
+      TweGIFT-64 (n=64, tweak τ=4, key κ=128, built on GIFT-64-128). Parameters: key κ=128,
+      nonce r=128, tag t=n=64. 64-bit blocks XORed with nonce-derived masks (α-multiplication
+      in F_2^128 with poly x^128+x^7+x^2+x+1). Provides RUP integrity.
 
   - id: loki
     name: LOKI
@@ -3232,15 +3321,16 @@ families:
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
   - id: lotus
-    name: LOTUS
+    name: LOTUS-AEAD
     construction_ids:
-      - spn
+      - tweakable_spn
     round_ids:
-      - lotus_round
+      - twegifit64_round
     target_applications:
-      - generic
+      - iot
+      - constrained_hardware
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 64
       components:
         - id: sbox
           params: { input_bits: 4, output_bits: 4 }
@@ -3248,10 +3338,15 @@ families:
         - id: xor
         - id: constant
     reference_ids:
-      - lotus_ref
-    process_ids: []
+      - chakraborti_2019_lotus_locus
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OTR-like AEAD using TweGIFT-64 (n=64, τ=4,
+      κ=128). Primary NIST submission: TweGIFT-64_LOTUS-AEAD. Parameters: key κ=128, nonce r=128,
+      tag t=n=64. Processes 2n=128-bit di-blocks with 2-round Feistel structure (4 TBC calls per
+      di-block). Intermediate checksums improve integrity under RUP. Field mult in F_2^128.
 
   - id: mantis
     name: MANTIS

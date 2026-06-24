@@ -2368,3 +2368,162 @@ references:
     year: 2003
     venue: "Revised Technical Report (revised May 24, 2003)"
     url: https://www.larc.usp.br/~pbarreto/whirlpool.zip
+
+  # ── Bleep64 ──────────────────────────────────────────────────────────────────
+  - id: driscoll_2019_bleep64
+    kind: report
+    title: "Bleep64: An Additive Stream Cipher Approach to Authenticated Encryption"
+    authors:
+      - Kevin R. Driscoll
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Bleep64-spec.pdf
+
+  # ── CiliPadi ─────────────────────────────────────────────────────────────────
+  - id: zaba_2019_cilipadi
+    kind: report
+    title: "CiliPadi: A Family of Lightweight Authenticated Encryption Schemes"
+    authors:
+      - Muhammad Reza Z'aba
+      - Norzaharina Jamil
+      - Md. Rohizan Rohmad
+      - Hairil Rani
+      - Shamsiah Shamsuddin
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CiliPadi-spec.pdf
+
+  # ── CLAE ──────────────────────────────────────────────────────────────────────
+  - id: liu_2019_clae
+    kind: report
+    title: "CLAE: A Configurable Lightweight Authenticated Encryption"
+    authors:
+      - Dongxi Liu
+      - Surya Nepal
+      - Josef Pieprzyk
+      - Willy Susilo
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CLAE-spec.pdf
+
+  # ── COMET ────────────────────────────────────────────────────────────────────
+  - id: gueron_2019_comet
+    kind: report
+    title: "COMET: COunter Mode Encryption with authentication Tag"
+    authors:
+      - Shay Gueron
+      - Ashwin Jha
+      - Mridul Nandi
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/COMET-spec.pdf
+
+  # ── ESTATE ───────────────────────────────────────────────────────────────────
+  - id: chakraborti_2019_estate
+    kind: report
+    title: "ESTATE: A Lightweight and Low Energy Authenticated Encryption Mode"
+    authors:
+      - Avik Chakraborti
+      - Nilanjan Datta
+      - Ashwin Jha
+      - Cuauhtemoc Mancillas Lopez
+      - Mridul Nandi
+      - Yu Sasaki
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ESTATE-spec.pdf
+
+  # ── FlexAEAD ─────────────────────────────────────────────────────────────────
+  - id: nascimento_2019_flexaead
+    kind: report
+    title: "FlexAEAD: A Flexible Lightweight Authenticated Encryption Algorithm"
+    authors:
+      - Eduardo Marsola do Nascimento
+      - "José Antônio Moreira Xexéo"
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/FlexAEAD-spec.pdf
+
+  # ── ForkAE ───────────────────────────────────────────────────────────────────
+  - id: andreeva_2019_forkae
+    kind: report
+    title: "ForkAE v.1: A Family of Variable-Input-Length AEAD Schemes"
+    authors:
+      - Elena Andreeva
+      - Virginie Lallemand
+      - Antoon Purnal
+      - Reza Reyhanitabar
+      - Arnab Roy
+      - "Damian Vizár"
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ForkAE-spec.pdf
+
+  # ── Fountain ─────────────────────────────────────────────────────────────────
+  - id: zhang_2019_fountain
+    kind: report
+    title: "Fountain: A Lightweight Authenticated Cipher v1"
+    authors:
+      - Bin Zhang
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Fountain-spec.pdf
+
+  # ── GIFT-COFB ────────────────────────────────────────────────────────────────
+  - id: banik_2019_gift_cofb
+    kind: report
+    title: "GIFT-COFB v1.0: A Lightweight Authenticated Encryption Cipher"
+    authors:
+      - Subhadeep Banik
+      - Avik Chakraborti
+      - Tetsu Iwata
+      - Kazuhiko Minematsu
+      - Mridul Nandi
+      - Thomas Peyrin
+      - Yu Sasaki
+      - Siang Meng Sim
+      - Yosuke Todo
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/GIFT-COFB-spec.pdf
+
+  # ── HyENA ────────────────────────────────────────────────────────────────────
+  - id: chakraborti_2019_hyena
+    kind: report
+    title: "HyENA: A Hybrid Feedback-based ENcryption with Authentication"
+    authors:
+      - Avik Chakraborti
+      - Nilanjan Datta
+      - Ashwin Jha
+      - Mridul Nandi
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/HYENA-spec.pdf
+
+  # ── LAEM ─────────────────────────────────────────────────────────────────────
+  - id: sui_2019_laem
+    kind: report
+    title: "LAEM: Lightweight Authentication Encryption Mode"
+    authors:
+      - Han Sui
+      - Wenling Wu
+      - Lei Zhang
+      - Danxia Zhang
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/LAEM-spec.pdf
+
+  # ── LOTUS-AEAD and LOCUS-AEAD ────────────────────────────────────────────────
+  - id: chakraborti_2019_lotus_locus
+    kind: report
+    title: "LOTUS-AEAD and LOCUS-AEAD"
+    authors:
+      - Avik Chakraborti
+      - Nilanjan Datta
+      - Ashwin Jha
+      - Cuauhtemoc Mancillas Lopez
+      - Mridul Nandi
+      - Yu Sasaki
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/LOTUS-AEAD-and-LOCUS-AEAD-spec.pdf
