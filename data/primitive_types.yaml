@@ -24,3 +24,9 @@ primitive_types:
 
   - id: hash_function
     name: Hash Function
+
+  - id: hash
+    name: Hash
+
+  - id: pbkdf
+    name: Password-Based Key Derivation Function (PBKDF / Memory-Hard Function)

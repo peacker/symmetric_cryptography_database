@@ -4120,7 +4120,7 @@ primitives:
       Compression: H_i = W[H_{i-1}](m_i) ⊕ H_{i-1} ⊕ m_i (Miyaguchi-Preneel).
 
   # ── Bleep64 ──────────────────────────────────────────────────────────────────
-  - id: bleep64_v1
+  - id: bleep64_aead_v1
     name: Bleep64 v1
     family_id: bleep64
     primitive_type: aead
@@ -4200,7 +4200,7 @@ primitives:
       State=384 bits, rate=128 bits, capacity=256 bits. 20 init rounds, 18 message rounds.
 
   # ── CLAE ──────────────────────────────────────────────────────────────────────
-  - id: clae_v1
+  - id: clae_aead_v1
     name: CLAE v1
     family_id: clae
     primitive_type: aead
@@ -4334,7 +4334,7 @@ primitives:
       Achieves 64-bit AE security. Ultra-constrained environments.
 
   # ── Fountain ─────────────────────────────────────────────────────────────────
-  - id: fountain_v1
+  - id: fountain_aead_v1
     name: Fountain v1
     family_id: fountain
     primitive_type: aead
@@ -4371,7 +4371,7 @@ primitives:
       Field mult in F_2^64 (poly x^64+x^4+x^3+x+1). Inverse-free design.
 
   # ── HyENA ────────────────────────────────────────────────────────────────────
-  - id: hyena_v1
+  - id: hyena_aead_v1
     name: HyENA v1
     family_id: hyena
     primitive_type: aead
@@ -4563,7 +4563,7 @@ primitives:
       Key k=128, nonce ν=64 (ν+k=n=192). Tag τ=96=r. Smaller state than primary.
 
   # ── Quartet ──────────────────────────────────────────────────────────────────
-  - id: quartet_v1
+  - id: quartet_aead_v1
     name: Quartet v1
     family_id: quartet
     primitive_type: aead
@@ -4901,6 +4901,146 @@ primitives:
       Daemen et al. 2019. Xoodyak keyed mode: Cyclist(K, id, counter) with XOODOO[12] (384-bit
       state, 12 rounds). key=128 (16 bytes), nonce=128 (16 bytes), tag=128 (16 bytes), state=384.
       R_kin=44 (bytes), R_kout=24, R_ratchet=16. Security claim: 128 bits.
+
+  # ── NLSv2 ────────────────────────────────────────────────────────────────────
+
+  - id: nlsv2_128
+    name: NLSv2-128
+    family_id: nlsv2
+    primitive_type: stream_cipher
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      state_size_bits: 544
+      output_word_bits: 32
+    notes: >
+      NLSv2 synchronous stream cipher with 128-bit key and 128-bit nonce. Internal state
+      ≈ 544 bits (512-bit NLFSR + auxiliary registers). Outputs 32-bit keystream words.
+      eSTREAM profile 1A (software focus). Includes Mundja MAC for authenticated use.
+
+  # ── CryptMT3 ─────────────────────────────────────────────────────────────────
+
+  - id: cryptmt3_128
+    name: CryptMT3
+    family_id: cryptmt3
+    primitive_type: stream_cipher
+    characteristics:
+      key_size_bits: 128
+      state_size_bits: 19937
+      output_word_bits: 8
+    notes: >
+      CryptMT3 stream cipher with 128-bit key (and optional IV). Mersenne Twister
+      LFSR state ≈ 19937 bits. Nonlinear filter outputs 8 bits per step. eSTREAM
+      software submission. Optimised for SIMD (128-bit integer multiplication).
+
+  # ── Dragon ────────────────────────────────────────────────────────────────────
+
+  - id: dragon_128
+    name: Dragon-128
+    family_id: dragon
+    primitive_type: stream_cipher
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      state_size_bits: 1088
+      output_word_bits: 64
+    notes: >
+      Dragon-128: 128-bit key, 128-bit IV, 1088-bit internal state (1024-bit NLFSR +
+      64-bit memory). Outputs 64 keystream bits per clock. eSTREAM Phase 3 (software).
+
+  - id: dragon_256
+    name: Dragon-256
+    family_id: dragon
+    primitive_type: stream_cipher
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 256
+      state_size_bits: 1088
+      output_word_bits: 64
+    notes: >
+      Dragon-256: 256-bit key, 256-bit IV, 1088-bit internal state (1024-bit NLFSR +
+      64-bit memory). Same architecture as Dragon-128 but with larger key and IV.
+
+  # ── HC-128 ────────────────────────────────────────────────────────────────────
+
+  - id: hc128
+    name: HC-128
+    family_id: hc_128
+    primitive_type: stream_cipher
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      state_size_bits: 32768
+      output_word_bits: 32
+    notes: >
+      HC-128 stream cipher with 128-bit key and 128-bit IV. Internal state: two 512-entry
+      32-bit tables P and Q (32768 bits total). Outputs one 32-bit word per step.
+      eSTREAM Phase 3 (software). ~3.05 cycles/byte on Pentium M.
+
+  # ── LEX ──────────────────────────────────────────────────────────────────────
+
+  - id: lex_128
+    name: LEX-128
+    family_id: lex
+    primitive_type: stream_cipher
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      state_size_bits: 256
+      output_word_bits: 32
+    notes: >
+      LEX-128: AES-based stream cipher using 128-bit AES key and 128-bit IV. Outputs
+      4 bytes per AES round (leak extraction), 40 bytes per AES invocation. eSTREAM
+      submission. Key re-setup every 500 AES encryptions in the more secure variant.
+
+  # ── Argon2 ────────────────────────────────────────────────────────────────────
+
+  - id: argon2d
+    name: Argon2d
+    family_id: argon2
+    primitive_type: pbkdf
+    reference_ids:
+      - rfc_9106_argon2
+    characteristics:
+      output_size_bits: 256
+      notes: "Data-dependent memory access; best resistance to time-space tradeoffs; vulnerable to side-channel timing attacks; not recommended for password hashing."
+    notes: >
+      Argon2d uses data-dependent memory indexing. For each block position, the reference
+      block is chosen based on the current block content, making it optimal for proof-of-work
+      and cryptocurrency applications where side-channel timing attacks are not a concern.
+      Parameters: memory m KB, iterations t, parallelism p, salt s, tag length τ.
+
+  - id: argon2i
+    name: Argon2i
+    family_id: argon2
+    primitive_type: pbkdf
+    reference_ids:
+      - rfc_9106_argon2
+    characteristics:
+      output_size_bits: 256
+      notes: "Data-independent memory access; side-channel safe; weaker tradeoff resistance than Argon2d."
+    notes: >
+      Argon2i uses data-independent memory indexing (computed from a counter and pass number).
+      Safe against side-channel timing attacks. Preferred for password hashing when side-channel
+      attacks are a concern. Requires more passes (≥3) than Argon2id for equivalent tradeoff
+      resistance. RFC 9106: MAY be supported.
+
+  - id: argon2id
+    name: Argon2id
+    family_id: argon2
+    primitive_type: pbkdf
+    reference_ids:
+      - biryukov_et_al_2017_argon2_v13
+      - rfc_9106_argon2
+    characteristics:
+      output_size_bits: 256
+      notes: "Hybrid: Argon2i for first half of first pass, Argon2d thereafter; primary recommended variant."
+    notes: >
+      Argon2id is the primary recommended variant (RFC 9106: MUST be supported). Uses
+      Argon2i for the first half of the first pass over memory and Argon2d for all
+      remaining memory fills. Provides both side-channel protection and strong resistance
+      against time-space tradeoff attacks. PHC winner variant. Recommended for all
+      password hashing and password-based key derivation applications.
 
   # ── Yarará and Coral ──────────────────────────────────────────────────────────
 

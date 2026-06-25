@@ -4938,7 +4938,7 @@ families:
     influences:
       - source_family_id: des
         relations:
-          - predecessor
+          - related_to
         note: DES was a simplified and modified descendant of Lucifer; IBM designed both.
     innovative_ideas:
       - id: lucifer_key_controlled_sbox
@@ -5053,7 +5053,7 @@ families:
     influences:
       - source_family_id: grain_128
         relations:
-          - precursor_of
+          - related_to
         note: Grain (v0, 80-bit key) was later extended to Grain-128 (128-bit key) for higher security.
     innovative_ideas:
       - id: grain_lfsr_nlfsr_pair
@@ -5311,7 +5311,7 @@ families:
     influences:
       - source_family_id: rc4
         relations:
-          - similar_permutation_approach
+          - inspired_by
         note: Like RC4, Sapphire II uses a shuffled 256-byte permutation vector; unlike RC4 it adds plaintext/ciphertext feedback.
     innovative_ideas:
       - id: sapphire_pt_ct_feedback
@@ -6040,3 +6040,277 @@ families:
       χ (nonlinear: B_y = Ā_{(y+1) mod 3} · A_{(y+2) mod 3}, A_y += B_y), ρ_east (shifts
       (0,1) and (2,8)). Security claim: 128-bit for keyed AE with nonce, κ=128, nonce=128,
       tag=128, state=384.
+
+  # ── NLSv2 ────────────────────────────────────────────────────────────────────
+
+  - id: nlsv2
+    name: NLSv2
+    construction_ids:
+      - nlfsr_filtered
+    round_ids:
+      - nlsv2_step
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      state_size_bits: 544
+      components:
+        - id: nlfsr
+          params: { length: 512 }
+        - id: nonlinear_filter
+          params: { output_bits: 32, operations: "add_mod, mul_mod, xor" }
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+    reference_ids:
+      - hawkes_et_al_2008_nlsv2
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences: []
+    innovative_ideas:
+      - id: nlsv2_nlfsr_replaces_lfsr
+        name: NLFSR replacing LFSR for improved algebraic security
+        note: >
+          NLSv2 replaces the LFSR of SOBER-128 with a Nonlinear Feedback Shift Register (NLFSR),
+          eliminating the guaranteed period but improving resistance to algebraic and
+          distinguishing attacks that exploited the linear LFSR structure.
+    notes: >
+      NLSv2 (Non-Linear SOBER version 2) is a synchronous stream cipher by Hawkes et al.,
+      submitted to eSTREAM profile 1A (software). It is an updated version of NLS, itself
+      descended from the SOBER family (SOBER → SOBER-II → SOBER-t16/t32 → Turing → SOBER-128 → NLS).
+      Internal state: 512-bit NLFSR + 32-bit register ≈ 544 bits. Key up to 128 bits; nonce
+      support for multi-message use. Output: 32-bit keystream words using a nonlinear filter
+      combining addition, multiplication (mod 2^32), and XOR. Also includes the Mundja MAC
+      primitive for message authentication.
+
+  # ── CryptMT3 ─────────────────────────────────────────────────────────────────
+
+  - id: cryptmt3
+    name: CryptMT3
+    construction_ids:
+      - filtered_lfsr
+    round_ids:
+      - cryptmt3_step
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      state_size_bits: 19937
+      components:
+        - id: lfsr
+          params: { length: 19937, note: "Mersenne Twister recurrence, period ≥ 2^19937−1" }
+        - id: nonlinear_filter
+          params: { note: "filter with memory using 128-bit integer multiplication" }
+        - id: mul_mod
+          params: { modulus: 340282366920938463463374607431768211456, note: "128-bit multiplication" }
+        - id: xor
+    reference_ids:
+      - matsumoto_et_al_2008_cryptmt3
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences: []
+    innovative_ideas:
+      - id: cryptmt3_mt_mother_generator
+        name: Mersenne Twister as guaranteed-period mother generator
+        note: >
+          CryptMT3 uses the Mersenne Twister LFSR (period ≥ 2^19937−1) as the "mother generator"
+          providing a huge-state linear base, while a nonlinear filter with memory using integer
+          multiplication introduces cryptographic nonlinearity without losing the period guarantee.
+    notes: >
+      CryptMT3 (version 3) is a stream cipher by Matsumoto et al. submitted to eSTREAM.
+      It combines a large-state LFSR (Mersenne Twister recurrence, ~19937-bit state, period ≥ 2^19937−1)
+      with a nonlinear filter with memory using 128-bit integer multiplication.
+      The filter state y is updated as y_{i+1} := y_i × (x_i | 1) mod 2^128, output = 8 MSBs of y.
+      1241-dimensionally equidistributed. Optimised for CPUs with SIMD (e.g. Intel Core 2 Duo
+      SSE2). Key and IV setup via the MT initialization procedure.
+
+  # ── Dragon ────────────────────────────────────────────────────────────────────
+
+  - id: dragon
+    name: Dragon
+    construction_ids:
+      - nlfsr_filtered
+    round_ids:
+      - dragon_step
+    target_applications:
+      - generic
+      - software
+      - mobile
+    characteristics:
+      state_size_bits: 1088
+      components:
+        - id: nlfsr
+          params: { length: 1024, word_size_bits: 32, words: 32 }
+        - id: nonlinear_filter
+          params: { memory_bits: 64, note: "F function: 192→192 bits, 3 mixing layers + S-box layer" }
+        - id: sbox
+          params: { input_bits: 8, output_bits: 32, note: "word-based S-box lookup" }
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+    reference_ids:
+      - dawson_et_al_2008_dragon
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences: []
+    innovative_ideas:
+      - id: dragon_word_based_nlfsr
+        name: Word-based NLFSR with nonlinear filter for high-throughput keystream
+        note: >
+          Dragon's 32×32-bit NLFSR uses a word-level nonlinear feedback function F that maps
+          6×32 bits → 6×32 bits via three mixing layers and an S-box layer, producing 64 bits
+          of keystream per clock. Word-based design achieves gigabits-per-second throughput
+          in software while remaining key-agile.
+    notes: >
+      Dragon is a word-based synchronous stream cipher by Dawson, Henricksen and Simpson.
+      First presented at ICISC 2004; eSTREAM Phase 3, software profile. Two variants:
+      Dragon-128 (128-bit key, 128-bit IV) and Dragon-256 (256-bit key, 256-bit IV).
+      Internal state: 32×32-bit NLFSR (1024 bits) + 2×32-bit memory M (64 bits) = 1088 bits.
+      Each clock step applies the invertible F function (initial mixing + S-box + final mixing),
+      updates the NLFSR state, and outputs 64 bits of keystream. Security claim: no attack
+      requiring less than 2^128 (Dragon-128) or 2^256 (Dragon-256) operations known.
+
+  # ── HC-128 ────────────────────────────────────────────────────────────────────
+
+  - id: hc_128
+    name: HC-128
+    construction_ids:
+      - table_update_stream
+    round_ids:
+      - hc128_step
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      state_size_bits: 32768
+      components:
+        - id: lookup_table
+          params: { count: 2, entries_per_table: 512, entry_size_bits: 32 }
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+    reference_ids:
+      - wu_2008_hc128
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences:
+      - source_family_id: hc_256
+        relations:
+          - derived_from
+        note: HC-128 is a simplified 128-bit-security version of HC-256 (which uses 1024-entry tables and 256-bit key/IV).
+    innovative_ideas:
+      - id: hc128_small_key_dependent_tables
+        name: Smaller continuously-updated key-dependent tables for 128-bit security
+        note: >
+          HC-128 uses two 512-entry 32-bit tables P and Q (16 KB total, half the HC-256 size),
+          continuously updated via a nonlinear feedback function, providing 128-bit security with
+          excellent software performance and a smaller memory footprint than HC-256.
+    notes: >
+      HC-128 is a synchronous stream cipher by Hongjun Wu; eSTREAM Phase 3, software profile.
+      It is a 128-bit-security variant of HC-256. Internal state: two 512-entry 32-bit tables
+      P and Q (32768 bits total). Each step updates one table entry with nonlinear feedback
+      (using f1, f2, g1, g2 functions derived from SHA-256 message schedule operations and
+      XOR/rotation), then outputs one 32-bit keystream word. Key=128 bits, IV=128 bits.
+      Initialization expands key/IV into P and Q and runs 1024 warm-up steps. Performance:
+      ~3.05 cycles/byte on Pentium M.
+
+  # ── LEX ──────────────────────────────────────────────────────────────────────
+
+  - id: lex
+    name: LEX
+    construction_ids:
+      - block_cipher_based_stream
+    round_ids:
+      - lex_round
+    target_applications:
+      - generic
+      - software
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: sbox
+          params: { input_bits: 8, output_bits: 8, note: "AES S-box" }
+        - id: bit_permutation
+          params: { note: "AES ShiftRows" }
+        - id: mix_columns
+          params: { note: "AES MixColumns over GF(2^8)" }
+        - id: xor
+    reference_ids:
+      - biryukov_2008_lex
+    process_ids:
+      - ecrypt_stream_cipher_project_2004_2008
+    influences:
+      - source_family_id: aes
+        relations:
+          - based_on
+        note: LEX is built directly on AES rounds using the "leak extraction" concept.
+    innovative_ideas:
+      - id: lex_leak_extraction
+        name: Leak extraction — outputting partial AES intermediate state as keystream
+        note: >
+          LEX's core idea is to extract ("leak") certain bytes of the AES intermediate
+          state at each round instead of only using the final ciphertext. At each AES
+          round, 4 bytes are leaked from specific positions of the 4×4 state matrix,
+          giving 40 bytes per AES invocation (vs 16 bytes for AES in CTR mode), while
+          the attacker never sees the full intermediate state.
+    notes: >
+      LEX (Leak EXtraction) is an AES-based stream cipher by Alex Biryukov, submitted to
+      eSTREAM. State: 128-bit AES state S + 128-bit expanded key (256 bits total).
+      Operation: IV is encrypted once with AES to form initial state S; then each
+      AES round leaks 4 bytes from fixed positions of the intermediate state
+      (bytes b_{0,0}, b_{2,0}, b_{0,2}, b_{2,2} at odd rounds; b_{0,1}, b_{2,1},
+      b_{0,3}, b_{2,3} at even rounds), producing 40 bytes per AES invocation (slightly
+      modified last round). Key=128, 192 or 256 bits; IV=128 bits. Performance: ~2.5×
+      faster than AES in CTR mode. Key re-setup every 500 AES encryptions (more secure variant).
+
+  # ── Argon2 ────────────────────────────────────────────────────────────────────
+
+  - id: argon2
+    name: Argon2
+    construction_ids:
+      - memory_hard_sponge
+    round_ids:
+      - argon2_pass
+    target_applications:
+      - password_hashing
+      - key_derivation
+    characteristics:
+      components:
+        - id: compression_function
+          params: { name: "G", note: "XORs two 1024-byte blocks then applies P twice row-wise and column-wise" }
+        - id: permutation
+          params: { name: "P", state_bits: 8192, note: "Blake2b compression function operating on 8×16 64-bit words" }
+        - id: xor
+    reference_ids:
+      - biryukov_et_al_2015_argon2_v12
+      - biryukov_et_al_2017_argon2_v13
+      - rfc_9106_argon2
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas:
+      - id: argon2_memory_hard_compression
+        name: Memory-hard compression function using large memory array
+        note: >
+          Argon2 fills a large array of 1 KB blocks using compression function G, which
+          XORs two existing blocks and applies the Blake2b-derived permutation P twice
+          (row-then-column). The data-dependent (Argon2d) or data-independent (Argon2i)
+          indexing ensures that time-space tradeoff attacks require memory proportional
+          to the intended cost, making GPU/ASIC attacks expensive.
+      - id: argon2_three_variants
+        name: Three variants for different threat models
+        note: >
+          Argon2d uses data-dependent memory access (best tradeoff resistance, side-channel
+          vulnerable), Argon2i uses data-independent access (side-channel safe, weaker
+          tradeoff resistance), and Argon2id (primary recommended variant) uses Argon2i
+          for the first half and Argon2d for the second half of each pass.
+    notes: >
+      Argon2 is a memory-hard password hashing function and KDF by Biryukov, Dinu, and
+      Khovratovich (University of Luxembourg). PHC winner (2015). Standardised as RFC 9106
+      (IRTF CFRG, September 2021). Parameters: password P, salt S, parallelism p, tag
+      length τ, memory m (KB), iterations t, version v, key K, data X. Three modes:
+      Argon2d (data-dependent indexing), Argon2i (data-independent), Argon2id (hybrid).
+      Core: compression function G = Blake2b permutation P applied row-wise and column-wise
+      on 1024-byte blocks. Variable-length hash H' based on BLAKE2b. Argon2id is the
+      recommended variant for password hashing and password-based key derivation.
