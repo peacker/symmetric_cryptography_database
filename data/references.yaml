@@ -3167,3 +3167,56 @@ references:
     venue: SHA-3 Competition Round 3 Submission
     url: https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf
     notes: "Skein/Threefish Round 3 specification. Local copy: references/2010-skein_threefish.pdf."
+
+  - id: rc4drop_ref
+    kind: paper
+    title: "RC4-drop: Discarding Initial Keystream Bytes to Mitigate Bias"
+    authors:
+      - Ilya Mironov
+    year: 2007
+    venue: eStream candidate drop modifications / cryptospecs
+    url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/rc4drop.pdf
+    notes: "RC4 variant that drops first 768 bytes of keystream to avoid WEP-style biases. Local copy: references/2007-rc4drop.pdf."
+
+  - id: newdes_ref
+    kind: paper
+    title: "NewDES"
+    authors:
+      - Robert Scott
+    year: 1985
+    venue: Cryptologia
+    url: https://en.wikipedia.org/wiki/NewDES
+    notes: "17-round 64-bit block cipher designed as a DES replacement. No widely available free PDF spec."
+
+  - id: catfish_ref
+    kind: paper
+    title: "Catfish: Password Hashing Scheme"
+    authors:
+      - Donghoon Chang
+      - Arpan Jati
+      - Sweta Mishra
+      - Somitra Kumar Sanadhya
+    year: 2014
+    venue: Password Hashing Competition (PHC) Submission
+    url: https://www.password-hashing.net/submissions.html
+    notes: "PHC submission. No standalone PDF available."
+
+  - id: m3lcrypt_ref
+    kind: paper
+    title: "M3lcrypt: Password Hashing Scheme"
+    authors:
+      - Matthew Green
+    year: 2014
+    venue: Password Hashing Competition (PHC) Submission
+    url: https://www.password-hashing.net/submissions.html
+    notes: "PHC submission. No standalone PDF available."
+
+  - id: pufferfish_ref
+    kind: paper
+    title: "Pufferfish: A Memory-Hard Password Hashing Function"
+    authors:
+      - Solar Designer
+    year: 2014
+    venue: Password Hashing Competition (PHC) Submission
+    url: https://github.com/epixoip/pufferfish
+    notes: "PHC submission. Available as GitHub source only, no spec PDF."

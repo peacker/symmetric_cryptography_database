@@ -32,7 +32,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Camellia | Camellia | block_cipher | 2004 | https://www.rfc-editor.org/rfc/rfc3713 | TODO | no |
 | [x] | CAST-128 | CAST-128 | block_cipher | 1997 | https://www.rfc-editor.org/rfc/rfc2144 | TODO | no |
 | [x] | CAST-256 | CAST-256 | block_cipher | 1999 | https://www.rfc-editor.org/rfc/rfc2612 | TODO | no |
-| [ ] | Catfish | Catfish | pbkdf | 2014 | https://www.password-hashing.net/submissions.html | N/A — no spec PDF | no |
+| [x] | Catfish | Catfish | pbkdf | 2014 | https://www.password-hashing.net/submissions.html | N/A — no spec PDF | no |
 | [x] | Catena | Catena | pbkdf | 2015 | https://www.password-hashing.net/submissions/specs/Catena-v5.pdf | Full | yes |
 | [x] | Centrifuge | Centrifuge | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Centrifuge-v0.pdf | Full | yes |
 | [x] | ChaCha | ChaCha | stream_cipher | 2008 | https://cr.yp.to/chacha.html | TODO | no |
@@ -126,7 +126,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | MANTIS | MANTIS | tweakable_block_cipher | TODO | TODO | TODO | no |
 | [x] | MARS | MARS | block_cipher | 1999 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
 | [ ] | MCRYPTON | MCRYPTON | block_cipher | TODO | TODO | TODO | no |
-| [ ] | M3lcrypt | M3lcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions.html | N/A — no spec PDF | no |
+| [x] | M3lcrypt | M3lcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions.html | N/A — no spec PDF | no |
 | [x] | MCS_PHS | MCS_PHS | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/MCS_PHS-v2.pdf | Full | yes |
 | [x] | MD2 | MD2 | hash | 1992 | https://www.rfc-editor.org/rfc/rfc1319 | Full | yes |
 | [x] | MD4 | MD4 | hash | 1990 | https://www.rfc-editor.org/rfc/rfc1320 | Full | yes |
@@ -143,7 +143,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | MULTI-S01 | MULTI-S01 | stream_cipher | TODO | TODO | TODO | no |
 | [ ] | MULTI2 | MULTI2 | block_cipher | TODO | TODO | TODO | no |
 | [x] | NBC | NBC | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000339 | Full | yes |
-| [ ] | NewDES | NewDES | block_cipher | 1985 | https://en.wikipedia.org/wiki/NewDES | TODO | no |
+| [x] | NewDES | NewDES | block_cipher | 1985 | https://en.wikipedia.org/wiki/NewDES | TODO | no |
 | [x] | Nimbus | Nimbus | block_cipher | TODO | TODO | TODO | yes |
 | [x] | NLSv2 | NLSv2 | stream_cipher | 2004 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_6 | Full | yes |
 | [x] | NOEKEON | NOEKEON | block_cipher | TODO | TODO | TODO | yes |
@@ -158,7 +158,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | PHOTON-Beetle | PHOTON | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/PHOTON-Beetle-spec.pdf | Full | yes |
 | [ ] | PICARO | PICARO | block_cipher | TODO | TODO | TODO | no |
 | [x] | PolyPassHash | PolyPassHash | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/PolyPassHash-v1.pdf | Full | yes |
-| [ ] | Pufferfish | Pufferfish | pbkdf | 2014 | https://github.com/epixoip/pufferfish | N/A — GitHub only, no spec PDF | no |
+| [x] | Pufferfish | Pufferfish | pbkdf | 2014 | https://github.com/epixoip/pufferfish | N/A — GitHub only, no spec PDF | no |
 | [x] | POMELO | POMELO | pbkdf | 2015 | https://www.password-hashing.net/submissions/specs/POMELO-v3.pdf | Full | yes |
 | [x] | PRESENT | PRESENT | block_cipher | 2007 | https://iacr.org/archive/ches2007/47270450/47270450.pdf | TODO | yes |
 | [ ] | PRIDE | PRIDE | block_cipher | TODO | TODO | TODO | no |
@@ -175,7 +175,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | RC2 | RC2 | block_cipher | 1998 | https://datatracker.ietf.org/doc/html/rfc2268 | Full | yes |
 | [x] | RC4 | RC4 | stream_cipher | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
 | [x] | RC4+ | RC4+ | stream_cipher | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
-| [ ] | RC4-drop | RC4-drop | stream_cipher | 2007 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/rc4drop.pdf | Full | yes |
+| [x] | RC4-drop | RC4-drop | stream_cipher | 2007 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/rc4drop.pdf | Full | yes |
 | [x] | RC4A | RC4A | stream_cipher | 2007 | https://eprint.iacr.org/2007/070 | Full | yes |
 | [x] | RC5 | RC5 | block_cipher | 1996 | https://www.rfc-editor.org/rfc/rfc2040 | TODO | no |
 | [x] | RC6 | RC6 | block_cipher | 1998 | https://www.cerias.purdue.edu/apps/reports_and_papers/view/2029 | TODO | yes |
@@ -241,7 +241,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | TANGRAM | TANGRAM | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000337 | Full | yes |
 | [x] | TEA | TEA | block_cipher | 1994 | https://doi.org/10.1007/3-540-60590-8_29 | TODO | yes |
 | [x] | Thank Goodness It's Friday (TGIF) | Thank Goodness It's Friday (TGIF) | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TGIF-spec.pdf | Full | yes |
-| [ ] | Three-key Triple DES | DES | block_cipher | TODO | TODO | TODO | no |
+| [x] | Three-key Triple DES | DES | block_cipher | 1998 | https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-67r2.pdf | Full | no |
 | [x] | Threefish | Threefish | block_cipher | 2010 | https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf | Full | yes |
 | [x] | Tiger | Tiger | hash | 1995 | https://www.cl.cam.ac.uk/~rja14/Papers/tiger.pdf | Full | yes |
 | [x] | TinyJambu | TinyJambu | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
@@ -252,10 +252,10 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Trivium | Trivium | stream_cipher | 2006 | https://web.archive.org/web/20180828163734/http://www.ecrypt.eu.org/stream/p3ciphers/trivium/trivium_p3.pdf | Full | yes |
 | [x] | TWINE | TWINE | block_cipher | 2012 | https://doi.org/10.1007/978-3-642-34047-5_13 | TODO | no |
 | [x] | TwoCats | TwoCats | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/TwoCats-v0.pdf | Full | yes |
-| [ ] | Two-key Triple DES | DES | block_cipher | TODO | TODO | TODO | no |
+| [x] | Two-key Triple DES | DES | block_cipher | 1979 | https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-67r2.pdf | Full | no |
 | [x] | Twofish | Twofish | block_cipher | 1998 | https://www.schneier.com/academic/twofish/ | TODO | yes |
 | [x] | uBlock | uBlock | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000334 | Full | yes |
-| [ ] | UEA2 / ZUC | ZUC | stream_cipher | TODO | TODO | TODO | no |
+| [x] | UEA2 / ZUC | ZUC | stream_cipher | 2011 | https://www.3gpp.org/ftp/Specs/archive/35_series/35.222/ | TODO | no |
 | [x] | uLBC | uLBC | block_cipher | 2025 | https://cic.iacr.org/p/1/4/25 | TODO | no |
 | [ ] | VMPC | VMPC | stream_cipher | TODO | TODO | TODO | no |
 | [x] | WAGE | WAGE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/WAGE-spec.pdf | Full | yes |

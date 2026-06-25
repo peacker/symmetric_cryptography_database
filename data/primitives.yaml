@@ -5396,3 +5396,85 @@ primitives:
       block_size_bits: 1024
       output_size_bits: 1024
       rounds: 80
+
+  # ── Triple DES / misc ─────────────────────────────────────────────────────
+
+  - id: three_key_3des
+    name: Three-key Triple DES
+    family_id: triple_des
+    primitive_type: block_cipher
+    reference_ids:
+      - three_key_triple_des_ref
+    characteristics:
+      block_size_bits: 64
+      output_size_bits: 64
+      key_size_bits: 168
+      rounds: 48
+
+  - id: two_key_3des
+    name: Two-key Triple DES
+    family_id: two_key_triple_des
+    primitive_type: block_cipher
+    reference_ids:
+      - two_key_triple_des_ref
+    characteristics:
+      block_size_bits: 64
+      output_size_bits: 64
+      key_size_bits: 112
+      rounds: 48
+
+  - id: rc4drop_768
+    name: RC4-drop[768]
+    family_id: rc4drop
+    primitive_type: stream_cipher
+    reference_ids:
+      - rc4drop_ref
+    characteristics: {}
+
+  - id: newdes_v1
+    name: NewDES
+    family_id: newdes
+    primitive_type: block_cipher
+    reference_ids:
+      - newdes_ref
+    characteristics:
+      block_size_bits: 64
+      output_size_bits: 64
+      key_size_bits: 120
+      rounds: 17
+
+  - id: zuc_v1
+    name: ZUC-128
+    family_id: zuc
+    primitive_type: stream_cipher
+    reference_ids:
+      - uea2_zuc_ref
+    characteristics:
+      key_size_bits: 128
+      iv_size_bits: 128
+
+  # ── PHC ──────────────────────────────────────────────────────────────────
+
+  - id: catfish_v1
+    name: Catfish
+    family_id: catfish
+    primitive_type: pbkdf
+    reference_ids:
+      - catfish_ref
+    characteristics: {}
+
+  - id: m3lcrypt_v1
+    name: M3lcrypt
+    family_id: m3lcrypt
+    primitive_type: pbkdf
+    reference_ids:
+      - m3lcrypt_ref
+    characteristics: {}
+
+  - id: pufferfish_v1
+    name: Pufferfish2
+    family_id: pufferfish
+    primitive_type: pbkdf
+    reference_ids:
+      - pufferfish_ref
+    characteristics: {}

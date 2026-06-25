@@ -7325,3 +7325,148 @@ families:
       HMAC derivation, and optional client-independent key update. Uses Salsa20/8 as the
       core permutation (same as scrypt). PHC finalist; widely deployed (e.g., default
       in many Linux systems as yescrypt in shadow-utils).
+
+  # ── Triple DES variants ───────────────────────────────────────────────────
+
+  - id: triple_des
+    name: Three-key Triple DES (3DES)
+    construction_ids:
+      - feistel
+    round_ids:
+      - des_round
+    target_applications:
+      - encryption
+    characteristics:
+      block_size_bits: 64
+      components: []
+    reference_ids:
+      - three_key_triple_des_ref
+    process_participations:
+      - process_id: cryptrec_selection_2000_2023
+        stage_ids:
+          - monitored
+        status: monitored
+    influences: []
+
+  - id: two_key_triple_des
+    name: Two-key Triple DES (2DES)
+    construction_ids:
+      - feistel
+    round_ids:
+      - des_round
+    target_applications:
+      - encryption
+    characteristics:
+      block_size_bits: 64
+      components: []
+    reference_ids:
+      - two_key_triple_des_ref
+    process_participations: []
+    influences: []
+
+  # ── RC4-drop ──────────────────────────────────────────────────────────────
+
+  - id: rc4drop
+    name: RC4-drop
+    construction_ids:
+      - key_dependent_table_network
+    round_ids:
+      - rc4_prga
+    target_applications:
+      - encryption
+    characteristics:
+      components: []
+    reference_ids:
+      - rc4drop_ref
+    process_participations: []
+    influences:
+      - source_family_id: rc4
+        relations:
+          - variant_of
+        note: "RC4-drop discards the first 768 bytes of the RC4 keystream to eliminate initial-byte biases"
+
+  # ── NewDES ────────────────────────────────────────────────────────────────
+
+  - id: newdes
+    name: NewDES
+    construction_ids:
+      - feistel
+    round_ids:
+      - des_round
+    target_applications:
+      - encryption
+    characteristics:
+      block_size_bits: 64
+      components: []
+    reference_ids:
+      - newdes_ref
+    process_participations: []
+    influences: []
+
+  # ── ZUC (standalone) ─────────────────────────────────────────────────────
+
+  - id: zuc
+    name: ZUC
+    construction_ids:
+      - lfsr_over_extension_field_with_memory
+    round_ids:
+      - rc4_prga
+    target_applications:
+      - encryption
+    characteristics:
+      components: []
+    reference_ids:
+      - uea2_zuc_ref
+    process_participations: []
+    influences:
+      - source_family_id: uea2_zuc
+        relations:
+          - variant_of
+        note: "ZUC is the core algorithm underlying the 3GPP LTE UEA2/UIA2 stream cipher suite"
+
+  # ── PHC password hashing ──────────────────────────────────────────────────
+
+  - id: catfish
+    name: Catfish
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - sha_round
+    target_applications:
+      - password_hashing
+    characteristics:
+      components: []
+    reference_ids:
+      - catfish_ref
+    process_participations: []
+    influences: []
+
+  - id: m3lcrypt
+    name: M3lcrypt
+    construction_ids:
+      - memory_hard_sponge
+    round_ids:
+      - sha_round
+    target_applications:
+      - password_hashing
+    characteristics:
+      components: []
+    reference_ids:
+      - m3lcrypt_ref
+    process_participations: []
+    influences: []
+
+  - id: pufferfish
+    name: Pufferfish
+    construction_ids:
+      - bcrypt_variant
+    round_ids:
+      - blowfish_round
+    target_applications:
+      - password_hashing
+    characteristics:
+      components: []
+    reference_ids:
+      - pufferfish_ref
+    process_participations: []
+    influences: []
