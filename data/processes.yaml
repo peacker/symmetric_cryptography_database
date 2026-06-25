@@ -288,7 +288,7 @@ processes:
           - {name: Abacus}
           - {name: ARIRANG}
           - {name: AURORA}
-          - {name: BLAKE}
+          - family_id: blake
           - {name: Blender}
           - {name: BLUE MIDNIGHT WISH}
           - {name: BOOLE}
@@ -306,10 +306,10 @@ processes:
           - {name: ESSENCE}
           - {name: FSB}
           - {name: Fugue}
-          - {name: Grøstl}
+          - family_id: groestl
           - {name: Hamsi}
-          - {name: JH}
-          - {name: Keccak}
+          - family_id: jh
+          - family_id: keccak
           - {name: Khichidi-1}
           - {name: LANE}
           - {name: Lesamnta}
@@ -326,7 +326,7 @@ processes:
           - {name: SHAMATA}
           - {name: SHAvite-3}
           - {name: SIMD}
-          - {name: Skein}
+          - family_id: skein
           - {name: Spectral Hash}
           - {name: StreamHash}
           - {name: SWIFFTX}
@@ -340,34 +340,34 @@ processes:
         label: Round 2 (14 candidates, July 2009)
         kind: round
         participants:
-          - {name: BLAKE}
+          - family_id: blake
           - {name: BLUE MIDNIGHT WISH}
           - {name: CubeHash}
           - {name: ECHO}
           - {name: Fugue}
-          - {name: Grøstl}
+          - family_id: groestl
           - {name: Hamsi}
-          - {name: JH}
-          - {name: Keccak}
+          - family_id: jh
+          - family_id: keccak
           - {name: Luffa}
           - {name: Shabal}
           - {name: SHAvite-3}
           - {name: SIMD}
-          - {name: Skein}
+          - family_id: skein
       - id: round_3
         label: Round 3 (5 finalists, December 2010)
         kind: round
         participants:
-          - {name: BLAKE}
-          - {name: Grøstl}
-          - {name: JH}
-          - {name: Keccak}
-          - {name: Skein}
+          - family_id: blake
+          - family_id: groestl
+          - family_id: jh
+          - family_id: keccak
+          - family_id: skein
       - id: winner
         label: Winner
         kind: outcome
         participants:
-          - {name: Keccak}
+          - family_id: keccak
 
   - id: caesar_competition_nist_2013_2019
     name: CAESAR Competition

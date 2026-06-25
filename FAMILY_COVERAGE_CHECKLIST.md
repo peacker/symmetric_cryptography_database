@@ -199,6 +199,11 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Serpent | Serpent | block_cipher | 1998 | https://www.cl.cam.ac.uk/archive/rja14/Papers/serpent.pdf | TODO | yes |
 | [x] | SFINKS | SFINKS | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/sfinks.pdf | Full | yes |
 | [x] | SHA-1 / SHA-2 | SHA-1 / SHA-2 | hash | 2002 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf | Full | yes |
+| [x] | SHA-3 / Keccak | Keccak-f[1600] permutation | hash | 2015 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf | Full | yes |
+| [x] | BLAKE (SHA-3 finalist) | BLAKE | hash | 2008 | https://www.aumasson.jp/blake/blake.pdf | Full | yes |
+| [x] | Grøstl (SHA-3 finalist) | Grøstl P/Q permutations | hash | 2008 | https://www.groestl.info/Groestl.pdf | Full | yes |
+| [x] | JH (SHA-3 finalist) | JH E_8 permutation | hash | 2008 | https://www3.ntu.edu.sg/home/wuhj/research/jh/jh_round3.pdf | Full | yes |
+| [x] | Skein (SHA-3 finalist) | Threefish block cipher | hash | 2008 | https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf | Full | yes |
 | [x] | SHACAL | SHACAL | block_cipher | 2000 | https://en.wikipedia.org/wiki/SHACAL | Full | yes |
 | [x] | SHACAL2 | SHACAL2 | block_cipher | 2001 | https://en.wikipedia.org/wiki/SHACAL | Full | yes |
 | [x] | Shamash & Shamashash | Shamash & Shamashash | aead+hash | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ShamashAndShamashash-spec.pdf | Full | yes |

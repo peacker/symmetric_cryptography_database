@@ -5942,6 +5942,7 @@ families:
         - id: constant
     reference_ids:
       - nist_2002_fips180_2
+      - nist_2015_fips180_4
     process_participations:
       - process_id: nist_sha1_sha2_standardization
         stage_ids: [standardized]
@@ -5973,6 +5974,222 @@ families:
       state=8×32=256 bits, 64 rounds. SHA-384: block=1024 bits, state=8×64=512 bits,
       80 rounds. SHA-512: block=1024 bits, state=8×64=512 bits, 80 rounds. All use the
       Merkle-Damgård construction with Davies-Meyer feedforward.
+
+  # ── SHA-3 Finalists ───────────────────────────────────────────────────────
+
+  - id: keccak
+    name: Keccak / SHA-3
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - keccak_round
+    target_applications:
+      - digital_signatures
+      - message_authentication
+      - key_derivation
+      - random_number_generation
+    characteristics:
+      state_size_bits: 1600
+      components:
+        - id: xor
+        - id: and
+        - id: not
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - bertoni_2011_keccak
+      - nist_2015_fips202
+    process_participations:
+      - process_id: sha3_competition_nist_2007_2012
+        stage_ids: [round_1, round_2, round_3, winner]
+        status: winner
+    influences: []
+    innovative_ideas:
+      - id: keccak_sponge
+        name: Sponge construction over a fixed permutation
+        note: >
+          Keccak absorbs input into a 1600-bit state (rate r bits absorbed at a time) and
+          squeezes output, all mediated by Keccak-f[1600] (24 rounds of θ, ρ, π, χ, ι
+          transformations). The sponge eliminates the length-extension vulnerability of
+          Merkle-Damgård constructions.
+      - id: keccak_chi_nonlinearity
+        name: χ (chi) 5-bit S-box layer using AND+XOR in a row
+        note: >
+          Each 5-bit row s_i = s_i ⊕ ((¬s_{i+1}) ∧ s_{i+2}): only uses NOT, AND, XOR — no
+          table lookups, branch-free, extremely efficient in hardware.
+    notes: >
+      Keccak was selected as SHA-3 in October 2012. FIPS 202 (2015) standardizes four
+      fixed-length variants (SHA3-224/256/384/512) and two extendable-output functions
+      (SHAKE128/SHAKE256). The underlying permutation Keccak-f[1600] operates on a
+      5×5×64-bit lane state with 24 rounds. Capacity c = 2× security level; rate r = 1600−c.
+
+  - id: blake
+    name: BLAKE
+    construction_ids:
+      - davies_meyer
+    round_ids:
+      - blake_round
+    target_applications:
+      - digital_signatures
+      - message_authentication
+      - software
+    characteristics:
+      state_size_bits: 512
+      block_size_bits: 512
+      components:
+        - id: add_mod
+          params: { modulus: 4294967296 }
+        - id: xor
+        - id: rotation_fixed
+        - id: constant
+    reference_ids:
+      - aumasson_2010_blake
+    process_participations:
+      - process_id: sha3_competition_nist_2007_2012
+        stage_ids: [round_1, round_2, round_3]
+        status: finalist
+    influences: []
+    innovative_ideas:
+      - id: blake_haifa_with_chacha
+        name: HAIFA iteration with a ChaCha-derived compression function (G-function)
+        note: >
+          BLAKE replaces MD4-style compression with the ChaCha quarter-round G-function
+          (add-rotate-xor on 32- or 64-bit words) arranged in a 4×4 matrix. It uses the
+          HAIFA framework (hash iterative framework with a counter) to prevent length
+          extension. BLAKE-256 uses 14 rounds; BLAKE-512 uses 16 rounds.
+    notes: >
+      BLAKE-256 (32-bit words) and BLAKE-512 (64-bit words) are the primary variants.
+      Output sizes: BLAKE-224 (224 bits), BLAKE-256 (256 bits), BLAKE-384 (384 bits),
+      BLAKE-512 (512 bits). BLAKE2 (2012) supersedes the original with faster speed and
+      simplified interface, dropping the HAIFA counter and NIST padding.
+
+  - id: groestl
+    name: Grøstl
+    construction_ids:
+      - davies_meyer
+    round_ids:
+      - groestl_round
+    target_applications:
+      - digital_signatures
+      - message_authentication
+    characteristics:
+      state_size_bits: 512
+      block_size_bits: 512
+      components:
+        - id: sbox
+          params: { input_bits: 8, output_bits: 8 }
+        - id: word_permutation
+          params: { word_size_bits: 8 }
+        - id: field_matrix_mul
+          params: { field_size: 256 }
+        - id: xor
+        - id: constant
+    reference_ids:
+      - gauravaram_2009_groestl
+    process_participations:
+      - process_id: sha3_competition_nist_2007_2012
+        stage_ids: [round_1, round_2, round_3]
+        status: finalist
+    influences: []
+    innovative_ideas:
+      - id: groestl_wide_pipe_two_permutations
+        name: Wide-pipe hash with two AES-like permutations P and Q
+        note: >
+          Grøstl uses two distinct permutations P and Q (both AES-look-alike over GF(2^8))
+          to produce a wide-pipe (512 or 1024-bit internal state for 256- or 512-bit output).
+          The output transformation is a truncated P permutation: h_i = P(h_{i-1} ⊕ m_i) ⊕
+          Q(m_i) ⊕ h_{i-1}, making it an AES-based wide-pipe construction.
+    notes: >
+      Grøstl-256 uses a 512-bit state (P and Q are 512-bit permutations, 10 rounds);
+      Grøstl-512 uses a 1024-bit state (P and Q are 1024-bit permutations, 14 rounds).
+      The AES-derived S-box and MixBytes layer provides strong diffusion.
+
+  - id: jh
+    name: JH
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - jh_round
+    target_applications:
+      - digital_signatures
+      - message_authentication
+    characteristics:
+      state_size_bits: 1024
+      block_size_bits: 512
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4 }
+        - id: word_permutation
+          params: { word_size_bits: 1 }
+        - id: xor
+        - id: constant
+    reference_ids:
+      - wu_2011_jh
+    process_participations:
+      - process_id: sha3_competition_nist_2007_2012
+        stage_ids: [round_1, round_2, round_3]
+        status: finalist
+    influences: []
+    innovative_ideas:
+      - id: jh_e8_bitsliced
+        name: E_8 bijective bitsliced permutation operating on a 1024-bit state
+        note: >
+          JH uses a 1024-bit state and a 42-round bijective permutation E_8 built from a
+          4-bit S-box (S7, which has almost-perfect nonlinearity) and a linear diffusion
+          layer. The compression is F_8(H, M) = E_8(H ⊕ M0||M1) ⊕ 0||M1, where M0/M1
+          are the two 512-bit halves of the message block.
+    notes: >
+      JH produces 224, 256, 384, or 512-bit digests from a 1024-bit internal state
+      using a sponge-like construction with rate 512 bits. The 42-round E_8 permutation
+      is bitsliced for efficient software implementation.
+
+  - id: skein
+    name: Skein
+    construction_ids:
+      - arx_permutation_network
+    round_ids:
+      - skein_round
+    target_applications:
+      - digital_signatures
+      - message_authentication
+      - key_derivation
+      - software
+    characteristics:
+      state_size_bits: 512
+      block_size_bits: 512
+      components:
+        - id: add_mod
+          params: { modulus: 18446744073709551616 }
+        - id: rotation_fixed
+        - id: word_permutation
+          params: { word_size_bits: 64 }
+        - id: xor
+        - id: constant
+    reference_ids:
+      - ferguson_2010_skein
+    process_participations:
+      - process_id: sha3_competition_nist_2007_2012
+        stage_ids: [round_1, round_2, round_3]
+        status: finalist
+    influences:
+      - source_family_id: threefish
+        relations: [improvement_of]
+        note: >
+          Skein is the hash function built on top of Threefish: it uses the Unique Block
+          Iteration (UBI) chaining mode over Threefish-256/512/1024 to create a hash
+          with provable security properties.
+    innovative_ideas:
+      - id: skein_ubi_chaining
+        name: Unique Block Iteration (UBI) chaining on a tweakable block cipher
+        note: >
+          UBI feeds a 128-bit tweak (containing a type tag, bit position, and flags) into
+          Threefish alongside the state, making every block distinct without a separate
+          IV. The output transformation H(M) = E_K(M) ⊕ M (Davies-Meyer) applied with
+          UBI ensures that prefix-free chaining prevents multi-collision attacks.
+    notes: >
+      Skein-256/512/1024 map to Threefish-256 (72 rounds), Threefish-512 (72 rounds),
+      and Threefish-1024 (80 rounds) respectively. Skein also supports tree hashing and
+      personalization via its UBI mode configuration type tags.
 
   - id: tiger
     name: Tiger

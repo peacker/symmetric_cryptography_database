@@ -2651,3 +2651,54 @@ rounds:
     name: yescrypt Step
     kind: step
     spec: {}
+
+  # ── SHA-3 Finalists ───────────────────────────────────────────────────────
+
+  - id: keccak_round
+    name: Keccak-f Round (θ ρ π χ ι)
+    kind: full_round
+    spec:
+      component_flow:
+        - { component_id: xor,          note: "θ (theta): column parity XOR + neighbour XOR" }
+        - { component_id: rotation_fixed, note: "ρ (rho): per-lane fixed rotation" }
+        - { component_id: word_permutation, note: "π (pi): inter-lane position permutation" }
+        - { component_id: and,           note: "χ (chi): 5-bit AND+NOT+XOR nonlinear layer" }
+        - { component_id: constant,      note: "ι (iota): XOR round constant into lane (0,0)" }
+
+  - id: blake_round
+    name: BLAKE G-function Round
+    kind: full_round
+    spec:
+      component_flow:
+        - { component_id: add_mod,        note: "32- or 64-bit modular addition (G step 1/3)" }
+        - { component_id: xor,            note: "XOR with message word (G step 2/4)" }
+        - { component_id: rotation_fixed, note: "Fixed rotation (r1/r2/r3/r4: 16/12/8/7 for BLAKE-256)" }
+
+  - id: groestl_round
+    name: Grøstl Permutation Round (P/Q)
+    kind: full_round
+    spec:
+      component_flow:
+        - { component_id: constant,       note: "AddRoundConstant: XOR round constant" }
+        - { component_id: sbox,           note: "SubBytes: AES-derived 8-bit S-box" }
+        - { component_id: word_permutation, note: "ShiftBytes: byte-level permutation" }
+        - { component_id: field_matrix_mul, note: "MixBytes: MDS matrix over GF(2^8)" }
+
+  - id: jh_round
+    name: JH E_8 Round (two half-rounds)
+    kind: full_round
+    spec:
+      component_flow:
+        - { component_id: sbox,           note: "S7: 4-bit bijective S-box (applied in parallel)" }
+        - { component_id: word_permutation, note: "L: linear diffusion layer" }
+        - { component_id: constant,       note: "RC: XOR round constant" }
+
+  - id: skein_round
+    name: Skein (Threefish) Round + UBI
+    kind: full_round
+    spec:
+      component_flow:
+        - { component_id: add_mod,        note: "64-bit modular word add (MIX function)" }
+        - { component_id: rotation_fixed, note: "Fixed rotation (variant per round/word pair)" }
+        - { component_id: word_permutation, note: "Word permutation P_d" }
+        - { component_id: xor,            note: "Subkey injection every 4 rounds" }

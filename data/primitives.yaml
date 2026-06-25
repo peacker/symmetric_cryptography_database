@@ -5222,3 +5222,177 @@ primitives:
     reference_ids:
       - peslyak_2015_yescrypt
     characteristics: {}
+
+  # ── SHA-3 Finalists ───────────────────────────────────────────────────────
+
+  - id: sha3_224
+    name: SHA3-224
+    family_id: keccak
+    primitive_type: hash_function
+    reference_ids:
+      - nist_2015_fips202
+    characteristics:
+      state_size_bits: 1600
+      output_size_bits: 224
+      rounds: 24
+
+  - id: sha3_256
+    name: SHA3-256
+    family_id: keccak
+    primitive_type: hash_function
+    reference_ids:
+      - nist_2015_fips202
+    characteristics:
+      state_size_bits: 1600
+      output_size_bits: 256
+      rounds: 24
+
+  - id: sha3_384
+    name: SHA3-384
+    family_id: keccak
+    primitive_type: hash_function
+    reference_ids:
+      - nist_2015_fips202
+    characteristics:
+      state_size_bits: 1600
+      output_size_bits: 384
+      rounds: 24
+
+  - id: sha3_512
+    name: SHA3-512
+    family_id: keccak
+    primitive_type: hash_function
+    reference_ids:
+      - nist_2015_fips202
+    characteristics:
+      state_size_bits: 1600
+      output_size_bits: 512
+      rounds: 24
+
+  - id: shake128
+    name: SHAKE128
+    family_id: keccak
+    primitive_type: hash_function
+    reference_ids:
+      - nist_2015_fips202
+    characteristics:
+      state_size_bits: 1600
+      rounds: 24
+
+  - id: shake256
+    name: SHAKE256
+    family_id: keccak
+    primitive_type: hash_function
+    reference_ids:
+      - nist_2015_fips202
+    characteristics:
+      state_size_bits: 1600
+      rounds: 24
+
+  - id: blake_256
+    name: BLAKE-256
+    family_id: blake
+    primitive_type: hash_function
+    reference_ids:
+      - aumasson_2010_blake
+    characteristics:
+      state_size_bits: 512
+      block_size_bits: 512
+      output_size_bits: 256
+      rounds: 14
+
+  - id: blake_512
+    name: BLAKE-512
+    family_id: blake
+    primitive_type: hash_function
+    reference_ids:
+      - aumasson_2010_blake
+    characteristics:
+      state_size_bits: 1024
+      block_size_bits: 1024
+      output_size_bits: 512
+      rounds: 16
+
+  - id: groestl_256
+    name: Grøstl-256
+    family_id: groestl
+    primitive_type: hash_function
+    reference_ids:
+      - gauravaram_2009_groestl
+    characteristics:
+      state_size_bits: 512
+      block_size_bits: 512
+      output_size_bits: 256
+      rounds: 10
+
+  - id: groestl_512
+    name: Grøstl-512
+    family_id: groestl
+    primitive_type: hash_function
+    reference_ids:
+      - gauravaram_2009_groestl
+    characteristics:
+      state_size_bits: 1024
+      block_size_bits: 1024
+      output_size_bits: 512
+      rounds: 14
+
+  - id: jh_256
+    name: JH-256
+    family_id: jh
+    primitive_type: hash_function
+    reference_ids:
+      - wu_2011_jh
+    characteristics:
+      state_size_bits: 1024
+      block_size_bits: 512
+      output_size_bits: 256
+      rounds: 42
+
+  - id: jh_512
+    name: JH-512
+    family_id: jh
+    primitive_type: hash_function
+    reference_ids:
+      - wu_2011_jh
+    characteristics:
+      state_size_bits: 1024
+      block_size_bits: 512
+      output_size_bits: 512
+      rounds: 42
+
+  - id: skein_256
+    name: Skein-256
+    family_id: skein
+    primitive_type: hash_function
+    reference_ids:
+      - ferguson_2010_skein
+    characteristics:
+      state_size_bits: 256
+      block_size_bits: 256
+      output_size_bits: 256
+      rounds: 72
+
+  - id: skein_512
+    name: Skein-512
+    family_id: skein
+    primitive_type: hash_function
+    reference_ids:
+      - ferguson_2010_skein
+    characteristics:
+      state_size_bits: 512
+      block_size_bits: 512
+      output_size_bits: 512
+      rounds: 72
+
+  - id: skein_1024
+    name: Skein-1024
+    family_id: skein
+    primitive_type: hash_function
+    reference_ids:
+      - ferguson_2010_skein
+    characteristics:
+      state_size_bits: 1024
+      block_size_bits: 1024
+      output_size_bits: 1024
+      rounds: 80

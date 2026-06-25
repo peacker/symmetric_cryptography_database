@@ -2351,7 +2351,10 @@ references:
       - National Institute of Standards and Technology (NIST)
     year: 2002
     venue: "Federal Information Processing Standards Publication 180-2, NIST"
-    url: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
+    organization: NIST
+    status: superseded
+    url: https://csrc.nist.gov/publications/detail/fips/180/2/archive/2002-08-01
+    notes: "First FIPS to specify SHA-256, SHA-384, SHA-512. Local copy: references/2002-sha_fips180-2.pdf. Superseded by FIPS 180-4 (2015)."
 
   - id: penazzi_2019_shamash
     kind: article
@@ -3069,3 +3072,98 @@ references:
     venue: "Password Hashing Competition (PHC) Submission"
     url: https://www.password-hashing.net/submissions/specs/yescrypt-v2.pdf
     notes: "PHC submission, originally submitted March 31 2014, this revision October 2015; scrypt variant (Salsa20/8 core); local copy references/phc-yescrypt-v2.pdf."
+
+  # ── SHA-2 / SHA-3 Standards ──────────────────────────────────────────────
+
+  - id: nist_2015_fips180_4
+    kind: standard
+    title: "Secure Hash Standard (SHS), FIPS PUB 180-4"
+    authors:
+      - National Institute of Standards and Technology (NIST)
+    year: 2015
+    venue: "Federal Information Processing Standards Publication 180-4, NIST"
+    organization: NIST
+    status: active
+    url: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
+    notes: "Current SHA standard (supersedes 180-2). Local copy: references/2015-fips180-4.pdf."
+
+  - id: nist_2015_fips202
+    kind: standard
+    title: "SHA-3 Standard: Permutation-Based Hash and Extendable-Output Functions, FIPS PUB 202"
+    authors:
+      - National Institute of Standards and Technology (NIST)
+    year: 2015
+    venue: "Federal Information Processing Standards Publication 202, NIST"
+    organization: NIST
+    status: active
+    url: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
+    notes: "Standardizes Keccak as SHA3-224/256/384/512 and SHAKE128/SHAKE256. Local copy: references/2015-fips202.pdf."
+
+  - id: aumasson_2010_blake
+    kind: paper
+    title: "SHA-3 proposal: BLAKE (version 1.4)"
+    authors:
+      - Jean-Philippe Aumasson
+      - Luca Henzen
+      - Willi Meier
+      - Raphael C.-W. Phan
+    year: 2010
+    venue: SHA-3 Competition Round 3 Submission
+    url: https://www.aumasson.jp/blake/blake.pdf
+    notes: "BLAKE Round 3 specification. Local copy: references/2008-blake_sha3.pdf."
+
+  - id: gauravaram_2009_groestl
+    kind: paper
+    title: "Grøstl – a SHA-3 candidate"
+    authors:
+      - Praveen Gauravaram
+      - Lars R. Knudsen
+      - Krystian Matusiewicz
+      - Florian Mendel
+      - Christian Rechberger
+      - Martin Schläffer
+      - Søren S. Thomsen
+    year: 2009
+    venue: SHA-3 Competition Round 2 Submission
+    url: https://www.groestl.info/Groestl.pdf
+    notes: "Grøstl specification (updated for Round 3). Local copy: references/2008-groestl_sha3.pdf."
+
+  - id: wu_2011_jh
+    kind: paper
+    title: "The Hash Function JH (Round 3 Submission)"
+    authors:
+      - Hongjun Wu
+    year: 2011
+    venue: SHA-3 Competition Round 3 Submission
+    url: https://www3.ntu.edu.sg/home/wuhj/research/jh/jh_round3.pdf
+    notes: "JH Round 3 specification. Local copy: references/2008-jh_sha3.pdf."
+
+  - id: bertoni_2011_keccak
+    kind: paper
+    title: "The Keccak reference (Version 3.0)"
+    authors:
+      - Guido Bertoni
+      - Joan Daemen
+      - Michaël Peeters
+      - Gilles Van Assche
+    year: 2011
+    venue: SHA-3 Competition Round 3 Submission
+    url: https://keccak.team/files/Keccak-submission-3.pdf
+    notes: "Keccak Round 3 specification. Local copy: references/2008-keccak_sha3.pdf."
+
+  - id: ferguson_2010_skein
+    kind: paper
+    title: "The Skein Hash Function Family (Version 1.3)"
+    authors:
+      - Niels Ferguson
+      - Stefan Lucks
+      - Bruce Schneier
+      - Doug Whiting
+      - Mihir Bellare
+      - Tadayoshi Kohno
+      - Jon Callas
+      - Jesse Walker
+    year: 2010
+    venue: SHA-3 Competition Round 3 Submission
+    url: https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf
+    notes: "Skein/Threefish Round 3 specification. Local copy: references/2010-skein_threefish.pdf."
