@@ -5,11 +5,69 @@ processes:
     organizer: NIST
     start_year: 1997
     end_year: 2000
+    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/archived-crypto-projects/aes-development
     notes: Process that selected Rijndael as AES.
+
+  - id: nessie_competition_european_commission_2000_2003
+    name: NESSIE Competition
+    organizer: European Commission
+    start_year: 2000
+    end_year: 2003
+    url: https://web.archive.org/web/20040306164444/http://www.cosic.esat.kuleuven.be/nessie/
+    notes: Process that selected a portfolio of cryptographic primitives. Previous url was https://www.cosic.esat.kuleuven.be/nessie/.
+
+  - id: cryptrec_selection_2000_2023
+    name: Cryptrec Competition
+    organizer: Cryptography Research and Evaluation Committees set up by the Japanese Government
+    start_year: 2000
+    end_year: 2023
+    url: https://www.cryptrec.go.jp/en/index.html
+    notes: Process that selected a portfolio of cryptographic primitives for Japanese government use. First selection in 2003, with updates in 2013 and 2023.
+
+  - id: estream_competition_nist_2004_2008
+    name: eSTREAM Competition
+    organizer: ECRYPT
+    start_year: 2004
+    end_year: 2008
+    url: https://web.archive.org/web/20080729041521/http://www.ecrypt.eu.org/stream/
+    notes: Process that selected stream ciphers for the eSTREAM portfolio. Previous url was http://www.ecrypt.eu.org/stream/.
+
+  - id: sha3_competition_nist_2007_2012
+    name: SHA-3 Competition
+    organizer: NIST
+    start_year: 2007
+    end_year: 2012
+    url: https://csrc.nist.gov/projects/hash-functions/sha-3-project
+    notes: Process that selected Keccak as SHA-3.
+
+  - id: caesar_competition_nist_2013_2019
+    name: CAESAR Competition
+    organizer: CAESAR Committee
+    start_year: 2013
+    end_year: 2019
+    url: "https://competitions.cr.yp.to/caesar.html"
+    notes: Process that selected a portfolio of authenticated encryption schemes.
+
+  - id: phc_competition_nist_2013_2015
+    name: PHC Competition
+    organizer: PHC Committee
+    start_year: 2013
+    end_year: 2015
+    url: "https://password-hashing.net/"
+    notes: Process that selected a portfolio of password hashing schemes.
+
+  - id: cacr_national_cryptographic_algorithm_design_competition
+    name: National Cryptographic Algorithm Design Competition
+    organizer: CACR
+    start_year: 2018
+    end_year: 2020
+    url: https://cacr.uwaterloo.ca/competitions/2020/
+    notes: Process that selected a portfolio of Symmetric and Post-Quantum Asymmetric cryptographic primitives.
 
   - id: lightweight_crypto_nist_2018_2023
     name: NIST Lightweight Cryptography Process
     organizer: NIST
     start_year: 2018
     end_year: 2023
-    notes: Process culminating in ASCON standardization.
+    url: https://csrc.nist.gov/projects/lightweight-cryptography
+    notes: Process that selected a portfolio of lightweight cryptographic primitives, culminating in ASCON standardization.

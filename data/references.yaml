@@ -2616,3 +2616,131 @@ references:
     year: 2019
     venue: "NIST Lightweight Cryptography (Round 1 submission)"
     url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SAEAES-spec.pdf
+
+  # ── PHOTON-Beetle ─────────────────────────────────────────────────────────────
+  - id: bao_2019_photon_beetle
+    kind: report
+    title: "PHOTON-Beetle Authenticated Encryption and Hash Family"
+    authors:
+      - Zhenzhen Bao
+      - Avik Chakraborti
+      - Nilanjan Datta
+      - Jian Guo
+      - Mridul Nandi
+      - Thomas Peyrin
+      - Kan Yasuda
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/PHOTON-Beetle-spec.pdf
+
+  # ── SIV-Rijndael256 ──────────────────────────────────────────────────────────
+  - id: bao_2019_siv_rijndael256
+    kind: report
+    title: "SIV-Rijndael256 Authenticated Encryption and Hash Family"
+    authors:
+      - Zhenzhen Bao
+      - Jian Guo
+      - Tetsu Iwata
+      - Ling Song
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SIV-Rijndael256-spec.pdf
+
+  # ── SIV-TEM-PHOTON ───────────────────────────────────────────────────────────
+  - id: bao_2019_siv_tem_photon
+    kind: report
+    title: "SIV-TEM-PHOTON Authenticated Encryption and Hash Family"
+    authors:
+      - Zhenzhen Bao
+      - Jian Guo
+      - Tetsu Iwata
+      - Ling Song
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SIV-TEM-PHOTON-spec.pdf
+
+  # ── SKINNY-AEAD/SKINNY-Hash ──────────────────────────────────────────────────
+  - id: beierle_2019_skinny_aead
+    kind: report
+    title: "SKINNY-AEAD and SKINNY-Hash v1.0"
+    authors:
+      - Christof Beierle
+      - "Jérémy Jean"
+      - "Stefan Kölbl"
+      - Gregor Leander
+      - Amir Moradi
+      - Thomas Peyrin
+      - Yu Sasaki
+      - Pascal Sasdrich
+      - Siang Meng Sim
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SKINNY-spec.pdf
+
+  # ── Subterranean 2.0 ─────────────────────────────────────────────────────────
+  - id: daemen_2019_subterranean_v2
+    kind: report
+    title: "The Subterranean 2.0 cipher suite"
+    authors:
+      - Joan Daemen
+      - Pedro Maat Costa Massolino
+      - Yann Rotella
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf
+
+  # ── SUNDAE-GIFT ───────────────────────────────────────────────────────────────
+  - id: banik_2019_sundae_gift
+    kind: report
+    title: "SUNDAE-GIFT v1.0"
+    authors:
+      - Subhadeep Banik
+      - Andrey Bogdanov
+      - Thomas Peyrin
+      - Yu Sasaki
+      - Siang Meng Sim
+      - Elmar Tischhauser
+      - Yosuke Todo
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SUNDAE-GIFT-spec.pdf
+
+  # ── WAGE ──────────────────────────────────────────────────────────────────────
+  - id: aagaard_2019_wage
+    kind: report
+    title: "WAGE: An Authenticated Cipher"
+    authors:
+      - Mark Aagaard
+      - Riham AlTawy
+      - Guang Gong
+      - Kalikinkar Mandal
+      - Raghvendra Rohit
+      - Nusa Zidaric
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/WAGE-spec.pdf
+
+  # ── Xoodyak ───────────────────────────────────────────────────────────────────
+  - id: daemen_2019_xoodyak
+    kind: report
+    title: "Xoodyak, a lightweight cryptographic scheme"
+    authors:
+      - Joan Daemen
+      - Seth Hoffert
+      - "Michaël Peeters"
+      - Gilles Van Assche
+      - Ronny Van Keer
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Xoodyak-spec.pdf
+
+  # ── Yarará and Coral ──────────────────────────────────────────────────────────
+  - id: montes_2019_yarara_and_coral
+    kind: report
+    title: "Yarará and Coral v1"
+    authors:
+      - Miguel Montes
+      - Daniel Penazzi
+    year: 2019
+    venue: "NIST Lightweight Cryptography (Round 1 submission)"
+    url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Yarara_and_Coral-spec.pdf

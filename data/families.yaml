@@ -4700,18 +4700,28 @@ families:
     round_ids:
       - wage_round
     target_applications:
-      - generic
+      - aead
     characteristics:
-      state_size_bits: 256
+      state_size_bits: 259
       components:
+        - id: lfsr
+        - id: sbox
+          params: { input_bits: 7, output_bits: 7, note: "WGP (Welch-Gong Permutation) and SB (7-bit S-box)" }
+        - id: field_matrix_mul
+          params: { field: "GF(2^7)", polynomial: "x^7+x^3+x^2+x+1" }
         - id: xor
-        - id: rotation_fixed
         - id: constant
     reference_ids:
-      - wage_ref
-    process_ids: []
+      - aagaard_2019_wage
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Aagaard et al. 2019. WAGE is a 259-bit permutation (37 stages × 7 bits over F_2^7)
+      used in a unified duplex sponge AEAD mode. Linear layer: LFSR with primitive feedback
+      polynomial l(y) = y^37+y^31+y^30+y^26+y^24+y^19+y^13+y^12+y^8+y^6+ω over F_2^7.
+      Nonlinear components: WGP7 (Welch-Gong Permutation, decimation d=13) and SB (7-bit S-box
+      constructed via nonlinear transformation Q and bit permutation P). Rate=64, capacity=195.
 
   - id: wake
     name: WAKE
@@ -4802,24 +4812,32 @@ families:
   - id: yarara_and_coral
     name: Yarara and Coral
     construction_ids:
-      - spn
+      - sponge_permutation
     round_ids:
       - yarara_and_coral_round
     target_applications:
-      - generic
+      - aead
+      - hash
     characteristics:
-      block_size_bits: 128
+      state_size_bits: 256
       components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
+        - id: and
+        - id: not
         - id: xor
+        - id: rotation_fixed
         - id: constant
     reference_ids:
-      - yarara_and_coral_ref
-    process_ids: []
+      - montes_2019_yarara_and_coral
+    process_ids:
+      - nist_lwc_2019_2023
     influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
+    notes: >
+      Montes & Penazzi 2019. Two related lightweight algorithms sharing a 256-bit permutation
+      (four 64-bit words). Round function = LD ∘ S ∘ C: C adds round constant to x_1, S is a
+      substitution layer, LD is a linear diffusion layer. Operations: AND, NOT, XOR, 64-bit
+      rotations. Yarará (AEAD): rate=64, capacity=192, key=128, nonce=128, tag=128. Uses
+      permutations π_I (10 rounds), π_AD/π_AE/π_F (6 rounds each). Coral (hash): rate=32,
+      capacity=224, digest=256 bits.
 
   # ── Newly added families (PDF-extracted) ─────────────────────────────────
 
@@ -5789,3 +5807,236 @@ families:
       of W: γ (8→8 S-box), π (column permutation), θ (8×8 circulant MDS over GF(2^8)),
       σ[k] (key XOR). Key schedule = same round function with round constants. Compression
       function = Miyaguchi-Preneel: H_i = W[H_{i-1}](m_i) ⊕ H_{i-1} ⊕ m_i.
+
+  # ── PHOTON-Beetle ─────────────────────────────────────────────────────────────
+
+  - id: photon_beetle
+    name: PHOTON-Beetle
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - photon_beetle_round
+    target_applications:
+      - aead
+      - hash
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4, note: "PHOTON S-box: C,5,6,B,9,0,A,D,3,E,F,8,4,7,1,2" }
+        - id: word_permutation
+          params: { note: ShiftRows }
+        - id: field_matrix_mul
+          params: { field: "GF(2^4)", polynomial: "x^4+x+1", note: MixColumnSerial }
+        - id: xor
+        - id: constant
+    reference_ids:
+      - bao_2019_photon_beetle
+    process_ids:
+      - nist_lwc_2019_2023
+    influences: []
+    notes: >
+      Bao et al. 2019. PHOTON-Beetle uses PHOTON256 (256-bit, 12 rounds, 8×8 array of 4-bit
+      cells) in Beetle sponge mode. PHOTON256 round: AddConstant, SubCells (4-bit S-box),
+      ShiftRows, MixColumnSerial (serial matrix M over GF(2^4), poly x^4+x+1). Beetle mode
+      uses ρ function (Shuffle + XOR) for ciphertext generation; differs from standard Sponge
+      Duplex. Primary AEAD: r=128 (PHOTON-Beetle-AEAD[128]), key=128, nonce=128, tag=128.
+
+  # ── SIV-Rijndael256 ──────────────────────────────────────────────────────────
+
+  - id: siv_rijndael256
+    name: SIV-Rijndael256
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - siv_rijndael256_round
+    target_applications:
+      - aead
+      - hash
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: sbox
+          params: { input_bits: 8, output_bits: 8, note: "Rijndael S-box (multiplicative inverse in GF(2^8))" }
+        - id: word_permutation
+          params: { note: "ShiftRows (offsets 0,1,3,4 for Nb=8)" }
+        - id: binary_matrix_mul
+          params: { note: "MixColumns over GF(2^8), poly x^8+x^4+x^3+x+1" }
+        - id: xor
+        - id: constant
+    reference_ids:
+      - bao_2019_siv_rijndael256
+    process_ids:
+      - nist_lwc_2019_2023
+    influences: []
+    notes: >
+      Bao et al. 2019. Rijndael256 is the Rijndael block cipher with fixed block length 256
+      bits (Nb=8) and key length 128 bits (Nk=4), 14 rounds. SPN: SubBytes (8-bit Rijndael
+      S-box), ShiftRows (shifts 0,1,3,4), MixColumns (GF(2^8), x^8+x^4+x^3+x+1 irred. poly),
+      AddRoundKey. SIV mode (nonce-misuse resistant): PRF F_K (CBC-MAC variant) generates
+      tag/IV; OFB encryption E_K^7 produces ciphertext. One instance: n=256, k=128, tag=256,
+      nonce=128. A 3-bit tweak (domain separator d) is injected into second column per round.
+
+  # ── SIV-TEM-PHOTON ───────────────────────────────────────────────────────────
+
+  - id: siv_tem_photon
+    name: SIV-TEM-PHOTON
+    construction_ids:
+      - even_mansour
+    round_ids:
+      - siv_tem_photon_round
+    target_applications:
+      - aead
+      - hash
+    characteristics:
+      state_size_bits: 256
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4, note: "PRESENT S-box: C,5,6,B,9,0,A,D,3,E,F,8,4,7,1,2" }
+        - id: word_permutation
+          params: { note: ShiftRows }
+        - id: field_matrix_mul
+          params: { field: "GF(2^4)", polynomial: "x^4+x+1", note: MixColumnSerial }
+        - id: xor
+        - id: constant
+    reference_ids:
+      - bao_2019_siv_tem_photon
+    process_ids:
+      - nist_lwc_2019_2023
+    influences: []
+    notes: >
+      Bao et al. 2019. TEM-PHOTON = Tweakable Even-Mansour with PHOTON P256 permutation.
+      Block=256 bits, key=128 bits, tweak=128 bits. TEM uses 4 iterations, each with 5-round
+      P256[d] (20 total rounds; P256 in original PHOTON has 12). P256 uses PRESENT 4-bit S-box,
+      ShiftRows, MixColumnSerial over GF(2^4) (poly x^4+x+1), domain separator AddDomain[d].
+      SIV mode on top: key=128, nonce=128, tag=256. One AEAD instance only.
+
+  # ── SKINNY-AEAD ──────────────────────────────────────────────────────────────
+
+  - id: skinny_aead
+    name: SKINNY-AEAD
+    construction_ids:
+      - tweakable_spn
+    round_ids:
+      - skinny_aead_round
+    target_applications:
+      - aead
+      - hash
+    characteristics:
+      state_size_bits: 384
+      components:
+        - id: sbox
+          params: { input_bits: 8, output_bits: 8, note: "SKINNY 8-bit S-box (4-bit version also used in SKINNY-64 variants)" }
+        - id: word_permutation
+          params: { note: ShiftRows }
+        - id: binary_matrix_mul
+          params: { note: "MixColumns (4-row matrix over GF(2))" }
+        - id: xor
+        - id: constant
+    reference_ids:
+      - beierle_2019_skinny_aead
+    process_ids:
+      - nist_lwc_2019_2023
+    influences: []
+    notes: >
+      Beierle et al. 2019. SKINNY-AEAD uses SKINNY tweakable block ciphers in ΘCB3 mode
+      (beyond-birthday-bound AEAD via tweakable BC). Primary (M1-M4): SKINNY-128-384,
+      block=128 bits, tweakey=384 bits (key=128, tweak=256), 56 rounds. Secondary (M5-M6):
+      SKINNY-128-256, block=128, tweakey=256, 48 rounds. SKINNY SPN: SubBytes (8-bit S-box),
+      ShiftRows, MixColumns (4-row binary matrix), AddRoundTweakey. SKINNY-Hash: sponge on
+      384-bit (M1-M4) or 256-bit (M5-M6) state with rate 128 or 32 bits.
+
+  # ── Subterranean 2.0 ─────────────────────────────────────────────────────────
+
+  - id: subterranean_2_0
+    name: Subterranean 2.0
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - subterranean_2_0_round
+    target_applications:
+      - aead
+      - hash
+      - stream_cipher
+    characteristics:
+      state_size_bits: 257
+      components:
+        - id: and
+        - id: xor
+        - id: bit_permutation
+          params: { note: "π: s_i ← s_{12i mod 257} (dispersion step)" }
+        - id: constant
+    reference_ids:
+      - daemen_2019_subterranean_v2
+    process_ids:
+      - nist_lwc_2019_2023
+    influences: []
+    notes: >
+      Daemen et al. 2019. Subterranean 2.0 is a duplex object on a 257-bit state using a
+      single-round permutation R = π ∘ θ ∘ ι ∘ χ: χ (nonlinear, s_i ← s_i + (s_{i+1}+1)·s_{i+2},
+      AND+XOR), ι (Kronecker delta constant XOR at bit 0), θ (linear mixing, s_i ← s_i+s_{i+3}+s_{i+8}),
+      π (bit transposition, s_i ← s_{12i mod 257}). Injection rate: 32 bits (keyed) or 8 bits
+      (unkeyed). Provides XOF, deck function, and SAE (Session AE) on top of the duplex.
+
+  # ── SUNDAE-GIFT ───────────────────────────────────────────────────────────────
+
+  - id: sundae_gift
+    name: SUNDAE-GIFT
+    construction_ids:
+      - stream_state_update_generator
+    round_ids:
+      - sundae_gift_round
+    target_applications:
+      - aead
+    characteristics:
+      state_size_bits: 128
+      components:
+        - id: sbox
+          params: { input_bits: 4, output_bits: 4, note: "GIFT 4-bit S-box" }
+        - id: bit_permutation
+          params: { note: "GIFT bit permutation" }
+        - id: xor
+        - id: constant
+    reference_ids:
+      - banik_2019_sundae_gift
+    process_ids:
+      - nist_lwc_2019_2023
+    influences: []
+    notes: >
+      Banik et al. 2019. SUNDAE-GIFT uses GIFT-128 (block=128, key=128, 40 rounds) in SUNDAE
+      mode. SUNDAE is a nonce-misuse resistant single-pass AEAD mode (binary-tree based MAC +
+      OFB encryption). GIFT-128 SPN: 4-bit SubCells, bit permutation PermBits, AddRoundKey,
+      AddRoundConstant. Primary: SUNDAE-GIFT-96 (nonce=96, key=128, tag=128).
+
+  # ── Xoodyak ───────────────────────────────────────────────────────────────────
+
+  - id: xoodyak
+    name: Xoodyak
+    construction_ids:
+      - sponge_permutation
+    round_ids:
+      - xoodyak_round
+    target_applications:
+      - aead
+      - hash
+    characteristics:
+      state_size_bits: 384
+      components:
+        - id: and
+        - id: not
+        - id: xor
+        - id: rotation_fixed
+          params: { note: "ρ_west and ρ_east plane shifts; θ uses plane XOR with lane shifts" }
+        - id: constant
+    reference_ids:
+      - daemen_2019_xoodyak
+    process_ids:
+      - nist_lwc_2019_2023
+    influences: []
+    notes: >
+      Daemen et al. 2019. Xoodyak uses XOODOO[12] (384-bit state = 3 planes × 4×32-bit lanes,
+      12 rounds) in Cyclist mode (lightweight duplex). XOODOO round: θ (column parity mixing
+      with 2D lane shifts), ρ_west (plane shift (1,0) and (0,11)), ι (XOR round constant C_i),
+      χ (nonlinear: B_y = Ā_{(y+1) mod 3} · A_{(y+2) mod 3}, A_y += B_y), ρ_east (shifts
+      (0,1) and (2,8)). Security claim: 128-bit for keyed AE with nonce, κ=128, nonce=128,
+      tag=128, state=384.

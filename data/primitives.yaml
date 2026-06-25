@@ -4627,3 +4627,296 @@ primitives:
     notes: >
       Naito et al. 2019. Secondary member with r1=120 (larger AD block). k=128, nonce r2=120,
       r1=120, r=64, τ=128. Same AES-128 block cipher and SAEB mode as primary.
+
+  # ── PHOTON-Beetle ─────────────────────────────────────────────────────────────
+
+  - id: photon_beetle_128_v1
+    name: PHOTON-Beetle-AEAD[128]
+    family_id: photon_beetle
+    primitive_type: aead
+    reference_ids:
+      - bao_2019_photon_beetle
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 256
+    notes: >
+      Bao et al. 2019. Primary AEAD instance. PHOTON256 permutation (256-bit state, 12 rounds)
+      in Beetle sponge mode with rate r=128. key=128, nonce=128, tag=128, state=256.
+
+  - id: photon_beetle_32_v1
+    name: PHOTON-Beetle-AEAD[32]
+    family_id: photon_beetle
+    primitive_type: aead
+    reference_ids:
+      - bao_2019_photon_beetle
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 256
+    notes: >
+      Bao et al. 2019. Secondary AEAD instance. PHOTON256 permutation (256-bit state, 12 rounds)
+      in Beetle sponge mode with rate r=32. key=128, nonce=128, tag=128, state=256. Lower
+      throughput than AEAD[128] but smaller hardware footprint.
+
+  # ── SIV-Rijndael256 ──────────────────────────────────────────────────────────
+
+  - id: siv_rijndael256_v1
+    name: SIV-Rijndael256
+    family_id: siv_rijndael256
+    primitive_type: aead
+    reference_ids:
+      - bao_2019_siv_rijndael256
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 256
+      state_size_bits: 256
+    notes: >
+      Bao et al. 2019. Rijndael256 (256-bit block, 128-bit key, 14 rounds) in SIV mode
+      (nonce-misuse resistant). key=128, nonce=128, tag=256, state=256. CBC-MAC variant F_K
+      produces 256-bit tag/IV; OFB-style encryption E_K^7 produces ciphertext.
+
+  # ── SIV-TEM-PHOTON ───────────────────────────────────────────────────────────
+
+  - id: siv_tem_photon_v1
+    name: SIV-TEM-PHOTON
+    family_id: siv_tem_photon
+    primitive_type: aead
+    reference_ids:
+      - bao_2019_siv_tem_photon
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 256
+      state_size_bits: 256
+    notes: >
+      Bao et al. 2019. Tweakable Even-Mansour (TEM) with PHOTON P256 permutation (256-bit block,
+      128-bit key, 128-bit tweak, 20 rounds effective). SIV mode on top (nonce-misuse resistant).
+      key=128, nonce=128, tag=256, state=256.
+
+  # ── SKINNY-AEAD ──────────────────────────────────────────────────────────────
+
+  - id: skinny_aead_m1_v1
+    name: SKINNY-AEAD-M1
+    family_id: skinny_aead
+    primitive_type: aead
+    reference_ids:
+      - beierle_2019_skinny_aead
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 384
+    notes: >
+      Beierle et al. 2019. Primary member. SKINNY-128-384 (block=128, tweakey=384, 56 rounds)
+      in ΘCB3 mode. key=128, nonce=128, tag=128, state=384.
+
+  - id: skinny_aead_m2_v1
+    name: SKINNY-AEAD-M2
+    family_id: skinny_aead
+    primitive_type: aead
+    reference_ids:
+      - beierle_2019_skinny_aead
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 128
+      state_size_bits: 384
+    notes: >
+      Beierle et al. 2019. SKINNY-128-384 in ΘCB3 mode. key=128, nonce=96, tag=128, state=384.
+
+  - id: skinny_aead_m3_v1
+    name: SKINNY-AEAD-M3
+    family_id: skinny_aead
+    primitive_type: aead
+    reference_ids:
+      - beierle_2019_skinny_aead
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 64
+      state_size_bits: 384
+    notes: >
+      Beierle et al. 2019. SKINNY-128-384 in ΘCB3 mode. key=128, nonce=128, tag=64, state=384.
+
+  - id: skinny_aead_m4_v1
+    name: SKINNY-AEAD-M4
+    family_id: skinny_aead
+    primitive_type: aead
+    reference_ids:
+      - beierle_2019_skinny_aead
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 384
+    notes: >
+      Beierle et al. 2019. SKINNY-128-384 in ΘCB3 mode. key=128, nonce=96, tag=64, state=384.
+
+  - id: skinny_aead_m5_v1
+    name: SKINNY-AEAD-M5
+    family_id: skinny_aead
+    primitive_type: aead
+    reference_ids:
+      - beierle_2019_skinny_aead
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 128
+      state_size_bits: 256
+    notes: >
+      Beierle et al. 2019. SKINNY-128-256 (block=128, tweakey=256, 48 rounds) in ΘCB3 mode.
+      key=128, nonce=96, tag=128, state=256.
+
+  - id: skinny_aead_m6_v1
+    name: SKINNY-AEAD-M6
+    family_id: skinny_aead
+    primitive_type: aead
+    reference_ids:
+      - beierle_2019_skinny_aead
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 256
+    notes: >
+      Beierle et al. 2019. SKINNY-128-256 (block=128, tweakey=256, 48 rounds) in ΘCB3 mode.
+      key=128, nonce=96, tag=64, state=256.
+
+  # ── Subterranean 2.0 ─────────────────────────────────────────────────────────
+
+  - id: subterranean_sae_v1
+    name: Subterranean-SAE
+    family_id: subterranean_2_0
+    primitive_type: aead
+    reference_ids:
+      - daemen_2019_subterranean_v2
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 257
+    notes: >
+      Daemen et al. 2019. SAE (Session Authenticated Encryption) mode on Subterranean 2.0
+      duplex. 257-bit permutation state; 32-bit injection rate (keyed phase). key=128,
+      nonce=128 (as session nonce), tag=128, state=257. Security claim: 128 bits.
+
+  # ── SUNDAE-GIFT ───────────────────────────────────────────────────────────────
+
+  - id: sundae_gift_96_v1
+    name: SUNDAE-GIFT-96
+    family_id: sundae_gift
+    primitive_type: aead
+    reference_ids:
+      - banik_2019_sundae_gift
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Banik et al. 2019. Primary member. GIFT-128 (40 rounds) in SUNDAE nonce-misuse resistant
+      mode. key=128, nonce=96, tag=128, state=128.
+
+  - id: sundae_gift_0_v1
+    name: SUNDAE-GIFT-0
+    family_id: sundae_gift
+    primitive_type: aead
+    reference_ids:
+      - banik_2019_sundae_gift
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 0
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Banik et al. 2019. Nonce-free variant. GIFT-128 (40 rounds) in SUNDAE mode without
+      nonce (deterministic). key=128, nonce=0, tag=128, state=128.
+
+  - id: sundae_gift_128_v1
+    name: SUNDAE-GIFT-128
+    family_id: sundae_gift
+    primitive_type: aead
+    reference_ids:
+      - banik_2019_sundae_gift
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Banik et al. 2019. GIFT-128 (40 rounds) in SUNDAE mode. key=128, nonce=128, tag=128,
+      state=128.
+
+  - id: sundae_gift_64_v1
+    name: SUNDAE-GIFT-64
+    family_id: sundae_gift
+    primitive_type: aead
+    reference_ids:
+      - banik_2019_sundae_gift
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 64
+      tag_size_bits: 128
+      state_size_bits: 128
+    notes: >
+      Banik et al. 2019. GIFT-128 (40 rounds) in SUNDAE mode. key=128, nonce=64, tag=128,
+      state=128.
+
+  # ── WAGE ──────────────────────────────────────────────────────────────────────
+
+  - id: wage_ae_128_v1
+    name: WAGE-AE-128
+    family_id: wage
+    primitive_type: aead
+    reference_ids:
+      - aagaard_2019_wage
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 259
+    notes: >
+      Aagaard et al. 2019. WAGE-AE-128: unified duplex sponge AEAD using the 259-bit WAGE
+      permutation. Rate r=64 bits per call. key=128 (k), nonce=128 (n), tag=128 (t), state=259.
+      Capacity=195 bits. Parameterization from Table 2.1.
+
+  # ── Xoodyak ───────────────────────────────────────────────────────────────────
+
+  - id: xoodyak_v1
+    name: Xoodyak
+    family_id: xoodyak
+    primitive_type: aead
+    reference_ids:
+      - daemen_2019_xoodyak
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 384
+    notes: >
+      Daemen et al. 2019. Xoodyak keyed mode: Cyclist(K, id, counter) with XOODOO[12] (384-bit
+      state, 12 rounds). key=128 (16 bytes), nonce=128 (16 bytes), tag=128 (16 bytes), state=384.
+      R_kin=44 (bytes), R_kout=24, R_ratchet=16. Security claim: 128 bits.
+
+  # ── Yarará and Coral ──────────────────────────────────────────────────────────
+
+  - id: yarara_v1
+    name: Yarara
+    family_id: yarara_and_coral
+    primitive_type: aead
+    reference_ids:
+      - montes_2019_yarara_and_coral
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 256
+    notes: >
+      Montes & Penazzi 2019. Yarará AEAD: 256-bit sponge permutation (4×64-bit words) with
+      Duplex mode. Rate r=64 bits; capacity c=192 bits. key=128, nonce=128 (as initial block),
+      tag=128, state=256. Permutations: π_I (10 rounds for init), π_AD/π_AE/π_F (6 rounds
+      each). Security claim: 128 bits (if n > c/2).

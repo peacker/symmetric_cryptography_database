@@ -140,7 +140,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | ORYX | ORYX | stream_cipher | TODO | TODO | TODO | no |
 | [ ] | PEA | PEA | block_cipher | TODO | TODO | TODO | no |
 | [x] | PHOTON | PHOTON | permutation | 2021 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
-| [ ] | PHOTON-Beetle | PHOTON | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/PHOTON-Beetle-spec.pdf | Full | yes |
+| [x] | PHOTON-Beetle | PHOTON | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/PHOTON-Beetle-spec.pdf | Full | yes |
 | [ ] | PICARO | PICARO | block_cipher | TODO | TODO | TODO | no |
 | [x] | PRESENT | PRESENT | block_cipher | 2007 | https://iacr.org/archive/ches2007/47270450/47270450.pdf | TODO | yes |
 | [ ] | PRIDE | PRIDE | block_cipher | TODO | TODO | TODO | no |
@@ -185,10 +185,10 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SHARK | SHARK | block_cipher | 1996 | https://doi.org/10.1007/3-540-68697-5_11 | Full | yes |
 | [x] | SIMON | SIMON | block_cipher | 2013 | https://eprint.iacr.org/2013/404 | TODO | no |
 | [x] | SIMPLE | SIMPLE | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
-| [ ] | SIV-Rijndael256 | Rijndael | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SIV-Rijndael256-spec.pdf | Full | yes |
-| [ ] | SIV-TEM-PHOTON | PHOTON | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SIV-TEM-PHOTON-spec.pdf | Full | yes |
+| [x] | SIV-Rijndael256 | Rijndael | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SIV-Rijndael256-spec.pdf | Full | yes |
+| [x] | SIV-TEM-PHOTON | PHOTON | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SIV-TEM-PHOTON-spec.pdf | Full | yes |
 | [x] | SKINNY | SKINNY | tweakable_block_cipher | 2016 | https://doi.org/10.1007/978-3-662-53008-5_5 | TODO | no |
-| [ ] | SKINNY-AEAD/SKINNY-HASH | SKINNY | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SKINNY-spec.pdf | Full | yes |
+| [x] | SKINNY-AEAD/SKINNY-HASH | SKINNY | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SKINNY-spec.pdf | Full | yes |
 | [x] | SKIPJACK | SKIPJACK | block_cipher | 1998 | https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub185.pdf | Full | yes |
 | [x] | SM4 | SM4 | block_cipher | 2021 | https://www.rfc-editor.org/rfc/rfc8998 | TODO | yes |
 | [x] | SMBA | SMBA | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000341 | Full | yes |
@@ -210,8 +210,8 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Spritz | Spritz | stream_cipher | 2014 | https://people.csail.mit.edu/rivest/pubs/RS14.pdf | Full | yes |
 | [x] | SQUARE | SQUARE | block_cipher | 1997 | https://link.springer.com/chapter/10.1007/BFb0052343 | Full | yes |
 | [x] | Subterranean | Subterranean permutation | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf | Full | yes |
-| [ ] | Subterranean 2.0 | Subterranean 2.0 | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf | Full | yes |
-| [ ] | SUNDAE-GIFT | GIFT | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SUNDAE-GIFT-spec.pdf | Full | yes |
+| [x] | Subterranean 2.0 | Subterranean 2.0 | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf | Full | yes |
+| [x] | SUNDAE-GIFT | GIFT | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SUNDAE-GIFT-spec.pdf | Full | yes |
 | [x] | Sycon | Sycon | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | TANGRAM | TANGRAM | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000337 | Full | yes |
 | [x] | TEA | TEA | block_cipher | 1994 | https://doi.org/10.1007/3-540-60590-8_29 | TODO | yes |
@@ -231,18 +231,18 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | UEA2 / ZUC | ZUC | stream_cipher | TODO | TODO | TODO | no |
 | [x] | uLBC | uLBC | block_cipher | 2025 | https://cic.iacr.org/p/1/4/25 | TODO | no |
 | [ ] | VMPC | VMPC | stream_cipher | TODO | TODO | TODO | no |
-| [ ] | WAGE | WAGE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/WAGE-spec.pdf | Full | yes |
+| [x] | WAGE | WAGE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/WAGE-spec.pdf | Full | yes |
 | [ ] | WAKE | WAKE | stream_cipher | TODO | TODO | TODO | no |
 | [x] | Whirlpool | Whirlpool | hash | 2003 | https://www.larc.usp.br/~pbarreto/whirlpool.zip | Full | yes |
 | [x] | XChaCha | ChaCha | stream_cipher | TODO | TODO | TODO | no |
 | [ ] | XEX-based families (XTS lineage) | AES | mode | TODO | TODO | TODO | no |
 | [x] | Xoodoo | Xoodoo | permutation | 2018 | https://keccak.team/xoodoo.html | TODO | no |
-| [ ] | Xoodyak | Xoodoo | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Xoodyak-spec.pdf | Full | yes |
+| [x] | Xoodyak | Xoodoo | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Xoodyak-spec.pdf | Full | yes |
 | [x] | XTEA | XTEA | block_cipher | 1997 | https://www.cix.co.uk/~klockstone/xtea.pdf | TODO | yes |
 | [x] | XXTEA | XXTEA | block_cipher | 1998 | https://www.cix.co.uk/~klockstone/xxtea.pdf | Full | yes |
 | [x] | XXTEA / Corrected Block TEA | XXTEA | block_cipher | 1998 | https://www.cix.co.uk/~klockstone/xxtea.pdf | Full | yes |
 | [x] | YAMB | YAMB | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/yamb.pdf | Full | yes |
-| [ ] | Yarara and Coral | Yarara and Coral | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Yarara_and_Coral-spec.pdf | Full | yes |
+| [x] | Yarara and Coral | Yarara and Coral | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Yarara_and_Coral-spec.pdf | Full | yes |
 | [x] | 3-Way | 3-Way | block_cipher | 1991 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/threeway.pdf | Full | yes |
 
 ## Modes of Operation Coverage Checklist
