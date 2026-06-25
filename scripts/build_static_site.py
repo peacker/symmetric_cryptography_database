@@ -89,8 +89,8 @@ def load_join_builder_dataset(conn: sqlite3.Connection) -> dict[str, object]:
     base_sql = (
         'SELECT p.id AS "primitive.id", p.name AS "primitive.name", '
         'p.primitive_type AS "primitive.type_id", pt.name AS "primitive.type_name", '
-      'p.block_size_bits AS "primitive.fixed_input_bits", '
-      'p.output_size_bits AS "primitive.fixed_output_bits", '
+        'p.block_size_bits AS "primitive.fixed_input_bits", '
+        'p.output_size_bits AS "primitive.fixed_output_bits", '
         'p.characteristics_json AS "primitive.characteristics_json", '
         'f.id AS "family.id", f.name AS "family.name", f.year AS "family.year", '
         'f.notes AS "family.notes", ref.id AS "reference.id", '
@@ -148,15 +148,15 @@ def build_site() -> None:
           <h1>Symmetric Cryptography Database</h1>
         </section>
         <nav class=\"navigator\" aria-label=\"Section navigation\">
-          <button type=\"button\" class=\"nav-tab\" data-view-target=\"visualizations\">Family Visualizations</button>
-          <button type=\"button\" class=\"nav-tab is-active\" data-view-target=\"tables\">All SQLite Tables</button>
+          <button type=\"button\" class=\"nav-tab is-active\" data-view-target=\"visualizations\">Family Visualizations</button>
+          <button type=\"button\" class=\"nav-tab\" data-view-target=\"tables\">All SQLite Tables</button>
           <button type=\"button\" class=\"nav-tab\" data-view-target=\"builder\">Custom Query Builder</button>
         </nav>
       </header>
 
       <section class=\"panel meta\" id=\"summary\"></section>
 
-      <section class=\"panel view-panel\" data-view=\"visualizations\">
+      <section class=\"panel view-panel is-active\" data-view=\"visualizations\">
         <h2>Family Visualizations</h2>
         <p class=\"small-note\">X axis = publication year. Y axis grouping is selectable.</p>
         <div class=\"toolbar viz-toolbar\">
@@ -168,20 +168,69 @@ def build_site() -> None:
             </select>
           </label>
           <label class=\"inline-check\"><input id=\"vizShowArrows\" type=\"checkbox\" /> Show relation arrows</label>
+          <label class=\"inline-check\"><input id=\"vizHideNames\" type=\"checkbox\" /> Hide family names</label>
           <div class=\"viz-font-controls\" aria-label=\"Timeline font size\">
             <button id=\"vizFontMinus\" type=\"button\">A-</button>
             <button id=\"vizFontPlus\" type=\"button\">A+</button>
             <button id=\"vizFontReset\" type=\"button\">Reset</button>
             <span id=\"vizFontValue\" class=\"small-note\">12px</span>
           </div>
+          <div class=\"viz-scale-controls\" aria-label=\"Timeline zoom\">
+            <button id=\"vizZoomOut\" type=\"button\">-</button>
+            <button id=\"vizZoomIn\" type=\"button\">+</button>
+            <button id=\"vizZoomReset\" type=\"button\">100%</button>
+            <button id=\"vizZoomFit\" type=\"button\">Fit</button>
+            <span id=\"vizZoomValue\" class=\"small-note\">100%</span>
+          </div>
         </div>
-        <div class=\"viz-wrap\">
-          <svg id=\"familyViz\" role=\"img\" aria-label=\"Family timeline visualization\"></svg>
+        <div class=\"viz-secondary-controls\">
+          <label class=\"toolbar-field viz-search-field\">Find family
+            <input id=\"vizFamilySearch\" type=\"search\" placeholder=\"Type a family name\" autocomplete=\"off\" />
+          </label>
+          <label class=\"inline-check\"><input id=\"vizCompactMode\" type=\"checkbox\" /> Compact density mode</label>
+          <div class=\"viz-year-controls\">
+            <label class=\"toolbar-field\">From year
+              <input id=\"vizYearStart\" type=\"range\" />
+            </label>
+            <label class=\"toolbar-field\">To year
+              <input id=\"vizYearEnd\" type=\"range\" />
+            </label>
+            <button id=\"vizYearReset\" type=\"button\">Reset years</button>
+            <span id=\"vizYearRangeValue\" class=\"small-note\">All years</span>
+          </div>
         </div>
-        <p id=\"vizRelationInfo\" class=\"small-note viz-relation-info\">Hover a relation arrow to see relation details.</p>
+        <details class=\"collapsible viz-filter-panel\" open>
+          <summary>Visible groups</summary>
+          <div class=\"collapsible-body\">
+            <div class=\"viz-filter-actions\">
+              <button id=\"vizFilterAll\" type=\"button\">All</button>
+              <button id=\"vizFilterNone\" type=\"button\">None</button>
+            </div>
+            <div id=\"vizGroupFilters\" class=\"filter-checklist viz-filter-checklist\"></div>
+          </div>
+        </details>
+        <div class=\"viz-frame\">
+          <div id=\"vizYAxisPane\" class=\"viz-yaxis-pane\">
+            <div id=\"vizYAxisTrack\" class=\"viz-axis-track\">
+              <svg id=\"familyVizYAxis\" role=\"presentation\" aria-hidden=\"true\"></svg>
+            </div>
+          </div>
+          <div class=\"viz-plot-pane\">
+            <div id=\"vizPlotScroll\" class=\"viz-plot-scroll\">
+              <svg id=\"familyVizPlot\" role=\"img\" aria-label=\"Family timeline visualization\"></svg>
+            </div>
+            <div class=\"viz-xaxis-pane\">
+              <div id=\"vizXAxisTrack\" class=\"viz-axis-track\">
+                <svg id=\"familyVizXAxis\" role=\"presentation\" aria-hidden=\"true\"></svg>
+              </div>
+            </div>
+          </div>
+          <div id=\"vizCornerPane\" class=\"viz-corner-pane\"></div>
+        </div>
+        <p id=\"vizRelationInfo\" class=\"small-note viz-relation-info\">Hover a relation arrow to see relation details. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.</p>
       </section>
 
-      <section class=\"panel view-panel is-active\" data-view=\"tables\">
+      <section class=\"panel view-panel\" data-view=\"tables\">
         <h2>All SQLite Tables</h2>
         <div class=\"toolbar\">
           <label class=\"toolbar-field\">Table
@@ -498,33 +547,138 @@ pre {
 }
 
 .viz-toolbar {
-  grid-template-columns: minmax(220px, 360px) auto auto;
+  grid-template-columns: minmax(220px, 300px) auto auto auto auto;
   align-items: end;
 }
 
-.viz-font-controls {
+.viz-font-controls,
+.viz-scale-controls {
   display: flex;
   align-items: center;
   gap: 0.42rem;
 }
 
-.viz-font-controls button {
+.viz-font-controls button,
+.viz-scale-controls button {
   width: auto;
   margin-top: 0;
 }
 
-#vizFontValue {
+#vizFontValue,
+#vizZoomValue {
   margin: 0;
   min-width: 3.2rem;
   text-align: right;
 }
 
-.viz-wrap {
+.viz-filter-panel {
+  margin-top: 0.7rem;
+}
+
+.viz-secondary-controls {
+  margin-top: 0.55rem;
+  display: grid;
+  grid-template-columns: minmax(230px, 330px) auto minmax(320px, 1fr);
+  gap: 0.55rem 0.75rem;
+  align-items: end;
+}
+
+.viz-search-field {
+  margin: 0;
+}
+
+.viz-year-controls {
+  display: grid;
+  grid-template-columns: minmax(130px, 1fr) minmax(130px, 1fr) auto auto;
+  gap: 0.45rem 0.6rem;
+  align-items: end;
+}
+
+.viz-year-controls .toolbar-field {
+  margin: 0;
+}
+
+#vizYearRangeValue {
+  margin: 0;
+  min-width: 9rem;
+  text-align: right;
+}
+
+.viz-filter-actions {
+  display: flex;
+  gap: 0.45rem;
+  margin-bottom: 0.55rem;
+}
+
+.viz-filter-actions button {
+  width: auto;
+  margin-top: 0;
+}
+
+.viz-filter-checklist {
+  max-height: 170px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.viz-frame {
   margin-top: 0.7rem;
   border: 1px solid var(--line);
   border-radius: 10px;
+  overflow: hidden;
   background: #fff;
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  grid-template-rows: minmax(360px, 68vh) 48px;
+}
+
+.viz-yaxis-pane {
+  grid-column: 1;
+  grid-row: 1;
+  overflow: hidden;
+  border-right: 1px solid var(--line);
+  background: color-mix(in srgb, #ffffff 92%, #eef5f6 8%);
+}
+
+.viz-plot-pane {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 48px;
+}
+
+.viz-plot-scroll {
+  grid-row: 1;
   overflow: auto;
+  background: #fff;
+}
+
+.viz-xaxis-pane {
+  grid-row: 2;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, #ffffff 92%, #eef5f6 8%);
+}
+
+.viz-corner-pane {
+  grid-column: 1;
+  grid-row: 2;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  background: color-mix(in srgb, #ffffff 88%, #e4eef0 12%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #294248;
+  text-align: center;
+}
+
+.viz-axis-track {
+  will-change: transform;
 }
 
 .viz-relation-info {
@@ -532,10 +686,9 @@ pre {
   min-height: 1.4rem;
 }
 
-#familyViz {
-  width: auto;
-  min-width: 920px;
-  height: 640px;
+#familyVizPlot,
+#familyVizYAxis,
+#familyVizXAxis {
   display: block;
 }
 
@@ -558,7 +711,7 @@ pre {
 .viz-point {
   fill: #1f77b4;
   stroke: #ffffff;
-  stroke-width: 1.2;
+  stroke-width: 1.1;
 }
 
 .viz-text {
@@ -644,6 +797,16 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
   .navigator { gap: 0.4rem; }
   .nav-tab { flex: 1 1 auto; text-align: center; justify-content: center; }
   .viz-toolbar { grid-template-columns: 1fr; }
+  .viz-secondary-controls { grid-template-columns: 1fr; }
+  .viz-year-controls {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+  #vizYearRangeValue {
+    text-align: left;
+  }
+  .viz-frame { grid-template-columns: 160px minmax(0, 1fr); }
+  .viz-filter-checklist { grid-template-columns: 1fr; }
 }
 """
 
@@ -722,11 +885,11 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
-        activate(tab.getAttribute("data-view-target") || "tables");
+        activate(tab.getAttribute("data-view-target") || "visualizations");
       });
     });
 
-    activate("tables");
+    activate("visualizations");
   }
 
   function createTableView(tableId) {
@@ -1072,18 +1235,59 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
   }
 
   function setupFamilyVisualization() {
-    const svg = document.getElementById("familyViz");
+    const plotSvg = document.getElementById("familyVizPlot");
+    const xAxisSvg = document.getElementById("familyVizXAxis");
+    const yAxisSvg = document.getElementById("familyVizYAxis");
+    const plotScroll = document.getElementById("vizPlotScroll");
+    const xAxisTrack = document.getElementById("vizXAxisTrack");
+    const yAxisTrack = document.getElementById("vizYAxisTrack");
+    const cornerPane = document.getElementById("vizCornerPane");
     const groupBy = document.getElementById("vizGroupBy");
     const showArrows = document.getElementById("vizShowArrows");
+    const hideNames = document.getElementById("vizHideNames");
+    const groupFilters = document.getElementById("vizGroupFilters");
+    const filterAll = document.getElementById("vizFilterAll");
+    const filterNone = document.getElementById("vizFilterNone");
     const fontMinus = document.getElementById("vizFontMinus");
     const fontPlus = document.getElementById("vizFontPlus");
     const fontReset = document.getElementById("vizFontReset");
     const fontValue = document.getElementById("vizFontValue");
+    const zoomOut = document.getElementById("vizZoomOut");
+    const zoomIn = document.getElementById("vizZoomIn");
+    const zoomReset = document.getElementById("vizZoomReset");
+    const zoomFit = document.getElementById("vizZoomFit");
+    const zoomValue = document.getElementById("vizZoomValue");
+    const familySearch = document.getElementById("vizFamilySearch");
+    const compactMode = document.getElementById("vizCompactMode");
+    const yearStart = document.getElementById("vizYearStart");
+    const yearEnd = document.getElementById("vizYearEnd");
+    const yearReset = document.getElementById("vizYearReset");
+    const yearRangeValue = document.getElementById("vizYearRangeValue");
     const relationInfoBox = document.getElementById("vizRelationInfo");
-    if (!svg || !groupBy || !showArrows || !fontMinus || !fontPlus || !fontReset || !fontValue || !relationInfoBox) return;
+    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !groupBy || !showArrows || !hideNames || !groupFilters || !filterAll || !filterNone || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !familySearch || !compactMode || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
 
     const BASE_FONT = 12;
+    const BASE_ZOOM = 1;
+    const MIN_ZOOM = 0.35;
+    const MAX_ZOOM = 4;
+    const ZOOM_FACTOR = 1.2;
+    const LEFT_AXIS_WIDTH = 200;
+    const AXIS_HEIGHT = 48;
+    const STACK_STEP = 0.34;
+    const GROUP_GAP_UNITS = 0.42;
+    const POINT_RADIUS = 4.25;
+    const BASE_RELATION_TEXT = "Hover a relation arrow to see relation details. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.";
+    const modeSelections = {
+      primitive: new Map(),
+      construction: new Map(),
+      target: new Map(),
+    };
     let fontPx = BASE_FONT;
+    let zoomScale = BASE_ZOOM;
+    let hasAutoFit = false;
+    let lastRenderSize = { plotWidth: 920, plotHeight: 640 };
+    let yearsBounds = null;
+    let suppressYearRender = false;
 
     const tables = data.tables || {};
     const families = (tables.families && tables.families.rows) || [];
@@ -1096,6 +1300,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
     const typeNameById = new Map(primitiveTypes.map((row) => [String(row.id), String(row.name)]));
     const constructionNameById = new Map(constructions.map((row) => [String(row.id), String(row.name)]));
+    const familyById = new Map(families.map((row) => [String(row.id), row]));
 
     const familyToTypes = new Map();
     primitives.forEach((row) => {
@@ -1126,6 +1331,10 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       if (target) familyToTargets.get(familyId).add(target);
     });
 
+    function clearNode(node) {
+      while (node.firstChild) node.removeChild(node.firstChild);
+    }
+
     function groupsForFamily(familyId, mode) {
       if (mode === "primitive") {
         const values = Array.from(familyToTypes.get(familyId) || []);
@@ -1147,80 +1356,286 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       return { count: Math.max(1, effective.length || 1), label: label || "related" };
     }
 
-    function clearSvg() {
-      while (svg.firstChild) svg.removeChild(svg.firstChild);
+    function modePalette(mode) {
+      if (mode === "construction") return ["rgba(248, 240, 224, 0.92)", "rgba(252, 247, 238, 0.98)"];
+      if (mode === "target") return ["rgba(232, 243, 234, 0.92)", "rgba(246, 251, 247, 0.98)"];
+      return ["rgba(231, 244, 248, 0.92)", "rgba(246, 251, 252, 0.98)"];
+    }
+
+    function modeLabel(mode) {
+      const option = groupBy.options[groupBy.selectedIndex];
+      return option ? option.textContent : mode;
+    }
+
+    function truncateLabel(text, maxChars) {
+      const normalized = String(text || "");
+      if (normalized.length <= maxChars) return normalized;
+      return `${normalized.slice(0, Math.max(1, maxChars - 3))}...`;
+    }
+
+    function charsForWidth(widthPx) {
+      return Math.max(7, Math.min(28, Math.floor(widthPx / (Math.max(fontPx, 8) * 0.62))));
+    }
+
+    function selectionMap(mode) {
+      return modeSelections[mode] || modeSelections.primitive;
+    }
+
+    function syncAxisTracks() {
+      yAxisTrack.style.transform = `translateY(${-plotScroll.scrollTop}px)`;
+      xAxisTrack.style.transform = `translateX(${-plotScroll.scrollLeft}px)`;
+    }
+
+    function clampZoom(nextZoom) {
+      return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, nextZoom));
+    }
+
+    function applyZoom() {
+      plotSvg.style.width = `${Math.round(lastRenderSize.plotWidth * zoomScale)}px`;
+      plotSvg.style.height = `${Math.round(lastRenderSize.plotHeight * zoomScale)}px`;
+      xAxisSvg.style.width = `${Math.round(lastRenderSize.plotWidth * zoomScale)}px`;
+      xAxisSvg.style.height = `${AXIS_HEIGHT}px`;
+      yAxisSvg.style.width = `${LEFT_AXIS_WIDTH}px`;
+      yAxisSvg.style.height = `${Math.round(lastRenderSize.plotHeight * zoomScale)}px`;
+      zoomValue.textContent = `${Math.round(zoomScale * 100)}%`;
+      syncAxisTracks();
+    }
+
+    function setZoom(nextZoom) {
+      zoomScale = clampZoom(nextZoom);
+      applyZoom();
+    }
+
+    function fitZoom() {
+      if (!plotScroll.clientWidth || !lastRenderSize.plotWidth) return;
+      const fitWidth = Math.max(240, plotScroll.clientWidth - 8);
+      setZoom(fitWidth / lastRenderSize.plotWidth);
+    }
+
+    function ensureSelection(mode, labels) {
+      const active = selectionMap(mode);
+      labels.forEach((label) => {
+        if (!active.has(label)) active.set(label, true);
+      });
+      Array.from(active.keys()).forEach((label) => {
+        if (!labels.includes(label)) active.delete(label);
+      });
+      return active;
+    }
+
+    function initializeYearBounds() {
+      if (yearsBounds) return yearsBounds;
+      const validYears = families
+        .map((family) => Number(family.year))
+        .filter((year) => Number.isFinite(year))
+        .sort((a, b) => a - b);
+      if (!validYears.length) return null;
+      yearsBounds = { min: validYears[0], max: validYears[validYears.length - 1] };
+      yearStart.min = String(yearsBounds.min);
+      yearStart.max = String(yearsBounds.max);
+      yearEnd.min = String(yearsBounds.min);
+      yearEnd.max = String(yearsBounds.max);
+      yearStart.step = "1";
+      yearEnd.step = "1";
+      yearStart.value = String(yearsBounds.min);
+      yearEnd.value = String(yearsBounds.max);
+      return yearsBounds;
+    }
+
+    function getYearRange() {
+      const bounds = initializeYearBounds();
+      if (!bounds) return null;
+      const start = Number(yearStart.value || bounds.min);
+      const end = Number(yearEnd.value || bounds.max);
+      return {
+        start: Number.isFinite(start) ? start : bounds.min,
+        end: Number.isFinite(end) ? end : bounds.max,
+        min: bounds.min,
+        max: bounds.max,
+      };
+    }
+
+    function normalizeYearControls() {
+      const yearRange = getYearRange();
+      if (!yearRange) {
+        yearRangeValue.textContent = "No years available";
+        return null;
+      }
+      let start = yearRange.start;
+      let end = yearRange.end;
+      if (start > end) {
+        if (document.activeElement === yearStart) {
+          end = start;
+          yearEnd.value = String(end);
+        } else {
+          start = end;
+          yearStart.value = String(start);
+        }
+      }
+      yearRangeValue.textContent = start === end ? `${start}` : `${start} - ${end}`;
+      return { start, end };
+    }
+
+    function renderGroupFilterList(mode, labels) {
+      const active = ensureSelection(mode, labels);
+      clearNode(groupFilters);
+      labels.forEach((label) => {
+        const row = document.createElement("label");
+        const box = document.createElement("input");
+        box.type = "checkbox";
+        box.checked = active.get(label) !== false;
+        box.setAttribute("data-group-label", label);
+        const text = document.createElement("span");
+        text.textContent = label;
+        row.appendChild(box);
+        row.appendChild(text);
+        groupFilters.appendChild(row);
+      });
+    }
+
+    function renderEmptyState(message) {
+      clearNode(plotSvg);
+      clearNode(xAxisSvg);
+      clearNode(yAxisSvg);
+      relationInfoBox.textContent = BASE_RELATION_TEXT;
+      cornerPane.textContent = `${modeLabel(groupBy.value)} | Publication year`;
+      plotSvg.setAttribute("viewBox", "0 0 920 260");
+      plotSvg.setAttribute("width", "920");
+      plotSvg.setAttribute("height", "260");
+      xAxisSvg.setAttribute("viewBox", `0 0 920 ${AXIS_HEIGHT}`);
+      xAxisSvg.setAttribute("width", "920");
+      xAxisSvg.setAttribute("height", String(AXIS_HEIGHT));
+      yAxisSvg.setAttribute("viewBox", `0 0 ${LEFT_AXIS_WIDTH} 260`);
+      yAxisSvg.setAttribute("width", String(LEFT_AXIS_WIDTH));
+      yAxisSvg.setAttribute("height", "260");
+      lastRenderSize = { plotWidth: 920, plotHeight: 260 };
+      const msg = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      msg.setAttribute("x", "24");
+      msg.setAttribute("y", "42");
+      msg.setAttribute("class", "viz-label");
+      msg.textContent = message;
+      plotSvg.appendChild(msg);
+      applyZoom();
     }
 
     function render() {
-      clearSvg();
-      relationInfoBox.textContent = "Hover a relation arrow to see relation details.";
+      clearNode(plotSvg);
+      clearNode(xAxisSvg);
+      clearNode(yAxisSvg);
+      relationInfoBox.textContent = BASE_RELATION_TEXT;
       const mode = groupBy.value;
-      const points = [];
+      cornerPane.textContent = `${modeLabel(mode)} | Publication year`;
+      const rawPoints = [];
+      const yearRange = normalizeYearControls();
+      const searchNeedle = familySearch.value.trim().toLowerCase();
 
       families.forEach((family) => {
         const year = Number(family.year);
         if (!Number.isFinite(year)) return;
+        if (yearRange && (year < yearRange.start || year > yearRange.end)) return;
         const familyId = String(family.id || "");
         if (!familyId) return;
-        const groups = groupsForFamily(familyId, mode);
-        groups.forEach((group) => {
-          points.push({
+        const familyName = String(family.name || familyId);
+        if (searchNeedle && !familyName.toLowerCase().includes(searchNeedle)) return;
+        groupsForFamily(familyId, mode).forEach((group) => {
+          rawPoints.push({
             familyId,
-            name: String(family.name || familyId),
+            name: familyName,
             year,
             group,
           });
         });
       });
 
-      if (!points.length) {
-        const msg = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        msg.setAttribute("x", "24");
-        msg.setAttribute("y", "40");
-        msg.setAttribute("class", "viz-label");
-        msg.textContent = "No family data available for visualization.";
-        svg.appendChild(msg);
+      if (!rawPoints.length) {
+        if (searchNeedle) {
+          renderEmptyState("No families match the current name search and year range.");
+        } else {
+          renderEmptyState("No family data available for visualization.");
+        }
         return;
       }
 
-      const groupLabels = Array.from(new Set(points.map((p) => p.group))).sort((a, b) => a.localeCompare(b));
-      const groupBase = new Map(groupLabels.map((label, idx) => [label, idx]));
-      points.sort((a, b) => a.group.localeCompare(b.group) || a.year - b.year || a.name.localeCompare(b.name));
+      const allGroupLabels = Array.from(new Set(rawPoints.map((point) => point.group))).sort((a, b) => a.localeCompare(b));
+      renderGroupFilterList(mode, allGroupLabels);
+      const activeGroups = ensureSelection(mode, allGroupLabels);
+      const points = rawPoints.filter((point) => activeGroups.get(point.group) !== false);
 
+      if (!points.length) {
+        renderEmptyState("No groups are currently enabled. Re-enable at least one group to render the chart.");
+        return;
+      }
+
+      points.sort((a, b) => a.group.localeCompare(b.group) || a.year - b.year || a.name.localeCompare(b.name));
+      const groupLabels = Array.from(new Set(points.map((point) => point.group))).sort((a, b) => a.localeCompare(b));
       const counters = new Map();
+      const maxStackByGroup = new Map();
       points.forEach((point) => {
         const key = `${point.group}|${point.year}`;
         const stack = counters.get(key) || 0;
-        point.yUnit = (groupBase.get(point.group) || 0) + stack * 0.46;
+        point.stackIndex = stack;
         counters.set(key, stack + 1);
+        maxStackByGroup.set(point.group, Math.max(maxStackByGroup.get(point.group) || 0, stack + 1));
       });
 
-      const minYear = Math.min(...points.map((p) => p.year));
-      const maxYear = Math.max(...points.map((p) => p.year));
-      const span = Math.max(1, maxYear - minYear);
-      const laneStep = Math.max(64, fontPx * 4.9);
-      const top = 26;
-      const bottom = 54;
-      const left = 220;
-      const right = 32;
-      const plotWidth = Math.max(980, (span + 1) * (42 + fontPx * 1.1));
-      const maxYUnit = Math.max(...points.map((p) => p.yUnit || 0));
-      const plotHeight = Math.max(320, (maxYUnit + 1) * laneStep + 10);
-      const width = left + plotWidth + right;
-      const height = top + plotHeight + bottom;
+      const groupLayout = new Map();
+      let nextBaseUnit = 0;
+      groupLabels.forEach((label) => {
+        const maxStack = maxStackByGroup.get(label) || 1;
+        const spanUnits = 1 + Math.max(0, maxStack - 1) * STACK_STEP;
+        const endUnit = nextBaseUnit + spanUnits;
+        groupLayout.set(label, { startUnit: nextBaseUnit, endUnit });
+        nextBaseUnit = endUnit + GROUP_GAP_UNITS;
+      });
 
-      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-      svg.setAttribute("width", String(width));
-      svg.setAttribute("height", String(height));
+      points.forEach((point) => {
+        const layout = groupLayout.get(point.group);
+        point.yUnit = (layout ? layout.startUnit : 0) + point.stackIndex * STACK_STEP;
+      });
+
+      const minYear = Math.min(...points.map((point) => point.year));
+      const maxYear = Math.max(...points.map((point) => point.year));
+      const span = Math.max(1, maxYear - minYear);
+      const laneStep = Math.max(36, fontPx * 2.85);
+      const topPad = 12;
+      const basePlotWidth = Math.max(840, (span + 1) * (32 + fontPx * 0.8));
+      const maxYUnit = Math.max(
+        ...points.map((point) => point.yUnit || 0),
+        ...Array.from(groupLayout.values()).map((layout) => layout.endUnit)
+      );
+      const plotHeight = Math.max(240, topPad + (maxYUnit + 1) * laneStep + 10);
+
+      const roughYearSpacing = span ? basePlotWidth / span : basePlotWidth;
+      const familyLabelChars = hideNames.checked ? 0 : Math.max(9, Math.min(24, Math.floor((roughYearSpacing * 1.3) / (Math.max(fontPx, 8) * 0.62))));
+      const plotLeftPad = POINT_RADIUS + 3;
+      const estimatedLabelWidth = hideNames.checked ? 0 : familyLabelChars * Math.max(fontPx, 8) * 0.62 + POINT_RADIUS + 10;
+      const plotRightPad = Math.max(POINT_RADIUS + 4, estimatedLabelWidth);
+      const plotWidth = basePlotWidth + plotLeftPad + plotRightPad;
+      const innerPlotWidth = Math.max(1, plotWidth - plotLeftPad - plotRightPad);
+      lastRenderSize = { plotWidth, plotHeight };
+      const compact = compactMode.checked;
+
+      plotSvg.setAttribute("viewBox", `0 0 ${plotWidth} ${plotHeight}`);
+      plotSvg.setAttribute("width", String(plotWidth));
+      plotSvg.setAttribute("height", String(plotHeight));
+      xAxisSvg.setAttribute("viewBox", `0 0 ${plotWidth} ${AXIS_HEIGHT}`);
+      xAxisSvg.setAttribute("width", String(plotWidth));
+      xAxisSvg.setAttribute("height", String(AXIS_HEIGHT));
+      yAxisSvg.setAttribute("viewBox", `0 0 ${LEFT_AXIS_WIDTH} ${plotHeight}`);
+      yAxisSvg.setAttribute("width", String(LEFT_AXIS_WIDTH));
+      yAxisSvg.setAttribute("height", String(plotHeight));
 
       function xFor(year) {
-        if (minYear === maxYear) return left + plotWidth / 2;
-        return left + ((year - minYear) / (maxYear - minYear)) * plotWidth;
+        if (minYear === maxYear) return plotLeftPad + innerPlotWidth / 2;
+        return plotLeftPad + ((year - minYear) / (maxYear - minYear)) * innerPlotWidth;
       }
 
       function yFor(yUnit) {
-        return top + yUnit * laneStep;
+        return topPad + yUnit * laneStep;
       }
+
+      const palette = modePalette(mode);
+      const groupLabelChars = charsForWidth(LEFT_AXIS_WIDTH - 24);
 
       const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
       const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
@@ -1233,67 +1648,99 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       marker.setAttribute("orient", "auto");
       const markerPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
       markerPath.setAttribute("d", "M0,0 L10,3.5 L0,7 z");
-      markerPath.setAttribute("fill", "rgba(76, 91, 95, 0.75)");
+      markerPath.setAttribute("fill", "rgba(76, 91, 95, 0.72)");
       marker.appendChild(markerPath);
       defs.appendChild(marker);
-      svg.appendChild(defs);
+      plotSvg.appendChild(defs);
 
-      const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      yAxis.setAttribute("x1", String(left));
-      yAxis.setAttribute("x2", String(left));
-      yAxis.setAttribute("y1", String(top));
-      yAxis.setAttribute("y2", String(top + plotHeight));
-      yAxis.setAttribute("class", "viz-axis");
-      svg.appendChild(yAxis);
+      groupLabels.forEach((label, index) => {
+        const layout = groupLayout.get(label);
+        if (!layout) return;
+        const y = yFor(layout.startUnit);
+        const bandTop = Math.max(0, y - laneStep * 0.54);
+        const bandBottom = Math.min(plotHeight, yFor(layout.endUnit) + laneStep * 0.28);
+        const fill = palette[index % palette.length];
 
-      const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      xAxis.setAttribute("x1", String(left));
-      xAxis.setAttribute("x2", String(left + plotWidth));
-      xAxis.setAttribute("y1", String(top + plotHeight));
-      xAxis.setAttribute("y2", String(top + plotHeight));
-      xAxis.setAttribute("class", "viz-axis");
-      svg.appendChild(xAxis);
+        const plotBand = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        plotBand.setAttribute("x", "0");
+        plotBand.setAttribute("y", String(bandTop));
+        plotBand.setAttribute("width", String(plotWidth));
+        plotBand.setAttribute("height", String(Math.max(1, bandBottom - bandTop)));
+        plotBand.setAttribute("fill", fill);
+        plotSvg.appendChild(plotBand);
 
-      groupLabels.forEach((label) => {
-        const base = groupBase.get(label) || 0;
-        const y = yFor(base);
+        const yBand = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        yBand.setAttribute("x", "0");
+        yBand.setAttribute("y", String(bandTop));
+        yBand.setAttribute("width", String(LEFT_AXIS_WIDTH));
+        yBand.setAttribute("height", String(Math.max(1, bandBottom - bandTop)));
+        yBand.setAttribute("fill", fill);
+        yAxisSvg.appendChild(yBand);
+
         const guide = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        guide.setAttribute("x1", String(left));
-        guide.setAttribute("x2", String(left + plotWidth));
-        guide.setAttribute("y1", String(y));
-        guide.setAttribute("y2", String(y));
+        guide.setAttribute("x1", "0");
+        guide.setAttribute("x2", String(plotWidth));
+        guide.setAttribute("y1", String(bandTop));
+        guide.setAttribute("y2", String(bandTop));
         guide.setAttribute("class", "viz-grid");
-        svg.appendChild(guide);
+        plotSvg.appendChild(guide);
 
-        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        text.setAttribute("x", String(left - 8));
-        text.setAttribute("y", String(y + 4));
-        text.setAttribute("text-anchor", "end");
-        text.setAttribute("class", "viz-label");
-        text.setAttribute("style", `font-size:${fontPx}px`);
-        text.textContent = label;
-        svg.appendChild(text);
+        const yText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        yText.setAttribute("x", String(LEFT_AXIS_WIDTH - 8));
+        yText.setAttribute("y", String(bandTop + (bandBottom - bandTop) / 2 + fontPx * 0.3));
+        yText.setAttribute("text-anchor", "end");
+        yText.setAttribute("class", "viz-label");
+        yText.setAttribute("style", `font-size:${fontPx}px`);
+        yText.textContent = truncateLabel(label, groupLabelChars);
+        const yTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
+        yTitle.textContent = label;
+        yText.appendChild(yTitle);
+        yAxisSvg.appendChild(yText);
       });
 
+      const yAxisLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      yAxisLine.setAttribute("x1", String(LEFT_AXIS_WIDTH - 0.5));
+      yAxisLine.setAttribute("x2", String(LEFT_AXIS_WIDTH - 0.5));
+      yAxisLine.setAttribute("y1", "0");
+      yAxisLine.setAttribute("y2", String(plotHeight));
+      yAxisLine.setAttribute("class", "viz-axis");
+      yAxisSvg.appendChild(yAxisLine);
+
       const tickStep = span > 40 ? 5 : span > 20 ? 2 : 1;
+      const xAxisLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      xAxisLine.setAttribute("x1", "0");
+      xAxisLine.setAttribute("x2", String(plotWidth));
+      xAxisLine.setAttribute("y1", "0.5");
+      xAxisLine.setAttribute("y2", "0.5");
+      xAxisLine.setAttribute("class", "viz-axis");
+      xAxisSvg.appendChild(xAxisLine);
+
       for (let year = minYear; year <= maxYear; year += tickStep) {
         const x = xFor(year);
         const grid = document.createElementNS("http://www.w3.org/2000/svg", "line");
         grid.setAttribute("x1", String(x));
         grid.setAttribute("x2", String(x));
-        grid.setAttribute("y1", String(top));
-        grid.setAttribute("y2", String(top + plotHeight));
+        grid.setAttribute("y1", "0");
+        grid.setAttribute("y2", String(plotHeight));
         grid.setAttribute("class", "viz-grid");
-        svg.appendChild(grid);
+        plotSvg.appendChild(grid);
+
+        const tickMark = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        tickMark.setAttribute("x1", String(x));
+        tickMark.setAttribute("x2", String(x));
+        tickMark.setAttribute("y1", "0");
+        tickMark.setAttribute("y2", "9");
+        tickMark.setAttribute("class", "viz-axis");
+        xAxisSvg.appendChild(tickMark);
 
         const tick = document.createElementNS("http://www.w3.org/2000/svg", "text");
         tick.setAttribute("x", String(x));
-        tick.setAttribute("y", String(top + plotHeight + 18));
+        tick.setAttribute("y", "24");
         tick.setAttribute("text-anchor", "middle");
         tick.setAttribute("class", "viz-label");
         tick.setAttribute("style", `font-size:${Math.max(10, fontPx - 1)}px`);
         tick.textContent = String(year);
-        svg.appendChild(tick);
+        xAxisSvg.appendChild(tick);
       }
 
       const pointPositions = points.map((point) => ({
@@ -1314,7 +1761,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       });
 
       const hoverLines = [];
-      if (showArrows.checked) {
+      if (showArrows.checked && !compact) {
         influences.forEach((edge) => {
           const sourceId = String(edge.source_family_id || "");
           const targetId = String(edge.target_family_id || "");
@@ -1326,9 +1773,9 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
           const sy = source.sy / source.count;
           const tx = target.sx / target.count;
           const ty = target.sy / target.count;
-
           const rel = relationInfo(edge);
-          const width = 1.4 + (rel.count - 1) * 1.3;
+          const width = 1.15 + (rel.count - 1) * 1.05;
+
           const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
           line.setAttribute("x1", String(sx));
           line.setAttribute("y1", String(sy));
@@ -1338,6 +1785,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
           line.setAttribute("marker-end", "url(#vizArrowHead)");
           line.setAttribute("class", "viz-edge");
           line.setAttribute("pointer-events", "none");
+          plotSvg.appendChild(line);
 
           const hoverLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
           hoverLine.setAttribute("x1", String(sx));
@@ -1345,64 +1793,125 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
           hoverLine.setAttribute("x2", String(tx));
           hoverLine.setAttribute("y2", String(ty));
           hoverLine.setAttribute("stroke", "rgba(0,0,0,0.001)");
-          hoverLine.setAttribute("stroke-width", String(Math.max(12, width + 10)));
+          hoverLine.setAttribute("stroke-width", String(Math.max(10, width + 8)));
           hoverLine.setAttribute("pointer-events", "all");
-
-          const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
           const hoverText = `${edge.source_family_id} -> ${edge.target_family_id} | Relations: ${rel.label} | ${normalizeValue(edge.note)}`;
+          const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
           title.textContent = hoverText;
           hoverLine.appendChild(title);
           hoverLine.addEventListener("mouseenter", () => {
             relationInfoBox.textContent = hoverText;
           });
           hoverLine.addEventListener("mouseleave", () => {
-            relationInfoBox.textContent = "Hover a relation arrow to see relation details.";
+            relationInfoBox.textContent = BASE_RELATION_TEXT;
           });
-          svg.appendChild(line);
           hoverLines.push(hoverLine);
         });
       }
 
       pointPositions.forEach((point) => {
+        const famData = familyById.get(point.familyId);
+        const famTypes = Array.from(familyToTypes.get(point.familyId) || []).sort((a, b) => a.localeCompare(b)).join(", ") || "—";
+        const famNotes = famData && famData.notes ? String(famData.notes).trim() : "";
+        const richTip = [`${point.name} (${point.year})`, `Type: ${famTypes}`, `Group: ${point.group}`].concat(famNotes ? [`\n${famNotes}`] : []).join("\n");
+
         const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         circle.setAttribute("cx", String(point.x));
         circle.setAttribute("cy", String(point.y));
-        circle.setAttribute("r", "5.5");
+        circle.setAttribute("r", String(compact ? Math.max(3, POINT_RADIUS - 1.15) : POINT_RADIUS));
         circle.setAttribute("class", "viz-point");
         const pointTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
-        pointTitle.textContent = `${point.name} (${point.year})\nGroup: ${point.group}`;
+        pointTitle.textContent = richTip;
         circle.appendChild(pointTitle);
-        svg.appendChild(circle);
+        plotSvg.appendChild(circle);
 
-        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        label.setAttribute("x", String(point.x + 8));
-        label.setAttribute("y", String(point.y + 4));
-        label.setAttribute("text-anchor", "start");
-        label.setAttribute("class", "viz-text");
-        label.setAttribute("style", `font-size:${fontPx}px`);
-        label.textContent = point.name;
-        svg.appendChild(label);
+        if (!hideNames.checked && !compact) {
+          const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          label.setAttribute("x", String(point.x + 6));
+          label.setAttribute("y", String(point.y + 3.5));
+          label.setAttribute("text-anchor", "start");
+          label.setAttribute("class", "viz-text");
+          label.setAttribute("style", `font-size:${fontPx}px`);
+          label.textContent = truncateLabel(point.name, familyLabelChars);
+          const fullTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
+          fullTitle.textContent = richTip;
+          label.appendChild(fullTitle);
+          plotSvg.appendChild(label);
+        }
       });
 
-      hoverLines.forEach((hoverLine) => svg.appendChild(hoverLine));
-
+      hoverLines.forEach((hoverLine) => plotSvg.appendChild(hoverLine));
       fontValue.textContent = `${fontPx}px`;
+      if (!hasAutoFit) {
+        hasAutoFit = true;
+        fitZoom();
+      } else {
+        applyZoom();
+      }
     }
 
     groupBy.addEventListener("change", render);
     showArrows.addEventListener("change", render);
+    hideNames.addEventListener("change", render);
+    compactMode.addEventListener("change", render);
+    familySearch.addEventListener("input", render);
+    familySearch.addEventListener("change", render);
+    groupFilters.addEventListener("change", (event) => {
+      const target = event.target;
+      if (!target || target.type !== "checkbox") return;
+      selectionMap(groupBy.value).set(target.getAttribute("data-group-label") || "", target.checked);
+      render();
+    });
+    filterAll.addEventListener("click", () => {
+      const active = selectionMap(groupBy.value);
+      Array.from(active.keys()).forEach((label) => active.set(label, true));
+      render();
+    });
+    filterNone.addEventListener("click", () => {
+      const active = selectionMap(groupBy.value);
+      Array.from(active.keys()).forEach((label) => active.set(label, false));
+      render();
+    });
     fontMinus.addEventListener("click", () => {
       fontPx = Math.max(8, fontPx - 1);
       render();
     });
     fontPlus.addEventListener("click", () => {
-      fontPx = Math.min(18, fontPx + 1);
+      fontPx = Math.min(16, fontPx + 1);
       render();
     });
     fontReset.addEventListener("click", () => {
       fontPx = BASE_FONT;
       render();
     });
+    zoomOut.addEventListener("click", () => setZoom(zoomScale / ZOOM_FACTOR));
+    zoomIn.addEventListener("click", () => setZoom(zoomScale * ZOOM_FACTOR));
+    zoomReset.addEventListener("click", () => setZoom(BASE_ZOOM));
+    zoomFit.addEventListener("click", () => fitZoom());
+    yearStart.addEventListener("input", () => {
+      if (suppressYearRender) return;
+      render();
+    });
+    yearEnd.addEventListener("input", () => {
+      if (suppressYearRender) return;
+      render();
+    });
+    yearReset.addEventListener("click", () => {
+      const bounds = initializeYearBounds();
+      if (!bounds) return;
+      suppressYearRender = true;
+      yearStart.value = String(bounds.min);
+      yearEnd.value = String(bounds.max);
+      suppressYearRender = false;
+      render();
+    });
+    plotScroll.addEventListener("scroll", syncAxisTracks);
+    plotScroll.addEventListener("wheel", (event) => {
+      if (!(event.ctrlKey || event.metaKey)) return;
+      event.preventDefault();
+      const factor = event.deltaY < 0 ? ZOOM_FACTOR : 1 / ZOOM_FACTOR;
+      setZoom(zoomScale * factor);
+    }, { passive: false });
     render();
   }
 

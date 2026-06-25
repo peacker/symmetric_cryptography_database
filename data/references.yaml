@@ -2120,6 +2120,16 @@ references:
     venue: "Lecture Notes in Computer Science (Springer)"
     url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/fealnx.pdf
 
+  - id: feistel_1973_lucifer
+    kind: article
+    title: "Cryptography and Computer Privacy"
+    authors:
+      - Horst Feistel
+    year: 1973
+    venue: "Scientific American, Vol. 228, No. 5, pp. 15–23"
+    url: https://www.scientificamerican.com/article/cryptography-and-computer-privacy/
+    notes: "Feistel's foundational 1973 paper introducing the Lucifer block cipher and the product-cipher (Feistel) structure; direct precursor to DES."
+
   - id: sorkin_1983_lucifer
     kind: article
     title: "Lucifer, A Cryptographic Algorithm"
@@ -2128,6 +2138,7 @@ references:
     year: 1983
     venue: "Cryptologia, Vol. 8, No. 1"
     url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/lucifer.pdf
+    notes: "Detailed specification of the Lucifer cipher (128-bit block, 128-bit key, 16 rounds); local copy references/1973-lucifer.pdf (note: file is named after the cipher's design era, but this paper is from 1983)."
 
   - id: maximov_2002_mir1
     kind: article

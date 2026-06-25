@@ -2,15 +2,18 @@
 
 A structured, version-controlled database for fixed-input/output-size symmetric primitives and their ecosystem metadata.
 
-## Scope (v1)
+## Scope
 
-This repository currently tracks fixed-size symmetric primitives (not variable-size modes yet):
+This repository tracks symmetric primitives:
 
 - block ciphers
 - tweakable block ciphers
 - permutations
 - compression functions
 - update functions
+- stream ciphers
+- authenticated encryption with associated data (AEAD)
+- hash functions
 
 Each primitive can store:
 
@@ -27,7 +30,7 @@ Each primitive can store:
 - `data/`: source-of-truth YAML datasets
 - `schema/`: JSON schema for validation
 - `scripts/`: validation, SQLite build, and visualization exports
-- `build/`: generated artifacts (`db`, CSV for plots)
+- `build/`: generated artifacts (`db`, static site, CSV and PNG exports)
 
 ## Data model strategy
 
@@ -44,33 +47,31 @@ Why this hybrid works:
 
 1. Create a virtual environment and install dependencies.
 2. Validate the datasets.
-3. Build the SQLite database.
-4. Export visualization CSV files.
-5. Build the static site.
-6. Start the local app server.
-
-Example:
+3. Build the SQLite database and static site.
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-make validate
-make build-db
-make export-viz
-make build-site
-make run-app
+make setup && make all
 ```
 
-Then open http://localhost:8501/ in your browser.
-
-Or run everything in one shot:
+Or step by step:
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt && make validate && make build-db && make export-viz && make build-site
+make setup        # creates .venv and installs requirements.txt
+make validate     # checks all YAML files against their schemas
+make build-db     # generates build/symmetric_primitives.db from YAML
+make export-viz   # generates CSVs and PNGs in build/viz/
+make build-site   # generates the static site in build/site/
 ```
 
-The static site output is generated in `build/site/`.
+The static site is generated in `build/site/`.
+
+### Static site preview
+
+```bash
+make serve
+```
+
+Then open http://localhost:8000/ in your browser.
 
 ## GitHub Pages auto-deploy
 
@@ -87,6 +88,20 @@ One-time GitHub setup:
 3. Set source to **GitHub Actions**.
 
 After that, every merged PR into `master` will trigger a fresh static build and deployment.
+
+## Makefile targets
+
+| Target | Description |
+|--------|-------------|
+| `make setup` | Create `.venv` and install `requirements.txt` |
+| `make validate` | Validate all YAML datasets against schemas |
+| `make build-db` | Build SQLite database from YAML |
+| `make export-viz` | Export CSV and PNG visualization files to `build/viz/` |
+| `make visualize` | Regenerate charts from existing CSV exports |
+| `make build-site` | Build static site to `build/site/` (runs build-db + export-viz first) |
+| `make serve` | Build site and serve it at http://localhost:8000/ |
+| `make all` | Run validate + build-db + export-viz + visualize + build-site |
+| `make clean` | Delete the `build/` directory |
 
 ## Governance and maintenance
 

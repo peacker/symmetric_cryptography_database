@@ -22,10 +22,6 @@
     "$defs": {
         "characteristics": {
             "type": "object",
-            "required": [
-                "block_size_bits",
-                "output_size_bits"
-            ],
             "properties": {
                 "block_size_bits": {
                     "type": "integer",
@@ -109,7 +105,7 @@
                 },
                 "nonce_size_bits": {
                     "type": "integer",
-                    "minimum": 1
+                    "minimum": 0
                 },
                 "nonce_size_bits_min": {
                     "type": "integer",
@@ -184,6 +180,21 @@
                 },
                 "notes": {
                     "type": "string"
+                }
+            },
+            "if": {
+                "properties": {
+                    "primitive_type": {
+                        "enum": ["block_cipher", "tweakable_block_cipher"]
+                    }
+                },
+                "required": ["primitive_type"]
+            },
+            "then": {
+                "properties": {
+                    "characteristics": {
+                        "required": ["block_size_bits", "output_size_bits"]
+                    }
                 }
             },
             "additionalProperties": false

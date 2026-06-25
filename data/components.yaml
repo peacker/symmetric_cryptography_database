@@ -240,3 +240,67 @@ components:
       initialisation constants (e.g. the "expand 32-byte k" string in
       Salsa20/ChaCha20), and domain-separation constants.
       Prevents slide attacks and ensures distinct round transformations.
+
+  - id: absg_decimation
+    name: ABSG Decimation
+    category: logical
+
+  - id: boolean_combiner
+    name: Boolean Combiner
+    category: logical
+
+  - id: boolean_filter
+    name: Boolean Filter
+    category: logical
+
+  - id: counter
+    name: Counter
+    category: arithmetic
+
+  - id: fcsr
+    name: Feedback with Carry Shift Register (FCSR)
+    category: register
+
+  - id: inversion_sbox
+    name: Inversion S-box
+    category: substitution
+
+  - id: linear_filter
+    name: Linear Filter
+    category: linear_layer
+
+  - id: linear_transform
+    name: Linear Transform
+    category: linear_layer
+
+  - id: lookup_table
+    name: Lookup Table
+    category: substitution
+
+  - id: permutation
+    name: Permutation
+    category: permutation
+
+  - id: permutation_vector
+    name: Permutation Vector
+    category: permutation
+
+  - id: shift_register
+    name: Shift Register
+    category: register
+
+  - id: t_function
+    name: T-Function
+    category: arithmetic
+
+  - id: nonlinear_filter
+    name: Nonlinear Filter
+    category: filter
+
+  - id: mix_columns
+    name: MixColumns
+    category: linear_transform
+
+  - id: compression_function
+    name: Compression Function
+    category: hash

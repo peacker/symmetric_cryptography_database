@@ -151,3 +151,63 @@ constructions:
     notes: >
       A permutation-centric construction used as the core of sponge and duplex
       modes in hashing and authenticated encryption designs.
+
+  - id: coupled_counter_system
+    name: Coupled Counter System
+
+  - id: duplex_mode
+    name: Duplex Mode
+
+  - id: filtered_fcsr
+    name: Filtered FCSR
+
+  - id: filtered_lfsr
+    name: Filtered LFSR
+
+  - id: filtered_lfsr_with_decimation
+    name: Filtered LFSR with Decimation
+
+  - id: gufn
+    name: Generalized Unbalanced Feistel Network (GUFN)
+
+  - id: irregular_clock_register_pair
+    name: Irregular Clock Register Pair
+
+  - id: lfsr_over_extension_field_with_memory
+    name: LFSR over Extension Field with Memory
+
+  - id: nlfsr_combiner
+    name: NLFSR Combiner
+
+  - id: nlfsr_lfsr_filter
+    name: NLFSR/LFSR Filter
+
+  - id: permutation_based_hash
+    name: Permutation-Based Hash
+
+  - id: permutation_based_stream
+    name: Permutation-Based Stream
+
+  - id: self_reciprocal_spn
+    name: Self-Reciprocal SPN
+
+  - id: sponge_construction
+    name: Sponge Construction
+
+  - id: t_function
+    name: T-Function
+
+  - id: table_driven_prf
+    name: Table-Driven PRF
+
+  - id: table_update_stream
+    name: Table-Update Stream
+
+  - id: nlfsr_filtered
+    name: NLFSR with Nonlinear Filter
+
+  - id: block_cipher_based_stream
+    name: Block-Cipher-Based Stream Cipher
+
+  - id: memory_hard_sponge
+    name: Memory-Hard Sponge / PBKDF

@@ -165,8 +165,8 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             name TEXT NOT NULL,
             family_id TEXT NOT NULL,
             primitive_type TEXT NOT NULL,
-            block_size_bits INTEGER NOT NULL,
-            output_size_bits INTEGER NOT NULL,
+            block_size_bits INTEGER,
+            output_size_bits INTEGER,
             characteristics_json TEXT NOT NULL,
             FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE RESTRICT,
             FOREIGN KEY (primitive_type) REFERENCES primitive_types(id) ON DELETE RESTRICT
@@ -370,6 +370,8 @@ def main() -> None:
                 conn.execute(
                     "INSERT INTO family_processes (family_id, process_id) VALUES (?, ?)",
                     (family["id"], process_id))
+        # Insert influences in a second pass so all families exist before any FK is checked.
+        for family in families_doc.get("families", []):
             for edge in family.get("influences", []):
                 relations = edge.get("relations") or ([edge["relation"]] if edge.get("relation") else [])
                 innovative_idea_ids = edge.get("innovative_idea_ids", [])
@@ -396,7 +398,7 @@ def main() -> None:
                 "  characteristics_json)"
                 " VALUES (?, ?, ?, ?, ?, ?, ?)",
                 (primitive["id"], primitive["name"], primitive["family_id"], primitive["primitive_type"],
-                 c["block_size_bits"], c["output_size_bits"],
+                 c.get("block_size_bits"), c.get("output_size_bits"),
                  json.dumps(c, ensure_ascii=True)),
             )
 

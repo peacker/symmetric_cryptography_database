@@ -4933,6 +4933,7 @@ families:
         - id: permutation
         - id: xor
     reference_ids:
+      - feistel_1973_lucifer
       - sorkin_1983_lucifer
     process_ids: []
     influences:

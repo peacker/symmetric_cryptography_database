@@ -2296,3 +2296,258 @@ rounds:
     notes: >
       SPRING is an SP-style lightweight block cipher family using an
       NFSR-based 32-bit nonlinear layer and permutation/key-mixing operations.
+
+  - id: achterbahn_clock
+    name: Achterbahn Clock Step
+    kind: step
+    spec: {}
+
+  - id: aes_prime_128_round
+    name: AES' 128-bit Round
+    kind: full_round
+    spec: {}
+
+  - id: aes_round
+    name: AES Round
+    kind: full_round
+    spec: {}
+
+  - id: cilipadi_permutation_round
+    name: CiliPadi Permutation Round
+    kind: full_round
+    spec: {}
+
+  - id: clx_permutation_round
+    name: CLX Permutation Round
+    kind: full_round
+    spec: {}
+
+  - id: comet_block_cipher_round
+    name: COMET Block Cipher Round
+    kind: full_round
+    spec: {}
+
+  - id: decim_clock
+    name: DECIM Clock Step
+    kind: step
+    spec: {}
+
+  - id: estate_tbc_round
+    name: ESTATE Tweakable Block Cipher Round
+    kind: full_round
+    spec: {}
+
+  - id: f_fcsr_step
+    name: F-FCSR Step
+    kind: step
+    spec: {}
+
+  - id: fnv1_byte_step
+    name: FNV-1 Byte Step
+    kind: step
+    spec: {}
+
+  - id: forkskinny_round
+    name: ForkSKINNY Round
+    kind: full_round
+    spec: {}
+
+  - id: fountain_state_update
+    name: Fountain State Update
+    kind: step
+    spec: {}
+
+  - id: grain_clock
+    name: Grain Clock Step
+    kind: step
+    spec: {}
+
+  - id: haval_pass
+    name: HAVAL Pass
+    kind: other
+    spec: {}
+
+  - id: hc256_step
+    name: HC-256 Step
+    kind: step
+    spec: {}
+
+  - id: hyena_hyfb_round
+    name: HYENA HyFB Round
+    kind: full_round
+    spec: {}
+
+  - id: laem_simon_round
+    name: LAEM-SIMON Round
+    kind: full_round
+    spec: {}
+
+  - id: lilliput_tbc_round
+    name: Lilliput-TBC Round
+    kind: full_round
+    spec: {}
+
+  - id: lucifer_round
+    name: Lucifer Round
+    kind: full_round
+    spec: {}
+
+  - id: macguffin_round
+    name: MacGuffin Round
+    kind: full_round
+    spec: {}
+
+  - id: md2_compression_round
+    name: MD2 Compression Round
+    kind: full_round
+    spec: {}
+
+  - id: md4_round
+    name: MD4 Round
+    kind: full_round
+    spec: {}
+
+  - id: md5_round
+    name: MD5 Round
+    kind: full_round
+    spec: {}
+
+  - id: mickey_clock
+    name: MICKEY Clock Step
+    kind: step
+    spec: {}
+
+  - id: mir_1_step
+    name: MIR-1 Step
+    kind: step
+    spec: {}
+
+  - id: photon256_round
+    name: PHOTON-256 Round
+    kind: full_round
+    spec: {}
+
+  - id: photon_beetle_round
+    name: PHOTON-Beetle Round
+    kind: full_round
+    spec: {}
+
+  - id: rabbit_iteration
+    name: Rabbit Iteration
+    kind: step
+    spec: {}
+
+  - id: ripemd_round
+    name: RIPEMD Round
+    kind: full_round
+    spec: {}
+
+  - id: sapphire_byte_step
+    name: Sapphire Byte Step
+    kind: step
+    spec: {}
+
+  - id: seal_inner_iteration
+    name: SEAL Inner Iteration
+    kind: step
+    spec: {}
+
+  - id: sfinks_clock
+    name: SFINKS Clock Step
+    kind: step
+    spec: {}
+
+  - id: sha_round
+    name: SHA Round
+    kind: full_round
+    spec: {}
+
+  - id: simp_round
+    name: SIMP Round
+    kind: full_round
+    spec: {}
+
+  - id: siv_rijndael256_round
+    name: SIV-Rijndael256 Round
+    kind: full_round
+    spec: {}
+
+  - id: siv_tem_photon_round
+    name: SIV-TEM-PHOTON Round
+    kind: full_round
+    spec: {}
+
+  - id: skinny_aead_round
+    name: SKINNY-AEAD Round
+    kind: full_round
+    spec: {}
+
+  - id: subterranean_2_0_round
+    name: Subterranean 2.0 Round
+    kind: step
+    spec: {}
+
+  - id: sundae_gift_round
+    name: SUNDAE-GIFT Round
+    kind: full_round
+    spec: {}
+
+  - id: threeway_round
+    name: 3-Way Round
+    kind: full_round
+    spec: {}
+
+  - id: tiger_pass
+    name: Tiger Pass
+    kind: other
+    spec: {}
+
+  - id: twegifit64_round
+    name: TweGIFIT-64 Round
+    kind: full_round
+    spec: {}
+
+  - id: whirlpool_cipher_round
+    name: Whirlpool Cipher Round
+    kind: full_round
+    spec: {}
+
+  - id: xoodyak_round
+    name: Xoodyak Round
+    kind: full_round
+    spec: {}
+
+  - id: yamb_step
+    name: YAMB Step
+    kind: step
+    spec: {}
+
+  - id: nlsv2_step
+    name: NLSv2 Step
+    kind: step
+    spec: {}
+
+  - id: cryptmt3_step
+    name: CryptMT3 Step
+    kind: step
+    spec: {}
+
+  - id: dragon_step
+    name: Dragon Step
+    kind: step
+    spec: {}
+
+  - id: hc128_step
+    name: HC-128 Step
+    kind: step
+    spec: {}
+
+  - id: lex_round
+    name: LEX Round
+    kind: full_round
+    spec: {}
+
+  - id: argon2_pass
+    name: Argon2 Pass
+    kind: full_round
+    spec: {}
