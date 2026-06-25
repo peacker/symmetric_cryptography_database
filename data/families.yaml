@@ -4844,28 +4844,6 @@ families:
       Trivium is a synchronous stream cipher with 80-bit key and 80-bit IV,
       using a 288-bit internal state and nonlinear feedback.
 
-  - id: two_key_triple_des
-    name: Two-key Triple DES
-    construction_ids:
-      - spn
-    round_ids:
-      - two_key_triple_des_round
-    target_applications:
-      - generic
-    characteristics:
-      block_size_bits: 128
-      components:
-        - id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - id: bit_permutation
-        - id: xor
-        - id: constant
-    reference_ids:
-      - two_key_triple_des_ref
-    process_participations: []
-    influences: []
-    notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
-
   - id: ublock
     name: uBlock
     construction_ids:
@@ -7470,3 +7448,4 @@ families:
       - pufferfish_ref
     process_participations: []
     influences: []
+
