@@ -13,14 +13,14 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | ACHTERBAHN | ACHTERBAHN | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/achterbahn.pdf | Full | yes |
 | [x] | AES | AES | block_cipher | 2001 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf | Full | no |
 | [x] | Akelarre | Akelarre | block_cipher | 1996 | https://sacworkshop.org/proc/SAC_96_002.pdf | PDF Page 3-16 | yes |
-| [x] | ANT | ANT | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000338 | Full | yes |
+| [x] | ANT | ANT | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000338 | Full | yes |
 | [x] | Anubis | Anubis | block_cipher | 2000 | https://garykessler.net/library/crypto/Anubis.pdf | Full | yes |
 | [x] | ARADI | ARADI | block_cipher | 2024 | https://eprint.iacr.org/2024/1240 | TODO | yes |
 | [x] | AntCrypt | AntCrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/AntCrypt-v0.pdf | Full | yes |
 | [x] | Argon2 | Argon2 | pbkdf | 2015 | https://www.rfc-editor.org/rfc/rfc9106 | Full | yes |
 | [x] | ARIA | ARIA | block_cipher | 2010 | https://www.rfc-editor.org/rfc/rfc5794 | TODO | no |
 | [x] | ASCON | ASCON permutation | permutation | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
-| [x] | Ballet | Ballet | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
+| [x] | Ballet | Ballet | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
 | [x] | battcrypt | battcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/battcrypt-v0.pdf | Full | yes |
 | [x] | BEAR/LION | BEAR/LION | construction | 1996 | https://www.cl.cam.ac.uk/archive/rja14/Papers/bear-lion.pdf | Full | yes |
 | [ ] | BelT | BelT | block_cipher | TODO | TODO | TODO | no |
@@ -65,10 +65,10 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | ESTATE | ESTATE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ESTATE-spec.pdf | Full | yes |
 | [x] | F-FCSR | F-FCSR | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/ffcsr.pdf | Full | yes |
 | [ ] | Fantomas / Robin | Fantomas / Robin | block_cipher | TODO | TODO | TODO | no |
-| [x] | FBC | FBC | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000340 | Full | yes |
+| [x] | FBC | FBC | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000340 | Full | yes |
 | [x] | FEAL | FEAL | block_cipher | 1987 | https://info.isl.ntt.co.jp/crypt/eng/archive/index.html | Full | yes |
 | [x] | FEAL-NX | FEAL-NX | block_cipher | 1997 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/fealnx.pdf | Full | yes |
-| [x] | FESH | FESH | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000336 | Full | yes |
+| [x] | FESH | FESH | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000336 | Full | yes |
 | [x] | FlexAEAD | FlexAEAD | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/FlexAEAD-spec.pdf | Full | yes |
 | [x] | FNV-1 | FNV-1 | hash | 1991 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/fnv1.pdf | Full | yes |
 | [x] | ForkAE | ForkAE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ForkAE-spec.pdf | Full | yes |
@@ -142,7 +142,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [ ] | MUGI | MUGI | stream_cipher | TODO | TODO | TODO | no |
 | [ ] | MULTI-S01 | MULTI-S01 | stream_cipher | TODO | TODO | TODO | no |
 | [ ] | MULTI2 | MULTI2 | block_cipher | TODO | TODO | TODO | no |
-| [x] | NBC | NBC | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000339 | Full | yes |
+| [x] | NBC | NBC | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000339 | Full | yes |
 | [ ] | NewDES | NewDES | block_cipher | 1985 | https://en.wikipedia.org/wiki/NewDES | TODO | no |
 | [x] | Nimbus | Nimbus | block_cipher | TODO | TODO | TODO | yes |
 | [x] | NLSv2 | NLSv2 | stream_cipher | 2004 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_6 | Full | yes |
@@ -171,7 +171,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | QARMAv2 | QARMAv2 | tweakable_block_cipher | 2023 | https://eprint.iacr.org/2023/929 | TODO | yes |
 | [x] | Quartet | Quartet | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Quartet-spec.pdf | Full | yes |
 | [x] | Rabbit | Rabbit | stream_cipher | 2003 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_7 | Full | yes |
-| [x] | Raindrop | Raindrop | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000342 | Full | yes |
+| [x] | Raindrop | Raindrop | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000342 | Full | yes |
 | [x] | RC2 | RC2 | block_cipher | 1998 | https://datatracker.ietf.org/doc/html/rfc2268 | Full | yes |
 | [x] | RC4 | RC4 | stream_cipher | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
 | [x] | RC4+ | RC4+ | stream_cipher | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
@@ -211,7 +211,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SKINNY-AEAD/SKINNY-HASH | SKINNY | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SKINNY-spec.pdf | Full | yes |
 | [x] | SKIPJACK | SKIPJACK | block_cipher | 1998 | https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub185.pdf | Full | yes |
 | [x] | SM4 | SM4 | block_cipher | 2021 | https://www.rfc-editor.org/rfc/rfc8998 | TODO | yes |
-| [x] | SMBA | SMBA | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000341 | Full | yes |
+| [x] | SMBA | SMBA | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000341 | Full | yes |
 | [x] | SNEIK | SNEIK | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | SNOW | SNOW | stream_cipher | 2001 | https://web.archive.org/web/20201017161826/http://www.madchat.fr/crypto/hash-lib-algo/snow/snow10.pdf | Full | yes |
 | [x] | SNOW 2.0 | SNOW 2.0 | stream_cipher | 2002 | https://link.springer.com/chapter/10.1007/3-540-36563-X_24 | Full | yes |
@@ -226,14 +226,14 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | SPIX | SPIX | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | SpoC | SpoC | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | Spook | Spook | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
-| [x] | SPRING | SPRING | prng | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000343 | Full | yes |
+| [x] | SPRING | SPRING | prng | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000343 | Full | yes |
 | [x] | Spritz | Spritz | stream_cipher | 2014 | https://people.csail.mit.edu/rivest/pubs/RS14.pdf | Full | yes |
 | [x] | SQUARE | SQUARE | block_cipher | 1997 | https://link.springer.com/chapter/10.1007/BFb0052343 | Full | yes |
 | [x] | Subterranean | Subterranean permutation | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf | Full | yes |
 | [x] | Subterranean 2.0 | Subterranean 2.0 | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf | Full | yes |
 | [x] | SUNDAE-GIFT | GIFT | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SUNDAE-GIFT-spec.pdf | Full | yes |
 | [x] | Sycon | Sycon | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
-| [x] | TANGRAM | TANGRAM | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000337 | Full | yes |
+| [x] | TANGRAM | TANGRAM | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000337 | Full | yes |
 | [x] | TEA | TEA | block_cipher | 1994 | https://doi.org/10.1007/3-540-60590-8_29 | TODO | yes |
 | [x] | Thank Goodness It's Friday (TGIF) | Thank Goodness It's Friday (TGIF) | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TGIF-spec.pdf | Full | yes |
 | [ ] | Three-key Triple DES | DES | block_cipher | TODO | TODO | TODO | no |
@@ -249,7 +249,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | TwoCats | TwoCats | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/TwoCats-v0.pdf | Full | yes |
 | [ ] | Two-key Triple DES | DES | block_cipher | TODO | TODO | TODO | no |
 | [x] | Twofish | Twofish | block_cipher | 1998 | https://www.schneier.com/academic/twofish/ | TODO | yes |
-| [x] | uBlock | uBlock | block_cipher | 2019 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000334 | Full | yes |
+| [x] | uBlock | uBlock | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000334 | Full | yes |
 | [ ] | UEA2 / ZUC | ZUC | stream_cipher | TODO | TODO | TODO | no |
 | [x] | uLBC | uLBC | block_cipher | 2025 | https://cic.iacr.org/p/1/4/25 | TODO | no |
 | [ ] | VMPC | VMPC | stream_cipher | TODO | TODO | TODO | no |

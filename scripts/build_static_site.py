@@ -108,6 +108,34 @@ def load_join_builder_dataset(conn: sqlite3.Connection) -> dict[str, object]:
     return {"columns": columns, "rows": rows, "baseSql": base_sql}
 
 
+def load_process_data(conn: sqlite3.Connection) -> dict[str, object]:
+    """Return process list and a map of family_id → primary process_id."""
+    processes = fetch_rows(
+        conn,
+        "SELECT id, name, organizer, start_year, end_year FROM processes ORDER BY start_year",
+    )
+    # family_id → primary process_id (winner > finalist > recommended > candidate > submitted)
+    STATUS_RANK = {
+        "winner": 0, "recommended": 1, "candidate_recommended": 2,
+        "finalist": 3, "special_recognition": 4, "portfolio": 5,
+        "monitored": 6, "candidate": 7, "submitted": 8,
+    }
+    participations = fetch_rows(
+        conn,
+        "SELECT family_id, process_id, status FROM family_processes ORDER BY family_id",
+    )
+    family_process_map: dict[str, str] = {}
+    family_process_rank: dict[str, int] = {}
+    for row in participations:
+        fid = row["family_id"]
+        pid = row["process_id"]
+        rank = STATUS_RANK.get(row["status"] or "", 99)
+        if fid not in family_process_rank or rank < family_process_rank[fid]:
+            family_process_map[fid] = pid
+            family_process_rank[fid] = rank
+    return {"processes": processes, "familyProcessMap": family_process_map}
+
+
 def build_site() -> None:
     if not DB_PATH.exists():
         raise SystemExit(f"Missing {DB_PATH}. Run make build-db first.")
@@ -115,6 +143,7 @@ def build_site() -> None:
     with sqlite3.connect(DB_PATH) as conn:
         all_tables = load_all_tables(conn)
         builder_dataset = load_join_builder_dataset(conn)
+        process_data = load_process_data(conn)
 
     payload = {
         "summary": {
@@ -124,6 +153,7 @@ def build_site() -> None:
         },
         "tables": all_tables,
         "joinBuilder": builder_dataset,
+        "processData": process_data,
     }
 
     cache_token = str(int(time.time()))
@@ -169,6 +199,7 @@ def build_site() -> None:
           </label>
           <label class=\"inline-check\"><input id=\"vizShowArrows\" type=\"checkbox\" /> Show relation arrows</label>
           <label class=\"inline-check\"><input id=\"vizHideNames\" type=\"checkbox\" /> Hide family names</label>
+          <label class=\"inline-check\"><input id=\"vizColorByProcess\" type=\"checkbox\" /> Color by process</label>
           <div class=\"viz-font-controls\" aria-label=\"Timeline font size\">
             <button id=\"vizFontMinus\" type=\"button\">A-</button>
             <button id=\"vizFontPlus\" type=\"button\">A+</button>
@@ -228,6 +259,7 @@ def build_site() -> None:
           <div id=\"vizCornerPane\" class=\"viz-corner-pane\"></div>
         </div>
         <p id=\"vizRelationInfo\" class=\"small-note viz-relation-info\">Hover a relation arrow to see relation details. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.</p>
+        <div id=\"vizProcessLegend\" class=\"viz-process-legend\" hidden></div>
       </section>
 
       <section class=\"panel view-panel\" data-view=\"tables\">
@@ -684,6 +716,32 @@ pre {
 .viz-relation-info {
   margin: 0.55rem 0 0;
   min-height: 1.4rem;
+}
+
+.viz-process-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.1rem;
+  margin: 0.6rem 0 0;
+  padding: 0.55rem 0.75rem;
+  background: rgba(0,0,0,0.025);
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+
+.viz-process-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.38rem;
+  white-space: nowrap;
+}
+
+.viz-process-legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 #familyVizPlot,
@@ -1242,9 +1300,11 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const xAxisTrack = document.getElementById("vizXAxisTrack");
     const yAxisTrack = document.getElementById("vizYAxisTrack");
     const cornerPane = document.getElementById("vizCornerPane");
+    const processLegend = document.getElementById("vizProcessLegend");
     const groupBy = document.getElementById("vizGroupBy");
     const showArrows = document.getElementById("vizShowArrows");
     const hideNames = document.getElementById("vizHideNames");
+    const colorByProcess = document.getElementById("vizColorByProcess");
     const groupFilters = document.getElementById("vizGroupFilters");
     const filterAll = document.getElementById("vizFilterAll");
     const filterNone = document.getElementById("vizFilterNone");
@@ -1264,7 +1324,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const yearReset = document.getElementById("vizYearReset");
     const yearRangeValue = document.getElementById("vizYearRangeValue");
     const relationInfoBox = document.getElementById("vizRelationInfo");
-    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !groupBy || !showArrows || !hideNames || !groupFilters || !filterAll || !filterNone || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !familySearch || !compactMode || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
+    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !groupBy || !showArrows || !hideNames || !colorByProcess || !processLegend || !groupFilters || !filterAll || !filterNone || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !familySearch || !compactMode || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
 
     const BASE_FONT = 12;
     const BASE_ZOOM = 1;
@@ -1330,6 +1390,34 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       const target = String(row.target || "").trim();
       if (target) familyToTargets.get(familyId).add(target);
     });
+
+    // Process color palette — saturated, accessible hues
+    const processData = (data.processData || {});
+    const processList = (processData.processes || []);
+    const familyProcessMap = (processData.familyProcessMap || {});
+    const PROCESS_COLORS = [
+      "#1a73c9", "#d4501a", "#1e9c5e", "#9b42b8", "#c9961a",
+      "#c91a4e", "#1ab8c9", "#5e6e1a", "#7a1ac9", "#1a4ec9",
+      "#a85a1a", "#1a9b9b",
+    ];
+    const processColorMap = new Map();
+    processList.forEach((proc, idx) => {
+      processColorMap.set(String(proc.id), PROCESS_COLORS[idx % PROCESS_COLORS.length]);
+    });
+    processColorMap.set("__none__", "#7a8c8f");
+
+    function processColorForFamily(familyId) {
+      const pid = familyProcessMap[familyId];
+      if (!pid) return processColorMap.get("__none__");
+      return processColorMap.get(pid) || processColorMap.get("__none__");
+    }
+
+    function processNameForFamily(familyId) {
+      const pid = familyProcessMap[familyId];
+      if (!pid) return "";
+      const proc = processList.find((p) => String(p.id) === pid);
+      return proc ? String(proc.name) : pid;
+    }
 
     function clearNode(node) {
       while (node.firstChild) node.removeChild(node.firstChild);
@@ -1809,17 +1897,25 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         });
       }
 
+      const useProcessColor = colorByProcess.checked;
+
       pointPositions.forEach((point) => {
         const famData = familyById.get(point.familyId);
         const famTypes = Array.from(familyToTypes.get(point.familyId) || []).sort((a, b) => a.localeCompare(b)).join(", ") || "—";
         const famNotes = famData && famData.notes ? String(famData.notes).trim() : "";
-        const richTip = [`${point.name} (${point.year})`, `Type: ${famTypes}`, `Group: ${point.group}`].concat(famNotes ? ["\\n" + famNotes] : []).join("\\n");
+        const procName = processNameForFamily(point.familyId);
+        const tipParts = [`${point.name} (${point.year})`, `Type: ${famTypes}`, `Group: ${point.group}`];
+        if (procName) tipParts.push(`Process: ${procName}`);
+        if (famNotes) tipParts.push("\\n" + famNotes);
+        const richTip = tipParts.join("\\n");
+        const dotColor = useProcessColor ? processColorForFamily(point.familyId) : null;
 
         const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         circle.setAttribute("cx", String(point.x));
         circle.setAttribute("cy", String(point.y));
         circle.setAttribute("r", String(compact ? Math.max(3, POINT_RADIUS - 1.15) : POINT_RADIUS));
         circle.setAttribute("class", "viz-point");
+        if (dotColor) circle.setAttribute("fill", dotColor);
         const pointTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
         pointTitle.textContent = richTip;
         circle.appendChild(pointTitle);
@@ -1831,7 +1927,10 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
           label.setAttribute("y", String(point.y + 3.5));
           label.setAttribute("text-anchor", "start");
           label.setAttribute("class", "viz-text");
-          label.setAttribute("style", `font-size:${fontPx}px`);
+          const labelStyle = dotColor
+            ? `font-size:${fontPx}px;fill:${dotColor}`
+            : `font-size:${fontPx}px`;
+          label.setAttribute("style", labelStyle);
           label.textContent = truncateLabel(point.name, familyLabelChars);
           const fullTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
           fullTitle.textContent = richTip;
@@ -1841,6 +1940,38 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       });
 
       hoverLines.forEach((hoverLine) => plotSvg.appendChild(hoverLine));
+
+      // Process legend
+      if (useProcessColor && processList.length) {
+        processLegend.hidden = false;
+        clearNode(processLegend);
+        processList.forEach((proc) => {
+          const color = processColorMap.get(String(proc.id)) || "#7a8c8f";
+          const item = document.createElement("span");
+          item.className = "viz-process-legend-item";
+          const dot = document.createElement("span");
+          dot.className = "viz-process-legend-dot";
+          dot.style.background = color;
+          const lbl = document.createElement("span");
+          lbl.textContent = String(proc.name);
+          item.appendChild(dot);
+          item.appendChild(lbl);
+          processLegend.appendChild(item);
+        });
+        const noneItem = document.createElement("span");
+        noneItem.className = "viz-process-legend-item";
+        const noneDot = document.createElement("span");
+        noneDot.className = "viz-process-legend-dot";
+        noneDot.style.background = processColorMap.get("__none__");
+        const noneLbl = document.createElement("span");
+        noneLbl.textContent = "No process";
+        noneItem.appendChild(noneDot);
+        noneItem.appendChild(noneLbl);
+        processLegend.appendChild(noneItem);
+      } else {
+        processLegend.hidden = true;
+      }
+
       fontValue.textContent = `${fontPx}px`;
       if (!hasAutoFit) {
         hasAutoFit = true;
@@ -1853,6 +1984,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     groupBy.addEventListener("change", render);
     showArrows.addEventListener("change", render);
     hideNames.addEventListener("change", render);
+    colorByProcess.addEventListener("change", render);
     compactMode.addEventListener("change", render);
     familySearch.addEventListener("input", render);
     familySearch.addEventListener("change", render);

@@ -92,6 +92,7 @@ def main() -> None:
     ok &= validate_schema(primitive_types_doc, SCHEMA_DIR / "primitive_types.schema.json", "primitive_types")
     ok &= validate_schema(references_doc, SCHEMA_DIR / "references.schema.json", "references")
     ok &= validate_schema(modes_doc, SCHEMA_DIR / "modes.schema.json", "modes")
+    ok &= validate_schema(processes_doc, SCHEMA_DIR / "processes.schema.json", "processes")
     if not ok:
         raise SystemExit(1)
 
@@ -157,10 +158,25 @@ def main() -> None:
             if ref not in reference_ids:
                 print(f"REFERENCE ERROR: family '{fid}' has unknown reference '{ref}'")
                 errors_found = True
-        for ref in family.get("process_ids", []):
-            if ref not in process_ids:
-                print(f"REFERENCE ERROR: family '{fid}' has unknown process '{ref}'")
+        for pp in family.get("process_participations", []):
+            proc_id = pp["process_id"]
+            if proc_id not in process_ids:
+                print(f"REFERENCE ERROR: family '{fid}' references unknown process '{proc_id}'")
                 errors_found = True
+            else:
+                valid_stage_ids = {
+                    s["id"]
+                    for p in processes_doc.get("processes", [])
+                    if p["id"] == proc_id
+                    for s in p.get("stages", [])
+                }
+                for sid in pp.get("stage_ids", []):
+                    if sid not in valid_stage_ids:
+                        print(
+                            f"REFERENCE ERROR: family '{fid}' references unknown"
+                            f" stage '{sid}' in process '{proc_id}'"
+                        )
+                        errors_found = True
         for edge in family.get("influences", []):
             src = edge["source_family_id"]
             if src not in family_ids:
@@ -297,6 +313,20 @@ def main() -> None:
             for error in validate_range_field(characteristics, base_field, mid):
                 print(error)
                 errors_found = True
+
+    # Validate process stage participant family_ids
+    for process in processes_doc.get("processes", []):
+        pid = process["id"]
+        for stage in process.get("stages", []):
+            sid = stage["id"]
+            for participant in stage.get("participants", []):
+                fid = participant.get("family_id")
+                if fid and fid not in family_ids:
+                    print(
+                        f"REFERENCE ERROR: process '{pid}' stage '{sid}'"
+                        f" references unknown family_id '{fid}'"
+                    )
+                    errors_found = True
 
     if errors_found:
         raise SystemExit(1)

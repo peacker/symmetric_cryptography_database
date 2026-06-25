@@ -145,6 +145,38 @@
             },
             "additionalProperties": true
         },
+        "process_participation": {
+            "type": "object",
+            "required": ["process_id"],
+            "properties": {
+                "process_id": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "stage_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "candidate",
+                        "finalist",
+                        "winner",
+                        "recommended",
+                        "candidate_recommended",
+                        "monitored",
+                        "special_recognition",
+                        "portfolio",
+                        "submitted"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
         "family": {
             "type": "object",
             "required": [
@@ -155,7 +187,7 @@
                 "target_applications",
                 "characteristics",
                 "reference_ids",
-                "process_ids",
+                "process_participations",
                 "influences"
             ],
             "properties": {
@@ -203,11 +235,10 @@
                         "minLength": 1
                     }
                 },
-                "process_ids": {
+                "process_participations": {
                     "type": "array",
                     "items": {
-                        "type": "string",
-                        "minLength": 1
+                        "$ref": "#/$defs/process_participation"
                     }
                 },
                 "influences": {

@@ -126,6 +126,38 @@ def main() -> None:
             VIZ_DIR / "families.csv",
         )
 
+        # Family process participations with status
+        export_query(
+            conn,
+            """
+            SELECT f.id AS family_id, f.name AS family_name,
+                   pr.id AS process_id, pr.name AS process_name,
+                   fp.status, fp.stage_ids_json
+            FROM family_processes fp
+            JOIN families f  ON f.id  = fp.family_id
+            JOIN processes pr ON pr.id = fp.process_id
+            ORDER BY pr.name, fp.status, f.name
+            """,
+            VIZ_DIR / "family_processes.csv",
+        )
+
+        # Process stage participants (family_id and name entries combined)
+        export_query(
+            conn,
+            """
+            SELECT pr.id AS process_id, pr.name AS process_name,
+                   ps.stage_id, ps.label AS stage_label, ps.kind AS stage_kind,
+                   psp.family_id, f.name AS family_name,
+                   psp.name AS external_name, psp.note
+            FROM process_stage_participants psp
+            JOIN process_stages ps ON ps.process_id = psp.process_id AND ps.stage_id = psp.stage_id
+            JOIN processes pr ON pr.id = psp.process_id
+            LEFT JOIN families f ON f.id = psp.family_id
+            ORDER BY pr.name, ps.stage_id, COALESCE(f.name, psp.name)
+            """,
+            VIZ_DIR / "process_stage_participants.csv",
+        )
+
         print(f"Visualization exports created in: {VIZ_DIR}")
     finally:
         conn.close()

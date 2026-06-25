@@ -47,6 +47,25 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             notes TEXT
         );
 
+        CREATE TABLE IF NOT EXISTS process_stages (
+            process_id TEXT NOT NULL,
+            stage_id   TEXT NOT NULL,
+            label      TEXT NOT NULL,
+            kind       TEXT,
+            parent_stage_id TEXT,
+            PRIMARY KEY (process_id, stage_id),
+            FOREIGN KEY (process_id) REFERENCES processes(id) ON DELETE CASCADE
+        );
+
+        CREATE TABLE IF NOT EXISTS process_stage_participants (
+            process_id TEXT NOT NULL,
+            stage_id   TEXT NOT NULL,
+            family_id  TEXT,
+            name       TEXT,
+            note       TEXT,
+            FOREIGN KEY (process_id, stage_id) REFERENCES process_stages(process_id, stage_id) ON DELETE CASCADE
+        );
+
         CREATE TABLE IF NOT EXISTS components (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
@@ -140,10 +159,12 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
         );
 
         CREATE TABLE IF NOT EXISTS family_processes (
-            family_id TEXT NOT NULL,
+            family_id  TEXT NOT NULL,
             process_id TEXT NOT NULL,
+            status     TEXT,
+            stage_ids_json TEXT NOT NULL DEFAULT '[]',
             PRIMARY KEY (family_id, process_id),
-            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
+            FOREIGN KEY (family_id)  REFERENCES families(id)  ON DELETE CASCADE,
             FOREIGN KEY (process_id) REFERENCES processes(id) ON DELETE RESTRICT
         );
 
@@ -210,6 +231,8 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         DELETE FROM constructions;
         DELETE FROM primitive_types;
         DELETE FROM components;
+        DELETE FROM process_stage_participants;
+        DELETE FROM process_stages;
         DELETE FROM processes;
         DELETE FROM "references";
         """
@@ -263,6 +286,24 @@ def main() -> None:
                 (process["id"], process["name"], process.get("organizer"),
                  process.get("start_year"), process.get("end_year"), process.get("notes")),
             )
+            for stage in process.get("stages", []):
+                conn.execute(
+                    "INSERT INTO process_stages"
+                    " (process_id, stage_id, label, kind, parent_stage_id)"
+                    " VALUES (?, ?, ?, ?, ?)",
+                    (process["id"], stage["id"], stage["label"],
+                     stage.get("kind"), stage.get("parent_stage_id")),
+                )
+                for participant in stage.get("participants", []):
+                    family_id = participant.get("family_id")
+                    name = participant.get("name")
+                    note = participant.get("note")
+                    conn.execute(
+                        "INSERT OR IGNORE INTO process_stage_participants"
+                        " (process_id, stage_id, family_id, name, note)"
+                        " VALUES (?, ?, ?, ?, ?)",
+                        (process["id"], stage["id"], family_id, name, note),
+                    )
 
         for comp in components_doc.get("components", []):
             params = comp.get("parameters")
@@ -366,10 +407,16 @@ def main() -> None:
                         (family["id"], ref_id),
                     )
             family_reference_ids[family["id"]] = refs_for_family
-            for process_id in family.get("process_ids", []):
+            for pp in family.get("process_participations", []):
+                proc_id = pp["process_id"]
+                stage_ids = pp.get("stage_ids", [])
+                status = pp.get("status")
                 conn.execute(
-                    "INSERT INTO family_processes (family_id, process_id) VALUES (?, ?)",
-                    (family["id"], process_id))
+                    "INSERT INTO family_processes"
+                    " (family_id, process_id, status, stage_ids_json)"
+                    " VALUES (?, ?, ?, ?)",
+                    (family["id"], proc_id, status,
+                     json.dumps(stage_ids, ensure_ascii=True)))
         # Insert influences in a second pass so all families exist before any FK is checked.
         for family in families_doc.get("families", []):
             for edge in family.get("influences", []):

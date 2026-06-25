@@ -1,7 +1,7 @@
 VENV := .venv
 PYTHON := $(VENV)/bin/python
 
-.PHONY: setup validate build-db export-viz build-site visualize serve all clean
+.PHONY: setup validate test build-db export-viz build-site visualize serve all clean
 
 setup:
 	python3 -m venv $(VENV)
@@ -9,6 +9,9 @@ setup:
 
 validate:
 	$(PYTHON) scripts/validate.py
+
+test: validate
+	$(PYTHON) scripts/test_process_alignment.py
 
 build-db:
 	$(PYTHON) scripts/build_db.py

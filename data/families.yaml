@@ -21,8 +21,10 @@ families:
         - id: constant
     reference_ids:
       - daemen_rijmen_1998_rijndael
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1, round_2, winner]
+        status: winner
     influences: []
     innovative_ideas:
       - id: rijndael_8x8_sbox
@@ -63,8 +65,13 @@ families:
         - id: constant
     reference_ids:
       - fips_197
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [winner]
+        status: winner
+      - process_id: cryptrec_selection_2000_2023
+        stage_ids: [recommended_block_128bit]
+        status: recommended
     influences:
       - source_family_id: rijndael
         relations:
@@ -108,7 +115,10 @@ families:
         - id: constant
     reference_ids:
       - bernstein_2008_salsa20
-    process_ids: []
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3, portfolio_sw]
+        status: portfolio
     influences: []
     innovative_ideas:
       - id: salsa_arx_quarterround
@@ -141,7 +151,7 @@ families:
         - id: constant
     reference_ids:
       - bernstein_2008_chacha
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: salsa
         relations:
@@ -174,7 +184,7 @@ families:
         - id: constant
     reference_ids:
       - bogdanov_2007_present
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: present_4x4_sbox
@@ -206,7 +216,7 @@ families:
         - id: constant
     reference_ids:
       - banik_2017_gift
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: present
         relations:
@@ -240,7 +250,7 @@ families:
     reference_ids:
       - fips_46_1977_des
       - fips_46_3_1999_des
-    process_ids: []
+    process_participations: []
     influences: []
 
   - id: blowfish
@@ -262,7 +272,7 @@ families:
         - id: xor
     reference_ids:
       - schneier_1994_blowfish
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: des
         relations:
@@ -288,7 +298,10 @@ families:
         - id: xor
     reference_ids:
       - lai_massey_1991_idea
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_64bit]
+        status: submitted
     influences: []
 
   - id: tea
@@ -310,7 +323,7 @@ families:
         - id: constant
     reference_ids:
       - needham_wheeler_1994_tea
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: tea_arx_feistel
@@ -339,7 +352,7 @@ families:
         - id: constant
     reference_ids:
       - needham_wheeler_1997_xtea
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: tea
         relations:
@@ -372,8 +385,10 @@ families:
         - id: rotation_fixed
     reference_ids:
       - schneier_et_al_1998_twofish
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1, round_2]
+        status: finalist
     influences: []
 
   - id: serpent
@@ -395,8 +410,10 @@ families:
         - id: constant
     reference_ids:
       - anderson_biham_knudsen_1998_serpent
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1, round_2]
+        status: finalist
     influences: []
 
   - id: camellia
@@ -420,7 +437,13 @@ families:
         - id: constant
     reference_ids:
       - matsui_et_al_2004_camellia
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_128bit]
+        status: submitted
+      - process_id: cryptrec_selection_2000_2023
+        stage_ids: [recommended_block_128bit]
+        status: recommended
     influences:
       - source_family_id: des
         relations:
@@ -444,7 +467,7 @@ families:
         - id: constant
     reference_ids:
       - beaulieu_et_al_2013_simon_speck
-    process_ids: []
+    process_participations: []
     influences: []
 
   - id: speck
@@ -464,7 +487,7 @@ families:
         - id: rotation_fixed
     reference_ids:
       - beaulieu_et_al_2013_simon_speck
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: tea
         relations:
@@ -490,7 +513,7 @@ families:
         - id: constant
     reference_ids:
       - borghoff_et_al_2012_prince
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: prince_alpha_reflexivity
@@ -522,7 +545,7 @@ families:
         - id: constant
     reference_ids:
       - guo_et_al_2011_led
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: present
         relations:
@@ -550,7 +573,7 @@ families:
         - id: constant
     reference_ids:
       - de_canniere_et_al_2009_katan_ktantan
-    process_ids: []
+    process_participations: []
     influences: []
 
   - id: ktantan
@@ -571,7 +594,7 @@ families:
         - id: constant
     reference_ids:
       - de_canniere_et_al_2009_katan_ktantan
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: katan
         relations:
@@ -600,7 +623,7 @@ families:
         - id: rotation_variable
     reference_ids:
       - adams_1997_cast128
-    process_ids: []
+    process_participations: []
     influences: []
 
   - id: cast256
@@ -625,8 +648,10 @@ families:
         - id: rotation_variable
     reference_ids:
       - adams_gilchrist_1999_cast256
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1]
+        status: candidate
     influences:
       - source_family_id: cast128
         relations:
@@ -650,7 +675,7 @@ families:
           params: { modulus: 4294967296 }
     reference_ids:
       - baldwin_rivest_1996_rc5
-    process_ids: []
+    process_participations: []
     influences: []
 
   - id: seed
@@ -675,7 +700,7 @@ families:
         - id: rotation_fixed
     reference_ids:
       - lee_et_al_2005_seed
-    process_ids: []
+    process_participations: []
     influences: []
 
   - id: aria
@@ -697,7 +722,7 @@ families:
         - id: binary_matrix_mul
     reference_ids:
       - lee_et_al_2010_aria
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: aria_bytewise_sbox
@@ -720,7 +745,7 @@ families:
       components: []
     reference_ids:
       - rivest_1987_rc4
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       RC4 (Rivest Cipher 4) is a stream cipher using a key scheduling
@@ -753,8 +778,13 @@ families:
           params: { modulus: 4294967296 }
     reference_ids:
       - rivest_et_al_1998_rc6
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1, round_2]
+        status: finalist
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_variable]
+        status: submitted
     influences:
       - source_family_id: rc5
         relations:
@@ -784,7 +814,7 @@ families:
     reference_ids:
       - yang_2021_sm_tls
       - gbt_32907_2016_sm4
-    process_ids: []
+    process_participations: []
     influences: []
 
   - id: kasumi
@@ -807,7 +837,7 @@ families:
           params: { input_bits: 8, output_bits: 8 }
     reference_ids:
       - ts_35_202_kasumi
-    process_ids: []
+    process_participations: []
     influences: []
 
   - id: clefia
@@ -829,7 +859,10 @@ families:
         - id: binary_matrix_mul
     reference_ids:
       - katagi_moriai_2011_clefia
-    process_ids: []
+    process_participations:
+      - process_id: cryptrec_selection_2000_2023
+        stage_ids: [candidate_recommended_block_128bit]
+        status: candidate_recommended
     influences: []
 
   - id: twine
@@ -852,7 +885,7 @@ families:
         - id: constant
     reference_ids:
       - suzaki_et_al_2012_twine
-    process_ids: []
+    process_participations: []
     influences: []
 
   # ── AES Candidates ──────────────────────────────────────────────────────
@@ -878,8 +911,10 @@ families:
         - id: binary_matrix_mul
     reference_ids:
       - lim_1998_crypton
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1]
+        status: candidate
     influences: []
 
   - id: deal
@@ -900,8 +935,10 @@ families:
         - id: bit_permutation
     reference_ids:
       - knudsen_1998_deal
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1]
+        status: candidate
     influences:
       - source_family_id: des
         relations:
@@ -929,8 +966,10 @@ families:
           params: { input_bits: 8, output_bits: 8 }
     reference_ids:
       - vaudenay_et_al_1998_dfc
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       DFC (Decorrelated Fast Cipher) uses decorrelation theory to provide
@@ -957,8 +996,10 @@ families:
           params: { modulus: 4294967296 }
     reference_ids:
       - shimoyama_et_al_1998_e2
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       E2 (Efficient Encryption) by NTT uses a 12-round Feistel with
@@ -983,8 +1024,10 @@ families:
           params: { word_size_bits: 8 }
     reference_ids:
       - georgoudis_et_al_1998_frog
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       FROG generates key-dependent internal tables used as pseudo-random
@@ -1010,8 +1053,10 @@ families:
         - id: rotation_fixed
     reference_ids:
       - schroeppel_1998_hpc
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       The Hasty Pudding Cipher (HPC) supports variable block sizes from
@@ -1037,8 +1082,10 @@ families:
         - id: binary_matrix_mul
     reference_ids:
       - brown_et_al_1998_loki97
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1]
+        status: candidate
     influences:
       - source_family_id: des
         relations:
@@ -1064,8 +1111,10 @@ families:
           params: { field_size: 256 }
     reference_ids:
       - jacobson_huber_1998_magenta
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       MAGENTA (Method for Assurance of Generally Networked Technical Architectures)
@@ -1095,8 +1144,10 @@ families:
         - id: rotation_fixed
     reference_ids:
       - burwick_et_al_1999_mars
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1, round_2]
+        status: finalist
     influences: []
     notes: >
       MARS by IBM uses a heterogeneous structure: unkeyed mixing rounds,
@@ -1125,8 +1176,13 @@ families:
         - id: binary_matrix_mul
     reference_ids:
       - massey_et_al_1998_safer_plus
-    process_ids:
-      - aes_competition_nist_1997_2000
+    process_participations:
+      - process_id: aes_competition_nist_1997_2000
+        stage_ids: [round_1]
+        status: candidate
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_variable]
+        status: submitted
     influences: []
 
   # ── Low-Latency And Memory-Encryption Ciphers ───────────────────────────
@@ -1150,7 +1206,7 @@ families:
         - id: constant
     reference_ids:
       - greene_motley_weeks_2024_aradi
-    process_ids: []
+    process_participations: []
     influences: []
 
   - id: bipbip
@@ -1172,7 +1228,7 @@ families:
         - id: constant
     reference_ids:
       - belkheyar_et_al_2023_bipbip
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       BipBip targets C3 pointer encryption and uses a 24-bit block with a 40-bit tweak.
@@ -1196,7 +1252,7 @@ families:
         - id: constant
     reference_ids:
       - avanzi_2016_qarma
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: prince
         relations:
@@ -1226,7 +1282,7 @@ families:
         - id: constant
     reference_ids:
       - avanzi_et_al_2023_qarmav2
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: qarma
         relations:
@@ -1254,7 +1310,7 @@ families:
         - id: constant
     reference_ids:
       - canale_et_al_2023_scarf
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       SCARF is a dedicated cache-randomization cipher with a very small 10-bit
@@ -1280,7 +1336,7 @@ families:
         - id: constant
     reference_ids:
       - liu_et_al_2025_ulbc
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       this family operates with 128-bit blocks and supports key lengths of either 128 or 256 bits. 
@@ -1303,7 +1359,7 @@ families:
         - id: constant
     reference_ids:
       - wang_et_al_2025_blink
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       Blink is instantiated with 64-bit and 128-bit blocks, and with tweak lengths of one or
@@ -1325,7 +1381,7 @@ families:
         - id: constant
     reference_ids:
       - belkheyar_et_al_2025_chilow
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       The ChiLow family includes 32-bit and 40-bit tweakable block-cipher variants for embedded
@@ -1351,7 +1407,7 @@ families:
         - id: rotation_fixed
     reference_ids:
       - minematsu_et_al_2026_msx
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       MSX includes MSX-64 and MSX-128 families, with key sizes 128 and 256 bits depending on
@@ -1383,8 +1439,10 @@ families:
       - ascon_joc_2021
       - ascon_ctrsa_2024
       - sp_800_232
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2, finalist, winner]
+        status: winner
     influences: []
     notes: First appeared in the 2016 CAESAR submission. Subsequent references track the NIST LWC submission, the Journal of Cryptology AEAD/Hash/XOF specification, the CT-RSA 2024 PRF/MAC specification, and the final NIST standard.
 
@@ -1411,8 +1469,7 @@ families:
     reference_ids:
       - photon_beetle_2021
       - sp_800_232
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations: []
     influences: []
 
   - id: skinny
@@ -1434,8 +1491,7 @@ families:
         - id: bit_permutation
     reference_ids:
       - skinny_2016
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations: []
     influences: []
 
   - id: sparkle
@@ -1457,8 +1513,10 @@ families:
     reference_ids:
       - sparkle_2020
       - sp_800_232
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2, finalist]
+        status: finalist
     influences: []
 
   - id: tinyjambu
@@ -1480,8 +1538,10 @@ families:
     reference_ids:
       - tinyjambu_2019
       - sp_800_232
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2, finalist]
+        status: finalist
     influences: []
 
   - id: xoodoo
@@ -1504,8 +1564,7 @@ families:
     reference_ids:
       - xoodoo_2018
       - sp_800_232
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations: []
     influences: []
 
   - id: elephant
@@ -1526,8 +1585,10 @@ families:
         - id: constant
     reference_ids:
       - elephant_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2, finalist]
+        status: finalist
     influences: []
 
   - id: romulus
@@ -1549,8 +1610,10 @@ families:
         - id: bit_permutation
     reference_ids:
       - romulus_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2, finalist]
+        status: finalist
     influences:
       - source_family_id: skinny
         relations:
@@ -1576,8 +1639,10 @@ families:
         - id: constant
     reference_ids:
       - isap_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2, finalist]
+        status: finalist
     influences:
       - source_family_id: ascon
         relations:
@@ -1603,8 +1668,10 @@ families:
         - id: and
     reference_ids:
       - grain_128aead_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2, finalist]
+        status: finalist
     influences: []
 
   - id: gimli
@@ -1626,8 +1693,10 @@ families:
         - id: constant
     reference_ids:
       - gimli_2017
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
 
   - id: subterranean
@@ -1648,8 +1717,10 @@ families:
         - id: rotation_fixed
     reference_ids:
       - subterranean_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
 
   - id: drygascon
@@ -1671,8 +1742,10 @@ families:
         - id: constant
     reference_ids:
       - drygascon_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences:
       - source_family_id: ascon
         relations:
@@ -1698,8 +1771,10 @@ families:
         - id: constant
     reference_ids:
       - sneik_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
 
   - id: sycon
@@ -1721,8 +1796,10 @@ families:
         - id: constant
     reference_ids:
       - sycon_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
 
   - id: spix
@@ -1744,8 +1821,10 @@ families:
         - id: constant
     reference_ids:
       - spix_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
 
   - id: spoc
@@ -1767,8 +1846,10 @@ families:
         - id: constant
     reference_ids:
       - spoc_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
 
   - id: spook
@@ -1790,8 +1871,10 @@ families:
         - id: constant
     reference_ids:
       - spook_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
 
   - id: knot
@@ -1813,8 +1896,10 @@ families:
         - id: constant
     reference_ids:
       - knot_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
 
   - id: pyjamask
@@ -1834,8 +1919,10 @@ families:
         - id: constant
     reference_ids:
       - pyjamask_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
 
   - id: qameleon
@@ -1856,8 +1943,10 @@ families:
         - id: bit_permutation
     reference_ids:
       - qameleon_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
 
   - id: saturnin
@@ -1878,8 +1967,10 @@ families:
         - id: constant
     reference_ids:
       - saturnin_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
 
   - id: simple
@@ -1900,8 +1991,10 @@ families:
         - id: constant
     reference_ids:
       - simple_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
 
   - id: trifle
@@ -1922,8 +2015,10 @@ families:
         - id: bit_permutation
     reference_ids:
       - trifle_2019
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
   - id: ace
     name: ACE
@@ -1946,8 +2041,10 @@ families:
         - id: constant
     reference_ids:
       - aagaard_et_al_2019_ace
-    process_ids:
-      - lightweight_crypto_nist_2018_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     innovative_ideas:
       - id: ace_sb64_nonlinear_layer
@@ -1980,7 +2077,7 @@ families:
         - id: rotation_variable
     reference_ids:
       - alvarez_et_al_1996_akelarre
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: akelarre_data_dependent_prime_rotation
@@ -2013,7 +2110,7 @@ families:
         - id: bit_permutation
     reference_ids:
       - leech_1996_crisp
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: crisp_hardened_keyschedule_feedback
@@ -2044,7 +2141,10 @@ families:
         - id: xor
     reference_ids:
       - ant_ref
-    process_ids: []
+    process_participations:
+      - process_id: cacr_national_cryptographic_algorithm_design_competition
+        stage_ids: [second_prize]
+        status: finalist
     influences: []
     notes: >
       ANT is a lightweight Feistel family with bit-based round functions composed
@@ -2068,7 +2168,10 @@ families:
         - id: xor
     reference_ids:
       - spring_ref
-    process_ids: []
+    process_participations:
+      - process_id: cacr_national_cryptographic_algorithm_design_competition
+        stage_ids: [third_prize]
+        status: finalist
     influences: []
     notes: >
       SPRING is an SP-structure block cipher family based on NFSR-derived
@@ -2092,7 +2195,10 @@ families:
         - id: xor
     reference_ids:
       - raindrop_ref
-    process_ids: []
+    process_participations:
+      - process_id: cacr_national_cryptographic_algorithm_design_competition
+        stage_ids: [third_prize]
+        status: finalist
     influences: []
     notes: >
       Raindrop is a Feistel-family block cipher with SP-style round-function
@@ -2116,7 +2222,10 @@ families:
         - id: xor
     reference_ids:
       - smba_ref
-    process_ids: []
+    process_participations:
+      - process_id: cacr_national_cryptographic_algorithm_design_competition
+        stage_ids: [third_prize]
+        status: finalist
     influences: []
     notes: >
       SMBA is a block-cipher family with 128-bit and 256-bit block variants,
@@ -2138,7 +2247,10 @@ families:
         - id: xor
     reference_ids:
       - fbc_ref
-    process_ids: []
+    process_participations:
+      - process_id: cacr_national_cryptographic_algorithm_design_competition
+        stage_ids: [third_prize]
+        status: finalist
     influences: []
     notes: >
       FBC is a lightweight generalized-Feistel family with versions FBC128-128,
@@ -2160,7 +2272,10 @@ families:
         - id: xor
     reference_ids:
       - nbc_ref
-    process_ids: []
+    process_participations:
+      - process_id: cacr_national_cryptographic_algorithm_design_competition
+        stage_ids: [third_prize]
+        status: finalist
     influences: []
     notes: >
       NBC is a generalized-Feistel block cipher family with variants NBC-128/128,
@@ -2183,7 +2298,10 @@ families:
         - id: xor
     reference_ids:
       - tangram_ref
-    process_ids: []
+    process_participations:
+      - process_id: cacr_national_cryptographic_algorithm_design_competition
+        stage_ids: [second_prize]
+        status: finalist
     influences: []
     notes: >
       TANGRAM is a bit-sliced SP-network family including TANGRAM-128/128,
@@ -2211,7 +2329,10 @@ families:
         - id: constant
     reference_ids:
       - barreto_rijmen_2000_anubis
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_128bit]
+        status: submitted
     influences:
       - source_family_id: rijndael
         relations:
@@ -2247,7 +2368,10 @@ families:
         - id: xor
     reference_ids:
       - ballet_ref
-    process_ids: []
+    process_participations:
+      - process_id: cacr_national_cryptographic_algorithm_design_competition
+        stage_ids: [first_prize]
+        status: winner
     influences: []
     notes: >
       Ballet is an ARX-oriented block-cipher family with three variants:
@@ -2271,7 +2395,7 @@ families:
         - id: constant
     reference_ids:
       - bear_lion_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: BEAR/LION/LIONESS are broad-block block-cipher constructions composed from a stream cipher and hash function in Feistel-like rounds.
 
@@ -2293,7 +2417,7 @@ families:
         - id: constant
     reference_ids:
       - belt_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2319,8 +2443,10 @@ families:
         - id: constant
     reference_ids:
       - driscoll_2019_bleep64
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       Driscoll (Honeywell) 2019. Additive stream cipher + autokey product cipher for AEAD.
@@ -2347,7 +2473,7 @@ families:
         - id: constant
     reference_ids:
       - blowfish_2_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2371,7 +2497,7 @@ families:
         - id: constant
     reference_ids:
       - chaskey_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Chaskey is a 128-bit ARX permutation used inside an efficient MAC construction for 32-bit microcontrollers.
 
@@ -2395,8 +2521,10 @@ families:
         - id: constant
     reference_ids:
       - zaba_2019_cilipadi
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       Z'aba et al. (CyberSecurity Malaysia) 2019. AEAD based on MonkeyDuplex sponge construction.
@@ -2423,7 +2551,10 @@ families:
         - id: constant
     reference_ids:
       - cipherunicorn_a_ref
-    process_ids: []
+    process_participations:
+      - process_id: cryptrec_selection_2000_2023
+        stage_ids: [candidate_recommended_block_128bit]
+        status: candidate_recommended
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2445,7 +2576,10 @@ families:
         - id: constant
     reference_ids:
       - cipherunicorn_e_ref
-    process_ids: []
+    process_participations:
+      - process_id: cryptrec_selection_2000_2023
+        stage_ids: [candidate_recommended_block_64bit]
+        status: candidate_recommended
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2471,8 +2605,10 @@ families:
         - id: xor
     reference_ids:
       - liu_2019_clae
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       Liu, Nepal, Pieprzyk, Susilo (CSIRO/UoW) 2019. Configurable byte-oriented AEAD inspired by
@@ -2500,8 +2636,10 @@ families:
         - id: and
     reference_ids:
       - wu_huang_2019_clx
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     innovative_ideas:
       - id: clx_duplex_keyed_permutation
@@ -2534,7 +2672,7 @@ families:
         - id: constant
     reference_ids:
       - cmea_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2560,8 +2698,10 @@ families:
         - id: constant
     reference_ids:
       - gueron_2019_comet
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Gueron, Jha, Nandi 2019. COunter Mode Encryption with authentication Tag.
@@ -2588,7 +2728,10 @@ families:
         - id: constant
     reference_ids:
       - cs_cipher_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_64bit]
+        status: submitted
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2610,7 +2753,7 @@ families:
         - id: constant
     reference_ids:
       - deoxys_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2631,7 +2774,7 @@ families:
         - id: bit_permutation
     reference_ids:
       - desx_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: DESX applies key whitening around DES to improve brute-force resistance.
 
@@ -2652,7 +2795,10 @@ families:
         - id: constant
     reference_ids:
       - enocoro_128v2_ref
-    process_ids: []
+    process_participations:
+      - process_id: cryptrec_selection_2000_2023
+        stage_ids: [candidate_recommended_stream]
+        status: candidate_recommended
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2676,8 +2822,10 @@ families:
         - id: constant
     reference_ids:
       - chakraborti_2019_estate
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Chakraborti, Datta, Jha, Lopez, Nandi, Sasaki (NTT/ISI) 2019. Energy-efficient single-state
@@ -2704,7 +2852,7 @@ families:
         - id: constant
     reference_ids:
       - fantomas_robin_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2726,7 +2874,7 @@ families:
         - id: rotation_fixed
     reference_ids:
       - feal_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       FEAL is a software-oriented Feistel family originally proposed as a fast
@@ -2749,7 +2897,10 @@ families:
         - id: xor
     reference_ids:
       - fesh_ref
-    process_ids: []
+    process_participations:
+      - process_id: cacr_national_cryptographic_algorithm_design_competition
+        stage_ids: [second_prize]
+        status: finalist
     influences: []
     notes: >
       FESH is an SPN-family block cipher with six published variants across 128-
@@ -2773,8 +2924,10 @@ families:
         - id: constant
     reference_ids:
       - nascimento_2019_flexaead
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       Nascimento, Xexéo (Petrobras/IME Brazil) 2019. Parameterized block cipher with integrated
@@ -2803,8 +2956,10 @@ families:
         - id: constant
     reference_ids:
       - andreeva_2019_forkae
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Andreeva, Lallemand, Purnal, Reyhanitabar, Roy, Vizár 2019. AEAD using ForkSkinny, a
@@ -2832,8 +2987,10 @@ families:
         - id: constant
     reference_ids:
       - zhang_2019_fountain
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Zhang (CAS Beijing) 2019. Stream cipher-based AEAD with variable non-linear feedbacks.
@@ -2859,7 +3016,7 @@ families:
         - id: constant
     reference_ids:
       - gage_and_ingage_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2882,7 +3039,7 @@ families:
         - id: xor
     reference_ids:
       - gost_28147_89_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: GOST 28147-89 is a 32-round Feistel block cipher with a 256-bit key.
 
@@ -2904,7 +3061,10 @@ families:
         - id: constant
     reference_ids:
       - grand_cru_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_128bit]
+        status: submitted
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2926,7 +3086,7 @@ families:
         - id: constant
     reference_ids:
       - hern_and_heron_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2948,7 +3108,7 @@ families:
         - id: constant
     reference_ids:
       - hight_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -2972,8 +3132,10 @@ families:
         - id: constant
     reference_ids:
       - chakraborti_2019_hyena
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Chakraborti, Datta, Jha, Nandi (NTT/ISI) 2019. Hybrid feedback-based ENcryption with
@@ -2999,7 +3161,7 @@ families:
         - id: xor
     reference_ids:
       - ice_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: ICE is a DES-like software-oriented Feistel design with keyed permutation.
 
@@ -3020,7 +3182,7 @@ families:
         - id: word_permutation
     reference_ids:
       - isaac_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: ISAAC is a stream generator using indirection, accumulation, and mixing.
 
@@ -3041,7 +3203,10 @@ families:
         - id: constant
     reference_ids:
       - kcipher_2_ref
-    process_ids: []
+    process_participations:
+      - process_id: cryptrec_selection_2000_2023
+        stage_ids: [recommended_stream]
+        status: recommended
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3063,7 +3228,10 @@ families:
         - id: constant
     reference_ids:
       - khazad_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_64bit]
+        status: submitted
     influences: []
     notes: Khazad is a wide-trail SPN block cipher family proposed in the NESSIE era.
 
@@ -3085,7 +3253,7 @@ families:
         - id: constant
     reference_ids:
       - klein_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3107,7 +3275,7 @@ families:
         - id: constant
     reference_ids:
       - kuznyechik_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3130,8 +3298,10 @@ families:
         - id: constant
     reference_ids:
       - sui_2019_laem
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       Sui, Wu, Zhang, Zhang (CAS Beijing) 2019. Lightweight Authentication Encryption Mode
@@ -3158,7 +3328,7 @@ families:
         - id: constant
     reference_ids:
       - lea_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3180,7 +3350,7 @@ families:
         - id: constant
     reference_ids:
       - lea_128_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3201,7 +3371,10 @@ families:
         - id: constant
     reference_ids:
       - leviathan_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_stream]
+        status: submitted
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3222,7 +3395,10 @@ families:
         - id: constant
     reference_ids:
       - lili_128_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_stream]
+        status: submitted
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3248,8 +3424,10 @@ families:
         - id: constant
     reference_ids:
       - adomnicai_2019_lilliput_ae
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       Adomnicai et al. 2019. AEAD scheme based on Lilliput-TBC, a tweakable block cipher
@@ -3276,8 +3454,10 @@ families:
         - id: constant
     reference_ids:
       - mehner_2019_limdolen
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       Mehner 2019. PMAC SIV-like AEAD using AXR (AND, XOR, Rotation) round function.
@@ -3305,8 +3485,10 @@ families:
         - id: constant
     reference_ids:
       - chakraborti_2019_lotus_locus
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OCB-like fully parallelizable AEAD using
@@ -3332,7 +3514,7 @@ families:
         - id: constant
     reference_ids:
       - loki_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3355,8 +3537,10 @@ families:
         - id: constant
     reference_ids:
       - chakraborti_2019_lotus_locus
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OTR-like AEAD using TweGIFT-64 (n=64, τ=4,
@@ -3382,7 +3566,7 @@ families:
         - id: constant
     reference_ids:
       - mantis_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3404,7 +3588,7 @@ families:
         - id: constant
     reference_ids:
       - mcrypton_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3426,7 +3610,7 @@ families:
         - id: constant
     reference_ids:
       - mibs_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3448,7 +3632,7 @@ families:
         - id: constant
     reference_ids:
       - midori_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3470,7 +3654,13 @@ families:
         - id: constant
     reference_ids:
       - misty1_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_64bit]
+        status: submitted
+      - process_id: cryptrec_selection_2000_2023
+        stage_ids: [candidate_recommended_block_64bit]
+        status: candidate_recommended
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3495,8 +3685,10 @@ families:
         - id: constant
     reference_ids:
       - chakraborty_2019_mixfeed
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Chakraborty and Nandi 2019. Minimally Xored Feedback (mixFeed) AEAD mode.
@@ -3523,7 +3715,7 @@ families:
         - id: constant
     reference_ids:
       - mmb_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3544,7 +3736,10 @@ families:
         - id: constant
     reference_ids:
       - mugi_ref
-    process_ids: []
+    process_participations:
+      - process_id: cryptrec_selection_2000_2023
+        stage_ids: [candidate_recommended_stream]
+        status: candidate_recommended
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3565,7 +3760,10 @@ families:
         - id: constant
     reference_ids:
       - multi_s01_ref
-    process_ids: []
+    process_participations:
+      - process_id: cryptrec_selection_2000_2023
+        stage_ids: [candidate_recommended_stream]
+        status: candidate_recommended
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3587,7 +3785,7 @@ families:
         - id: constant
     reference_ids:
       - multi2_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3609,7 +3807,10 @@ families:
         - id: constant
     reference_ids:
       - nimbus_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_64bit]
+        status: submitted
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3631,7 +3832,10 @@ families:
         - id: constant
     reference_ids:
       - noekeon_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_128bit]
+        status: submitted
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3653,7 +3857,10 @@ families:
         - id: constant
     reference_ids:
       - nush_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_variable]
+        status: submitted
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3679,8 +3886,10 @@ families:
         - id: constant
     reference_ids:
       - chakraborty_2019_orange
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Chakraborty and Nandi 2019. Optimum RAte spoNGE (ORANGE) using PHOTON256 (256-bit, 12-round
@@ -3709,8 +3918,10 @@ families:
         - id: constant
     reference_ids:
       - bhattacharjee_2019_oribatida
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Bhattacharjee, List, Mancillas-López, Nandi 2019. Keyed monkey-wrap duplex AEAD using the SimP
@@ -3737,7 +3948,7 @@ families:
         - id: constant
     reference_ids:
       - oryx_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3759,7 +3970,7 @@ families:
         - id: constant
     reference_ids:
       - pea_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3781,7 +3992,7 @@ families:
         - id: constant
     reference_ids:
       - picaro_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3803,7 +4014,7 @@ families:
         - id: constant
     reference_ids:
       - pride_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3825,7 +4036,7 @@ families:
         - id: constant
     reference_ids:
       - princev2_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3849,7 +4060,10 @@ families:
         - id: constant
     reference_ids:
       - q_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_128bit]
+        status: submitted
     influences: []
     notes: >
       Q is a 128-bit block cipher proposal for NESSIE, combining Rijndael-style
@@ -3873,8 +4087,10 @@ families:
         - id: constant
     reference_ids:
       - zhang_2019_quartet
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       Zhang 2019. Stream cipher-based AEAD with 4 × 64-bit lanes = 256-bit internal state.
@@ -3903,7 +4119,7 @@ families:
         - id: rotation_fixed
     reference_ids:
       - rc2_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       RC2 is a 64-bit block cipher with a variable-length key and a
@@ -3926,7 +4142,7 @@ families:
         - id: constant
     reference_ids:
       - rc4plus_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -3950,7 +4166,7 @@ families:
         - id: constant
     reference_ids:
       - rc4a_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: RC4A is an RC4-family byte-oriented stream cipher variant using two 256-byte permutations.
 
@@ -3974,7 +4190,7 @@ families:
         - id: constant
     reference_ids:
       - remus_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: REMUS is a lightweight AEAD mode family introduced alongside Romulus and instantiated with Skinny-based primitives.
 
@@ -3999,8 +4215,10 @@ families:
         - id: constant
     reference_ids:
       - naito_2019_saeaes
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Naito et al. (Mitsubishi Electric / Univ. Electro-Communications) 2019. AES instantiation
@@ -4028,7 +4246,7 @@ families:
         - id: constant
     reference_ids:
       - safer_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -4050,7 +4268,7 @@ families:
         - id: constant
     reference_ids:
       - saferpp_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -4072,7 +4290,10 @@ families:
         - id: constant
     reference_ids:
       - sc2000_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_128bit]
+        status: submitted
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -4094,7 +4315,10 @@ families:
         - id: constant
     reference_ids:
       - shacal_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_block_160bit]
+        status: submitted
     influences: []
     notes: >
       SHACAL-1 is a block-cipher view of SHA-1 compression with 160-bit block
@@ -4118,7 +4342,7 @@ families:
         - id: constant
     reference_ids:
       - shacal2_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       SHACAL-2 is a block-cipher view of SHA-256 compression with 256-bit block
@@ -4146,8 +4370,10 @@ families:
         - id: constant
     reference_ids:
       - penazzi_2019_shamash
-    process_ids:
-      - nist_lwc_round1
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     innovative_ideas:
       - id: shamash_sponge_aead_dual
@@ -4189,7 +4415,7 @@ families:
         - id: constant
     reference_ids:
       - shark_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       SHARK is an early wide-trail style SPN with byte-oriented substitution
@@ -4213,7 +4439,7 @@ families:
         - id: xor
     reference_ids:
       - skipjack_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: >
       SKIPJACK is a 64-bit block cipher with an 80-bit key, used historically
@@ -4237,7 +4463,10 @@ families:
         - id: xor
     reference_ids:
       - snow_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_stream]
+        status: submitted
     influences: []
     notes: >
       SNOW is a word-oriented stream cipher with a 16-word LFSR and a compact
@@ -4262,7 +4491,7 @@ families:
         - id: constant
     reference_ids:
       - snow_2_0_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: SNOW 2.0 stream-cipher family with a 16x32-bit LFSR and FSM-based nonlinear output filtering.
 
@@ -4285,7 +4514,7 @@ families:
         - id: constant
     reference_ids:
       - snow_3g_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: SNOW 3G stream-cipher family standardized by 3GPP for UEA2/UIA2.
 
@@ -4307,7 +4536,10 @@ families:
         - id: constant
     reference_ids:
       - sober_t16_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_stream]
+        status: submitted
     influences: []
     notes: SOBER-t16 is a 16-bit word-oriented stream-cipher design submitted to NESSIE.
 
@@ -4329,7 +4561,10 @@ families:
         - id: constant
     reference_ids:
       - sober_t32_ref
-    process_ids: []
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_stream]
+        status: submitted
     influences: []
     notes: SOBER-t32 is the 32-bit word-oriented SOBER variant submitted to NESSIE.
 
@@ -4352,7 +4587,7 @@ families:
         - id: constant
     reference_ids:
       - sosemanuk1_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: SOSEMANUK is an eSTREAM software-profile stream cipher influenced by SNOW 2.0 and Serpent.
 
@@ -4374,7 +4609,7 @@ families:
         - id: constant
     reference_ids:
       - speckey_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Speckey is defined as a Speck-32-based keyed permutation round with key addition applied to the full 32-bit state.
 
@@ -4396,7 +4631,7 @@ families:
         - id: constant
     reference_ids:
       - speedy_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: SPEEDY-r-192 is an ultra-low-latency block-cipher family with 6-bit S-boxes and bit-level diffusion.
 
@@ -4419,7 +4654,7 @@ families:
         - id: constant
     reference_ids:
       - spritz_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Spritz is an RC4-style byte-oriented stream-cipher/hash design with a 256-byte permutation state.
 
@@ -4444,7 +4679,7 @@ families:
         - id: constant
     reference_ids:
       - square_ref
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: shark
         relations:
@@ -4482,7 +4717,7 @@ families:
         - id: constant
     reference_ids:
       - thank_goodness_it_s_friday_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: TGIF is a lightweight AEAD design based on a tweakable-SPN core TGIF-TBC and an authenticated-encryption mode.
 
@@ -4504,7 +4739,7 @@ families:
         - id: constant
     reference_ids:
       - three_key_triple_des_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -4530,7 +4765,7 @@ families:
         - id: constant
     reference_ids:
       - threefish_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Threefish is the ARX tweakable block-cipher core used by Skein, with standardized 256/512/1024-bit variants.
 
@@ -4555,7 +4790,7 @@ families:
         - id: constant
     reference_ids:
       - treyfer_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: TREYFER is a very compact 64-bit lightweight block cipher/MAC design targeting constrained environments.
 
@@ -4578,7 +4813,7 @@ families:
         - id: constant
     reference_ids:
       - triad_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: TRIAD is a stream-cipher-based construction providing both Triad-AE (AEAD) and Triad-HASH in the NIST LWC Round 1 submission.
 
@@ -4600,7 +4835,10 @@ families:
         - id: xor
     reference_ids:
       - trivium_ref
-    process_ids: []
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3, portfolio_hw]
+        status: portfolio
     influences: []
     notes: >
       Trivium is a synchronous stream cipher with 80-bit key and 80-bit IV,
@@ -4624,7 +4862,7 @@ families:
         - id: constant
     reference_ids:
       - two_key_triple_des_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -4645,7 +4883,10 @@ families:
         - id: xor
     reference_ids:
       - ublock_ref
-    process_ids: []
+    process_participations:
+      - process_id: cacr_national_cryptographic_algorithm_design_competition
+        stage_ids: [first_prize]
+        status: winner
     influences: []
     notes: >
       uBlock is a block-cipher family with variants uBlock-128/128,
@@ -4668,7 +4909,7 @@ families:
         - id: constant
     reference_ids:
       - uea2_zuc_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -4689,7 +4930,7 @@ families:
         - id: constant
     reference_ids:
       - vmpc_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -4713,8 +4954,10 @@ families:
         - id: constant
     reference_ids:
       - aagaard_2019_wage
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Aagaard et al. 2019. WAGE is a 259-bit permutation (37 stages × 7 bits over F_2^7)
@@ -4740,7 +4983,7 @@ families:
         - id: constant
     reference_ids:
       - wake_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -4761,7 +5004,7 @@ families:
         - id: constant
     reference_ids:
       - xchacha_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Auto-ingested from FAMILY_COVERAGE_CHECKLIST.md; replace placeholder values with paper-derived parameters.
 
@@ -4783,7 +5026,7 @@ families:
         - id: constant
     reference_ids:
       - xxtea_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: XXTEA (Corrected Block TEA) is a word-oriented ARX cipher operating on variable-length blocks.
 
@@ -4805,7 +5048,7 @@ families:
         - id: constant
     reference_ids:
       - xxtea_corrected_block_tea_ref
-    process_ids: []
+    process_participations: []
     influences: []
     notes: Corrected Block TEA variant from the Wheeler-Needham correction note (also known as XXTEA).
 
@@ -4828,8 +5071,10 @@ families:
         - id: constant
     reference_ids:
       - montes_2019_yarara_and_coral
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       Montes & Penazzi 2019. Two related lightweight algorithms sharing a 256-bit permutation
@@ -4862,7 +5107,7 @@ families:
         - id: constant
     reference_ids:
       - daemen_1991_threeway
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: threeway_self_reciprocal
@@ -4898,7 +5143,7 @@ families:
         - id: permutation
     reference_ids:
       - blaze_schneier_1994_macguffin
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: des
         relations:
@@ -4935,7 +5180,7 @@ families:
     reference_ids:
       - feistel_1973_lucifer
       - sorkin_1983_lucifer
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: des
         relations:
@@ -4972,7 +5217,7 @@ families:
         - id: shift_fixed
     reference_ids:
       - maximov_2002_mir1
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: mir_1_t_function_automaton
@@ -5008,8 +5253,10 @@ families:
         - id: xor
     reference_ids:
       - gammel_2005_achterbahn
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2]
+        status: candidate
     influences: []
     innovative_ideas:
       - id: achterbahn_nlfsr_combiner
@@ -5049,8 +5296,10 @@ families:
         - id: xor
     reference_ids:
       - hell_2005_grain
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3, portfolio_hw]
+        status: portfolio
     influences:
       - source_family_id: grain_128
         relations:
@@ -5090,8 +5339,10 @@ families:
         - id: xor
     reference_ids:
       - babbage_2005_mickey
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3, portfolio_hw]
+        status: portfolio
     influences: []
     innovative_ideas:
       - id: mickey_mutual_irregular_clocking
@@ -5125,8 +5376,10 @@ families:
         - id: absg_decimation
     reference_ids:
       - berbain_2005_decim
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3]
+        status: candidate
     influences: []
     innovative_ideas:
       - id: decim_absg_decimation
@@ -5162,8 +5415,10 @@ families:
         - id: rotation_fixed
     reference_ids:
       - wu_2004_hc256
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3]
+        status: candidate
     influences: []
     innovative_ideas:
       - id: hc256_large_key_dependent_tables
@@ -5200,8 +5455,10 @@ families:
           params: { count: 8, size_bits: 32 }
     reference_ids:
       - boesgaard_2003_rabbit
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3, portfolio_sw]
+        status: portfolio
     influences: []
     innovative_ideas:
       - id: rabbit_coupled_g_function
@@ -5235,8 +5492,10 @@ families:
           params: { type: xor }
     reference_ids:
       - arnault_2005_ffcsr
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3, portfolio_hw]
+        status: portfolio
     influences: []
     innovative_ideas:
       - id: f_fcsr_carry_nonlinearity
@@ -5272,7 +5531,7 @@ families:
         - id: rotation_fixed
     reference_ids:
       - rogaway_1997_seal
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: seal_prf_stream
@@ -5308,7 +5567,7 @@ families:
           params: { modulus: 256 }
     reference_ids:
       - johnson_1995_sapphire
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: rc4
         relations:
@@ -5348,8 +5607,10 @@ families:
         - id: xor
     reference_ids:
       - braeken_2005_sfinks
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1]
+        status: candidate
     influences: []
     innovative_ideas:
       - id: sfinks_gf2_16_inversion
@@ -5389,8 +5650,10 @@ families:
         - id: xor
     reference_ids:
       - lancrypto_2005_yamb
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1]
+        status: candidate
     influences: []
     innovative_ideas:
       - id: yamb_word_lfsr_with_dynamic_sbox
@@ -5423,7 +5686,7 @@ families:
         - id: xor
     reference_ids:
       - fowler_1991_fnv1
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: fnv1_multiplicative_prime_mixing
@@ -5462,7 +5725,7 @@ families:
         - id: constant
     reference_ids:
       - zheng_1992_haval
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: md5
         relations: [inspired_by]
@@ -5505,7 +5768,7 @@ families:
         - id: xor
     reference_ids:
       - kaliski_1992_md2
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: md2_pi_sbox
@@ -5548,7 +5811,7 @@ families:
         - id: not
     reference_ids:
       - rivest_1992_md4
-    process_ids: []
+    process_participations: []
     influences: []
     innovative_ideas:
       - id: md4_software_speed
@@ -5588,7 +5851,7 @@ families:
         - id: constant
     reference_ids:
       - rivest_1992_md5
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: md4
         relations: [improvement_of]
@@ -5630,8 +5893,10 @@ families:
         - id: not
     reference_ids:
       - dobbertin_1996_ripemd160
-    process_ids:
-      - eu_ripe_project
+    process_participations:
+      - process_id: eu_ripe_project
+        stage_ids: [category_unkeyed]
+        status: submitted
     influences:
       - source_family_id: md4
         relations: [improvement_of]
@@ -5677,8 +5942,10 @@ families:
         - id: constant
     reference_ids:
       - nist_2002_fips180_2
-    process_ids:
-      - nist_standardization
+    process_participations:
+      - process_id: nist_sha1_sha2_standardization
+        stage_ids: [standardized]
+        status: winner
     influences:
       - source_family_id: md4
         relations: [improvement_of]
@@ -5733,7 +6000,7 @@ families:
         - id: shift_fixed
     reference_ids:
       - anderson_1995_tiger
-    process_ids: []
+    process_participations: []
     influences:
       - source_family_id: md4
         relations: [inspired_by]
@@ -5785,8 +6052,10 @@ families:
         - id: xor
     reference_ids:
       - barreto_2003_whirlpool
-    process_ids:
-      - nessie_project
+    process_participations:
+      - process_id: nessie_competition_european_commission_2000_2003
+        stage_ids: [submissions_hash]
+        status: submitted
     influences:
       - source_family_id: rijndael
         relations: [inspired_by]
@@ -5833,8 +6102,10 @@ families:
         - id: constant
     reference_ids:
       - bao_2019_photon_beetle
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2, finalist]
+        status: finalist
     influences: []
     notes: >
       Bao et al. 2019. PHOTON-Beetle uses PHOTON256 (256-bit, 12 rounds, 8×8 array of 4-bit
@@ -5867,8 +6138,10 @@ families:
         - id: constant
     reference_ids:
       - bao_2019_siv_rijndael256
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       Bao et al. 2019. Rijndael256 is the Rijndael block cipher with fixed block length 256
@@ -5902,8 +6175,10 @@ families:
         - id: constant
     reference_ids:
       - bao_2019_siv_tem_photon
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1]
+        status: candidate
     influences: []
     notes: >
       Bao et al. 2019. TEM-PHOTON = Tweakable Even-Mansour with PHOTON P256 permutation.
@@ -5936,8 +6211,10 @@ families:
         - id: constant
     reference_ids:
       - beierle_2019_skinny_aead
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Beierle et al. 2019. SKINNY-AEAD uses SKINNY tweakable block ciphers in ΘCB3 mode
@@ -5969,8 +6246,10 @@ families:
         - id: constant
     reference_ids:
       - daemen_2019_subterranean_v2
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Daemen et al. 2019. Subterranean 2.0 is a duplex object on a 257-bit state using a
@@ -6000,8 +6279,10 @@ families:
         - id: constant
     reference_ids:
       - banik_2019_sundae_gift
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2]
+        status: candidate
     influences: []
     notes: >
       Banik et al. 2019. SUNDAE-GIFT uses GIFT-128 (block=128, key=128, 40 rounds) in SUNDAE
@@ -6031,8 +6312,10 @@ families:
         - id: constant
     reference_ids:
       - daemen_2019_xoodyak
-    process_ids:
-      - nist_lwc_2019_2023
+    process_participations:
+      - process_id: lightweight_crypto_nist_2018_2023
+        stage_ids: [round_1, round_2, finalist]
+        status: finalist
     influences: []
     notes: >
       Daemen et al. 2019. Xoodyak uses XOODOO[12] (384-bit state = 3 planes × 4×32-bit lanes,
@@ -6065,8 +6348,10 @@ families:
         - id: xor
     reference_ids:
       - hawkes_et_al_2008_nlsv2
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3]
+        status: candidate
     influences: []
     innovative_ideas:
       - id: nlsv2_nlfsr_replaces_lfsr
@@ -6107,8 +6392,10 @@ families:
         - id: xor
     reference_ids:
       - matsumoto_et_al_2008_cryptmt3
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3]
+        status: candidate
     influences: []
     innovative_ideas:
       - id: cryptmt3_mt_mother_generator
@@ -6151,8 +6438,10 @@ families:
         - id: xor
     reference_ids:
       - dawson_et_al_2008_dragon
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3]
+        status: candidate
     influences: []
     innovative_ideas:
       - id: dragon_word_based_nlfsr
@@ -6193,12 +6482,14 @@ families:
         - id: rotation_fixed
     reference_ids:
       - wu_2008_hc128
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_2, phase_3, portfolio_sw]
+        status: portfolio
     influences:
       - source_family_id: hc_256
         relations:
-          - derived_from
+          - variant_of
         note: HC-128 is a simplified 128-bit-security version of HC-256 (which uses 1024-entry tables and 256-bit key/IV).
     innovative_ideas:
       - id: hc128_small_key_dependent_tables
@@ -6239,12 +6530,14 @@ families:
         - id: xor
     reference_ids:
       - biryukov_2008_lex
-    process_ids:
-      - ecrypt_stream_cipher_project_2004_2008
+    process_participations:
+      - process_id: estream_competition_nist_2004_2008
+        stage_ids: [phase_1, phase_2, phase_3]
+        status: candidate
     influences:
       - source_family_id: aes
         relations:
-          - based_on
+          - inspired_by
         note: LEX is built directly on AES rounds using the "leak extraction" concept.
     innovative_ideas:
       - id: lex_leak_extraction
@@ -6287,8 +6580,10 @@ families:
       - biryukov_et_al_2015_argon2_v12
       - biryukov_et_al_2017_argon2_v13
       - rfc_9106_argon2
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions, finalist, winner]
+        status: winner
     influences: []
     innovative_ideas:
       - id: argon2_memory_hard_compression
@@ -6329,8 +6624,10 @@ families:
         - id: xor
     reference_ids:
       - durmuth_zimmermann_2014_antcrypt
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6351,8 +6648,10 @@ families:
         - id: lookup_table
     reference_ids:
       - thomas_2014_battcrypt
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions, finalist]
+        status: finalist
     influences: []
     innovative_ideas: []
     notes: >
@@ -6374,8 +6673,10 @@ families:
         - id: xor
     reference_ids:
       - forler_lucks_wenzel_2015_catena
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions, special_recognition]
+        status: special_recognition
     influences: []
     innovative_ideas: []
     notes: >
@@ -6398,8 +6699,10 @@ families:
         - id: xor
     reference_ids:
       - alvarez_2014_centrifuge
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6419,8 +6722,10 @@ families:
         - id: xor
     reference_ids:
       - franke_2014_earworm
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6442,8 +6747,10 @@ families:
         - id: xor
     reference_ids:
       - pinter_2014_gambit
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6465,8 +6772,10 @@ families:
         - id: xor
     reference_ids:
       - mubarak_2014_lanarea
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6488,8 +6797,10 @@ families:
         - id: xor
     reference_ids:
       - simplicio_et_al_2015_lyra2
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions, special_recognition]
+        status: special_recognition
     influences: []
     innovative_ideas: []
     notes: >
@@ -6511,8 +6822,10 @@ families:
         - id: mul_mod
     reference_ids:
       - pornin_2015_makwa
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions, special_recognition]
+        status: special_recognition
     influences: []
     innovative_ideas: []
     notes: >
@@ -6535,8 +6848,10 @@ families:
         - id: xor
     reference_ids:
       - maslennikov_2014_mcs_phs
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6557,8 +6872,10 @@ families:
         - id: xor
     reference_ids:
       - enright_2014_omegacrypt
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6580,8 +6897,10 @@ families:
         - id: lookup_table
     reference_ids:
       - thomas_2014_parallel
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions, finalist]
+        status: finalist
     influences: []
     innovative_ideas: []
     notes: >
@@ -6602,8 +6921,10 @@ families:
         - id: xor
     reference_ids:
       - cappos_torres_2014_polypasshash
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6627,8 +6948,10 @@ families:
         - id: rotation_fixed
     reference_ids:
       - wu_2015_pomelo
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions, finalist]
+        status: finalist
     influences: []
     innovative_ideas: []
     notes: >
@@ -6651,8 +6974,10 @@ families:
         - id: xor
     reference_ids:
       - chang_et_al_2014_rig
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6673,8 +6998,10 @@ families:
         - id: xor
     reference_ids:
       - vuckovac_2014_schvrch
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6694,8 +7021,10 @@ families:
         - id: xor
     reference_ids:
       - sch_2014_tortuga
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6716,8 +7045,10 @@ families:
         - id: mul_mod
     reference_ids:
       - cox_2014_twocats
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6739,8 +7070,10 @@ families:
         - id: xor
     reference_ids:
       - kapun_2014_yarn
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions]
+        status: candidate
     influences: []
     innovative_ideas: []
     notes: >
@@ -6763,8 +7096,10 @@ families:
         - id: xor
     reference_ids:
       - peslyak_2015_yescrypt
-    process_ids:
-      - phc_competition_nist_2013_2015
+    process_participations:
+      - process_id: phc_competition_nist_2013_2015
+        stage_ids: [submissions, special_recognition]
+        status: special_recognition
     influences: []
     innovative_ideas: []
     notes: >

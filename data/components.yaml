@@ -295,12 +295,12 @@ components:
 
   - id: nonlinear_filter
     name: Nonlinear Filter
-    category: filter
+    category: substitution
 
   - id: mix_columns
     name: MixColumns
-    category: linear_transform
+    category: linear_layer
 
   - id: compression_function
     name: Compression Function
-    category: hash
+    category: logical
