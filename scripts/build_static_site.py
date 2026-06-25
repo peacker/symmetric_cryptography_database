@@ -1813,7 +1813,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const famData = familyById.get(point.familyId);
         const famTypes = Array.from(familyToTypes.get(point.familyId) || []).sort((a, b) => a.localeCompare(b)).join(", ") || "—";
         const famNotes = famData && famData.notes ? String(famData.notes).trim() : "";
-        const richTip = [`${point.name} (${point.year})`, `Type: ${famTypes}`, `Group: ${point.group}`].concat(famNotes ? [`\n${famNotes}`] : []).join("\n");
+        const richTip = [`${point.name} (${point.year})`, `Type: ${famTypes}`, `Group: ${point.group}`].concat(famNotes ? ["\\n" + famNotes] : []).join("\\n");
 
         const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         circle.setAttribute("cx", String(point.x));
