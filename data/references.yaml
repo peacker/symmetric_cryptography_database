@@ -2858,3 +2858,214 @@ references:
     status: active
     url: https://www.rfc-editor.org/rfc/rfc9106
     notes: "Informational RFC (IRTF CFRG); specifies Argon2d, Argon2i, Argon2id; uses BLAKE2b hash and compression function G; Argon2id is the primary recommended variant; local copy references/2021-argon2-rfc9106.pdf."
+
+  - id: durmuth_zimmermann_2014_antcrypt
+    kind: report
+    title: "AntCrypt"
+    authors:
+      - Markus Dürmuth
+      - Ralf Zimmermann
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/AntCrypt-v0.pdf
+    notes: "PHC submission, March 31 2014; Horst Görtz Institute for IT Security, Ruhr University Bochum; memory-hard using parallel worker threads; local copy references/phc-antcrypt-v0.pdf."
+
+  - id: thomas_2014_battcrypt
+    kind: report
+    title: "battcrypt (Blowfish All The Things)"
+    authors:
+      - Steven Thomas
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/battcrypt-v0.pdf
+    notes: "PHC submission; bcrypt variant using Blowfish cipher; local copy references/phc-battcrypt-v0.pdf."
+
+  - id: forler_lucks_wenzel_2015_catena
+    kind: report
+    title: "The Catena Password-Scrambling Framework"
+    authors:
+      - Christian Forler
+      - Stefan Lucks
+      - Jakob Wenzel
+    year: 2015
+    venue: "Password Hashing Competition (PHC) Submission, Version 3.2"
+    url: https://www.password-hashing.net/submissions/specs/Catena-v5.pdf
+    notes: "PHC submission v3.2, September 29 2015; Bauhaus-Universität Weimar; graph-based memory-hard password scrambling framework; local copy references/phc-catena-v5.pdf."
+
+  - id: alvarez_2014_centrifuge
+    kind: report
+    title: "CENTRIFUGE: A password hashing algorithm"
+    authors:
+      - Rafael Alvarez
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/Centrifuge-v0.pdf
+    notes: "PHC submission; University of Alicante, Spain; uses PBKDF2 and SHA-512; local copy references/phc-centrifuge-v0.pdf."
+
+  - id: franke_2014_earworm
+    kind: report
+    title: "The EARWORM Password Hashing Algorithm"
+    authors:
+      - Daniel Franke
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission, Round 1"
+    url: https://www.password-hashing.net/submissions/specs/EARWORM-v0.pdf
+    notes: "PHC submission Round 1, March 31 2014; sequential memory-hard function; local copy references/phc-earworm-v0.pdf."
+
+  - id: pinter_2014_gambit
+    kind: report
+    title: "Gambit: A sponge based, memory hard key derivation function"
+    authors:
+      - Krisztián Pintér
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/Gambit-v1.pdf
+    notes: "PHC submission; duplexed sponge with memory-hard properties; local copy references/phc-gambit-v1.pdf."
+
+  - id: mubarak_2014_lanarea
+    kind: report
+    title: "Lanarea DF"
+    authors:
+      - Haneef Mubarak
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/Lanarea-v0.pdf
+    notes: "PHC submission; Lanarea Derivation Function, memory-hard key derivation; local copy references/phc-lanarea-v0.pdf."
+
+  - id: simplicio_et_al_2015_lyra2
+    kind: report
+    title: "The Lyra2 reference guide"
+    authors:
+      - Marcos A. Simplicio Jr
+      - Leonardo C. Almeida
+      - Ewerton R. Andrade
+      - Paulo C. F. dos Santos
+      - Paulo S. L. M. Barreto
+    year: 2015
+    venue: "Password Hashing Competition (PHC) Submission, Version 2.0"
+    url: https://www.password-hashing.net/submissions/specs/Lyra2-v3.pdf
+    notes: "PHC submission v2.0, January 15 2015; Universidade de São Paulo (Poli-USP), Brazil; sponge-based memory-hard password hashing using Blake2 sponge; local copy references/phc-lyra2-v3.pdf."
+
+  - id: pornin_2015_makwa
+    kind: report
+    title: "The MAKWA Password Hashing Function"
+    authors:
+      - Thomas Pornin
+    year: 2015
+    venue: "Password Hashing Competition (PHC) Submission, Specifications v1.1"
+    url: https://www.password-hashing.net/submissions/specs/Makwa-v1.pdf
+    notes: "PHC submission, April 22 2015; modular-squaring-based password hashing; supports delegation (offloading to untrusted systems); local copy references/phc-makwa-v1.pdf."
+
+  - id: maslennikov_2014_mcs_phs
+    kind: report
+    title: "Password Hashing Scheme MCS_PHS"
+    authors:
+      - Mikhail Maslennikov
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/MCS_PHS-v2.pdf
+    notes: "PHC submission, revision February 16 2014; uses MCSSHA-8 iterative hash; local copy references/phc-mcs_phs-v2.pdf."
+
+  - id: enright_2014_omegacrypt
+    kind: report
+    title: "Omega Crypt (ocrypt)"
+    authors:
+      - Brandon Enright
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission, Version 1.0"
+    url: https://www.password-hashing.net/submissions/specs/OmegaCrypt-v0.pdf
+    notes: "PHC submission v1.0, 2014-03-31; stream-cipher-driven sequential memory-hard function; local copy references/phc-omegacrypt-v0.pdf."
+
+  - id: thomas_2014_parallel
+    kind: report
+    title: "Parallel"
+    authors:
+      - Steve Thomas
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/Parallel-v1.pdf
+    notes: "PHC submission; bcrypt-based parallel variant by same author as battcrypt; local copy references/phc-parallel-v1.pdf."
+
+  - id: cappos_torres_2014_polypasshash
+    kind: article
+    title: "PolyPasswordHasher: Protecting Passwords In The Event Of A Password File Disclosure"
+    authors:
+      - Justin Cappos
+      - Santiago Torres
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/PolyPassHash-v1.pdf
+    notes: "PHC submission; New York University; threshold-cryptography-enhanced password hashing; interdependent password hashes resist offline cracking; local copy references/phc-polypasshash-v1.pdf."
+
+  - id: wu_2015_pomelo
+    kind: report
+    title: "POMELO: A Password Hashing Algorithm (Version 2)"
+    authors:
+      - Hongjun Wu
+    year: 2015
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/POMELO-v3.pdf
+    notes: "PHC submission v2, last modified 2015-04-13; Nanyang Technological University; ARX-based memory-hard function; local copy references/phc-pomelo-v3.pdf."
+
+  - id: chang_et_al_2014_rig
+    kind: report
+    title: "Rig: A simple, secure and flexible design for Password Hashing"
+    authors:
+      - Donghoon Chang
+      - Arpan Jati
+      - Sweta Mishra
+      - Somitra Kumar Sanadhya
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission, Version 2.0"
+    url: https://www.password-hashing.net/submissions/specs/RIG-v2.pdf
+    notes: "PHC submission v2.0, September 23 2014; IIIT-Delhi, India; sponge-based memory-hard design; local copy references/phc-rig-v2.pdf."
+
+  - id: vuckovac_2014_schvrch
+    kind: report
+    title: "Schvrch (ШВРЋ)"
+    authors:
+      - Rade Vuckovac
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/Schvrch-v0.pdf
+    notes: "PHC submission, February 18 2014; simple iterative KDF; local copy references/phc-schvrch-v0.pdf."
+
+  - id: sch_2014_tortuga
+    kind: report
+    title: "Tortuga: Password hashing based on the Turtle algorithm"
+    authors:
+      - Teath Sch
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/Tortuga-v0.pdf
+    notes: "PHC submission; based on the Turtle algorithm, iterative hash KDF; local copy references/phc-tortuga-v0.pdf."
+
+  - id: cox_2014_twocats
+    kind: report
+    title: "TwoCats (and SkinnyCat): A Compute Time and Sequential Memory Hard Password Hashing Scheme"
+    authors:
+      - Bill Cox
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/TwoCats-v0.pdf
+    notes: "PHC submission, March 2014; Chapel Hill, NC; sequential memory-hard design with cache-timing attack resistance; local copy references/phc-twocats-v0.pdf."
+
+  - id: kapun_2014_yarn
+    kind: report
+    title: "Yarn password hashing function"
+    authors:
+      - Evgeny Kapun
+    year: 2014
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/Yarn-v2.pdf
+    notes: "PHC submission; uses BLAKE2b and AES (aesenc instruction); memory-hard with data-dependent lookups; local copy references/phc-yarn-v2.pdf."
+
+  - id: peslyak_2015_yescrypt
+    kind: report
+    title: "yescrypt - a Password Hashing Competition submission"
+    authors:
+      - Alexander Peslyak
+    year: 2015
+    venue: "Password Hashing Competition (PHC) Submission"
+    url: https://www.password-hashing.net/submissions/specs/yescrypt-v2.pdf
+    notes: "PHC submission, originally submitted March 31 2014, this revision October 2015; scrypt variant (Salsa20/8 core); local copy references/phc-yescrypt-v2.pdf."

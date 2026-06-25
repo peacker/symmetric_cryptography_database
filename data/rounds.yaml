@@ -2551,3 +2551,103 @@ rounds:
     name: Argon2 Pass
     kind: full_round
     spec: {}
+
+  - id: antcrypt_step
+    name: AntCrypt Step
+    kind: step
+    spec: {}
+
+  - id: battcrypt_step
+    name: battcrypt Step
+    kind: step
+    spec: {}
+
+  - id: catena_flap
+    name: Catena Flap
+    kind: full_round
+    spec: {}
+
+  - id: centrifuge_iteration
+    name: Centrifuge Iteration
+    kind: step
+    spec: {}
+
+  - id: earworm_step
+    name: EARWORM Step
+    kind: step
+    spec: {}
+
+  - id: gambit_step
+    name: Gambit Step
+    kind: step
+    spec: {}
+
+  - id: lanarea_step
+    name: Lanarea Step
+    kind: step
+    spec: {}
+
+  - id: lyra2_step
+    name: Lyra2 Step
+    kind: step
+    spec: {}
+
+  - id: makwa_iteration
+    name: Makwa Squaring Iteration
+    kind: step
+    spec: {}
+
+  - id: mcs_phs_iteration
+    name: MCS_PHS Iteration
+    kind: step
+    spec: {}
+
+  - id: omegacrypt_step
+    name: OmegaCrypt Step
+    kind: step
+    spec: {}
+
+  - id: parallel_step
+    name: Parallel Step
+    kind: step
+    spec: {}
+
+  - id: polypasshash_step
+    name: PolyPassHash Step
+    kind: step
+    spec: {}
+
+  - id: pomelo_step
+    name: POMELO Step
+    kind: step
+    spec: {}
+
+  - id: rig_step
+    name: RIG Step
+    kind: step
+    spec: {}
+
+  - id: schvrch_step
+    name: Schvrch Step
+    kind: step
+    spec: {}
+
+  - id: tortuga_step
+    name: Tortuga Step
+    kind: step
+    spec: {}
+
+  - id: twocats_step
+    name: TwoCats Step
+    kind: step
+    spec: {}
+
+  - id: yarn_step
+    name: Yarn Step
+    kind: step
+    spec: {}
+
+  - id: yescrypt_step
+    name: yescrypt Step
+    kind: step
+    spec: {}

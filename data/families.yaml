@@ -6315,3 +6315,461 @@ families:
       Core: compression function G = Blake2b permutation P applied row-wise and column-wise
       on 1024-byte blocks. Variable-length hash H' based on BLAKE2b. Argon2id is the
       recommended variant for password hashing and password-based key derivation.
+
+  - id: antcrypt
+    name: AntCrypt
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - antcrypt_step
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - durmuth_zimmermann_2014_antcrypt
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      AntCrypt (PHC 2014) by Dürmuth and Zimmermann (Ruhr University Bochum). Memory-hard
+      PBKDF using parallel worker threads (ant colony metaphor); each worker processes a
+      small portion of a large memory array, providing cache-hard and memory-hard properties.
+
+  - id: battcrypt
+    name: battcrypt
+    construction_ids:
+      - bcrypt_variant
+    round_ids:
+      - battcrypt_step
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: lookup_table
+    reference_ids:
+      - thomas_2014_battcrypt
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      battcrypt (Blowfish All The Things, PHC 2014) by Steven Thomas. bcrypt variant that
+      applies Blowfish cipher (Eksblowfish key schedule) repeatedly with a large memory
+      buffer, inheriting bcrypt's resistance to GPU acceleration.
+
+  - id: catena
+    name: Catena
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - catena_flap
+    target_applications:
+      - password_hashing
+      - key_derivation
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - forler_lucks_wenzel_2015_catena
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      Catena (PHC 2015, v3.2) by Forler, Lucks, Wenzel (Bauhaus-Universität Weimar).
+      Graph-based memory-hard password-scrambling framework. Core operation "flap" traverses
+      a bit-reversal or double-butterfly graph. Supports multiple graph instances
+      (Catena-BRG, Catena-DBG). Resists time-space tradeoffs through data-dependent
+      memory access patterns.
+
+  - id: centrifuge
+    name: Centrifuge
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - centrifuge_iteration
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - alvarez_2014_centrifuge
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      Centrifuge (PHC 2014) by Rafael Alvarez (University of Alicante, Spain). Password
+      hashing algorithm using PBKDF2 with SHA-512 in a centrifuge-like iterative structure.
+
+  - id: earworm
+    name: EARWORM
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - earworm_step
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - franke_2014_earworm
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      EARWORM (PHC 2014, Round 1) by Daniel Franke. Sequential memory-hard function
+      designed to resist GPU and ASIC acceleration. Uses cache-hard memory access patterns
+      requiring sequential reads from a large memory buffer.
+
+  - id: gambit
+    name: Gambit
+    construction_ids:
+      - memory_hard_sponge
+    round_ids:
+      - gambit_step
+    target_applications:
+      - password_hashing
+      - key_derivation
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - pinter_2014_gambit
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      Gambit (PHC 2014) by Krisztián Pintér. Memory-hard KDF based on a duplexed sponge.
+      Fills a memory array by squeezing the sponge and absorbing the memory-dependent
+      results back. Supports optional read-only random array (ROM) for additional hardness.
+
+  - id: lanarea
+    name: Lanarea
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - lanarea_step
+    target_applications:
+      - password_hashing
+      - key_derivation
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - mubarak_2014_lanarea
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      Lanarea DF (Lanarea Derivation Function, PHC 2014) by Haneef Mubarak. Memory-hard
+      KDF using XOR and hash operations over a large array; designed to resist GPU,
+      FPGA, and ASIC attacks.
+
+  - id: lyra2
+    name: Lyra2
+    construction_ids:
+      - memory_hard_sponge
+    round_ids:
+      - lyra2_step
+    target_applications:
+      - password_hashing
+      - key_derivation
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - simplicio_et_al_2015_lyra2
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      Lyra2 (PHC 2015, v2.0) by Simplicio et al. (Universidade de São Paulo). Memory-hard
+      sponge-based KDF using Blake2b as the underlying sponge. Parameters control time
+      (T), memory (M), and parallelism (ρ). Duplex mode absorbs and squeezes over a
+      large matrix of sponge states. PHC finalist.
+
+  - id: makwa
+    name: Makwa
+    construction_ids:
+      - modular_squaring_kdf
+    round_ids:
+      - makwa_iteration
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: mul_mod
+    reference_ids:
+      - pornin_2015_makwa
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      Makwa (PHC 2015, v1.1) by Thomas Pornin. Password hashing function based on
+      iterated modular squaring (x ← x² mod n) rather than memory-hardness. Unique
+      feature: supports delegation where the bulk of computation can be offloaded to an
+      untrusted server. Also supports offline work-factor increase without the original
+      password.
+
+  - id: mcs_phs
+    name: MCS_PHS
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - mcs_phs_iteration
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - maslennikov_2014_mcs_phs
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      MCS_PHS (PHC 2014) by Mikhail Maslennikov. Password hashing scheme using the
+      MCSSHA-8 iterative hash function with configurable iteration count and salt.
+
+  - id: omegacrypt
+    name: Omega Crypt
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - omegacrypt_step
+    target_applications:
+      - password_hashing
+      - key_derivation
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - enright_2014_omegacrypt
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      Omega Crypt / ocrypt (PHC 2014) by Brandon Enright. Sequential memory-hard KDF
+      using a stream cipher to drive data-dependent branching, defeating GPU-based
+      parallelism. Inherits scrypt's anti-ASIC and anti-FPGA properties while adding
+      data-dependent memory access.
+
+  - id: parallel
+    name: Parallel
+    construction_ids:
+      - bcrypt_variant
+    round_ids:
+      - parallel_step
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: lookup_table
+    reference_ids:
+      - thomas_2014_parallel
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      Parallel (PHC 2014) by Steve Thomas (same author as battcrypt). bcrypt-based
+      parallel variant designed to use multiple CPU threads, providing both time-
+      hardness and memory-hardness through the bcrypt/Blowfish key setup.
+
+  - id: polypasshash
+    name: PolyPassHash
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - polypasshash_step
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - cappos_torres_2014_polypasshash
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      PolyPasswordHasher (PHC 2014) by Cappos and Torres (New York University). Combines
+      salted hashing with threshold cryptography: password hashes are combined with
+      Shamir secret shares so that no individual password can be cracked without at least
+      a threshold number of other passwords. Provides mutual protection across users.
+
+  - id: pomelo
+    name: POMELO
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - pomelo_step
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: add_mod
+        - id: xor
+        - id: rotation_fixed
+    reference_ids:
+      - wu_2015_pomelo
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      POMELO (PHC 2015, v2) by Hongjun Wu (Nanyang Technological University). ARX-based
+      memory-hard password hashing algorithm. Fills a large array using add, rotate, XOR
+      operations, then performs data-dependent read/write passes. Designed to be simple
+      and efficient on CPUs while resisting GPU/ASIC acceleration. PHC finalist.
+
+  - id: rig
+    name: RIG
+    construction_ids:
+      - memory_hard_sponge
+    round_ids:
+      - rig_step
+    target_applications:
+      - password_hashing
+      - key_derivation
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - chang_et_al_2014_rig
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      RIG (PHC 2014, v2.0) by Chang, Jati, Mishra, Sanadhya (IIIT-Delhi, India). Simple,
+      secure, flexible memory-hard sponge-based password hashing. Uses a sponge with
+      configurable absorb/squeeze for memory initialization, time cost, and output generation.
+
+  - id: schvrch
+    name: Schvrch
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - schvrch_step
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - vuckovac_2014_schvrch
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      Schvrch / ШВРЋ (PHC 2014) by Rade Vuckovac. Simple iterative KDF using a
+      custom hash construction with configurable cost parameters.
+
+  - id: tortuga
+    name: Tortuga
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - tortuga_step
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - sch_2014_tortuga
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      Tortuga (PHC 2014) by Teath Sch. Password hashing function based on the Turtle
+      algorithm, an iterative hash-based construction with configurable time cost.
+
+  - id: twocats
+    name: TwoCats
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - twocats_step
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: xor
+        - id: mul_mod
+    reference_ids:
+      - cox_2014_twocats
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      TwoCats and SkinnyCat (PHC 2014) by Bill Cox (Chapel Hill, NC). Compute-time and
+      sequential memory-hard password hashing scheme. Two levels of memory-hardness:
+      TwoCats uses a large memory array, SkinnyCat is the reduced-memory variant. Designed
+      to resist cache-timing attacks while remaining efficiently computable on CPUs.
+
+  - id: yarn
+    name: Yarn
+    construction_ids:
+      - iterated_hash_kdf
+    round_ids:
+      - yarn_step
+    target_applications:
+      - password_hashing
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - kapun_2014_yarn
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      Yarn (PHC 2014) by Evgeny Kapun. Memory-hard password hashing function using
+      BLAKE2b and the AES aesenc x86 instruction for maximum CPU efficiency. Data-
+      dependent memory lookups make results depend on intermediate computations,
+      resisting GPU parallelism. Optimised for modern x86 processors.
+
+  - id: yescrypt
+    name: yescrypt
+    construction_ids:
+      - scrypt_variant
+    round_ids:
+      - yescrypt_step
+    target_applications:
+      - password_hashing
+      - key_derivation
+    characteristics:
+      components:
+        - id: xor
+    reference_ids:
+      - peslyak_2015_yescrypt
+    process_ids:
+      - phc_competition_nist_2013_2015
+    influences: []
+    innovative_ideas: []
+    notes: >
+      yescrypt (PHC 2015) by Alexander Peslyak (Solar Designer / Openwall). scrypt variant
+      with enhanced security features: additional work factor tuning, password-specific
+      HMAC derivation, and optional client-independent key update. Uses Salsa20/8 as the
+      core permutation (same as scrypt). PHC finalist; widely deployed (e.g., default
+      in many Linux systems as yescrypt in shadow-utils).

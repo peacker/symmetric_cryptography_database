@@ -5060,3 +5060,165 @@ primitives:
       Duplex mode. Rate r=64 bits; capacity c=192 bits. key=128, nonce=128 (as initial block),
       tag=128, state=256. Permutations: π_I (10 rounds for init), π_AD/π_AE/π_F (6 rounds
       each). Security claim: 128 bits (if n > c/2).
+
+  # ── PHC submissions ───────────────────────────────────────────────────────────
+
+  - id: antcrypt
+    name: AntCrypt
+    family_id: antcrypt
+    primitive_type: pbkdf
+    reference_ids:
+      - durmuth_zimmermann_2014_antcrypt
+    characteristics: {}
+
+  - id: battcrypt
+    name: battcrypt
+    family_id: battcrypt
+    primitive_type: pbkdf
+    reference_ids:
+      - thomas_2014_battcrypt
+    characteristics: {}
+
+  - id: catena
+    name: Catena
+    family_id: catena
+    primitive_type: pbkdf
+    reference_ids:
+      - forler_lucks_wenzel_2015_catena
+    characteristics: {}
+
+  - id: centrifuge
+    name: Centrifuge
+    family_id: centrifuge
+    primitive_type: pbkdf
+    reference_ids:
+      - alvarez_2014_centrifuge
+    characteristics: {}
+
+  - id: earworm
+    name: EARWORM
+    family_id: earworm
+    primitive_type: pbkdf
+    reference_ids:
+      - franke_2014_earworm
+    characteristics: {}
+
+  - id: gambit
+    name: Gambit
+    family_id: gambit
+    primitive_type: pbkdf
+    reference_ids:
+      - pinter_2014_gambit
+    characteristics: {}
+
+  - id: lanarea
+    name: Lanarea
+    family_id: lanarea
+    primitive_type: pbkdf
+    reference_ids:
+      - mubarak_2014_lanarea
+    characteristics: {}
+
+  - id: lyra2
+    name: Lyra2
+    family_id: lyra2
+    primitive_type: pbkdf
+    reference_ids:
+      - simplicio_et_al_2015_lyra2
+    characteristics: {}
+
+  - id: makwa
+    name: Makwa
+    family_id: makwa
+    primitive_type: pbkdf
+    reference_ids:
+      - pornin_2015_makwa
+    characteristics: {}
+
+  - id: mcs_phs
+    name: MCS_PHS
+    family_id: mcs_phs
+    primitive_type: pbkdf
+    reference_ids:
+      - maslennikov_2014_mcs_phs
+    characteristics: {}
+
+  - id: omegacrypt
+    name: Omega Crypt
+    family_id: omegacrypt
+    primitive_type: pbkdf
+    reference_ids:
+      - enright_2014_omegacrypt
+    characteristics: {}
+
+  - id: parallel
+    name: Parallel
+    family_id: parallel
+    primitive_type: pbkdf
+    reference_ids:
+      - thomas_2014_parallel
+    characteristics: {}
+
+  - id: polypasshash
+    name: PolyPassHash
+    family_id: polypasshash
+    primitive_type: pbkdf
+    reference_ids:
+      - cappos_torres_2014_polypasshash
+    characteristics: {}
+
+  - id: pomelo
+    name: POMELO
+    family_id: pomelo
+    primitive_type: pbkdf
+    reference_ids:
+      - wu_2015_pomelo
+    characteristics: {}
+
+  - id: rig
+    name: RIG
+    family_id: rig
+    primitive_type: pbkdf
+    reference_ids:
+      - chang_et_al_2014_rig
+    characteristics: {}
+
+  - id: schvrch
+    name: Schvrch
+    family_id: schvrch
+    primitive_type: pbkdf
+    reference_ids:
+      - vuckovac_2014_schvrch
+    characteristics: {}
+
+  - id: tortuga
+    name: Tortuga
+    family_id: tortuga
+    primitive_type: pbkdf
+    reference_ids:
+      - sch_2014_tortuga
+    characteristics: {}
+
+  - id: twocats
+    name: TwoCats
+    family_id: twocats
+    primitive_type: pbkdf
+    reference_ids:
+      - cox_2014_twocats
+    characteristics: {}
+
+  - id: yarn
+    name: Yarn
+    family_id: yarn
+    primitive_type: pbkdf
+    reference_ids:
+      - kapun_2014_yarn
+    characteristics: {}
+
+  - id: yescrypt
+    name: yescrypt
+    family_id: yescrypt
+    primitive_type: pbkdf
+    reference_ids:
+      - peslyak_2015_yescrypt
+    characteristics: {}
