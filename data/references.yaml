@@ -775,17 +775,12 @@ references:
     url: https://csrc.nist.gov/projects/lightweight-cryptography
 
   - id: grain_128aead_2019
-    kind: article
-    title: "Grain-128AEAD v2 - Submission to NIST Lightweight Cryptography"
-    authors:
-      - Martin Hell
-      - Thomas Johansson
-      - Willi Meier
-      - Jonathan Sonnerup
-      - Hirotaka Yoshida
-    year: 2019
-    venue: NIST LWC Round 1 Submission
-    url: https://csrc.nist.gov/projects/lightweight-cryptography
+    kind: paper
+    title: "Grain-128AEAD v2"
+    year: 2022
+    venue: "NIST Lightweight Cryptography Winner (NIST SP 800-232)"
+    url: "https://csrc.nist.gov/projects/lightweight-cryptography"
+    notes: "NIST lightweight cryptography standard finalist. Local copy: references/2022-grain128aead.pdf."
 
   - id: gimli_2017
     kind: article
@@ -1059,9 +1054,11 @@ references:
 
   - id: belt_ref
     kind: paper
-    title: "BelT"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "STB 34.101.31-2020: BelT Block Cipher"
+    year: 2012
+    venue: "State Standard of the Republic of Belarus (STB 34.101.31)"
+    url: "https://eprint.iacr.org/2012/148.pdf"
+    notes: "Belarusian national block cipher standard. 128-bit block, 256-bit key, 8-round SPN. Local copy: references/2012-belt.pdf."
 
   - id: bleep64_ref
     kind: paper
@@ -1109,15 +1106,19 @@ references:
 
   - id: cipherunicorn_a_ref
     kind: paper
-    title: "CIPHERUNICORN-A"
+    title: "CIPHERUNICORN-A: A 128-Bit Block Cipher"
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: "CRYPTREC Candidate / NEC"
+    url: "https://www.cryptrec.go.jp/cryptrec_03_spec_cypherlist_files/PDF/05_01spec.pdf"
+    notes: "NEC's 128-bit block cipher submitted as a CRYPTREC candidate. Local copy: references/2000-cipherunicorn_a.pdf."
 
   - id: cipherunicorn_e_ref
     kind: paper
-    title: "CIPHERUNICORN-E"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "CIPHERUNICORN-E: A 64-Bit Block Cipher"
+    year: 1998
+    venue: "CRYPTREC Candidate / NEC"
+    url: "https://www.cryptrec.go.jp/cryptrec_03_spec_cypherlist_files/PDF/04_01spec.pdf"
+    notes: "NEC's 64-bit block cipher submitted as a CRYPTREC candidate. Local copy: references/1998-cipherunicorn_e.pdf."
 
   - id: clae_ref
     kind: paper
@@ -1156,9 +1157,11 @@ references:
 
   - id: deoxys_ref
     kind: paper
-    title: "Deoxys"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Deoxys v1.41"
+    year: 2016
+    venue: "CAESAR Competition Final Portfolio Submission"
+    url: "https://competitions.cr.yp.to/caesar-submissions/deoxys-v1.41.pdf"
+    notes: "Tweakable block cipher by Jean et al. CAESAR finalist (Portfolio 1). Local copy: references/2016-deoxys.pdf."
 
   - id: desx_ref
     kind: paper
@@ -1174,8 +1177,10 @@ references:
   - id: enocoro_128v2_ref
     kind: paper
     title: "Enocoro-128v2"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    year: 2010
+    venue: "CRYPTREC Candidate / Hitachi"
+    url: "https://www.cryptrec.go.jp/cryptrec_03_spec_cypherlist_files/PDF/10_05spec.pdf"
+    notes: "Hitachi's eSTREAM-profile stream cipher, CRYPTREC recommended. Local copy: references/2010-enocoro128v2.pdf."
 
   - id: estate_ref
     kind: paper
@@ -1254,19 +1259,25 @@ references:
     kind: paper
     title: "Grand Cru"
     year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    venue: "NESSIE Submission"
+    url: "https://www.cosic.esat.kuleuven.be/nessie/tweaks.html"
+    notes: "128-bit block cipher submitted to NESSIE. Local copy: references/2011-grandcru.pdf."
 
   - id: hern_and_heron_ref
     kind: paper
-    title: "HERN & HERON"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "HERN and HERON"
+    year: 2019
+    venue: "NIST Lightweight Cryptography Competition Round 1"
+    url: "https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/HERN-HERON-spec.pdf"
+    notes: "Lightweight block cipher pair for constrained environments. Local copy: references/2019-hern_heron.pdf."
 
   - id: hight_ref
     kind: paper
-    title: "HIGHT"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "HIGHT: A New Block Cipher Suitable for Low-Resource Device"
+    year: 2006
+    venue: "CHES 2006"
+    url: "https://eprint.iacr.org/2006/350.pdf"
+    notes: "Korean lightweight 64-bit block cipher with 128-bit key, 32-round GFN. Local copy: references/2006-hight.pdf."
 
   - id: hyena_ref
     kind: paper
@@ -1296,9 +1307,11 @@ references:
 
   - id: kcipher_2_ref
     kind: paper
-    title: "KCipher-2"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "KCipher-2 Specification"
+    year: 2013
+    venue: "RFC 7008 / CRYPTREC"
+    url: "https://www.rfc-editor.org/rfc/rfc7008"
+    notes: "Japanese stream cipher recommended by CRYPTREC. Local copy: references/2013-kcipher2.pdf."
 
   - id: khazad_ref
     kind: paper
@@ -1313,15 +1326,19 @@ references:
 
   - id: klein_ref
     kind: paper
-    title: "KLEIN"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "The KLEIN Block Ciphers"
+    year: 2011
+    venue: "RFIDSec 2011"
+    url: "https://eprint.iacr.org/2011/576.pdf"
+    notes: "Lightweight block cipher targeting RFID. Local copy: references/2011-klein.pdf."
 
   - id: kuznyechik_ref
     kind: paper
-    title: "Kuznyechik"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Kuznyechik (Grasshopper) Block Cipher — GOST R 34.12-2015"
+    year: 2019
+    venue: "eprint.iacr.org / GOST standard analysis"
+    url: "https://eprint.iacr.org/2019/534.pdf"
+    notes: "Russian national block cipher standard (GOST R 34.12-2015). 128-bit block, 256-bit key, 10-round SPN. Local copy: references/2019-kuznyechik.pdf."
 
   - id: laem_ref
     kind: paper
@@ -1331,9 +1348,11 @@ references:
 
   - id: lea_ref
     kind: paper
-    title: "LEA"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "LEA: A 128-Bit Block Cipher for Fast Encryption on Common Processors"
+    year: 2015
+    venue: "WISA 2013 / KCMVP-approved"
+    url: "https://eprint.iacr.org/2015/752.pdf"
+    notes: "Korean lightweight block cipher (128-bit block). Local copy: references/2015-lea.pdf."
 
   - id: lea_128_ref
     kind: paper
@@ -1391,9 +1410,11 @@ references:
 
   - id: mantis_ref
     kind: paper
-    title: "MANTIS"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "The SKINNY Family of Block Ciphers and its Low-Latency Variant MANTIS"
+    year: 2016
+    venue: "CRYPTO 2016"
+    url: "https://eprint.iacr.org/2016/660.pdf"
+    notes: "MANTIS is the low-latency tweakable variant; shares paper with SKINNY. Local copy: references/2016-skinny_mantis.pdf."
 
   - id: mcrypton_ref
     kind: paper
@@ -1409,9 +1430,11 @@ references:
 
   - id: midori_ref
     kind: paper
-    title: "MIDORI"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "Midori: A Block Cipher for Low Energy"
+    year: 2015
+    venue: "ASIACRYPT 2015"
+    url: "https://eprint.iacr.org/2015/1142.pdf"
+    notes: "Energy-efficient block cipher. 64- and 128-bit variants. Local copy: references/2015-midori.pdf."
 
   - id: misty1_ref
     kind: paper
@@ -1436,15 +1459,19 @@ references:
 
   - id: mugi_ref
     kind: paper
-    title: "MUGI"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "MUGI: A Pseudorandom Number Generator for Practical Applications"
+    year: 2002
+    venue: "IEICE Transactions on Fundamentals / CRYPTREC"
+    url: "https://eprint.iacr.org/2002/189.pdf"
+    notes: "Japanese stream cipher, CRYPTREC recommended. Local copy: references/2002-mugi.pdf."
 
   - id: multi_s01_ref
     kind: paper
-    title: "MULTI-S01"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "MULTI-S01: Pseudorandom Number Generator"
+    year: 2001
+    venue: "CRYPTREC Candidate / Hitachi"
+    url: "https://www.cryptrec.go.jp/cryptrec_03_spec_cypherlist_files/PDF/10_03spec.pdf"
+    notes: "Japanese stream cipher, CRYPTREC candidate. Local copy: references/2001-multi_s01.pdf."
 
   - id: multi2_ref
     kind: paper
@@ -1511,15 +1538,19 @@ references:
 
   - id: pride_ref
     kind: paper
-    title: "PRIDE"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "PRIDE: A Lightweight Symmetric Encryption Design"
+    year: 2014
+    venue: "CRYPTO 2014"
+    url: "https://eprint.iacr.org/2014/591.pdf"
+    notes: "64-bit lightweight block cipher with ARX round function. Local copy: references/2014-pride.pdf."
 
   - id: princev2_ref
     kind: paper
-    title: "PRINCEv2"
-    year: 2000
-    notes: "Placeholder reference for checklist coverage ingestion."
+    title: "PRINCEv2: More Security for (Almost) No Overhead"
+    year: 2020
+    venue: "Selected Areas in Cryptography (SAC) 2020"
+    url: "https://eprint.iacr.org/2020/1269.pdf"
+    notes: "Tweakable low-latency block cipher update. Local copy: references/2020-princev2.pdf."
 
   - id: q_ref
     kind: paper

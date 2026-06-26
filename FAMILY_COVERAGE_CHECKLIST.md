@@ -23,7 +23,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Ballet | Ballet | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
 | [x] | battcrypt | battcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/battcrypt-v0.pdf | Full | yes |
 | [x] | BEAR/LION | BEAR/LION | construction | 1996 | https://www.cl.cam.ac.uk/archive/rja14/Papers/bear-lion.pdf | Full | yes |
-| [x] | BelT | BelT | block_cipher | TODO | TODO | TODO | no |
+| [x] | BelT | BelT | block_cipher | TODO | TODO | TODO | yes |
 | [x] | BipBip | BipBip | tweakable_block_cipher | 2023 | https://tches.iacr.org/index.php/TCHES/article/view/9955/9458 | TODO | no |
 | [x] | Bleep64 | Bleep64 | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Bleep64-spec.pdf | Full | yes |
 | [x] | Blink | Blink | block_cipher | 2025 | https://eprint.iacr.org/2025/1314 | TODO | yes |
@@ -39,8 +39,8 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Chaskey | Chaskey | mac | 2014 | https://eprint.iacr.org/2014/386 | Full | yes |
 | [x] | ChiLow | ChiLow | tweakable_block_cipher | 2025 | https://eprint.iacr.org/2025/308 | TODO | yes |
 | [x] | CiliPadi | CiliPadi | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CiliPadi-spec.pdf | Full | yes |
-| [x] | CIPHERUNICORN-A | CIPHERUNICORN-A | block_cipher | TODO | TODO | TODO | no |
-| [x] | CIPHERUNICORN-E | CIPHERUNICORN-E | block_cipher | TODO | TODO | TODO | no |
+| [x] | CIPHERUNICORN-A | CIPHERUNICORN-A | block_cipher | TODO | TODO | TODO | yes |
+| [x] | CIPHERUNICORN-E | CIPHERUNICORN-E | block_cipher | TODO | TODO | TODO | yes |
 | [x] | CLAE | CLAE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CLAE-spec.pdf | Full | yes |
 | [x] | CLEFIA | CLEFIA | block_cipher | 2011 | https://www.rfc-editor.org/rfc/rfc6114 | TODO | no |
 | [x] | CLX | CLX | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CLX-spec.pdf | Full | yes |
@@ -52,7 +52,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | CS-Cipher | CS-Cipher | block_cipher | TODO | TODO | TODO | yes |
 | [x] | DEAL | DEAL | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | DECIM | DECIM | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/decim.pdf | Full | yes |
-| [x] | Deoxys | Deoxys | tweakable_block_cipher | TODO | TODO | TODO | no |
+| [x] | Deoxys | Deoxys | tweakable_block_cipher | TODO | TODO | TODO | yes |
 | [x] | DES | DES | block_cipher | 1977 | https://csrc.nist.gov/pubs/fips/46/final | TODO | yes |
 | [x] | DESX | DESX | block_cipher | 1996 | https://doi.org/10.1007/3-540-68697-5_9 | Full | yes |
 | [x] | DFC | DFC | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
@@ -61,7 +61,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | E2 | E2 | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
 | [x] | EARWORM | EARWORM | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/EARWORM-v0.pdf | Full | yes |
 | [x] | Elephant | Elephant | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
-| [x] | Enocoro-128v2 | Enocoro-128v2 | stream_cipher | TODO | TODO | TODO | no |
+| [x] | Enocoro-128v2 | Enocoro-128v2 | stream_cipher | TODO | TODO | TODO | yes |
 | [x] | ESTATE | ESTATE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ESTATE-spec.pdf | Full | yes |
 | [x] | F-FCSR | F-FCSR | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/ffcsr.pdf | Full | yes |
 | [x] | Fantomas / Robin | Fantomas / Robin | block_cipher | TODO | TODO | TODO | no |
@@ -74,7 +74,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | ForkAE | ForkAE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ForkAE-spec.pdf | Full | yes |
 | [x] | Fountain | Fountain | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Fountain-spec.pdf | Full | yes |
 | [x] | FROG | FROG | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
-| [x] | GAGE and InGAGE | GAGE and InGAGE | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
+| [x] | GAGE and InGAGE | GAGE and InGAGE | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | Gambit | Gambit | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Gambit-v1.pdf | Full | yes |
 | [x] | GIFT | GIFT | block_cipher | 2017 | https://iacr.org/archive/ches2017/105290001/105290001.pdf | TODO | no |
 | [x] | GIFT-COFB | GIFT | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/GIFT-COFB-spec.pdf | Full | yes |
@@ -82,13 +82,13 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | GOST 28147-89 (Magma) | Magma | block_cipher | 1989 | https://datatracker.ietf.org/doc/html/rfc5830 | Full | yes |
 | [x] | Grain | Grain | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/grain.pdf | Full | yes |
 | [x] | Grain-128 | Grain-128 | stream_cipher | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
-| [x] | Grain-128AEAD | Grain-128 | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
-| [x] | Grand Cru | Grand Cru | block_cipher | TODO | TODO | TODO | no |
+| [x] | Grain-128AEAD | Grain-128 | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
+| [x] | Grand Cru | Grand Cru | block_cipher | TODO | TODO | TODO | yes |
 | [x] | HAVAL | HAVAL | hash | 1992 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/haval.pdf | Full | yes |
 | [x] | HC-128 | HC-128 | stream_cipher | 2004 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_4 | Full | yes |
 | [x] | HC-256 | HC-256 | stream_cipher | 2004 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/hc256.pdf | Full | yes |
-| [x] | HERN & HERON | HERN & HERON | block_cipher | TODO | TODO | TODO | no |
-| [x] | HIGHT | HIGHT | block_cipher | TODO | TODO | TODO | no |
+| [x] | HERN & HERON | HERN & HERON | block_cipher | TODO | TODO | TODO | yes |
+| [x] | HIGHT | HIGHT | block_cipher | TODO | TODO | TODO | yes |
 | [x] | HPC | HPC | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | HyENA | HyENA | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/HYENA-spec.pdf | Full | yes |
 | [x] | ICE | ICE | block_cipher | 1997 | https://doi.org/10.1007/BFb0052346 | Full | yes |
@@ -98,15 +98,15 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | LEX | LEX | stream_cipher | 2004 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_5 | Full | yes |
 | [x] | KASUMI | KASUMI | block_cipher | 2001 | https://www.3gpp.org/ftp/Specs/archive/35_series/35.202/ | TODO | no |
 | [x] | KATAN | KATAN | block_cipher | 2009 | https://www.iacr.org/archive/ches2009/57470001/57470001.pdf | TODO | yes |
-| [x] | KCipher-2 | KCipher-2 | stream_cipher | TODO | TODO | TODO | no |
+| [x] | KCipher-2 | KCipher-2 | stream_cipher | TODO | TODO | TODO | yes |
 | [x] | Khazad | Khazad | block_cipher | TODO | TODO | TODO | yes |
-| [x] | KLEIN | KLEIN | block_cipher | TODO | TODO | TODO | no |
+| [x] | KLEIN | KLEIN | block_cipher | TODO | TODO | TODO | yes |
 | [x] | KNOT | KNOT | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | KTANTAN | KTANTAN | block_cipher | 2009 | https://www.iacr.org/archive/ches2009/57470001/57470001.pdf | TODO | no |
-| [x] | Kuznyechik | Kuznyechik | block_cipher | TODO | TODO | TODO | no |
+| [x] | Kuznyechik | Kuznyechik | block_cipher | TODO | TODO | TODO | yes |
 | [x] | LAEM | LAEM | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/LAEM-spec.pdf | Full | yes |
 | [x] | Lanarea | Lanarea | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Lanarea-v0.pdf | Full | yes |
-| [x] | LEA | LEA | block_cipher | TODO | TODO | TODO | no |
+| [x] | LEA | LEA | block_cipher | TODO | TODO | TODO | yes |
 | [x] | LEA-128 | LEA | block_cipher | TODO | TODO | TODO | no |
 | [x] | LED | LED | block_cipher | 2011 | https://www.iacr.org/archive/ches2011/69170327/69170327.pdf | TODO | yes |
 | [x] | LEVIATHAN | LEVIATHAN | stream_cipher | TODO | TODO | TODO | yes |
@@ -123,7 +123,7 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | MacGuffin | MacGuffin | block_cipher | 1994 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/macguffin.pdf | Full | yes |
 | [x] | MAGENTA | MAGENTA | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
 | [x] | Makwa | Makwa | pbkdf | 2015 | https://www.password-hashing.net/submissions/specs/Makwa-v1.pdf | Full | yes |
-| [x] | MANTIS | MANTIS | tweakable_block_cipher | TODO | TODO | TODO | no |
+| [x] | MANTIS | MANTIS | tweakable_block_cipher | TODO | TODO | TODO | yes |
 | [x] | MARS | MARS | block_cipher | 1999 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
 | [x] | MCRYPTON | MCRYPTON | block_cipher | TODO | TODO | TODO | no |
 | [x] | M3lcrypt | M3lcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions.html | N/A — no spec PDF | no |
@@ -133,14 +133,14 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | MD5 | MD5 | hash | 1992 | https://www.rfc-editor.org/rfc/rfc1321 | Full | yes |
 | [x] | MIBS | MIBS | block_cipher | TODO | TODO | TODO | no |
 | [x] | MICKEY | MICKEY | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/mickey.pdf | Full | yes |
-| [x] | MIDORI | MIDORI | block_cipher | TODO | TODO | TODO | no |
+| [x] | MIDORI | MIDORI | block_cipher | TODO | TODO | TODO | yes |
 | [x] | MIR-1 | MIR-1 | stream_cipher | 2002 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/mir1.pdf | Full | yes |
 | [x] | MISTY1 | MISTY1 | block_cipher | TODO | TODO | TODO | yes |
 | [x] | mixFeed | mixFeed | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/mixFeed-spec.pdf | Full | yes |
 | [x] | MMB | MMB | block_cipher | TODO | TODO | TODO | no |
 | [x] | MSX | MSX | block_cipher | 2026 | https://cic.iacr.org/p/2/4/32 | TODO | no |
-| [x] | MUGI | MUGI | stream_cipher | TODO | TODO | TODO | no |
-| [x] | MULTI-S01 | MULTI-S01 | stream_cipher | TODO | TODO | TODO | no |
+| [x] | MUGI | MUGI | stream_cipher | TODO | TODO | TODO | yes |
+| [x] | MULTI-S01 | MULTI-S01 | stream_cipher | TODO | TODO | TODO | yes |
 | [x] | MULTI2 | MULTI2 | block_cipher | TODO | TODO | TODO | no |
 | [x] | NBC | NBC | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000339 | Full | yes |
 | [x] | NewDES | NewDES | block_cipher | 1985 | https://en.wikipedia.org/wiki/NewDES | TODO | no |
@@ -161,9 +161,9 @@ This is a planning list of known symmetric primitive/cipher families.
 | [x] | Pufferfish | Pufferfish | pbkdf | 2014 | https://github.com/epixoip/pufferfish | N/A — GitHub only, no spec PDF | no |
 | [x] | POMELO | POMELO | pbkdf | 2015 | https://www.password-hashing.net/submissions/specs/POMELO-v3.pdf | Full | yes |
 | [x] | PRESENT | PRESENT | block_cipher | 2007 | https://iacr.org/archive/ches2007/47270450/47270450.pdf | TODO | yes |
-| [x] | PRIDE | PRIDE | block_cipher | TODO | TODO | TODO | no |
+| [x] | PRIDE | PRIDE | block_cipher | TODO | TODO | TODO | yes |
 | [x] | PRINCE | PRINCE | block_cipher | 2012 | https://www.iacr.org/archive/asiacrypt2012/76580403/76580403.pdf | TODO | no |
-| [x] | PRINCEv2 | PRINCEv2 | block_cipher | TODO | TODO | TODO | no |
+| [x] | PRINCEv2 | PRINCEv2 | block_cipher | TODO | TODO | TODO | yes |
 | [x] | Pyjamask | Pyjamask | block_cipher | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | Q | Q | block_cipher | 2000 | https://web.archive.org/web/20070205001927/http://www.cosic.esat.kuleuven.ac.be/nessie/ | Full | yes |
 | [x] | Qameleon | Qameleon | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
