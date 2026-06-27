@@ -3128,3 +3128,37 @@ references:
   venue: Password Hashing Competition (PHC) Submission
   url: https://github.com/epixoip/pufferfish
   notes: PHC submission. Available as GitHub source only, no spec PDF.
+- id: nist_2009_sha3_round1_report
+  kind: report
+  title: Status Report on the First Round of the SHA-3 Cryptographic Hash Algorithm Competition
+  authors:
+  - Andrew Regenscheid
+  - Ray Perlner
+  - Shu-jen H. Chang
+  - John Kelsey
+  - Mridul Nandi
+  - Souradyuti Paul
+  year: 2009
+  venue: NISTIR 7620
+  organization: NIST
+  url: https://doi.org/10.6028/NIST.IR.7620
+- id: nist_2011_sha3_round2_report
+  kind: report
+  title: Status Report on the Second Round of the SHA-3 Cryptographic Hash Algorithm Competition
+  year: 2011
+  venue: NISTIR 7764
+  organization: NIST
+  url: https://doi.org/10.6028/NIST.IR.7764
+- id: nist_2012_sha3_final_report
+  kind: report
+  title: Third-Round Report of the SHA-3 Cryptographic Hash Algorithm Competition
+  year: 2012
+  venue: NISTIR 7896
+  organization: NIST
+  url: https://doi.org/10.6028/NIST.IR.7896
+- id: nist_2008_sha3_first_round_candidates
+  kind: webpage
+  title: NIST Posts 51 Entries for New Hash Algorithm Competition
+  year: 2008
+  organization: NIST
+  url: https://www.nist.gov/node/404121

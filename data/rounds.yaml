@@ -3213,3 +3213,233 @@ rounds:
       note: Word permutation P_d
     - component_id: xor
       note: Subkey injection every 4 rounds
+- id: abacus_round
+  name: Abacus round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: arirang_round
+  name: ARIRANG round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: aurora_round
+  name: AURORA round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: blender_round
+  name: Blender round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: blue_midnight_wish_round
+  name: BLUE MIDNIGHT WISH round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: boole_round
+  name: BOOLE round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: cheetah_round
+  name: Cheetah round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: chi_hash_round
+  name: CHI round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: crunch_round
+  name: CRUNCH round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: cubehash_round
+  name: CubeHash round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: dch_round
+  name: DCH round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: dynamic_sha_round
+  name: Dynamic SHA round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: dynamic_sha2_round
+  name: Dynamic SHA2 round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: echo_hash_round
+  name: ECHO round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: ecoh_round
+  name: ECOH round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: edon_r_round
+  name: EDON-R round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: enrupt_round
+  name: EnRUPT round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: essence_round
+  name: ESSENCE round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: fsb_round
+  name: FSB round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: fugue_round
+  name: Fugue round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: hamsi_round
+  name: Hamsi round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: khichidi_1_round
+  name: Khichidi-1 round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: lane_round
+  name: LANE round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: lesamnta_round
+  name: Lesamnta round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: luffa_round
+  name: Luffa round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: lux_hash_round
+  name: LUX round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: mcssha3_round
+  name: MCSSHA-3 round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: md6_round
+  name: MD6 round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: meshhash_round
+  name: MeshHash round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: nasha_round
+  name: NaSHA round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: sandstorm_round
+  name: SANDstorm round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: sarmal_round
+  name: Sarmal round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: sgail_round
+  name: Sgàil round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: shabal_round
+  name: Shabal round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: shamata_round
+  name: SHAMATA round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: shavite3_round
+  name: SHAvite-3 round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: simd_hash_round
+  name: SIMD round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: spectral_hash_round
+  name: Spectral Hash round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: streamhash_round
+  name: StreamHash round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: swifftx_round
+  name: SWIFFTX round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: tangle_hash_round
+  name: Tangle round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: tib3_round
+  name: TIB3 round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: twister_hash_round
+  name: Twister round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: vortex_hash_round
+  name: Vortex round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: wamm_round
+  name: WaMM round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: waterfall_hash_round
+  name: Waterfall round
+  kind: other
+  spec: {}
+  notes: Coverage placeholder; the candidate's round structure is not yet modeled.

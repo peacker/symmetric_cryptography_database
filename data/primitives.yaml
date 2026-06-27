@@ -5058,3 +5058,380 @@ primitives:
   reference_ids:
   - pufferfish_ref
   characteristics: {}
+- id: abacus_hash
+  name: Abacus
+  family_id: abacus
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: arirang_hash
+  name: ARIRANG
+  family_id: arirang
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: aurora_hash
+  name: AURORA
+  family_id: aurora
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: blender_hash
+  name: Blender
+  family_id: blender
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: blue_midnight_wish_hash
+  name: BLUE MIDNIGHT WISH
+  family_id: blue_midnight_wish
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  - nist_2011_sha3_round2_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: boole_hash
+  name: BOOLE
+  family_id: boole
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: cheetah_hash
+  name: Cheetah
+  family_id: cheetah
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: chi_hash_hash
+  name: CHI
+  family_id: chi_hash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: crunch_hash
+  name: CRUNCH
+  family_id: crunch
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: cubehash_hash
+  name: CubeHash
+  family_id: cubehash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  - nist_2011_sha3_round2_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: dch_hash
+  name: DCH
+  family_id: dch
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: dynamic_sha_hash
+  name: Dynamic SHA
+  family_id: dynamic_sha
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: dynamic_sha2_hash
+  name: Dynamic SHA2
+  family_id: dynamic_sha2
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: echo_hash_hash
+  name: ECHO
+  family_id: echo_hash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  - nist_2011_sha3_round2_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: ecoh_hash
+  name: ECOH
+  family_id: ecoh
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: edon_r_hash
+  name: EDON-R
+  family_id: edon_r
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: enrupt_hash
+  name: EnRUPT
+  family_id: enrupt
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: essence_hash
+  name: ESSENCE
+  family_id: essence
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: fsb_hash
+  name: FSB
+  family_id: fsb
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: fugue_hash
+  name: Fugue
+  family_id: fugue
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  - nist_2011_sha3_round2_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: hamsi_hash
+  name: Hamsi
+  family_id: hamsi
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  - nist_2011_sha3_round2_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: khichidi_1_hash
+  name: Khichidi-1
+  family_id: khichidi_1
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: lane_hash
+  name: LANE
+  family_id: lane
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: lesamnta_hash
+  name: Lesamnta
+  family_id: lesamnta
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: luffa_hash
+  name: Luffa
+  family_id: luffa
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  - nist_2011_sha3_round2_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: lux_hash_hash
+  name: LUX
+  family_id: lux_hash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: mcssha3_hash
+  name: MCSSHA-3
+  family_id: mcssha3
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: md6_hash
+  name: MD6
+  family_id: md6
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: meshhash_hash
+  name: MeshHash
+  family_id: meshhash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: nasha_hash
+  name: NaSHA
+  family_id: nasha
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: sandstorm_hash
+  name: SANDstorm
+  family_id: sandstorm
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: sarmal_hash
+  name: Sarmal
+  family_id: sarmal
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: sgail_hash
+  name: Sgàil
+  family_id: sgail
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: shabal_hash
+  name: Shabal
+  family_id: shabal
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  - nist_2011_sha3_round2_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: shamata_hash
+  name: SHAMATA
+  family_id: shamata
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: shavite3_hash
+  name: SHAvite-3
+  family_id: shavite3
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  - nist_2011_sha3_round2_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: simd_hash_hash
+  name: SIMD
+  family_id: simd_hash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  - nist_2011_sha3_round2_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: spectral_hash_hash
+  name: Spectral Hash
+  family_id: spectral_hash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: streamhash_hash
+  name: StreamHash
+  family_id: streamhash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: swifftx_hash
+  name: SWIFFTX
+  family_id: swifftx
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: tangle_hash_hash
+  name: Tangle
+  family_id: tangle_hash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: tib3_hash
+  name: TIB3
+  family_id: tib3
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: twister_hash_hash
+  name: Twister
+  family_id: twister_hash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: vortex_hash_hash
+  name: Vortex
+  family_id: vortex_hash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: wamm_hash
+  name: WaMM
+  family_id: wamm
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+- id: waterfall_hash_hash
+  name: Waterfall
+  family_id: waterfall_hash
+  primitive_type: hash_function
+  reference_ids:
+  - nist_2009_sha3_round1_report
+  characteristics: {}
+  notes: Candidate-level record; output variants and technical parameters are not yet modeled.

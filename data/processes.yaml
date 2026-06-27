@@ -279,80 +279,82 @@ processes:
     start_year: 2007
     end_year: 2012
     url: https://csrc.nist.gov/projects/hash-functions/sha-3-project
-    notes: Process that selected Keccak as SHA-3.
+    notes: NIST received 64 submissions, accepted 51 first-round candidates, advanced
+      14 candidates to the second round, selected 5 finalists, and chose Keccak as
+      the SHA-3 winner.
     stages:
       - id: round_1
         label: Round 1 (51 candidates, December 2008)
         kind: round
         participants:
-          - {name: Abacus}
-          - {name: ARIRANG}
-          - {name: AURORA}
+          - family_id: abacus
+          - family_id: arirang
+          - family_id: aurora
           - family_id: blake
-          - {name: Blender}
-          - {name: BLUE MIDNIGHT WISH}
-          - {name: BOOLE}
-          - {name: Cheetah}
-          - {name: CHI}
-          - {name: CRUNCH}
-          - {name: CubeHash}
-          - {name: DCH}
-          - {name: Dynamic SHA}
-          - {name: Dynamic SHA2}
-          - {name: ECHO}
-          - {name: ECOH}
-          - {name: EDON-R}
-          - {name: EnRUPT}
-          - {name: ESSENCE}
-          - {name: FSB}
-          - {name: Fugue}
+          - family_id: blender
+          - family_id: blue_midnight_wish
+          - family_id: boole
+          - family_id: cheetah
+          - family_id: chi_hash
+          - family_id: crunch
+          - family_id: cubehash
+          - family_id: dch
+          - family_id: dynamic_sha
+          - family_id: dynamic_sha2
+          - family_id: echo_hash
+          - family_id: ecoh
+          - family_id: edon_r
+          - family_id: enrupt
+          - family_id: essence
+          - family_id: fsb
+          - family_id: fugue
           - family_id: groestl
-          - {name: Hamsi}
+          - family_id: hamsi
           - family_id: jh
           - family_id: keccak
-          - {name: Khichidi-1}
-          - {name: LANE}
-          - {name: Lesamnta}
-          - {name: Luffa}
-          - {name: LUX}
-          - {name: MCSSHA-3}
-          - {name: MD6}
-          - {name: MeshHash}
-          - {name: NaSHA}
-          - {name: SANDstorm}
-          - {name: Sarmal}
-          - {name: Sgàil}
-          - {name: Shabal}
-          - {name: SHAMATA}
-          - {name: SHAvite-3}
-          - {name: SIMD}
+          - family_id: khichidi_1
+          - family_id: lane
+          - family_id: lesamnta
+          - family_id: luffa
+          - family_id: lux_hash
+          - family_id: mcssha3
+          - family_id: md6
+          - family_id: meshhash
+          - family_id: nasha
+          - family_id: sandstorm
+          - family_id: sarmal
+          - family_id: sgail
+          - family_id: shabal
+          - family_id: shamata
+          - family_id: shavite3
+          - family_id: simd_hash
           - family_id: skein
-          - {name: Spectral Hash}
-          - {name: StreamHash}
-          - {name: SWIFFTX}
-          - {name: Tangle}
-          - {name: TIB3}
-          - {name: Twister}
-          - {name: Vortex}
-          - {name: WaMM}
-          - {name: Waterfall}
+          - family_id: spectral_hash
+          - family_id: streamhash
+          - family_id: swifftx
+          - family_id: tangle_hash
+          - family_id: tib3
+          - family_id: twister_hash
+          - family_id: vortex_hash
+          - family_id: wamm
+          - family_id: waterfall_hash
       - id: round_2
         label: Round 2 (14 candidates, July 2009)
         kind: round
         participants:
           - family_id: blake
-          - {name: BLUE MIDNIGHT WISH}
-          - {name: CubeHash}
-          - {name: ECHO}
-          - {name: Fugue}
+          - family_id: blue_midnight_wish
+          - family_id: cubehash
+          - family_id: echo_hash
+          - family_id: fugue
           - family_id: groestl
-          - {name: Hamsi}
+          - family_id: hamsi
           - family_id: jh
           - family_id: keccak
-          - {name: Luffa}
-          - {name: Shabal}
-          - {name: SHAvite-3}
-          - {name: SIMD}
+          - family_id: luffa
+          - family_id: shabal
+          - family_id: shavite3
+          - family_id: simd_hash
           - family_id: skein
       - id: round_3
         label: Round 3 (5 finalists, December 2010)

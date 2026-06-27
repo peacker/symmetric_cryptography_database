@@ -188,7 +188,8 @@
                 "characteristics",
                 "reference_ids",
                 "process_participations",
-                "influences"
+                "influences",
+                "notes"
             ],
             "properties": {
                 "id": {
@@ -248,7 +249,8 @@
                     }
                 },
                 "notes": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                 }
             },
             "additionalProperties": false
