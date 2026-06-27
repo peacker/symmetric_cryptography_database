@@ -55,6 +55,13 @@ Why this hybrid works:
 make setup && make all
 ```
 
+On Apple Silicon, `make setup` deliberately prefers the native Python from
+`/opt/homebrew` (when installed), then Apple's `/usr/bin/python3`. It also
+recreates a copied Intel virtual environment automatically; Python virtual
+environments are machine-specific and should not be migrated between Macs.
+To select another native Python explicitly, run
+`make setup BOOTSTRAP_PYTHON=/path/to/python3`.
+
 Or step by step:
 
 ```bash

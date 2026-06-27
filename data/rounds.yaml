@@ -1,2704 +1,3215 @@
 version: 1
-
 rounds:
-  - id: rijndael_aes_round
-    name: Rijndael/AES Full Round
-    kind: full_round
-    spec:
-      state_model:
-        layout: 4x4_bytes
-        state_bits: 128
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: word_permutation
-          params: { word_size_bits: 8 }
-        - component_id: field_matrix_mul
-          params: { field_size: 256 }
-        - component_id: xor
-      constant_injection: round_constant
-    notes: >
-      Canonical AES-like round: SubBytes, ShiftRows, MixColumns,
-      AddRoundKey. Shared by Rijndael/AES variants modulo round count and
-      first/last-round details.
-
-  - id: salsa_quarterround
-    name: Salsa Quarterround
-    kind: quarterround
-    spec:
-      state_model:
-        word_bits: 32
-        words_touched: 4
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-        - component_id: rotation_fixed
-      rotation_constants: [7, 9, 13, 18]
-      constant_injection: none
-    notes: >
-      Salsa quarterround over four 32-bit words with fixed rotation
-      constants 7, 9, 13, 18.
-
-  - id: chacha_quarterround
-    name: ChaCha Quarterround
-    kind: quarterround
-    spec:
-      state_model:
-        word_bits: 32
-        words_touched: 4
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-        - component_id: rotation_fixed
-      rotation_constants: [16, 12, 8, 7]
-      constant_injection: none
-    notes: >
-      ChaCha quarterround over four 32-bit words with fixed rotation
-      constants 16, 12, 8, 7.
-
-  - id: present_round
-    name: PRESENT Full Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 64
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: bit_permutation
-      constant_injection: round_counter
-    notes: >
-      PRESENT round with addRoundKey, 4-bit S-box layer, and P-layer.
-
-  - id: gift_round
-    name: GIFT Full Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [64, 128]
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: bit_permutation
-        - component_id: xor
-      constant_injection: round_constant
-    notes: >
-      GIFT round with nibble S-box layer, bit permutation layer,
-      and key/constant injection.
-
-  - id: des_round
-    name: DES Feistel Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 64
-        branch_bits: 32
-      component_flow:
-        - component_id: bit_permutation
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 6, output_bits: 4 }
-        - component_id: bit_permutation
-      constant_injection: none
-    notes: >
-      DES Feistel round with expansion, subkey XOR, S-box substitution,
-      and P-permutation.
-
-  - id: blowfish_round
-    name: Blowfish Feistel Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 64
-        branch_bits: 32
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 32 }
-        - component_id: xor
-      constant_injection: none
-    notes: >
-      Blowfish Feistel round using key-dependent S-boxes and ARX mixing in F.
-
-  - id: idea_round
-    name: IDEA Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 64
-        word_bits: 16
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 65536 }
-        - component_id: mul_mod
-          params: { modulus: 65537 }
-        - component_id: xor
-      constant_injection: none
-    notes: >
-      IDEA round using mixed-group operations (mod 2^16 addition,
-      mod 2^16+1 multiplication, XOR).
-
-  - id: tea_round
-    name: TEA Round Pair
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 64
-        word_bits: 32
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-        - component_id: shift_fixed
-          params: { amount: 4 }
-        - component_id: shift_fixed
-          params: { amount: 5 }
-        - component_id: constant
-      constant_injection: delta_constant
-    notes: >
-      One TEA cycle (two Feistel rounds) with delta constant accumulation.
-
-  - id: xtea_round
-    name: XTEA Round Pair
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 64
-        word_bits: 32
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-        - component_id: shift_fixed
-          params: { amount: 4 }
-        - component_id: shift_fixed
-          params: { amount: 5 }
-        - component_id: constant
-      constant_injection: delta_constant
-    notes: >
-      One XTEA cycle (two Feistel rounds) with revised key schedule.
-
-  - id: twofish_round
-    name: Twofish Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: field_matrix_mul
-          params: { field_size: 256 }
-        - component_id: xor
-        - component_id: rotation_fixed
-      constant_injection: subkeys
-    notes: >
-      Twofish round with key-dependent S-boxes, MDS mixing,
-      pseudo-Hadamard transform, and rotations.
-
-  - id: serpent_round
-    name: Serpent Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: binary_matrix_mul
-      constant_injection: round_key
-    notes: >
-      Serpent round with key mixing, bitslice 4x4 S-box layer,
-      and linear transformation.
-
-  - id: camellia_round
-    name: Camellia Feistel Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        branch_bits: 64
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: binary_matrix_mul
-        - component_id: xor
-      constant_injection: subkeys
-    notes: >
-      Camellia Feistel round using F-function S-box/linear layer;
-      FL/FLINV layers are inserted every six rounds.
-
-  - id: simon_round
-    name: SIMON Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [32, 48, 64, 96, 128]
-      component_flow:
-        - component_id: rotation_fixed
-        - component_id: and
-        - component_id: xor
-        - component_id: constant
-      constant_injection: z_sequence
-    notes: >
-      SIMON Feistel round using AND/XOR and rotations with round constants.
-
-  - id: speck_round
-    name: SPECK Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [32, 48, 64, 96, 128]
-      component_flow:
-        - component_id: rotation_fixed
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-      constant_injection: round_key
-    notes: >
-      SPECK ARX round using opposite-direction rotations, modular addition,
-      and XOR with round key.
-
-  - id: prince_round
-    name: PRINCE Core Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 64
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: binary_matrix_mul
-        - component_id: xor
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      PRINCE forward/backward core round with S-layer and linear mixing.
-
-  - id: led_round
-    name: LED Step Round
-    kind: step
-    spec:
-      state_model:
-        state_bits: 64
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: word_permutation
-          params: { word_size_bits: 4 }
-        - component_id: field_matrix_mul
-          params: { field_size: 16 }
-        - component_id: xor
-      constant_injection: step_constant
-    notes: >
-      LED step transformation (SubCells, ShiftRows, MixColumnsSerial,
-      AddConstants/AddRoundKey).
-
-  - id: katan_round
-    name: KATAN Update Round
-    kind: step
-    spec:
-      state_model:
-        state_bits_options: [32, 48, 64]
-      component_flow:
-        - component_id: lfsr
-        - component_id: nlfsr
-        - component_id: and
-        - component_id: xor
-        - component_id: constant
-      constant_injection: irregular_sequence
-    notes: >
-      KATAN round as coupled shift-register updates with non-linear taps.
-
-  - id: ktantan_round
-    name: KTANTAN Update Round
-    kind: step
-    spec:
-      state_model:
-        state_bits_options: [32, 48, 64]
-      component_flow:
-        - component_id: lfsr
-        - component_id: nlfsr
-        - component_id: and
-        - component_id: xor
-        - component_id: constant
-      constant_injection: irregular_sequence
-    notes: >
-      KTANTAN hardware-embedded-key update round; structurally related to KATAN.
-
-  - id: cast128_round
-    name: CAST-128 Feistel Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 64
-        branch_bits: 32
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: sub_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 32 }
-        - component_id: rotation_variable
-      constant_injection: subkeys
-    notes: >
-      CAST-128 round family uses key-dependent choice of F-function type
-      (add/sub/xor + data-dependent rotate + S-box mix) in a Feistel structure.
-
-  - id: cast256_round
-    name: CAST-256 Quad-Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        branch_bits: 32
-        branches: 4
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: sub_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 32 }
-        - component_id: rotation_variable
-      constant_injection: subkeys
-    notes: >
-      CAST-256 uses CAST-style round functions arranged in a 4-branch
-      generalized Feistel schedule.
-
-  - id: rc5_round
-    name: RC5 Data-Dependent Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [32, 64, 128]
-      component_flow:
-        - component_id: xor
-        - component_id: rotation_variable
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-      constant_injection: subkeys
-    notes: >
-      RC5 round core with XOR, data-dependent rotation, and modular addition.
-
-  - id: seed_round
-    name: SEED Feistel Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        branch_bits: 64
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: sub_mod
-          params: { modulus: 4294967296 }
-        - component_id: rotation_fixed
-      constant_injection: subkeys
-    notes: >
-      SEED 16-round Feistel structure with keyed round function over two
-      32-bit words, using S-box layers and modular arithmetic.
-
-  - id: aria_round
-    name: ARIA Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: binary_matrix_mul
-      constant_injection: round_keys
-    notes: >
-      ARIA alternates two substitution layers and a linear diffusion layer;
-      round count depends on key length.
-
-  - id: rc4_ksa
-    name: RC4 Key Scheduling Algorithm
-    kind: other
-    spec:
-      description: Initializes 256-byte permutation from variable key
-    notes: >
-      RC4 KSA initializes a 256-byte permutation array from a variable-length
-      key (1–256 bytes), applying swap operations in a deterministic sequence.
-      Essential for producing a key-dependent initial state before PRGA.
-
-  - id: rc4_prga
-    name: RC4 Pseudo-Random Generation Algorithm
-    kind: other
-    spec:
-      description: Generates keystream bytes from permutation state
-    notes: >
-      RC4 PRGA generates one byte of keystream per iteration by advancing
-      two state indices, performing a swap, and extracting an output byte.
-      This update is applied repeatedly to generate arbitrary keystream lengths.
-
-  - id: rc6_round
-    name: RC6 Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        word_bits: 32
-      component_flow:
-        - component_id: xor
-        - component_id: mul_mod
-          params: { modulus: 4294967296 }
-        - component_id: rotation_variable
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-      constant_injection: subkeys
-    notes: >
-      RC6 ARX-style round with data-dependent rotation and integer multiplication.
-
-  - id: sm4_round
-    name: SM4 Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        word_bits: 32
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: rotation_fixed
-        - component_id: xor
-      constant_injection: round_constants
-    notes: >
-      SM4 32-round update with tau non-linear substitution and linear diffusion.
-
-  - id: kasumi_round
-    name: KASUMI Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 64
-        branch_bits: 32
-      component_flow:
-        - component_id: xor
-        - component_id: and
-        - component_id: or
-        - component_id: rotation_fixed
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-      constant_injection: subkeys
-    notes: >
-      KASUMI Feistel round composed from FL and FO/FI subfunctions.
-
-  - id: clefia_round
-    name: CLEFIA GFN Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        branches: 4
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: binary_matrix_mul
-      constant_injection: subkeys
-    notes: >
-      CLEFIA uses a 4-branch generalized Feistel network in the data path.
-
-  - id: twine_round
-    name: TWINE Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 64
-        branches: 16
-        nibble_bits: 4
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: xor
-        - component_id: word_permutation
-          params: { word_size_bits: 4 }
-      constant_injection: round_constants
-    notes: >
-      TWINE is a lightweight 16-branch generalized Feistel block cipher.
-
-  # ── AES Candidates ─────────────────────────────────────────────────────
-
-  - id: crypton_round
-    name: CRYPTON Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: word_permutation
-          params: { word_size_bits: 8 }
-        - component_id: binary_matrix_mul
-      constant_injection: round_constants
-    notes: >
-      CRYPTON SPN round with byte substitution, word permutation,
-      and linear diffusion layer.
-
-  - id: deal_round
-    name: DEAL Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        branch_bits: 64
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 6, output_bits: 4 }
-        - component_id: bit_permutation
-      constant_injection: subkeys
-    notes: >
-      DEAL Feistel round with DES as the inner round function;
-      each 128-bit round uses a full DES encryption on the 64-bit branch.
-
-  - id: dfc_round
-    name: DFC Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        branch_bits: 64
-      component_flow:
-        - component_id: mul_mod
-          params: { modulus: 9223372036854775807 }
-        - component_id: add_mod
-          params: { modulus: 18446744073709551616 }
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: xor
-      constant_injection: subkeys
-    notes: >
-      DFC Feistel round using affine mapping over near-prime field
-      combined with an S-box for decorrelation.
-
-  - id: e2_round
-    name: E2 Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        branch_bits: 64
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: rotation_fixed
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-      constant_injection: subkeys
-    notes: >
-      E2 Feistel round with initial and final key mixing layers (IT/FT)
-      and a bijective round function using S-boxes and byte operations.
-
-  - id: frog_round
-    name: FROG Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: word_permutation
-          params: { word_size_bits: 8 }
-        - component_id: xor
-      constant_injection: internal_key
-    notes: >
-      FROG round uses a pseudo-random permutation derived from the key;
-      each of the eight rounds applies key-dependent byte permutations and S-boxes.
-
-  - id: hpc_round
-    name: HPC Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: xor
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: rotation_fixed
-      constant_injection: subkeys
-    notes: >
-      Hasty Pudding Cipher round using spice values and key-derived
-      tables; structure varies with block size (tiny/short/medium/standard/extended).
-
-  - id: loki97_round
-    name: LOKI97 Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        branch_bits: 64
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 13, output_bits: 8 }
-        - component_id: rotation_fixed
-        - component_id: binary_matrix_mul
-      constant_injection: subkeys
-    notes: >
-      LOKI97 Feistel round with large permuted S-box (13-bit input),
-      linear transformation, and complex key schedule.
-
-  - id: magenta_round
-    name: MAGENTA Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        branch_bits: 64
-      component_flow:
-        - component_id: xor
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: field_matrix_mul
-          params: { field_size: 256 }
-      constant_injection: subkeys
-    notes: >
-      MAGENTA Feistel round using the PE function built recursively
-      from GF(2^8) multiply and S-box operations.
-
-  - id: mars_round
-    name: MARS Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-        word_bits: 32
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-        - component_id: mul_mod
-          params: { modulus: 4294967296 }
-        - component_id: rotation_variable
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 32 }
-        - component_id: rotation_fixed
-      constant_injection: subkeys
-    notes: >
-      MARS heterogeneous structure: mixing phases use ARX; keying phases
-      use E-function with S-boxes, integer multiplication, and data-dependent rotations.
-
-  - id: safer_plus_round
-    name: SAFER+ Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: xor
-        - component_id: add_mod
-          params: { modulus: 256 }
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: sub_mod
-          params: { modulus: 256 }
-        - component_id: binary_matrix_mul
-      constant_injection: round_keys
-    notes: >
-      SAFER+ SPN round with alternating XOR/byte-add key mixing,
-      exponential/logarithm S-boxes, and Pseudo-Hadamard Transform (PHT) diffusion.
-
-  # ── Low-Latency And Memory-Encryption Ciphers ───────────────────────────
-
-  - id: aradi_round
-    name: ARADI Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: binary_matrix_mul
-        - component_id: xor
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      Representative ARADI round abstraction for low-latency SPN-style
-      memory-encryption use cases.
-
-  - id: bipbip_round
-    name: BipBip Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 24
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: xor
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      BipBip low-latency tweakable-round abstraction with compact dimensions.
-
-  - id: qarma_round
-    name: QARMA Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [64, 128]
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: binary_matrix_mul
-        - component_id: xor
-        - component_id: constant
-      constant_injection: round_tweakey
-    notes: >
-      QARMA reflection-cipher style round abstraction used in a tweakable
-      Even-Mansour design for low-latency memory encryption.
-
-  - id: qarmav2_round
-    name: QARMAv2 Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [64, 128]
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: binary_matrix_mul
-        - component_id: xor
-        - component_id: constant
-      constant_injection: round_tweakey
-    notes: >
-      QARMAv2 round abstraction with revised linear and tweak/key scheduling
-      choices versus QARMA, while preserving low-latency goals.
-
-  - id: scarf_round
-    name: SCARF Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 10
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 5, output_bits: 5 }
-        - component_id: xor
-        - component_id: constant
-      constant_injection: round_key
-    notes: >
-      SCARF is designed for secure cache-randomization and very small block
-      size operation on critical latency paths.
-
-  - id: ulbc_round
-    name: uLBC Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: word_permutation
-          params: { word_size_bits: 4 }
-        - component_id: xor
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      uLBC low-latency nibble-oriented round abstraction for 128-bit block
-      variants.
-
-  - id: blink_round
-    name: Blink Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [64, 128]
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: xor
-        - component_id: constant
-      constant_injection: round_tweakey
-    notes: >
-      Blink round abstraction in the THF low-latency tweakable block-cipher
-      framework.
-
-  - id: chilow_round
-    name: ChiLow Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [32, 40]
-      component_flow:
-        - component_id: xor
-        - component_id: binary_matrix_mul
-        - component_id: constant
-      constant_injection: round_tweakey
-    notes: >
-      ChiLow round abstraction for embedded code encryption with extremely
-      low-latency decryption targets.
-
-  - id: msx_round
-    name: MSX Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [64, 128]
-        branch_bits: 16
-        branches_options: [2, 4]
-      component_flow:
-        - component_id: mul_mod
-          params: { modulus: 4294967296 }
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-        - component_id: rotation_fixed
-      constant_injection: round_key
-    notes: >
-      MSX generalized-Feistel/ARX-style round abstraction targeting efficient
-      software on microcontrollers.
-
-  # ── NIST LWC Underlying Primitive Families ──────────────────────────────
-
-  - id: ascon_permutation_round
-    name: Ascon-p Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 320
-        lanes: 5
-        lane_bits: 64
-      component_flow:
-        - component_id: constant
-        - component_id: xor
-        - component_id: and
-        - component_id: not
-        - component_id: rotation_fixed
-      constant_injection: round_constant
-    notes: >
-      Ascon-p round abstraction with constant addition, nonlinear bit-sliced
-      substitution layer, and linear diffusion via lane rotations. Section 3
-      of NIST SP 800-232 gives the official permutation name "Ascon-p".
-
-  - id: photon_permutation_round
-    name: PHOTON Permutation Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 256
-      component_flow:
-        - component_id: constant
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: word_permutation
-          params: { word_size_bits: 4 }
-        - component_id: field_matrix_mul
-          params: { field_size: 16 }
-      constant_injection: round_constant
-    notes: >
-      PHOTON permutation round abstraction over a nibble state with
-      AddConstant, S-box, row/column permutation, and MixColumns-like diffusion.
-
-  - id: skinny_round
-    name: SKINNY Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [64, 128]
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: constant
-        - component_id: xor
-        - component_id: bit_permutation
-      constant_injection: round_tweakey
-    notes: >
-      SKINNY round abstraction with substitution layer, round constants,
-      tweakey injection, and lightweight permutation-based diffusion.
-
-  - id: sparkle_permutation_step
-    name: SPARKLE Permutation Step
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [256, 384, 512]
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: step_constant
-    notes: >
-      SPARKLE step abstraction based on ARX Alzette boxes and a linear layer,
-      used in the SCHWAEMM/ESCH suite.
-
-  - id: tinyjambu_state_update
-    name: TinyJambu State Update
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: nlfsr
-        - component_id: and
-        - component_id: xor
-        - component_id: constant
-      constant_injection: key_bits
-    notes: >
-      TinyJambu state-update abstraction using NLFSR-like feedback and
-      key-dependent nonlinear terms.
-
-  - id: xoodoo_permutation_round
-    name: Xoodoo Permutation Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 384
-        planes: 3
-      component_flow:
-        - component_id: xor
-        - component_id: and
-        - component_id: not
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      Xoodoo round abstraction with theta-like mixing, chi-like nonlinearity,
-      and lane shifts across a 3-plane 384-bit state.
-
-  - id: elephant_mode_step
-    name: Elephant Mode Step
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [160, 176, 200]
-      component_flow:
-        - component_id: xor
-        - component_id: and
-        - component_id: not
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: domain_constant
-    notes: >
-      Elephant mode step abstraction over lightweight permutation cores used
-      by Dumbo, Jumbo, and Delirium variants.
-
-  - id: romulus_skinny_step
-    name: Romulus SKINNY Step
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: xor
-        - component_id: constant
-        - component_id: bit_permutation
-      constant_injection: tweakey
-    notes: >
-      Romulus round abstraction based on SKINNY-128 tweakey-based round
-      transformations.
-
-  - id: isap_permutation_step
-    name: ISAP Permutation Step
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 320
-      component_flow:
-        - component_id: xor
-        - component_id: and
-        - component_id: not
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      ISAP permutation step abstraction based on ASCON-like 320-bit
-      permutation rounds and domain-separated processing.
-
-  - id: grain_128_state_update
-    name: Grain-128 State Update
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 256
-      component_flow:
-        - component_id: lfsr
-        - component_id: nlfsr
-        - component_id: xor
-        - component_id: and
-      constant_injection: key_iv_mixing
-    notes: >
-      Grain-128 state update abstraction with coupled LFSR/NLFSR feedback
-      and nonlinear output filtering.
-
-  - id: gimli_permutation_round
-    name: Gimli Permutation Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 384
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      Gimli round abstraction with ARX quarter-round style lane updates,
-      small swaps, and periodic constants.
-
-  - id: subterranean_duplex_round
-    name: Subterranean Duplex Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 257
-      component_flow:
-        - component_id: xor
-        - component_id: and
-        - component_id: not
-        - component_id: rotation_fixed
-      constant_injection: domain_bit
-    notes: >
-      Subterranean duplex round abstraction over a 257-bit state with
-      nonlinear chi-style update and bit-level diffusion.
-
-  - id: drygascon_permutation_round
-    name: DryGASCON Permutation Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 320
-      component_flow:
-        - component_id: xor
-        - component_id: and
-        - component_id: not
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      DryGASCON round abstraction over a GASCON-like permutation core for
-      dry sponge style authenticated encryption.
-
-  - id: sneik_permutation_round
-    name: SNEIK Permutation Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 256
-      component_flow:
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      SNEIK round abstraction for a lightweight ARX-style permutation used
-      in the NIST LWC process.
-
-  - id: sycon_permutation_round
-    name: Sycon Permutation Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 320
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 5, output_bits: 5 }
-        - component_id: xor
-        - component_id: bit_permutation
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      Sycon round abstraction over a lightweight permutation with nonlinear
-      substitution and permutation-based diffusion.
-
-  - id: spix_permutation_round
-    name: SPIX Permutation Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 256
-      component_flow:
-        - component_id: xor
-        - component_id: and
-        - component_id: not
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      SPIX round abstraction based on a compact permutation core for
-      lightweight authenticated encryption.
-
-  - id: spoc_permutation_round
-    name: SpoC Permutation Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 256
-      component_flow:
-        - component_id: xor
-        - component_id: and
-        - component_id: not
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      SpoC round abstraction over a lightweight permutation core in a
-      sponge-like authenticated encryption design.
-
-  - id: spook_permutation_round
-    name: Spook Permutation Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 256
-      component_flow:
-        - component_id: xor
-        - component_id: and
-        - component_id: not
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      Spook round abstraction over a permutation-driven mode with lightweight
-      authenticated encryption targets.
-
-  - id: knot_permutation_round
-    name: KNOT Permutation Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [256, 384]
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: xor
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      KNOT permutation round abstraction with nibble-oriented nonlinearity and
-      lightweight diffusion for constrained environments.
-
-  - id: pyjamask_round
-    name: Pyjamask Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits_options: [96, 128]
-      component_flow:
-        - component_id: xor
-        - component_id: binary_matrix_mul
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      Pyjamask round abstraction using linear layer-heavy ARX-like operations
-      with lightweight software-oriented design.
-
-  - id: qameleon_round
-    name: Qameleon Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: xor
-        - component_id: constant
-        - component_id: bit_permutation
-      constant_injection: round_tweakey
-    notes: >
-      Qameleon round abstraction as a tweakable lightweight block-cipher style
-      transformation with nibble-based nonlinearity.
-
-  - id: saturnin_round
-    name: Saturnin Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 256
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: xor
-        - component_id: binary_matrix_mul
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      Saturnin round abstraction with SPN-like nonlinear and linear layers over
-      a 256-bit state.
-
-  - id: simple_permutation_round
-    name: SIMPLE Permutation Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 256
-      component_flow:
-        - component_id: xor
-        - component_id: and
-        - component_id: not
-        - component_id: rotation_fixed
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      SIMPLE round abstraction over a lightweight permutation core intended for
-      authenticated encryption in constrained settings.
-
-  - id: trifle_round
-    name: TRIFLE Round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 4, output_bits: 4 }
-        - component_id: xor
-        - component_id: constant
-        - component_id: bit_permutation
-      constant_injection: round_tweakey
-    notes: >
-      TRIFLE round abstraction for a lightweight tweakable block-cipher style
-      primitive used in NIST LWC submissions.
-  - id: ace_round
-    name: ACE round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 320
-      component_flow:
-        - component_id: and
-        - component_id: rotation_fixed
-        - component_id: xor
-        - component_id: word_permutation
-          params: { word_size_bits: 64 }
-        - component_id: constant
-    notes: ACE-step abstraction over five 64-bit words with SB-64 nonlinear processing and word shuffling.
-
-  - id: akelarre_round
-    name: Akelarre round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: rotation_variable
-        - component_id: add_mod
-          params: { modulus: 4294967296 }
-        - component_id: xor
-    notes: >
-      Round abstraction for Akelarre's addition-rotation structure over four
-      32-bit words (with data/key-dependent rotations).
-
-  - id: crisp_round
-    name: CRISP round
-    kind: full_round
-    spec:
-      state_model:
-        left_bits: 64
-        right_bits: 64
-      component_flow:
-        - component_id: bit_permutation
-        - component_id: sbox
-          params: { input_bits: 11, output_bits: 8 }
-        - component_id: xor
-    notes: >
-      Feistel round function with 64->88 expansion, subkey mixing, 11x8 S-boxes,
-      and key-dependent S2 post-processing.
-
-  - id: ant_round
-    name: ANT round
-    kind: full_round
-    spec:
-      component_flow:
-        - component_id: and
-        - component_id: rotation_fixed
-        - component_id: xor
-    notes: Feistel round based on AND-Rotation-XOR (ARX-like bit-level design).
-
-  - id: anubis_round
-    name: Anubis round
-    kind: full_round
-    spec:
-      state_model:
-        state_bits: 128
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: word_permutation
-          params: { word_size_bits: 8 }
-        - component_id: binary_matrix_mul
-        - component_id: xor
-        - component_id: constant
-    notes: Byte-oriented wide-trail SPN round abstraction with involutional design components.
-
-  - id: ballet_round
-    name: Ballet round
-    kind: full_round
-    spec:
-      component_flow:
-        - component_id: add_mod
-        - component_id: rotation_fixed
-        - component_id: xor
-    notes: ARX-style round used across Ballet variants.
-
-  - id: bear_lion_round
-    name: BEAR/LION round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: belt_round
-    name: BelT round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: bleep64_round
-    name: Bleep64 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: blowfish_2_round
-    name: Blowfish round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: chaskey_round
-    name: Chaskey round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: cilipadi_round
-    name: CiliPadi round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: cipherunicorn_a_round
-    name: CIPHERUNICORN-A round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: cipherunicorn_e_round
-    name: CIPHERUNICORN-E round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: clae_round
-    name: CLAE round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: clx_round
-    name: CLX round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: cmea_round
-    name: CMEA round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: comet_round
-    name: COMET round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: cs_cipher_round
-    name: CS-Cipher round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: deoxys_round
-    name: Deoxys round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: desx_round
-    name: DESX round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: enocoro_128v2_round
-    name: Enocoro-128v2 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: estate_round
-    name: ESTATE round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: fantomas_robin_round
-    name: Fantomas / Robin round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: feal_round
-    name: FEAL round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: fesh_round
-    name: FESH round
-    kind: full_round
-    spec:
-      component_flow:
-        - component_id: sbox
-        - component_id: bit_permutation
-        - component_id: xor
-    notes: SPN round with substitution and permutation layers.
-
-  - id: flexaead_round
-    name: FlexAEAD round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: forkae_round
-    name: ForkAE round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: fountain_round
-    name: Fountain round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: gage_and_ingage_round
-    name: GAGE and InGAGE round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: gost_28147_89_round
-    name: GOST 28147-89 (Magma) round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: grand_cru_round
-    name: Grand Cru round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: hern_and_heron_round
-    name: HERN & HERON round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: hight_round
-    name: HIGHT round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: hyena_round
-    name: HyENA round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: ice_round
-    name: ICE round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: isaac_round
-    name: ISAAC round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: kcipher_2_round
-    name: KCipher-2 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: khazad_round
-    name: Khazad round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: klein_round
-    name: KLEIN round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: kuznyechik_round
-    name: Kuznyechik round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: laem_round
-    name: LAEM round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: lea_round
-    name: LEA round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: lea_128_round
-    name: LEA-128 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: leviathan_round
-    name: LEVIATHAN round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: lili_128_round
-    name: LILI-128 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: lilliput_ae_round
-    name: Lilliput-AE round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: limdolen_round
-    name: Limdolen round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: locus_round
-    name: LOCUS round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: loki_round
-    name: LOKI round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: lotus_round
-    name: LOTUS round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: mantis_round
-    name: MANTIS round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: mcrypton_round
-    name: MCRYPTON round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: mibs_round
-    name: MIBS round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: midori_round
-    name: MIDORI round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: misty1_round
-    name: MISTY1 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: mixfeed_round
-    name: mixFeed round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: mmb_round
-    name: MMB round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: mugi_round
-    name: MUGI round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: multi_s01_round
-    name: MULTI-S01 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: multi2_round
-    name: MULTI2 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: nimbus_round
-    name: Nimbus round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: noekeon_round
-    name: NOEKEON round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: nush_round
-    name: NUSH round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: orange_round
-    name: ORANGE round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: oribatida_round
-    name: Oribatida round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: oryx_round
-    name: ORYX round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: pea_round
-    name: PEA round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: picaro_round
-    name: PICARO round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: pride_round
-    name: PRIDE round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: princev2_round
-    name: PRINCEv2 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: q_round
-    name: Q round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: quartet_round
-    name: Quartet round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: rc2_round
-    name: RC2 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: rc4plus_round
-    name: RC4+ round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: rc4a_round
-    name: RC4A round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: remus_round
-    name: REMUS round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: saeaes_round
-    name: SAEAES round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: safer_round
-    name: SAFER round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: saferpp_round
-    name: SAFER++ round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: sc2000_round
-    name: SC2000 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: shacal_round
-    name: SHACAL round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: shacal2_round
-    name: SHACAL2 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: shamash_and_shamashash_round
-    name: Shamash & Shamashash round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: shark_round
-    name: SHARK round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: skipjack_round
-    name: SKIPJACK round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: snow_round
-    name: SNOW round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: snow_2_0_round
-    name: SNOW 2.0 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: snow_3g_round
-    name: SNOW 3G round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: sober_t16_round
-    name: SOBER-t16 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: sober_t32_round
-    name: SOBER-t32 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: sosemanuk1_round
-    name: SOSEMANUK1 round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: speckey_round
-    name: SPECKEY round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: speedy_round
-    name: SPEEDY round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: spritz_round
-    name: Spritz round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: square_round
-    name: SQUARE round
-    kind: full_round
-    spec:
-      state_model:
-        layout: 4x4_bytes
-        state_bits: 128
-      component_flow:
-        - component_id: sbox
-          params: { input_bits: 8, output_bits: 8 }
-        - component_id: field_matrix_mul
-          params: { field_size: 256 }
-        - component_id: word_permutation
-          params: { word_size_bits: 8 }
-        - component_id: xor
-        - component_id: constant
-      constant_injection: round_constant
-    notes: >
-      SQUARE round abstraction with byte substitution, diffusion, transposition,
-      and round-key mixing over a 128-bit 4x4-byte state.
-
-  - id: thank_goodness_it_s_friday_round
-    name: Thank Goodness It's Friday (TGIF) round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: three_key_triple_des_round
-    name: Three-key Triple DES round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: threefish_round
-    name: Threefish round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: treyfer_round
-    name: TREYFER round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: triad_round
-    name: Triad round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: trivium_round
-    name: Trivium round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: two_key_triple_des_round
-    name: Two-key Triple DES round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: ublock_round
-    name: uBlock round
-    kind: full_round
-    spec:
-      component_flow:
-        - component_id: sbox
-        - component_id: word_permutation
-        - component_id: xor
-    notes: uBlock round uses 4-bit S-boxes and byte-level permutation layers.
-
-  - id: uea2_zuc_round
-    name: UEA2 / ZUC round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: vmpc_round
-    name: VMPC round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: wage_round
-    name: WAGE round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: wake_round
-    name: WAKE round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: xchacha_round
-    name: XChaCha round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: xxtea_round
-    name: XXTEA round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: xxtea_corrected_block_tea_round
-    name: XXTEA / Corrected Block TEA round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: yarara_and_coral_round
-    name: Yarara and Coral round
-    kind: other
-    spec:
-      component_flow:
-        - component_id: xor
-    notes: Generic placeholder round entry pending full parameter extraction.
-
-  - id: raindrop_round
-    name: Raindrop round
-    kind: full_round
-    spec:
-      component_flow:
-        - component_id: sbox
-        - component_id: bit_permutation
-        - component_id: xor
-    notes: Feistel-based round function with SP-style nonlinear and diffusion layers.
-
-  - id: smba_round
-    name: SMBA round
-    kind: full_round
-    spec:
-      component_flow:
-        - component_id: sbox
-        - component_id: bit_permutation
-        - component_id: xor
-    notes: Generalized-Feistel round with S-box and linear diffusion operations.
-
-  - id: fbc_round
-    name: FBC round
-    kind: full_round
-    spec:
-      component_flow:
-        - component_id: sbox
-        - component_id: rotation_fixed
-        - component_id: xor
-    notes: Generalized-Feistel round with nonlinear and word-rotation mixing.
-
-  - id: nbc_round
-    name: NBC round
-    kind: full_round
-    spec:
-      component_flow:
-        - component_id: sbox
-        - component_id: xor
-    notes: Generalized-Feistel round driven by a 16-bit S-box nonlinear layer.
-
-  - id: tangram_round
-    name: TANGRAM round
-    kind: full_round
-    spec:
-      component_flow:
-        - component_id: sbox
-        - component_id: rotation_fixed
-        - component_id: xor
-    notes: Bit-sliced SPN round with SubColumn and ShiftRow-style transforms.
-
-  - id: spring_round
-    name: SPRING round
-    kind: full_round
-    spec:
-      component_flow:
-        - component_id: nlfsr
-        - component_id: bit_permutation
-        - component_id: xor
-        - component_id: constant
-    notes: >
-      SPRING is an SP-style lightweight block cipher family using an
-      NFSR-based 32-bit nonlinear layer and permutation/key-mixing operations.
-
-  - id: achterbahn_clock
-    name: Achterbahn Clock Step
-    kind: step
-    spec: {}
-
-  - id: aes_prime_128_round
-    name: AES' 128-bit Round
-    kind: full_round
-    spec: {}
-
-  - id: aes_round
-    name: AES Round
-    kind: full_round
-    spec: {}
-
-  - id: cilipadi_permutation_round
-    name: CiliPadi Permutation Round
-    kind: full_round
-    spec: {}
-
-  - id: clx_permutation_round
-    name: CLX Permutation Round
-    kind: full_round
-    spec: {}
-
-  - id: comet_block_cipher_round
-    name: COMET Block Cipher Round
-    kind: full_round
-    spec: {}
-
-  - id: decim_clock
-    name: DECIM Clock Step
-    kind: step
-    spec: {}
-
-  - id: estate_tbc_round
-    name: ESTATE Tweakable Block Cipher Round
-    kind: full_round
-    spec: {}
-
-  - id: f_fcsr_step
-    name: F-FCSR Step
-    kind: step
-    spec: {}
-
-  - id: fnv1_byte_step
-    name: FNV-1 Byte Step
-    kind: step
-    spec: {}
-
-  - id: forkskinny_round
-    name: ForkSKINNY Round
-    kind: full_round
-    spec: {}
-
-  - id: fountain_state_update
-    name: Fountain State Update
-    kind: step
-    spec: {}
-
-  - id: grain_clock
-    name: Grain Clock Step
-    kind: step
-    spec: {}
-
-  - id: haval_pass
-    name: HAVAL Pass
-    kind: other
-    spec: {}
-
-  - id: hc256_step
-    name: HC-256 Step
-    kind: step
-    spec: {}
-
-  - id: hyena_hyfb_round
-    name: HYENA HyFB Round
-    kind: full_round
-    spec: {}
-
-  - id: laem_simon_round
-    name: LAEM-SIMON Round
-    kind: full_round
-    spec: {}
-
-  - id: lilliput_tbc_round
-    name: Lilliput-TBC Round
-    kind: full_round
-    spec: {}
-
-  - id: lucifer_round
-    name: Lucifer Round
-    kind: full_round
-    spec: {}
-
-  - id: macguffin_round
-    name: MacGuffin Round
-    kind: full_round
-    spec: {}
-
-  - id: md2_compression_round
-    name: MD2 Compression Round
-    kind: full_round
-    spec: {}
-
-  - id: md4_round
-    name: MD4 Round
-    kind: full_round
-    spec: {}
-
-  - id: md5_round
-    name: MD5 Round
-    kind: full_round
-    spec: {}
-
-  - id: mickey_clock
-    name: MICKEY Clock Step
-    kind: step
-    spec: {}
-
-  - id: mir_1_step
-    name: MIR-1 Step
-    kind: step
-    spec: {}
-
-  - id: photon256_round
-    name: PHOTON-256 Round
-    kind: full_round
-    spec: {}
-
-  - id: photon_beetle_round
-    name: PHOTON-Beetle Round
-    kind: full_round
-    spec: {}
-
-  - id: rabbit_iteration
-    name: Rabbit Iteration
-    kind: step
-    spec: {}
-
-  - id: ripemd_round
-    name: RIPEMD Round
-    kind: full_round
-    spec: {}
-
-  - id: sapphire_byte_step
-    name: Sapphire Byte Step
-    kind: step
-    spec: {}
-
-  - id: seal_inner_iteration
-    name: SEAL Inner Iteration
-    kind: step
-    spec: {}
-
-  - id: sfinks_clock
-    name: SFINKS Clock Step
-    kind: step
-    spec: {}
-
-  - id: sha_round
-    name: SHA Round
-    kind: full_round
-    spec: {}
-
-  - id: simp_round
-    name: SIMP Round
-    kind: full_round
-    spec: {}
-
-  - id: siv_rijndael256_round
-    name: SIV-Rijndael256 Round
-    kind: full_round
-    spec: {}
-
-  - id: siv_tem_photon_round
-    name: SIV-TEM-PHOTON Round
-    kind: full_round
-    spec: {}
-
-  - id: skinny_aead_round
-    name: SKINNY-AEAD Round
-    kind: full_round
-    spec: {}
-
-  - id: subterranean_2_0_round
-    name: Subterranean 2.0 Round
-    kind: step
-    spec: {}
-
-  - id: sundae_gift_round
-    name: SUNDAE-GIFT Round
-    kind: full_round
-    spec: {}
-
-  - id: threeway_round
-    name: 3-Way Round
-    kind: full_round
-    spec: {}
-
-  - id: tiger_pass
-    name: Tiger Pass
-    kind: other
-    spec: {}
-
-  - id: twegifit64_round
-    name: TweGIFIT-64 Round
-    kind: full_round
-    spec: {}
-
-  - id: whirlpool_cipher_round
-    name: Whirlpool Cipher Round
-    kind: full_round
-    spec: {}
-
-  - id: xoodyak_round
-    name: Xoodyak Round
-    kind: full_round
-    spec: {}
-
-  - id: yamb_step
-    name: YAMB Step
-    kind: step
-    spec: {}
-
-  - id: nlsv2_step
-    name: NLSv2 Step
-    kind: step
-    spec: {}
-
-  - id: cryptmt3_step
-    name: CryptMT3 Step
-    kind: step
-    spec: {}
-
-  - id: dragon_step
-    name: Dragon Step
-    kind: step
-    spec: {}
-
-  - id: hc128_step
-    name: HC-128 Step
-    kind: step
-    spec: {}
-
-  - id: lex_round
-    name: LEX Round
-    kind: full_round
-    spec: {}
-
-  - id: argon2_pass
-    name: Argon2 Pass
-    kind: full_round
-    spec: {}
-
-  - id: antcrypt_step
-    name: AntCrypt Step
-    kind: step
-    spec: {}
-
-  - id: battcrypt_step
-    name: battcrypt Step
-    kind: step
-    spec: {}
-
-  - id: catena_flap
-    name: Catena Flap
-    kind: full_round
-    spec: {}
-
-  - id: centrifuge_iteration
-    name: Centrifuge Iteration
-    kind: step
-    spec: {}
-
-  - id: earworm_step
-    name: EARWORM Step
-    kind: step
-    spec: {}
-
-  - id: gambit_step
-    name: Gambit Step
-    kind: step
-    spec: {}
-
-  - id: lanarea_step
-    name: Lanarea Step
-    kind: step
-    spec: {}
-
-  - id: lyra2_step
-    name: Lyra2 Step
-    kind: step
-    spec: {}
-
-  - id: makwa_iteration
-    name: Makwa Squaring Iteration
-    kind: step
-    spec: {}
-
-  - id: mcs_phs_iteration
-    name: MCS_PHS Iteration
-    kind: step
-    spec: {}
-
-  - id: omegacrypt_step
-    name: OmegaCrypt Step
-    kind: step
-    spec: {}
-
-  - id: parallel_step
-    name: Parallel Step
-    kind: step
-    spec: {}
-
-  - id: polypasshash_step
-    name: PolyPassHash Step
-    kind: step
-    spec: {}
-
-  - id: pomelo_step
-    name: POMELO Step
-    kind: step
-    spec: {}
-
-  - id: rig_step
-    name: RIG Step
-    kind: step
-    spec: {}
-
-  - id: schvrch_step
-    name: Schvrch Step
-    kind: step
-    spec: {}
-
-  - id: tortuga_step
-    name: Tortuga Step
-    kind: step
-    spec: {}
-
-  - id: twocats_step
-    name: TwoCats Step
-    kind: step
-    spec: {}
-
-  - id: yarn_step
-    name: Yarn Step
-    kind: step
-    spec: {}
-
-  - id: yescrypt_step
-    name: yescrypt Step
-    kind: step
-    spec: {}
-
-  # ── SHA-3 Finalists ───────────────────────────────────────────────────────
-
-  - id: keccak_round
-    name: Keccak-f Round (θ ρ π χ ι)
-    kind: full_round
-    spec:
-      component_flow:
-        - { component_id: xor,          note: "θ (theta): column parity XOR + neighbour XOR" }
-        - { component_id: rotation_fixed, note: "ρ (rho): per-lane fixed rotation" }
-        - { component_id: word_permutation, note: "π (pi): inter-lane position permutation" }
-        - { component_id: and,           note: "χ (chi): 5-bit AND+NOT+XOR nonlinear layer" }
-        - { component_id: constant,      note: "ι (iota): XOR round constant into lane (0,0)" }
-
-  - id: blake_round
-    name: BLAKE G-function Round
-    kind: full_round
-    spec:
-      component_flow:
-        - { component_id: add_mod,        note: "32- or 64-bit modular addition (G step 1/3)" }
-        - { component_id: xor,            note: "XOR with message word (G step 2/4)" }
-        - { component_id: rotation_fixed, note: "Fixed rotation (r1/r2/r3/r4: 16/12/8/7 for BLAKE-256)" }
-
-  - id: groestl_round
-    name: Grøstl Permutation Round (P/Q)
-    kind: full_round
-    spec:
-      component_flow:
-        - { component_id: constant,       note: "AddRoundConstant: XOR round constant" }
-        - { component_id: sbox,           note: "SubBytes: AES-derived 8-bit S-box" }
-        - { component_id: word_permutation, note: "ShiftBytes: byte-level permutation" }
-        - { component_id: field_matrix_mul, note: "MixBytes: MDS matrix over GF(2^8)" }
-
-  - id: jh_round
-    name: JH E_8 Round (two half-rounds)
-    kind: full_round
-    spec:
-      component_flow:
-        - { component_id: sbox,           note: "S7: 4-bit bijective S-box (applied in parallel)" }
-        - { component_id: word_permutation, note: "L: linear diffusion layer" }
-        - { component_id: constant,       note: "RC: XOR round constant" }
-
-  - id: skein_round
-    name: Skein (Threefish) Round + UBI
-    kind: full_round
-    spec:
-      component_flow:
-        - { component_id: add_mod,        note: "64-bit modular word add (MIX function)" }
-        - { component_id: rotation_fixed, note: "Fixed rotation (variant per round/word pair)" }
-        - { component_id: word_permutation, note: "Word permutation P_d" }
-        - { component_id: xor,            note: "Subkey injection every 4 rounds" }
+- id: rijndael_aes_round
+  name: Rijndael/AES Full Round
+  kind: full_round
+  spec:
+    state_model:
+      layout: 4x4_bytes
+      state_bits: 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+    - component_id: xor
+    constant_injection: round_constant
+  notes: 'Canonical AES-like round: SubBytes, ShiftRows, MixColumns, AddRoundKey.
+    Shared by Rijndael/AES variants modulo round count and first/last-round details.
+
+    '
+- id: salsa_quarterround
+  name: Salsa Quarterround
+  kind: quarterround
+  spec:
+    state_model:
+      word_bits: 32
+      words_touched: 4
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_fixed
+    rotation_constants:
+    - 7
+    - 9
+    - 13
+    - 18
+    constant_injection: none
+  notes: 'Salsa quarterround over four 32-bit words with fixed rotation constants
+    7, 9, 13, 18.
+
+    '
+- id: chacha_quarterround
+  name: ChaCha Quarterround
+  kind: quarterround
+  spec:
+    state_model:
+      word_bits: 32
+      words_touched: 4
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_fixed
+    rotation_constants:
+    - 16
+    - 12
+    - 8
+    - 7
+    constant_injection: none
+  notes: 'ChaCha quarterround over four 32-bit words with fixed rotation constants
+    16, 12, 8, 7.
+
+    '
+- id: present_round
+  name: PRESENT Full Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: bit_permutation
+    constant_injection: round_counter
+  notes: 'PRESENT round with addRoundKey, 4-bit S-box layer, and P-layer.
+
+    '
+- id: gift_round
+  name: GIFT Full Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 64
+      - 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: bit_permutation
+    - component_id: xor
+    constant_injection: round_constant
+  notes: 'GIFT round with nibble S-box layer, bit permutation layer, and key/constant
+    injection.
+
+    '
+- id: des_round
+  name: DES Feistel Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+    component_flow:
+    - component_id: bit_permutation
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 6
+        output_bits: 4
+    - component_id: bit_permutation
+    constant_injection: none
+  notes: 'DES Feistel round with expansion, subkey XOR, S-box substitution, and P-permutation.
+
+    '
+- id: blowfish_round
+  name: Blowfish Feistel Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - component_id: xor
+    constant_injection: none
+  notes: 'Blowfish Feistel round using key-dependent S-boxes and ARX mixing in F.
+
+    '
+- id: idea_round
+  name: IDEA Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      word_bits: 16
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 65536
+    - component_id: mul_mod
+      params:
+        modulus: 65537
+    - component_id: xor
+    constant_injection: none
+  notes: 'IDEA round using mixed-group operations (mod 2^16 addition, mod 2^16+1 multiplication,
+    XOR).
+
+    '
+- id: tea_round
+  name: TEA Round Pair
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      word_bits: 32
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: shift_fixed
+      params:
+        amount: 4
+    - component_id: shift_fixed
+      params:
+        amount: 5
+    - component_id: constant
+    constant_injection: delta_constant
+  notes: 'One TEA cycle (two Feistel rounds) with delta constant accumulation.
+
+    '
+- id: xtea_round
+  name: XTEA Round Pair
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      word_bits: 32
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: shift_fixed
+      params:
+        amount: 4
+    - component_id: shift_fixed
+      params:
+        amount: 5
+    - component_id: constant
+    constant_injection: delta_constant
+  notes: 'One XTEA cycle (two Feistel rounds) with revised key schedule.
+
+    '
+- id: twofish_round
+  name: Twofish Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+    - component_id: xor
+    - component_id: rotation_fixed
+    constant_injection: subkeys
+  notes: 'Twofish round with key-dependent S-boxes, MDS mixing, pseudo-Hadamard transform,
+    and rotations.
+
+    '
+- id: serpent_round
+  name: Serpent Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: binary_matrix_mul
+    constant_injection: round_key
+  notes: 'Serpent round with key mixing, bitslice 4x4 S-box layer, and linear transformation.
+
+    '
+- id: camellia_round
+  name: Camellia Feistel Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      branch_bits: 64
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    constant_injection: subkeys
+  notes: 'Camellia Feistel round using F-function S-box/linear layer; FL/FLINV layers
+    are inserted every six rounds.
+
+    '
+- id: simon_round
+  name: SIMON Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 32
+      - 48
+      - 64
+      - 96
+      - 128
+    component_flow:
+    - component_id: rotation_fixed
+    - component_id: and
+    - component_id: xor
+    - component_id: constant
+    constant_injection: z_sequence
+  notes: 'SIMON Feistel round using AND/XOR and rotations with round constants.
+
+    '
+- id: speck_round
+  name: SPECK Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 32
+      - 48
+      - 64
+      - 96
+      - 128
+    component_flow:
+    - component_id: rotation_fixed
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    constant_injection: round_key
+  notes: 'SPECK ARX round using opposite-direction rotations, modular addition, and
+    XOR with round key.
+
+    '
+- id: prince_round
+  name: PRINCE Core Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'PRINCE forward/backward core round with S-layer and linear mixing.
+
+    '
+- id: led_round
+  name: LED Step Round
+  kind: step
+  spec:
+    state_model:
+      state_bits: 64
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: word_permutation
+      params:
+        word_size_bits: 4
+    - component_id: field_matrix_mul
+      params:
+        field_size: 16
+    - component_id: xor
+    constant_injection: step_constant
+  notes: 'LED step transformation (SubCells, ShiftRows, MixColumnsSerial, AddConstants/AddRoundKey).
+
+    '
+- id: katan_round
+  name: KATAN Update Round
+  kind: step
+  spec:
+    state_model:
+      state_bits_options:
+      - 32
+      - 48
+      - 64
+    component_flow:
+    - component_id: lfsr
+    - component_id: nlfsr
+    - component_id: and
+    - component_id: xor
+    - component_id: constant
+    constant_injection: irregular_sequence
+  notes: 'KATAN round as coupled shift-register updates with non-linear taps.
+
+    '
+- id: ktantan_round
+  name: KTANTAN Update Round
+  kind: step
+  spec:
+    state_model:
+      state_bits_options:
+      - 32
+      - 48
+      - 64
+    component_flow:
+    - component_id: lfsr
+    - component_id: nlfsr
+    - component_id: and
+    - component_id: xor
+    - component_id: constant
+    constant_injection: irregular_sequence
+  notes: 'KTANTAN hardware-embedded-key update round; structurally related to KATAN.
+
+    '
+- id: cast128_round
+  name: CAST-128 Feistel Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: sub_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - component_id: rotation_variable
+    constant_injection: subkeys
+  notes: 'CAST-128 round family uses key-dependent choice of F-function type (add/sub/xor
+    + data-dependent rotate + S-box mix) in a Feistel structure.
+
+    '
+- id: cast256_round
+  name: CAST-256 Quad-Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      branch_bits: 32
+      branches: 4
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: sub_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - component_id: rotation_variable
+    constant_injection: subkeys
+  notes: 'CAST-256 uses CAST-style round functions arranged in a 4-branch generalized
+    Feistel schedule.
+
+    '
+- id: rc5_round
+  name: RC5 Data-Dependent Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 32
+      - 64
+      - 128
+    component_flow:
+    - component_id: xor
+    - component_id: rotation_variable
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    constant_injection: subkeys
+  notes: 'RC5 round core with XOR, data-dependent rotation, and modular addition.
+
+    '
+- id: seed_round
+  name: SEED Feistel Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      branch_bits: 64
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: sub_mod
+      params:
+        modulus: 4294967296
+    - component_id: rotation_fixed
+    constant_injection: subkeys
+  notes: 'SEED 16-round Feistel structure with keyed round function over two 32-bit
+    words, using S-box layers and modular arithmetic.
+
+    '
+- id: aria_round
+  name: ARIA Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: binary_matrix_mul
+    constant_injection: round_keys
+  notes: 'ARIA alternates two substitution layers and a linear diffusion layer; round
+    count depends on key length.
+
+    '
+- id: rc4_ksa
+  name: RC4 Key Scheduling Algorithm
+  kind: other
+  spec:
+    description: Initializes 256-byte permutation from variable key
+  notes: 'RC4 KSA initializes a 256-byte permutation array from a variable-length
+    key (1–256 bytes), applying swap operations in a deterministic sequence. Essential
+    for producing a key-dependent initial state before PRGA.
+
+    '
+- id: rc4_prga
+  name: RC4 Pseudo-Random Generation Algorithm
+  kind: other
+  spec:
+    description: Generates keystream bytes from permutation state
+  notes: 'RC4 PRGA generates one byte of keystream per iteration by advancing two
+    state indices, performing a swap, and extracting an output byte. This update is
+    applied repeatedly to generate arbitrary keystream lengths.
+
+    '
+- id: rc6_round
+  name: RC6 Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      word_bits: 32
+    component_flow:
+    - component_id: xor
+    - component_id: mul_mod
+      params:
+        modulus: 4294967296
+    - component_id: rotation_variable
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    constant_injection: subkeys
+  notes: 'RC6 ARX-style round with data-dependent rotation and integer multiplication.
+
+    '
+- id: sm4_round
+  name: SM4 Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      word_bits: 32
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: rotation_fixed
+    - component_id: xor
+    constant_injection: round_constants
+  notes: 'SM4 32-round update with tau non-linear substitution and linear diffusion.
+
+    '
+- id: kasumi_round
+  name: KASUMI Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: or
+    - component_id: rotation_fixed
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    constant_injection: subkeys
+  notes: 'KASUMI Feistel round composed from FL and FO/FI subfunctions.
+
+    '
+- id: clefia_round
+  name: CLEFIA GFN Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      branches: 4
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: binary_matrix_mul
+    constant_injection: subkeys
+  notes: 'CLEFIA uses a 4-branch generalized Feistel network in the data path.
+
+    '
+- id: twine_round
+  name: TWINE Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branches: 16
+      nibble_bits: 4
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: xor
+    - component_id: word_permutation
+      params:
+        word_size_bits: 4
+    constant_injection: round_constants
+  notes: 'TWINE is a lightweight 16-branch generalized Feistel block cipher.
+
+    '
+- id: crypton_round
+  name: CRYPTON Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: binary_matrix_mul
+    constant_injection: round_constants
+  notes: 'CRYPTON SPN round with byte substitution, word permutation, and linear diffusion
+    layer.
+
+    '
+- id: deal_round
+  name: DEAL Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      branch_bits: 64
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 6
+        output_bits: 4
+    - component_id: bit_permutation
+    constant_injection: subkeys
+  notes: 'DEAL Feistel round with DES as the inner round function; each 128-bit round
+    uses a full DES encryption on the 64-bit branch.
+
+    '
+- id: dfc_round
+  name: DFC Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      branch_bits: 64
+    component_flow:
+    - component_id: mul_mod
+      params:
+        modulus: 9223372036854775807
+    - component_id: add_mod
+      params:
+        modulus: 18446744073709551616
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: xor
+    constant_injection: subkeys
+  notes: 'DFC Feistel round using affine mapping over near-prime field combined with
+    an S-box for decorrelation.
+
+    '
+- id: e2_round
+  name: E2 Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      branch_bits: 64
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: rotation_fixed
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    constant_injection: subkeys
+  notes: 'E2 Feistel round with initial and final key mixing layers (IT/FT) and a
+    bijective round function using S-boxes and byte operations.
+
+    '
+- id: frog_round
+  name: FROG Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: xor
+    constant_injection: internal_key
+  notes: 'FROG round uses a pseudo-random permutation derived from the key; each of
+    the eight rounds applies key-dependent byte permutations and S-boxes.
+
+    '
+- id: hpc_round
+  name: HPC Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: xor
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: rotation_fixed
+    constant_injection: subkeys
+  notes: 'Hasty Pudding Cipher round using spice values and key-derived tables; structure
+    varies with block size (tiny/short/medium/standard/extended).
+
+    '
+- id: loki97_round
+  name: LOKI97 Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      branch_bits: 64
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 13
+        output_bits: 8
+    - component_id: rotation_fixed
+    - component_id: binary_matrix_mul
+    constant_injection: subkeys
+  notes: 'LOKI97 Feistel round with large permuted S-box (13-bit input), linear transformation,
+    and complex key schedule.
+
+    '
+- id: magenta_round
+  name: MAGENTA Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      branch_bits: 64
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+    constant_injection: subkeys
+  notes: 'MAGENTA Feistel round using the PE function built recursively from GF(2^8)
+    multiply and S-box operations.
+
+    '
+- id: mars_round
+  name: MARS Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+      word_bits: 32
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: mul_mod
+      params:
+        modulus: 4294967296
+    - component_id: rotation_variable
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - component_id: rotation_fixed
+    constant_injection: subkeys
+  notes: 'MARS heterogeneous structure: mixing phases use ARX; keying phases use E-function
+    with S-boxes, integer multiplication, and data-dependent rotations.
+
+    '
+- id: safer_plus_round
+  name: SAFER+ Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: xor
+    - component_id: add_mod
+      params:
+        modulus: 256
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: sub_mod
+      params:
+        modulus: 256
+    - component_id: binary_matrix_mul
+    constant_injection: round_keys
+  notes: 'SAFER+ SPN round with alternating XOR/byte-add key mixing, exponential/logarithm
+    S-boxes, and Pseudo-Hadamard Transform (PHT) diffusion.
+
+    '
+- id: aradi_round
+  name: ARADI Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'Representative ARADI round abstraction for low-latency SPN-style memory-encryption
+    use cases.
+
+    '
+- id: bipbip_round
+  name: BipBip Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 24
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'BipBip low-latency tweakable-round abstraction with compact dimensions.
+
+    '
+- id: qarma_round
+  name: QARMA Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 64
+      - 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_tweakey
+  notes: 'QARMA reflection-cipher style round abstraction used in a tweakable Even-Mansour
+    design for low-latency memory encryption.
+
+    '
+- id: qarmav2_round
+  name: QARMAv2 Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 64
+      - 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_tweakey
+  notes: 'QARMAv2 round abstraction with revised linear and tweak/key scheduling choices
+    versus QARMA, while preserving low-latency goals.
+
+    '
+- id: scarf_round
+  name: SCARF Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 10
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_key
+  notes: 'SCARF is designed for secure cache-randomization and very small block size
+    operation on critical latency paths.
+
+    '
+- id: ulbc_round
+  name: uLBC Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: word_permutation
+      params:
+        word_size_bits: 4
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'uLBC low-latency nibble-oriented round abstraction for 128-bit block variants.
+
+    '
+- id: blink_round
+  name: Blink Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 64
+      - 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_tweakey
+  notes: 'Blink round abstraction in the THF low-latency tweakable block-cipher framework.
+
+    '
+- id: chilow_round
+  name: ChiLow Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 32
+      - 40
+    component_flow:
+    - component_id: xor
+    - component_id: binary_matrix_mul
+    - component_id: constant
+    constant_injection: round_tweakey
+  notes: 'ChiLow round abstraction for embedded code encryption with extremely low-latency
+    decryption targets.
+
+    '
+- id: msx_round
+  name: MSX Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 64
+      - 128
+      branch_bits: 16
+      branches_options:
+      - 2
+      - 4
+    component_flow:
+    - component_id: mul_mod
+      params:
+        modulus: 4294967296
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_fixed
+    constant_injection: round_key
+  notes: 'MSX generalized-Feistel/ARX-style round abstraction targeting efficient
+    software on microcontrollers.
+
+    '
+- id: ascon_permutation_round
+  name: Ascon-p Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 320
+      lanes: 5
+      lane_bits: 64
+    component_flow:
+    - component_id: constant
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: rotation_fixed
+    constant_injection: round_constant
+  notes: 'Ascon-p round abstraction with constant addition, nonlinear bit-sliced substitution
+    layer, and linear diffusion via lane rotations. Section 3 of NIST SP 800-232 gives
+    the official permutation name "Ascon-p".
+
+    '
+- id: photon_permutation_round
+  name: PHOTON Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 256
+    component_flow:
+    - component_id: constant
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: word_permutation
+      params:
+        word_size_bits: 4
+    - component_id: field_matrix_mul
+      params:
+        field_size: 16
+    constant_injection: round_constant
+  notes: 'PHOTON permutation round abstraction over a nibble state with AddConstant,
+    S-box, row/column permutation, and MixColumns-like diffusion.
+
+    '
+- id: skinny_round
+  name: SKINNY Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 64
+      - 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: constant
+    - component_id: xor
+    - component_id: bit_permutation
+    constant_injection: round_tweakey
+  notes: 'SKINNY round abstraction with substitution layer, round constants, tweakey
+    injection, and lightweight permutation-based diffusion.
+
+    '
+- id: sparkle_permutation_step
+  name: SPARKLE Permutation Step
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 256
+      - 384
+      - 512
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: step_constant
+  notes: 'SPARKLE step abstraction based on ARX Alzette boxes and a linear layer,
+    used in the SCHWAEMM/ESCH suite.
+
+    '
+- id: tinyjambu_state_update
+  name: TinyJambu State Update
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: nlfsr
+    - component_id: and
+    - component_id: xor
+    - component_id: constant
+    constant_injection: key_bits
+  notes: 'TinyJambu state-update abstraction using NLFSR-like feedback and key-dependent
+    nonlinear terms.
+
+    '
+- id: xoodoo_permutation_round
+  name: Xoodoo Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 384
+      planes: 3
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'Xoodoo round abstraction with theta-like mixing, chi-like nonlinearity,
+    and lane shifts across a 3-plane 384-bit state.
+
+    '
+- id: elephant_mode_step
+  name: Elephant Mode Step
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 160
+      - 176
+      - 200
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: domain_constant
+  notes: 'Elephant mode step abstraction over lightweight permutation cores used by
+    Dumbo, Jumbo, and Delirium variants.
+
+    '
+- id: romulus_skinny_step
+  name: Romulus SKINNY Step
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: xor
+    - component_id: constant
+    - component_id: bit_permutation
+    constant_injection: tweakey
+  notes: 'Romulus round abstraction based on SKINNY-128 tweakey-based round transformations.
+
+    '
+- id: isap_permutation_step
+  name: ISAP Permutation Step
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 320
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'ISAP permutation step abstraction based on ASCON-like 320-bit permutation
+    rounds and domain-separated processing.
+
+    '
+- id: grain_128_state_update
+  name: Grain-128 State Update
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 256
+    component_flow:
+    - component_id: lfsr
+    - component_id: nlfsr
+    - component_id: xor
+    - component_id: and
+    constant_injection: key_iv_mixing
+  notes: 'Grain-128 state update abstraction with coupled LFSR/NLFSR feedback and
+    nonlinear output filtering.
+
+    '
+- id: gimli_permutation_round
+  name: Gimli Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 384
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'Gimli round abstraction with ARX quarter-round style lane updates, small
+    swaps, and periodic constants.
+
+    '
+- id: subterranean_duplex_round
+  name: Subterranean Duplex Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 257
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: rotation_fixed
+    constant_injection: domain_bit
+  notes: 'Subterranean duplex round abstraction over a 257-bit state with nonlinear
+    chi-style update and bit-level diffusion.
+
+    '
+- id: drygascon_permutation_round
+  name: DryGASCON Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 320
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'DryGASCON round abstraction over a GASCON-like permutation core for dry
+    sponge style authenticated encryption.
+
+    '
+- id: sneik_permutation_round
+  name: SNEIK Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 256
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'SNEIK round abstraction for a lightweight ARX-style permutation used in
+    the NIST LWC process.
+
+    '
+- id: sycon_permutation_round
+  name: Sycon Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 320
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+    - component_id: xor
+    - component_id: bit_permutation
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'Sycon round abstraction over a lightweight permutation with nonlinear substitution
+    and permutation-based diffusion.
+
+    '
+- id: spix_permutation_round
+  name: SPIX Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 256
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'SPIX round abstraction based on a compact permutation core for lightweight
+    authenticated encryption.
+
+    '
+- id: spoc_permutation_round
+  name: SpoC Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 256
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'SpoC round abstraction over a lightweight permutation core in a sponge-like
+    authenticated encryption design.
+
+    '
+- id: spook_permutation_round
+  name: Spook Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 256
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'Spook round abstraction over a permutation-driven mode with lightweight
+    authenticated encryption targets.
+
+    '
+- id: knot_permutation_round
+  name: KNOT Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 256
+      - 384
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'KNOT permutation round abstraction with nibble-oriented nonlinearity and
+    lightweight diffusion for constrained environments.
+
+    '
+- id: pyjamask_round
+  name: Pyjamask Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 96
+      - 128
+    component_flow:
+    - component_id: xor
+    - component_id: binary_matrix_mul
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'Pyjamask round abstraction using linear layer-heavy ARX-like operations
+    with lightweight software-oriented design.
+
+    '
+- id: qameleon_round
+  name: Qameleon Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: xor
+    - component_id: constant
+    - component_id: bit_permutation
+    constant_injection: round_tweakey
+  notes: 'Qameleon round abstraction as a tweakable lightweight block-cipher style
+    transformation with nibble-based nonlinearity.
+
+    '
+- id: saturnin_round
+  name: Saturnin Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 256
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: xor
+    - component_id: binary_matrix_mul
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'Saturnin round abstraction with SPN-like nonlinear and linear layers over
+    a 256-bit state.
+
+    '
+- id: simple_permutation_round
+  name: SIMPLE Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 256
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: rotation_fixed
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'SIMPLE round abstraction over a lightweight permutation core intended for
+    authenticated encryption in constrained settings.
+
+    '
+- id: trifle_round
+  name: TRIFLE Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: xor
+    - component_id: constant
+    - component_id: bit_permutation
+    constant_injection: round_tweakey
+  notes: 'TRIFLE round abstraction for a lightweight tweakable block-cipher style
+    primitive used in NIST LWC submissions.
+
+    '
+- id: ace_round
+  name: ACE round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 320
+    component_flow:
+    - component_id: and
+    - component_id: rotation_fixed
+    - component_id: xor
+    - component_id: word_permutation
+      params:
+        word_size_bits: 64
+    - component_id: constant
+  notes: ACE-step abstraction over five 64-bit words with SB-64 nonlinear processing
+    and word shuffling.
+- id: akelarre_round
+  name: Akelarre round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: rotation_variable
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+  notes: 'Round abstraction for Akelarre''s addition-rotation structure over four
+    32-bit words (with data/key-dependent rotations).
+
+    '
+- id: crisp_round
+  name: CRISP round
+  kind: full_round
+  spec:
+    state_model:
+      left_bits: 64
+      right_bits: 64
+    component_flow:
+    - component_id: bit_permutation
+    - component_id: sbox
+      params:
+        input_bits: 11
+        output_bits: 8
+    - component_id: xor
+  notes: 'Feistel round function with 64->88 expansion, subkey mixing, 11x8 S-boxes,
+    and key-dependent S2 post-processing.
+
+    '
+- id: ant_round
+  name: ANT round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: and
+    - component_id: rotation_fixed
+    - component_id: xor
+  notes: Feistel round based on AND-Rotation-XOR (ARX-like bit-level design).
+- id: anubis_round
+  name: Anubis round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    - component_id: constant
+  notes: Byte-oriented wide-trail SPN round abstraction with involutional design components.
+- id: ballet_round
+  name: Ballet round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+    - component_id: rotation_fixed
+    - component_id: xor
+  notes: ARX-style round used across Ballet variants.
+- id: bear_lion_round
+  name: BEAR/LION round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: belt_round
+  name: BelT round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: bit_permutation
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_constant
+    state_model:
+      block_bits: 128
+      word_bits: 32
+  notes: 'BelT SPN round: byte substitution, row permutation, column mix, key XOR.'
+- id: bleep64_round
+  name: Bleep64 round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: blowfish_2_round
+  name: Blowfish round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - component_id: xor
+    constant_injection: none
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+  notes: Blowfish Feistel round using key-dependent S-boxes and ARX mixing (duplicate
+    entry).
+- id: chaskey_round
+  name: Chaskey round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: cilipadi_round
+  name: CiliPadi round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: cipherunicorn_a_round
+  name: CIPHERUNICORN-A round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: rotation_fixed
+    - component_id: xor
+    constant_injection: subkey
+    state_model:
+      state_bits: 128
+      branch_bits: 64
+  notes: 'CIPHERUNICORN-A Feistel round: 8-bit S-box, 32-bit add, rotate, XOR.'
+- id: cipherunicorn_e_round
+  name: CIPHERUNICORN-E round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: rotation_fixed
+    - component_id: xor
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+  notes: CIPHERUNICORN-E Feistel round.
+- id: clae_round
+  name: CLAE round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: clx_round
+  name: CLX round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: cmea_round
+  name: CMEA round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: lookup_table
+    - component_id: xor
+    - component_id: add_mod
+      params:
+        modulus: 256
+  notes: CMEA 3-pass byte-oriented processing (no formal round structure).
+- id: comet_round
+  name: COMET round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: cs_cipher_round
+  name: CS-Cipher round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: linear_transform
+    - component_id: xor
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+  notes: 'CS-Cipher SPN round (3 sub-steps: substitution, linear layer, key add).'
+- id: deoxys_round
+  name: Deoxys round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    constant_injection: tweakey_xor
+    state_model:
+      state_bits: 128
+      word_bits: 8
+      tweakey_bits: 256
+  notes: 'Deoxys TWEAKEY round: SubBytes, ShiftRows, MixBytes, AddTweakey.'
+- id: desx_round
+  name: DESX round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: enocoro_128v2_round
+  name: Enocoro-128v2 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: lfsr
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: xor
+    constant_injection: none
+    state_model:
+      state_bits: 320
+  notes: Enocoro-128v2 state update step with shift register and S-box nonlinearity.
+- id: estate_round
+  name: ESTATE round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: fantomas_robin_round
+  name: Fantomas / Robin round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    constant_injection: round_constant
+    state_model:
+      state_bits: 128
+      word_bits: 4
+  notes: 'Fantomas/Robin LS-Design round: 4-bit S-box layer, binary linear code diffusion,
+    key XOR.'
+- id: feal_round
+  name: FEAL round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: fesh_round
+  name: FESH round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+    - component_id: bit_permutation
+    - component_id: xor
+  notes: SPN round with substitution and permutation layers.
+- id: flexaead_round
+  name: FlexAEAD round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: forkae_round
+  name: ForkAE round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: fountain_round
+  name: Fountain round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: gage_and_ingage_round
+  name: GAGE and InGAGE round
+  kind: step
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: bit_permutation
+    - component_id: xor
+  notes: 'GAGE permutation step: nibble substitution, bit permutation, constant XOR.'
+- id: gost_28147_89_round
+  name: GOST 28147-89 (Magma) round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: grand_cru_round
+  name: Grand Cru round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+    - component_id: xor
+    constant_injection: round_key_xor
+    state_model:
+      state_bits: 128
+      word_bits: 8
+  notes: 'Grand Cru AES-like round: SubBytes, ShiftRows, MixColumns, AddRoundKey.'
+- id: hern_and_heron_round
+  name: HERN & HERON round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: bit_permutation
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_constant
+    state_model:
+      state_bits: 128
+  notes: 'HERN/HERON SPN round: nibble substitution, bit permutation, constant and
+    key XOR.'
+- id: hight_round
+  name: HIGHT round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: add_mod
+      params:
+        modulus: 256
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+      word_bits: 8
+      branches: 8
+  notes: 'HIGHT GFN round: XOR, rotation, and 8-bit modular addition with subkeys.'
+- id: hyena_round
+  name: HyENA round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: ice_round
+  name: ICE round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: isaac_round
+  name: ISAAC round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: kcipher_2_round
+  name: KCipher-2 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: lfsr
+    - component_id: sbox
+      params:
+        input_bits: 32
+        output_bits: 32
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    constant_injection: none
+    state_model:
+      state_bits: 640
+  notes: 'KCipher-2 state update: two GF(2^32) LFSRs + two memory registers + NL S-boxes.'
+- id: khazad_round
+  name: Khazad round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: klein_round
+  name: KLEIN round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: rotation_fixed
+    - component_id: field_matrix_mul
+      params:
+        field_size: 16
+    - component_id: xor
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+      word_bits: 4
+  notes: 'KLEIN round: SubNibbles, RotateNibbles, MixNibbles (MDS over GF(2^4)), KeyXOR.'
+- id: kuznyechik_round
+  name: Kuznyechik round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: linear_transform
+    constant_injection: round_key_xor
+    state_model:
+      state_bits: 128
+      word_bits: 8
+  notes: 'Kuznyechik round: AddRoundKey (XOR), SubBytes (π), LinearTransform (X=τ∘λ).'
+- id: laem_round
+  name: LAEM round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: lea_round
+  name: LEA round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_fixed
+    constant_injection: subkey
+    state_model:
+      state_bits: 128
+      word_bits: 32
+  notes: 'LEA ARX round: 32-bit modular add, XOR, and fixed rotations on four 32-bit
+    words.'
+- id: lea_128_round
+  name: LEA-128 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_fixed
+    constant_injection: subkey
+    state_model:
+      state_bits: 128
+      word_bits: 32
+  notes: LEA-128 round (same structure as LEA with 128-bit key).
+- id: leviathan_round
+  name: LEVIATHAN round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: xor
+    - component_id: rotation_fixed
+    constant_injection: counter
+    state_model:
+      state_bits: 128
+  notes: LEVIATHAN block-cipher-based keystream generation step.
+- id: lili_128_round
+  name: LILI-128 round
+  kind: step
+  spec:
+    component_flow:
+    - component_id: lfsr
+    - component_id: absg_decimation
+    - component_id: boolean_filter
+  notes: 'LILI-128 step: LFSRC clocks LFSRD irregularly; nonlinear filter on LFSRD
+    state.'
+- id: lilliput_ae_round
+  name: Lilliput-AE round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: limdolen_round
+  name: Limdolen round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: locus_round
+  name: LOCUS round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: loki_round
+  name: LOKI round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 12
+        output_bits: 8
+    - component_id: rotation_fixed
+    - component_id: xor
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+  notes: 'LOKI Feistel round: 12-bit to 8-bit S-box lookup, rotation, XOR with subkey.'
+- id: lotus_round
+  name: LOTUS round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: mantis_round
+  name: MANTIS round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: bit_permutation
+    - component_id: xor
+    - component_id: constant
+    constant_injection: tweakey_xor
+    state_model:
+      state_bits: 64
+      word_bits: 4
+      tweakey_bits: 128
+  notes: 'MANTIS half-round: SubCells, PermCells (ShuffleSlices), MixSlices, AddConstant,
+    AddTweakey.'
+- id: mcrypton_round
+  name: MCRYPTON round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: bit_permutation
+    - component_id: xor
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+      word_bits: 4
+  notes: 'mCrypton SPN round: nibble substitution, bit permutation, key XOR.'
+- id: mibs_round
+  name: MIBS round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: bit_permutation
+    - component_id: xor
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+  notes: 'MIBS Feistel round: nibble substitution, nibble permutation, key XOR.'
+- id: midori_round
+  name: MIDORI round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: bit_permutation
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_constant
+    state_model:
+      state_bits: 64
+      word_bits: 4
+  notes: 'Midori64 round: SubCell (4-bit SB), ShuffleCell, MixColumn, XOR key+constant.'
+- id: misty1_round
+  name: MISTY1 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 9
+        output_bits: 9
+    - component_id: sbox
+      params:
+        input_bits: 7
+        output_bits: 7
+    - component_id: xor
+    - component_id: and
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+  notes: MISTY1 FO outer Feistel round (contains 3 FI sub-rounds with S7 and S9 S-boxes).
+- id: mixfeed_round
+  name: mixFeed round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: mmb_round
+  name: MMB round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: mul_mod
+      params:
+        modulus: 4294967295
+    - component_id: xor
+    constant_injection: subkey
+    state_model:
+      state_bits: 128
+      word_bits: 32
+  notes: 'MMB round: key XOR, four 32-bit modular multiplications (mod 2^32-1), key
+    XOR.'
+- id: mugi_round
+  name: MUGI round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+    - component_id: xor
+    constant_injection: none
+    state_model:
+      state_bits: 1088
+  notes: 'MUGI state update (ρ function): AES-based nonlinear update on 17-word state
+    plus buffer.'
+- id: multi_s01_round
+  name: MULTI-S01 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: lfsr
+    - component_id: nlfsr
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: xor
+    constant_injection: none
+    state_model:
+      state_bits: 512
+  notes: MULTI-S01 keystream generation step using multiple shift registers and S-box
+    combination.
+- id: multi2_round
+  name: MULTI2 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: and
+    - component_id: or
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+      word_bits: 32
+  notes: MULTI2 round with four π-functions on two 32-bit words (add, XOR, rotate,
+    AND/OR).
+- id: nimbus_round
+  name: Nimbus round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+  notes: 'Nimbus SPN round: nibble substitution, binary MDS mixing, key XOR.'
+- id: noekeon_round
+  name: NOEKEON round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: constant
+    constant_injection: round_constant
+    state_model:
+      state_bits: 128
+      word_bits: 32
+  notes: 'NOEKEON round: θ (linear XOR), π1/π2 (rotations), γ (4-bit S-box), ι (constant
+    XOR).'
+- id: nush_round
+  name: NUSH round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: rotation_fixed
+    - component_id: xor
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+      word_bits: 32
+  notes: 'NUSH round: modular addition, fixed rotation, XOR (no S-boxes).'
+- id: orange_round
+  name: ORANGE round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: oribatida_round
+  name: Oribatida round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: oryx_round
+  name: ORYX round
+  kind: step
+  spec:
+    component_flow:
+    - component_id: lfsr
+    - component_id: lookup_table
+    - component_id: xor
+  notes: 'ORYX keystream step: coupled LFSR advancement and table-driven nonlinear
+    output.'
+- id: pea_round
+  name: PEA round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: bit_permutation
+    - component_id: xor
+  notes: PEA round (placeholder — specification not confirmed).
+- id: picaro_round
+  name: PICARO round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: linear_transform
+    - component_id: xor
+    constant_injection: round_key_xor
+    state_model:
+      state_bits: 128
+      word_bits: 8
+  notes: 'PICARO round: byte substitution (GF inverse-based S-box), linear diffusion,
+    key XOR.'
+- id: pride_round
+  name: PRIDE round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: bit_permutation
+    constant_injection: round_constant
+    state_model:
+      state_bits: 64
+      word_bits: 4
+  notes: 'PRIDE round: key/constant XOR, 4-bit S-box layer, decomposed linear layer
+    (four 16-bit maps).'
+- id: princev2_round
+  name: PRINCEv2 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_constant
+    state_model:
+      state_bits: 64
+      word_bits: 4
+  notes: 'PRINCEv2 round: 4-bit S-box, ShiftRows, MixColumns (M'' matrix), round constant,
+    key XOR.'
+- id: q_round
+  name: Q round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: quartet_round
+  name: Quartet round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: rc2_round
+  name: RC2 round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: rc4plus_round
+  name: RC4+ round
+  kind: step
+  spec:
+    component_flow:
+    - component_id: permutation
+    - component_id: add_mod
+      params:
+        modulus: 256
+    - component_id: xor
+  notes: 'RC4+ PRGA step: swap, additional mixing in permutation table, output XOR.'
+- id: rc4a_round
+  name: RC4A round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: remus_round
+  name: REMUS round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: saeaes_round
+  name: SAEAES round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: safer_round
+  name: SAFER round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: xor
+    - component_id: add_mod
+      params:
+        modulus: 256
+    - component_id: constant
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+      word_bits: 8
+  notes: 'SAFER round: alternating exp/log S-boxes with XOR and 8-bit modular addition
+    layers.'
+- id: saferpp_round
+  name: SAFER++ round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: xor
+    - component_id: add_mod
+      params:
+        modulus: 256
+    - component_id: linear_transform
+    constant_injection: subkey
+    state_model:
+      state_bits: 64
+      word_bits: 8
+  notes: 'SAFER++ round: exp/log S-boxes, XOR/add key mixing, PHT diffusion.'
+- id: sc2000_round
+  name: SC2000 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: sbox
+      params:
+        input_bits: 2
+        output_bits: 2
+    - component_id: linear_transform
+    - component_id: xor
+    constant_injection: subkey
+    state_model:
+      state_bits: 128
+      word_bits: 4
+  notes: 'SC2000 round: combined 2-bit and 4-bit S-box layers, MDS linear transform,
+    key XOR.'
+- id: shacal_round
+  name: SHACAL round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: shacal2_round
+  name: SHACAL2 round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: shamash_and_shamashash_round
+  name: Shamash & Shamashash round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: shark_round
+  name: SHARK round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: skipjack_round
+  name: SKIPJACK round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: snow_round
+  name: SNOW round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: snow_2_0_round
+  name: SNOW 2.0 round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: snow_3g_round
+  name: SNOW 3G round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: sober_t16_round
+  name: SOBER-t16 round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: sober_t32_round
+  name: SOBER-t32 round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: sosemanuk1_round
+  name: SOSEMANUK1 round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: speckey_round
+  name: SPECKEY round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: speedy_round
+  name: SPEEDY round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: spritz_round
+  name: Spritz round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: square_round
+  name: SQUARE round
+  kind: full_round
+  spec:
+    state_model:
+      layout: 4x4_bytes
+      state_bits: 128
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'SQUARE round abstraction with byte substitution, diffusion, transposition,
+    and round-key mixing over a 128-bit 4x4-byte state.
+
+    '
+- id: thank_goodness_it_s_friday_round
+  name: Thank Goodness It's Friday (TGIF) round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: three_key_triple_des_round
+  name: Three-key Triple DES round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: bit_permutation
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 6
+        output_bits: 4
+    - component_id: bit_permutation
+    constant_injection: none
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+  notes: DES Feistel round as used in 3TDEA (identical to single-DES round; applied
+    48 times).
+- id: threefish_round
+  name: Threefish round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: treyfer_round
+  name: TREYFER round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: triad_round
+  name: Triad round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: trivium_round
+  name: Trivium round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: two_key_triple_des_round
+  name: Two-key Triple DES round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: ublock_round
+  name: uBlock round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+    - component_id: word_permutation
+    - component_id: xor
+  notes: uBlock round uses 4-bit S-boxes and byte-level permutation layers.
+- id: uea2_zuc_round
+  name: UEA2 / ZUC round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: lfsr
+    - component_id: add_mod
+      params:
+        modulus: 2147483647
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: linear_transform
+    - component_id: xor
+    constant_injection: none
+    state_model:
+      state_bits: 512
+      word_bits: 31
+  notes: 'ZUC step: LFSR over GF(2^31-1), two-register FSM with S-boxes (S0, S1),
+    output XOR.'
+- id: vmpc_round
+  name: VMPC round
+  kind: step
+  spec:
+    component_flow:
+    - component_id: permutation
+    - component_id: t_function
+    - component_id: xor
+  notes: 'VMPC PRGA step: T-function-based permutation update, keystream byte output.'
+- id: wage_round
+  name: WAGE round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: wake_round
+  name: WAKE round
+  kind: step
+  spec:
+    component_flow:
+    - component_id: lookup_table
+    - component_id: xor
+  notes: 'WAKE keystream step: table-driven auto-key 32-bit word generation.'
+- id: xchacha_round
+  name: XChaCha round
+  kind: quarterround
+  spec:
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_fixed
+    constant_injection: counter
+    state_model:
+      state_bits: 512
+      word_bits: 32
+  notes: 'XChaCha20 quarter-round (identical to ChaCha20''s): a+=b; d^=a; d<<<16;
+    etc.'
+- id: xxtea_round
+  name: XXTEA round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: xxtea_corrected_block_tea_round
+  name: XXTEA / Corrected Block TEA round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: yarara_and_coral_round
+  name: Yarara and Coral round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: Generic placeholder round entry pending full parameter extraction.
+- id: raindrop_round
+  name: Raindrop round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+    - component_id: bit_permutation
+    - component_id: xor
+  notes: Feistel-based round function with SP-style nonlinear and diffusion layers.
+- id: smba_round
+  name: SMBA round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+    - component_id: bit_permutation
+    - component_id: xor
+  notes: Generalized-Feistel round with S-box and linear diffusion operations.
+- id: fbc_round
+  name: FBC round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+    - component_id: rotation_fixed
+    - component_id: xor
+  notes: Generalized-Feistel round with nonlinear and word-rotation mixing.
+- id: nbc_round
+  name: NBC round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+    - component_id: xor
+  notes: Generalized-Feistel round driven by a 16-bit S-box nonlinear layer.
+- id: tangram_round
+  name: TANGRAM round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+    - component_id: rotation_fixed
+    - component_id: xor
+  notes: Bit-sliced SPN round with SubColumn and ShiftRow-style transforms.
+- id: spring_round
+  name: SPRING round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: nlfsr
+    - component_id: bit_permutation
+    - component_id: xor
+    - component_id: constant
+  notes: 'SPRING is an SP-style lightweight block cipher family using an NFSR-based
+    32-bit nonlinear layer and permutation/key-mixing operations.
+
+    '
+- id: achterbahn_clock
+  name: Achterbahn Clock Step
+  kind: step
+  spec: {}
+- id: aes_prime_128_round
+  name: AES' 128-bit Round
+  kind: full_round
+  spec: {}
+- id: aes_round
+  name: AES Round
+  kind: full_round
+  spec: {}
+- id: cilipadi_permutation_round
+  name: CiliPadi Permutation Round
+  kind: full_round
+  spec: {}
+- id: clx_permutation_round
+  name: CLX Permutation Round
+  kind: full_round
+  spec: {}
+- id: comet_block_cipher_round
+  name: COMET Block Cipher Round
+  kind: full_round
+  spec: {}
+- id: decim_clock
+  name: DECIM Clock Step
+  kind: step
+  spec: {}
+- id: estate_tbc_round
+  name: ESTATE Tweakable Block Cipher Round
+  kind: full_round
+  spec: {}
+- id: f_fcsr_step
+  name: F-FCSR Step
+  kind: step
+  spec: {}
+- id: fnv1_byte_step
+  name: FNV-1 Byte Step
+  kind: step
+  spec: {}
+- id: forkskinny_round
+  name: ForkSKINNY Round
+  kind: full_round
+  spec: {}
+- id: fountain_state_update
+  name: Fountain State Update
+  kind: step
+  spec: {}
+- id: grain_clock
+  name: Grain Clock Step
+  kind: step
+  spec: {}
+- id: haval_pass
+  name: HAVAL Pass
+  kind: other
+  spec: {}
+- id: hc256_step
+  name: HC-256 Step
+  kind: step
+  spec: {}
+- id: hyena_hyfb_round
+  name: HYENA HyFB Round
+  kind: full_round
+  spec: {}
+- id: laem_simon_round
+  name: LAEM-SIMON Round
+  kind: full_round
+  spec: {}
+- id: lilliput_tbc_round
+  name: Lilliput-TBC Round
+  kind: full_round
+  spec: {}
+- id: lucifer_round
+  name: Lucifer Round
+  kind: full_round
+  spec: {}
+- id: macguffin_round
+  name: MacGuffin Round
+  kind: full_round
+  spec: {}
+- id: md2_compression_round
+  name: MD2 Compression Round
+  kind: full_round
+  spec: {}
+- id: md4_round
+  name: MD4 Round
+  kind: full_round
+  spec: {}
+- id: md5_round
+  name: MD5 Round
+  kind: full_round
+  spec: {}
+- id: mickey_clock
+  name: MICKEY Clock Step
+  kind: step
+  spec: {}
+- id: mir_1_step
+  name: MIR-1 Step
+  kind: step
+  spec: {}
+- id: photon256_round
+  name: PHOTON-256 Round
+  kind: full_round
+  spec: {}
+- id: photon_beetle_round
+  name: PHOTON-Beetle Round
+  kind: full_round
+  spec: {}
+- id: rabbit_iteration
+  name: Rabbit Iteration
+  kind: step
+  spec: {}
+- id: ripemd_round
+  name: RIPEMD Round
+  kind: full_round
+  spec: {}
+- id: sapphire_byte_step
+  name: Sapphire Byte Step
+  kind: step
+  spec: {}
+- id: seal_inner_iteration
+  name: SEAL Inner Iteration
+  kind: step
+  spec: {}
+- id: sfinks_clock
+  name: SFINKS Clock Step
+  kind: step
+  spec: {}
+- id: sha1_round
+  name: SHA-1 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: shift_fixed
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: constant
+    state_model:
+      state_bits: 160
+      word_bits: 32
+      branches: 5
+    constant_injection: subkey_and_round_constant
+  notes: 'SHA-1 compression round: apply one of four Boolean functions (Ch/Parity/Maj)
+    to the five 32-bit state words A–E, add the scheduled message word, a round constant,
+    and ROTL-5(A); shift state. 80 rounds total.'
+- id: sha2_32bit_round
+  name: SHA-2 32-bit round (SHA-224/256)
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: rotation_fixed
+    - component_id: shift_fixed
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: constant
+    state_model:
+      state_bits: 256
+      word_bits: 32
+      branches: 8
+    constant_injection: round_constant_and_message_word
+  notes: 'SHA-256 compression round: T1 = h + Σ1(e) + Ch(e,f,g) + K[t] + W[t]; T2
+    = Σ0(a) + Maj(a,b,c); shift state. Σ0 = ROTR-2 ⊕ ROTR-13 ⊕ ROTR-22; Σ1 = ROTR-6
+    ⊕ ROTR-11 ⊕ ROTR-25. 64 rounds. SHA-224 uses the same compression function with
+    different IVs and truncates the 256-bit state to 224 bits.'
+- id: sha2_64bit_round
+  name: SHA-2 64-bit round (SHA-384/512/512-224/512-256)
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: rotation_fixed
+    - component_id: shift_fixed
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: add_mod
+      params:
+        modulus: 18446744073709551616
+    - component_id: constant
+    state_model:
+      state_bits: 512
+      word_bits: 64
+      branches: 8
+    constant_injection: round_constant_and_message_word
+  notes: 'SHA-512 compression round: identical structure to SHA-256 but on 64-bit
+    words. Σ0 = ROTR-28 ⊕ ROTR-34 ⊕ ROTR-39; Σ1 = ROTR-14 ⊕ ROTR-18 ⊕ ROTR-41. 80
+    rounds. SHA-384 and the /224 /256 variants share this compression function with
+    distinct IVs and truncated output.'
+- id: simp_round
+  name: SIMP Round
+  kind: full_round
+  spec: {}
+- id: siv_rijndael256_round
+  name: SIV-Rijndael256 Round
+  kind: full_round
+  spec: {}
+- id: siv_tem_photon_round
+  name: SIV-TEM-PHOTON Round
+  kind: full_round
+  spec: {}
+- id: skinny_aead_round
+  name: SKINNY-AEAD Round
+  kind: full_round
+  spec: {}
+- id: subterranean_2_0_round
+  name: Subterranean 2.0 Round
+  kind: step
+  spec: {}
+- id: sundae_gift_round
+  name: SUNDAE-GIFT Round
+  kind: full_round
+  spec: {}
+- id: threeway_round
+  name: 3-Way Round
+  kind: full_round
+  spec: {}
+- id: tiger_pass
+  name: Tiger Pass
+  kind: other
+  spec: {}
+- id: twegifit64_round
+  name: TweGIFIT-64 Round
+  kind: full_round
+  spec: {}
+- id: whirlpool_cipher_round
+  name: Whirlpool Cipher Round
+  kind: full_round
+  spec: {}
+- id: xoodyak_round
+  name: Xoodyak Round
+  kind: full_round
+  spec: {}
+- id: yamb_step
+  name: YAMB Step
+  kind: step
+  spec: {}
+- id: nlsv2_step
+  name: NLSv2 Step
+  kind: step
+  spec: {}
+- id: cryptmt3_step
+  name: CryptMT3 Step
+  kind: step
+  spec: {}
+- id: dragon_step
+  name: Dragon Step
+  kind: step
+  spec: {}
+- id: hc128_step
+  name: HC-128 Step
+  kind: step
+  spec: {}
+- id: lex_round
+  name: LEX Round
+  kind: full_round
+  spec: {}
+- id: argon2_pass
+  name: Argon2 Pass
+  kind: full_round
+  spec: {}
+- id: antcrypt_step
+  name: AntCrypt Step
+  kind: step
+  spec: {}
+- id: battcrypt_step
+  name: battcrypt Step
+  kind: step
+  spec: {}
+- id: catena_flap
+  name: Catena Flap
+  kind: full_round
+  spec: {}
+- id: centrifuge_iteration
+  name: Centrifuge Iteration
+  kind: step
+  spec: {}
+- id: earworm_step
+  name: EARWORM Step
+  kind: step
+  spec: {}
+- id: gambit_step
+  name: Gambit Step
+  kind: step
+  spec: {}
+- id: lanarea_step
+  name: Lanarea Step
+  kind: step
+  spec: {}
+- id: lyra2_step
+  name: Lyra2 Step
+  kind: step
+  spec: {}
+- id: makwa_iteration
+  name: Makwa Squaring Iteration
+  kind: step
+  spec: {}
+- id: mcs_phs_iteration
+  name: MCS_PHS Iteration
+  kind: step
+  spec: {}
+- id: omegacrypt_step
+  name: OmegaCrypt Step
+  kind: step
+  spec: {}
+- id: parallel_step
+  name: Parallel Step
+  kind: step
+  spec: {}
+- id: polypasshash_step
+  name: PolyPassHash Step
+  kind: step
+  spec: {}
+- id: pomelo_step
+  name: POMELO Step
+  kind: step
+  spec: {}
+- id: rig_step
+  name: RIG Step
+  kind: step
+  spec: {}
+- id: schvrch_step
+  name: Schvrch Step
+  kind: step
+  spec: {}
+- id: tortuga_step
+  name: Tortuga Step
+  kind: step
+  spec: {}
+- id: twocats_step
+  name: TwoCats Step
+  kind: step
+  spec: {}
+- id: yarn_step
+  name: Yarn Step
+  kind: step
+  spec: {}
+- id: yescrypt_step
+  name: yescrypt Step
+  kind: step
+  spec: {}
+- id: keccak_round
+  name: Keccak-f Round (θ ρ π χ ι)
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+      note: 'θ (theta): column parity XOR + neighbour XOR'
+    - component_id: rotation_fixed
+      note: 'ρ (rho): per-lane fixed rotation'
+    - component_id: word_permutation
+      note: 'π (pi): inter-lane position permutation'
+    - component_id: and
+      note: 'χ (chi): 5-bit AND+NOT+XOR nonlinear layer'
+    - component_id: constant
+      note: 'ι (iota): XOR round constant into lane (0,0)'
+- id: blake_round
+  name: BLAKE G-function Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      note: 32- or 64-bit modular addition (G step 1/3)
+    - component_id: xor
+      note: XOR with message word (G step 2/4)
+    - component_id: rotation_fixed
+      note: 'Fixed rotation (r1/r2/r3/r4: 16/12/8/7 for BLAKE-256)'
+- id: groestl_round
+  name: Grøstl Permutation Round (P/Q)
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: constant
+      note: 'AddRoundConstant: XOR round constant'
+    - component_id: sbox
+      note: 'SubBytes: AES-derived 8-bit S-box'
+    - component_id: word_permutation
+      note: 'ShiftBytes: byte-level permutation'
+    - component_id: field_matrix_mul
+      note: 'MixBytes: MDS matrix over GF(2^8)'
+- id: jh_round
+  name: JH E_8 Round (two half-rounds)
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: 'S7: 4-bit bijective S-box (applied in parallel)'
+    - component_id: word_permutation
+      note: 'L: linear diffusion layer'
+    - component_id: constant
+      note: 'RC: XOR round constant'
+- id: skein_round
+  name: Skein (Threefish) Round + UBI
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      note: 64-bit modular word add (MIX function)
+    - component_id: rotation_fixed
+      note: Fixed rotation (variant per round/word pair)
+    - component_id: word_permutation
+      note: Word permutation P_d
+    - component_id: xor
+      note: Subkey injection every 4 rounds

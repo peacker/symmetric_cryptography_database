@@ -119,8 +119,8 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
         CREATE TABLE IF NOT EXISTS family_components (
             family_id    TEXT NOT NULL,
             component_id TEXT NOT NULL,
-            params_json  TEXT,
-            PRIMARY KEY (family_id, component_id),
+            params_json  TEXT NOT NULL DEFAULT '{}',
+            PRIMARY KEY (family_id, component_id, params_json),
             FOREIGN KEY (family_id)    REFERENCES families(id)   ON DELETE CASCADE,
             FOREIGN KEY (component_id) REFERENCES components(id) ON DELETE RESTRICT
         );
@@ -374,12 +374,16 @@ def main() -> None:
                     "INSERT INTO family_targets (family_id, target) VALUES (?, ?)",
                     (family["id"], target))
             for comp_ref in c.get("components", []):
-                params = comp_ref.get("params")
+                params_json = json.dumps(
+                    comp_ref.get("params") or {},
+                    ensure_ascii=True,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                )
                 conn.execute(
                     "INSERT INTO family_components (family_id, component_id, params_json)"
                     " VALUES (?, ?, ?)",
-                    (family["id"], comp_ref["id"],
-                     json.dumps(params, ensure_ascii=True) if params else None))
+                    (family["id"], comp_ref["id"], params_json))
             for construction_id in family.get("construction_ids", []):
                 conn.execute(
                     "INSERT INTO family_constructions (family_id, construction_id) VALUES (?, ?)",
@@ -472,6 +476,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
 
 

@@ -197,9 +197,16 @@ def build_site() -> None:
               <option value=\"target\">Target application</option>
             </select>
           </label>
-          <label class=\"inline-check\"><input id=\"vizShowArrows\" type=\"checkbox\" /> Show relation arrows</label>
-          <label class=\"inline-check\"><input id=\"vizHideNames\" type=\"checkbox\" /> Hide family names</label>
-          <label class=\"inline-check\"><input id=\"vizColorByProcess\" type=\"checkbox\" /> Color by process</label>
+          <div class=\"viz-display-group\">
+            <div class=\"viz-name-section\">
+              <span class=\"viz-name-section-label\">Names</span>
+              <div class=\"viz-name-mode\" role=\"group\"><button id=\"vizNameOff\" type=\"button\" class=\"name-mode-btn\">Off</button><button id=\"vizNameClip\" type=\"button\" class=\"name-mode-btn is-active\">Clip</button><button id=\"vizNameWrap\" type=\"button\" class=\"name-mode-btn\">Wrap</button><button id=\"vizNameFull\" type=\"button\" class=\"name-mode-btn\">Full</button></div>
+            </div>
+            <label class=\"inline-check\"><input id=\"vizCollapseGroups\" type=\"checkbox\" checked /> Collapse to <input id=\"vizCollapseCount\" type=\"number\" min=\"1\" value=\"3\" class=\"viz-collapse-count\" /></label>
+            <label class=\"inline-check\"><input id=\"vizHideDots\" type=\"checkbox\" /> Bullet points</label>
+            <label class=\"inline-check\"><input id=\"vizShowArrows\" type=\"checkbox\" /> Show relation arrows</label>
+            <label class=\"inline-check\"><input id=\"vizColorByProcess\" type=\"checkbox\" checked /> Color by process</label>
+          </div>
           <div class=\"viz-font-controls\" aria-label=\"Timeline font size\">
             <button id=\"vizFontMinus\" type=\"button\">A-</button>
             <button id=\"vizFontPlus\" type=\"button\">A+</button>
@@ -218,7 +225,6 @@ def build_site() -> None:
           <label class=\"toolbar-field viz-search-field\">Find family
             <input id=\"vizFamilySearch\" type=\"search\" placeholder=\"Type a family name\" autocomplete=\"off\" />
           </label>
-          <label class=\"inline-check\"><input id=\"vizCompactMode\" type=\"checkbox\" /> Compact density mode</label>
           <div class=\"viz-year-controls\">
             <label class=\"toolbar-field\">From year
               <input id=\"vizYearStart\" type=\"range\" />
@@ -240,7 +246,7 @@ def build_site() -> None:
             <div id=\"vizGroupFilters\" class=\"filter-checklist viz-filter-checklist\"></div>
           </div>
         </details>
-        <div class=\"viz-frame\">
+        <div class=\"viz-frame\" id=\"vizFrame\">
           <div id=\"vizYAxisPane\" class=\"viz-yaxis-pane\">
             <div id=\"vizYAxisTrack\" class=\"viz-axis-track\">
               <svg id=\"familyVizYAxis\" role=\"presentation\" aria-hidden=\"true\"></svg>
@@ -579,8 +585,14 @@ pre {
 }
 
 .viz-toolbar {
-  grid-template-columns: minmax(220px, 300px) auto auto auto auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.85rem;
   align-items: end;
+}
+
+.viz-toolbar .toolbar-field {
+  min-width: 200px;
 }
 
 .viz-font-controls,
@@ -610,13 +622,70 @@ pre {
 .viz-secondary-controls {
   margin-top: 0.55rem;
   display: grid;
-  grid-template-columns: minmax(230px, 330px) auto minmax(320px, 1fr);
+  grid-template-columns: minmax(230px, 330px) minmax(320px, 1fr);
   gap: 0.55rem 0.75rem;
   align-items: end;
 }
 
 .viz-search-field {
   margin: 0;
+}
+
+.viz-display-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem 0.85rem;
+  flex-wrap: wrap;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f4f8f9;
+}
+
+.viz-name-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.viz-name-section-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.viz-name-mode {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.name-mode-btn {
+  all: unset;
+  cursor: pointer;
+  padding: 0.22rem 0.55rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.name-mode-btn:hover { background: var(--accent-soft); }
+
+.name-mode-btn.is-active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+  border-color: var(--accent);
+}
+
+.viz-collapse-count {
+  width: 3.2rem;
+  padding: 0.2rem 0.3rem;
+  margin: 0 0 0 0.35rem;
+  display: inline;
 }
 
 .viz-year-controls {
@@ -659,8 +728,8 @@ pre {
   overflow: hidden;
   background: #fff;
   display: grid;
-  grid-template-columns: 200px minmax(0, 1fr);
-  grid-template-rows: minmax(360px, 68vh) 48px;
+  grid-template-columns: 100px minmax(0, 1fr);
+  grid-template-rows: 1fr 48px;
 }
 
 .viz-yaxis-pane {
@@ -700,10 +769,12 @@ pre {
   border-right: 1px solid var(--line);
   background: color-mix(in srgb, #ffffff 88%, #e4eef0 12%);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0.35rem 0.5rem;
-  font-size: 0.82rem;
+  padding: 0.25rem 0.35rem;
+  gap: 0.05rem;
+  font-size: 0.6rem;
   font-weight: 700;
   color: #294248;
   text-align: center;
@@ -863,7 +934,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
   #vizYearRangeValue {
     text-align: left;
   }
-  .viz-frame { grid-template-columns: 160px minmax(0, 1fr); }
+  .viz-frame { grid-template-columns: 80px minmax(0, 1fr); }
   .viz-filter-checklist { grid-template-columns: 1fr; }
 }
 """
@@ -1303,7 +1374,12 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const processLegend = document.getElementById("vizProcessLegend");
     const groupBy = document.getElementById("vizGroupBy");
     const showArrows = document.getElementById("vizShowArrows");
-    const hideNames = document.getElementById("vizHideNames");
+    const hideDots = document.getElementById("vizHideDots");
+    const nameModeOff = document.getElementById("vizNameOff");
+    const nameModeClip = document.getElementById("vizNameClip");
+    const nameModeWrap = document.getElementById("vizNameWrap");
+    const nameModeFull = document.getElementById("vizNameFull");
+    let nameMode = "clip";
     const colorByProcess = document.getElementById("vizColorByProcess");
     const groupFilters = document.getElementById("vizGroupFilters");
     const filterAll = document.getElementById("vizFilterAll");
@@ -1318,20 +1394,22 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const zoomFit = document.getElementById("vizZoomFit");
     const zoomValue = document.getElementById("vizZoomValue");
     const familySearch = document.getElementById("vizFamilySearch");
-    const compactMode = document.getElementById("vizCompactMode");
+    const vizFrame = document.getElementById("vizFrame");
+    const collapseGroups = document.getElementById("vizCollapseGroups");
+    const collapseCount = document.getElementById("vizCollapseCount");
     const yearStart = document.getElementById("vizYearStart");
     const yearEnd = document.getElementById("vizYearEnd");
     const yearReset = document.getElementById("vizYearReset");
     const yearRangeValue = document.getElementById("vizYearRangeValue");
     const relationInfoBox = document.getElementById("vizRelationInfo");
-    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !groupBy || !showArrows || !hideNames || !colorByProcess || !processLegend || !groupFilters || !filterAll || !filterNone || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !familySearch || !compactMode || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
+    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !vizFrame || !groupBy || !showArrows || !hideDots || !nameModeOff || !nameModeClip || !nameModeWrap || !nameModeFull || !colorByProcess || !processLegend || !groupFilters || !filterAll || !filterNone || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !familySearch || !collapseGroups || !collapseCount || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
 
     const BASE_FONT = 12;
     const BASE_ZOOM = 1;
     const MIN_ZOOM = 0.35;
     const MAX_ZOOM = 4;
     const ZOOM_FACTOR = 1.2;
-    const LEFT_AXIS_WIDTH = 200;
+    const LEFT_AXIS_WIDTH = 100;
     const AXIS_HEIGHT = 48;
     const STACK_STEP = 0.34;
     const GROUP_GAP_UNITS = 0.42;
@@ -1458,7 +1536,12 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     function truncateLabel(text, maxChars) {
       const normalized = String(text || "");
       if (normalized.length <= maxChars) return normalized;
-      return `${normalized.slice(0, Math.max(1, maxChars - 3))}...`;
+      return `${normalized.slice(0, Math.max(1, maxChars - 1))}…`;
+    }
+
+    function shortGroupLabel(name) {
+      const m = name.match(/\\(([A-Z][A-Z0-9]*)/);
+      return m ? m[1] : name;
     }
 
     function charsForWidth(widthPx) {
@@ -1479,12 +1562,15 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     }
 
     function applyZoom() {
+      const scaledH = Math.round(lastRenderSize.plotHeight * zoomScale);
+      const maxFrameH = Math.round(window.innerHeight * 0.68);
+      vizFrame.style.height = `${Math.max(160, Math.min(scaledH, maxFrameH)) + AXIS_HEIGHT}px`;
       plotSvg.style.width = `${Math.round(lastRenderSize.plotWidth * zoomScale)}px`;
-      plotSvg.style.height = `${Math.round(lastRenderSize.plotHeight * zoomScale)}px`;
+      plotSvg.style.height = `${scaledH}px`;
       xAxisSvg.style.width = `${Math.round(lastRenderSize.plotWidth * zoomScale)}px`;
       xAxisSvg.style.height = `${AXIS_HEIGHT}px`;
       yAxisSvg.style.width = `${LEFT_AXIS_WIDTH}px`;
-      yAxisSvg.style.height = `${Math.round(lastRenderSize.plotHeight * zoomScale)}px`;
+      yAxisSvg.style.height = `${scaledH}px`;
       zoomValue.textContent = `${Math.round(zoomScale * 100)}%`;
       syncAxisTracks();
     }
@@ -1574,7 +1660,9 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         box.checked = active.get(label) !== false;
         box.setAttribute("data-group-label", label);
         const text = document.createElement("span");
-        text.textContent = label;
+        const shortLabel = shortGroupLabel(label);
+        text.textContent = shortLabel;
+        if (shortLabel !== label) row.title = label;
         row.appendChild(box);
         row.appendChild(text);
         groupFilters.appendChild(row);
@@ -1585,8 +1673,9 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       clearNode(plotSvg);
       clearNode(xAxisSvg);
       clearNode(yAxisSvg);
-      relationInfoBox.textContent = BASE_RELATION_TEXT;
-      cornerPane.textContent = `${modeLabel(groupBy.value)} | Publication year`;
+      relationInfoBox.hidden = !showArrows.checked;
+      if (showArrows.checked) relationInfoBox.textContent = BASE_RELATION_TEXT;
+      cornerPane.innerHTML = `<b>${escapeHtml(modeLabel(groupBy.value))}</b><span style="font-weight:400;opacity:0.75">Publication year</span>`;
       plotSvg.setAttribute("viewBox", "0 0 920 260");
       plotSvg.setAttribute("width", "920");
       plotSvg.setAttribute("height", "260");
@@ -1610,9 +1699,10 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       clearNode(plotSvg);
       clearNode(xAxisSvg);
       clearNode(yAxisSvg);
-      relationInfoBox.textContent = BASE_RELATION_TEXT;
+      relationInfoBox.hidden = !showArrows.checked;
+      if (showArrows.checked) relationInfoBox.textContent = BASE_RELATION_TEXT;
       const mode = groupBy.value;
-      cornerPane.textContent = `${modeLabel(mode)} | Publication year`;
+      cornerPane.innerHTML = `<b>${escapeHtml(modeLabel(mode))}</b><span style="font-weight:400;opacity:0.75">Publication year</span>`;
       const rawPoints = [];
       const yearRange = normalizeYearControls();
       const searchNeedle = familySearch.value.trim().toLowerCase();
@@ -1656,29 +1746,91 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
       points.sort((a, b) => a.group.localeCompare(b.group) || a.year - b.year || a.name.localeCompare(b.name));
       const groupLabels = Array.from(new Set(points.map((point) => point.group))).sort((a, b) => a.localeCompare(b));
+
+      const collapseOn = collapseGroups.checked;
+      const collapseN = Math.max(1, parseInt(collapseCount.value || "3", 10) || 3);
+
+      // Pre-compute year/spacing estimates needed for wrap-mode line-count calculation
+      const _earlyMinY = Math.min(...points.map((p) => p.year));
+      const _earlyMaxY = Math.max(...points.map((p) => p.year));
+      const _earlySpan = Math.max(1, _earlyMaxY - _earlyMinY);
+      const _earlyLaneStep = Math.max(36, fontPx * 2.85);
+      const _earlyBW = Math.max(840, (_earlySpan + 1) * (32 + fontPx * 0.8));
+      const _earlySpacing = _earlySpan ? _earlyBW / _earlySpan : _earlyBW;
+      const _earlyDotOff = hideDots.checked ? (POINT_RADIUS + 2) : 0;
+      const _earlyMaxNamePx = Math.max(0, _earlySpacing - _earlyDotOff);
+      const wrapLineChars = Math.max(2, Math.floor(_earlyMaxNamePx / (Math.max(fontPx, 8) * 0.58)));
+      function wrapIntoLines(name, cpl) {
+        const out = [];
+        let cur = "";
+        name.split(" ").forEach((word) => {
+          const joined = cur ? `${cur} ${word}` : word;
+          if (joined.length <= cpl) {
+            cur = joined;
+          } else if (cur) {
+            out.push(cur);
+            let w = word;
+            while (w.length > cpl) { out.push(w.slice(0, cpl)); w = w.slice(cpl); }
+            cur = w;
+          } else {
+            let w = word;
+            while (w.length > cpl) { out.push(w.slice(0, cpl)); w = w.slice(cpl); }
+            cur = w;
+          }
+        });
+        if (cur) out.push(cur);
+        return out;
+      }
+      function _countLines(name) { return Math.min(wrapIntoLines(name, wrapLineChars).length, 2); }
+      let _maxLinesNeeded = 1;
+      if (nameMode === "wrap") {
+        points.forEach((p) => { _maxLinesNeeded = Math.max(_maxLinesNeeded, _countLines(p.name)); });
+      }
+      const effectiveStackStep = nameMode === "wrap"
+        ? Math.max(STACK_STEP, _maxLinesNeeded * (fontPx * 1.4) / _earlyLaneStep + 0.04)
+        : STACK_STEP;
+
+      const familyCountByGroup = new Map();
+      points.forEach((p) => {
+        if (!familyCountByGroup.has(p.group)) familyCountByGroup.set(p.group, new Set());
+        familyCountByGroup.get(p.group).add(p.familyId);
+      });
+
       const counters = new Map();
       const maxStackByGroup = new Map();
+      const ellipsisCells = [];
+
       points.forEach((point) => {
-        const key = `${point.group}|${point.year}`;
+        const key = `${point.group}|||${point.year}`;
         const stack = counters.get(key) || 0;
-        point.stackIndex = stack;
         counters.set(key, stack + 1);
-        maxStackByGroup.set(point.group, Math.max(maxStackByGroup.get(point.group) || 0, stack + 1));
+        if (collapseOn && stack >= collapseN) {
+          point.stackIndex = -1;
+          if (stack === collapseN) {
+            ellipsisCells.push({ group: point.group, year: point.year, stackIndex: collapseN });
+            maxStackByGroup.set(point.group, Math.max(maxStackByGroup.get(point.group) || 0, collapseN + 1));
+          }
+        } else {
+          point.stackIndex = stack;
+          maxStackByGroup.set(point.group, Math.max(maxStackByGroup.get(point.group) || 0, stack + 1));
+        }
       });
+
+      const visiblePoints = points.filter((point) => point.stackIndex !== -1);
 
       const groupLayout = new Map();
       let nextBaseUnit = 0;
       groupLabels.forEach((label) => {
         const maxStack = maxStackByGroup.get(label) || 1;
-        const spanUnits = 1 + Math.max(0, maxStack - 1) * STACK_STEP;
+        const spanUnits = 1 + Math.max(0, maxStack - 1) * effectiveStackStep;
         const endUnit = nextBaseUnit + spanUnits;
         groupLayout.set(label, { startUnit: nextBaseUnit, endUnit });
         nextBaseUnit = endUnit + GROUP_GAP_UNITS;
       });
 
-      points.forEach((point) => {
+      visiblePoints.forEach((point) => {
         const layout = groupLayout.get(point.group);
-        point.yUnit = (layout ? layout.startUnit : 0) + point.stackIndex * STACK_STEP;
+        point.yUnit = (layout ? layout.startUnit : 0) + point.stackIndex * effectiveStackStep;
       });
 
       const minYear = Math.min(...points.map((point) => point.year));
@@ -1686,22 +1838,31 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       const span = Math.max(1, maxYear - minYear);
       const laneStep = Math.max(36, fontPx * 2.85);
       const topPad = 12;
-      const basePlotWidth = Math.max(840, (span + 1) * (32 + fontPx * 0.8));
+      let longestNamePx = 0;
+      if (nameMode === "full") {
+        visiblePoints.forEach((p) => { longestNamePx = Math.max(longestNamePx, p.name.length * Math.max(fontPx, 8) * 0.62); });
+      }
+      const _minColW = nameMode === "full" ? POINT_RADIUS + longestNamePx + 16 : 32 + fontPx * 0.8;
+      const basePlotWidth = Math.max(840, (span + 1) * Math.max(32 + fontPx * 0.8, _minColW));
       const maxYUnit = Math.max(
-        ...points.map((point) => point.yUnit || 0),
+        ...visiblePoints.map((point) => point.yUnit || 0),
         ...Array.from(groupLayout.values()).map((layout) => layout.endUnit)
       );
       const plotHeight = Math.max(240, topPad + (maxYUnit + 1) * laneStep + 10);
 
       const roughYearSpacing = span ? basePlotWidth / span : basePlotWidth;
-      const familyLabelChars = hideNames.checked ? 0 : Math.max(9, Math.min(24, Math.floor((roughYearSpacing * 1.3) / (Math.max(fontPx, 8) * 0.62))));
+      const dotOff = hideDots.checked ? (POINT_RADIUS + 2) : 0;
+      const maxNamePx = Math.max(0, roughYearSpacing - dotOff);
+      const familyLabelChars = (nameMode === "off" || nameMode === "wrap") ? 0 : Math.max(0, Math.floor(maxNamePx / (Math.max(fontPx, 8) * 0.58)));
       const plotLeftPad = POINT_RADIUS + 3;
-      const estimatedLabelWidth = hideNames.checked ? 0 : familyLabelChars * Math.max(fontPx, 8) * 0.62 + POINT_RADIUS + 10;
+      const estimatedLabelWidth = nameMode === "off" ? 0
+        : nameMode === "full" ? longestNamePx + POINT_RADIUS + 10
+        : nameMode === "wrap" ? maxNamePx + POINT_RADIUS + 10
+        : familyLabelChars * Math.max(fontPx, 8) * 0.62 + POINT_RADIUS + 10;
       const plotRightPad = Math.max(POINT_RADIUS + 4, estimatedLabelWidth);
       const plotWidth = basePlotWidth + plotLeftPad + plotRightPad;
       const innerPlotWidth = Math.max(1, plotWidth - plotLeftPad - plotRightPad);
       lastRenderSize = { plotWidth, plotHeight };
-      const compact = compactMode.checked;
 
       plotSvg.setAttribute("viewBox", `0 0 ${plotWidth} ${plotHeight}`);
       plotSvg.setAttribute("width", String(plotWidth));
@@ -1723,7 +1884,6 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       }
 
       const palette = modePalette(mode);
-      const groupLabelChars = charsForWidth(LEFT_AXIS_WIDTH - 24);
 
       const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
       const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
@@ -1773,15 +1933,38 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         guide.setAttribute("class", "viz-grid");
         plotSvg.appendChild(guide);
 
+        const yCenter = bandTop + (bandBottom - bandTop) / 2;
+        const xPos = LEFT_AXIS_WIDTH - 5;
+        const groupCount = (familyCountByGroup.get(label) || new Set()).size;
+        const shortLabel = shortGroupLabel(label);
+        const labelWithCount = `${shortLabel} (${groupCount})`;
+        const fullLabelWithCount = `${label} (${groupCount})`;
         const yText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        yText.setAttribute("x", String(LEFT_AXIS_WIDTH - 8));
-        yText.setAttribute("y", String(bandTop + (bandBottom - bandTop) / 2 + fontPx * 0.3));
+        yText.setAttribute("x", String(xPos));
         yText.setAttribute("text-anchor", "end");
         yText.setAttribute("class", "viz-label");
         yText.setAttribute("style", `font-size:${fontPx}px`);
-        yText.textContent = truncateLabel(label, groupLabelChars);
+        const maxCharsPerLine = Math.max(4, Math.floor((LEFT_AXIS_WIDTH - 10) / (Math.max(fontPx, 8) * 0.6)));
+        const yWords = labelWithCount.split(" ");
+        const yLines = [];
+        let yCurLine = "";
+        yWords.forEach((word) => {
+          const test = yCurLine ? `${yCurLine} ${word}` : word;
+          if (test.length > maxCharsPerLine && yCurLine) { yLines.push(yCurLine); yCurLine = word; }
+          else yCurLine = test;
+        });
+        if (yCurLine) yLines.push(yCurLine);
+        const lineH = Math.round(fontPx * 1.35);
+        const totalTextH = (yLines.length - 1) * lineH;
+        yLines.forEach((line, i) => {
+          const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+          tspan.setAttribute("x", String(xPos));
+          tspan.setAttribute("y", String(yCenter - totalTextH / 2 + i * lineH + fontPx * 0.35));
+          tspan.textContent = line;
+          yText.appendChild(tspan);
+        });
         const yTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
-        yTitle.textContent = label;
+        yTitle.textContent = fullLabelWithCount;
         yText.appendChild(yTitle);
         yAxisSvg.appendChild(yText);
       });
@@ -1794,7 +1977,6 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       yAxisLine.setAttribute("class", "viz-axis");
       yAxisSvg.appendChild(yAxisLine);
 
-      const tickStep = span > 40 ? 5 : span > 20 ? 2 : 1;
       const xAxisLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
       xAxisLine.setAttribute("x1", "0");
       xAxisLine.setAttribute("x2", String(plotWidth));
@@ -1803,7 +1985,12 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       xAxisLine.setAttribute("class", "viz-axis");
       xAxisSvg.appendChild(xAxisLine);
 
-      for (let year = minYear; year <= maxYear; year += tickStep) {
+      const pixelsPerYear = span ? innerPlotWidth / span : innerPlotWidth;
+      const minLabelPx = Math.max(fontPx, 8) * 4.5;
+      const labelStepRaw = minLabelPx / Math.max(pixelsPerYear, 0.1);
+      const labelStep = labelStepRaw <= 1 ? 1 : labelStepRaw <= 2 ? 2 : labelStepRaw <= 5 ? 5 : 10;
+
+      for (let year = minYear; year <= maxYear; year++) {
         const x = xFor(year);
         const grid = document.createElementNS("http://www.w3.org/2000/svg", "line");
         grid.setAttribute("x1", String(x));
@@ -1813,25 +2000,27 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         grid.setAttribute("class", "viz-grid");
         plotSvg.appendChild(grid);
 
-        const tickMark = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        tickMark.setAttribute("x1", String(x));
-        tickMark.setAttribute("x2", String(x));
-        tickMark.setAttribute("y1", "0");
-        tickMark.setAttribute("y2", "9");
-        tickMark.setAttribute("class", "viz-axis");
-        xAxisSvg.appendChild(tickMark);
+        if ((year - minYear) % labelStep === 0) {
+          const tickMark = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          tickMark.setAttribute("x1", String(x));
+          tickMark.setAttribute("x2", String(x));
+          tickMark.setAttribute("y1", "0");
+          tickMark.setAttribute("y2", "9");
+          tickMark.setAttribute("class", "viz-axis");
+          xAxisSvg.appendChild(tickMark);
 
-        const tick = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        tick.setAttribute("x", String(x));
-        tick.setAttribute("y", "24");
-        tick.setAttribute("text-anchor", "middle");
-        tick.setAttribute("class", "viz-label");
-        tick.setAttribute("style", `font-size:${Math.max(10, fontPx - 1)}px`);
-        tick.textContent = String(year);
-        xAxisSvg.appendChild(tick);
+          const tick = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          tick.setAttribute("x", String(x));
+          tick.setAttribute("y", "24");
+          tick.setAttribute("text-anchor", "middle");
+          tick.setAttribute("class", "viz-label");
+          tick.setAttribute("style", `font-size:${Math.max(10, fontPx - 1)}px`);
+          tick.textContent = String(year);
+          xAxisSvg.appendChild(tick);
+        }
       }
 
-      const pointPositions = points.map((point) => ({
+      const pointPositions = visiblePoints.map((point) => ({
         ...point,
         x: xFor(point.year),
         y: yFor(point.yUnit || 0),
@@ -1849,7 +2038,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       });
 
       const hoverLines = [];
-      if (showArrows.checked && !compact) {
+      if (showArrows.checked) {
         influences.forEach((edge) => {
           const sourceId = String(edge.source_family_id || "");
           const targetId = String(edge.target_family_id || "");
@@ -1910,28 +2099,43 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const richTip = tipParts.join("\\n");
         const dotColor = useProcessColor ? processColorForFamily(point.familyId) : null;
 
-        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        circle.setAttribute("cx", String(point.x));
-        circle.setAttribute("cy", String(point.y));
-        circle.setAttribute("r", String(compact ? Math.max(3, POINT_RADIUS - 1.15) : POINT_RADIUS));
-        circle.setAttribute("class", "viz-point");
-        if (dotColor) circle.setAttribute("fill", dotColor);
-        const pointTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
-        pointTitle.textContent = richTip;
-        circle.appendChild(pointTitle);
-        plotSvg.appendChild(circle);
+        if (hideDots.checked) {
+          const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          circle.setAttribute("cx", String(point.x));
+          circle.setAttribute("cy", String(point.y));
+          circle.setAttribute("r", String(POINT_RADIUS));
+          circle.setAttribute("class", "viz-point");
+          if (dotColor) circle.setAttribute("fill", dotColor);
+          const pointTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
+          pointTitle.textContent = richTip;
+          circle.appendChild(pointTitle);
+          plotSvg.appendChild(circle);
+        }
 
-        if (!hideNames.checked && !compact) {
+        if (nameMode !== "off") {
+          const labelX = hideDots.checked ? point.x + POINT_RADIUS + 2 : point.x;
+          const labelStyle = dotColor
+            ? `font-size:${fontPx}px;font-family:"IBM Plex Mono",monospace;fill:${dotColor}`
+            : `font-size:${fontPx}px;font-family:"IBM Plex Mono",monospace`;
           const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-          label.setAttribute("x", String(point.x + 6));
-          label.setAttribute("y", String(point.y + 3.5));
           label.setAttribute("text-anchor", "start");
           label.setAttribute("class", "viz-text");
-          const labelStyle = dotColor
-            ? `font-size:${fontPx}px;fill:${dotColor}`
-            : `font-size:${fontPx}px`;
           label.setAttribute("style", labelStyle);
-          label.textContent = truncateLabel(point.name, familyLabelChars);
+          if (nameMode === "wrap") {
+            const dispLines = wrapIntoLines(point.name, wrapLineChars).slice(0, 2);
+            const lineH = Math.round(fontPx * 1.3);
+            dispLines.forEach((line, i) => {
+              const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+              tspan.setAttribute("x", String(i > 0 ? labelX + 4 : labelX));
+              tspan.setAttribute("y", String(point.y + 3.5 + i * lineH));
+              tspan.textContent = line;
+              label.appendChild(tspan);
+            });
+          } else {
+            label.setAttribute("x", String(labelX));
+            label.setAttribute("y", String(point.y + 3.5));
+            label.textContent = nameMode === "full" ? point.name : truncateLabel(point.name, familyLabelChars);
+          }
           const fullTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
           fullTitle.textContent = richTip;
           label.appendChild(fullTitle);
@@ -1940,6 +2144,44 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       });
 
       hoverLines.forEach((hoverLine) => plotSvg.appendChild(hoverLine));
+
+      if (collapseOn) {
+        ellipsisCells.forEach((cell) => {
+          const layout = groupLayout.get(cell.group);
+          if (!layout) return;
+          const x = xFor(cell.year);
+          const y = yFor(layout.startUnit + cell.stackIndex * effectiveStackStep);
+          const cellKey = `${cell.group}|||${cell.year}`;
+          const hiddenCount = (counters.get(cellKey) || 0) - collapseN;
+
+          if (hideDots.checked) {
+            const ellDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            ellDot.setAttribute("cx", String(x));
+            ellDot.setAttribute("cy", String(y));
+            ellDot.setAttribute("r", String(POINT_RADIUS));
+            ellDot.setAttribute("fill", "#b0babf");
+            ellDot.setAttribute("stroke", "#ffffff");
+            ellDot.setAttribute("stroke-width", "1.1");
+            ellDot.setAttribute("stroke-dasharray", "2 2");
+            const ellTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
+            ellTitle.textContent = `+${hiddenCount} more in ${cell.group} (${cell.year})`;
+            ellDot.appendChild(ellTitle);
+            plotSvg.appendChild(ellDot);
+          }
+
+          if (nameMode !== "off") {
+            const ellLabelX = hideDots.checked ? x + POINT_RADIUS + 2 : x;
+            const ellText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            ellText.setAttribute("x", String(ellLabelX));
+            ellText.setAttribute("y", String(y + 3.5));
+            ellText.setAttribute("text-anchor", "start");
+            ellText.setAttribute("class", "viz-text");
+            ellText.setAttribute("style", `font-size:${fontPx}px;font-family:"IBM Plex Mono",monospace;fill:#7a8c8f`);
+            ellText.textContent = `+${hiddenCount}`;
+            plotSvg.appendChild(ellText);
+          }
+        });
+      }
 
       // Process legend
       if (useProcessColor && processList.length) {
@@ -1983,9 +2225,19 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
     groupBy.addEventListener("change", render);
     showArrows.addEventListener("change", render);
-    hideNames.addEventListener("change", render);
+    hideDots.addEventListener("change", render);
+    [["off", nameModeOff], ["clip", nameModeClip], ["wrap", nameModeWrap], ["full", nameModeFull]].forEach(([mode, btn]) => {
+      btn.addEventListener("click", () => {
+        nameMode = mode;
+        [nameModeOff, nameModeClip, nameModeWrap, nameModeFull].forEach((b) => b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        render();
+      });
+    });
     colorByProcess.addEventListener("change", render);
-    compactMode.addEventListener("change", render);
+    collapseGroups.addEventListener("change", render);
+    collapseCount.addEventListener("change", render);
+    collapseCount.addEventListener("input", render);
     familySearch.addEventListener("input", render);
     familySearch.addEventListener("change", render);
     groupFilters.addEventListener("change", (event) => {

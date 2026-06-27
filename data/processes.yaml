@@ -580,7 +580,7 @@ processes:
           - family_id: argon2
 
   - id: cacr_national_cryptographic_algorithm_design_competition
-    name: National Cryptographic Algorithm Design Competition
+    name: CACR National Cryptographic Algorithm Design Competition
     organizer: CACR
     start_year: 2018
     end_year: 2020
@@ -747,6 +747,7 @@ processes:
         kind: outcome
         participants:
           - family_id: sha1_sha2
+          - family_id: sha2
 
   - id: eu_ripe_project
     name: RIPE Project
