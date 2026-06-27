@@ -1,6 +1,8 @@
-# symmetric_primitives_database
+# Symmetric Cryptography Database
 
 A structured, version-controlled database for fixed-input/output-size symmetric primitives and their ecosystem metadata.
+
+**Website:** <https://peacker.github.io/symmetric_cryptography_database/>
 
 ## Scope
 
@@ -75,7 +77,7 @@ Then open http://localhost:8000/ in your browser.
 
 ## GitHub Pages auto-deploy
 
-This repository is configured to publish a static dashboard to GitHub Pages whenever changes are pushed to `master` (or `main`):
+This repository is configured to publish a static dashboard to GitHub Pages whenever changes are pushed to `main` or `master`. The public repository currently uses `main` as its default branch.
 
 - workflow: `.github/workflows/pages.yml`
 - build command: `make build-site`
@@ -87,7 +89,27 @@ One-time GitHub setup:
 2. Open **Pages**.
 3. Set source to **GitHub Actions**.
 
-After that, every merged PR into `master` will trigger a fresh static build and deployment.
+After that, every push to `main` or `master` will validate the data, build the site, and deploy the result. The published site is available at <https://peacker.github.io/symmetric_cryptography_database/>.
+
+## Contributing
+
+Contributions that improve the coverage, accuracy, provenance, schemas, tooling, or website are welcome.
+
+1. Fork the repository and create a focused branch from `main`.
+2. Run `make setup` to create the virtual environment and install dependencies.
+3. Edit the source YAML in `data/` and update the matching schema in `schema/` when the data model changes.
+4. Cite a reliable primary source in `data/references.yaml` for factual claims. Add influence links only when the relationship is explicitly supported by a source.
+5. Keep existing IDs stable. Add new IDs for new entities rather than renaming published IDs.
+6. Run the same checks used by CI:
+
+   ```bash
+   make test
+   make build-site
+   ```
+
+7. Open a pull request that explains the change and its sources. Keep unrelated changes in separate pull requests when practical.
+
+Generated files under `build/` are ignored and should not be committed. Before submitting, confirm that validation and the process-alignment test pass and that the generated site opens correctly.
 
 ## Makefile targets
 
@@ -136,7 +158,4 @@ When you move to variable-size modes, add a `mode` entity and a relation table `
 
 ## Similar projects
 
-`cryptospecs` was a collection of specifications and implementations of 
-block ciphers, stream ciphers, hash functions, and few asymmetric ciphers.
-While the main website https://code.google.com/archive/p/cryptospecs/ has been deprecated, 
-it can still be found at https://github.com/stamparm/cryptospecs/tree/master
+`cryptospecs` was a collection of specifications and implementations of block ciphers, stream ciphers, hash functions, and a few asymmetric ciphers. Its original [Google Code website](https://code.google.com/archive/p/cryptospecs/) is archived, and the project remains available in the [cryptospecs GitHub repository](https://github.com/stamparm/cryptospecs/tree/master).

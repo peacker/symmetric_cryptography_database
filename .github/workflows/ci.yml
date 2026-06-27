@@ -6,11 +6,16 @@ on:
   pull_request:
     branches: [main, master]
 
+permissions:
+  contents: read
+
 jobs:
   validate-and-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -19,16 +24,13 @@ jobs:
           cache: pip
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: python -m pip install -r requirements.txt
 
-      - name: Validate datasets
-        run: python scripts/validate.py
+      - name: Validate datasets and process alignment
+        run: make test PYTHON=python
 
-      - name: Build database
-        run: python scripts/build_db.py
-
-      - name: Export visualization CSVs
-        run: python scripts/export_viz.py
+      - name: Build database, exports, and static site
+        run: make build-site PYTHON=python
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
