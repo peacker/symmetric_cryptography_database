@@ -232,7 +232,8 @@ primitives:
     rounds: 20
     block_size_bits: 512
     output_size_bits: 512
-  notes: XSalsa20 uses HSalsa20 to derive a subkey, extending Salsa20 to a 192-bit nonce.
+  notes: XSalsa20 uses HSalsa20 to derive a subkey, extending Salsa20 to a 192-bit
+    nonce.
 - id: chacha20
   name: ChaCha20
   family_id: chacha
@@ -247,8 +248,8 @@ primitives:
     rounds: 20
     block_size_bits: 512
     output_size_bits: 512
-  notes: 'The IETF ChaCha20 stream cipher repeatedly invokes the ChaCha20 block
-    function to form a keystream and XORs it with the plaintext.'
+  notes: The IETF ChaCha20 stream cipher repeatedly invokes the ChaCha20 block function
+    to form a keystream and XORs it with the plaintext.
 - id: chacha20_block_function
   name: ChaCha20 Block Function
   family_id: chacha
@@ -264,8 +265,8 @@ primitives:
     rounds: 20
     block_size_bits: 512
     output_size_bits: 512
-  notes: 'The RFC-defined update function transforms a 512-bit ChaCha state through
-    20 rounds and adds the initial state to produce one 512-bit keystream block.'
+  notes: The RFC-defined update function transforms a 512-bit ChaCha state through
+    20 rounds and adds the initial state to produce one 512-bit keystream block.
 - id: present_80
   name: PRESENT-80
   family_id: present
@@ -1221,9 +1222,9 @@ primitives:
     tag_size_bits: 128
     block_size_bits: 128
     rounds: 12
-  notes: 'NIST-standardized authenticated encryption for constrained devices,
-    using Ascon-p[12] for initialization/finalization and Ascon-p[8] while
-    processing associated data and plaintext.'
+  notes: NIST-standardized authenticated encryption for constrained devices, using
+    Ascon-p[12] for initialization/finalization and Ascon-p[8] while processing associated
+    data and plaintext.
 - id: ascon_hash256
   name: Ascon-Hash256
   family_id: ascon
@@ -1235,8 +1236,8 @@ primitives:
     block_size_bits: 64
     output_size_bits: 256
     rounds: 12
-  notes: 'NIST-standardized 256-bit hash function based on the Ascon-p[12]
-    permutation with a 64-bit rate.'
+  notes: NIST-standardized 256-bit hash function based on the Ascon-p[12] permutation
+    with a 64-bit rate.
 - id: ascon_xof128
   name: Ascon-XOF128
   family_id: ascon
@@ -1247,8 +1248,8 @@ primitives:
     state_size_bits: 320
     block_size_bits: 64
     rounds: 12
-  notes: 'NIST-standardized extendable-output function with 128-bit security,
-    based on Ascon-p[12] with a 64-bit rate.'
+  notes: NIST-standardized extendable-output function with 128-bit security, based
+    on Ascon-p[12] with a 64-bit rate.
 - id: ascon_cxof128
   name: Ascon-CXOF128
   family_id: ascon
@@ -1259,8 +1260,8 @@ primitives:
     state_size_bits: 320
     block_size_bits: 64
     rounds: 12
-  notes: 'Customizable NIST-standardized XOF with 128-bit security; it absorbs
-    a customization string before the message.'
+  notes: Customizable NIST-standardized XOF with 128-bit security; it absorbs a customization
+    string before the message.
 - id: photon_permutation_256
   name: PHOTON Permutation (256-bit)
   family_id: photon
@@ -2471,6 +2472,66 @@ primitives:
     output_size_bits: 128
     rounds: 24
   notes: LEA with 128-bit key and 24 rounds.
+- id: lea_192
+  name: LEA-192
+  family_id: lea
+  primitive_type: block_cipher
+  reference_ids:
+  - lea_ref
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 192
+    output_size_bits: 128
+    rounds: 28
+  notes: Original LEA configuration with a 192-bit key and 28 rounds.
+- id: lea_256
+  name: LEA-256
+  family_id: lea
+  primitive_type: block_cipher
+  reference_ids:
+  - lea_ref
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 256
+    output_size_bits: 128
+    rounds: 32
+  notes: Original LEA configuration with a 256-bit key and 32 rounds.
+- id: lea_iso_128
+  name: LEA-128 [ISO]
+  family_id: lea_iso
+  primitive_type: block_cipher
+  reference_ids:
+  - iso_iec_29192_2_2019
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 128
+    output_size_bits: 128
+    rounds: 24
+  notes: LEA-128 profile standardized by ISO/IEC 29192-2:2019.
+- id: lea_iso_192
+  name: LEA-192 [ISO]
+  family_id: lea_iso
+  primitive_type: block_cipher
+  reference_ids:
+  - iso_iec_29192_2_2019
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 192
+    output_size_bits: 128
+    rounds: 28
+  notes: LEA-192 profile standardized by ISO/IEC 29192-2:2019.
+- id: lea_iso_256
+  name: LEA-256 [ISO]
+  family_id: lea_iso
+  primitive_type: block_cipher
+  reference_ids:
+  - iso_iec_29192_2_2019
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 256
+    output_size_bits: 128
+    rounds: 32
+  notes: LEA-256 profile standardized by ISO/IEC 29192-2:2019.
 - id: leviathan_v1
   name: LEVIATHAN
   family_id: leviathan
@@ -5218,7 +5279,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: arirang_hash
   name: ARIRANG
   family_id: arirang
@@ -5226,7 +5288,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: aurora_hash
   name: AURORA
   family_id: aurora
@@ -5234,7 +5297,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: blender_hash
   name: Blender
   family_id: blender
@@ -5242,7 +5306,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: blue_midnight_wish_hash
   name: BLUE MIDNIGHT WISH
   family_id: blue_midnight_wish
@@ -5251,7 +5316,8 @@ primitives:
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: boole_hash
   name: BOOLE
   family_id: boole
@@ -5259,7 +5325,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: cheetah_hash
   name: Cheetah
   family_id: cheetah
@@ -5267,7 +5334,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: chi_hash_hash
   name: CHI
   family_id: chi_hash
@@ -5275,7 +5343,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: crunch_hash
   name: CRUNCH
   family_id: crunch
@@ -5283,7 +5352,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: cubehash_hash
   name: CubeHash
   family_id: cubehash
@@ -5292,7 +5362,8 @@ primitives:
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: dch_hash
   name: DCH
   family_id: dch
@@ -5300,7 +5371,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: dynamic_sha_hash
   name: Dynamic SHA
   family_id: dynamic_sha
@@ -5308,7 +5380,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: dynamic_sha2_hash
   name: Dynamic SHA2
   family_id: dynamic_sha2
@@ -5316,7 +5389,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: echo_hash_hash
   name: ECHO
   family_id: echo_hash
@@ -5325,7 +5399,8 @@ primitives:
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: ecoh_hash
   name: ECOH
   family_id: ecoh
@@ -5333,7 +5408,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: edon_r_hash
   name: EDON-R
   family_id: edon_r
@@ -5341,7 +5417,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: enrupt_hash
   name: EnRUPT
   family_id: enrupt
@@ -5349,7 +5426,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: essence_hash
   name: ESSENCE
   family_id: essence
@@ -5357,7 +5435,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: fsb_hash
   name: FSB
   family_id: fsb
@@ -5365,7 +5444,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: fugue_hash
   name: Fugue
   family_id: fugue
@@ -5374,7 +5454,8 @@ primitives:
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: hamsi_hash
   name: Hamsi
   family_id: hamsi
@@ -5383,7 +5464,8 @@ primitives:
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: khichidi_1_hash
   name: Khichidi-1
   family_id: khichidi_1
@@ -5391,7 +5473,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: lane_hash
   name: LANE
   family_id: lane
@@ -5399,7 +5482,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: lesamnta_hash
   name: Lesamnta
   family_id: lesamnta
@@ -5407,7 +5491,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: luffa_hash
   name: Luffa
   family_id: luffa
@@ -5416,7 +5501,8 @@ primitives:
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: lux_hash_hash
   name: LUX
   family_id: lux_hash
@@ -5424,7 +5510,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: mcssha3_hash
   name: MCSSHA-3
   family_id: mcssha3
@@ -5432,7 +5519,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: md6_hash
   name: MD6
   family_id: md6
@@ -5440,7 +5528,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: meshhash_hash
   name: MeshHash
   family_id: meshhash
@@ -5448,7 +5537,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: nasha_hash
   name: NaSHA
   family_id: nasha
@@ -5456,7 +5546,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: sandstorm_hash
   name: SANDstorm
   family_id: sandstorm
@@ -5464,7 +5555,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: sarmal_hash
   name: Sarmal
   family_id: sarmal
@@ -5472,7 +5564,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: sgail_hash
   name: Sgàil
   family_id: sgail
@@ -5480,7 +5573,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: shabal_hash
   name: Shabal
   family_id: shabal
@@ -5489,7 +5583,8 @@ primitives:
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: shamata_hash
   name: SHAMATA
   family_id: shamata
@@ -5497,7 +5592,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: shavite3_hash
   name: SHAvite-3
   family_id: shavite3
@@ -5506,7 +5602,8 @@ primitives:
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: simd_hash_hash
   name: SIMD
   family_id: simd_hash
@@ -5515,7 +5612,8 @@ primitives:
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: spectral_hash_hash
   name: Spectral Hash
   family_id: spectral_hash
@@ -5523,7 +5621,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: streamhash_hash
   name: StreamHash
   family_id: streamhash
@@ -5531,7 +5630,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: swifftx_hash
   name: SWIFFTX
   family_id: swifftx
@@ -5539,7 +5639,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: tangle_hash_hash
   name: Tangle
   family_id: tangle_hash
@@ -5547,7 +5648,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: tib3_hash
   name: TIB3
   family_id: tib3
@@ -5555,7 +5657,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: twister_hash_hash
   name: Twister
   family_id: twister_hash
@@ -5563,7 +5666,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: vortex_hash_hash
   name: Vortex
   family_id: vortex_hash
@@ -5571,7 +5675,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: wamm_hash
   name: WaMM
   family_id: wamm
@@ -5579,7 +5684,8 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
 - id: waterfall_hash_hash
   name: Waterfall
   family_id: waterfall_hash
@@ -5587,4 +5693,194 @@ primitives:
   reference_ids:
   - nist_2009_sha3_round1_report
   characteristics: {}
-  notes: Candidate-level record; output variants and technical parameters are not yet modeled.
+  notes: Candidate-level record; output variants and technical parameters are not
+    yet modeled.
+- id: kalyna_128_128_v1
+  name: Kalyna-128/128
+  family_id: kalyna
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 128
+    output_size_bits: 128
+    rounds: 10
+  reference_ids:
+  - oliynykov_2015_kalyna
+  - dstu_7624_2014
+  notes: 'Kalyna-128/128: 8×2-column state, 10 rounds (DSTU 7624:2014 variant 1).'
+- id: kalyna_128_256_v1
+  name: Kalyna-128/256
+  family_id: kalyna
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 256
+    output_size_bits: 128
+    rounds: 14
+  reference_ids:
+  - oliynykov_2015_kalyna
+  - dstu_7624_2014
+  notes: 'Kalyna-128/256: 8×2-column state, 256-bit key, 14 rounds (DSTU 7624:2014
+    variant 2).'
+- id: kalyna_256_256_v1
+  name: Kalyna-256/256
+  family_id: kalyna
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 256
+    key_size_bits: 256
+    output_size_bits: 256
+    rounds: 14
+  reference_ids:
+  - oliynykov_2015_kalyna
+  - dstu_7624_2014
+  notes: 'Kalyna-256/256: 8×4-column state, 14 rounds (DSTU 7624:2014 variant 3).'
+- id: kalyna_256_512_v1
+  name: Kalyna-256/512
+  family_id: kalyna
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 256
+    key_size_bits: 512
+    output_size_bits: 256
+    rounds: 18
+  reference_ids:
+  - oliynykov_2015_kalyna
+  - dstu_7624_2014
+  notes: 'Kalyna-256/512: 8×4-column state, 512-bit key, 18 rounds (DSTU 7624:2014
+    variant 4).'
+- id: kalyna_512_512_v1
+  name: Kalyna-512/512
+  family_id: kalyna
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 512
+    key_size_bits: 512
+    output_size_bits: 512
+    rounds: 18
+  reference_ids:
+  - oliynykov_2015_kalyna
+  - dstu_7624_2014
+  notes: 'Kalyna-512/512: 8×8-column state, 18 rounds (DSTU 7624:2014 variant 5).'
+- id: mukhomor_128_v1
+  name: Mukhomor-128
+  family_id: mukhomor
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 128
+    output_size_bits: 128
+    rounds: 11
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  notes: Mukhomor 128-bit block/key variant, 11 rounds (Lai-Massey structure).
+- id: mukhomor_256_v1
+  name: Mukhomor-256
+  family_id: mukhomor
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 256
+    key_size_bits: 256
+    output_size_bits: 256
+    rounds: 13
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  notes: Mukhomor 256-bit block/key variant, 13 rounds.
+- id: mukhomor_512_v1
+  name: Mukhomor-512
+  family_id: mukhomor
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 512
+    key_size_bits: 512
+    output_size_bits: 512
+    rounds: 18
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  notes: Mukhomor 512-bit block/key variant, 18 rounds.
+- id: ade_128_v1
+  name: ADE-128
+  family_id: ade
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 128
+    output_size_bits: 128
+    rounds: 10
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  notes: ADE 128-bit variant, 10 rounds. AES-identical key schedule. Key-dependent
+    SubBytes/ShiftRows/MixColumn.
+- id: ade_256_v1
+  name: ADE-256
+  family_id: ade
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 256
+    key_size_bits: 256
+    output_size_bits: 256
+    rounds: 14
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  notes: ADE 256-bit variant, 14 rounds. Full specification not publicly available.
+- id: ade_512_v1
+  name: ADE-512
+  family_id: ade
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 512
+    key_size_bits: 512
+    output_size_bits: 512
+    rounds: 18
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  notes: ADE 512-bit variant, 18 rounds. Full specification not publicly available.
+- id: labyrinth_128_v1
+  name: Labyrinth-128
+  family_id: labyrinth
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 128
+    output_size_bits: 128
+    rounds: 16
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  notes: Labyrinth 128-bit Feistel variant, 16 rounds with initial/final whitening.
+- id: labyrinth_256_v1
+  name: Labyrinth-256
+  family_id: labyrinth
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 256
+    key_size_bits: 256
+    output_size_bits: 256
+    rounds: 16
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  notes: Labyrinth 256-bit Feistel variant, 16 rounds.
+- id: labyrinth_512_v1
+  name: Labyrinth-512
+  family_id: labyrinth
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 512
+    key_size_bits: 512
+    output_size_bits: 512
+    rounds: 16
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  notes: Labyrinth 512-bit Feistel variant, 16 rounds.
+- id: rsb_128_v1
+  name: RSB-128
+  family_id: rsb
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 128
+    output_size_bits: 128
+    rounds: 10
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  notes: RSB 128-bit variant; round count approximate (specification not publicly
+    available). Eliminated from the competition due to speed and statistical weaknesses.

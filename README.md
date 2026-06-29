@@ -107,14 +107,20 @@ Contributions that improve the coverage, accuracy, provenance, schemas, tooling,
 3. Edit the source YAML in `data/` and update the matching schema in `schema/` when the data model changes.
 4. Cite a reliable primary source in `data/references.yaml` for factual claims. Add influence links only when the relationship is explicitly supported by a source.
 5. Keep existing IDs stable. Add new IDs for new entities rather than renaming published IDs.
-6. Run the same checks used by CI:
+6. When a later document standardizes an existing design, preserve the original family
+   and add a separate `<name> [authority]` family (for example `LEA [ISO]`) whose only
+   provenance is the standard. Link it to the original with `standardization_of` and
+   attach the standardized primitive profiles to that family. This creates a separate,
+   bold standardization milestone without retroactively marking the original publication
+   as a standard.
+7. Run the same checks used by CI:
 
    ```bash
    make test
    make build-site
    ```
 
-7. Open a pull request that explains the change and its sources. Keep unrelated changes in separate pull requests when practical.
+8. Open a pull request that explains the change and its sources. Keep unrelated changes in separate pull requests when practical.
 
 Generated files under `build/` are ignored and should not be committed. Before submitting, confirm that validation and the process-alignment test pass and that the generated site opens correctly.
 

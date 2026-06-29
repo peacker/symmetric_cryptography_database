@@ -14,8 +14,8 @@ rounds:
     - component_id: add_mod
     - component_id: rotation_fixed
     constant_injection: round_counter_and_subkey
-  notes: Original CHAM ARX round over four words. Even and odd rounds alternate
-    one- and eight-bit rotations; the word size determines the addition modulus.
+  notes: Original CHAM ARX round over four words. Even and odd rounds alternate one-
+    and eight-bit rotations; the word size determines the addition modulus.
 - id: cham_revised_round
   name: Revised CHAM round
   kind: full_round
@@ -3460,3 +3460,105 @@ rounds:
   kind: other
   spec: {}
   notes: Coverage placeholder; the candidate's round structure is not yet modeled.
+- id: kalyna_round
+  name: Kalyna round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: add_mod
+      params:
+        modulus: 18446744073709551616
+    - component_id: sbox
+    - component_id: word_permutation
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+        matrix_rows: 8
+        matrix_cols: 8
+    state_model:
+      state_bits: null
+      word_bits: 64
+      branches: variable (2/4/8 columns)
+    constant_injection: round_key_xor_and_mod_add
+  notes: 'Kalyna round: odd rounds use XOR round key injection; even rounds use modulo
+    2^64 word addition. Each round applies SubBytes (4 random 8-bit S-boxes with max
+    DP=2^-5), ShiftRows (byte-level cyclic shift per row), and MixColumns (8×8 MDS
+    matrix over GF(2^8) with irreducible polynomial x^8+x^4+x^3+x^2+1, branch number=9).
+    Pre- and post-whitening via modulo 2^64 addition.'
+- id: mukhomor_round
+  name: Mukhomor round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: sbox
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+        matrix_rows: 4
+        matrix_cols: 4
+    - component_id: xor
+    state_model:
+      state_bits: null
+      word_bits: 32
+      branches: 4
+    constant_injection: round_key_mod_add
+  notes: 'Mukhomor (extended Lai-Massey) round: the round function M-64 applies modulo
+    2^32 key addition, then 3 applications of the SL-transformation (S-box layer using
+    Kalyna''s 4 random S-boxes + 4×4 MDS from Rijndael). Outputs are combined via
+    an OR-Feistel step (identity round function). Initial and final whitening included.'
+- id: ade_round
+  name: ADE round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+    - component_id: word_permutation
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+    state_model:
+      state_bits: 128
+      word_bits: 8
+      branches: 16
+    constant_injection: subkey
+  notes: 'ADE round: all three main operations are key-dependent. ByteSub applies
+    S(a) = M·(a·γ)^-1 + β where γ is a byte from the current round key. ShiftRows
+    shifts each row by 2-bit pairs from the round key. MixColumn multiplies by a key-dependent
+    MDS matrix parameterised by byte s from the round key. Key schedule is identical
+    to AES/Rijndael.'
+- id: labyrinth_round
+  name: Labyrinth round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+    - component_id: sbox
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+        matrix_rows: 8
+        matrix_cols: 8
+    state_model:
+      state_bits: null
+      word_bits: 8
+      branches: variable
+    constant_injection: round_key_mod_add
+  notes: 'Labyrinth 16-round Feistel round function: modular key addition (modulo
+    block-half size), S-box layer (same S-box as encryption), 8×8 MDS matrix multiplication
+    (similar to Kalyna''s; branch number 9). Initial and final whitening use modular
+    key addition, S-boxes, and byte permutation layers. Key schedule is CS-Cipher-inspired.'
+- id: rsb_round
+  name: RSB round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: sbox
+    - component_id: xor
+  notes: RSB was eliminated early in the competition due to poor encryption speed
+    and potentially weak statistical properties. Its full specification was not published
+    in open literature; details are limited.

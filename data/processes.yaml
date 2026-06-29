@@ -1,779 +1,825 @@
 version: 1
 processes:
-  - id: aes_competition_nist_1997_2000
-    name: AES Competition
-    organizer: NIST
-    start_year: 1997
-    end_year: 2000
-    url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/archived-crypto-projects/aes-development
-    notes: Process that selected Rijndael as AES.
-    stages:
-      - id: round_1
-        label: Round 1
-        kind: round
-        participants:
-          - family_id: cast256
-          - family_id: crypton
-          - family_id: deal
-          - family_id: dfc
-          - family_id: e2
-          - family_id: frog
-          - family_id: hpc
-          - family_id: loki97
-          - family_id: magenta
-          - family_id: mars
-          - family_id: rc6
-          - family_id: rijndael
-          - family_id: safer_plus
-          - family_id: serpent
-          - family_id: twofish
-      - id: round_2
-        label: Round 2
-        kind: round
-        participants:
-          - family_id: mars
-          - family_id: rc6
-          - family_id: rijndael
-          - family_id: serpent
-          - family_id: twofish
-      - id: winner
-        label: Winner
-        kind: outcome
-        participants:
-          - family_id: rijndael
-
-  - id: nessie_competition_european_commission_2000_2003
-    name: NESSIE Competition
-    organizer: European Commission
-    start_year: 2000
-    end_year: 2003
-    url: https://web.archive.org/web/20040306164444/http://www.cosic.esat.kuleuven.be/nessie/
-    notes: Process that selected a portfolio of cryptographic primitives. Previous url was https://www.cosic.esat.kuleuven.be/nessie/.
-    stages:
-      - id: submissions_block_64bit
-        label: Block cipher submissions (64-bit)
-        kind: category
-        participants:
-          - family_id: cs_cipher
-          - {name: Hierocrypt-L1}
-          - family_id: idea
-          - family_id: khazad
-          - family_id: misty1
-          - family_id: nimbus
-      - id: submissions_block_128bit
-        label: Block cipher submissions (128-bit)
-        kind: category
-        participants:
-          - family_id: anubis
-          - family_id: camellia
-          - family_id: grand_cru
-          - {name: Hierocrypt-3}
-          - family_id: noekeon
-          - family_id: q
-          - family_id: sc2000
-      - id: submissions_block_160bit
-        label: Block cipher submissions (160-bit)
-        kind: category
-        participants:
-          - family_id: shacal
-      - id: submissions_block_variable
-        label: Block cipher submissions (variable length)
-        kind: category
-        participants:
-          - family_id: nush
-          - family_id: rc6
-          - family_id: safer_plus
-      - id: submissions_stream
-        label: Synchronous stream cipher submissions
-        kind: category
-        participants:
-          - {name: BMGL}
-          - family_id: leviathan
-          - family_id: lili_128
-          - family_id: snow
-          - family_id: sober_t16
-          - family_id: sober_t32
-      - id: submissions_mac
-        label: MAC submissions
-        kind: category
-        participants:
-          - {name: Two-Track-MAC}
-          - {name: UMAC}
-      - id: submissions_hash
-        label: Hash function submissions
-        kind: category
-        participants:
-          - family_id: whirlpool
-
-  - id: cryptrec_selection_2000_2023
-    name: Cryptrec Competition
-    organizer: Cryptography Research and Evaluation Committees set up by the Japanese Government
-    start_year: 2000
-    end_year: 2023
-    url: https://www.cryptrec.go.jp/en/index.html
-    notes: Process that selected a portfolio of cryptographic primitives for Japanese government use. First selection in 2003, with updates in 2013 and 2023.
-    stages:
-      - id: recommended_block_128bit
-        label: e-Government Recommended / 128-bit block ciphers
-        kind: list
-        participants:
-          - family_id: aes
-          - family_id: camellia
-      - id: recommended_stream
-        label: e-Government Recommended / Stream ciphers
-        kind: list
-        participants:
-          - family_id: kcipher_2
-      - id: candidate_recommended_block_64bit
-        label: Candidate Recommended / 64-bit block ciphers
-        kind: list
-        participants:
-          - family_id: cipherunicorn_e
-          - {name: Hierocrypt-L1}
-          - family_id: misty1
-      - id: candidate_recommended_block_128bit
-        label: Candidate Recommended / 128-bit block ciphers
-        kind: list
-        participants:
-          - family_id: cipherunicorn_a
-          - family_id: clefia
-          - {name: Hierocrypt-3}
-      - id: candidate_recommended_stream
-        label: Candidate Recommended / Stream ciphers
-        kind: list
-        participants:
-          - family_id: enocoro_128v2
-          - family_id: mugi
-          - family_id: multi_s01
-      - id: monitored
-        label: Monitored Ciphers List
-        kind: list
-        participants:
-          - family_id: three_key_triple_des
-
-  - id: estream_competition_nist_2004_2008
-    name: eSTREAM Competition
-    organizer: ECRYPT
-    start_year: 2004
-    end_year: 2008
-    url: https://web.archive.org/web/20080729041521/http://www.ecrypt.eu.org/stream/
-    notes: Process that selected stream ciphers for the eSTREAM portfolio. Previous url was http://www.ecrypt.eu.org/stream/.
-    stages:
-      - id: phase_1
-        label: Phase 1
-        kind: phase
-        participants:
-          - {name: ABC}
-          - family_id: cryptmt3
-          - {name: DICING}
-          - family_id: dragon
-          - {name: Frogbit}
-          - family_id: hc_256
-          - {name: Mir-1}
-          - {name: Py}
-          - {name: SOSEMANUK}
-          - family_id: f_fcsr
-          - {name: Hermes8}
-          - family_id: lex
-          - {name: MAG}
-          - family_id: nlsv2
-          - {name: Phelix}
-          - {name: Polar Bear}
-          - {name: POMARANCH}
-          - family_id: rabbit
-          - {name: SSS}
-          - {name: TRBDK3 YAEA}
-          - family_id: yamb
-          - family_id: salsa20
-          - family_id: achterbahn
-          - family_id: decim
-          - {name: Edon-80}
-          - family_id: grain
-          - family_id: mickey
-          - {name: MOSQUITO}
-          - family_id: sfinks
-          - family_id: trivium
-          - {name: TSC-3}
-          - {name: VEST}
-          - {name: WG}
-          - {name: Zk-Crypt}
-      - id: phase_2
-        label: Phase 2
-        kind: phase
-        participants:
-          - {name: ABC v3}
-          - family_id: cryptmt3
-          - {name: DICING}
-          - family_id: dragon
-          - family_id: hc_128
-          - family_id: hc_256
-          - family_id: lex
-          - family_id: nlsv2
-          - {name: Phelix}
-          - {name: Polar Bear v2}
-          - {name: Py}
-          - family_id: rabbit
-          - family_id: salsa20
-          - {name: SOSEMANUK}
-          - family_id: achterbahn
-          - family_id: decim
-          - {name: Edon-80}
-          - family_id: grain
-          - family_id: f_fcsr
-          - {name: Hermes8}
-          - family_id: mickey
-          - {name: MOUSTIQUE}
-          - {name: POMARANCH v3}
-          - family_id: trivium
-          - {name: TSC-4}
-          - {name: VEST}
-          - {name: WG}
-          - {name: Zk-Crypt}
-      - id: phase_3
-        label: Phase 3
-        kind: phase
-        participants:
-          - family_id: cryptmt3
-          - family_id: dragon
-          - family_id: hc_128
-          - family_id: hc_256
-          - family_id: lex
-          - family_id: nlsv2
-          - family_id: rabbit
-          - family_id: salsa20
-          - {name: SOSEMANUK}
-          - family_id: decim
-          - {name: Edon-80}
-          - family_id: f_fcsr
-          - family_id: grain
-          - family_id: mickey
-          - {name: Moustique}
-          - {name: Pomaranch}
-          - family_id: trivium
-      - id: portfolio_sw
-        label: Final Portfolio – Profile 1 (Software)
-        kind: portfolio
-        participants:
-          - family_id: hc_128
-          - family_id: rabbit
-          - family_id: salsa20
-            note: Salsa20/12 was selected for the portfolio.
-          - {name: SOSEMANUK}
-      - id: portfolio_hw
-        label: Final Portfolio – Profile 2 (Hardware)
-        kind: portfolio
-        participants:
-          - family_id: f_fcsr
-            note: F-FCSR-H v2 was selected; later withdrawn after cryptanalysis.
-          - family_id: grain
-            note: Grain v1 was selected.
-          - family_id: mickey
-            note: MICKEY v2 was selected.
-          - family_id: trivium
-
-  - id: sha3_competition_nist_2007_2012
-    name: SHA-3 Competition
-    organizer: NIST
-    start_year: 2007
-    end_year: 2012
-    url: https://csrc.nist.gov/projects/hash-functions/sha-3-project
-    notes: NIST received 64 submissions, accepted 51 first-round candidates, advanced
-      14 candidates to the second round, selected 5 finalists, and chose Keccak as
-      the SHA-3 winner.
-    stages:
-      - id: round_1
-        label: Round 1 (51 candidates, December 2008)
-        kind: round
-        participants:
-          - family_id: abacus
-          - family_id: arirang
-          - family_id: aurora
-          - family_id: blake
-          - family_id: blender
-          - family_id: blue_midnight_wish
-          - family_id: boole
-          - family_id: cheetah
-          - family_id: chi_hash
-          - family_id: crunch
-          - family_id: cubehash
-          - family_id: dch
-          - family_id: dynamic_sha
-          - family_id: dynamic_sha2
-          - family_id: echo_hash
-          - family_id: ecoh
-          - family_id: edon_r
-          - family_id: enrupt
-          - family_id: essence
-          - family_id: fsb
-          - family_id: fugue
-          - family_id: groestl
-          - family_id: hamsi
-          - family_id: jh
-          - family_id: keccak
-          - family_id: khichidi_1
-          - family_id: lane
-          - family_id: lesamnta
-          - family_id: luffa
-          - family_id: lux_hash
-          - family_id: mcssha3
-          - family_id: md6
-          - family_id: meshhash
-          - family_id: nasha
-          - family_id: sandstorm
-          - family_id: sarmal
-          - family_id: sgail
-          - family_id: shabal
-          - family_id: shamata
-          - family_id: shavite3
-          - family_id: simd_hash
-          - family_id: skein
-          - family_id: spectral_hash
-          - family_id: streamhash
-          - family_id: swifftx
-          - family_id: tangle_hash
-          - family_id: tib3
-          - family_id: twister_hash
-          - family_id: vortex_hash
-          - family_id: wamm
-          - family_id: waterfall_hash
-      - id: round_2
-        label: Round 2 (14 candidates, July 2009)
-        kind: round
-        participants:
-          - family_id: blake
-          - family_id: blue_midnight_wish
-          - family_id: cubehash
-          - family_id: echo_hash
-          - family_id: fugue
-          - family_id: groestl
-          - family_id: hamsi
-          - family_id: jh
-          - family_id: keccak
-          - family_id: luffa
-          - family_id: shabal
-          - family_id: shavite3
-          - family_id: simd_hash
-          - family_id: skein
-      - id: round_3
-        label: Round 3 (5 finalists, December 2010)
-        kind: round
-        participants:
-          - family_id: blake
-          - family_id: groestl
-          - family_id: jh
-          - family_id: keccak
-          - family_id: skein
-      - id: winner
-        label: Winner
-        kind: outcome
-        participants:
-          - family_id: keccak
-
-  - id: caesar_competition_nist_2013_2019
-    name: CAESAR Competition
-    organizer: CAESAR Committee
-    start_year: 2013
-    end_year: 2019
-    url: https://competitions.cr.yp.to/caesar.html
-    notes: Process that selected a portfolio of authenticated encryption schemes.
-    stages:
-      - id: round_1
-        label: Round 1 (First Round)
-        kind: round
-        participants:
-          - {name: "++AE"}
-          - {name: AES-CMCC}
-          - {name: AES-COBRA}
-          - {name: AES-CPFB}
-          - {name: Artemia}
-          - {name: AVALANCHE}
-          - {name: Calico}
-          - {name: CBA}
-          - {name: CBEAM}
-          - {name: Enchilada}
-          - {name: FASER}
-          - {name: HKC}
-          - {name: "iFeed[AES]"}
-          - {name: iSCREAM}
-          - {name: Julius}
-          - {name: KIASU}
-          - {name: LAC}
-          - {name: Marble}
-          - {name: McMambo}
-          - {name: PAES}
-          - {name: PANDA}
-          - {name: POLAWIS}
-          - {name: Prøst}
-          - {name: Raviyoyla}
-          - {name: Sablier}
-          - {name: Silver}
-          - {name: Wheesht}
-          - {name: YAES}
-          - {name: AES-OTR}
-          - {name: AEZ}
-          - {name: CLOC}
-          - {name: Deoxys-I}
-          - {name: Deoxys-II}
-          - {name: JAMBU}
-          - {name: Ketje}
-          - {name: Keyak}
-          - {name: NORX}
-          - {name: Tiaoxin}
-          - {name: HS1-SIV}
-          - {name: ICEPOLE}
-          - {name: Joltik}
-          - {name: Minalpher}
-          - {name: OMD}
-          - {name: PAEQ}
-          - {name: π-Cipher}
-          - {name: POET}
-          - {name: PRIMATEs}
-          - {name: SCREAM}
-          - {name: SHELL}
-          - {name: STRIBOB}
-          - {name: TriviA-ck}
-          - {name: Ascon}
-          - {name: ACORN}
-          - {name: AEGIS-128}
-          - {name: OCB}
-          - {name: COLM}
-          - {name: AEGIS-128L}
-          - {name: AEGIS-256}
-          - {name: MORUS}
-      - id: round_2
-        label: Round 2 (Second Round)
-        kind: round
-        participants:
-          - {name: AES-OTR}
-          - {name: AEZ}
-          - {name: CLOC and SILC}
-          - {name: Deoxys-I}
-          - {name: Deoxys-II}
-          - {name: HS1-SIV}
-          - {name: ICEPOLE}
-          - {name: JAMBU}
-          - {name: Joltik}
-          - {name: Ketje}
-          - {name: Keyak}
-          - {name: Minalpher}
-          - {name: OMD}
-          - {name: PAEQ}
-          - {name: π-Cipher}
-          - {name: POET}
-          - {name: PRIMATEs}
-          - {name: SCREAM}
-          - {name: SHELL}
-          - {name: STRIBOB}
-          - {name: TriviA-ck}
-          - {name: Ascon}
-          - {name: ACORN}
-          - {name: AEGIS-128}
-          - {name: OCB}
-          - {name: Deoxys-II}
-          - {name: COLM}
-          - {name: AEGIS-128L}
-          - {name: AEGIS-256}
-          - {name: MORUS}
-          - {name: NORX}
-          - {name: Tiaoxin}
-      - id: round_3
-        label: Round 3 (Third Round)
-        kind: round
-        participants:
-          - {name: AES-OTR}
-          - {name: AEZ}
-          - {name: CLOC and SILC}
-          - {name: Deoxys-I}
-          - {name: Deoxys-II}
-          - {name: JAMBU}
-          - {name: Ketje}
-          - {name: Keyak}
-          - {name: NORX}
-          - {name: Tiaoxin}
-          - {name: Ascon}
-          - {name: ACORN}
-          - {name: AEGIS-128}
-          - {name: OCB}
-          - {name: COLM}
-          - {name: AEGIS-128L}
-          - {name: AEGIS-256}
-          - {name: MORUS}
-      - id: final_portfolio_uc1
-        label: Final Portfolio – Use Case 1 (Lightweight)
-        kind: portfolio
-        participants:
-          - {name: Ascon, note: First choice}
-          - {name: ACORN, note: Second choice}
-      - id: final_portfolio_uc2
-        label: Final Portfolio – Use Case 2 (High-performance)
-        kind: portfolio
-        participants:
-          - {name: AEGIS-128}
-          - {name: OCB}
-          - {name: AEGIS-128L}
-          - {name: AEGIS-256}
-          - {name: MORUS}
-      - id: final_portfolio_uc3
-        label: Final Portfolio – Use Case 3 (Defense in depth)
-        kind: portfolio
-        participants:
-          - {name: Deoxys-II, note: First choice}
-          - {name: COLM, note: Second choice}
-
-  - id: phc_competition_nist_2013_2015
-    name: PHC Competition
-    organizer: PHC Committee
-    start_year: 2013
-    end_year: 2015
-    url: https://password-hashing.net/
-    notes: Process that selected a portfolio of password hashing schemes.
-    stages:
-      - id: submissions
-        label: All Submissions
-        kind: other
-        participants:
-          - family_id: antcrypt
-          - family_id: argon2
-          - family_id: battcrypt
-          - family_id: catena
-          - {name: Catfish}
-          - family_id: centrifuge
-          - family_id: earworm
-          - family_id: gambit
-          - family_id: lanarea
-          - family_id: lyra2
-          - {name: M3lcrypt}
-          - family_id: makwa
-          - family_id: mcs_phs
-          - family_id: omegacrypt
-          - family_id: parallel
-          - family_id: polypasshash
-          - family_id: pomelo
-          - {name: Pufferfish}
-          - family_id: rig
-          - family_id: schvrch
-          - family_id: tortuga
-          - family_id: twocats
-          - family_id: yarn
-          - family_id: yescrypt
-      - id: finalist
-        label: Finalists
-        kind: outcome
-        participants:
-          - family_id: argon2
-          - family_id: battcrypt
-          - family_id: parallel
-          - family_id: pomelo
-          - {name: Pufferfish}
-      - id: special_recognition
-        label: Special Recognition
-        kind: outcome
-        participants:
-          - family_id: catena
-          - family_id: lyra2
-          - family_id: makwa
-          - family_id: yescrypt
-      - id: winner
-        label: Winner
-        kind: outcome
-        participants:
-          - family_id: argon2
-
-  - id: cacr_national_cryptographic_algorithm_design_competition
-    name: CACR National Cryptographic Algorithm Design Competition
-    organizer: CACR
-    start_year: 2018
-    end_year: 2020
-    url: https://web.archive.org/web/20251021204936/http://sfjs.cacrnet.org.cn/site/content/309.html
-    notes: Process that selected a portfolio of Symmetric and Post-Quantum Asymmetric cryptographic primitives. Previously hosted at http://sfjs.cacrnet.org.cn/site/content/309.html.
-    stages:
-      - id: first_prize
-        label: First Prize
-        kind: outcome
-        participants:
-          - family_id: ublock
-          - family_id: ballet
-      - id: second_prize
-        label: Second Prize
-        kind: outcome
-        participants:
-          - family_id: fesh
-          - family_id: ant
-          - family_id: tangram
-      - id: third_prize
-        label: Third Prize
-        kind: outcome
-        participants:
-          - family_id: raindrop
-          - family_id: nbc
-          - family_id: fbc
-          - family_id: smba
-          - family_id: spring
-
-  - id: lightweight_crypto_nist_2018_2023
-    name: NIST Lightweight Cryptography Process
-    organizer: NIST
-    start_year: 2018
-    end_year: 2023
-    url: https://csrc.nist.gov/projects/lightweight-cryptography
-    notes: Process that selected a portfolio of lightweight cryptographic primitives, culminating in ASCON standardization.
-    stages:
-      - id: round_1
-        label: Round 1 (56 submissions, 2019)
-        kind: round
-        participants:
-          - family_id: ace
-          - family_id: ascon
-          - family_id: bleep64
-          - family_id: cilipadi
-          - family_id: clae
-          - family_id: clx
-          - family_id: comet
-          - family_id: drygascon
-          - family_id: elephant
-          - family_id: estate
-          - family_id: flexaead
-          - family_id: forkae
-          - family_id: fountain
-          - family_id: gimli
-          - family_id: grain_128
-          - family_id: hyena
-          - family_id: isap
-          - family_id: knot
-          - family_id: laem
-          - family_id: lilliput_ae
-          - family_id: limdolen
-          - family_id: locus
-          - family_id: lotus
-          - family_id: mixfeed
-          - family_id: orange
-          - family_id: oribatida
-          - family_id: photon_beetle
-          - family_id: pyjamask
-          - family_id: qameleon
-          - family_id: quartet
-          - family_id: romulus
-          - family_id: saeaes
-          - family_id: saturnin
-          - family_id: shamash_and_shamashash
-          - family_id: simple
-          - family_id: siv_rijndael256
-          - family_id: siv_tem_photon
-          - family_id: skinny_aead
-          - family_id: sneik
-          - family_id: sparkle
-          - family_id: spix
-          - family_id: spoc
-          - family_id: spook
-          - family_id: subterranean
-          - family_id: subterranean_2_0
-          - family_id: sundae_gift
-          - family_id: sycon
-          - family_id: tinyjambu
-          - family_id: trifle
-          - family_id: wage
-          - family_id: xoodyak
-          - family_id: yarara_and_coral
-          - {name: GIFT-COFB}
-          - {name: Pyjamask-AEAD}
-          - {name: REMUS}
-          - {name: Dumbo/Jumbo (Elephant)}
-      - id: round_2
-        label: Round 2 (32 candidates, 2019)
-        kind: round
-        participants:
-          - family_id: ace
-          - family_id: ascon
-          - family_id: comet
-          - family_id: drygascon
-          - family_id: elephant
-          - family_id: estate
-          - family_id: forkae
-          - family_id: fountain
-          - family_id: gimli
-          - family_id: grain_128
-          - family_id: hyena
-          - family_id: isap
-          - family_id: knot
-          - family_id: locus
-          - family_id: lotus
-          - family_id: mixfeed
-          - family_id: orange
-          - family_id: oribatida
-          - family_id: photon_beetle
-          - family_id: romulus
-          - family_id: saeaes
-          - family_id: sparkle
-          - family_id: spix
-          - family_id: spoc
-          - family_id: spook
-          - family_id: subterranean_2_0
-          - family_id: sundae_gift
-          - family_id: tinyjambu
-          - family_id: wage
-          - family_id: xoodyak
-          - family_id: skinny_aead
-          - {name: GIFT-COFB}
-      - id: finalist
-        label: Finalists (10 candidates, 2021)
-        kind: outcome
-        participants:
-          - family_id: ascon
-          - family_id: elephant
-          - family_id: grain_128
-          - family_id: isap
-          - family_id: photon_beetle
-          - family_id: romulus
-          - family_id: sparkle
-          - family_id: tinyjambu
-          - family_id: xoodyak
-          - {name: GIFT-COFB}
-      - id: winner
-        label: Winner
-        kind: outcome
-        participants:
-          - family_id: ascon
-
-  - id: nist_sha1_sha2_standardization
-    name: NIST SHA-1 / SHA-2 Standardization
-    organizer: NIST
-    start_year: 1993
-    end_year: 2002
-    url: https://csrc.nist.gov/publications/detail/fips/180/4/final
-    notes: NIST standardization of SHA-1 (FIPS 180-1, 1995) and SHA-2 family (SHA-256/384/512, FIPS 180-2, 2002). SHA was first published as FIPS 180 in 1993; FIPS 180-4 (2012) consolidated all variants. The entire process was closed-source, with no public competition or evaluation.
-    stages:
-      - id: standardized
-        label: Standardized
-        kind: outcome
-        participants:
-          - family_id: sha1_sha2
-          - family_id: sha2
-
-  - id: eu_ripe_project
-    name: RIPE Project
-    organizer: RIPE Consortium
-    start_year: 1988
-    end_year: 1992
-    url: https://ir.cwi.nl/pub/5295/5295D.pdf
-    notes: EU RACE Integrity Primitives Evaluation project that produced RIPEMD (1992). RIPEMD-160, a strengthened 160-bit successor, was published in 1996 by Dobbertin, Bosselaers, and Preneel.
-    stages:
-      - id: category_unkeyed
-        label: Unkeyed integrity primitives
-        kind: category
-        participants:
-          - {name: MDC-4, note: Hash based on DES}
-          - family_id: ripemd
-            note: Hash derived from MD4 and MD5.
-      - id: category_secret_key
-        label: Secret key integrity primitives
-        kind: category
-        participants:
-          - {name: RIPEMAC, note: MAC}
-          - {name: IBC-Hash, note: MAC}
-          - {name: SKID, note: Identification protocol}
-      - id: category_public_key
-        label: Public key primitives
-        kind: category
-        participants:
-          - {name: "RSA signature as in ISO/IEC 9796"}
-          - {name: COMSET, note: Identification protocol}
+- id: aes_competition_nist_1997_2000
+  name: AES Competition
+  organizer: NIST
+  start_year: 1997
+  end_year: 2000
+  url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/archived-crypto-projects/aes-development
+  notes: Process that selected Rijndael as AES.
+  stages:
+  - id: round_1
+    label: Round 1
+    kind: round
+    participants:
+    - family_id: cast256
+    - family_id: crypton
+    - family_id: deal
+    - family_id: dfc
+    - family_id: e2
+    - family_id: frog
+    - family_id: hpc
+    - family_id: loki97
+    - family_id: magenta
+    - family_id: mars
+    - family_id: rc6
+    - family_id: rijndael
+    - family_id: safer_plus
+    - family_id: serpent
+    - family_id: twofish
+  - id: round_2
+    label: Round 2
+    kind: round
+    participants:
+    - family_id: mars
+    - family_id: rc6
+    - family_id: rijndael
+    - family_id: serpent
+    - family_id: twofish
+  - id: winner
+    label: Winner
+    kind: outcome
+    participants:
+    - family_id: rijndael
+- id: nessie_competition_european_commission_2000_2003
+  name: NESSIE Competition
+  organizer: European Commission
+  start_year: 2000
+  end_year: 2003
+  url: https://web.archive.org/web/20040306164444/http://www.cosic.esat.kuleuven.be/nessie/
+  notes: Process that selected a portfolio of cryptographic primitives. Previous url
+    was https://www.cosic.esat.kuleuven.be/nessie/.
+  stages:
+  - id: submissions_block_64bit
+    label: Block cipher submissions (64-bit)
+    kind: category
+    participants:
+    - family_id: cs_cipher
+    - name: Hierocrypt-L1
+    - family_id: idea
+    - family_id: khazad
+    - family_id: misty1
+    - family_id: nimbus
+  - id: submissions_block_128bit
+    label: Block cipher submissions (128-bit)
+    kind: category
+    participants:
+    - family_id: anubis
+    - family_id: camellia
+    - family_id: grand_cru
+    - name: Hierocrypt-3
+    - family_id: noekeon
+    - family_id: q
+    - family_id: sc2000
+  - id: submissions_block_160bit
+    label: Block cipher submissions (160-bit)
+    kind: category
+    participants:
+    - family_id: shacal
+  - id: submissions_block_variable
+    label: Block cipher submissions (variable length)
+    kind: category
+    participants:
+    - family_id: nush
+    - family_id: rc6
+    - family_id: safer_plus
+  - id: submissions_stream
+    label: Synchronous stream cipher submissions
+    kind: category
+    participants:
+    - name: BMGL
+    - family_id: leviathan
+    - family_id: lili_128
+    - family_id: snow
+    - family_id: sober_t16
+    - family_id: sober_t32
+  - id: submissions_mac
+    label: MAC submissions
+    kind: category
+    participants:
+    - name: Two-Track-MAC
+    - name: UMAC
+  - id: submissions_hash
+    label: Hash function submissions
+    kind: category
+    participants:
+    - family_id: whirlpool
+- id: cryptrec_selection_2000_2023
+  name: Cryptrec Competition
+  organizer: Cryptography Research and Evaluation Committees set up by the Japanese
+    Government
+  start_year: 2000
+  end_year: 2023
+  url: https://www.cryptrec.go.jp/en/index.html
+  notes: Process that selected a portfolio of cryptographic primitives for Japanese
+    government use. First selection in 2003, with updates in 2013 and 2023.
+  stages:
+  - id: recommended_block_128bit
+    label: e-Government Recommended / 128-bit block ciphers
+    kind: list
+    participants:
+    - family_id: aes
+    - family_id: camellia
+  - id: recommended_stream
+    label: e-Government Recommended / Stream ciphers
+    kind: list
+    participants:
+    - family_id: kcipher_2
+  - id: candidate_recommended_block_64bit
+    label: Candidate Recommended / 64-bit block ciphers
+    kind: list
+    participants:
+    - family_id: cipherunicorn_e
+    - name: Hierocrypt-L1
+    - family_id: misty1
+  - id: candidate_recommended_block_128bit
+    label: Candidate Recommended / 128-bit block ciphers
+    kind: list
+    participants:
+    - family_id: cipherunicorn_a
+    - family_id: clefia
+    - name: Hierocrypt-3
+  - id: candidate_recommended_stream
+    label: Candidate Recommended / Stream ciphers
+    kind: list
+    participants:
+    - family_id: enocoro_128v2
+    - family_id: mugi
+    - family_id: multi_s01
+  - id: monitored
+    label: Monitored Ciphers List
+    kind: list
+    participants:
+    - family_id: three_key_triple_des
+- id: estream_competition_nist_2004_2008
+  name: eSTREAM Competition
+  organizer: ECRYPT
+  start_year: 2004
+  end_year: 2008
+  url: https://web.archive.org/web/20080729041521/http://www.ecrypt.eu.org/stream/
+  notes: Process that selected stream ciphers for the eSTREAM portfolio. Previous
+    url was http://www.ecrypt.eu.org/stream/.
+  stages:
+  - id: phase_1
+    label: Phase 1
+    kind: phase
+    participants:
+    - name: ABC
+    - family_id: cryptmt3
+    - name: DICING
+    - family_id: dragon
+    - name: Frogbit
+    - family_id: hc_256
+    - name: Mir-1
+    - name: Py
+    - name: SOSEMANUK
+    - family_id: f_fcsr
+    - name: Hermes8
+    - family_id: lex
+    - name: MAG
+    - family_id: nlsv2
+    - name: Phelix
+    - name: Polar Bear
+    - name: POMARANCH
+    - family_id: rabbit
+    - name: SSS
+    - name: TRBDK3 YAEA
+    - family_id: yamb
+    - family_id: salsa20
+    - family_id: achterbahn
+    - family_id: decim
+    - name: Edon-80
+    - family_id: grain
+    - family_id: mickey
+    - name: MOSQUITO
+    - family_id: sfinks
+    - family_id: trivium
+    - name: TSC-3
+    - name: VEST
+    - name: WG
+    - name: Zk-Crypt
+  - id: phase_2
+    label: Phase 2
+    kind: phase
+    participants:
+    - name: ABC v3
+    - family_id: cryptmt3
+    - name: DICING
+    - family_id: dragon
+    - family_id: hc_128
+    - family_id: hc_256
+    - family_id: lex
+    - family_id: nlsv2
+    - name: Phelix
+    - name: Polar Bear v2
+    - name: Py
+    - family_id: rabbit
+    - family_id: salsa20
+    - name: SOSEMANUK
+    - family_id: achterbahn
+    - family_id: decim
+    - name: Edon-80
+    - family_id: grain
+    - family_id: f_fcsr
+    - name: Hermes8
+    - family_id: mickey
+    - name: MOUSTIQUE
+    - name: POMARANCH v3
+    - family_id: trivium
+    - name: TSC-4
+    - name: VEST
+    - name: WG
+    - name: Zk-Crypt
+  - id: phase_3
+    label: Phase 3
+    kind: phase
+    participants:
+    - family_id: cryptmt3
+    - family_id: dragon
+    - family_id: hc_128
+    - family_id: hc_256
+    - family_id: lex
+    - family_id: nlsv2
+    - family_id: rabbit
+    - family_id: salsa20
+    - name: SOSEMANUK
+    - family_id: decim
+    - name: Edon-80
+    - family_id: f_fcsr
+    - family_id: grain
+    - family_id: mickey
+    - name: Moustique
+    - name: Pomaranch
+    - family_id: trivium
+  - id: portfolio_sw
+    label: Final Portfolio – Profile 1 (Software)
+    kind: portfolio
+    participants:
+    - family_id: hc_128
+    - family_id: rabbit
+    - family_id: salsa20
+      note: Salsa20/12 was selected for the portfolio.
+    - name: SOSEMANUK
+  - id: portfolio_hw
+    label: Final Portfolio – Profile 2 (Hardware)
+    kind: portfolio
+    participants:
+    - family_id: f_fcsr
+      note: F-FCSR-H v2 was selected; later withdrawn after cryptanalysis.
+    - family_id: grain
+      note: Grain v1 was selected.
+    - family_id: mickey
+      note: MICKEY v2 was selected.
+    - family_id: trivium
+- id: sha3_competition_nist_2007_2012
+  name: SHA-3 Competition
+  organizer: NIST
+  start_year: 2007
+  end_year: 2012
+  url: https://csrc.nist.gov/projects/hash-functions/sha-3-project
+  notes: NIST received 64 submissions, accepted 51 first-round candidates, advanced
+    14 candidates to the second round, selected 5 finalists, and chose Keccak as the
+    SHA-3 winner.
+  stages:
+  - id: round_1
+    label: Round 1 (51 candidates, December 2008)
+    kind: round
+    participants:
+    - family_id: abacus
+    - family_id: arirang
+    - family_id: aurora
+    - family_id: blake
+    - family_id: blender
+    - family_id: blue_midnight_wish
+    - family_id: boole
+    - family_id: cheetah
+    - family_id: chi_hash
+    - family_id: crunch
+    - family_id: cubehash
+    - family_id: dch
+    - family_id: dynamic_sha
+    - family_id: dynamic_sha2
+    - family_id: echo_hash
+    - family_id: ecoh
+    - family_id: edon_r
+    - family_id: enrupt
+    - family_id: essence
+    - family_id: fsb
+    - family_id: fugue
+    - family_id: groestl
+    - family_id: hamsi
+    - family_id: jh
+    - family_id: keccak
+    - family_id: khichidi_1
+    - family_id: lane
+    - family_id: lesamnta
+    - family_id: luffa
+    - family_id: lux_hash
+    - family_id: mcssha3
+    - family_id: md6
+    - family_id: meshhash
+    - family_id: nasha
+    - family_id: sandstorm
+    - family_id: sarmal
+    - family_id: sgail
+    - family_id: shabal
+    - family_id: shamata
+    - family_id: shavite3
+    - family_id: simd_hash
+    - family_id: skein
+    - family_id: spectral_hash
+    - family_id: streamhash
+    - family_id: swifftx
+    - family_id: tangle_hash
+    - family_id: tib3
+    - family_id: twister_hash
+    - family_id: vortex_hash
+    - family_id: wamm
+    - family_id: waterfall_hash
+  - id: round_2
+    label: Round 2 (14 candidates, July 2009)
+    kind: round
+    participants:
+    - family_id: blake
+    - family_id: blue_midnight_wish
+    - family_id: cubehash
+    - family_id: echo_hash
+    - family_id: fugue
+    - family_id: groestl
+    - family_id: hamsi
+    - family_id: jh
+    - family_id: keccak
+    - family_id: luffa
+    - family_id: shabal
+    - family_id: shavite3
+    - family_id: simd_hash
+    - family_id: skein
+  - id: round_3
+    label: Round 3 (5 finalists, December 2010)
+    kind: round
+    participants:
+    - family_id: blake
+    - family_id: groestl
+    - family_id: jh
+    - family_id: keccak
+    - family_id: skein
+  - id: winner
+    label: Winner
+    kind: outcome
+    participants:
+    - family_id: keccak
+- id: caesar_competition_nist_2013_2019
+  name: CAESAR Competition
+  organizer: CAESAR Committee
+  start_year: 2013
+  end_year: 2019
+  url: https://competitions.cr.yp.to/caesar.html
+  notes: Process that selected a portfolio of authenticated encryption schemes.
+  stages:
+  - id: round_1
+    label: Round 1 (First Round)
+    kind: round
+    participants:
+    - name: ++AE
+    - name: AES-CMCC
+    - name: AES-COBRA
+    - name: AES-CPFB
+    - name: Artemia
+    - name: AVALANCHE
+    - name: Calico
+    - name: CBA
+    - name: CBEAM
+    - name: Enchilada
+    - name: FASER
+    - name: HKC
+    - name: iFeed[AES]
+    - name: iSCREAM
+    - name: Julius
+    - name: KIASU
+    - name: LAC
+    - name: Marble
+    - name: McMambo
+    - name: PAES
+    - name: PANDA
+    - name: POLAWIS
+    - name: Prøst
+    - name: Raviyoyla
+    - name: Sablier
+    - name: Silver
+    - name: Wheesht
+    - name: YAES
+    - name: AES-OTR
+    - name: AEZ
+    - name: CLOC
+    - name: Deoxys-I
+    - name: Deoxys-II
+    - name: JAMBU
+    - name: Ketje
+    - name: Keyak
+    - name: NORX
+    - name: Tiaoxin
+    - name: HS1-SIV
+    - name: ICEPOLE
+    - name: Joltik
+    - name: Minalpher
+    - name: OMD
+    - name: PAEQ
+    - name: π-Cipher
+    - name: POET
+    - name: PRIMATEs
+    - name: SCREAM
+    - name: SHELL
+    - name: STRIBOB
+    - name: TriviA-ck
+    - name: Ascon
+    - name: ACORN
+    - name: AEGIS-128
+    - name: OCB
+    - name: COLM
+    - name: AEGIS-128L
+    - name: AEGIS-256
+    - name: MORUS
+  - id: round_2
+    label: Round 2 (Second Round)
+    kind: round
+    participants:
+    - name: AES-OTR
+    - name: AEZ
+    - name: CLOC and SILC
+    - name: Deoxys-I
+    - name: Deoxys-II
+    - name: HS1-SIV
+    - name: ICEPOLE
+    - name: JAMBU
+    - name: Joltik
+    - name: Ketje
+    - name: Keyak
+    - name: Minalpher
+    - name: OMD
+    - name: PAEQ
+    - name: π-Cipher
+    - name: POET
+    - name: PRIMATEs
+    - name: SCREAM
+    - name: SHELL
+    - name: STRIBOB
+    - name: TriviA-ck
+    - name: Ascon
+    - name: ACORN
+    - name: AEGIS-128
+    - name: OCB
+    - name: Deoxys-II
+    - name: COLM
+    - name: AEGIS-128L
+    - name: AEGIS-256
+    - name: MORUS
+    - name: NORX
+    - name: Tiaoxin
+  - id: round_3
+    label: Round 3 (Third Round)
+    kind: round
+    participants:
+    - name: AES-OTR
+    - name: AEZ
+    - name: CLOC and SILC
+    - name: Deoxys-I
+    - name: Deoxys-II
+    - name: JAMBU
+    - name: Ketje
+    - name: Keyak
+    - name: NORX
+    - name: Tiaoxin
+    - name: Ascon
+    - name: ACORN
+    - name: AEGIS-128
+    - name: OCB
+    - name: COLM
+    - name: AEGIS-128L
+    - name: AEGIS-256
+    - name: MORUS
+  - id: final_portfolio_uc1
+    label: Final Portfolio – Use Case 1 (Lightweight)
+    kind: portfolio
+    participants:
+    - name: Ascon
+      note: First choice
+    - name: ACORN
+      note: Second choice
+  - id: final_portfolio_uc2
+    label: Final Portfolio – Use Case 2 (High-performance)
+    kind: portfolio
+    participants:
+    - name: AEGIS-128
+    - name: OCB
+    - name: AEGIS-128L
+    - name: AEGIS-256
+    - name: MORUS
+  - id: final_portfolio_uc3
+    label: Final Portfolio – Use Case 3 (Defense in depth)
+    kind: portfolio
+    participants:
+    - name: Deoxys-II
+      note: First choice
+    - name: COLM
+      note: Second choice
+- id: phc_competition_nist_2013_2015
+  name: PHC Competition
+  organizer: PHC Committee
+  start_year: 2013
+  end_year: 2015
+  url: https://password-hashing.net/
+  notes: Process that selected a portfolio of password hashing schemes.
+  stages:
+  - id: submissions
+    label: All Submissions
+    kind: other
+    participants:
+    - family_id: antcrypt
+    - family_id: argon2
+    - family_id: battcrypt
+    - family_id: catena
+    - name: Catfish
+    - family_id: centrifuge
+    - family_id: earworm
+    - family_id: gambit
+    - family_id: lanarea
+    - family_id: lyra2
+    - name: M3lcrypt
+    - family_id: makwa
+    - family_id: mcs_phs
+    - family_id: omegacrypt
+    - family_id: parallel
+    - family_id: polypasshash
+    - family_id: pomelo
+    - name: Pufferfish
+    - family_id: rig
+    - family_id: schvrch
+    - family_id: tortuga
+    - family_id: twocats
+    - family_id: yarn
+    - family_id: yescrypt
+  - id: finalist
+    label: Finalists
+    kind: outcome
+    participants:
+    - family_id: argon2
+    - family_id: battcrypt
+    - family_id: parallel
+    - family_id: pomelo
+    - name: Pufferfish
+  - id: special_recognition
+    label: Special Recognition
+    kind: outcome
+    participants:
+    - family_id: catena
+    - family_id: lyra2
+    - family_id: makwa
+    - family_id: yescrypt
+  - id: winner
+    label: Winner
+    kind: outcome
+    participants:
+    - family_id: argon2
+- id: cacr_national_cryptographic_algorithm_design_competition
+  name: CACR National Cryptographic Algorithm Design Competition
+  organizer: CACR
+  start_year: 2018
+  end_year: 2020
+  url: https://web.archive.org/web/20251021204936/http://sfjs.cacrnet.org.cn/site/content/309.html
+  notes: Process that selected a portfolio of Symmetric and Post-Quantum Asymmetric
+    cryptographic primitives. Previously hosted at http://sfjs.cacrnet.org.cn/site/content/309.html.
+  stages:
+  - id: first_prize
+    label: First Prize
+    kind: outcome
+    participants:
+    - family_id: ublock
+    - family_id: ballet
+  - id: second_prize
+    label: Second Prize
+    kind: outcome
+    participants:
+    - family_id: fesh
+    - family_id: ant
+    - family_id: tangram
+  - id: third_prize
+    label: Third Prize
+    kind: outcome
+    participants:
+    - family_id: raindrop
+    - family_id: nbc
+    - family_id: fbc
+    - family_id: smba
+    - family_id: spring
+- id: lightweight_crypto_nist_2018_2023
+  name: NIST Lightweight Cryptography Process
+  organizer: NIST
+  start_year: 2018
+  end_year: 2023
+  url: https://csrc.nist.gov/projects/lightweight-cryptography
+  notes: Process that selected a portfolio of lightweight cryptographic primitives,
+    culminating in ASCON standardization.
+  stages:
+  - id: round_1
+    label: Round 1 (56 submissions, 2019)
+    kind: round
+    participants:
+    - family_id: ace
+    - family_id: ascon
+    - family_id: bleep64
+    - family_id: cilipadi
+    - family_id: clae
+    - family_id: clx
+    - family_id: comet
+    - family_id: drygascon
+    - family_id: elephant
+    - family_id: estate
+    - family_id: flexaead
+    - family_id: forkae
+    - family_id: fountain
+    - family_id: gimli
+    - family_id: grain_128
+    - family_id: hyena
+    - family_id: isap
+    - family_id: knot
+    - family_id: laem
+    - family_id: lilliput_ae
+    - family_id: limdolen
+    - family_id: locus
+    - family_id: lotus
+    - family_id: mixfeed
+    - family_id: orange
+    - family_id: oribatida
+    - family_id: photon_beetle
+    - family_id: pyjamask
+    - family_id: qameleon
+    - family_id: quartet
+    - family_id: romulus
+    - family_id: saeaes
+    - family_id: saturnin
+    - family_id: shamash_and_shamashash
+    - family_id: simple
+    - family_id: siv_rijndael256
+    - family_id: siv_tem_photon
+    - family_id: skinny_aead
+    - family_id: sneik
+    - family_id: sparkle
+    - family_id: spix
+    - family_id: spoc
+    - family_id: spook
+    - family_id: subterranean
+    - family_id: subterranean_2_0
+    - family_id: sundae_gift
+    - family_id: sycon
+    - family_id: tinyjambu
+    - family_id: trifle
+    - family_id: wage
+    - family_id: xoodyak
+    - family_id: yarara_and_coral
+    - name: GIFT-COFB
+    - name: Pyjamask-AEAD
+    - name: REMUS
+    - name: Dumbo/Jumbo (Elephant)
+  - id: round_2
+    label: Round 2 (32 candidates, 2019)
+    kind: round
+    participants:
+    - family_id: ace
+    - family_id: ascon
+    - family_id: comet
+    - family_id: drygascon
+    - family_id: elephant
+    - family_id: estate
+    - family_id: forkae
+    - family_id: fountain
+    - family_id: gimli
+    - family_id: grain_128
+    - family_id: hyena
+    - family_id: isap
+    - family_id: knot
+    - family_id: locus
+    - family_id: lotus
+    - family_id: mixfeed
+    - family_id: orange
+    - family_id: oribatida
+    - family_id: photon_beetle
+    - family_id: romulus
+    - family_id: saeaes
+    - family_id: sparkle
+    - family_id: spix
+    - family_id: spoc
+    - family_id: spook
+    - family_id: subterranean_2_0
+    - family_id: sundae_gift
+    - family_id: tinyjambu
+    - family_id: wage
+    - family_id: xoodyak
+    - family_id: skinny_aead
+    - name: GIFT-COFB
+  - id: finalist
+    label: Finalists (10 candidates, 2021)
+    kind: outcome
+    participants:
+    - family_id: ascon
+    - family_id: elephant
+    - family_id: grain_128
+    - family_id: isap
+    - family_id: photon_beetle
+    - family_id: romulus
+    - family_id: sparkle
+    - family_id: tinyjambu
+    - family_id: xoodyak
+    - name: GIFT-COFB
+  - id: winner
+    label: Winner
+    kind: outcome
+    participants:
+    - family_id: ascon
+- id: nist_sha1_sha2_standardization
+  name: NIST SHA-1 / SHA-2 Standardization
+  organizer: NIST
+  start_year: 1993
+  end_year: 2002
+  url: https://csrc.nist.gov/publications/detail/fips/180/4/final
+  notes: NIST standardization of SHA-1 (FIPS 180-1, 1995) and SHA-2 family (SHA-256/384/512,
+    FIPS 180-2, 2002). SHA was first published as FIPS 180 in 1993; FIPS 180-4 (2012)
+    consolidated all variants. The entire process was closed-source, with no public
+    competition or evaluation.
+  stages:
+  - id: standardized
+    label: Standardized
+    kind: outcome
+    participants:
+    - family_id: sha1_sha2
+    - family_id: sha2
+- id: eu_ripe_project
+  name: RIPE Project
+  organizer: RIPE Consortium
+  start_year: 1988
+  end_year: 1992
+  url: https://ir.cwi.nl/pub/5295/5295D.pdf
+  notes: EU RACE Integrity Primitives Evaluation project that produced RIPEMD (1992).
+    RIPEMD-160, a strengthened 160-bit successor, was published in 1996 by Dobbertin,
+    Bosselaers, and Preneel.
+  stages:
+  - id: category_unkeyed
+    label: Unkeyed integrity primitives
+    kind: category
+    participants:
+    - name: MDC-4
+      note: Hash based on DES
+    - family_id: ripemd
+      note: Hash derived from MD4 and MD5.
+  - id: category_secret_key
+    label: Secret key integrity primitives
+    kind: category
+    participants:
+    - name: RIPEMAC
+      note: MAC
+    - name: IBC-Hash
+      note: MAC
+    - name: SKID
+      note: Identification protocol
+  - id: category_public_key
+    label: Public key primitives
+    kind: category
+    participants:
+    - name: RSA signature as in ISO/IEC 9796
+    - name: COMSET
+      note: Identification protocol
+- id: ukrainian_national_cryptographic_competition_2007_2010
+  name: Ukrainian National Public Cryptographic Competition
+  organizer: State Service of Special Communication and Information Security of Ukraine
+  start_year: 2007
+  end_year: 2010
+  url: https://www.sav.sk/journals/uploads/0317154006ogdr.pdf
+  notes: 'Announced in 2006 to select a symmetric block cipher prototype for the Ukrainian
+    national standard, replacing GOST 28147-89. Requirements: 128/256/512-bit block
+    and key sizes; resistance to all known attacks; no trapdoors; software speed at
+    least equal to GOST 28147-89. Five candidates were submitted in 2007. RSB was
+    eliminated after initial analysis. The remaining four (Kalyna, Mukhomor, ADE,
+    Labyrinth) underwent full security and performance evaluation. Kalyna was selected
+    and subsequently standardised as DSTU 7624:2014 (approved 2014, published 2015).'
+  stages:
+  - id: submission
+    kind: round
+    label: Submission (2007)
+    participants:
+    - family_id: kalyna
+    - family_id: mukhomor
+    - family_id: ade
+    - family_id: labyrinth
+    - family_id: rsb
+  - id: finalist
+    kind: round
+    label: Finalist (2007–2010)
+    participants:
+    - family_id: kalyna
+    - family_id: mukhomor
+    - family_id: ade
+    - family_id: labyrinth
+  - id: winner
+    kind: outcome
+    label: Winner (2010)
+    participants:
+    - family_id: kalyna

@@ -60,8 +60,8 @@ families:
     note: The revised specification retains the CHAM ARX round structure while increasing
       the round counts to strengthen its security margins.
   notes: Revised CHAM uses 88 rounds for CHAM-64/128, 112 rounds for CHAM-128/128,
-    and 120 rounds for CHAM-128/256. The family retains four state words and the
-    addition, rotation, XOR, subkey, and round-counter operations of CHAM.
+    and 120 rounds for CHAM-128/256. The family retains four state words and the addition,
+    rotation, XOR, subkey, and round-counter operations of CHAM.
 - id: saecham
   name: SAECHAM
   construction_ids:
@@ -94,9 +94,9 @@ families:
     - inspired_by
     note: SAECHAM restructures the operation order and rotation choices of CHAM-64/128
       for improved security and performance on constrained processors.
-  notes: SAECHAM (Secure and Efficient CHAM) is an 88-round, 64-bit block cipher
-    with a 128-bit key. It adopts the CHAM-RXA operation ordering selected from
-    analyzed CHAM variants and targets efficient 8-, 16-, and 32-bit implementations.
+  notes: SAECHAM (Secure and Efficient CHAM) is an 88-round, 64-bit block cipher with
+    a 128-bit key. It adopts the CHAM-RXA operation ordering selected from analyzed
+    CHAM variants and targets efficient 8-, 16-, and 32-bit implementations.
 - id: rijndael
   name: Rijndael
   construction_ids:
@@ -147,7 +147,8 @@ families:
     '
 - id: aes
   name: AES
-  notes: "AES is the 128-bit-block subset of Rijndael standardized by FIPS 197, with 128-, 192-, and 256-bit keys and 10, 12, or 14 rounds respectively."
+  notes: AES is the 128-bit-block subset of Rijndael standardized by FIPS 197, with
+    128-, 192-, and 256-bit keys and 10, 12, or 14 rounds respectively.
   construction_ids:
   - aligned_spn
   round_ids:
@@ -240,17 +241,17 @@ families:
     name: Column/diagonal mixing
     note: The state reordering that alternates column and diagonal rounds for diffusion.
   notes: 'Salsa20 is a 512-bit ARX stream-cipher family introduced as the Snuffle
-    2005 encryption function. Salsa20 uses 20 rounds; Salsa20/12 and Salsa20/8
-    are reduced-round variants. XSalsa20 extends Salsa20 from a 64-bit nonce to
-    a 192-bit nonce through HSalsa20 subkey derivation.
+    2005 encryption function. Salsa20 uses 20 rounds; Salsa20/12 and Salsa20/8 are
+    reduced-round variants. XSalsa20 extends Salsa20 from a 64-bit nonce to a 192-bit
+    nonce through HSalsa20 subkey derivation.
 
     '
 - id: chacha
   name: ChaCha
-  notes: 'ChaCha is Bernstein’s ARX stream-cipher family and a refinement of Salsa20.
+  notes: ChaCha is Bernstein’s ARX stream-cipher family and a refinement of Salsa20.
     The IETF ChaCha20 profile uses a 256-bit key, 96-bit nonce, and 32-bit counter.
-    RFC 7539 standardized that profile and its block function in 2015; RFC 8439
-    replaced it in 2018.'
+    RFC 7539 standardized that profile and its block function in 2015; RFC 8439 replaced
+    it in 2018.
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -286,7 +287,9 @@ families:
       '
 - id: present
   name: PRESENT
-  notes: "PRESENT is a 31-round, 64-bit lightweight SPN using 4-bit S-boxes and a fixed bit permutation; its 80- and 128-bit-key variants are standardized in ISO/IEC 29192-2."
+  notes: PRESENT is a 31-round, 64-bit lightweight SPN using 4-bit S-boxes and a fixed
+    bit permutation; its 80- and 128-bit-key variants are standardized in ISO/IEC
+    29192-2.
   construction_ids:
   - bit_based_spn
   round_ids:
@@ -321,7 +324,8 @@ families:
     note: The lightweight constant injection that prevents symmetry in the round structure.
 - id: gift
   name: GIFT
-  notes: "GIFT is a lightweight bit-permutation SPN derived from PRESENT; its 64- and 128-bit block ciphers also underpin authenticated-encryption designs such as GIFT-COFB."
+  notes: GIFT is a lightweight bit-permutation SPN derived from PRESENT; its 64- and
+    128-bit block ciphers also underpin authenticated-encryption designs such as GIFT-COFB.
   construction_ids:
   - bit_based_spn
   round_ids:
@@ -357,7 +361,8 @@ families:
       '
 - id: des
   name: DES
-  notes: "DES is a 16-round, 64-bit Feistel cipher with a 56-bit effective key, standardized in FIPS 46 in 1977 and now retained only for historical and legacy analysis."
+  notes: DES is a 16-round, 64-bit Feistel cipher with a 56-bit effective key, standardized
+    in FIPS 46 in 1977 and now retained only for historical and legacy analysis.
   construction_ids:
   - feistel
   round_ids:
@@ -381,7 +386,9 @@ families:
   influences: []
 - id: blowfish
   name: Blowfish
-  notes: "Blowfish is a 16-round, 64-bit Feistel cipher with key-dependent S-boxes and a variable key of up to 448 bits; its expensive key setup suits applications with infrequent key changes."
+  notes: Blowfish is a 16-round, 64-bit Feistel cipher with key-dependent S-boxes
+    and a variable key of up to 448 bits; its expensive key setup suits applications
+    with infrequent key changes.
   construction_ids:
   - feistel
   - key_dependent_table_network
@@ -411,7 +418,8 @@ families:
     note: Blowfish was proposed as a fast software-oriented DES replacement.
 - id: idea
   name: IDEA
-  notes: "IDEA is an 8.5-round, 64-bit Lai–Massey cipher whose round function mixes XOR, addition modulo 2^16, and multiplication modulo 2^16+1 under a 128-bit key."
+  notes: IDEA is an 8.5-round, 64-bit Lai–Massey cipher whose round function mixes
+    XOR, addition modulo 2^16, and multiplication modulo 2^16+1 under a 128-bit key.
   construction_ids:
   - lay_massey
   round_ids:
@@ -439,7 +447,9 @@ families:
   influences: []
 - id: tea
   name: TEA
-  notes: "TEA is a compact 64-bit Feistel cipher using 32 cycles of ARX-style mixing under a 128-bit key; its minimal implementation is offset by equivalent-key and related-key weaknesses."
+  notes: TEA is a compact 64-bit Feistel cipher using 32 cycles of ARX-style mixing
+    under a 128-bit key; its minimal implementation is offset by equivalent-key and
+    related-key weaknesses.
   construction_ids:
   - feistel
   round_ids:
@@ -469,7 +479,8 @@ families:
     note: The fixed delta constant used to vary the round sum.
 - id: xtea
   name: XTEA
-  notes: "XTEA revises TEA’s key schedule and round ordering while retaining a 64-bit Feistel structure, 128-bit key, and simple addition, shift, and XOR operations."
+  notes: XTEA revises TEA’s key schedule and round ordering while retaining a 64-bit
+    Feistel structure, 128-bit key, and simple addition, shift, and XOR operations.
   construction_ids:
   - feistel
   round_ids:
@@ -500,7 +511,9 @@ families:
     note: XTEA improves TEA's key schedule and resistance to related-key attacks.
 - id: twofish
   name: Twofish
-  notes: "Twofish is a 16-round, 128-bit Feistel-like AES finalist using key-dependent S-boxes, an MDS matrix, a pseudo-Hadamard transform, and 128-, 192-, or 256-bit keys."
+  notes: Twofish is a 16-round, 128-bit Feistel-like AES finalist using key-dependent
+    S-boxes, an MDS matrix, a pseudo-Hadamard transform, and 128-, 192-, or 256-bit
+    keys.
   construction_ids:
   - feistel
   round_ids:
@@ -534,7 +547,8 @@ families:
   influences: []
 - id: serpent
   name: Serpent
-  notes: "Serpent is a conservative 32-round, 128-bit bitsliced SPN and AES finalist, supporting 128-, 192-, and 256-bit keys with eight reused 4-bit S-boxes."
+  notes: Serpent is a conservative 32-round, 128-bit bitsliced SPN and AES finalist,
+    supporting 128-, 192-, and 256-bit keys with eight reused 4-bit S-boxes.
   construction_ids:
   - aligned_spn
   round_ids:
@@ -563,7 +577,8 @@ families:
   influences: []
 - id: camellia
   name: Camellia
-  notes: "Camellia is a 128-bit Feistel cipher with FL/FL⁻¹ layers and 128-, 192-, or 256-bit keys; it is standardized by ISO/IEC and described in RFC 3713."
+  notes: Camellia is a 128-bit Feistel cipher with FL/FL⁻¹ layers and 128-, 192-,
+    or 256-bit keys; it is standardized by ISO/IEC and described in RFC 3713.
   construction_ids:
   - feistel
   round_ids:
@@ -602,7 +617,9 @@ families:
     note: Camellia uses a strengthened Feistel design with modern diffusion layers.
 - id: simon
   name: SIMON
-  notes: "SIMON is a hardware-oriented family of lightweight Feistel ciphers whose nonlinear round function uses rotations, AND, and XOR across several block/key-size profiles."
+  notes: SIMON is a hardware-oriented family of lightweight Feistel ciphers whose
+    nonlinear round function uses rotations, AND, and XOR across several block/key-size
+    profiles.
   construction_ids:
   - feistel
   round_ids:
@@ -622,7 +639,8 @@ families:
   influences: []
 - id: speck
   name: SPECK
-  notes: "SPECK is a software-oriented family of lightweight ARX Feistel ciphers, parameterized for multiple word, block, and key sizes."
+  notes: SPECK is a software-oriented family of lightweight ARX Feistel ciphers, parameterized
+    for multiple word, block, and key sizes.
   construction_ids:
   - feistel
   round_ids:
@@ -648,7 +666,8 @@ families:
       TEA-like software ciphers.
 - id: prince
   name: PRINCE
-  notes: "PRINCE is a 64-bit, 128-bit-key low-latency block cipher using an α-reflection construction that permits decryption with closely related hardware."
+  notes: PRINCE is a 64-bit, 128-bit-key low-latency block cipher using an α-reflection
+    construction that permits decryption with closely related hardware.
   construction_ids:
   - aligned_spn
   round_ids:
@@ -679,7 +698,8 @@ families:
     note: The forward/backward round symmetry that enables low-latency decryption.
 - id: led
   name: LED
-  notes: "LED is a 64-bit lightweight SPN inspired by AES, using PRESENT’s 4-bit S-box and largely keyless rounds with either a 64- or 128-bit key."
+  notes: LED is a 64-bit lightweight SPN inspired by AES, using PRESENT’s 4-bit S-box
+    and largely keyless rounds with either a 64- or 128-bit key.
   construction_ids:
   - bit_based_spn
   round_ids:
@@ -715,7 +735,9 @@ families:
     note: LED follows a compact nibble-oriented SPN style suited for lightweight hardware.
 - id: katan
   name: KATAN
-  notes: "KATAN is an ultra-lightweight block-cipher family built from two shift registers and nonlinear Boolean feedback, with 32-, 48-, and 64-bit block variants under an 80-bit key."
+  notes: KATAN is an ultra-lightweight block-cipher family built from two shift registers
+    and nonlinear Boolean feedback, with 32-, 48-, and 64-bit block variants under
+    an 80-bit key.
   construction_ids:
   - lfsr_nlfsr_register_network
   round_ids:
@@ -736,7 +758,8 @@ families:
   influences: []
 - id: ktantan
   name: KTANTAN
-  notes: "KTANTAN specializes KATAN for fixed-key hardware by embedding the 80-bit key into the circuit, trading key agility for a smaller implementation."
+  notes: KTANTAN specializes KATAN for fixed-key hardware by embedding the 80-bit
+    key into the circuit, trading key agility for a smaller implementation.
   construction_ids:
   - lfsr_nlfsr_register_network
   round_ids:
@@ -761,7 +784,8 @@ families:
     note: KTANTAN is the fixed-key hardware-specialized sibling in the KATAN family.
 - id: cast128
   name: CAST-128
-  notes: "CAST-128 is a 64-bit Feistel cipher with 12 or 16 rounds, key-dependent rotations, and large S-boxes; RFC 2144 and ISO/IEC 18033-3 specify it."
+  notes: CAST-128 is a 64-bit Feistel cipher with 12 or 16 rounds, key-dependent rotations,
+    and large S-boxes; RFC 2144 and ISO/IEC 18033-3 specify it.
   construction_ids:
   - feistel
   round_ids:
@@ -791,7 +815,8 @@ families:
   influences: []
 - id: cast256
   name: CAST-256
-  notes: "CAST-256 extends CAST round functions into a 48-round, 128-bit generalized Feistel design with 128-, 192-, or 256-bit keys; it was an AES candidate."
+  notes: CAST-256 extends CAST round functions into a 48-round, 128-bit generalized
+    Feistel design with 128-, 192-, or 256-bit keys; it was an AES candidate.
   construction_ids:
   - generalized_feistel
   round_ids:
@@ -828,7 +853,8 @@ families:
     note: CAST-256 extends CAST design ideas to 128-bit blocks and larger keying.
 - id: rc5
   name: RC5
-  notes: "RC5 is a parameterized ARX block cipher distinguished by data-dependent rotations; RFC 2040 describes common 32-bit-word profiles."
+  notes: RC5 is a parameterized ARX block cipher distinguished by data-dependent rotations;
+    RFC 2040 describes common 32-bit-word profiles.
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -849,7 +875,8 @@ families:
   influences: []
 - id: seed
   name: SEED
-  notes: "SEED is a Korean 16-round, 128-bit Feistel cipher with a 128-bit key, standardized in ISO/IEC 18033-3 and described by RFC 4269."
+  notes: SEED is a Korean 16-round, 128-bit Feistel cipher with a 128-bit key, standardized
+    in ISO/IEC 18033-3 and described by RFC 4269.
   construction_ids:
   - feistel
   round_ids:
@@ -879,7 +906,9 @@ families:
   influences: []
 - id: aria
   name: ARIA
-  notes: "ARIA is a Korean 128-bit involutional SPN with alternating substitution layers and 128-, 192-, or 256-bit keys, standardized nationally and described in RFC 5794."
+  notes: ARIA is a Korean 128-bit involutional SPN with alternating substitution layers
+    and 128-, 192-, or 256-bit keys, standardized nationally and described in RFC
+    5794.
   construction_ids:
   - aligned_spn
   round_ids:
@@ -934,7 +963,8 @@ families:
     '
 - id: rc6
   name: RC6
-  notes: "RC6 is a 20-round, four-word evolution of RC5 that adds integer multiplication to ARX mixing; its 128-bit-block profiles were submitted to AES."
+  notes: RC6 is a 20-round, four-word evolution of RC5 that adds integer multiplication
+    to ARX mixing; its 128-bit-block profiles were submitted to AES.
   construction_ids:
   - generalized_feistel
   round_ids:
@@ -974,7 +1004,8 @@ families:
     note: RC6 extends RC5 with four registers and multiplication for faster diffusion.
 - id: sm4
   name: SM4
-  notes: "SM4 is a 32-round, 128-bit unbalanced Feistel-like cipher with a 128-bit key, standardized in China as GB/T 32907 and used in ShangMi protocols."
+  notes: SM4 is a 32-round, 128-bit unbalanced Feistel-like cipher with a 128-bit
+    key, standardized in China as GB/T 32907 and used in ShangMi protocols.
   construction_ids:
   - generalized_feistel
   round_ids:
@@ -1000,7 +1031,8 @@ families:
   influences: []
 - id: kasumi
   name: KASUMI
-  notes: "KASUMI is a 64-bit, 128-bit-key Feistel cipher derived from MISTY1 and adapted for the 3GPP confidentiality and integrity algorithms used in UMTS."
+  notes: KASUMI is a 64-bit, 128-bit-key Feistel cipher derived from MISTY1 and adapted
+    for the 3GPP confidentiality and integrity algorithms used in UMTS.
   construction_ids:
   - feistel
   round_ids:
@@ -1025,7 +1057,9 @@ families:
   influences: []
 - id: clefia
   name: CLEFIA
-  notes: "CLEFIA is a 128-bit, four-branch generalized Feistel cipher with 128-, 192-, or 256-bit keys and a diffusion-switching mechanism; it is standardized in ISO/IEC 29192-2."
+  notes: CLEFIA is a 128-bit, four-branch generalized Feistel cipher with 128-, 192-,
+    or 256-bit keys and a diffusion-switching mechanism; it is standardized in ISO/IEC
+    29192-2.
   construction_ids:
   - generalized_feistel
   round_ids:
@@ -1054,7 +1088,8 @@ families:
   influences: []
 - id: twine
   name: TWINE
-  notes: "TWINE is a 36-round, 64-bit lightweight generalized Feistel cipher built from sixteen 4-bit branches, with 80- and 128-bit-key variants."
+  notes: TWINE is a 36-round, 64-bit lightweight generalized Feistel cipher built
+    from sixteen 4-bit branches, with 80- and 128-bit-key variants.
   construction_ids:
   - generalized_feistel
   round_ids:
@@ -1080,7 +1115,8 @@ families:
   influences: []
 - id: crypton
   name: CRYPTON
-  notes: "CRYPTON is a 12-round, 128-bit AES candidate whose SPN uses byte substitutions and transposition-oriented diffusion, with keys up to 256 bits."
+  notes: CRYPTON is a 12-round, 128-bit AES candidate whose SPN uses byte substitutions
+    and transposition-oriented diffusion, with keys up to 256 bits.
   construction_ids:
   - spn
   round_ids:
@@ -1111,7 +1147,8 @@ families:
   influences: []
 - id: deal
   name: DEAL
-  notes: "DEAL is a 128-bit AES candidate constructed as a Feistel network whose round function is DES, supporting 128-, 192-, and 256-bit keys."
+  notes: DEAL is a 128-bit AES candidate constructed as a Feistel network whose round
+    function is DES, supporting 128-, 192-, and 256-bit keys.
   construction_ids:
   - feistel
   round_ids:
@@ -1277,7 +1314,8 @@ families:
     '
 - id: loki97
   name: LOKI97
-  notes: "LOKI97 is a 16-round, 128-bit Feistel cipher in the LOKI lineage, using large S-boxes and 128-, 192-, or 256-bit keys; it was an AES candidate."
+  notes: LOKI97 is a 16-round, 128-bit Feistel cipher in the LOKI lineage, using large
+    S-boxes and 128-, 192-, or 256-bit keys; it was an AES candidate.
   construction_ids:
   - feistel
   round_ids:
@@ -1380,7 +1418,9 @@ families:
     '
 - id: safer_plus
   name: SAFER+
-  notes: "SAFER+ is a 128-bit SPN using bytewise exponentiation/logarithm substitutions and pseudo-Hadamard diffusion, with key-dependent round counts for 128-, 192-, and 256-bit keys."
+  notes: SAFER+ is a 128-bit SPN using bytewise exponentiation/logarithm substitutions
+    and pseudo-Hadamard diffusion, with key-dependent round counts for 128-, 192-,
+    and 256-bit keys.
   construction_ids:
   - spn
   round_ids:
@@ -1418,7 +1458,8 @@ families:
   influences: []
 - id: aradi
   name: ARADI
-  notes: "ARADI is a 128-bit, 256-bit-key low-latency SPN designed for efficient bitsliced software and hardware, with 4-bit S-boxes and binary linear diffusion."
+  notes: ARADI is a 128-bit, 256-bit-key low-latency SPN designed for efficient bitsliced
+    software and hardware, with 4-bit S-boxes and binary linear diffusion.
   construction_ids:
   - aligned_spn
   round_ids:
@@ -1468,7 +1509,8 @@ families:
     '
 - id: qarma
   name: QARMA
-  notes: "QARMA is a family of low-latency tweakable block ciphers using a reflection-style Even–Mansour construction, designed primarily for memory encryption."
+  notes: QARMA is a family of low-latency tweakable block ciphers using a reflection-style
+    Even–Mansour construction, designed primarily for memory encryption.
   construction_ids:
   - even_mansour
   round_ids:
@@ -1692,11 +1734,12 @@ families:
     status: winner
   influences: []
   notes: First appeared in the 2016 CAESAR submission. NIST SP 800-232 standardizes
-    the Ascon-p permutation together with Ascon-AEAD128, Ascon-Hash256,
-    Ascon-XOF128, and Ascon-CXOF128.
+    the Ascon-p permutation together with Ascon-AEAD128, Ascon-Hash256, Ascon-XOF128,
+    and Ascon-CXOF128.
 - id: photon
   name: PHOTON
-  notes: "PHOTON is a family of lightweight sponge hash functions whose internal permutations use AES-like 4-bit substitution, row shifting, and MDS column mixing."
+  notes: PHOTON is a family of lightweight sponge hash functions whose internal permutations
+    use AES-like 4-bit substitution, row shifting, and MDS column mixing.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1725,7 +1768,9 @@ families:
   influences: []
 - id: skinny
   name: SKINNY
-  notes: "SKINNY is a lightweight tweakable SPN family with 64- or 128-bit blocks and a tweakey schedule designed to minimize area while retaining strong differential bounds."
+  notes: SKINNY is a lightweight tweakable SPN family with 64- or 128-bit blocks and
+    a tweakey schedule designed to minimize area while retaining strong differential
+    bounds.
   construction_ids:
   - tweakable_spn
   round_ids:
@@ -1749,7 +1794,8 @@ families:
   influences: []
 - id: sparkle
   name: SPARKLE
-  notes: "SPARKLE is an ARX permutation family built from the Alzette box and a branch-linear layer; it underpins the SCHWAEMM AEAD and ESCH hash families."
+  notes: SPARKLE is an ARX permutation family built from the Alzette box and a branch-linear
+    layer; it underpins the SCHWAEMM AEAD and ESCH hash families.
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -1777,7 +1823,8 @@ families:
   influences: []
 - id: tinyjambu
   name: TinyJambu
-  notes: "TinyJambu is a lightweight keyed state-update design with a 128-bit nonlinear feedback register; it underpins the TinyJAMBU authenticated-encryption variants."
+  notes: TinyJambu is a lightweight keyed state-update design with a 128-bit nonlinear
+    feedback register; it underpins the TinyJAMBU authenticated-encryption variants.
   construction_ids:
   - lfsr_nlfsr_register_network
   round_ids:
@@ -1804,7 +1851,8 @@ families:
   influences: []
 - id: xoodoo
   name: Xoodoo
-  notes: "Xoodoo is a 384-bit, 12-round permutation arranged as three bit planes of four lanes; it is the permutation underlying Xoodyak."
+  notes: Xoodoo is a 384-bit, 12-round permutation arranged as three bit planes of
+    four lanes; it is the permutation underlying Xoodyak.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1826,7 +1874,9 @@ families:
   influences: []
 - id: elephant
   name: Elephant
-  notes: "Elephant is a lightweight nonce-based AEAD family that masks short permutations such as Spongent-pi, Keccak-p, or Ascon-p rather than maintaining a large keyed state."
+  notes: Elephant is a lightweight nonce-based AEAD family that masks short permutations
+    such as Spongent-pi, Keccak-p, or Ascon-p rather than maintaining a large keyed
+    state.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1853,7 +1903,8 @@ families:
   influences: []
 - id: romulus
   name: Romulus
-  notes: "Romulus is a nonce-based AEAD family built around the SKINNY-128-256 tweakable block cipher, with modes tuned for misuse resistance or lightweight operation."
+  notes: Romulus is a nonce-based AEAD family built around the SKINNY-128-256 tweakable
+    block cipher, with modes tuned for misuse resistance or lightweight operation.
   construction_ids:
   - tweakable_spn
   round_ids:
@@ -1887,7 +1938,8 @@ families:
     note: Romulus is built on SKINNY tweakey-based round functions.
 - id: isap
   name: ISAP
-  notes: "ISAP is a lightweight AEAD family designed for robust side-channel protection, using re-keying and sponge-like processing over lightweight permutations."
+  notes: ISAP is a lightweight AEAD family designed for robust side-channel protection,
+    using re-keying and sponge-like processing over lightweight permutations.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1920,7 +1972,8 @@ families:
       design.
 - id: grain_128
   name: Grain-128
-  notes: "Grain-128 is a hardware-oriented stream-cipher family combining a 128-bit LFSR, a 128-bit NLFSR, and a nonlinear output function; later variants add authentication."
+  notes: Grain-128 is a hardware-oriented stream-cipher family combining a 128-bit
+    LFSR, a 128-bit NLFSR, and a nonlinear output function; later variants add authentication.
   construction_ids:
   - lfsr_nlfsr_register_network
   round_ids:
@@ -1948,7 +2001,9 @@ families:
   influences: []
 - id: gimli
   name: Gimli
-  notes: "Gimli is a 384-bit ARX permutation operating on a 3×4 array of 32-bit words, designed as a compact foundation for hashing, authenticated encryption, and other modes."
+  notes: Gimli is a 384-bit ARX permutation operating on a 3×4 array of 32-bit words,
+    designed as a compact foundation for hashing, authenticated encryption, and other
+    modes.
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -1976,7 +2031,8 @@ families:
   influences: []
 - id: subterranean
   name: Subterranean
-  notes: "Subterranean 2.0 is a duplex construction over a 257-bit permutation, offering lightweight hashing and authenticated encryption with bit-oriented nonlinear feedback."
+  notes: Subterranean 2.0 is a duplex construction over a 257-bit permutation, offering
+    lightweight hashing and authenticated encryption with bit-oriented nonlinear feedback.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2001,7 +2057,8 @@ families:
   influences: []
 - id: drygascon
   name: DryGASCON
-  notes: "DryGASCON is a permutation-based AEAD and hashing design derived from the GASCON/Ascon lineage, separating a capacity state from a small input accumulator."
+  notes: DryGASCON is a permutation-based AEAD and hashing design derived from the
+    GASCON/Ascon lineage, separating a capacity state from a small input accumulator.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2033,7 +2090,8 @@ families:
       design choices.
 - id: sneik
   name: SNEIK
-  notes: "SNEIK is a lightweight ARX permutation and sponge suite designed for compact authenticated encryption, hashing, and related symmetric functions."
+  notes: SNEIK is a lightweight ARX permutation and sponge suite designed for compact
+    authenticated encryption, hashing, and related symmetric functions.
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -2060,7 +2118,8 @@ families:
   influences: []
 - id: sycon
   name: Sycon
-  notes: "Sycon is a 320-bit permutation-based lightweight suite using 5-bit S-boxes and bit permutations for authenticated encryption, hashing, and related functions."
+  notes: Sycon is a 320-bit permutation-based lightweight suite using 5-bit S-boxes
+    and bit permutations for authenticated encryption, hashing, and related functions.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2088,7 +2147,8 @@ families:
   influences: []
 - id: spix
   name: SPIX
-  notes: "SPIX is a lightweight duplex AEAD design using a 256-bit permutation with Boolean nonlinear layers and rotations."
+  notes: SPIX is a lightweight duplex AEAD design using a 256-bit permutation with
+    Boolean nonlinear layers and rotations.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2115,7 +2175,8 @@ families:
   influences: []
 - id: spoc
   name: SpoC
-  notes: "SpoC is a lightweight sponge-based AEAD family that processes plaintext through a rate smaller than the permutation rate to improve privacy bounds."
+  notes: SpoC is a lightweight sponge-based AEAD family that processes plaintext through
+    a rate smaller than the permutation rate to improve privacy bounds.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2142,7 +2203,8 @@ families:
   influences: []
 - id: spook
   name: Spook
-  notes: "Spook is a lightweight AEAD family combining a tweakable block cipher with a sponge-like mode, with variants aimed at single-user and multi-user security."
+  notes: Spook is a lightweight AEAD family combining a tweakable block cipher with
+    a sponge-like mode, with variants aimed at single-user and multi-user security.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2169,7 +2231,8 @@ families:
   influences: []
 - id: knot
   name: KNOT
-  notes: "KNOT is a family of bit-sliced permutations and sponge modes for lightweight authenticated encryption and hashing, using 4-bit S-boxes and lane rotations."
+  notes: KNOT is a family of bit-sliced permutations and sponge modes for lightweight
+    authenticated encryption and hashing, using 4-bit S-boxes and lane rotations.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2198,7 +2261,8 @@ families:
   influences: []
 - id: pyjamask
   name: Pyjamask
-  notes: "Pyjamask is a 128-bit-key SPN family using bitsliced 3-bit S-boxes and circulant binary-matrix diffusion; it forms the core of Pyjamask AEAD modes."
+  notes: Pyjamask is a 128-bit-key SPN family using bitsliced 3-bit S-boxes and circulant
+    binary-matrix diffusion; it forms the core of Pyjamask AEAD modes.
   construction_ids:
   - aligned_spn
   round_ids:
@@ -2222,7 +2286,8 @@ families:
   influences: []
 - id: qameleon
   name: Qameleon
-  notes: "Qameleon is a lightweight tweakable SPN designed for authenticated encryption, using 4-bit substitution, bit permutations, and tweak-dependent round material."
+  notes: Qameleon is a lightweight tweakable SPN designed for authenticated encryption,
+    using 4-bit substitution, bit permutations, and tweak-dependent round material.
   construction_ids:
   - tweakable_spn
   round_ids:
@@ -2249,7 +2314,8 @@ families:
   influences: []
 - id: saturnin
   name: Saturnin
-  notes: "Saturnin is a 256-bit block cipher and permutation-like primitive using a 4-bit S-box and MDS diffusion, designed to support lightweight AEAD and hashing."
+  notes: Saturnin is a 256-bit block cipher and permutation-like primitive using a
+    4-bit S-box and MDS diffusion, designed to support lightweight AEAD and hashing.
   construction_ids:
   - aligned_spn
   round_ids:
@@ -2276,7 +2342,8 @@ families:
   influences: []
 - id: simple
   name: SIMPLE
-  notes: "SIMPLE is a lightweight permutation-based authenticated-encryption design using a 256-bit Boolean permutation and sponge-style processing."
+  notes: SIMPLE is a lightweight permutation-based authenticated-encryption design
+    using a 256-bit Boolean permutation and sponge-style processing.
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2301,7 +2368,8 @@ families:
   influences: []
 - id: trifle
   name: TRIFLE
-  notes: "TRIFLE is a lightweight tweakable block cipher and AEAD design using a 128-bit state, 4-bit S-boxes, and bit-permutation diffusion."
+  notes: TRIFLE is a lightweight tweakable block cipher and AEAD design using a 128-bit
+    state, 4-bit S-boxes, and bit-permutation diffusion.
   construction_ids:
   - tweakable_spn
   round_ids:
@@ -3792,15 +3860,45 @@ families:
     - id: xor
     - id: rotation_fixed
   reference_ids:
-  - iso_iec_29192_2_2019
   - lea_ref
   process_participations: []
   influences: []
-  notes: LEA (Lightweight Encryption Algorithm; Hong et al., ICISC 2013) is a 128-bit
+  notes: LEA (Lightweight Encryption Algorithm; Hong et al., WISA 2013) is a 128-bit
     ARX block cipher with key sizes of 128, 192, or 256 bits and 24, 28, or 32 rounds
     respectively. Its round function applies 32-bit modular additions, XORs, and fixed
     rotations to four 32-bit words — no S-boxes are used. Designed for fast software
     on general-purpose CPUs.
+- id: lea_iso
+  name: LEA [ISO]
+  construction_ids:
+  - generalized_feistel
+  round_ids:
+  - lea_round
+  target_applications:
+  - software
+  - mobile
+  - hardware
+  characteristics:
+    block_size_bits: 128
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - iso_iec_29192_2_2019
+  process_participations: []
+  influences:
+  - source_family_id: lea
+    relations:
+    - standardization_of
+    note: ISO/IEC 29192-2:2019 standardizes the LEA-128, LEA-192, and LEA-256 configurations
+      of the original LEA design.
+  notes: LEA [ISO] represents the 2019 ISO/IEC 29192-2 standardization milestone,
+    separately from the original 2013 LEA publication. The standardized profiles retain
+    LEA's 128-bit block and define 128-, 192-, and 256-bit keys with 24, 28, and 32
+    rounds respectively.
 - id: leviathan
   name: LEVIATHAN
   construction_ids:
@@ -5440,8 +5538,8 @@ families:
     - variant_of
     note: 3TDEA applies DES three times in Encrypt-Decrypt-Encrypt order using three
       independent keys.
-  notes: Three-key Triple DES (3TDEA; TDEA keying option 1) applies DES three times (E-D-E)
-    with three independent 56-bit keys (192-bit keying material, 168-bit effective
+  notes: Three-key Triple DES (3TDEA; TDEA keying option 1) applies DES three times
+    (E-D-E) with three independent 56-bit keys (192-bit keying material, 168-bit effective
     key length). ANSI X9.52 standardized TDEA and its keying options in 1998; FIPS
     46-3 followed in 1999. NIST withdrew SP 800-67 Rev. 2 in 2024.
 - id: threefish
@@ -5720,11 +5818,9 @@ families:
   - xxtea_ref
   process_participations: []
   influences: []
-  notes: >-
-    XXTEA (Corrected Block TEA) is a word-oriented ARX cipher operating on
-    variable-length blocks. Its structure is a consistent, incomplete,
-    source-heavy, heterogeneous UFN (unbalanced [Feistel
-    network](https://en.wikipedia.org/wiki/Feistel_network)).
+  notes: XXTEA (Corrected Block TEA) is a word-oriented ARX cipher operating on variable-length
+    blocks. Its structure is a consistent, incomplete, source-heavy, heterogeneous
+    UFN (unbalanced [Feistel network](https://en.wikipedia.org/wiki/Feistel_network)).
 - id: yarara_and_coral
   name: Yarara and Coral
   construction_ids:
@@ -6936,8 +7032,8 @@ families:
     note: SHA-3 selects four fixed-output Keccak sponge instances with domain separation.
   notes: 'SHA-3 is the FIPS 202 family of four fixed-output hash functions: SHA3-224,
     SHA3-256, SHA3-384, and SHA3-512. Each uses Keccak-p[1600,24] with a capacity
-    determined by the requested security strength and a domain-separation suffix
-    distinct from SHAKE.'
+    determined by the requested security strength and a domain-separation suffix distinct
+    from SHAKE.'
 - id: shake
   name: SHAKE
   construction_ids:
@@ -6963,11 +7059,12 @@ families:
   - source_family_id: keccak
     relations:
     - selection_of_possible_configurations
-    note: SHAKE selects two extendable-output Keccak sponge instances with domain separation.
-  notes: 'SHAKE is the FIPS 202 family of extendable-output functions SHAKE128 and
+    note: SHAKE selects two extendable-output Keccak sponge instances with domain
+      separation.
+  notes: SHAKE is the FIPS 202 family of extendable-output functions SHAKE128 and
     SHAKE256. Unlike fixed-output hashes, a SHAKE invocation can produce any requested
     number of output bits; the numeric suffix denotes its general security strength,
-    not a fixed digest length.'
+    not a fixed digest length.
 - id: blake
   name: BLAKE
   construction_ids:
@@ -7050,8 +7147,7 @@ families:
     name: Native keyed hashing
     note: BLAKE2 directly supports keyed hashing for MAC and PRF use without an HMAC
       wrapper.
-  notes: >-
-    BLAKE2 is the successor to BLAKE, optimized for software and directly supporting
+  notes: BLAKE2 is the successor to BLAKE, optimized for software and directly supporting
     keyed hashing. BLAKE2b uses 64-bit words, 128-byte blocks, 12 rounds, and outputs
     1–64 bytes; BLAKE2s uses 32-bit words, 64-byte blocks, 10 rounds, and outputs
     1–32 bytes. The original specification also defines parallel and tree-hashing
@@ -8484,7 +8580,10 @@ families:
     '
 - id: two_key_triple_des
   name: Two-key Triple DES (2TDEA)
-  notes: "Two-key TDEA (keying option 2) applies DES three times with K3 equal to K1, using 112 effective key bits. ANSI X9.52 standardized TDEA and both keying options 1 and 2 in 1998; FIPS 46-3 followed in 1999. NIST disallowed two-key TDEA for new encryption in 2016."
+  notes: Two-key TDEA (keying option 2) applies DES three times with K3 equal to K1,
+    using 112 effective key bits. ANSI X9.52 standardized TDEA and both keying options
+    1 and 2 in 1998; FIPS 46-3 followed in 1999. NIST disallowed two-key TDEA for
+    new encryption in 2016.
   construction_ids:
   - feistel
   round_ids:
@@ -8501,7 +8600,9 @@ families:
   influences: []
 - id: rc4drop
   name: RC4-drop
-  notes: "RC4-drop variants discard an initial prefix of RC4 keystream—commonly 768 or 3072 bytes—to reduce early-output biases, without repairing RC4’s broader statistical weaknesses."
+  notes: RC4-drop variants discard an initial prefix of RC4 keystream—commonly 768
+    or 3072 bytes—to reduce early-output biases, without repairing RC4’s broader statistical
+    weaknesses.
   construction_ids:
   - key_dependent_table_network
   round_ids:
@@ -8521,7 +8622,8 @@ families:
       initial-byte biases
 - id: newdes
   name: NewDES
-  notes: "NewDES is a 64-bit, 120-bit-key Feistel-like cipher designed as a simpler alternative to DES, using byte-oriented XOR and a fixed substitution table."
+  notes: NewDES is a 64-bit, 120-bit-key Feistel-like cipher designed as a simpler
+    alternative to DES, using byte-oriented XOR and a fixed substitution table.
   construction_ids:
   - feistel
   round_ids:
@@ -8537,7 +8639,9 @@ families:
   influences: []
 - id: zuc
   name: ZUC
-  notes: "ZUC is a word-oriented stream cipher combining a 16-stage LFSR over extension fields with nonlinear finite-state machinery; it underpins the 3GPP 128-EEA3 and 128-EIA3 algorithms."
+  notes: ZUC is a word-oriented stream cipher combining a 16-stage LFSR over extension
+    fields with nonlinear finite-state machinery; it underpins the 3GPP 128-EEA3 and
+    128-EIA3 algorithms.
   construction_ids:
   - lfsr_over_extension_field_with_memory
   round_ids:
@@ -8562,7 +8666,8 @@ families:
   influences: []
 - id: catfish
   name: Catfish
-  notes: "Catfish is a Password Hashing Competition proposal built around memory-filling iterations intended to raise the cost of massively parallel password guessing."
+  notes: Catfish is a Password Hashing Competition proposal built around memory-filling
+    iterations intended to raise the cost of massively parallel password guessing.
   construction_ids:
   - iterated_hash_kdf
   round_ids:
@@ -8577,7 +8682,8 @@ families:
   influences: []
 - id: m3lcrypt
   name: M3lcrypt
-  notes: "M3lcrypt is a Password Hashing Competition proposal designed to combine tunable memory use with repeated hashing for resistance to hardware-accelerated guessing."
+  notes: M3lcrypt is a Password Hashing Competition proposal designed to combine tunable
+    memory use with repeated hashing for resistance to hardware-accelerated guessing.
   construction_ids:
   - memory_hard_sponge
   round_ids:
@@ -8592,7 +8698,9 @@ families:
   influences: []
 - id: pufferfish
   name: Pufferfish
-  notes: "Pufferfish is a bcrypt-derived password-hashing design with tunable memory and time costs, using an enlarged key-dependent state to impede parallel cracking hardware."
+  notes: Pufferfish is a bcrypt-derived password-hashing design with tunable memory
+    and time costs, using an enlarged key-dependent state to impede parallel cracking
+    hardware.
   construction_ids:
   - bcrypt_variant
   round_ids:
@@ -8625,7 +8733,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Abacus is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe design using an MDS matrix, 8-bit S-boxes, a feedback shift register, and an output transformation."
+  notes: 'Abacus is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: wide-pipe design using an MDS matrix, 8-bit
+    S-boxes, a feedback shift register, and an output transformation.'
 - id: arirang
   name: ARIRANG
   construction_ids: []
@@ -8646,7 +8757,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "ARIRANG is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel wide-pipe design with message expansion and MDS diffusion."
+  notes: 'ARIRANG is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: unbalanced-Feistel wide-pipe design with
+    message expansion and MDS diffusion.'
 - id: aurora
   name: AURORA
   construction_ids: []
@@ -8667,7 +8781,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "AURORA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: MDS-and-S-box design with an explicit message schedule and output transformation."
+  notes: 'AURORA is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: MDS-and-S-box design with an explicit message
+    schedule and output transformation.'
 - id: blender
   name: Blender
   construction_ids: []
@@ -8688,7 +8805,9 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Blender is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe ARX design."
+  notes: 'Blender is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: wide-pipe ARX design.'
 - id: blue_midnight_wish
   name: BLUE MIDNIGHT WISH
   construction_ids: []
@@ -8711,7 +8830,10 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: "BLUE MIDNIGHT WISH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: wide-pipe ARX design with an explicit message expansion."
+  notes: 'BLUE MIDNIGHT WISH is a cryptographic hash-function proposal accepted as
+    one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced
+    to the second round. Construction hint: wide-pipe ARX design with an explicit
+    message expansion.'
 - id: boole
   name: BOOLE
   construction_ids: []
@@ -8732,7 +8854,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "BOOLE is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: feedback-shift-register design with Boolean filtering and an output transformation."
+  notes: 'BOOLE is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: feedback-shift-register design with Boolean filtering
+    and an output transformation.'
 - id: cheetah
   name: Cheetah
   construction_ids: []
@@ -8753,7 +8878,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Cheetah is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: AES-like design using a message schedule, MDS diffusion, and 8-bit S-boxes."
+  notes: 'Cheetah is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: AES-like design using a message schedule,
+    MDS diffusion, and 8-bit S-boxes.'
 - id: chi_hash
   name: CHI
   construction_ids: []
@@ -8774,7 +8902,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "CHI is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel wide-pipe design using a message schedule and compact S-boxes."
+  notes: 'CHI is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: unbalanced-Feistel wide-pipe design using a message
+    schedule and compact S-boxes.'
 - id: crunch
   name: CRUNCH
   construction_ids: []
@@ -8795,7 +8926,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "CRUNCH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel design using message expansion and a large S-box layer."
+  notes: 'CRUNCH is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: unbalanced-Feistel design using message expansion
+    and a large S-box layer.'
 - id: cubehash
   name: CubeHash
   construction_ids: []
@@ -8818,7 +8952,9 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: "CubeHash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: ARX permutation-based design."
+  notes: 'CubeHash is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It advanced to the second
+    round. Construction hint: ARX permutation-based design.'
 - id: dch
   name: DCH
   construction_ids: []
@@ -8839,7 +8975,9 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "DCH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: message-scheduled design using an 8-bit S-box."
+  notes: 'DCH is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: message-scheduled design using an 8-bit S-box.'
 - id: dynamic_sha
   name: Dynamic SHA
   construction_ids: []
@@ -8860,7 +8998,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Dynamic SHA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel design with a SHA-like message schedule and Boolean functions."
+  notes: 'Dynamic SHA is a cryptographic hash-function proposal accepted as one of
+    the 51 first-round candidates in the NIST SHA-3 competition. It did not advance
+    to the second round. Construction hint: unbalanced-Feistel design with a SHA-like
+    message schedule and Boolean functions.'
 - id: dynamic_sha2
   name: Dynamic SHA2
   construction_ids: []
@@ -8881,7 +9022,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Dynamic SHA2 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel ARX design inspired by SHA-2."
+  notes: 'Dynamic SHA2 is a cryptographic hash-function proposal accepted as one of
+    the 51 first-round candidates in the NIST SHA-3 competition. It did not advance
+    to the second round. Construction hint: unbalanced-Feistel ARX design inspired
+    by SHA-2.'
 - id: echo_hash
   name: ECHO
   construction_ids: []
@@ -8904,7 +9048,10 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: "ECHO is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: AES-inspired wide-pipe design using MDS diffusion and 8-bit S-boxes."
+  notes: 'ECHO is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It advanced to the second
+    round. Construction hint: AES-inspired wide-pipe design using MDS diffusion and
+    8-bit S-boxes.'
 - id: ecoh
   name: ECOH
   construction_ids: []
@@ -8925,7 +9072,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "ECOH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: elliptic-curve-based compression design with an explicit message schedule."
+  notes: 'ECOH is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: elliptic-curve-based compression design with
+    an explicit message schedule.'
 - id: edon_r
   name: EDON-R
   construction_ids: []
@@ -8946,7 +9096,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "EDON-R is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe ARX design built from quasigroup transformations."
+  notes: 'EDON-R is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: wide-pipe ARX design built from quasigroup
+    transformations.'
 - id: enrupt
   name: EnRUPT
   construction_ids: []
@@ -8967,7 +9120,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "EnRUPT is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: word-oriented wide-pipe design with nonlinear rotational mixing."
+  notes: 'EnRUPT is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: word-oriented wide-pipe design with nonlinear
+    rotational mixing.'
 - id: essence
   name: ESSENCE
   construction_ids: []
@@ -8988,7 +9144,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "ESSENCE is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: feedback-shift-register-based compression design."
+  notes: 'ESSENCE is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: feedback-shift-register-based compression
+    design.'
 - id: fsb
   name: FSB
   construction_ids: []
@@ -9009,7 +9168,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "FSB is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: code-based wide-pipe design with a dedicated output transformation."
+  notes: 'FSB is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: code-based wide-pipe design with a dedicated
+    output transformation.'
 - id: fugue
   name: Fugue
   construction_ids: []
@@ -9032,7 +9194,10 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: "Fugue is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: wide-pipe AES-like design using a large MDS matrix, 8-bit S-boxes, and an output transformation."
+  notes: 'Fugue is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It advanced to the second
+    round. Construction hint: wide-pipe AES-like design using a large MDS matrix,
+    8-bit S-boxes, and an output transformation.'
 - id: hamsi
   name: Hamsi
   construction_ids: []
@@ -9055,7 +9220,9 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: "Hamsi is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: message-expanded design using 4-bit S-boxes."
+  notes: 'Hamsi is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It advanced to the second
+    round. Construction hint: message-expanded design using 4-bit S-boxes.'
 - id: khichidi_1
   name: Khichidi-1
   construction_ids: []
@@ -9076,7 +9243,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Khichidi-1 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: message-scheduled feedback-shift-register design."
+  notes: 'Khichidi-1 is a cryptographic hash-function proposal accepted as one of
+    the 51 first-round candidates in the NIST SHA-3 competition. It did not advance
+    to the second round. Construction hint: message-scheduled feedback-shift-register
+    design.'
 - id: lane
   name: LANE
   construction_ids: []
@@ -9097,7 +9267,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "LANE is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: AES-inspired design using message expansion, MDS diffusion, 8-bit S-boxes, and an output transformation."
+  notes: 'LANE is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: AES-inspired design using message expansion,
+    MDS diffusion, 8-bit S-boxes, and an output transformation.'
 - id: lesamnta
   name: Lesamnta
   construction_ids: []
@@ -9118,7 +9291,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Lesamnta is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel design using MDS diffusion, 8-bit S-boxes, and an output transformation."
+  notes: 'Lesamnta is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: unbalanced-Feistel design using MDS diffusion,
+    8-bit S-boxes, and an output transformation.'
 - id: luffa
   name: Luffa
   construction_ids: []
@@ -9141,7 +9317,10 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: "Luffa is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: permutation-based design using 4-bit S-boxes and an output transformation."
+  notes: 'Luffa is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It advanced to the second
+    round. Construction hint: permutation-based design using 4-bit S-boxes and an
+    output transformation.'
 - id: lux_hash
   name: LUX
   construction_ids: []
@@ -9162,7 +9341,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "LUX is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe AES-like design using MDS diffusion, 8-bit S-boxes, and an output transformation."
+  notes: 'LUX is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: wide-pipe AES-like design using MDS diffusion,
+    8-bit S-boxes, and an output transformation.'
 - id: mcssha3
   name: MCSSHA-3
   construction_ids: []
@@ -9183,7 +9365,9 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "MCSSHA-3 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: feedback-shift-register-based design."
+  notes: 'MCSSHA-3 is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: feedback-shift-register-based design.'
 - id: md6
   name: MD6
   construction_ids: []
@@ -9204,7 +9388,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "MD6 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: tree-capable wide-pipe design whose compression function uses a feedback shift register."
+  notes: 'MD6 is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: tree-capable wide-pipe design whose compression
+    function uses a feedback shift register.'
 - id: meshhash
   name: MeshHash
   construction_ids: []
@@ -9225,7 +9412,9 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "MeshHash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: S-box-based design with an output transformation."
+  notes: 'MeshHash is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: S-box-based design with an output transformation.'
 - id: nasha
   name: NaSHA
   construction_ids: []
@@ -9246,7 +9435,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "NaSHA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: balanced-Feistel design using an 8-bit S-box and a feedback shift register."
+  notes: 'NaSHA is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: balanced-Feistel design using an 8-bit S-box
+    and a feedback shift register.'
 - id: sandstorm
   name: SANDstorm
   construction_ids: []
@@ -9267,7 +9459,9 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "SANDstorm is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: message-scheduled S-box design."
+  notes: 'SANDstorm is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: message-scheduled S-box design.'
 - id: sarmal
   name: Sarmal
   construction_ids: []
@@ -9288,7 +9482,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Sarmal is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel design using MDS diffusion and 8-bit S-boxes."
+  notes: 'Sarmal is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: unbalanced-Feistel design using MDS diffusion
+    and 8-bit S-boxes.'
 - id: sgail
   name: Sgàil
   construction_ids: []
@@ -9309,7 +9506,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Sgàil is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe design using a message schedule, MDS diffusion, and 8-bit S-boxes."
+  notes: 'Sgàil is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: wide-pipe design using a message schedule, MDS
+    diffusion, and 8-bit S-boxes.'
 - id: shabal
   name: Shabal
   construction_ids: []
@@ -9332,7 +9532,9 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: "Shabal is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: message-scheduled design using a feedback shift register."
+  notes: 'Shabal is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It advanced to the second
+    round. Construction hint: message-scheduled design using a feedback shift register.'
 - id: shamata
   name: SHAMATA
   construction_ids: []
@@ -9353,7 +9555,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "SHAMATA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: balanced-Feistel wide-pipe design using message expansion, MDS diffusion, and 8-bit S-boxes."
+  notes: 'SHAMATA is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: balanced-Feistel wide-pipe design using message
+    expansion, MDS diffusion, and 8-bit S-boxes.'
 - id: shavite3
   name: SHAvite-3
   construction_ids: []
@@ -9376,7 +9581,10 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: "SHAvite-3 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: balanced-Feistel AES-inspired design using message expansion, MDS diffusion, S-boxes, and feedback."
+  notes: 'SHAvite-3 is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It advanced to the second
+    round. Construction hint: balanced-Feistel AES-inspired design using message expansion,
+    MDS diffusion, S-boxes, and feedback.'
 - id: simd_hash
   name: SIMD
   construction_ids: []
@@ -9399,7 +9607,10 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: "SIMD is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: unbalanced-Feistel wide-pipe design with a truncated-Reed–Solomon message expansion."
+  notes: 'SIMD is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It advanced to the second
+    round. Construction hint: unbalanced-Feistel wide-pipe design with a truncated-Reed–Solomon
+    message expansion.'
 - id: spectral_hash
   name: Spectral Hash
   construction_ids: []
@@ -9420,7 +9631,9 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Spectral Hash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: S-box-based design with an output transformation."
+  notes: 'Spectral Hash is a cryptographic hash-function proposal accepted as one
+    of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance
+    to the second round. Construction hint: S-box-based design with an output transformation.'
 - id: streamhash
   name: StreamHash
   construction_ids: []
@@ -9441,7 +9654,9 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "StreamHash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: large-S-box stream-oriented design."
+  notes: 'StreamHash is a cryptographic hash-function proposal accepted as one of
+    the 51 first-round candidates in the NIST SHA-3 competition. It did not advance
+    to the second round. Construction hint: large-S-box stream-oriented design.'
 - id: swifftx
   name: SWIFFTX
   construction_ids: []
@@ -9462,7 +9677,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "SWIFFTX is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: SWIFFT-inspired transform design with an S-box layer."
+  notes: 'SWIFFTX is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: SWIFFT-inspired transform design with an
+    S-box layer.'
 - id: tangle_hash
   name: Tangle
   construction_ids: []
@@ -9483,7 +9701,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Tangle is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe message-scheduled design using an S-box."
+  notes: 'Tangle is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: wide-pipe message-scheduled design using
+    an S-box.'
 - id: tib3
   name: TIB3
   construction_ids: []
@@ -9504,7 +9725,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "TIB3 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel design using message expansion and compact S-boxes."
+  notes: 'TIB3 is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: unbalanced-Feistel design using message expansion
+    and compact S-boxes.'
 - id: twister_hash
   name: Twister
   construction_ids: []
@@ -9525,7 +9749,10 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Twister is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe AES-like design using MDS diffusion, 8-bit S-boxes, and an output transformation."
+  notes: 'Twister is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: wide-pipe AES-like design using MDS diffusion,
+    8-bit S-boxes, and an output transformation.'
 - id: vortex_hash
   name: Vortex
   construction_ids: []
@@ -9546,7 +9773,9 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Vortex is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: MDS-and-S-box design with an output transformation."
+  notes: 'Vortex is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: MDS-and-S-box design with an output transformation.'
 - id: wamm
   name: WaMM
   construction_ids: []
@@ -9567,7 +9796,9 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "WaMM is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe S-box design with an output transformation."
+  notes: 'WaMM is a cryptographic hash-function proposal accepted as one of the 51
+    first-round candidates in the NIST SHA-3 competition. It did not advance to the
+    second round. Construction hint: wide-pipe S-box design with an output transformation.'
 - id: waterfall_hash
   name: Waterfall
   construction_ids: []
@@ -9588,4 +9819,272 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: "Waterfall is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe S-box and feedback-shift-register design with an output transformation."
+  notes: 'Waterfall is a cryptographic hash-function proposal accepted as one of the
+    51 first-round candidates in the NIST SHA-3 competition. It did not advance to
+    the second round. Construction hint: wide-pipe S-box and feedback-shift-register
+    design with an output transformation.'
+- id: kalyna
+  name: Kalyna
+  construction_ids:
+  - aligned_spn
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+        count: 4
+        note: 4 randomly generated 8-bit bijections; max DP=2^-5, max LP=2^-3
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+        matrix_rows: 8
+        matrix_cols: 8
+        irreducible_poly: x^8+x^4+x^3+x^2+1
+        branch_number: 9
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: add_mod
+      params:
+        modulus: 18446744073709551616
+    - id: constant
+  target_applications:
+  - general_purpose
+  - digital_signatures
+  - encryption
+  - hardware
+  - software
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - improvement_of
+    note: 'Kalyna is explicitly Rijndael-based. Main differences: 4 random S-boxes
+      (vs. single algebraic AES S-box), 8×8 MDS (vs. 4×4), alternating XOR/mod-2^64
+      key injection, larger block/key sizes (up to 512 bits), and a new self-similar
+      key schedule.'
+  innovative_ideas:
+  - id: kalyna_8x8_mds
+    name: 8×8 MDS matrix (branch number 9) over GF(2^8)
+    note: Kalyna replaces Rijndael's 4×4 MDS with an 8×8 MDS matrix, giving branch
+      number BM=9. For every 2 consecutive rounds this guarantees ≥9 active S-boxes,
+      yielding EDP≤2^{-230} for the 128-bit variant.
+  - id: kalyna_dual_key_injection
+    name: Alternating XOR and modulo 2^64 key injection
+    note: Odd rounds inject the subkey via XOR (σ); even rounds via mod-2^64 word
+      addition (χ). Pre- and post-whitening use mod-2^64 addition. This makes Kalyna
+      a non-Markov cipher, complicating differential analysis and providing algebraic
+      non-linearity.
+  - id: kalyna_random_sboxes
+    name: 4 randomly generated 8-bit S-boxes selected by DC/LC/degree criteria
+    note: 'S-boxes were drawn from a hardware RNG and filtered to satisfy: max XOR
+      DP ≤ 2^{-5}, max linear bias ≤ 2^{-3}, algebraic degree=7. The degree criterion
+      prevents XL/XSL algebraic attacks that potentially threaten the AES S-box.'
+  - id: kalyna_self_similar_key_schedule
+    name: Key schedule built from the cipher's own round function
+    note: Round keys are generated by encrypting per-variant constants Ci with the
+      master key KM using Kalyna's own round operations. This ensures key schedule
+      security is tied to the cipher strength and provides resistance to related-key
+      and slide attacks.
+  process_participations:
+  - process_id: ukrainian_national_cryptographic_competition_2007_2010
+    stage_ids:
+    - submission
+    - finalist
+    - winner
+    status: winner
+  reference_ids:
+  - oliynykov_2015_kalyna
+  - dstu_7624_2014
+  - oliynykov_2010_ukraine_competition
+  round_ids:
+  - kalyna_round
+  notes: Kalyna (DSTU 7624:2014) is the Ukrainian national symmetric block cipher
+    standard, selected in 2010 and standardised in 2015. It is an SPN cipher in the
+    Rijndael lineage with 128-, 256-, or 512-bit blocks and keys of equal or double
+    the block size. The state is represented as an 8×c matrix over GF(2^8) (c=2,4,8
+    for l=128,256,512). Rounds alternate XOR and modulo-2^64 subkey injection; the
+    8×8 MDS matrix (branch number 9) and 4 randomly chosen S-boxes provide high security
+    margins.
+- id: mukhomor
+  name: Mukhomor
+  construction_ids:
+  - lay_massey
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+        count: 4
+        note: Kalyna's 4 random S-boxes
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+        matrix_rows: 4
+        matrix_cols: 4
+        note: Rijndael's 4×4 MDS matrix
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+  target_applications:
+  - general_purpose
+  - software
+  influences:
+  - source_family_id: kalyna
+    relations:
+    - related_to
+    note: Shares all four S-boxes and the same key schedule construction principles
+      with Kalyna.
+  - source_family_id: rijndael
+    relations:
+    - same_mix_column
+    note: Uses Rijndael's 4×4 MDS matrix in the SL-transformation.
+  process_participations:
+  - process_id: ukrainian_national_cryptographic_competition_2007_2010
+    stage_ids:
+    - submission
+    - finalist
+    status: finalist
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  round_ids:
+  - mukhomor_round
+  notes: Mukhomor is an extended Lai-Massey cipher (FOX-family structure) proposed
+    to the Ukrainian competition. It supports 128-, 256-, and 512-bit blocks and keys.
+    The round function applies 3 iterations of an SL-transformation (Kalyna's S-boxes
+    + Rijndael's 4×4 MDS matrix) with modulo 2^32 key addition in every round; the
+    OR step uses one Feistel round with an identity function. Key schedule mirrors
+    Kalyna's. Proven secure against known attacks but assessed to have insufficient
+    security margins; not selected.
+- id: ade
+  name: ADE
+  construction_ids:
+  - aligned_spn
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+        note: 'Key-dependent S-boxes: S(a)=M·(a·γ)^-1+β where γ is a round-key byte'
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+        note: 'Key-dependent ShiftRows: each row shifted by 2-bit pairs from round
+          key'
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+        note: Key-dependent MDS matrix parameterised by round-key byte s
+    - id: xor
+  target_applications:
+  - general_purpose
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - variant_of
+    note: ADE replaces all three Rijndael transformations (SubBytes, ShiftRows, MixColumns)
+      with round-key-dependent versions to resist algebraic attacks; key schedule
+      is identical to AES.
+  process_participations:
+  - process_id: ukrainian_national_cryptographic_competition_2007_2010
+    stage_ids:
+    - submission
+    - finalist
+    status: candidate
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  round_ids:
+  - ade_round
+  notes: ADE (Kozhedub Air Force University, Kyiv/Kharkiv) is a Rijndael-based cipher
+    with key-dependent substitution, permutation, and linear layers. It supports 128,
+    192, 256, 320, 512-bit blocks/keys (scalable by 32 bits). The key-dependent operations
+    were intended to defeat algebraic attacks, but independent analysis showed that
+    certain round-key values cause synchronous ShiftRows shifts across all rows, partitioning
+    the 128-bit block into 4 independent 32-bit streams — a class of weak keys. Not
+    selected.
+- id: labyrinth
+  name: Labyrinth
+  construction_ids:
+  - feistel
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+        note: Same S-box used throughout (like Rijndael)
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+        matrix_rows: 8
+        matrix_cols: 8
+        note: 8×8 MDS matrix (branch number 9, similar to Kalyna)
+    - id: add_mod
+      params:
+        note: Modulo key addition (modulo half-block size) in round function
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+        note: Byte permutations in initial and final whitening
+    - id: xor
+  target_applications:
+  - embedded
+  - software
+  influences:
+  - source_family_id: camellia
+    relations:
+    - inspired_by
+    note: Round function structure (key addition + S-boxes + MDS) follows Camellia's
+      design.
+  - source_family_id: cs_cipher
+    relations:
+    - inspired_by
+    note: Key schedule is inspired by CS-Cipher's key derivation via round-function
+      application.
+  process_participations:
+  - process_id: ukrainian_national_cryptographic_competition_2007_2010
+    stage_ids:
+    - submission
+    - finalist
+    status: finalist
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  round_ids:
+  - labyrinth_round
+  notes: Labyrinth (JSC Cryptomach, Kharkiv) is a 16-round Feistel cipher with initial
+    and final whitening. It supports 128-, 256-, and 512-bit blocks and keys. The
+    round function applies modular key addition, S-box layer, and 8×8 MDS multiplication.
+    Initial/final whitening adds resistance to nR-style differential attacks. The
+    key schedule derives round keys CS-Cipher-style by running the round function
+    on the master key. No effective attacks were found, but Labyrinth—like AES—can
+    be described by an overdefined system of degree-2 equations; absence of a full
+    formal security proof led to its non-selection.
+- id: rsb
+  name: RSB
+  construction_ids:
+  - spn
+  characteristics:
+    components:
+    - id: sbox
+    - id: xor
+  target_applications:
+  - general_purpose
+  influences: []
+  process_participations:
+  - process_id: ukrainian_national_cryptographic_competition_2007_2010
+    stage_ids:
+    - submission
+    status: submitted
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  round_ids:
+  - rsb_round
+  notes: RSB (National Aviation University, Kyiv) was one of five candidates in the
+    Ukrainian national cryptographic competition. It was eliminated after initial
+    analysis due to insufficient encryption/decryption speed and potentially poor
+    statistical properties (indicating vulnerability to differential and linear cryptanalysis).
+    Its full specification was not published in the open literature.

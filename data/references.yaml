@@ -108,7 +108,8 @@ references:
   year: 2008
   venue: New Stream Cipher Designs, LNCS 4986, pp. 84–97
   url: https://doi.org/10.1007/978-3-540-68351-3_8
-  notes: 'Published book chapter based on the manuscript dated 2007-12-25. Local copy: references/2008-salsa20-stream_cipher.pdf.'
+  notes: 'Published book chapter based on the manuscript dated 2007-12-25. Local copy:
+    references/2008-salsa20-stream_cipher.pdf.'
 - id: bernstein_2011_xsalsa20
   kind: specification
   title: Extending the Salsa20 nonce
@@ -138,7 +139,9 @@ references:
   organization: IRTF
   status: obsoleted
   url: https://www.rfc-editor.org/info/rfc7539
-  notes: 'First stable CFRG specification of the IETF ChaCha20 profile, its block function, Poly1305, and their AEAD construction; obsoleted by RFC 8439. Local PDF rendered from the official RFC text: references/2015-chacha20-rfc7539.pdf.'
+  notes: 'First stable CFRG specification of the IETF ChaCha20 profile, its block
+    function, Poly1305, and their AEAD construction; obsoleted by RFC 8439. Local
+    PDF rendered from the official RFC text: references/2015-chacha20-rfc7539.pdf.'
 - id: bogdanov_2007_present
   kind: article
   title: 'PRESENT: An Ultra-Lightweight Block Cipher'
@@ -204,8 +207,8 @@ references:
   organization: NIST
   status: active
   url: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-232.pdf
-  notes: 'Specifies Ascon-AEAD128, Ascon-Hash256, Ascon-XOF128, Ascon-CXOF128,
-    and the underlying Ascon-p permutation. Local copy: references/2025-ascon-nist_sp_800-232.pdf.'
+  notes: 'Specifies Ascon-AEAD128, Ascon-Hash256, Ascon-XOF128, Ascon-CXOF128, and
+    the underlying Ascon-p permutation. Local copy: references/2025-ascon-nist_sp_800-232.pdf.'
 - id: iso_iec_18033_3_2010
   kind: standard
   title: 'ISO/IEC 18033-3:2010 — Encryption algorithms — Part 3: Block ciphers'
@@ -213,7 +216,8 @@ references:
   organization: ISO/IEC
   status: active
   url: https://www.iso.org/standard/54531.html
-  notes: Official standard covering TDEA, MISTY1, CAST-128, HIGHT, AES, Camellia, and SEED; full text is closed-source.
+  notes: Official standard covering TDEA, MISTY1, CAST-128, HIGHT, AES, Camellia,
+    and SEED; full text is closed-source.
 - id: iso_iec_29192_2_2019
   kind: standard
   title: 'ISO/IEC 29192-2:2019 — Lightweight cryptography — Part 2: Block ciphers'
@@ -221,7 +225,8 @@ references:
   organization: ISO/IEC
   status: active
   url: https://www.iso.org/standard/78477.html
-  notes: Official standard covering PRESENT, CLEFIA, and LEA; full text is closed-source.
+  notes: Official standard covering PRESENT, CLEFIA, and LEA. The full text is purchase-only;
+    ISO provides an official sample at https://www.iso.org/obp/ui/en/#!iso:std:78477:en.
 - id: rfc_2994_misty1
   kind: standard
   title: 'RFC 2994: A Description of the MISTY1 Encryption Algorithm'
@@ -741,7 +746,8 @@ references:
   organization: IRTF
   status: current
   url: https://www.rfc-editor.org/info/rfc8439
-  notes: 'Updates RFC 7539 by incorporating errata and additional security-considerations text. Local PDF rendered from the official RFC text: references/2018-chacha20-rfc8439.pdf.'
+  notes: 'Updates RFC 7539 by incorporating errata and additional security-considerations
+    text. Local PDF rendered from the official RFC text: references/2018-chacha20-rfc8439.pdf.'
 - id: rivest_1987_rc4
   kind: article
   title: 'RC4: A Stream Cipher'
@@ -1430,8 +1436,8 @@ references:
   year: 2013
   venue: Information Security Applications (WISA) 2013, LNCS 8267
   url: https://doi.org/10.1007/978-3-319-05149-9_1
-  notes: Korean lightweight block cipher with a 128-bit block and 128-, 192-, or
-    256-bit keys. Local copy references/2013-lea.pdf.
+  notes: Korean lightweight block cipher with a 128-bit block and 128-, 192-, or 256-bit
+    keys. Local copy references/2013-lea.pdf.
 - id: leviathan_ref
   kind: paper
   title: LEVIATHAN - The Leviathan Authenticated Encryption Mode
@@ -1945,7 +1951,9 @@ references:
     Encryption Algorithm (TDEA) Block Cipher'
   year: 2017
   status: withdrawn
-  notes: 'Second revision of the NIST TDEA recommendation, not the algorithm’s first standardization; withdrawn 2024-01-01. TDEA was standardized in FIPS 46-3 in 1999. Local copy: references/2017-nist_sp800_67r2_3des.pdf.'
+  notes: 'Second revision of the NIST TDEA recommendation, not the algorithm’s first
+    standardization; withdrawn 2024-01-01. TDEA was standardized in FIPS 46-3 in 1999.
+    Local copy: references/2017-nist_sp800_67r2_3des.pdf.'
   venue: NIST SP 800-67r2
   url: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-67r2.pdf
 - id: threefish_ref
@@ -2044,8 +2052,8 @@ references:
   kind: specification
   title: 'XChaCha: eXtended-nonce ChaCha and AEAD_XChaCha20_Poly1305'
   year: 2018
-  notes: Expired IETF Internet-Draft specifying XChaCha20 with HChaCha20 subkey
-    derivation; it was not published as an RFC and is not treated as a standard.
+  notes: Expired IETF Internet-Draft specifying XChaCha20 with HChaCha20 subkey derivation;
+    it was not published as an RFC and is not treated as a standard.
   authors:
   - Scott Arciszewski
   venue: IETF Internet-Draft
@@ -3291,7 +3299,8 @@ references:
   notes: PHC submission. Available as GitHub source only, no spec PDF.
 - id: nist_2009_sha3_round1_report
   kind: report
-  title: Status Report on the First Round of the SHA-3 Cryptographic Hash Algorithm Competition
+  title: Status Report on the First Round of the SHA-3 Cryptographic Hash Algorithm
+    Competition
   authors:
   - Andrew Regenscheid
   - Ray Perlner
@@ -3305,7 +3314,8 @@ references:
   url: https://doi.org/10.6028/NIST.IR.7620
 - id: nist_2011_sha3_round2_report
   kind: report
-  title: Status Report on the Second Round of the SHA-3 Cryptographic Hash Algorithm Competition
+  title: Status Report on the Second Round of the SHA-3 Cryptographic Hash Algorithm
+    Competition
   year: 2011
   venue: NISTIR 7764
   organization: NIST
@@ -3323,3 +3333,53 @@ references:
   year: 2008
   organization: NIST
   url: https://www.nist.gov/node/404121
+- id: oliynykov_2015_kalyna
+  title: 'A New Encryption Standard of Ukraine: The Kalyna Block Cipher'
+  authors:
+  - Roman Oliynykov
+  - Ivan Gorbenko
+  - Oleksandr Kazymyrov
+  - Victor Ruzhentsev
+  - Oleksandr Kuznetsov
+  - Yurii Gorbenko
+  - Oleksandr Dyrda
+  - Viktor Dolgov
+  - Andrii Pushkaryov
+  - Ruslan Mordvinov
+  - Dmytro Kaidalov
+  year: 2015
+  venue: IACR ePrint Archive, Report 2015/650
+  url: https://eprint.iacr.org/2015/650
+  kind: paper
+  notes: 'English-language adapted specification of the Kalyna block cipher (DSTU
+    7624:2014). Describes all five Kalyna-l/k variants, S-boxes, MDS matrix, key schedule,
+    and security analysis. Local copy: references/2015-kalyna.pdf.'
+- id: dstu_7624_2014
+  title: DSTU 7624:2014 — Information Technology. Cryptographic Data Security. Symmetric
+    Block Transformation Algorithm
+  authors:
+  - State Service of Special Communication and Information Protection of Ukraine
+  organization: State Service of Special Communication and Information Protection
+    of Ukraine
+  year: 2015
+  venue: National Standard of Ukraine DSTU 7624:2014
+  url: https://www.dstu.com.ua/
+  kind: standard
+  status: active
+  notes: Official Ukrainian national standard specifying the Kalyna block cipher and
+    ten modes of operation. Approved 2014, published 2015. Replaces GOST 28147-89
+    for non-government information protection.
+- id: oliynykov_2010_ukraine_competition
+  title: Results of Ukrainian National Public Cryptographic Competition
+  authors:
+  - Roman Oliynykov
+  - Ivan Gorbenko
+  - Viktor Dolgov
+  - Viktor Ruzhentsev
+  year: 2010
+  venue: Tatra Mountains Mathematical Publications, vol. 47, pp. 99–113
+  url: https://www.sav.sk/journals/uploads/0317154006ogdr.pdf
+  kind: paper
+  notes: 'Overview of all five candidates (Kalyna, Mukhomor, ADE, Labyrinth, RSB)
+    submitted to the Ukrainian national competition, and security analysis results
+    leading to Kalyna''s selection. Local copy: references/2015-ukranian_competition-[kalyna,mukhomor,ade,labirinth,rsb].pdf.'

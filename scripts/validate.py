@@ -97,6 +97,11 @@ def main() -> None:
         raise SystemExit(1)
 
     reference_ids = {r["id"] for r in references_doc.get("references", [])}
+    standard_reference_ids = {
+        r["id"]
+        for r in references_doc.get("references", [])
+        if "standard" in str(r.get("kind", "")).lower()
+    }
     process_ids     = {p["id"] for p in processes_doc.get("processes", [])}
     family_ids      = {f["id"] for f in families_doc.get("families", [])}
     component_ids   = {c["id"] for c in components_doc.get("components", [])}
@@ -105,6 +110,7 @@ def main() -> None:
     primitive_ids   = {p["id"] for p in primitives_doc.get("primitives", [])}
     primitive_type_ids = {t["id"] for t in primitive_types_doc.get("primitive_types", [])}
     family_innovation_ids: dict[str, set[str]] = {}
+    standardized_profile_family_ids: set[str] = set()
 
     # Validate special_case_of self-references in components
     errors_found = False
@@ -205,18 +211,28 @@ def main() -> None:
                     "inherits_alpha_reflexivity_structure",
                     "inspired_by",
                     "improvement_of",
+                    "standardization_of",
                     "variant_of",
                     "generalization_of",
                     "related_to",
                 }:
                     print(f"REFERENCE ERROR: family '{fid}' has unknown influence relation '{rel}'")
                     errors_found = True
+            if "standardization_of" in relations:
+                standardized_profile_family_ids.add(fid)
             for idea_id in edge.get("innovative_idea_ids", []):
                 if idea_id not in family_innovation_ids.get(src, set()):
                     print(
                         f"REFERENCE ERROR: family '{fid}' influence from '{src}' references unknown innovative idea '{idea_id}'"
                     )
                     errors_found = True
+        if fid in standardized_profile_family_ids:
+            family_standard_ids = set(family.get("reference_ids", [])) & standard_reference_ids
+            if not family_standard_ids:
+                print(
+                    f"REFERENCE ERROR: standardized profile family '{fid}' has no standard reference"
+                )
+                errors_found = True
         for comp_ref in family.get("characteristics", {}).get("components", []):
             cid = comp_ref["id"]
             if cid not in component_ids:
@@ -238,6 +254,13 @@ def main() -> None:
         for ref in primitive.get("reference_ids", []):
             if ref not in reference_ids:
                 print(f"REFERENCE ERROR: instance '{pid}' has unknown reference '{ref}'")
+                errors_found = True
+        if primitive["family_id"] in standardized_profile_family_ids:
+            primitive_standard_ids = set(primitive.get("reference_ids", [])) & standard_reference_ids
+            if not primitive_standard_ids:
+                print(
+                    f"REFERENCE ERROR: standardized profile instance '{pid}' has no standard reference"
+                )
                 errors_found = True
         tweakey_size = characteristics.get("tweakey_size_bits")
         if isinstance(tweakey_size, str):
