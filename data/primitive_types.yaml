@@ -25,6 +25,9 @@ primitive_types:
   - id: hash_function
     name: Hash Function
 
+  - id: extendable_output_function
+    name: Extendable-Output Function (XOF)
+
   - id: hash
     name: Hash
 

@@ -6851,7 +6851,7 @@ families:
     introduced SHA-256/384/512; FIPS 180-3 (2008) added SHA-224; FIPS 180-4 (2015)
     added SHA-512/224 and SHA-512/256 and is the current standard.
 - id: keccak
-  name: Keccak / SHA-3
+  name: Keccak
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -6872,7 +6872,6 @@ families:
   reference_ids:
   - nist_2008_sha3_first_round_candidates
   - bertoni_2011_keccak
-  - nist_2015_fips202
   process_participations:
   - process_id: sha3_competition_nist_2007_2012
     stage_ids:
@@ -6897,12 +6896,72 @@ families:
       XOR — no table lookups, branch-free, extremely efficient in hardware.
 
       '
-  notes: 'Keccak was selected as SHA-3 in October 2012. FIPS 202 (2015) standardizes
-    four fixed-length variants (SHA3-224/256/384/512) and two extendable-output functions
-    (SHAKE128/SHAKE256). The underlying permutation Keccak-f[1600] operates on a 5×5×64-bit
-    lane state with 24 rounds. Capacity c = 2× security level; rate r = 1600−c.
+  notes: 'Keccak is the sponge-based hash-function design selected as the winner of
+    the NIST SHA-3 competition in October 2012. Its Keccak-f[1600] permutation operates
+    on a 5×5×64-bit lane state with 24 rounds and underlies the standardized SHA-3
+    and SHAKE families.
 
     '
+- id: sha3
+  name: SHA-3
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - keccak_round
+  target_applications:
+  - digital_signatures
+  - message_authentication
+  - key_derivation
+  characteristics:
+    state_size_bits: 1600
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - nist_2015_fips202_sha3
+  process_participations: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - selection_of_possible_configurations
+    note: SHA-3 selects four fixed-output Keccak sponge instances with domain separation.
+  notes: 'SHA-3 is the FIPS 202 family of four fixed-output hash functions: SHA3-224,
+    SHA3-256, SHA3-384, and SHA3-512. Each uses Keccak-p[1600,24] with a capacity
+    determined by the requested security strength and a domain-separation suffix
+    distinct from SHAKE.'
+- id: shake
+  name: SHAKE
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - keccak_round
+  target_applications:
+  - key_derivation
+  - random_number_generation
+  - generic
+  characteristics:
+    state_size_bits: 1600
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - nist_2015_fips202_shake
+  process_participations: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - selection_of_possible_configurations
+    note: SHAKE selects two extendable-output Keccak sponge instances with domain separation.
+  notes: 'SHAKE is the FIPS 202 family of extendable-output functions SHAKE128 and
+    SHAKE256. Unlike fixed-output hashes, a SHAKE invocation can produce any requested
+    number of output bits; the numeric suffix denotes its general security strength,
+    not a fixed digest length.'
 - id: blake
   name: BLAKE
   construction_ids:

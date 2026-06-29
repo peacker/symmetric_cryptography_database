@@ -4831,61 +4831,72 @@ primitives:
   reference_ids:
   - peslyak_2015_yescrypt
   characteristics: {}
+- id: keccak_f1600
+  name: Keccak-f[1600]
+  family_id: keccak
+  primitive_type: permutation
+  reference_ids:
+  - bertoni_2011_keccak
+  characteristics:
+    block_size_bits: 1600
+    state_size_bits: 1600
+    output_size_bits: 1600
+    rounds: 24
 - id: sha3_224
   name: SHA3-224
-  family_id: keccak
+  family_id: sha3
   primitive_type: hash_function
   reference_ids:
-  - nist_2015_fips202
+  - nist_2015_fips202_sha3
   characteristics:
     state_size_bits: 1600
     output_size_bits: 224
     rounds: 24
 - id: sha3_256
   name: SHA3-256
-  family_id: keccak
+  family_id: sha3
   primitive_type: hash_function
   reference_ids:
-  - nist_2015_fips202
+  - nist_2015_fips202_sha3
   characteristics:
     state_size_bits: 1600
     output_size_bits: 256
     rounds: 24
 - id: sha3_384
   name: SHA3-384
-  family_id: keccak
+  family_id: sha3
   primitive_type: hash_function
   reference_ids:
-  - nist_2015_fips202
+  - nist_2015_fips202_sha3
   characteristics:
     state_size_bits: 1600
     output_size_bits: 384
     rounds: 24
 - id: sha3_512
   name: SHA3-512
-  family_id: keccak
+  family_id: sha3
   primitive_type: hash_function
   reference_ids:
-  - nist_2015_fips202
+  - nist_2015_fips202_sha3
   characteristics:
     state_size_bits: 1600
     output_size_bits: 512
     rounds: 24
 - id: shake128
   name: SHAKE128
-  family_id: keccak
-  primitive_type: hash_function
+  family_id: shake
+  primitive_type: extendable_output_function
   reference_ids:
-  - nist_2015_fips202
+  - nist_2015_fips202_shake
   characteristics:
     state_size_bits: 1600
     rounds: 24
 - id: shake256
   name: SHAKE256
-  family_id: keccak
-  primitive_type: hash_function
+  family_id: shake
+  primitive_type: extendable_output_function
   reference_ids:
-  - nist_2015_fips202
+  - nist_2015_fips202_shake
   characteristics:
     state_size_bits: 1600
     rounds: 24

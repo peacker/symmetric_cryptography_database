@@ -258,7 +258,9 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | SFINKS | SFINKS | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/sfinks.pdf | Full | yes |
 | [x] | SHA-1 | SHA-1 | hash | 1995 | https://csrc.nist.gov/publications/detail/fips/180/1/archive/1995-04-17 | Full | yes |
 | [x] | SHA-2 | SHA-2 | hash | 2015 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf | Full | yes |
-| [x] | SHA-3 / Keccak | Keccak-f[1600] permutation | hash | 2015 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf | Full | yes |
+| [x] | Keccak (SHA-3 winner) | Keccak-f[1600] permutation | hash | 2008 | https://keccak.team/files/Keccak-reference-3.0.pdf | Full | yes |
+| [x] | SHA-3 | Keccak-p[1600,24] permutation | hash | 2015 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf | Sections 5 and 6.1 | yes |
+| [x] | SHAKE | Keccak-p[1600,24] permutation | xof | 2015 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf | Sections 5 and 6.2 | yes |
 | [x] | BLAKE (SHA-3 finalist) | BLAKE | hash | 2008 | https://www.aumasson.jp/blake/blake.pdf | Full | yes |
 | [x] | Grøstl (SHA-3 finalist) | Grøstl P/Q permutations | hash | 2008 | https://www.groestl.info/Groestl.pdf | Full | yes |
 | [x] | JH (SHA-3 finalist) | JH E_8 permutation | hash | 2008 | https://www3.ntu.edu.sg/home/wuhj/research/jh/jh_round3.pdf | Full | yes |

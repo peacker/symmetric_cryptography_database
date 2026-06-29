@@ -3001,10 +3001,9 @@ references:
   status: active
   url: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
   notes: 'Current SHA standard (supersedes 180-2). Local copy: references/2015-fips180-4.pdf.'
-- id: nist_2015_fips202
+- id: nist_2015_fips202_sha3
   kind: standard
-  title: 'SHA-3 Standard: Permutation-Based Hash and Extendable-Output Functions,
-    FIPS PUB 202'
+  title: 'FIPS PUB 202: SHA-3 Fixed-Output Hash Functions (Sections 5 and 6.1)'
   authors:
   - National Institute of Standards and Technology (NIST)
   year: 2015
@@ -3012,8 +3011,18 @@ references:
   organization: NIST
   status: active
   url: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
-  notes: 'Standardizes Keccak as SHA3-224/256/384/512 and SHAKE128/SHAKE256. Local
-    copy: references/2015-fips202.pdf.'
+  notes: 'Defines SHA3-224, SHA3-256, SHA3-384, and SHA3-512. Local copy: references/2015-sha3-fips202.pdf.'
+- id: nist_2015_fips202_shake
+  kind: standard
+  title: 'FIPS PUB 202: SHAKE Extendable-Output Functions (Sections 5 and 6.2)'
+  authors:
+  - National Institute of Standards and Technology (NIST)
+  year: 2015
+  venue: Federal Information Processing Standards Publication 202, NIST
+  organization: NIST
+  status: active
+  url: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
+  notes: 'Defines SHAKE128 and SHAKE256. Local copy: references/2015-shake-fips202.pdf.'
 - id: aumasson_2010_blake
   kind: paper
   title: 'SHA-3 proposal: BLAKE (version 1.4)'
