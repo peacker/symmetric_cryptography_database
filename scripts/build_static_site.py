@@ -202,23 +202,22 @@ def build_site() -> None:
               <span class=\"viz-name-section-label\">Names</span>
               <div class=\"viz-name-mode\" role=\"group\"><button id=\"vizNameOff\" type=\"button\" class=\"name-mode-btn\">Off</button><button id=\"vizNameClip\" type=\"button\" class=\"name-mode-btn is-active\">Clip</button><button id=\"vizNameWrap\" type=\"button\" class=\"name-mode-btn\">Wrap</button><button id=\"vizNameFull\" type=\"button\" class=\"name-mode-btn\">Full</button></div>
             </div>
+            <div class=\"viz-name-section\">
+              <span class=\"viz-name-section-label\">Font size</span>
+              <div class=\"viz-name-mode\"><button id=\"vizFontMinus\" type=\"button\" class=\"name-mode-btn\">A-</button><button id=\"vizFontPlus\" type=\"button\" class=\"name-mode-btn\">A+</button><button id=\"vizFontReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"vizFontValue\" class=\"viz-ctrl-value\">12px</span></div>
+            </div>
+            <div class=\"viz-name-section\">
+              <span class=\"viz-name-section-label\">Plot zoom</span>
+              <div class=\"viz-name-mode\"><button id=\"vizZoomOut\" type=\"button\" class=\"name-mode-btn\">-</button><button id=\"vizZoomIn\" type=\"button\" class=\"name-mode-btn\">+</button><button id=\"vizZoomReset\" type=\"button\" class=\"name-mode-btn\">100%</button><button id=\"vizZoomFit\" type=\"button\" class=\"name-mode-btn\">Fit</button><span id=\"vizZoomValue\" class=\"viz-ctrl-value\">100%</span></div>
+            </div>
+            <div class=\"viz-name-section\">
+              <span class=\"viz-name-section-label\">Year spacing</span>
+              <div class=\"viz-name-mode\"><button id=\"vizColMinus\" type=\"button\" class=\"name-mode-btn\">-</button><button id=\"vizColPlus\" type=\"button\" class=\"name-mode-btn\">+</button><button id=\"vizColReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"vizColSpacingValue\" class=\"viz-ctrl-value\">+0px</span></div>
+            </div>
             <label class=\"inline-check\"><input id=\"vizCollapseGroups\" type=\"checkbox\" checked /> Collapse to <input id=\"vizCollapseCount\" type=\"number\" min=\"1\" value=\"3\" class=\"viz-collapse-count\" /></label>
             <label class=\"inline-check\"><input id=\"vizHideDots\" type=\"checkbox\" /> Bullet points</label>
             <label class=\"inline-check\"><input id=\"vizShowArrows\" type=\"checkbox\" /> Show relation arrows</label>
             <label class=\"inline-check\"><input id=\"vizColorByProcess\" type=\"checkbox\" checked /> Color by process</label>
-          </div>
-          <div class=\"viz-font-controls\" aria-label=\"Timeline font size\">
-            <button id=\"vizFontMinus\" type=\"button\">A-</button>
-            <button id=\"vizFontPlus\" type=\"button\">A+</button>
-            <button id=\"vizFontReset\" type=\"button\">Reset</button>
-            <span id=\"vizFontValue\" class=\"small-note\">12px</span>
-          </div>
-          <div class=\"viz-scale-controls\" aria-label=\"Timeline zoom\">
-            <button id=\"vizZoomOut\" type=\"button\">-</button>
-            <button id=\"vizZoomIn\" type=\"button\">+</button>
-            <button id=\"vizZoomReset\" type=\"button\">100%</button>
-            <button id=\"vizZoomFit\" type=\"button\">Fit</button>
-            <span id=\"vizZoomValue\" class=\"small-note\">100%</span>
           </div>
         </div>
         <div class=\"viz-secondary-controls\">
@@ -595,24 +594,12 @@ pre {
   min-width: 200px;
 }
 
-.viz-font-controls,
-.viz-scale-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.42rem;
-}
-
-.viz-font-controls button,
-.viz-scale-controls button {
-  width: auto;
-  margin-top: 0;
-}
-
-#vizFontValue,
-#vizZoomValue {
+.viz-ctrl-value {
+  color: var(--muted);
   margin: 0;
   min-width: 3.2rem;
   text-align: right;
+  font-size: 0.82rem;
 }
 
 .viz-filter-panel {
@@ -1393,6 +1380,10 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const zoomReset = document.getElementById("vizZoomReset");
     const zoomFit = document.getElementById("vizZoomFit");
     const zoomValue = document.getElementById("vizZoomValue");
+    const colMinus = document.getElementById("vizColMinus");
+    const colPlus = document.getElementById("vizColPlus");
+    const colReset = document.getElementById("vizColReset");
+    const colSpacingValue = document.getElementById("vizColSpacingValue");
     const familySearch = document.getElementById("vizFamilySearch");
     const vizFrame = document.getElementById("vizFrame");
     const collapseGroups = document.getElementById("vizCollapseGroups");
@@ -1402,10 +1393,12 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const yearReset = document.getElementById("vizYearReset");
     const yearRangeValue = document.getElementById("vizYearRangeValue");
     const relationInfoBox = document.getElementById("vizRelationInfo");
-    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !vizFrame || !groupBy || !showArrows || !hideDots || !nameModeOff || !nameModeClip || !nameModeWrap || !nameModeFull || !colorByProcess || !processLegend || !groupFilters || !filterAll || !filterNone || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !familySearch || !collapseGroups || !collapseCount || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
+    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !vizFrame || !groupBy || !showArrows || !hideDots || !nameModeOff || !nameModeClip || !nameModeWrap || !nameModeFull || !colorByProcess || !processLegend || !groupFilters || !filterAll || !filterNone || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !colMinus || !colPlus || !colReset || !colSpacingValue || !familySearch || !collapseGroups || !collapseCount || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
 
     const BASE_FONT = 12;
     const BASE_ZOOM = 1;
+    const BASE_COL_BONUS = 0;
+    const COL_STEP = 8;
     const MIN_ZOOM = 0.35;
     const MAX_ZOOM = 4;
     const ZOOM_FACTOR = 1.2;
@@ -1422,6 +1415,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     };
     let fontPx = BASE_FONT;
     let zoomScale = BASE_ZOOM;
+    let colSpacingBonus = BASE_COL_BONUS;
     let hasAutoFit = false;
     let lastRenderSize = { plotWidth: 920, plotHeight: 640 };
     let yearsBounds = null;
@@ -1763,7 +1757,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       const _earlyMaxY = Math.max(...points.map((p) => p.year));
       const _earlySpan = Math.max(1, _earlyMaxY - _earlyMinY);
       const _earlyLaneStep = Math.max(36, fontPx * 2.85);
-      const _earlyBW = Math.max(840, (_earlySpan + 1) * (32 + fontPx * 0.8));
+      const _earlyBW = Math.max(840, (_earlySpan + 1) * (32 + colSpacingBonus + fontPx * 0.8));
       const _earlySpacing = _earlySpan ? _earlyBW / _earlySpan : _earlyBW;
       const _earlyDotOff = hideDots.checked ? (POINT_RADIUS + 2) : 0;
       const _earlyMaxNamePx = Math.max(0, _earlySpacing - _earlyDotOff);
@@ -1850,8 +1844,8 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       if (nameMode === "full") {
         visiblePoints.forEach((p) => { longestNamePx = Math.max(longestNamePx, p.name.length * Math.max(fontPx, 8) * 0.62); });
       }
-      const _minColW = nameMode === "full" ? POINT_RADIUS + longestNamePx + 16 : 32 + fontPx * 0.8;
-      const basePlotWidth = Math.max(840, (span + 1) * Math.max(32 + fontPx * 0.8, _minColW));
+      const _minColW = nameMode === "full" ? POINT_RADIUS + longestNamePx + 16 : 32 + colSpacingBonus + fontPx * 0.8;
+      const basePlotWidth = Math.max(840, (span + 1) * Math.max(32 + colSpacingBonus + fontPx * 0.8, _minColW));
       const maxYUnit = Math.max(
         ...visiblePoints.map((point) => point.yUnit || 0),
         ...Array.from(groupLayout.values()).map((layout) => layout.endUnit)
@@ -2034,63 +2028,84 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         y: yFor(point.yUnit || 0),
       }));
 
-      const anchorByFamily = new Map();
+      const anchorsByFamily = new Map();
       pointPositions.forEach((point) => {
-        if (!anchorByFamily.has(point.familyId)) {
-          anchorByFamily.set(point.familyId, { sx: 0, sy: 0, count: 0 });
-        }
-        const anchor = anchorByFamily.get(point.familyId);
-        anchor.sx += point.x;
-        anchor.sy += point.y;
-        anchor.count += 1;
+        if (!anchorsByFamily.has(point.familyId)) anchorsByFamily.set(point.familyId, []);
+        anchorsByFamily.get(point.familyId).push(point);
       });
+
+      function relationEndpointPairs(sourceId, targetId) {
+        const sources = anchorsByFamily.get(sourceId) || [];
+        const targets = anchorsByFamily.get(targetId) || [];
+        if (!sources.length || !targets.length) return [];
+
+        // A family can appear in several lanes. Connect every visible target dot
+        // from an actual source dot, preferring the matching lane when possible.
+        return targets.map((target) => {
+          let best = null;
+          sources.forEach((source) => {
+            const sameGroup = source.group === target.group;
+            const dx = target.x - source.x;
+            const dy = target.y - source.y;
+            const candidate = { source, target, sameGroup, distance: dx * dx + dy * dy };
+            if (!best
+                || (candidate.sameGroup && !best.sameGroup)
+                || (candidate.sameGroup === best.sameGroup && candidate.distance < best.distance)) {
+              best = candidate;
+            }
+          });
+          return best;
+        });
+      }
 
       const hoverLines = [];
       if (showArrows.checked) {
         influences.forEach((edge) => {
           const sourceId = String(edge.source_family_id || "");
           const targetId = String(edge.target_family_id || "");
-          const source = anchorByFamily.get(sourceId);
-          const target = anchorByFamily.get(targetId);
-          if (!source || !target) return;
+          const endpointPairs = relationEndpointPairs(sourceId, targetId);
+          if (!endpointPairs.length) return;
 
-          const sx = source.sx / source.count;
-          const sy = source.sy / source.count;
-          const tx = target.sx / target.count;
-          const ty = target.sy / target.count;
           const rel = relationInfo(edge);
           const width = 1.15 + (rel.count - 1) * 1.05;
-
-          const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-          line.setAttribute("x1", String(sx));
-          line.setAttribute("y1", String(sy));
-          line.setAttribute("x2", String(tx));
-          line.setAttribute("y2", String(ty));
-          line.setAttribute("stroke-width", String(width));
-          line.setAttribute("marker-end", "url(#vizArrowHead)");
-          line.setAttribute("class", "viz-edge");
-          line.setAttribute("pointer-events", "none");
-          plotSvg.appendChild(line);
-
-          const hoverLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-          hoverLine.setAttribute("x1", String(sx));
-          hoverLine.setAttribute("y1", String(sy));
-          hoverLine.setAttribute("x2", String(tx));
-          hoverLine.setAttribute("y2", String(ty));
-          hoverLine.setAttribute("stroke", "rgba(0,0,0,0.001)");
-          hoverLine.setAttribute("stroke-width", String(Math.max(10, width + 8)));
-          hoverLine.setAttribute("pointer-events", "all");
           const hoverText = `${edge.source_family_id} -> ${edge.target_family_id} | Relations: ${rel.label} | ${normalizeValue(edge.note)}`;
-          const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
-          title.textContent = hoverText;
-          hoverLine.appendChild(title);
-          hoverLine.addEventListener("mouseenter", () => {
-            relationInfoBox.textContent = hoverText;
+
+          endpointPairs.forEach((endpoints) => {
+            const sx = endpoints.source.x;
+            const sy = endpoints.source.y;
+            const tx = endpoints.target.x;
+            const ty = endpoints.target.y;
+
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", String(sx));
+            line.setAttribute("y1", String(sy));
+            line.setAttribute("x2", String(tx));
+            line.setAttribute("y2", String(ty));
+            line.setAttribute("stroke-width", String(width));
+            line.setAttribute("marker-end", "url(#vizArrowHead)");
+            line.setAttribute("class", "viz-edge");
+            line.setAttribute("pointer-events", "none");
+            plotSvg.appendChild(line);
+
+            const hoverLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            hoverLine.setAttribute("x1", String(sx));
+            hoverLine.setAttribute("y1", String(sy));
+            hoverLine.setAttribute("x2", String(tx));
+            hoverLine.setAttribute("y2", String(ty));
+            hoverLine.setAttribute("stroke", "rgba(0,0,0,0.001)");
+            hoverLine.setAttribute("stroke-width", String(Math.max(10, width + 8)));
+            hoverLine.setAttribute("pointer-events", "all");
+            const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+            title.textContent = hoverText;
+            hoverLine.appendChild(title);
+            hoverLine.addEventListener("mouseenter", () => {
+              relationInfoBox.textContent = hoverText;
+            });
+            hoverLine.addEventListener("mouseleave", () => {
+              relationInfoBox.textContent = BASE_RELATION_TEXT;
+            });
+            hoverLines.push(hoverLine);
           });
-          hoverLine.addEventListener("mouseleave", () => {
-            relationInfoBox.textContent = BASE_RELATION_TEXT;
-          });
-          hoverLines.push(hoverLine);
         });
       }
 
@@ -2242,6 +2257,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       }
 
       fontValue.textContent = `${fontPx}px`;
+      colSpacingValue.textContent = `${colSpacingBonus >= 0 ? "+" : ""}${colSpacingBonus}px`;
       if (!hasAutoFit) {
         hasAutoFit = true;
         fitZoom();
@@ -2293,6 +2309,18 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     });
     fontReset.addEventListener("click", () => {
       fontPx = BASE_FONT;
+      render();
+    });
+    colMinus.addEventListener("click", () => {
+      colSpacingBonus = Math.max(-16, colSpacingBonus - COL_STEP);
+      render();
+    });
+    colPlus.addEventListener("click", () => {
+      colSpacingBonus = Math.min(200, colSpacingBonus + COL_STEP);
+      render();
+    });
+    colReset.addEventListener("click", () => {
+      colSpacingBonus = BASE_COL_BONUS;
       render();
     });
     zoomOut.addEventListener("click", () => setZoom(zoomScale / ZOOM_FACTOR));
