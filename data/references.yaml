@@ -14,8 +14,7 @@ references:
   venue: Information Security and Cryptology – ICISC 2017, LNCS 10779, pp. 3–25
   publisher: Springer
   url: https://doi.org/10.1007/978-3-319-78556-1_1
-  notes: Original CHAM family publication. Publisher PDF was not openly retrievable;
-    local copy pending as references/2018-cham.pdf.
+  notes: 'Original CHAM family publication. Local copy: references/2018-cham.pdf.'
 - id: roh_et_al_2020_cham_revised
   kind: paper
   title: Revised Version of Block Cipher CHAM
@@ -31,8 +30,7 @@ references:
   venue: Information Security and Cryptology – ICISC 2019, LNCS 11975, pp. 1–19
   publisher: Springer
   url: https://doi.org/10.1007/978-3-030-40921-0_1
-  notes: Revised CHAM specification increasing the round counts. Publisher PDF was
-    not openly retrievable; local copy pending as references/2020-cham-revised.pdf.
+  notes: 'Revised CHAM specification increasing the round counts. Local copy: references/2020-cham-revised.pdf.'
 - id: shin_et_al_2025_saecham
   kind: article
   title: 'SAECHAM: Secure and Efficient Lightweight Block Cipher CHAM Variant'
@@ -49,8 +47,7 @@ references:
   venue: IEEE Internet of Things Journal, vol. 12, no. 15, pp. 29989–30002
   publisher: IEEE
   url: https://doi.org/10.1109/JIOT.2025.3569746
-  notes: SAECHAM publication (IEEE document 11003085). Publisher PDF was not openly
-    retrievable; local copy pending as references/2025-saecham.pdf.
+  notes: 'SAECHAM publication (IEEE document 11003085). Local copy: references/2025-saecham.pdf.'
 - id: cryptopp_cham
   kind: documentation
   title: CHAM

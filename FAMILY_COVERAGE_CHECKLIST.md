@@ -99,8 +99,8 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Centrifuge | Centrifuge | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Centrifuge-v0.pdf | Full | yes |
 | [x] | ChaCha | ChaCha20 | stream_cipher | 2008 | https://cr.yp.to/chacha.html | Full | yes |
 | [x] | ChaCha20 (IETF profile) | ChaCha20 Block Function | update_function | 2015 | https://www.rfc-editor.org/info/rfc7539 | Full | yes |
-| [x] | CHAM | CHAM | block_cipher | 2018 | https://link.springer.com/chapter/10.1007/978-3-319-78556-1_1 | Full | no |
-| [x] | CHAM Revised | CHAM Revised | block_cipher | 2020 | https://link.springer.com/chapter/10.1007/978-3-030-40921-0_1 | Full | no |
+| [x] | CHAM | CHAM | block_cipher | 2018 | https://link.springer.com/chapter/10.1007/978-3-319-78556-1_1 | Full | yes |
+| [x] | CHAM Revised | CHAM Revised | block_cipher | 2020 | https://link.springer.com/chapter/10.1007/978-3-030-40921-0_1 | Full | yes |
 | [x] | Chaskey | Chaskey | mac | 2014 | https://eprint.iacr.org/2014/386 | Full | yes |
 | [x] | ChiLow | ChiLow | tweakable_block_cipher | 2025 | https://eprint.iacr.org/2025/308 | TODO | yes |
 | [x] | CiliPadi | CiliPadi | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CiliPadi-spec.pdf | Full | yes |
@@ -250,7 +250,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | RIPEMD | RIPEMD | hash | 1995 | https://homes.esat.kuleuven.be/~bosselae/ripemd160.html | Full | yes |
 | [x] | Romulus | Romulus | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | SAEAES | SAEAES | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SAEAES-spec.pdf | Full | yes |
-| [x] | SAECHAM | SAECHAM | block_cipher | 2025 | https://ieeexplore.ieee.org/document/11003085 | Full | no |
+| [x] | SAECHAM | SAECHAM | block_cipher | 2025 | https://ieeexplore.ieee.org/document/11003085 | Full | yes |
 | [x] | SAFER | SAFER | block_cipher | 1993 | https://link.springer.com/chapter/10.1007/3-540-58108-1_1 | Full | yes |
 | [x] | SAFER+ | SAFER+ | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | SAFER++ | SAFER++ | block_cipher | 2000 | https://www.cosic.esat.kuleuven.be/nessie/ | Full | no |
