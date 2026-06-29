@@ -1958,19 +1958,6 @@ primitives:
     rounds: 1
     output_size_bits: 128
   notes: Generic baseline instance; update with full paper-specific variants.
-- id: blowfish_2_v1
-  name: Blowfish (32–448-bit key)
-  family_id: blowfish_2
-  primitive_type: block_cipher
-  reference_ids:
-  - blowfish_2_ref
-  characteristics:
-    block_size_bits: 64
-    key_size_bits: 128
-    output_size_bits: 64
-    rounds: 16
-  notes: Duplicate auto-ingestion of the canonical blowfish family; key size shown
-    as representative 128-bit value.
 - id: chaskey_v1
   name: Chaskey-v1
   family_id: chaskey
@@ -2484,18 +2471,6 @@ primitives:
     output_size_bits: 128
     rounds: 24
   notes: LEA with 128-bit key and 24 rounds.
-- id: lea_128_v1
-  name: LEA-128
-  family_id: lea_128
-  primitive_type: block_cipher
-  reference_ids:
-  - lea_128_ref
-  characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    output_size_bits: 128
-    rounds: 24
-  notes: 128-bit key instance of LEA; functionally identical to the lea family primitive.
 - id: leviathan_v1
   name: LEVIATHAN
   family_id: leviathan
@@ -3148,10 +3123,11 @@ primitives:
   family_id: three_key_triple_des
   primitive_type: block_cipher
   reference_ids:
+  - ansi_x9_52_1998_tdea
   - three_key_triple_des_ref
   characteristics:
     block_size_bits: 64
-    key_size_bits: 192
+    key_size_bits: 168
     output_size_bits: 64
     rounds: 48
   notes: 192-bit keying material (168-bit effective key). Deprecated by NIST after
@@ -3208,18 +3184,6 @@ primitives:
     block_size_bits: 1
     output_size_bits: 1
   notes: Baseline Trivium stream-cipher instance after standard warm-up phase.
-- id: two_key_triple_des_v1
-  name: Two-key Triple DES-v1
-  family_id: two_key_triple_des
-  primitive_type: block_cipher
-  reference_ids:
-  - two_key_triple_des_ref
-  characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
 - id: ublock_128_128
   name: uBlock-128/128
   family_id: ublock
@@ -3253,18 +3217,6 @@ primitives:
     key_size_bits: 256
     rounds: 24
     output_size_bits: 256
-- id: uea2_zuc_v1
-  name: ZUC / UEA2
-  family_id: uea2_zuc
-  primitive_type: stream_cipher
-  reference_ids:
-  - uea2_zuc_ref
-  characteristics:
-    key_size_bits: 128
-    iv_size_bits: 128
-    state_size_bits: 512
-  notes: ZUC stream cipher used as UEA2 (encryption) and UIA2 (integrity) in 3GPP
-    LTE.
 - id: vmpc_v1
   name: VMPC
   family_id: vmpc
@@ -3323,18 +3275,6 @@ primitives:
     output_size_bits: 128
   notes: Baseline XXTEA instance for n=4 words (128-bit block), using q = 6 + 52/n
     rounds.
-- id: xxtea_corrected_block_tea_v1
-  name: XXTEA / Corrected Block TEA-v1
-  family_id: xxtea_corrected_block_tea
-  primitive_type: block_cipher
-  reference_ids:
-  - xxtea_corrected_block_tea_ref
-  characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    rounds: 19
-    output_size_bits: 128
-  notes: Baseline Corrected Block TEA instance for n=4 words (128-bit block).
 - id: yarara_and_coral_v1
   name: Yarara and Coral-v1
   family_id: yarara_and_coral
@@ -3563,7 +3503,7 @@ primitives:
 - id: fnv1_32
   name: FNV-1 (32-bit)
   family_id: fnv_1
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - fowler_1991_fnv1
   characteristics:
@@ -3578,7 +3518,7 @@ primitives:
 - id: fnv1_64
   name: FNV-1 (64-bit)
   family_id: fnv_1
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - fowler_1991_fnv1
   characteristics:
@@ -3592,7 +3532,7 @@ primitives:
 - id: fnv1a_32
   name: FNV-1a (32-bit)
   family_id: fnv_1
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - fowler_1991_fnv1
   characteristics:
@@ -3606,7 +3546,7 @@ primitives:
 - id: haval_3p_128
   name: HAVAL-128/3
   family_id: haval
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - zheng_1992_haval
   characteristics:
@@ -3623,7 +3563,7 @@ primitives:
 - id: haval_3p_256
   name: HAVAL-256/3
   family_id: haval
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - zheng_1992_haval
   characteristics:
@@ -3638,7 +3578,7 @@ primitives:
 - id: haval_5p_256
   name: HAVAL-256/5
   family_id: haval
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - zheng_1992_haval
   characteristics:
@@ -3654,7 +3594,7 @@ primitives:
 - id: md2_v1
   name: MD2
   family_id: md2
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - kaliski_1992_md2
   characteristics:
@@ -3671,7 +3611,7 @@ primitives:
 - id: md4_v1
   name: MD4
   family_id: md4
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - rivest_1992_md4
   characteristics:
@@ -3689,7 +3629,7 @@ primitives:
 - id: md5_v1
   name: MD5
   family_id: md5
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - rivest_1992_md5
   characteristics:
@@ -3707,7 +3647,7 @@ primitives:
 - id: ripemd_128
   name: RIPEMD-128
   family_id: ripemd
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - dobbertin_1996_ripemd160
   characteristics:
@@ -3724,7 +3664,7 @@ primitives:
 - id: ripemd_160
   name: RIPEMD-160
   family_id: ripemd
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - dobbertin_1996_ripemd160
   characteristics:
@@ -3742,7 +3682,7 @@ primitives:
 - id: sha1_v1
   name: SHA-1
   family_id: sha1_sha2
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - nist_2002_fips180_2
   characteristics:
@@ -3760,7 +3700,7 @@ primitives:
 - id: sha256_v1
   name: SHA-256
   family_id: sha2
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - nist_2002_fips180_2
   characteristics:
@@ -3778,7 +3718,7 @@ primitives:
 - id: sha384_v1
   name: SHA-384
   family_id: sha2
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - nist_2002_fips180_2
   characteristics:
@@ -3796,7 +3736,7 @@ primitives:
 - id: sha512_v1
   name: SHA-512
   family_id: sha2
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - nist_2002_fips180_2
   characteristics:
@@ -3814,7 +3754,7 @@ primitives:
 - id: sha224_v1
   name: SHA-224
   family_id: sha2
-  primitive_type: hash
+  primitive_type: hash_function
   characteristics:
     block_size_bits: 512
     output_size_bits: 224
@@ -3829,7 +3769,7 @@ primitives:
 - id: sha512_224_v1
   name: SHA-512/224
   family_id: sha2
-  primitive_type: hash
+  primitive_type: hash_function
   characteristics:
     block_size_bits: 1024
     output_size_bits: 224
@@ -3844,7 +3784,7 @@ primitives:
 - id: sha512_256_v1
   name: SHA-512/256
   family_id: sha2
-  primitive_type: hash
+  primitive_type: hash_function
   characteristics:
     block_size_bits: 1024
     output_size_bits: 256
@@ -3876,7 +3816,7 @@ primitives:
 - id: shamashash_v1
   name: Shamashash v1
   family_id: shamash_and_shamashash
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - penazzi_2019_shamash
   characteristics:
@@ -3891,7 +3831,7 @@ primitives:
 - id: tiger_192
   name: Tiger/192
   family_id: tiger
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - anderson_1995_tiger
   characteristics:
@@ -3909,7 +3849,7 @@ primitives:
 - id: tiger_160
   name: Tiger/160
   family_id: tiger
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - anderson_1995_tiger
   characteristics:
@@ -3925,7 +3865,7 @@ primitives:
 - id: tiger_128
   name: Tiger/128
   family_id: tiger
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - anderson_1995_tiger
   characteristics:
@@ -3940,7 +3880,7 @@ primitives:
 - id: whirlpool_v1
   name: Whirlpool
   family_id: whirlpool
-  primitive_type: hash
+  primitive_type: hash_function
   reference_ids:
   - barreto_2003_whirlpool
   characteristics:
@@ -5106,6 +5046,34 @@ primitives:
     block_size_bits: 1024
     output_size_bits: 512
     rounds: 16
+- id: blake2b
+  name: BLAKE2b
+  family_id: blake2
+  primitive_type: hash_function
+  reference_ids:
+  - aumasson_et_al_2013_blake2
+  - rfc_7693_blake2
+  characteristics:
+    state_size_bits: 512
+    block_size_bits: 1024
+    output_size_bits: 512
+    output_size_bits_min: 8
+    output_size_bits_max: 512
+    rounds: 12
+- id: blake2s
+  name: BLAKE2s
+  family_id: blake2
+  primitive_type: hash_function
+  reference_ids:
+  - aumasson_et_al_2013_blake2
+  - rfc_7693_blake2
+  characteristics:
+    state_size_bits: 256
+    block_size_bits: 512
+    output_size_bits: 256
+    output_size_bits_min: 8
+    output_size_bits_max: 256
+    rounds: 10
 - id: groestl_256
   name: Grøstl-256
   family_id: groestl
@@ -5183,23 +5151,12 @@ primitives:
     block_size_bits: 1024
     output_size_bits: 1024
     rounds: 80
-- id: three_key_3des
-  name: Three-key Triple DES
-  family_id: triple_des
-  primitive_type: block_cipher
-  reference_ids:
-  - three_key_triple_des_ref
-  characteristics:
-    block_size_bits: 64
-    output_size_bits: 64
-    key_size_bits: 168
-    rounds: 48
 - id: two_key_3des
-  name: Two-key Triple DES
+  name: Two-key Triple DES (2TDEA)
   family_id: two_key_triple_des
   primitive_type: block_cipher
   reference_ids:
-  - two_key_triple_des_ref
+  - ansi_x9_52_1998_tdea
   characteristics:
     block_size_bits: 64
     output_size_bits: 64
@@ -5228,10 +5185,11 @@ primitives:
   family_id: zuc
   primitive_type: stream_cipher
   reference_ids:
-  - uea2_zuc_ref
+  - zuc_ref
   characteristics:
     key_size_bits: 128
     iv_size_bits: 128
+    state_size_bits: 512
 - id: catfish_v1
   name: Catfish
   family_id: catfish

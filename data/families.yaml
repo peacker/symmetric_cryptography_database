@@ -384,6 +384,7 @@ families:
   notes: "Blowfish is a 16-round, 64-bit Feistel cipher with key-dependent S-boxes and a variable key of up to 448 bits; its expensive key setup suits applications with infrequent key changes."
   construction_ids:
   - feistel
+  - key_dependent_table_network
   round_ids:
   - blowfish_round
   target_applications:
@@ -2789,41 +2790,6 @@ families:
     of 32-bit words as nonlinear filter. Processes two 32-bit words per iteration.
 
     '
-- id: blowfish_2
-  name: Blowfish
-  construction_ids:
-  - feistel
-  - key_dependent_table_network
-  round_ids:
-  - blowfish_2_round
-  target_applications:
-  - software
-  - generic
-  characteristics:
-    block_size_bits: 64
-    components:
-    - id: sbox
-      params:
-        input_bits: 8
-        output_bits: 32
-    - id: add_mod
-      params:
-        modulus: 4294967296
-    - id: xor
-  reference_ids:
-  - blowfish_2_ref
-  process_participations: []
-  influences:
-  - source_family_id: des
-    relations:
-    - inspired_by
-    note: Blowfish adopts the Feistel structure from DES but uses key-dependent, data-dependent
-      S-boxes and a much larger key.
-  notes: 'Blowfish (Schneier 1994) is a 64-bit Feistel cipher with a variable key
-    length of 32–448 bits and 16 rounds. Each round uses four key-dependent 8×32 S-boxes
-    and modular-addition mixing in the F-function. NOTE: this family entry is a duplicate
-    of the canonical ''blowfish'' entry created during auto-ingestion; parameters
-    have been corrected.'
 - id: chaskey
   name: Chaskey
   construction_ids:
@@ -3835,35 +3801,6 @@ families:
     respectively. Its round function applies 32-bit modular additions, XORs, and fixed
     rotations to four 32-bit words — no S-boxes are used. Designed for fast software
     on general-purpose CPUs.
-- id: lea_128
-  name: LEA-128
-  construction_ids:
-  - generalized_feistel
-  round_ids:
-  - lea_128_round
-  target_applications:
-  - software
-  - mobile
-  characteristics:
-    block_size_bits: 128
-    components:
-    - id: add_mod
-      params:
-        modulus: 4294967296
-    - id: xor
-    - id: rotation_fixed
-  reference_ids:
-  - lea_128_ref
-  process_participations: []
-  influences:
-  - source_family_id: lea
-    relations:
-    - selection_of_possible_configurations
-    note: LEA-128 is the 128-bit-key instance of the LEA cipher family.
-  notes: LEA-128 is the 128-bit-key variant of LEA (Lightweight Encryption Algorithm).
-    It uses a 128-bit block and 24 rounds. The round function uses 32-bit modular
-    additions, XORs, and fixed rotations with no S-boxes. See the LEA family for full
-    details.
 - id: leviathan
   name: LEVIATHAN
   construction_ids:
@@ -5476,6 +5413,7 @@ families:
   - legacy
   - government
   - banking
+  - encryption
   characteristics:
     block_size_bits: 64
     components:
@@ -5486,9 +5424,15 @@ families:
     - id: bit_permutation
     - id: xor
   reference_ids:
+  - ansi_x9_52_1998_tdea
   - fips_46_3_1999_des
   - three_key_triple_des_ref
-  process_participations: []
+  - iso_iec_18033_3_2010
+  process_participations:
+  - process_id: cryptrec_selection_2000_2023
+    stage_ids:
+    - monitored
+    status: monitored
   influences:
   - source_family_id: des
     relations:
@@ -5496,10 +5440,10 @@ families:
     - variant_of
     note: 3TDEA applies DES three times in Encrypt-Decrypt-Encrypt order using three
       independent keys.
-  notes: Three-key Triple DES (3TDEA; NIST SP 800-67r2) applies DES three times (E-D-E)
+  notes: Three-key Triple DES (3TDEA; TDEA keying option 1) applies DES three times (E-D-E)
     with three independent 56-bit keys (192-bit keying material, 168-bit effective
-    security). FIPS 46-3 standardized TDEA in 1999; SP 800-67 Rev. 2 was a 2017
-    revision, not its introduction, and NIST withdrew that recommendation in 2024.
+    key length). ANSI X9.52 standardized TDEA and its keying options in 1998; FIPS
+    46-3 followed in 1999. NIST withdrew SP 800-67 Rev. 2 in 2024.
 - id: threefish
   name: Threefish
   construction_ids:
@@ -5638,34 +5582,6 @@ families:
     and uBlock-256/256.
 
     '
-- id: uea2_zuc
-  name: UEA2 / ZUC
-  construction_ids:
-  - lfsr_over_extension_field_with_memory
-  round_ids:
-  - uea2_zuc_round
-  target_applications:
-  - telecommunications
-  characteristics:
-    components:
-    - id: lfsr
-    - id: linear_transform
-    - id: sbox
-      params:
-        input_bits: 8
-        output_bits: 8
-    - id: add_mod
-      params:
-        modulus: 2147483647
-  reference_ids:
-  - uea2_zuc_ref
-  process_participations: []
-  influences: []
-  notes: ZUC (Zu Chongzhi; 3GPP TS 35.221, 2011) is the stream cipher used in LTE
-    (4G) UEA2/UIA2 for confidentiality and integrity. Its state is a 16-element LFSR
-    over GF(2^31-1), with two 32-bit memory registers (R1, R2) updated via a finite
-    state machine using two 8-bit S-boxes (S0 from AES, S1 from SNOW 3G) and 31-bit
-    modular arithmetic.
 - id: vmpc
   name: VMPC
   construction_ids:
@@ -5804,31 +5720,11 @@ families:
   - xxtea_ref
   process_participations: []
   influences: []
-  notes: XXTEA (Corrected Block TEA) is a word-oriented ARX cipher operating on variable-length
-    blocks.
-- id: xxtea_corrected_block_tea
-  name: XXTEA / Corrected Block TEA
-  construction_ids:
-  - arx_permutation_network
-  round_ids:
-  - xxtea_corrected_block_tea_round
-  target_applications:
-  - generic
-  characteristics:
-    block_size_bits: 128
-    components:
-    - id: add_mod
-      params:
-        modulus: 4294967296
-    - id: shift_fixed
-    - id: xor
-    - id: constant
-  reference_ids:
-  - xxtea_corrected_block_tea_ref
-  process_participations: []
-  influences: []
-  notes: Corrected Block TEA variant from the Wheeler-Needham correction note (also
-    known as XXTEA).
+  notes: >-
+    XXTEA (Corrected Block TEA) is a word-oriented ARX cipher operating on
+    variable-length blocks. Its structure is a consistent, incomplete,
+    source-heavy, heterogeneous UFN (unbalanced [Feistel
+    network](https://en.wikipedia.org/wiki/Feistel_network)).
 - id: yarara_and_coral
   name: Yarara and Coral
   construction_ids:
@@ -7114,10 +7010,52 @@ families:
       '
   notes: 'BLAKE-256 (32-bit words) and BLAKE-512 (64-bit words) are the primary variants.
     Output sizes: BLAKE-224 (224 bits), BLAKE-256 (256 bits), BLAKE-384 (384 bits),
-    BLAKE-512 (512 bits). BLAKE2 (2012) supersedes the original with faster speed
-    and simplified interface, dropping the HAIFA counter and NIST padding.
+    BLAKE-512 (512 bits). BLAKE2 supersedes the original with higher software speed
+    and a simplified interface.
 
     '
+- id: blake2
+  name: BLAKE2
+  construction_ids:
+  - arx_permutation_network
+  round_ids:
+  - blake2_round
+  target_applications:
+  - digital_signatures
+  - message_authentication
+  - software
+  characteristics:
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - aumasson_et_al_2013_blake2
+  - rfc_7693_blake2
+  process_participations: []
+  influences:
+  - source_family_id: blake
+    relations:
+    - improvement_of
+    - same_round_function
+    note: BLAKE2 simplifies and accelerates BLAKE while retaining its ARX G mixing
+      function with revised rotations, round counts, and initialization.
+  innovative_ideas:
+  - id: blake2_parameter_block
+    name: Parameter-block initialization
+    note: Digest length, key length, and tree-hashing parameters are incorporated
+      during initialization instead of requiring separate domain constructions.
+  - id: blake2_native_keying
+    name: Native keyed hashing
+    note: BLAKE2 directly supports keyed hashing for MAC and PRF use without an HMAC
+      wrapper.
+  notes: >-
+    BLAKE2 is the successor to BLAKE, optimized for software and directly supporting
+    keyed hashing. BLAKE2b uses 64-bit words, 128-byte blocks, 12 rounds, and outputs
+    1–64 bytes; BLAKE2s uses 32-bit words, 64-byte blocks, 10 rounds, and outputs
+    1–32 bytes. The original specification also defines parallel and tree-hashing
+    variants.
 - id: groestl
   name: Grøstl
   construction_ids:
@@ -8544,31 +8482,9 @@ families:
     in many Linux systems as yescrypt in shadow-utils).
 
     '
-- id: triple_des
-  name: Three-key Triple DES (3DES)
-  notes: "Three-key TDEA applies DES in encrypt–decrypt–encrypt order with three independent 56-bit keys. FIPS 46-3 standardized it in 1999; NIST withdrew SP 800-67 Rev. 2 in 2024 and permits it only for processing legacy protected data."
-  construction_ids:
-  - feistel
-  round_ids:
-  - des_round
-  target_applications:
-  - encryption
-  characteristics:
-    block_size_bits: 64
-    components: []
-  reference_ids:
-  - fips_46_3_1999_des
-  - iso_iec_18033_3_2010
-  - three_key_triple_des_ref
-  process_participations:
-  - process_id: cryptrec_selection_2000_2023
-    stage_ids:
-    - monitored
-    status: monitored
-  influences: []
 - id: two_key_triple_des
-  name: Two-key Triple DES (2DES)
-  notes: "Two-key TDEA applies DES three times with K3 equal to K1, giving about 112 bits of key strength; NIST disallowed it for new encryption in 2016."
+  name: Two-key Triple DES (2TDEA)
+  notes: "Two-key TDEA (keying option 2) applies DES three times with K3 equal to K1, using 112 effective key bits. ANSI X9.52 standardized TDEA and both keying options 1 and 2 in 1998; FIPS 46-3 followed in 1999. NIST disallowed two-key TDEA for new encryption in 2016."
   construction_ids:
   - feistel
   round_ids:
@@ -8579,7 +8495,8 @@ families:
     block_size_bits: 64
     components: []
   reference_ids:
-  - two_key_triple_des_ref
+  - ansi_x9_52_1998_tdea
+  - fips_46_3_1999_des
   process_participations: []
   influences: []
 - id: rc4drop
@@ -8624,20 +8541,25 @@ families:
   construction_ids:
   - lfsr_over_extension_field_with_memory
   round_ids:
-  - rc4_prga
+  - zuc_round
   target_applications:
   - encryption
+  - telecommunications
   characteristics:
-    components: []
+    components:
+    - id: lfsr
+    - id: linear_transform
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: add_mod
+      params:
+        modulus: 2147483647
   reference_ids:
-  - uea2_zuc_ref
+  - zuc_ref
   process_participations: []
-  influences:
-  - source_family_id: uea2_zuc
-    relations:
-    - variant_of
-    note: ZUC is the core algorithm underlying the 3GPP LTE UEA2/UIA2 stream cipher
-      suite
+  influences: []
 - id: catfish
   name: Catfish
   notes: "Catfish is a Password Hashing Competition proposal built around memory-filling iterations intended to raise the cost of massively parallel password guessing."

@@ -254,6 +254,18 @@ references:
   url: https://csrc.nist.gov/pubs/fips/46-3/final
   notes: Reaffirmed 1999-10-25; specifies DES and Triple DES (TDEA); withdrawn 2005-05-19;
     local copy references/1999-des-fips46-3.pdf.
+- id: ansi_x9_52_1998_tdea
+  kind: standard
+  title: 'ANSI X9.52-1998: Triple Data Encryption Algorithm Modes of Operation'
+  year: 1998
+  venue: ANSI X9.52
+  organization: American National Standards Institute
+  status: withdrawn
+  url: https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program/validation-notes
+  notes: Defines TDEA keying option 1 with three independent keys and keying option
+    2 with K3 equal to K1; cited by NIST as ANSI X9.52-1998. The ANSI publication
+    is paywalled; the supporting official NIST validation document is archived as
+    references/2000-nist_sp800-20-tmovs.pdf.
 - id: fips_46_1977_des
   kind: standard
   title: 'FIPS 46: Data Encryption Standard (DES)'
@@ -1144,15 +1156,6 @@ references:
   title: Bleep64
   year: 2000
   notes: Placeholder reference for checklist coverage ingestion.
-- id: blowfish_2_ref
-  kind: paper
-  title: Description of a New Variable-Length Key, 64-Bit Block Cipher (Blowfish)
-  year: 1994
-  notes: Duplicate auto-ingestion; the canonical reference is schneier_1994_blowfish.
-  authors:
-  - Bruce Schneier
-  venue: Fast Software Encryption (FSE), LNCS 809
-  url: https://www.schneier.com/academic/blowfish/
 - id: bmgl_ref
   kind: paper
   title: 'BMGL: Synchronous Key-stream Generator with Provable Security'
@@ -1420,15 +1423,6 @@ references:
 - id: lea_ref
   kind: paper
   title: 'LEA: A 128-Bit Block Cipher for Fast Encryption on Common Processors'
-  year: 2015
-  venue: WISA 2013 / KCMVP-approved
-  url: https://eprint.iacr.org/2015/752.pdf
-  notes: 'Korean lightweight block cipher (128-bit block). Local copy: references/2015-lea.pdf.'
-- id: lea_128_ref
-  kind: paper
-  title: 'LEA: A 128-Bit Block Cipher for Fast Encryption on Common Processors'
-  year: 2013
-  notes: Same paper as lea_ref; LEA-128 is the 128-bit key configuration.
   authors:
   - Deukjo Hong
   - Jung-Keun Lee
@@ -1436,8 +1430,11 @@ references:
   - Daesung Kwon
   - Kwon Ho Ryu
   - Dong-Geon Lee
+  year: 2013
   venue: Information Security Applications (WISA) 2013, LNCS 8267
-  url: https://eprint.iacr.org/2013/763
+  url: https://doi.org/10.1007/978-3-319-05149-9_1
+  notes: Korean lightweight block cipher with a 128-bit block and 128-, 192-, or
+    256-bit keys. Local copy references/2013-lea.pdf.
 - id: leviathan_ref
   kind: paper
   title: LEVIATHAN - The Leviathan Authenticated Encryption Mode
@@ -2004,11 +2001,6 @@ references:
   venue: eSTREAM submission
   url: https://web.archive.org/web/20180828163734/http://www.ecrypt.eu.org/stream/p3ciphers/trivium/trivium_p3.pdf
   notes: Derived from references/2006-trivium.pdf.
-- id: two_key_triple_des_ref
-  kind: paper
-  title: Two-key Triple DES
-  year: 2000
-  notes: Placeholder reference for checklist coverage ingestion.
 - id: ublock_ref
   kind: paper
   title: 分组密码uBlock
@@ -2021,7 +2013,7 @@ references:
   venue: Journal of Cryptologic Research
   url: http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000334
   notes: 'uBlock block cipher family paper (DOI: 10.13868/j.cnki.jcr.000334).'
-- id: uea2_zuc_ref
+- id: zuc_ref
   kind: standard
   title: ZUC Specification (Zu Chongzhi Stream Cipher)
   year: 2011
@@ -2071,16 +2063,6 @@ references:
   venue: University of Cambridge Computer Laboratory note
   url: https://www.cix.co.uk/~klockstone/xxtea.pdf
   notes: Derived from references/1998-xxtea.pdf.
-- id: xxtea_corrected_block_tea_ref
-  kind: paper
-  title: Correction to XTEA
-  authors:
-  - David J. Wheeler
-  - Roger M. Needham
-  year: 1998
-  venue: University of Cambridge Computer Laboratory note
-  url: https://www.cix.co.uk/~klockstone/xxtea.pdf
-  notes: Corrected Block TEA (XXTEA) reference; derived from references/1998-xxtea.pdf.
 - id: yarara_and_coral_ref
   kind: paper
   title: Yarara and Coral
@@ -3184,6 +3166,30 @@ references:
   venue: SHA-3 Competition Round 3 Submission
   url: https://www.aumasson.jp/blake/blake.pdf
   notes: 'BLAKE Round 3 specification. Local copy: references/2008-blake_sha3.pdf.'
+- id: aumasson_et_al_2013_blake2
+  kind: paper
+  title: 'BLAKE2: Simpler, Smaller, Fast as MD5'
+  authors:
+  - Jean-Philippe Aumasson
+  - Samuel Neves
+  - Zooko Wilcox-O'Hearn
+  - Christian Winnerlein
+  year: 2013
+  venue: Applied Cryptography and Network Security (ACNS 2013)
+  url: https://eprint.iacr.org/2013/322
+  notes: Original BLAKE2 specification; local copy references/2013-blake2.pdf.
+- id: rfc_7693_blake2
+  kind: standard
+  title: 'RFC 7693: The BLAKE2 Cryptographic Hash and Message Authentication Code'
+  authors:
+  - Markku-Juhani O. Saarinen
+  - Jean-Philippe Aumasson
+  year: 2015
+  venue: RFC 7693 (Informational)
+  organization: RFC Editor
+  status: informational
+  url: https://www.rfc-editor.org/rfc/rfc7693
+  notes: Local copy references/2015-blake2-rfc7693.pdf.
 - id: gauravaram_2009_groestl
   kind: paper
   title: Grøstl – a SHA-3 candidate

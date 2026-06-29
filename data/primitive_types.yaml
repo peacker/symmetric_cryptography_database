@@ -28,8 +28,5 @@ primitive_types:
   - id: extendable_output_function
     name: Extendable-Output Function (XOF)
 
-  - id: hash
-    name: Hash
-
   - id: pbkdf
     name: Password-Based Key Derivation Function (PBKDF / Memory-Hard Function)

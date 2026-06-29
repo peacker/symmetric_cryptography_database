@@ -1626,25 +1626,6 @@ rounds:
     component_flow:
     - component_id: xor
   notes: Generic placeholder round entry pending full parameter extraction.
-- id: blowfish_2_round
-  name: Blowfish round
-  kind: full_round
-  spec:
-    component_flow:
-    - component_id: add_mod
-      params:
-        modulus: 4294967296
-    - component_id: sbox
-      params:
-        input_bits: 8
-        output_bits: 32
-    - component_id: xor
-    constant_injection: none
-    state_model:
-      state_bits: 64
-      branch_bits: 32
-  notes: Blowfish Feistel round using key-dependent S-boxes and ARX mixing (duplicate
-    entry).
 - id: chaskey_round
   name: Chaskey round
   kind: other
@@ -2024,21 +2005,6 @@ rounds:
       word_bits: 32
   notes: 'LEA ARX round: 32-bit modular add, XOR, and fixed rotations on four 32-bit
     words.'
-- id: lea_128_round
-  name: LEA-128 round
-  kind: full_round
-  spec:
-    component_flow:
-    - component_id: add_mod
-      params:
-        modulus: 4294967296
-    - component_id: xor
-    - component_id: rotation_fixed
-    constant_injection: subkey
-    state_model:
-      state_bits: 128
-      word_bits: 32
-  notes: LEA-128 round (same structure as LEA with 128-bit key).
 - id: leviathan_round
   name: LEVIATHAN round
   kind: full_round
@@ -2698,13 +2664,6 @@ rounds:
     component_flow:
     - component_id: xor
   notes: Generic placeholder round entry pending full parameter extraction.
-- id: two_key_triple_des_round
-  name: Two-key Triple DES round
-  kind: other
-  spec:
-    component_flow:
-    - component_id: xor
-  notes: Generic placeholder round entry pending full parameter extraction.
 - id: ublock_round
   name: uBlock round
   kind: full_round
@@ -2714,8 +2673,8 @@ rounds:
     - component_id: word_permutation
     - component_id: xor
   notes: uBlock round uses 4-bit S-boxes and byte-level permutation layers.
-- id: uea2_zuc_round
-  name: UEA2 / ZUC round
+- id: zuc_round
+  name: ZUC round
   kind: full_round
   spec:
     component_flow:
@@ -2777,13 +2736,6 @@ rounds:
     etc.'
 - id: xxtea_round
   name: XXTEA round
-  kind: other
-  spec:
-    component_flow:
-    - component_id: xor
-  notes: Generic placeholder round entry pending full parameter extraction.
-- id: xxtea_corrected_block_tea_round
-  name: XXTEA / Corrected Block TEA round
   kind: other
   spec:
     component_flow:
@@ -3225,6 +3177,22 @@ rounds:
       note: XOR with message word (G step 2/4)
     - component_id: rotation_fixed
       note: 'Fixed rotation (r1/r2/r3/r4: 16/12/8/7 for BLAKE-256)'
+- id: blake2_round
+  name: BLAKE2 G-function Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      note: Modular addition over 64-bit words in BLAKE2b or 32-bit words in BLAKE2s
+    - component_id: xor
+      note: XOR with scheduled message words
+    - component_id: rotation_fixed
+      note: BLAKE2b uses 32/24/16/63 rotations; BLAKE2s uses 16/12/8/7
+    constant_injection: message_schedule
+    state_model:
+      state_words: 16
+  notes: Each round applies eight G functions, first to columns and then diagonals;
+    BLAKE2b uses 12 rounds and BLAKE2s uses 10.
 - id: groestl_round
   name: Grøstl Permutation Round (P/Q)
   kind: full_round

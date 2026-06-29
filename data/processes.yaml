@@ -149,7 +149,7 @@ processes:
         label: Monitored Ciphers List
         kind: list
         participants:
-          - family_id: triple_des
+          - family_id: three_key_triple_des
 
   - id: estream_competition_nist_2004_2008
     name: eSTREAM Competition
