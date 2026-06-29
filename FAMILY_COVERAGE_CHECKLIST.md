@@ -344,7 +344,8 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Yarn | Yarn | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Yarn-v2.pdf | Full | yes |
 | [x] | yescrypt | yescrypt | pbkdf | 2015 | https://www.password-hashing.net/submissions/specs/yescrypt-v2.pdf | Full | yes |
 | [x] | 3-Way | 3-Way | block_cipher | 1991 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/threeway.pdf | Full | yes |
-| [x] | Kalyna | Kalyna | block_cipher | 2015 | https://eprint.iacr.org/2015/650 | Full | yes |
+| [x] | Kalyna | Kalyna | block_cipher | 2010 | https://www.sav.sk/journals/uploads/0317154006ogdr.pdf | Section 1 | yes |
+| [x] | Kalyna [DSTU 7624:2014] | Kalyna | block_cipher | 2015 | https://eprint.iacr.org/2015/650 | Full | yes |
 | [x] | Mukhomor | Mukhomor | block_cipher | 2010 | https://www.sav.sk/journals/uploads/0317154006ogdr.pdf | Section 2 | yes |
 | [x] | ADE | ADE | block_cipher | 2010 | https://www.sav.sk/journals/uploads/0317154006ogdr.pdf | Section 4 | yes |
 | [x] | Labyrinth | Labyrinth | block_cipher | 2010 | https://www.sav.sk/journals/uploads/0317154006ogdr.pdf | Section 3 | yes |

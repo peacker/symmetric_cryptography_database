@@ -5705,9 +5705,8 @@ primitives:
     output_size_bits: 128
     rounds: 10
   reference_ids:
-  - oliynykov_2015_kalyna
-  - dstu_7624_2014
-  notes: 'Kalyna-128/128: 8×2-column state, 10 rounds (DSTU 7624:2014 variant 1).'
+  - oliynykov_2010_ukraine_competition
+  notes: 'Kalyna-128/128 competition design: 8×2-column state, 10 rounds.'
 - id: kalyna_128_256_v1
   name: Kalyna-128/256
   family_id: kalyna
@@ -5718,10 +5717,8 @@ primitives:
     output_size_bits: 128
     rounds: 14
   reference_ids:
-  - oliynykov_2015_kalyna
-  - dstu_7624_2014
-  notes: 'Kalyna-128/256: 8×2-column state, 256-bit key, 14 rounds (DSTU 7624:2014
-    variant 2).'
+  - oliynykov_2010_ukraine_competition
+  notes: 'Kalyna-128/256 competition design: 8×2-column state, 256-bit key, 14 rounds.'
 - id: kalyna_256_256_v1
   name: Kalyna-256/256
   family_id: kalyna
@@ -5732,9 +5729,8 @@ primitives:
     output_size_bits: 256
     rounds: 14
   reference_ids:
-  - oliynykov_2015_kalyna
-  - dstu_7624_2014
-  notes: 'Kalyna-256/256: 8×4-column state, 14 rounds (DSTU 7624:2014 variant 3).'
+  - oliynykov_2010_ukraine_competition
+  notes: 'Kalyna-256/256 competition design: 8×4-column state, 14 rounds.'
 - id: kalyna_256_512_v1
   name: Kalyna-256/512
   family_id: kalyna
@@ -5745,13 +5741,81 @@ primitives:
     output_size_bits: 256
     rounds: 18
   reference_ids:
-  - oliynykov_2015_kalyna
-  - dstu_7624_2014
-  notes: 'Kalyna-256/512: 8×4-column state, 512-bit key, 18 rounds (DSTU 7624:2014
-    variant 4).'
+  - oliynykov_2010_ukraine_competition
+  notes: 'Kalyna-256/512 competition design: 8×4-column state, 512-bit key, 18 rounds.'
 - id: kalyna_512_512_v1
   name: Kalyna-512/512
   family_id: kalyna
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 512
+    key_size_bits: 512
+    output_size_bits: 512
+    rounds: 30
+  reference_ids:
+  - oliynykov_2010_ukraine_competition
+  notes: 'Kalyna-512/512 competition design: 8×8-column state, 30 rounds (as submitted
+    to the Ukrainian competition). The standardised DSTU 7624:2014 version reduced
+    this to 18 rounds for performance.'
+- id: kalyna_dstu_128_128
+  name: Kalyna-128/128 [DSTU]
+  family_id: kalyna_dstu
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 128
+    output_size_bits: 128
+    rounds: 10
+  reference_ids:
+  - oliynykov_2015_kalyna
+  - dstu_7624_2014
+  notes: 'Kalyna-128/128 per DSTU 7624:2014 (Table 1, variant 1): 8×2-column state,
+    10 rounds.'
+- id: kalyna_dstu_128_256
+  name: Kalyna-128/256 [DSTU]
+  family_id: kalyna_dstu
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 256
+    output_size_bits: 128
+    rounds: 14
+  reference_ids:
+  - oliynykov_2015_kalyna
+  - dstu_7624_2014
+  notes: 'Kalyna-128/256 per DSTU 7624:2014 (Table 1, variant 2): 8×2-column state,
+    256-bit key, 14 rounds.'
+- id: kalyna_dstu_256_256
+  name: Kalyna-256/256 [DSTU]
+  family_id: kalyna_dstu
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 256
+    key_size_bits: 256
+    output_size_bits: 256
+    rounds: 14
+  reference_ids:
+  - oliynykov_2015_kalyna
+  - dstu_7624_2014
+  notes: 'Kalyna-256/256 per DSTU 7624:2014 (Table 1, variant 3): 8×4-column state,
+    14 rounds.'
+- id: kalyna_dstu_256_512
+  name: Kalyna-256/512 [DSTU]
+  family_id: kalyna_dstu
+  primitive_type: block_cipher
+  characteristics:
+    block_size_bits: 256
+    key_size_bits: 512
+    output_size_bits: 256
+    rounds: 18
+  reference_ids:
+  - oliynykov_2015_kalyna
+  - dstu_7624_2014
+  notes: 'Kalyna-256/512 per DSTU 7624:2014 (Table 1, variant 4): 8×4-column state,
+    512-bit key, 18 rounds. New in the standard; absent from the competition design.'
+- id: kalyna_dstu_512_512
+  name: Kalyna-512/512 [DSTU]
+  family_id: kalyna_dstu
   primitive_type: block_cipher
   characteristics:
     block_size_bits: 512
@@ -5761,7 +5825,8 @@ primitives:
   reference_ids:
   - oliynykov_2015_kalyna
   - dstu_7624_2014
-  notes: 'Kalyna-512/512: 8×8-column state, 18 rounds (DSTU 7624:2014 variant 5).'
+  notes: 'Kalyna-512/512 per DSTU 7624:2014 (Table 1, variant 5): 8×8-column state,
+    18 rounds. Reduced from 30 rounds in the competition design for performance.'
 - id: mukhomor_128_v1
   name: Mukhomor-128
   family_id: mukhomor

@@ -9895,18 +9895,72 @@ families:
     - winner
     status: winner
   reference_ids:
-  - oliynykov_2015_kalyna
-  - dstu_7624_2014
   - oliynykov_2010_ukraine_competition
   round_ids:
   - kalyna_round
-  notes: Kalyna (DSTU 7624:2014) is the Ukrainian national symmetric block cipher
-    standard, selected in 2010 and standardised in 2015. It is an SPN cipher in the
-    Rijndael lineage with 128-, 256-, or 512-bit blocks and keys of equal or double
-    the block size. The state is represented as an 8×c matrix over GF(2^8) (c=2,4,8
-    for l=128,256,512). Rounds alternate XOR and modulo-2^64 subkey injection; the
-    8×8 MDS matrix (branch number 9) and 4 randomly chosen S-boxes provide high security
-    margins.
+  notes: Kalyna (competition design, 2007) was submitted by JSC Institute of Information
+    Technologies (Kharkiv) to the Ukrainian National Public Cryptographic Competition.
+    It is an SPN cipher in the Rijndael lineage with 128-, 256-, or 512-bit blocks
+    and keys of equal or double the block size. The competition variant uses mod-2^32
+    word addition for key injection and 10/14/30 rounds (128/256/512-bit blocks).
+    A slight modification — switching to mod-2^64 addition and reducing the 512-bit
+    variant to 18 rounds for performance — was standardised as DSTU 7624:2014 (see
+    kalyna_dstu family).
+- id: kalyna_dstu
+  name: Kalyna [DSTU 7624:2014]
+  construction_ids:
+  - aligned_spn
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+        count: 4
+        note: 4 randomly generated 8-bit bijections; max DP=2^-5, max LP=2^-3
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+        matrix_rows: 8
+        matrix_cols: 8
+        irreducible_poly: x^8+x^4+x^3+x^2+1
+        branch_number: 9
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: add_mod
+      params:
+        modulus: 18446744073709551616
+    - id: constant
+  target_applications:
+  - general_purpose
+  - digital_signatures
+  - encryption
+  - hardware
+  - software
+  influences:
+  - source_family_id: kalyna
+    relations:
+    - standardization_of
+    note: 'DSTU 7624:2014 standardises a slightly modified version of the competition
+      Kalyna: key injection switched from mod-2^32 to mod-2^64 word addition (exploiting
+      64-bit CPUs), the 512-bit variant was reduced from 30 to 18 rounds for performance,
+      and Kalyna-256/512 (block 256, key 512, 18 rounds) was added as a new variant.
+      The standard also specifies ten modes of operation.'
+  process_participations: []
+  reference_ids:
+  - oliynykov_2015_kalyna
+  - dstu_7624_2014
+  round_ids:
+  - kalyna_round
+  notes: Kalyna [DSTU 7624:2014] is the Ukrainian national block cipher standard,
+    approved 2014 and published 2015 by the State Service of Special Communication
+    and Information Protection of Ukraine. It specifies five parameter sets (128/128,
+    128/256, 256/256, 256/512, 512/512 bits; 10/14/14/18/18 rounds), using mod-2^64
+    alternating key injection, 4 randomly chosen 8-bit S-boxes, an 8×8 MDS matrix
+    over GF(2^8) with branch number 9, and a self-similar key schedule. It replaces
+    GOST 28147-89 for non-government information protection.
 - id: mukhomor
   name: Mukhomor
   construction_ids:
