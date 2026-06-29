@@ -77,7 +77,11 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | AntCrypt | AntCrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/AntCrypt-v0.pdf | Full | yes |
 | [x] | Argon2 | Argon2 | pbkdf | 2015 | https://www.rfc-editor.org/rfc/rfc9106 | Full | yes |
 | [x] | ARIA | ARIA | block_cipher | 2010 | https://www.rfc-editor.org/rfc/rfc5794 | TODO | no |
-| [x] | ASCON | ASCON permutation | permutation | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
+| [x] | Ascon | Ascon-p | permutation | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
+| [x] | Ascon-AEAD128 | Ascon-AEAD128 | aead | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
+| [x] | Ascon-CXOF128 | Ascon-CXOF128 | extendable_output_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
+| [x] | Ascon-Hash256 | Ascon-Hash256 | hash_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
+| [x] | Ascon-XOF128 | Ascon-XOF128 | extendable_output_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
 | [x] | Ballet | Ballet | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
 | [x] | battcrypt | battcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/battcrypt-v0.pdf | Full | yes |
 | [x] | BEAR/LION | BEAR/LION | construction | 1996 | https://www.cl.cam.ac.uk/archive/rja14/Papers/bear-lion.pdf | Full | yes |
@@ -93,7 +97,8 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Catfish | Catfish | pbkdf | 2014 | https://www.password-hashing.net/submissions.html | N/A — no spec PDF | no |
 | [x] | Catena | Catena | pbkdf | 2015 | https://www.password-hashing.net/submissions/specs/Catena-v5.pdf | Full | yes |
 | [x] | Centrifuge | Centrifuge | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Centrifuge-v0.pdf | Full | yes |
-| [x] | ChaCha | ChaCha | stream_cipher | 2008 | https://cr.yp.to/chacha.html | TODO | no |
+| [x] | ChaCha | ChaCha20 | stream_cipher | 2008 | https://cr.yp.to/chacha.html | Full | yes |
+| [x] | ChaCha20 (IETF profile) | ChaCha20 Block Function | update_function | 2015 | https://www.rfc-editor.org/info/rfc7539 | Full | yes |
 | [x] | Chaskey | Chaskey | mac | 2014 | https://eprint.iacr.org/2014/386 | Full | yes |
 | [x] | ChiLow | ChiLow | tweakable_block_cipher | 2025 | https://eprint.iacr.org/2025/308 | TODO | yes |
 | [x] | CiliPadi | CiliPadi | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CiliPadi-spec.pdf | Full | yes |
@@ -304,7 +309,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | TANGRAM | TANGRAM | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000337 | Full | yes |
 | [x] | TEA | TEA | block_cipher | 1994 | https://doi.org/10.1007/3-540-60590-8_29 | TODO | yes |
 | [x] | Thank Goodness It's Friday (TGIF) | Thank Goodness It's Friday (TGIF) | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TGIF-spec.pdf | Full | yes |
-| [x] | Three-key Triple DES | DES | block_cipher | 2017 | https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-67r2.pdf | Full | yes |
+| [x] | Three-key Triple DES | DES | block_cipher | 1999 | https://csrc.nist.gov/pubs/fips/46-3/final | Full | yes |
 | [x] | Threefish | Threefish | block_cipher | 2010 | https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf | Full | yes |
 | [x] | Tiger | Tiger | hash | 1995 | https://www.cl.cam.ac.uk/~rja14/Papers/tiger.pdf | Full | yes |
 | [x] | TinyJambu | TinyJambu | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
@@ -345,7 +350,7 @@ This section tracks modes of operation built on symmetric primitives.
 | --- | --- | --- | --- | --- | --- | --- |
 | [x] | BMGL | PRNG | 2000 | https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.37.8270&rep=rep1&type=pdf | Rijndael | yes |
 | [x] | CBC (Cipher Block Chaining) | ENC | 1976 | NIST SP 800-38A | AES/Rijndael | no |
-| [x] | ChaCha20-Poly1305 | AEAD | 2008 | RFC 7539 | ChaCha20, Poly1305 | no |
+| [x] | ChaCha20-Poly1305 | AEAD | 2015 | https://www.rfc-editor.org/info/rfc7539 | ChaCha20, Poly1305 | yes |
 | [x] | CTR (Counter Mode) | ENC | 2001 | NIST SP 800-38A | AES/Rijndael | no |
 | [x] | GCM (Galois/Counter Mode) | AEAD | 2005 | NIST SP 800-38D | AES/Rijndael | no |
 | [x] | HMAC-SHA256 | MAC | 1997 | RFC 2104 | SHA-256 | no |

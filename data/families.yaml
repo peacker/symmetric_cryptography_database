@@ -50,7 +50,7 @@ families:
     '
 - id: aes
   name: AES
-  notes: "AES is a block-cipher family represented in this database by AES-128, AES-192, AES-256."
+  notes: "AES is the 128-bit-block subset of Rijndael standardized by FIPS 197, with 128-, 192-, and 256-bit keys and 10, 12, or 14 rounds respectively."
   construction_ids:
   - aligned_spn
   round_ids:
@@ -103,8 +103,8 @@ families:
   - id: rijndael_mix_columns
     name: MixColumns
     note: The linear column-mixing layer that provides diffusion across bytes.
-- id: salsa
-  name: Salsa
+- id: salsa20
+  name: Salsa20
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -142,7 +142,7 @@ families:
   - id: salsa_column_diagonal_mixing
     name: Column/diagonal mixing
     note: The state reordering that alternates column and diagonal rounds for diffusion.
-  notes: 'Salsa is a 512-bit ARX stream-cipher family introduced as the Snuffle
+  notes: 'Salsa20 is a 512-bit ARX stream-cipher family introduced as the Snuffle
     2005 encryption function. Salsa20 uses 20 rounds; Salsa20/12 and Salsa20/8
     are reduced-round variants. XSalsa20 extends Salsa20 from a 64-bit nonce to
     a 192-bit nonce through HSalsa20 subkey derivation.
@@ -150,7 +150,10 @@ families:
     '
 - id: chacha
   name: ChaCha
-  notes: "ChaCha is a permutation family represented in this database by ChaCha20 Block Function."
+  notes: 'ChaCha is Bernstein’s ARX stream-cipher family and a refinement of Salsa20.
+    The IETF ChaCha20 profile uses a 256-bit key, 96-bit nonce, and 32-bit counter.
+    RFC 7539 standardized that profile and its block function in 2015; RFC 8439
+    replaced it in 2018.'
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -169,10 +172,11 @@ families:
     - id: constant
   reference_ids:
   - bernstein_2008_chacha
+  - rfc_7539
   - rfc_8439
   process_participations: []
   influences:
-  - source_family_id: salsa
+  - source_family_id: salsa20
     relations:
     - improvement_of
     - same_round_function
@@ -185,7 +189,7 @@ families:
       '
 - id: present
   name: PRESENT
-  notes: "PRESENT is a block-cipher family represented in this database by PRESENT-80, PRESENT-128."
+  notes: "PRESENT is a 31-round, 64-bit lightweight SPN using 4-bit S-boxes and a fixed bit permutation; its 80- and 128-bit-key variants are standardized in ISO/IEC 29192-2."
   construction_ids:
   - bit_based_spn
   round_ids:
@@ -220,7 +224,7 @@ families:
     note: The lightweight constant injection that prevents symmetry in the round structure.
 - id: gift
   name: GIFT
-  notes: "GIFT is a authenticated-encryption and block-cipher family represented in this database by GIFT-64, GIFT-128, GIFT-COFB v1.0."
+  notes: "GIFT is a lightweight bit-permutation SPN derived from PRESENT; its 64- and 128-bit block ciphers also underpin authenticated-encryption designs such as GIFT-COFB."
   construction_ids:
   - bit_based_spn
   round_ids:
@@ -256,7 +260,7 @@ families:
       '
 - id: des
   name: DES
-  notes: "DES is a block-cipher family represented in this database by DES."
+  notes: "DES is a 16-round, 64-bit Feistel cipher with a 56-bit effective key, standardized in FIPS 46 in 1977 and now retained only for historical and legacy analysis."
   construction_ids:
   - feistel
   round_ids:
@@ -280,7 +284,7 @@ families:
   influences: []
 - id: blowfish
   name: Blowfish
-  notes: "Blowfish is a block-cipher family represented in this database by Blowfish-128."
+  notes: "Blowfish is a 16-round, 64-bit Feistel cipher with key-dependent S-boxes and a variable key of up to 448 bits; its expensive key setup suits applications with infrequent key changes."
   construction_ids:
   - feistel
   round_ids:
@@ -309,7 +313,7 @@ families:
     note: Blowfish was proposed as a fast software-oriented DES replacement.
 - id: idea
   name: IDEA
-  notes: "IDEA is a block-cipher family represented in this database by IDEA."
+  notes: "IDEA is an 8.5-round, 64-bit Lai–Massey cipher whose round function mixes XOR, addition modulo 2^16, and multiplication modulo 2^16+1 under a 128-bit key."
   construction_ids:
   - lay_massey
   round_ids:
@@ -337,7 +341,7 @@ families:
   influences: []
 - id: tea
   name: TEA
-  notes: "TEA is a block-cipher family represented in this database by TEA."
+  notes: "TEA is a compact 64-bit Feistel cipher using 32 cycles of ARX-style mixing under a 128-bit key; its minimal implementation is offset by equivalent-key and related-key weaknesses."
   construction_ids:
   - feistel
   round_ids:
@@ -367,7 +371,7 @@ families:
     note: The fixed delta constant used to vary the round sum.
 - id: xtea
   name: XTEA
-  notes: "XTEA is a block-cipher family represented in this database by XTEA."
+  notes: "XTEA revises TEA’s key schedule and round ordering while retaining a 64-bit Feistel structure, 128-bit key, and simple addition, shift, and XOR operations."
   construction_ids:
   - feistel
   round_ids:
@@ -398,7 +402,7 @@ families:
     note: XTEA improves TEA's key schedule and resistance to related-key attacks.
 - id: twofish
   name: Twofish
-  notes: "Twofish is a block-cipher family represented in this database by Twofish-128, Twofish-192, Twofish-256."
+  notes: "Twofish is a 16-round, 128-bit Feistel-like AES finalist using key-dependent S-boxes, an MDS matrix, a pseudo-Hadamard transform, and 128-, 192-, or 256-bit keys."
   construction_ids:
   - feistel
   round_ids:
@@ -432,7 +436,7 @@ families:
   influences: []
 - id: serpent
   name: Serpent
-  notes: "Serpent is a block-cipher family represented in this database by Serpent-128, Serpent-192, Serpent-256."
+  notes: "Serpent is a conservative 32-round, 128-bit bitsliced SPN and AES finalist, supporting 128-, 192-, and 256-bit keys with eight reused 4-bit S-boxes."
   construction_ids:
   - aligned_spn
   round_ids:
@@ -461,7 +465,7 @@ families:
   influences: []
 - id: camellia
   name: Camellia
-  notes: "Camellia is a block-cipher family represented in this database by Camellia-128, Camellia-192, Camellia-256."
+  notes: "Camellia is a 128-bit Feistel cipher with FL/FL⁻¹ layers and 128-, 192-, or 256-bit keys; it is standardized by ISO/IEC and described in RFC 3713."
   construction_ids:
   - feistel
   round_ids:
@@ -500,7 +504,7 @@ families:
     note: Camellia uses a strengthened Feistel design with modern diffusion layers.
 - id: simon
   name: SIMON
-  notes: "SIMON is a block-cipher family represented in this database by SIMON-64/128, SIMON-128/128."
+  notes: "SIMON is a hardware-oriented family of lightweight Feistel ciphers whose nonlinear round function uses rotations, AND, and XOR across several block/key-size profiles."
   construction_ids:
   - feistel
   round_ids:
@@ -520,7 +524,7 @@ families:
   influences: []
 - id: speck
   name: SPECK
-  notes: "SPECK is a block-cipher family represented in this database by SPECK-64/128, SPECK-128/128."
+  notes: "SPECK is a software-oriented family of lightweight ARX Feistel ciphers, parameterized for multiple word, block, and key sizes."
   construction_ids:
   - feistel
   round_ids:
@@ -546,7 +550,7 @@ families:
       TEA-like software ciphers.
 - id: prince
   name: PRINCE
-  notes: "PRINCE is a block-cipher family represented in this database by PRINCE."
+  notes: "PRINCE is a 64-bit, 128-bit-key low-latency block cipher using an α-reflection construction that permits decryption with closely related hardware."
   construction_ids:
   - aligned_spn
   round_ids:
@@ -577,7 +581,7 @@ families:
     note: The forward/backward round symmetry that enables low-latency decryption.
 - id: led
   name: LED
-  notes: "LED is a block-cipher family represented in this database by LED-64, LED-128."
+  notes: "LED is a 64-bit lightweight SPN inspired by AES, using PRESENT’s 4-bit S-box and largely keyless rounds with either a 64- or 128-bit key."
   construction_ids:
   - bit_based_spn
   round_ids:
@@ -613,7 +617,7 @@ families:
     note: LED follows a compact nibble-oriented SPN style suited for lightweight hardware.
 - id: katan
   name: KATAN
-  notes: "KATAN is a block-cipher family represented in this database by KATAN-64."
+  notes: "KATAN is an ultra-lightweight block-cipher family built from two shift registers and nonlinear Boolean feedback, with 32-, 48-, and 64-bit block variants under an 80-bit key."
   construction_ids:
   - lfsr_nlfsr_register_network
   round_ids:
@@ -634,7 +638,7 @@ families:
   influences: []
 - id: ktantan
   name: KTANTAN
-  notes: "KTANTAN is a block-cipher family represented in this database by KTANTAN-64."
+  notes: "KTANTAN specializes KATAN for fixed-key hardware by embedding the 80-bit key into the circuit, trading key agility for a smaller implementation."
   construction_ids:
   - lfsr_nlfsr_register_network
   round_ids:
@@ -659,7 +663,7 @@ families:
     note: KTANTAN is the fixed-key hardware-specialized sibling in the KATAN family.
 - id: cast128
   name: CAST-128
-  notes: "CAST-128 is a block-cipher family represented in this database by CAST-128."
+  notes: "CAST-128 is a 64-bit Feistel cipher with 12 or 16 rounds, key-dependent rotations, and large S-boxes; RFC 2144 and ISO/IEC 18033-3 specify it."
   construction_ids:
   - feistel
   round_ids:
@@ -689,7 +693,7 @@ families:
   influences: []
 - id: cast256
   name: CAST-256
-  notes: "CAST-256 is a block-cipher family represented in this database by CAST-256-128, CAST-256-192, CAST-256-256."
+  notes: "CAST-256 extends CAST round functions into a 48-round, 128-bit generalized Feistel design with 128-, 192-, or 256-bit keys; it was an AES candidate."
   construction_ids:
   - generalized_feistel
   round_ids:
@@ -726,7 +730,7 @@ families:
     note: CAST-256 extends CAST design ideas to 128-bit blocks and larger keying.
 - id: rc5
   name: RC5
-  notes: "RC5 is a block-cipher family represented in this database by RC5-32/12/16, RC5-32/16/16."
+  notes: "RC5 is a parameterized ARX block cipher distinguished by data-dependent rotations; RFC 2040 describes common 32-bit-word profiles."
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -747,7 +751,7 @@ families:
   influences: []
 - id: seed
   name: SEED
-  notes: "SEED is a block-cipher family represented in this database by SEED."
+  notes: "SEED is a Korean 16-round, 128-bit Feistel cipher with a 128-bit key, standardized in ISO/IEC 18033-3 and described by RFC 4269."
   construction_ids:
   - feistel
   round_ids:
@@ -777,7 +781,7 @@ families:
   influences: []
 - id: aria
   name: ARIA
-  notes: "ARIA is a block-cipher family represented in this database by ARIA-128, ARIA-192, ARIA-256."
+  notes: "ARIA is a Korean 128-bit involutional SPN with alternating substitution layers and 128-, 192-, or 256-bit keys, standardized nationally and described in RFC 5794."
   construction_ids:
   - aligned_spn
   round_ids:
@@ -832,7 +836,7 @@ families:
     '
 - id: rc6
   name: RC6
-  notes: "RC6 is a block-cipher family represented in this database by RC6-32/20/16, RC6-32/20/24, RC6-32/20/32."
+  notes: "RC6 is a 20-round, four-word evolution of RC5 that adds integer multiplication to ARX mixing; its 128-bit-block profiles were submitted to AES."
   construction_ids:
   - generalized_feistel
   round_ids:
@@ -872,7 +876,7 @@ families:
     note: RC6 extends RC5 with four registers and multiplication for faster diffusion.
 - id: sm4
   name: SM4
-  notes: "SM4 is a block-cipher family represented in this database by SM4."
+  notes: "SM4 is a 32-round, 128-bit unbalanced Feistel-like cipher with a 128-bit key, standardized in China as GB/T 32907 and used in ShangMi protocols."
   construction_ids:
   - generalized_feistel
   round_ids:
@@ -898,7 +902,7 @@ families:
   influences: []
 - id: kasumi
   name: KASUMI
-  notes: "KASUMI is a block-cipher family represented in this database by KASUMI."
+  notes: "KASUMI is a 64-bit, 128-bit-key Feistel cipher derived from MISTY1 and adapted for the 3GPP confidentiality and integrity algorithms used in UMTS."
   construction_ids:
   - feistel
   round_ids:
@@ -923,7 +927,7 @@ families:
   influences: []
 - id: clefia
   name: CLEFIA
-  notes: "CLEFIA is a block-cipher family represented in this database by CLEFIA-128, CLEFIA-192, CLEFIA-256."
+  notes: "CLEFIA is a 128-bit, four-branch generalized Feistel cipher with 128-, 192-, or 256-bit keys and a diffusion-switching mechanism; it is standardized in ISO/IEC 29192-2."
   construction_ids:
   - generalized_feistel
   round_ids:
@@ -952,7 +956,7 @@ families:
   influences: []
 - id: twine
   name: TWINE
-  notes: "TWINE is a block-cipher family represented in this database by TWINE-80, TWINE-128."
+  notes: "TWINE is a 36-round, 64-bit lightweight generalized Feistel cipher built from sixteen 4-bit branches, with 80- and 128-bit-key variants."
   construction_ids:
   - generalized_feistel
   round_ids:
@@ -978,7 +982,7 @@ families:
   influences: []
 - id: crypton
   name: CRYPTON
-  notes: "CRYPTON is a block-cipher family represented in this database by CRYPTON-128, CRYPTON-192, CRYPTON-256."
+  notes: "CRYPTON is a 12-round, 128-bit AES candidate whose SPN uses byte substitutions and transposition-oriented diffusion, with keys up to 256 bits."
   construction_ids:
   - spn
   round_ids:
@@ -1009,7 +1013,7 @@ families:
   influences: []
 - id: deal
   name: DEAL
-  notes: "DEAL is a block-cipher family represented in this database by DEAL-128, DEAL-192, DEAL-256."
+  notes: "DEAL is a 128-bit AES candidate constructed as a Feistel network whose round function is DES, supporting 128-, 192-, and 256-bit keys."
   construction_ids:
   - feistel
   round_ids:
@@ -1175,7 +1179,7 @@ families:
     '
 - id: loki97
   name: LOKI97
-  notes: "LOKI97 is a block-cipher family represented in this database by LOKI97-128, LOKI97-192, LOKI97-256."
+  notes: "LOKI97 is a 16-round, 128-bit Feistel cipher in the LOKI lineage, using large S-boxes and 128-, 192-, or 256-bit keys; it was an AES candidate."
   construction_ids:
   - feistel
   round_ids:
@@ -1278,7 +1282,7 @@ families:
     '
 - id: safer_plus
   name: SAFER+
-  notes: "SAFER+ is a block-cipher family represented in this database by SAFER+-128, SAFER+-192, SAFER+-256."
+  notes: "SAFER+ is a 128-bit SPN using bytewise exponentiation/logarithm substitutions and pseudo-Hadamard diffusion, with key-dependent round counts for 128-, 192-, and 256-bit keys."
   construction_ids:
   - spn
   round_ids:
@@ -1316,7 +1320,7 @@ families:
   influences: []
 - id: aradi
   name: ARADI
-  notes: "ARADI is a block-cipher family represented in this database by ARADI-128/256."
+  notes: "ARADI is a 128-bit, 256-bit-key low-latency SPN designed for efficient bitsliced software and hardware, with 4-bit S-boxes and binary linear diffusion."
   construction_ids:
   - aligned_spn
   round_ids:
@@ -1366,7 +1370,7 @@ families:
     '
 - id: qarma
   name: QARMA
-  notes: "QARMA is a tweakable block-cipher family represented in this database by QARMA-64-128, QARMA-128-256."
+  notes: "QARMA is a family of low-latency tweakable block ciphers using a reflection-style Even–Mansour construction, designed primarily for memory encryption."
   construction_ids:
   - even_mansour
   round_ids:
@@ -1557,7 +1561,7 @@ families:
 
     '
 - id: ascon
-  name: ASCON
+  name: Ascon
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1589,12 +1593,12 @@ families:
     - winner
     status: winner
   influences: []
-  notes: First appeared in the 2016 CAESAR submission. Subsequent references track
-    the NIST LWC submission, the Journal of Cryptology AEAD/Hash/XOF specification,
-    the CT-RSA 2024 PRF/MAC specification, and the final NIST standard.
+  notes: First appeared in the 2016 CAESAR submission. NIST SP 800-232 standardizes
+    the Ascon-p permutation together with Ascon-AEAD128, Ascon-Hash256,
+    Ascon-XOF128, and Ascon-CXOF128.
 - id: photon
   name: PHOTON
-  notes: "PHOTON is a permutation family represented in this database by PHOTON Permutation (256-bit)."
+  notes: "PHOTON is a family of lightweight sponge hash functions whose internal permutations use AES-like 4-bit substitution, row shifting, and MDS column mixing."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1619,12 +1623,11 @@ families:
         field_size: 16
   reference_ids:
   - photon_beetle_2021
-  - sp_800_232
   process_participations: []
   influences: []
 - id: skinny
   name: SKINNY
-  notes: "SKINNY is a tweakable block-cipher family represented in this database by SKINNY-64-128, SKINNY-128-256."
+  notes: "SKINNY is a lightweight tweakable SPN family with 64- or 128-bit blocks and a tweakey schedule designed to minimize area while retaining strong differential bounds."
   construction_ids:
   - tweakable_spn
   round_ids:
@@ -1648,7 +1651,7 @@ families:
   influences: []
 - id: sparkle
   name: SPARKLE
-  notes: "SPARKLE is a permutation family represented in this database by SPARKLE-384."
+  notes: "SPARKLE is an ARX permutation family built from the Alzette box and a branch-linear layer; it underpins the SCHWAEMM AEAD and ESCH hash families."
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -1666,7 +1669,6 @@ families:
     - id: constant
   reference_ids:
   - sparkle_2020
-  - sp_800_232
   process_participations:
   - process_id: lightweight_crypto_nist_2018_2023
     stage_ids:
@@ -1677,7 +1679,7 @@ families:
   influences: []
 - id: tinyjambu
   name: TinyJambu
-  notes: "TinyJambu is a update-function family represented in this database by TinyJambu-128 State Update."
+  notes: "TinyJambu is a lightweight keyed state-update design with a 128-bit nonlinear feedback register; it underpins the TinyJAMBU authenticated-encryption variants."
   construction_ids:
   - lfsr_nlfsr_register_network
   round_ids:
@@ -1694,7 +1696,6 @@ families:
     - id: constant
   reference_ids:
   - tinyjambu_2019
-  - sp_800_232
   process_participations:
   - process_id: lightweight_crypto_nist_2018_2023
     stage_ids:
@@ -1705,7 +1706,7 @@ families:
   influences: []
 - id: xoodoo
   name: Xoodoo
-  notes: "Xoodoo is a permutation family represented in this database by Xoodoo Permutation (384-bit)."
+  notes: "Xoodoo is a 384-bit, 12-round permutation arranged as three bit planes of four lanes; it is the permutation underlying Xoodyak."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1723,12 +1724,11 @@ families:
     - id: constant
   reference_ids:
   - xoodoo_2018
-  - sp_800_232
   process_participations: []
   influences: []
 - id: elephant
   name: Elephant
-  notes: "Elephant is a permutation family represented in this database by Elephant Permutation (160-bit profile)."
+  notes: "Elephant is a lightweight nonce-based AEAD family that masks short permutations such as Spongent-pi, Keccak-p, or Ascon-p rather than maintaining a large keyed state."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1755,7 +1755,7 @@ families:
   influences: []
 - id: romulus
   name: Romulus
-  notes: "Romulus is a tweakable block-cipher family represented in this database by Romulus-SKINNY-128-256."
+  notes: "Romulus is a nonce-based AEAD family built around the SKINNY-128-256 tweakable block cipher, with modes tuned for misuse resistance or lightweight operation."
   construction_ids:
   - tweakable_spn
   round_ids:
@@ -1789,7 +1789,7 @@ families:
     note: Romulus is built on SKINNY tweakey-based round functions.
 - id: isap
   name: ISAP
-  notes: "ISAP is a permutation family represented in this database by ISAP Permutation (320-bit)."
+  notes: "ISAP is a lightweight AEAD family designed for robust side-channel protection, using re-keying and sponge-like processing over lightweight permutations."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1822,7 +1822,7 @@ families:
       design.
 - id: grain_128
   name: Grain-128
-  notes: "Grain-128 is a stream-cipher family represented in this database by Grain-128 Stream Core."
+  notes: "Grain-128 is a hardware-oriented stream-cipher family combining a 128-bit LFSR, a 128-bit NLFSR, and a nonlinear output function; later variants add authentication."
   construction_ids:
   - lfsr_nlfsr_register_network
   round_ids:
@@ -1850,7 +1850,7 @@ families:
   influences: []
 - id: gimli
   name: Gimli
-  notes: "Gimli is a permutation family represented in this database by Gimli Permutation (384-bit)."
+  notes: "Gimli is a 384-bit ARX permutation operating on a 3×4 array of 32-bit words, designed as a compact foundation for hashing, authenticated encryption, and other modes."
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -1878,7 +1878,7 @@ families:
   influences: []
 - id: subterranean
   name: Subterranean
-  notes: "Subterranean is a permutation family represented in this database by Subterranean Permutation (257-bit)."
+  notes: "Subterranean 2.0 is a duplex construction over a 257-bit permutation, offering lightweight hashing and authenticated encryption with bit-oriented nonlinear feedback."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1903,7 +1903,7 @@ families:
   influences: []
 - id: drygascon
   name: DryGASCON
-  notes: "DryGASCON is a permutation family represented in this database by DryGASCON Permutation (320-bit)."
+  notes: "DryGASCON is a permutation-based AEAD and hashing design derived from the GASCON/Ascon lineage, separating a capacity state from a small input accumulator."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1935,7 +1935,7 @@ families:
       design choices.
 - id: sneik
   name: SNEIK
-  notes: "SNEIK is a permutation family represented in this database by SNEIK Permutation (256-bit)."
+  notes: "SNEIK is a lightweight ARX permutation and sponge suite designed for compact authenticated encryption, hashing, and related symmetric functions."
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -1962,7 +1962,7 @@ families:
   influences: []
 - id: sycon
   name: Sycon
-  notes: "Sycon is a permutation family represented in this database by Sycon Permutation (320-bit)."
+  notes: "Sycon is a 320-bit permutation-based lightweight suite using 5-bit S-boxes and bit permutations for authenticated encryption, hashing, and related functions."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -1990,7 +1990,7 @@ families:
   influences: []
 - id: spix
   name: SPIX
-  notes: "SPIX is a permutation family represented in this database by SPIX Permutation (256-bit)."
+  notes: "SPIX is a lightweight duplex AEAD design using a 256-bit permutation with Boolean nonlinear layers and rotations."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2017,7 +2017,7 @@ families:
   influences: []
 - id: spoc
   name: SpoC
-  notes: "SpoC is a permutation family represented in this database by SpoC Permutation (256-bit)."
+  notes: "SpoC is a lightweight sponge-based AEAD family that processes plaintext through a rate smaller than the permutation rate to improve privacy bounds."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2044,7 +2044,7 @@ families:
   influences: []
 - id: spook
   name: Spook
-  notes: "Spook is a permutation family represented in this database by Spook Permutation (256-bit)."
+  notes: "Spook is a lightweight AEAD family combining a tweakable block cipher with a sponge-like mode, with variants aimed at single-user and multi-user security."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2071,7 +2071,7 @@ families:
   influences: []
 - id: knot
   name: KNOT
-  notes: "KNOT is a permutation family represented in this database by KNOT Permutation (256-bit)."
+  notes: "KNOT is a family of bit-sliced permutations and sponge modes for lightweight authenticated encryption and hashing, using 4-bit S-boxes and lane rotations."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2100,7 +2100,7 @@ families:
   influences: []
 - id: pyjamask
   name: Pyjamask
-  notes: "Pyjamask is a block-cipher family represented in this database by Pyjamask-128."
+  notes: "Pyjamask is a 128-bit-key SPN family using bitsliced 3-bit S-boxes and circulant binary-matrix diffusion; it forms the core of Pyjamask AEAD modes."
   construction_ids:
   - aligned_spn
   round_ids:
@@ -2124,7 +2124,7 @@ families:
   influences: []
 - id: qameleon
   name: Qameleon
-  notes: "Qameleon is a tweakable block-cipher family represented in this database by Qameleon-128."
+  notes: "Qameleon is a lightweight tweakable SPN designed for authenticated encryption, using 4-bit substitution, bit permutations, and tweak-dependent round material."
   construction_ids:
   - tweakable_spn
   round_ids:
@@ -2151,7 +2151,7 @@ families:
   influences: []
 - id: saturnin
   name: Saturnin
-  notes: "Saturnin is a block-cipher family represented in this database by Saturnin-256."
+  notes: "Saturnin is a 256-bit block cipher and permutation-like primitive using a 4-bit S-box and MDS diffusion, designed to support lightweight AEAD and hashing."
   construction_ids:
   - aligned_spn
   round_ids:
@@ -2178,7 +2178,7 @@ families:
   influences: []
 - id: simple
   name: SIMPLE
-  notes: "SIMPLE is a permutation family represented in this database by SIMPLE Permutation (256-bit)."
+  notes: "SIMPLE is a lightweight permutation-based authenticated-encryption design using a 256-bit Boolean permutation and sponge-style processing."
   construction_ids:
   - sponge_permutation
   round_ids:
@@ -2203,7 +2203,7 @@ families:
   influences: []
 - id: trifle
   name: TRIFLE
-  notes: "TRIFLE is a tweakable block-cipher family represented in this database by TRIFLE-128."
+  notes: "TRIFLE is a lightweight tweakable block cipher and AEAD design using a 128-bit state, 4-bit S-boxes, and bit-permutation diffusion."
   construction_ids:
   - tweakable_spn
   round_ids:
@@ -3479,7 +3479,7 @@ families:
   notes: HIGHT (Hong et al., ICISC 2006) is a 64-bit block cipher with a 128-bit key
     and 32 rounds, designed for RFID and other constrained hardware. It uses an 8-branch
     Generalised Feistel Network with only XOR, fixed rotation, and 8-bit modular addition
-    — no S-boxes.
+    — no S-boxes. HIGHT is standardized in ISO/IEC 18033-3:2010.
 - id: hyena
   name: HyENA
   construction_ids:
@@ -4143,7 +4143,7 @@ families:
   notes: MISTY1 (Matsui, Mitsubishi Electric; FSE 1997) is a 64-bit recursive Feistel
     block cipher with a 128-bit key and 8 outer rounds (FO). Each FO round contains
     three FI sub-rounds, which use 7×7 (S7) and 9×9 (S9) S-boxes plus FL/FLinv key
-    mixing layers. It has provable security against differential and linear cryptanalysis.
+    mixing layers. It is specified by RFC 2994 and ISO/IEC 18033-3:2010.
 - id: mixfeed
   name: mixFeed
   construction_ids:
@@ -5389,6 +5389,7 @@ families:
     - id: bit_permutation
     - id: xor
   reference_ids:
+  - fips_46_3_1999_des
   - three_key_triple_des_ref
   process_participations: []
   influences:
@@ -5400,9 +5401,8 @@ families:
       independent keys.
   notes: Three-key Triple DES (3TDEA; NIST SP 800-67r2) applies DES three times (E-D-E)
     with three independent 56-bit keys (192-bit keying material, 168-bit effective
-    security). The result is a 64-bit block cipher with 48 DES rounds total. NIST
-    deprecated 3TDEA for general use after 2023 due to the 64-bit block size vulnerability
-    (Sweet32 attack).
+    security). FIPS 46-3 standardized TDEA in 1999; SP 800-67 Rev. 2 was a 2017
+    revision, not its introduction, and NIST withdrew that recommendation in 2024.
 - id: threefish
   name: Threefish
   construction_ids:
@@ -5429,8 +5429,9 @@ families:
   - threefish_ref
   process_participations: []
   influences: []
-  notes: Threefish is the ARX tweakable block-cipher core used by Skein, with standardized
-    256/512/1024-bit variants.
+  notes: Threefish is the ARX tweakable block-cipher core used by Skein, with 256-,
+    512-, and 1024-bit block variants. It is documented in the Skein specification
+    but was not independently standardized.
 - id: treyfer
   name: TREYFER
   construction_ids:
@@ -8448,7 +8449,7 @@ families:
     '
 - id: triple_des
   name: Three-key Triple DES (3DES)
-  notes: "Three-key Triple DES (3DES) is a block-cipher family represented in this database by Three-key Triple DES."
+  notes: "Three-key TDEA applies DES in encrypt–decrypt–encrypt order with three independent 56-bit keys. FIPS 46-3 standardized it in 1999; NIST withdrew SP 800-67 Rev. 2 in 2024 and permits it only for processing legacy protected data."
   construction_ids:
   - feistel
   round_ids:
@@ -8459,6 +8460,7 @@ families:
     block_size_bits: 64
     components: []
   reference_ids:
+  - fips_46_3_1999_des
   - iso_iec_18033_3_2010
   - three_key_triple_des_ref
   process_participations:
@@ -8469,7 +8471,7 @@ families:
   influences: []
 - id: two_key_triple_des
   name: Two-key Triple DES (2DES)
-  notes: "Two-key Triple DES (2DES) is a block-cipher family represented in this database by Two-key Triple DES-v1, Two-key Triple DES."
+  notes: "Two-key TDEA applies DES three times with K3 equal to K1, giving about 112 bits of key strength; NIST disallowed it for new encryption in 2016."
   construction_ids:
   - feistel
   round_ids:
@@ -8485,7 +8487,7 @@ families:
   influences: []
 - id: rc4drop
   name: RC4-drop
-  notes: "RC4-drop is a stream-cipher family represented in this database by RC4-drop[768]."
+  notes: "RC4-drop variants discard an initial prefix of RC4 keystream—commonly 768 or 3072 bytes—to reduce early-output biases, without repairing RC4’s broader statistical weaknesses."
   construction_ids:
   - key_dependent_table_network
   round_ids:
@@ -8505,7 +8507,7 @@ families:
       initial-byte biases
 - id: newdes
   name: NewDES
-  notes: "NewDES is a block-cipher family represented in this database by NewDES."
+  notes: "NewDES is a 64-bit, 120-bit-key Feistel-like cipher designed as a simpler alternative to DES, using byte-oriented XOR and a fixed substitution table."
   construction_ids:
   - feistel
   round_ids:
@@ -8521,7 +8523,7 @@ families:
   influences: []
 - id: zuc
   name: ZUC
-  notes: "ZUC is a stream-cipher family represented in this database by ZUC-128."
+  notes: "ZUC is a word-oriented stream cipher combining a 16-stage LFSR over extension fields with nonlinear finite-state machinery; it underpins the 3GPP 128-EEA3 and 128-EIA3 algorithms."
   construction_ids:
   - lfsr_over_extension_field_with_memory
   round_ids:
@@ -8541,7 +8543,7 @@ families:
       suite
 - id: catfish
   name: Catfish
-  notes: "Catfish is a password-hashing family represented in this database by Catfish."
+  notes: "Catfish is a Password Hashing Competition proposal built around memory-filling iterations intended to raise the cost of massively parallel password guessing."
   construction_ids:
   - iterated_hash_kdf
   round_ids:
@@ -8556,7 +8558,7 @@ families:
   influences: []
 - id: m3lcrypt
   name: M3lcrypt
-  notes: "M3lcrypt is a password-hashing family represented in this database by M3lcrypt."
+  notes: "M3lcrypt is a Password Hashing Competition proposal designed to combine tunable memory use with repeated hashing for resistance to hardware-accelerated guessing."
   construction_ids:
   - memory_hard_sponge
   round_ids:
@@ -8571,7 +8573,7 @@ families:
   influences: []
 - id: pufferfish
   name: Pufferfish
-  notes: "Pufferfish is a password-hashing family represented in this database by Pufferfish2."
+  notes: "Pufferfish is a bcrypt-derived password-hashing design with tunable memory and time costs, using an enlarged key-dependent state to impede parallel cracking hardware."
   construction_ids:
   - bcrypt_variant
   round_ids:

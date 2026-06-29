@@ -54,6 +54,18 @@ references:
   venue: Workshop Record of SASC 2008
   url: https://cr.yp.to/chacha.html
   notes: 'Original ChaCha specification. Local copy: references/2008-chacha.pdf.'
+- id: rfc_7539
+  kind: standard
+  title: 'RFC 7539: ChaCha20 and Poly1305 for IETF Protocols'
+  authors:
+  - Yoav Nir
+  - Adam Langley
+  year: 2015
+  venue: RFC 7539
+  organization: IRTF
+  status: obsoleted
+  url: https://www.rfc-editor.org/info/rfc7539
+  notes: 'First stable CFRG specification of the IETF ChaCha20 profile, its block function, Poly1305, and their AEAD construction; obsoleted by RFC 8439. Local PDF rendered from the official RFC text: references/2015-chacha20-rfc7539.pdf.'
 - id: bogdanov_2007_present
   kind: article
   title: 'PRESENT: An Ultra-Lightweight Block Cipher'
@@ -108,13 +120,19 @@ references:
   kind: standard
   title: 'NIST SP 800-232: Ascon-Based Lightweight Cryptography Standards for Constrained
     Devices: Authenticated Encryption, Hash, and Extendable Output Functions'
-  authors: []
+  authors:
+  - Meltem Sönmez Turan
+  - Kerry McKay
+  - Jinkeon Kang
+  - John Kelsey
+  - Donghoon Chang
   year: 2025
   venue: NIST
   organization: NIST
   status: active
   url: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-232.pdf
-  notes: Section 3 gives the official permutation name "Ascon-p".
+  notes: 'Specifies Ascon-AEAD128, Ascon-Hash256, Ascon-XOF128, Ascon-CXOF128,
+    and the underlying Ascon-p permutation. Local copy: references/2025-ascon-nist_sp_800-232.pdf.'
 - id: iso_iec_18033_3_2010
   kind: standard
   title: 'ISO/IEC 18033-3:2010 — Encryption algorithms — Part 3: Block ciphers'
@@ -635,7 +653,10 @@ references:
   - Adam Langley
   year: 2018
   venue: RFC 8439
-  url: https://datatracker.ietf.org/doc/rfc8439/
+  organization: IRTF
+  status: current
+  url: https://www.rfc-editor.org/info/rfc8439
+  notes: 'Updates RFC 7539 by incorporating errata and additional security-considerations text. Local PDF rendered from the official RFC text: references/2018-chacha20-rfc8439.pdf.'
 - id: rivest_1987_rc4
   kind: article
   title: 'RC4: A Stream Cipher'
@@ -1853,7 +1874,8 @@ references:
   title: 'NIST Special Publication 800-67 Rev. 2: Recommendation for the Triple Data
     Encryption Algorithm (TDEA) Block Cipher'
   year: 2017
-  notes: 'NIST recommendation for Triple DES. Local copy: references/2017-nist_sp800_67r2_3des.pdf.'
+  status: withdrawn
+  notes: 'Second revision of the NIST TDEA recommendation, not the algorithm’s first standardization; withdrawn 2024-01-01. TDEA was standardized in FIPS 46-3 in 1999. Local copy: references/2017-nist_sp800_67r2_3des.pdf.'
   venue: NIST SP 800-67r2
   url: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-67r2.pdf
 - id: threefish_ref
@@ -1954,10 +1976,11 @@ references:
   venue: Fast Software Encryption (FSE) 1994, LNCS 1008
   url: https://link.springer.com/chapter/10.1007/3-540-60590-8_26
 - id: xchacha_ref
-  kind: standard
+  kind: specification
   title: 'XChaCha: eXtended-nonce ChaCha and AEAD_XChaCha20_Poly1305'
   year: 2018
-  notes: IETF draft specifying XChaCha20 with HChaCha20 subkey derivation.
+  notes: Expired IETF Internet-Draft specifying XChaCha20 with HChaCha20 subkey
+    derivation; it was not published as an RFC and is not treated as a standard.
   authors:
   - Scott Arciszewski
   venue: IETF Internet-Draft
@@ -2078,17 +2101,6 @@ references:
   venue: NIST Special Publication 800-38D
   url: https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38d.pdf
   notes: Authenticated encryption mode for block ciphers. NIST standard.
-- id: chacha20_poly1305_ref
-  kind: standard
-  title: ChaCha20 and Poly1305 for IETF Protocols
-  authors:
-  - Adam Langley
-  - Anirudh Modadugu
-  - Daniel J. Bernstein
-  year: 2015
-  venue: RFC 7539
-  url: https://tools.ietf.org/html/rfc7539
-  notes: AEAD mode combining ChaCha20 stream cipher and Poly1305 MAC.
 - id: cbc_ref
   kind: standard
   title: Recommendation for Block Cipher Modes of Operation

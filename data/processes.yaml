@@ -184,7 +184,7 @@ processes:
           - {name: SSS}
           - {name: TRBDK3 YAEA}
           - family_id: yamb
-          - family_id: salsa
+          - family_id: salsa20
           - family_id: achterbahn
           - family_id: decim
           - {name: Edon-80}
@@ -213,7 +213,7 @@ processes:
           - {name: Polar Bear v2}
           - {name: Py}
           - family_id: rabbit
-          - family_id: salsa
+          - family_id: salsa20
           - {name: SOSEMANUK}
           - family_id: achterbahn
           - family_id: decim
@@ -240,7 +240,7 @@ processes:
           - family_id: lex
           - family_id: nlsv2
           - family_id: rabbit
-          - family_id: salsa
+          - family_id: salsa20
           - {name: SOSEMANUK}
           - family_id: decim
           - {name: Edon-80}
@@ -256,7 +256,7 @@ processes:
         participants:
           - family_id: hc_128
           - family_id: rabbit
-          - family_id: salsa
+          - family_id: salsa20
             note: Salsa20/12 was selected for the portfolio.
           - {name: SOSEMANUK}
       - id: portfolio_hw

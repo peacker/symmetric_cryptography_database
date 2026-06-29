@@ -52,12 +52,14 @@ modes:
     name: ChaCha20-Poly1305
     mode_type: AEAD
     authors:
-      - Daniel J. Bernstein
-    year: 2008
+      - Yoav Nir
+      - Adam Langley
+    year: 2015
     underlying_primitive_ids:
       - chacha20
     reference_ids:
-      - chacha20_poly1305_ref
+      - rfc_7539
+      - rfc_8439
     target_applications:
       - generic
       - software

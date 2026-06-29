@@ -175,7 +175,7 @@ TYPE_MAP = {
     "safer++":                      "block_cipher",
     "safer-k64":                    "block_cipher",
     "safer-k128":                   "block_cipher",
-    "salsa":                        "stream_cipher",
+    "salsa20":                      "stream_cipher",
     "sapphire":                     "stream_cipher",
     "saturnin":                     "block_cipher",
     "sc2000":                       "block_cipher",

@@ -110,7 +110,7 @@ primitives:
     output_size_bits: 128
 - id: salsa20
   name: Salsa20
-  family_id: salsa
+  family_id: salsa20
   primitive_type: stream_cipher
   reference_ids:
   - bernstein_2005_salsa20_spec
@@ -125,7 +125,7 @@ primitives:
     512-bit keystream blocks with 20 ARX rounds.
 - id: snuffle_2005
   name: Snuffle 2005
-  family_id: salsa
+  family_id: salsa20
   primitive_type: stream_cipher
   reference_ids:
   - bernstein_2005_salsa20_spec
@@ -138,7 +138,7 @@ primitives:
   notes: Snuffle 2005 is the original name for the Salsa20 encryption function.
 - id: xsalsa20
   name: XSalsa20
-  family_id: salsa
+  family_id: salsa20
   primitive_type: stream_cipher
   reference_ids:
   - bernstein_2011_xsalsa20
@@ -150,11 +150,11 @@ primitives:
     output_size_bits: 512
   notes: XSalsa20 uses HSalsa20 to derive a subkey, extending Salsa20 to a 192-bit nonce.
 - id: chacha20
-  name: ChaCha20 Block Function
+  name: ChaCha20
   family_id: chacha
-  primitive_type: permutation
+  primitive_type: stream_cipher
   reference_ids:
-  - bernstein_2008_chacha
+  - rfc_7539
   - rfc_8439
   characteristics:
     key_size_bits: 256
@@ -163,9 +163,25 @@ primitives:
     rounds: 20
     block_size_bits: 512
     output_size_bits: 512
-  notes: 'ChaCha20 block function per RFC 8439: takes a 256-bit key, 96-bit nonce,
-    and 32-bit block counter to produce a 512-bit (64-byte) output. Applies 20 quarterrounds
-    (10 double-rounds) in a symmetric pattern.'
+  notes: 'The IETF ChaCha20 stream cipher repeatedly invokes the ChaCha20 block
+    function to form a keystream and XORs it with the plaintext.'
+- id: chacha20_block_function
+  name: ChaCha20 Block Function
+  family_id: chacha
+  primitive_type: update_function
+  reference_ids:
+  - rfc_7539
+  - rfc_8439
+  characteristics:
+    key_size_bits: 256
+    nonce_size_bits: 96
+    block_count_bits: 32
+    state_size_bits: 512
+    rounds: 20
+    block_size_bits: 512
+    output_size_bits: 512
+  notes: 'The RFC-defined update function transforms a 512-bit ChaCha state through
+    20 rounds and adds the initial state to produce one 512-bit keystream block.'
 - id: present_80
   name: PRESENT-80
   family_id: present
@@ -1108,6 +1124,59 @@ primitives:
     block_size_bits: 320
     output_size_bits: 320
   notes: Official NIST SP 800-232 name for the permutation is Ascon-p.
+- id: ascon_aead128
+  name: Ascon-AEAD128
+  family_id: ascon
+  primitive_type: aead
+  reference_ids:
+  - sp_800_232
+  characteristics:
+    state_size_bits: 320
+    key_size_bits: 128
+    nonce_size_bits: 128
+    tag_size_bits: 128
+    block_size_bits: 128
+    rounds: 12
+  notes: 'NIST-standardized authenticated encryption for constrained devices,
+    using Ascon-p[12] for initialization/finalization and Ascon-p[8] while
+    processing associated data and plaintext.'
+- id: ascon_hash256
+  name: Ascon-Hash256
+  family_id: ascon
+  primitive_type: hash_function
+  reference_ids:
+  - sp_800_232
+  characteristics:
+    state_size_bits: 320
+    block_size_bits: 64
+    output_size_bits: 256
+    rounds: 12
+  notes: 'NIST-standardized 256-bit hash function based on the Ascon-p[12]
+    permutation with a 64-bit rate.'
+- id: ascon_xof128
+  name: Ascon-XOF128
+  family_id: ascon
+  primitive_type: extendable_output_function
+  reference_ids:
+  - sp_800_232
+  characteristics:
+    state_size_bits: 320
+    block_size_bits: 64
+    rounds: 12
+  notes: 'NIST-standardized extendable-output function with 128-bit security,
+    based on Ascon-p[12] with a 64-bit rate.'
+- id: ascon_cxof128
+  name: Ascon-CXOF128
+  family_id: ascon
+  primitive_type: extendable_output_function
+  reference_ids:
+  - sp_800_232
+  characteristics:
+    state_size_bits: 320
+    block_size_bits: 64
+    rounds: 12
+  notes: 'Customizable NIST-standardized XOF with 128-bit security; it absorbs
+    a customization string before the message.'
 - id: photon_permutation_256
   name: PHOTON Permutation (256-bit)
   family_id: photon
