@@ -246,7 +246,8 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | SAFER | SAFER | block_cipher | 1993 | https://link.springer.com/chapter/10.1007/3-540-58108-1_1 | Full | yes |
 | [x] | SAFER+ | SAFER+ | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | SAFER++ | SAFER++ | block_cipher | 2000 | https://www.cosic.esat.kuleuven.be/nessie/ | Full | no |
-| [x] | Salsa20 | Salsa20 | stream_cipher | 2004 | https://cr.yp.to/snuffle.html | Full | yes |
+| [x] | Salsa20 / Snuffle 2005 | Salsa20 | stream_cipher | 2005 | https://cr.yp.to/snuffle/spec.pdf | Full | yes |
+| [x] | XSalsa20 | XSalsa20 | stream_cipher | 2011 | https://cr.yp.to/snuffle/xsalsa-20110204.pdf | Full | yes |
 | [x] | Sapphire | Sapphire | stream_cipher | 1995 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/sapphire.pdf | Full | yes |
 | [x] | Saturnin | Saturnin | block_cipher | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | SC2000 | SC2000 | block_cipher | 2000 | https://www.cosic.esat.kuleuven.be/nessie/ | Full | yes |

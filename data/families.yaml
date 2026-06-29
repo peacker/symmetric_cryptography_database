@@ -74,12 +74,9 @@ families:
     - id: xor
     - id: constant
   reference_ids:
+  - iso_iec_18033_3_2010
   - fips_197
   process_participations:
-  - process_id: aes_competition_nist_1997_2000
-    stage_ids:
-    - winner
-    status: winner
   - process_id: cryptrec_selection_2000_2023
     stage_ids:
     - recommended_block_128bit
@@ -125,7 +122,10 @@ families:
     - id: rotation_fixed
     - id: constant
   reference_ids:
-  - bernstein_2008_salsa20
+  - bernstein_2005_salsa20_spec
+  - bernstein_2007_salsa20_family
+  - bernstein_2008_salsa20_family_published
+  - bernstein_2011_xsalsa20
   process_participations:
   - process_id: estream_competition_nist_2004_2008
     stage_ids:
@@ -142,8 +142,10 @@ families:
   - id: salsa_column_diagonal_mixing
     name: Column/diagonal mixing
     note: The state reordering that alternates column and diagonal rounds for diffusion.
-  notes: 'ARX design. Salsa20 is the full-round variant; Salsa20/12 and Salsa20/8
-    are reduced-round speed-optimised variants.
+  notes: 'Salsa is a 512-bit ARX stream-cipher family introduced as the Snuffle
+    2005 encryption function. Salsa20 uses 20 rounds; Salsa20/12 and Salsa20/8
+    are reduced-round variants. XSalsa20 extends Salsa20 from a 64-bit nonce to
+    a 192-bit nonce through HSalsa20 subkey derivation.
 
     '
 - id: chacha
@@ -167,6 +169,7 @@ families:
     - id: constant
   reference_ids:
   - bernstein_2008_chacha
+  - rfc_8439
   process_participations: []
   influences:
   - source_family_id: salsa
@@ -201,6 +204,7 @@ families:
     - id: xor
     - id: constant
   reference_ids:
+  - iso_iec_29192_2_2019
   - bogdanov_2007_present
   process_participations: []
   influences: []
@@ -478,6 +482,7 @@ families:
     - id: rotation_fixed
     - id: constant
   reference_ids:
+  - iso_iec_18033_3_2010
   - matsui_et_al_2004_camellia
   process_participations:
   - process_id: nessie_competition_european_commission_2000_2003
@@ -678,6 +683,7 @@ families:
     - id: xor
     - id: rotation_variable
   reference_ids:
+  - iso_iec_18033_3_2010
   - adams_1997_cast128
   process_participations: []
   influences: []
@@ -765,6 +771,7 @@ families:
         modulus: 4294967296
     - id: rotation_fixed
   reference_ids:
+  - iso_iec_18033_3_2010
   - lee_et_al_2005_seed
   process_participations: []
   influences: []
@@ -935,6 +942,7 @@ families:
         output_bits: 8
     - id: binary_matrix_mul
   reference_ids:
+  - iso_iec_29192_2_2019
   - katagi_moriai_2011_clefia
   process_participations:
   - process_id: cryptrec_selection_2000_2023
@@ -2590,8 +2598,8 @@ families:
     - first_prize
     status: winner
   influences: []
-  notes: 'Ballet is an ARX-oriented block-cipher family with three variants: Ballet-128/128,
-    Ballet-128/256, and Ballet-256/256.
+  notes: 'Ballet is a simplified four-branch, almost-symmetric Lay–Massey ARX block-cipher
+    construction. Its three variants are Ballet-128/128, Ballet-128/256, and Ballet-256/256.
 
     '
 - id: bear_lion
@@ -3464,6 +3472,7 @@ families:
       params:
         modulus: 256
   reference_ids:
+  - iso_iec_18033_3_2010
   - hight_ref
   process_participations: []
   influences: []
@@ -3720,6 +3729,7 @@ families:
     - id: xor
     - id: rotation_fixed
   reference_ids:
+  - iso_iec_29192_2_2019
   - lea_ref
   process_participations: []
   influences: []
@@ -4117,6 +4127,8 @@ families:
     - id: xor
     - id: and
   reference_ids:
+  - iso_iec_18033_3_2010
+  - rfc_2994_misty1
   - misty1_ref
   process_participations:
   - process_id: nessie_competition_european_commission_2000_2003
@@ -8447,6 +8459,7 @@ families:
     block_size_bits: 64
     components: []
   reference_ids:
+  - iso_iec_18033_3_2010
   - three_key_triple_des_ref
   process_participations:
   - process_id: cryptrec_selection_2000_2023
@@ -8582,6 +8595,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8590,7 +8604,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Abacus is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Abacus is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe design using an MDS matrix, 8-bit S-boxes, a feedback shift register, and an output transformation."
 - id: arirang
   name: ARIRANG
   construction_ids: []
@@ -8602,6 +8616,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8610,7 +8625,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: ARIRANG is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "ARIRANG is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel wide-pipe design with message expansion and MDS diffusion."
 - id: aurora
   name: AURORA
   construction_ids: []
@@ -8622,6 +8637,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8630,7 +8646,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: AURORA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "AURORA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: MDS-and-S-box design with an explicit message schedule and output transformation."
 - id: blender
   name: Blender
   construction_ids: []
@@ -8642,6 +8658,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8650,7 +8667,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Blender is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Blender is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe ARX design."
 - id: blue_midnight_wish
   name: BLUE MIDNIGHT WISH
   construction_ids: []
@@ -8662,6 +8679,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
@@ -8672,7 +8690,7 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: BLUE MIDNIGHT WISH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round.
+  notes: "BLUE MIDNIGHT WISH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: wide-pipe ARX design with an explicit message expansion."
 - id: boole
   name: BOOLE
   construction_ids: []
@@ -8684,6 +8702,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8692,7 +8711,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: BOOLE is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "BOOLE is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: feedback-shift-register design with Boolean filtering and an output transformation."
 - id: cheetah
   name: Cheetah
   construction_ids: []
@@ -8704,6 +8723,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8712,7 +8732,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Cheetah is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Cheetah is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: AES-like design using a message schedule, MDS diffusion, and 8-bit S-boxes."
 - id: chi_hash
   name: CHI
   construction_ids: []
@@ -8724,6 +8744,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8732,7 +8753,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: CHI is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "CHI is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel wide-pipe design using a message schedule and compact S-boxes."
 - id: crunch
   name: CRUNCH
   construction_ids: []
@@ -8744,6 +8765,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8752,7 +8774,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: CRUNCH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "CRUNCH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel design using message expansion and a large S-box layer."
 - id: cubehash
   name: CubeHash
   construction_ids: []
@@ -8764,6 +8786,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
@@ -8774,7 +8797,7 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: CubeHash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round.
+  notes: "CubeHash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: ARX permutation-based design."
 - id: dch
   name: DCH
   construction_ids: []
@@ -8786,6 +8809,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8794,7 +8818,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: DCH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "DCH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: message-scheduled design using an 8-bit S-box."
 - id: dynamic_sha
   name: Dynamic SHA
   construction_ids: []
@@ -8806,6 +8830,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8814,7 +8839,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Dynamic SHA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Dynamic SHA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel design with a SHA-like message schedule and Boolean functions."
 - id: dynamic_sha2
   name: Dynamic SHA2
   construction_ids: []
@@ -8826,6 +8851,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8834,7 +8860,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Dynamic SHA2 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Dynamic SHA2 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel ARX design inspired by SHA-2."
 - id: echo_hash
   name: ECHO
   construction_ids: []
@@ -8846,6 +8872,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
@@ -8856,7 +8883,7 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: ECHO is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round.
+  notes: "ECHO is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: AES-inspired wide-pipe design using MDS diffusion and 8-bit S-boxes."
 - id: ecoh
   name: ECOH
   construction_ids: []
@@ -8868,6 +8895,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8876,7 +8904,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: ECOH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "ECOH is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: elliptic-curve-based compression design with an explicit message schedule."
 - id: edon_r
   name: EDON-R
   construction_ids: []
@@ -8888,6 +8916,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8896,7 +8925,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: EDON-R is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "EDON-R is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe ARX design built from quasigroup transformations."
 - id: enrupt
   name: EnRUPT
   construction_ids: []
@@ -8908,6 +8937,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8916,7 +8946,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: EnRUPT is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "EnRUPT is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: word-oriented wide-pipe design with nonlinear rotational mixing."
 - id: essence
   name: ESSENCE
   construction_ids: []
@@ -8928,6 +8958,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8936,7 +8967,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: ESSENCE is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "ESSENCE is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: feedback-shift-register-based compression design."
 - id: fsb
   name: FSB
   construction_ids: []
@@ -8948,6 +8979,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -8956,7 +8988,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: FSB is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "FSB is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: code-based wide-pipe design with a dedicated output transformation."
 - id: fugue
   name: Fugue
   construction_ids: []
@@ -8968,6 +9000,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
@@ -8978,7 +9011,7 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: Fugue is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round.
+  notes: "Fugue is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: wide-pipe AES-like design using a large MDS matrix, 8-bit S-boxes, and an output transformation."
 - id: hamsi
   name: Hamsi
   construction_ids: []
@@ -8990,6 +9023,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
@@ -9000,7 +9034,7 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: Hamsi is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round.
+  notes: "Hamsi is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: message-expanded design using 4-bit S-boxes."
 - id: khichidi_1
   name: Khichidi-1
   construction_ids: []
@@ -9012,6 +9046,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9020,7 +9055,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Khichidi-1 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Khichidi-1 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: message-scheduled feedback-shift-register design."
 - id: lane
   name: LANE
   construction_ids: []
@@ -9032,6 +9067,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9040,7 +9076,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: LANE is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "LANE is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: AES-inspired design using message expansion, MDS diffusion, 8-bit S-boxes, and an output transformation."
 - id: lesamnta
   name: Lesamnta
   construction_ids: []
@@ -9052,6 +9088,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9060,7 +9097,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Lesamnta is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Lesamnta is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel design using MDS diffusion, 8-bit S-boxes, and an output transformation."
 - id: luffa
   name: Luffa
   construction_ids: []
@@ -9072,6 +9109,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
@@ -9082,7 +9120,7 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: Luffa is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round.
+  notes: "Luffa is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: permutation-based design using 4-bit S-boxes and an output transformation."
 - id: lux_hash
   name: LUX
   construction_ids: []
@@ -9094,6 +9132,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9102,7 +9141,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: LUX is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "LUX is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe AES-like design using MDS diffusion, 8-bit S-boxes, and an output transformation."
 - id: mcssha3
   name: MCSSHA-3
   construction_ids: []
@@ -9114,6 +9153,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9122,7 +9162,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: MCSSHA-3 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "MCSSHA-3 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: feedback-shift-register-based design."
 - id: md6
   name: MD6
   construction_ids: []
@@ -9134,6 +9174,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9142,7 +9183,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: MD6 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "MD6 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: tree-capable wide-pipe design whose compression function uses a feedback shift register."
 - id: meshhash
   name: MeshHash
   construction_ids: []
@@ -9154,6 +9195,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9162,7 +9204,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: MeshHash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "MeshHash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: S-box-based design with an output transformation."
 - id: nasha
   name: NaSHA
   construction_ids: []
@@ -9174,6 +9216,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9182,7 +9225,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: NaSHA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "NaSHA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: balanced-Feistel design using an 8-bit S-box and a feedback shift register."
 - id: sandstorm
   name: SANDstorm
   construction_ids: []
@@ -9194,6 +9237,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9202,7 +9246,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: SANDstorm is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "SANDstorm is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: message-scheduled S-box design."
 - id: sarmal
   name: Sarmal
   construction_ids: []
@@ -9214,6 +9258,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9222,7 +9267,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Sarmal is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Sarmal is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel design using MDS diffusion and 8-bit S-boxes."
 - id: sgail
   name: Sgàil
   construction_ids: []
@@ -9234,6 +9279,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9242,7 +9288,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Sgàil is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Sgàil is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe design using a message schedule, MDS diffusion, and 8-bit S-boxes."
 - id: shabal
   name: Shabal
   construction_ids: []
@@ -9254,6 +9300,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
@@ -9264,7 +9311,7 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: Shabal is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round.
+  notes: "Shabal is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: message-scheduled design using a feedback shift register."
 - id: shamata
   name: SHAMATA
   construction_ids: []
@@ -9276,6 +9323,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9284,7 +9332,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: SHAMATA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "SHAMATA is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: balanced-Feistel wide-pipe design using message expansion, MDS diffusion, and 8-bit S-boxes."
 - id: shavite3
   name: SHAvite-3
   construction_ids: []
@@ -9296,6 +9344,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
@@ -9306,7 +9355,7 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: SHAvite-3 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round.
+  notes: "SHAvite-3 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: balanced-Feistel AES-inspired design using message expansion, MDS diffusion, S-boxes, and feedback."
 - id: simd_hash
   name: SIMD
   construction_ids: []
@@ -9318,6 +9367,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   - nist_2011_sha3_round2_report
@@ -9328,7 +9378,7 @@ families:
     - round_2
     status: candidate
   influences: []
-  notes: SIMD is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round.
+  notes: "SIMD is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It advanced to the second round. Construction hint: unbalanced-Feistel wide-pipe design with a truncated-Reed–Solomon message expansion."
 - id: spectral_hash
   name: Spectral Hash
   construction_ids: []
@@ -9340,6 +9390,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9348,7 +9399,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Spectral Hash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Spectral Hash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: S-box-based design with an output transformation."
 - id: streamhash
   name: StreamHash
   construction_ids: []
@@ -9360,6 +9411,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9368,7 +9420,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: StreamHash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "StreamHash is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: large-S-box stream-oriented design."
 - id: swifftx
   name: SWIFFTX
   construction_ids: []
@@ -9380,6 +9432,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9388,7 +9441,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: SWIFFTX is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "SWIFFTX is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: SWIFFT-inspired transform design with an S-box layer."
 - id: tangle_hash
   name: Tangle
   construction_ids: []
@@ -9400,6 +9453,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9408,7 +9462,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Tangle is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Tangle is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe message-scheduled design using an S-box."
 - id: tib3
   name: TIB3
   construction_ids: []
@@ -9420,6 +9474,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9428,7 +9483,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: TIB3 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "TIB3 is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: unbalanced-Feistel design using message expansion and compact S-boxes."
 - id: twister_hash
   name: Twister
   construction_ids: []
@@ -9440,6 +9495,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9448,7 +9504,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Twister is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Twister is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe AES-like design using MDS diffusion, 8-bit S-boxes, and an output transformation."
 - id: vortex_hash
   name: Vortex
   construction_ids: []
@@ -9460,6 +9516,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9468,7 +9525,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Vortex is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Vortex is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: MDS-and-S-box design with an output transformation."
 - id: wamm
   name: WaMM
   construction_ids: []
@@ -9480,6 +9537,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9488,7 +9546,7 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: WaMM is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "WaMM is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe S-box design with an output transformation."
 - id: waterfall_hash
   name: Waterfall
   construction_ids: []
@@ -9500,6 +9558,7 @@ families:
   characteristics:
     components: []
   reference_ids:
+  - fleischmann_2009_sha3_classification
   - nist_2008_sha3_first_round_candidates
   - nist_2009_sha3_round1_report
   process_participations:
@@ -9508,4 +9567,4 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: Waterfall is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round.
+  notes: "Waterfall is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3 competition. It did not advance to the second round. Construction hint: wide-pipe S-box and feedback-shift-register design with an output transformation."

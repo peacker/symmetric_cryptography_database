@@ -178,7 +178,7 @@ def build_site() -> None:
           <h1>Symmetric Cryptography Database</h1>
         </section>
         <nav class=\"navigator\" aria-label=\"Section navigation\">
-          <button type=\"button\" class=\"nav-tab is-active\" data-view-target=\"visualizations\">Family Visualizations</button>
+          <button type=\"button\" class=\"nav-tab is-active\" data-view-target=\"visualizations\">Timelines</button>
           <button type=\"button\" class=\"nav-tab\" data-view-target=\"tables\">All SQLite Tables</button>
           <button type=\"button\" class=\"nav-tab\" data-view-target=\"builder\">Custom Query Builder</button>
         </nav>
@@ -187,7 +187,7 @@ def build_site() -> None:
       <section class=\"panel meta\" id=\"summary\"></section>
 
       <section class=\"panel view-panel is-active\" data-view=\"visualizations\">
-        <h2>Family Visualizations</h2>
+        <h2>Timelines</h2>
         <p class=\"small-note\">X axis = publication year. Y axis grouping is selectable.</p>
         <div class=\"toolbar viz-toolbar\">
           <label class=\"toolbar-field\">Group families by
@@ -1435,10 +1435,18 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const constructions = (tables.constructions && tables.constructions.rows) || [];
     const familyTargets = (tables.family_targets && tables.family_targets.rows) || [];
     const influences = (tables.family_influences && tables.family_influences.rows) || [];
+    const familyStandards = (tables.family_standards && tables.family_standards.rows) || [];
+    const primitiveStandards = (tables.primitive_standards && tables.primitive_standards.rows) || [];
 
     const typeNameById = new Map(primitiveTypes.map((row) => [String(row.id), String(row.name)]));
     const constructionNameById = new Map(constructions.map((row) => [String(row.id), String(row.name)]));
     const familyById = new Map(families.map((row) => [String(row.id), row]));
+    const primitiveFamilyById = new Map(primitives.map((row) => [String(row.id), String(row.family_id || "")]));
+    const standardFamilyIds = new Set(familyStandards.map((row) => String(row.family_id)));
+    primitiveStandards.forEach((row) => {
+      const familyId = primitiveFamilyById.get(String(row.primitive_id));
+      if (familyId) standardFamilyIds.add(familyId);
+    });
 
     const familyToTypes = new Map();
     primitives.forEach((row) => {
@@ -2091,13 +2099,16 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       pointPositions.forEach((point) => {
         const famData = familyById.get(point.familyId);
         const famTypes = Array.from(familyToTypes.get(point.familyId) || []).sort((a, b) => a.localeCompare(b)).join(", ") || "—";
+        const famConstructions = Array.from(familyToConstructions.get(point.familyId) || []).sort((a, b) => a.localeCompare(b)).join(", ") || "Not classified";
         const famNotes = famData && famData.notes ? String(famData.notes).trim() : "";
         const procName = processNameForFamily(point.familyId);
-        const tipParts = [`${point.name} (${point.year})`, `Type: ${famTypes}`, `Group: ${point.group}`];
+        const isStandard = standardFamilyIds.has(point.familyId);
+        const tipParts = [`${point.name} (${point.year})`, `Type: ${famTypes}`, `Construction: ${famConstructions}`, `Group: ${point.group}`];
+        if (isStandard) tipParts.push("Standard: yes (official specification)");
         if (procName) tipParts.push(`Process: ${procName}`);
         if (famNotes) tipParts.push("\\n" + famNotes);
         const richTip = tipParts.join("\\n");
-        const dotColor = useProcessColor ? processColorForFamily(point.familyId) : null;
+        const dotColor = isStandard ? "#000000" : (useProcessColor ? processColorForFamily(point.familyId) : null);
 
         if (hideDots.checked) {
           const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -2115,8 +2126,8 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         if (nameMode !== "off") {
           const labelX = hideDots.checked ? point.x + POINT_RADIUS + 2 : point.x;
           const labelStyle = dotColor
-            ? `font-size:${fontPx}px;font-family:"IBM Plex Mono",monospace;fill:${dotColor}`
-            : `font-size:${fontPx}px;font-family:"IBM Plex Mono",monospace`;
+            ? `font-size:${fontPx}px;font-family:"IBM Plex Mono",monospace;fill:${dotColor};font-weight:${isStandard ? 700 : 400}`
+            : `font-size:${fontPx}px;font-family:"IBM Plex Mono",monospace;font-weight:${isStandard ? 700 : 400}`;
           const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
           label.setAttribute("text-anchor", "start");
           label.setAttribute("class", "viz-text");
@@ -2183,33 +2194,49 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         });
       }
 
-      // Process legend
-      if (useProcessColor && processList.length) {
+      // Standards and process legend
+      if (standardFamilyIds.size || (useProcessColor && processList.length)) {
         processLegend.hidden = false;
         clearNode(processLegend);
-        processList.forEach((proc) => {
-          const color = processColorMap.get(String(proc.id)) || "#7a8c8f";
-          const item = document.createElement("span");
-          item.className = "viz-process-legend-item";
-          const dot = document.createElement("span");
-          dot.className = "viz-process-legend-dot";
-          dot.style.background = color;
-          const lbl = document.createElement("span");
-          lbl.textContent = String(proc.name);
-          item.appendChild(dot);
-          item.appendChild(lbl);
-          processLegend.appendChild(item);
-        });
-        const noneItem = document.createElement("span");
-        noneItem.className = "viz-process-legend-item";
-        const noneDot = document.createElement("span");
-        noneDot.className = "viz-process-legend-dot";
-        noneDot.style.background = processColorMap.get("__none__");
-        const noneLbl = document.createElement("span");
-        noneLbl.textContent = "No process";
-        noneItem.appendChild(noneDot);
-        noneItem.appendChild(noneLbl);
-        processLegend.appendChild(noneItem);
+        if (standardFamilyIds.size) {
+          const standardItem = document.createElement("span");
+          standardItem.className = "viz-process-legend-item";
+          const standardDot = document.createElement("span");
+          standardDot.className = "viz-process-legend-dot";
+          standardDot.style.background = "#000000";
+          const standardLabel = document.createElement("span");
+          standardLabel.textContent = "Standard (official specification)";
+          standardLabel.style.fontWeight = "700";
+          standardLabel.style.color = "#000000";
+          standardItem.appendChild(standardDot);
+          standardItem.appendChild(standardLabel);
+          processLegend.appendChild(standardItem);
+        }
+        if (useProcessColor) {
+          processList.forEach((proc) => {
+            const color = processColorMap.get(String(proc.id)) || "#7a8c8f";
+            const item = document.createElement("span");
+            item.className = "viz-process-legend-item";
+            const dot = document.createElement("span");
+            dot.className = "viz-process-legend-dot";
+            dot.style.background = color;
+            const lbl = document.createElement("span");
+            lbl.textContent = String(proc.name);
+            item.appendChild(dot);
+            item.appendChild(lbl);
+            processLegend.appendChild(item);
+          });
+          const noneItem = document.createElement("span");
+          noneItem.className = "viz-process-legend-item";
+          const noneDot = document.createElement("span");
+          noneDot.className = "viz-process-legend-dot";
+          noneDot.style.background = processColorMap.get("__none__");
+          const noneLbl = document.createElement("span");
+          noneLbl.textContent = "No process";
+          noneItem.appendChild(noneDot);
+          noneItem.appendChild(noneLbl);
+          processLegend.appendChild(noneItem);
+        }
       } else {
         processLegend.hidden = true;
       }

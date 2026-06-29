@@ -9,16 +9,42 @@ references:
   year: 1998
   venue: NIST AES Submission
   url: https://csrc.nist.gov/projects/aes
-- id: bernstein_2008_salsa20
+- id: bernstein_2005_salsa20_spec
+  kind: specification
+  title: Salsa20 specification
+  authors:
+  - Daniel J. Bernstein
+  year: 2005
+  venue: Snuffle 2005 specification
+  url: https://cr.yp.to/snuffle/spec.pdf
+  notes: 'Complete definition dated 2005-04-27. Local copy: references/2005-salsa20.pdf.'
+- id: bernstein_2007_salsa20_family
   kind: article
-  title: The Salsa20 family of stream ciphers
+  title: The Salsa20 Family of Stream Ciphers
+  authors:
+  - Daniel J. Bernstein
+  year: 2007
+  venue: Manuscript dated 2007-12-25
+  url: https://cr.yp.to/snuffle/salsafamily-20071225.pdf
+  notes: 'Author manuscript dated 2007-12-25. Local copy: references/2007-salsa20-stream_cipher.pdf.'
+- id: bernstein_2008_salsa20_family_published
+  kind: article
+  title: The Salsa20 Family of Stream Ciphers
   authors:
   - Daniel J. Bernstein
   year: 2008
   venue: New Stream Cipher Designs, LNCS 4986, pp. 84–97
-  url: https://cr.yp.to/snuffle.html
-  notes: Chapter in 'New Stream Cipher Designs' (Robshaw & Billet, eds), Springer
-    2008; local copy references/2004-salsa20.pdf.
+  url: https://doi.org/10.1007/978-3-540-68351-3_8
+  notes: 'Published book chapter based on the manuscript dated 2007-12-25. Local copy: references/2008-salsa20-stream_cipher.pdf.'
+- id: bernstein_2011_xsalsa20
+  kind: specification
+  title: Extending the Salsa20 nonce
+  authors:
+  - Daniel J. Bernstein
+  year: 2011
+  venue: XSalsa20 specification, revision dated 2011-02-04
+  url: https://cr.yp.to/snuffle/xsalsa-20110204.pdf
+  notes: 'Defines XSalsa20 and supersedes the 2008-11-28 version. Local copy: references/2011-xsalsa20.pdf.'
 - id: bernstein_2008_chacha
   kind: article
   title: ChaCha, a variant of Salsa20
@@ -27,6 +53,7 @@ references:
   year: 2008
   venue: Workshop Record of SASC 2008
   url: https://cr.yp.to/chacha.html
+  notes: 'Original ChaCha specification. Local copy: references/2008-chacha.pdf.'
 - id: bogdanov_2007_present
   kind: article
   title: 'PRESENT: An Ultra-Lightweight Block Cipher'
@@ -88,6 +115,40 @@ references:
   status: active
   url: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-232.pdf
   notes: Section 3 gives the official permutation name "Ascon-p".
+- id: iso_iec_18033_3_2010
+  kind: standard
+  title: 'ISO/IEC 18033-3:2010 — Encryption algorithms — Part 3: Block ciphers'
+  year: 2010
+  organization: ISO/IEC
+  status: active
+  url: https://www.iso.org/standard/54531.html
+  notes: Official standard covering TDEA, MISTY1, CAST-128, HIGHT, AES, Camellia, and SEED; full text is closed-source.
+- id: iso_iec_29192_2_2019
+  kind: standard
+  title: 'ISO/IEC 29192-2:2019 — Lightweight cryptography — Part 2: Block ciphers'
+  year: 2019
+  organization: ISO/IEC
+  status: active
+  url: https://www.iso.org/standard/78477.html
+  notes: Official standard covering PRESENT, CLEFIA, and LEA; full text is closed-source.
+- id: rfc_2994_misty1
+  kind: standard
+  title: 'RFC 2994: A Description of the MISTY1 Encryption Algorithm'
+  year: 2000
+  organization: IETF
+  status: informational
+  url: https://www.rfc-editor.org/rfc/rfc2994
+- id: fleischmann_2009_sha3_classification
+  kind: article
+  title: Classification of the SHA-3 Candidates
+  authors:
+  - Ewan Fleischmann
+  - Christian Forler
+  - Michael Gorski
+  year: 2009
+  venue: Dagstuhl Seminar Proceedings 09031
+  url: https://doi.org/10.4230/DagSemProc.09031.5
+  notes: Comparative classification of first-round SHA-3 candidate construction attributes.
 - id: fips_46_3_1999_des
   kind: standard
   title: 'FIPS 46-3: Data Encryption Standard (DES)'
@@ -169,7 +230,7 @@ references:
   venue: AES Submission
   url: https://www.cl.cam.ac.uk/archive/rja14/Papers/serpent.pdf
 - id: matsui_et_al_2004_camellia
-  kind: article
+  kind: standard
   title: 'RFC 3713: A Description of the Camellia Encryption Algorithm'
   authors:
   - Mitsuru Matsui
@@ -234,7 +295,7 @@ references:
   venue: CHES 2009
   url: https://www.iacr.org/archive/ches2009/57470001/57470001.pdf
 - id: adams_1997_cast128
-  kind: article
+  kind: standard
   title: 'RFC 2144: The CAST-128 Encryption Algorithm'
   authors:
   - Carlisle Adams
@@ -242,7 +303,7 @@ references:
   venue: RFC 2144
   url: https://www.rfc-editor.org/rfc/rfc2144
 - id: adams_gilchrist_1999_cast256
-  kind: article
+  kind: standard
   title: 'RFC 2612: The CAST-256 Encryption Algorithm'
   authors:
   - Carlisle Adams
@@ -251,7 +312,7 @@ references:
   venue: RFC 2612
   url: https://www.rfc-editor.org/rfc/rfc2612
 - id: baldwin_rivest_1996_rc5
-  kind: article
+  kind: standard
   title: 'RFC 2040: The RC5, RC5-CBC, RC5-CBC-Pad, and RC5-CTS Algorithms'
   authors:
   - Robert Baldwin
@@ -260,7 +321,7 @@ references:
   venue: RFC 2040
   url: https://www.rfc-editor.org/rfc/rfc2040
 - id: lee_et_al_2005_seed
-  kind: article
+  kind: standard
   title: 'RFC 4269: The SEED Encryption Algorithm'
   authors:
   - Hyangjin Lee
@@ -272,7 +333,7 @@ references:
   venue: RFC 4269
   url: https://www.rfc-editor.org/rfc/rfc4269
 - id: lee_et_al_2010_aria
-  kind: article
+  kind: standard
   title: 'RFC 5794: A Description of the ARIA Encryption Algorithm'
   authors:
   - Jungkeun Lee
@@ -304,7 +365,7 @@ references:
   status: active
   url: http://www.gmbz.org.cn/upload/2018-04-04/1522788048733065051.pdf
 - id: yang_2021_sm_tls
-  kind: article
+  kind: standard
   title: 'RFC 8998: ShangMi (SM) Cipher Suites for TLS 1.3'
   authors:
   - Paul Yang
@@ -322,7 +383,7 @@ references:
   status: active
   url: https://www.3gpp.org/ftp/Specs/archive/35_series/35.202/
 - id: katagi_moriai_2011_clefia
-  kind: article
+  kind: standard
   title: 'RFC 6114: The 128-Bit Blockcipher CLEFIA'
   authors:
   - Masanobu Katagi
@@ -974,7 +1035,7 @@ references:
   notes: Primary source paper describing BEAR and LION as block-cipher constructions
     from a stream cipher and a hash function; local copy is references/1996-bear-lion-lioness.pdf.
 - id: belt_ref
-  kind: paper
+  kind: standard
   title: 'STB 34.101.31-2020: BelT Block Cipher'
   year: 2012
   venue: State Standard of the Republic of Belarus (STB 34.101.31)
@@ -1167,7 +1228,7 @@ references:
   venue: NIST Lightweight Cryptography Standardization, Round 1
   url: https://csrc.nist.gov/projects/lightweight-cryptography
 - id: gost_28147_89_ref
-  kind: paper
+  kind: standard
   title: GOST 28147-89 (Magma)
   authors:
   - Josef Pieprzyk
@@ -1223,7 +1284,7 @@ references:
   url: https://link.springer.com/chapter/10.1007/3-540-60865-6_41
   notes: Primary publication reference for ISAAC.
 - id: kcipher_2_ref
-  kind: paper
+  kind: standard
   title: KCipher-2 Specification
   year: 2013
   venue: RFC 7008 / CRYPTREC
@@ -1409,7 +1470,7 @@ references:
   url: https://www.cryptrec.go.jp/cryptrec_03_spec_cypherlist_files/PDF/10_03spec.pdf
   notes: 'Japanese stream cipher, CRYPTREC candidate. Local copy: references/2001-multi_s01.pdf.'
 - id: multi2_ref
-  kind: paper
+  kind: standard
   title: 'MULTI2: An Encryption Algorithm for Satellite Broadcasting'
   year: 1988
   notes: Original MULTI2 paper. Standardised as ISO/IEC 9979-0002.
@@ -1640,7 +1701,7 @@ references:
   url: https://doi.org/10.1007/3-540-68697-5_11
   notes: Derived from references/1996-shark.pdf.
 - id: skipjack_ref
-  kind: paper
+  kind: standard
   title: SKIPJACK and KEA Algorithm Specifications
   authors:
   - National Security Agency
@@ -1669,7 +1730,7 @@ references:
   url: https://link.springer.com/chapter/10.1007/3-540-36563-X_24
   notes: Primary bibliographic pointer for SNOW 2.0; local supporting PDF is references/2012-snow2_snow3g_sliding.pdf.
 - id: snow_3g_ref
-  kind: paper
+  kind: standard
   title: Specification of the 3GPP Confidentiality and Integrity Algorithms UEA2 &
     UIA2
   authors:
@@ -2008,7 +2069,7 @@ references:
   url: http://www.jcr.cacrnet.org.cn/CN/PDF/10.13868/j.cnki.jcr.000343
   notes: 'SPRING block cipher paper (DOI: 10.13868/j.cnki.jcr.000343).'
 - id: gcm_ref
-  kind: paper
+  kind: standard
   title: The Galois/Counter Mode of Operation (GCM)
   authors:
   - David A. McGrew
@@ -2018,7 +2079,7 @@ references:
   url: https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38d.pdf
   notes: Authenticated encryption mode for block ciphers. NIST standard.
 - id: chacha20_poly1305_ref
-  kind: paper
+  kind: standard
   title: ChaCha20 and Poly1305 for IETF Protocols
   authors:
   - Adam Langley
@@ -2029,7 +2090,7 @@ references:
   url: https://tools.ietf.org/html/rfc7539
   notes: AEAD mode combining ChaCha20 stream cipher and Poly1305 MAC.
 - id: cbc_ref
-  kind: paper
+  kind: standard
   title: Recommendation for Block Cipher Modes of Operation
   authors:
   - Morris Dworkin
@@ -2050,7 +2111,7 @@ references:
   url: https://eprint.iacr.org/2000/057
   notes: Counter mode converts block ciphers to stream ciphers.
 - id: hmac_ref
-  kind: paper
+  kind: standard
   title: 'HMAC: Keyed-Hashing for Message Authentication'
   authors:
   - Mihir Bellare
@@ -2061,7 +2122,7 @@ references:
   url: https://tools.ietf.org/html/rfc2104
   notes: Universal construction for message authentication codes.
 - id: pbkdf2_ref
-  kind: paper
+  kind: standard
   title: 'PKCS #5: Password-Based Cryptography Specification Version 2.0'
   authors:
   - Burt Kaliski

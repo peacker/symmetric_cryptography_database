@@ -41,8 +41,6 @@ processes:
         kind: outcome
         participants:
           - family_id: rijndael
-          - family_id: aes
-            note: AES is the standardized selection of Rijndael restricted to 128-bit block size.
 
   - id: nessie_competition_european_commission_2000_2003
     name: NESSIE Competition

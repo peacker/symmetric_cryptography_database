@@ -109,22 +109,53 @@ primitives:
     block_size_bits: 128
     output_size_bits: 128
 - id: salsa20
-  name: Salsa20 Block Function
+  name: Salsa20
   family_id: salsa
-  primitive_type: permutation
+  primitive_type: stream_cipher
+  reference_ids:
+  - bernstein_2005_salsa20_spec
+  - bernstein_2007_salsa20_family
   characteristics:
     key_size_bits: 256
     nonce_size_bits: 64
     rounds: 20
     block_size_bits: 512
     output_size_bits: 512
-  notes: Salsa20 block function takes a 256-bit key, 64-bit nonce, and a 64-bit block
-    counter to produce a 512-bit (64-byte) output. Applies 20 quarterrounds in a symmetric
-    pattern.
+  notes: Salsa20 uses a 256-bit key, 64-bit nonce, and 64-bit block counter to generate
+    512-bit keystream blocks with 20 ARX rounds.
+- id: snuffle_2005
+  name: Snuffle 2005
+  family_id: salsa
+  primitive_type: stream_cipher
+  reference_ids:
+  - bernstein_2005_salsa20_spec
+  characteristics:
+    key_size_bits: 256
+    nonce_size_bits: 64
+    rounds: 20
+    block_size_bits: 512
+    output_size_bits: 512
+  notes: Snuffle 2005 is the original name for the Salsa20 encryption function.
+- id: xsalsa20
+  name: XSalsa20
+  family_id: salsa
+  primitive_type: stream_cipher
+  reference_ids:
+  - bernstein_2011_xsalsa20
+  characteristics:
+    key_size_bits: 256
+    nonce_size_bits: 192
+    rounds: 20
+    block_size_bits: 512
+    output_size_bits: 512
+  notes: XSalsa20 uses HSalsa20 to derive a subkey, extending Salsa20 to a 192-bit nonce.
 - id: chacha20
   name: ChaCha20 Block Function
   family_id: chacha
   primitive_type: permutation
+  reference_ids:
+  - bernstein_2008_chacha
+  - rfc_8439
   characteristics:
     key_size_bits: 256
     nonce_size_bits: 96
