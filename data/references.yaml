@@ -1,5 +1,81 @@
 version: 1
 references:
+- id: koo_et_al_2018_cham
+  kind: paper
+  title: 'CHAM: A Family of Lightweight Block Ciphers for Resource-Constrained Devices'
+  authors:
+  - Bonwook Koo
+  - Dongyoung Roh
+  - Hyeonjin Kim
+  - Younghoon Jung
+  - Dong-Geon Lee
+  - Daesung Kwon
+  year: 2018
+  venue: Information Security and Cryptology – ICISC 2017, LNCS 10779, pp. 3–25
+  publisher: Springer
+  url: https://doi.org/10.1007/978-3-319-78556-1_1
+  notes: Original CHAM family publication. Publisher PDF was not openly retrievable;
+    local copy pending as references/2018-cham.pdf.
+- id: roh_et_al_2020_cham_revised
+  kind: paper
+  title: Revised Version of Block Cipher CHAM
+  authors:
+  - Dongyoung Roh
+  - Bonwook Koo
+  - Younghoon Jung
+  - Il Woong Jeong
+  - Dong-Geon Lee
+  - Daesung Kwon
+  - Woo-Hwan Kim
+  year: 2020
+  venue: Information Security and Cryptology – ICISC 2019, LNCS 11975, pp. 1–19
+  publisher: Springer
+  url: https://doi.org/10.1007/978-3-030-40921-0_1
+  notes: Revised CHAM specification increasing the round counts. Publisher PDF was
+    not openly retrievable; local copy pending as references/2020-cham-revised.pdf.
+- id: shin_et_al_2025_saecham
+  kind: article
+  title: 'SAECHAM: Secure and Efficient Lightweight Block Cipher CHAM Variant'
+  authors:
+  - Myoungsu Shin
+  - Hanbeom Shin
+  - Insung Kim
+  - Sunyeop Kim
+  - Dongjae Lee
+  - Deukjo Hong
+  - Jaechul Sung
+  - Seokhie Hong
+  year: 2025
+  venue: IEEE Internet of Things Journal, vol. 12, no. 15, pp. 29989–30002
+  publisher: IEEE
+  url: https://doi.org/10.1109/JIOT.2025.3569746
+  notes: SAECHAM publication (IEEE document 11003085). Publisher PDF was not openly
+    retrievable; local copy pending as references/2025-saecham.pdf.
+- id: cryptopp_cham
+  kind: documentation
+  title: CHAM
+  organization: Crypto++
+  year: 2018
+  url: https://www.cryptopp.com/wiki/CHAM
+  notes: Crypto++ documentation and implementation notes for CHAM.
+- id: jeong_cham_implementation
+  kind: software
+  title: CHAM reference implementations in crypto-primitives
+  authors:
+  - Il Woong Jeong
+  year: 2020
+  url: https://github.com/ilwoong/crypto-primitives/tree/master/cham
+  notes: C implementation of the revised CHAM-64/128, CHAM-128/128, and CHAM-128/256
+    parameter sets.
+- id: shin_saecham_implementations
+  kind: software
+  title: SAECHAM implementations
+  authors:
+  - Myoungsu Shin
+  year: 2025
+  url: https://github.com/dampers/SAECHAM-implementations
+  notes: Optimized SAECHAM implementations for AVR, MSP430, ARM Cortex-M3/M4, and
+    SIMD platforms.
 - id: daemen_rijmen_1998_rijndael
   kind: article
   title: 'AES Proposal: Rijndael'

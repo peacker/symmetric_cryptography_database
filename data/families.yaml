@@ -1,5 +1,102 @@
 version: 1
 families:
+- id: cham
+  name: CHAM
+  construction_ids:
+  - generalized_feistel
+  round_ids:
+  - cham_round
+  target_applications:
+  - lightweight
+  - embedded
+  - iot
+  - resource_constrained_devices
+  characteristics:
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - koo_et_al_2018_cham
+  - cryptopp_cham
+  process_participations: []
+  influences: []
+  innovative_ideas:
+  - id: cham_four_branch_arx
+    name: Four-branch ARX generalized Feistel design
+    note: A compact four-word generalized Feistel structure using only modular addition,
+      fixed rotations, XOR, and round counters.
+  notes: The original CHAM family comprises CHAM-64/128, CHAM-128/128, and CHAM-128/256.
+    The respective original round counts are 80, 80, and 96. CHAM is an S-box-free
+    ARX design optimized for resource-constrained devices.
+- id: cham_revised
+  name: CHAM Revised
+  construction_ids:
+  - generalized_feistel
+  round_ids:
+  - cham_revised_round
+  target_applications:
+  - lightweight
+  - embedded
+  - iot
+  - resource_constrained_devices
+  characteristics:
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - roh_et_al_2020_cham_revised
+  - jeong_cham_implementation
+  process_participations: []
+  influences:
+  - source_family_id: cham
+    relations:
+    - improvement_of
+    - variant_of
+    - same_round_function
+    note: The revised specification retains the CHAM ARX round structure while increasing
+      the round counts to strengthen its security margins.
+  notes: Revised CHAM uses 88 rounds for CHAM-64/128, 112 rounds for CHAM-128/128,
+    and 120 rounds for CHAM-128/256. The family retains four state words and the
+    addition, rotation, XOR, subkey, and round-counter operations of CHAM.
+- id: saecham
+  name: SAECHAM
+  construction_ids:
+  - generalized_feistel
+  round_ids:
+  - saecham_round
+  target_applications:
+  - lightweight
+  - embedded
+  - iot
+  - resource_constrained_devices
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: add_mod
+      params:
+        modulus: 65536
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - shin_et_al_2025_saecham
+  - shin_saecham_implementations
+  process_participations: []
+  influences:
+  - source_family_id: cham
+    relations:
+    - improvement_of
+    - variant_of
+    - inspired_by
+    note: SAECHAM restructures the operation order and rotation choices of CHAM-64/128
+      for improved security and performance on constrained processors.
+  notes: SAECHAM (Secure and Efficient CHAM) is an 88-round, 64-bit block cipher
+    with a 128-bit key. It adopts the CHAM-RXA operation ordering selected from
+    analyzed CHAM variants and targets efficient 8-, 16-, and 32-bit implementations.
 - id: rijndael
   name: Rijndael
   construction_ids:

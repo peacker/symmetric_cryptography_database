@@ -1,5 +1,54 @@
 version: 1
 rounds:
+- id: cham_round
+  name: CHAM round
+  kind: full_round
+  spec:
+    state_model:
+      words: 4
+      word_bits: 16_or_32
+      state_bits: 64_or_128
+    component_flow:
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: add_mod
+    - component_id: rotation_fixed
+    constant_injection: round_counter_and_subkey
+  notes: Original CHAM ARX round over four words. Even and odd rounds alternate
+    one- and eight-bit rotations; the word size determines the addition modulus.
+- id: cham_revised_round
+  name: Revised CHAM round
+  kind: full_round
+  spec:
+    state_model:
+      words: 4
+      word_bits: 16_or_32
+      state_bits: 64_or_128
+    component_flow:
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: add_mod
+    - component_id: rotation_fixed
+    constant_injection: round_counter_and_subkey
+  notes: Revised CHAM retains the original alternating ARX round structure and uses
+    increased round counts for all three parameter sets.
+- id: saecham_round
+  name: SAECHAM round
+  kind: full_round
+  spec:
+    state_model:
+      words: 4
+      word_bits: 16
+      state_bits: 64
+    component_flow:
+    - component_id: rotation_fixed
+    - component_id: xor
+    - component_id: add_mod
+      params:
+        modulus: 65536
+    constant_injection: round_counter_and_subkey
+  notes: SAECHAM's CHAM-RXA-derived round restructures the order of rotation, XOR,
+    and 16-bit modular addition. Even and odd rounds use distinct fixed rotations.
 - id: rijndael_aes_round
   name: Rijndael/AES Full Round
   kind: full_round

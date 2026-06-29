@@ -1,5 +1,89 @@
 version: 1
 primitives:
+- id: cham_64_128
+  name: CHAM-64/128
+  family_id: cham
+  primitive_type: block_cipher
+  reference_ids:
+  - koo_et_al_2018_cham
+  - cryptopp_cham
+  characteristics:
+    block_size_bits: 64
+    key_size_bits: 128
+    rounds: 80
+    output_size_bits: 64
+- id: cham_128_128
+  name: CHAM-128/128
+  family_id: cham
+  primitive_type: block_cipher
+  reference_ids:
+  - koo_et_al_2018_cham
+  - cryptopp_cham
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 128
+    rounds: 80
+    output_size_bits: 128
+- id: cham_128_256
+  name: CHAM-128/256
+  family_id: cham
+  primitive_type: block_cipher
+  reference_ids:
+  - koo_et_al_2018_cham
+  - cryptopp_cham
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 256
+    rounds: 96
+    output_size_bits: 128
+- id: cham_revised_64_128
+  name: CHAM-64/128 (Revised)
+  family_id: cham_revised
+  primitive_type: block_cipher
+  reference_ids:
+  - roh_et_al_2020_cham_revised
+  - jeong_cham_implementation
+  characteristics:
+    block_size_bits: 64
+    key_size_bits: 128
+    rounds: 88
+    output_size_bits: 64
+- id: cham_revised_128_128
+  name: CHAM-128/128 (Revised)
+  family_id: cham_revised
+  primitive_type: block_cipher
+  reference_ids:
+  - roh_et_al_2020_cham_revised
+  - jeong_cham_implementation
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 128
+    rounds: 112
+    output_size_bits: 128
+- id: cham_revised_128_256
+  name: CHAM-128/256 (Revised)
+  family_id: cham_revised
+  primitive_type: block_cipher
+  reference_ids:
+  - roh_et_al_2020_cham_revised
+  - jeong_cham_implementation
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 256
+    rounds: 120
+    output_size_bits: 128
+- id: saecham_64_128
+  name: SAECHAM-64/128
+  family_id: saecham
+  primitive_type: block_cipher
+  reference_ids:
+  - shin_et_al_2025_saecham
+  - shin_saecham_implementations
+  characteristics:
+    block_size_bits: 64
+    key_size_bits: 128
+    rounds: 88
+    output_size_bits: 64
 - id: rijndael_128_128
   name: Rijndael-128/128
   family_id: rijndael

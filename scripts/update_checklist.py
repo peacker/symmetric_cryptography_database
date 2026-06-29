@@ -45,6 +45,8 @@ TYPE_MAP = {
     "cast-128":                     "block_cipher",
     "cast-256":                     "block_cipher",
     "chacha":                       "stream_cipher",
+    "cham":                         "block_cipher",
+    "cham revised":                 "block_cipher",
     "chaskey":                      "mac",
     "chilow":                       "tweakable_block_cipher",
     "cilipadi":                     "aead",
@@ -170,6 +172,7 @@ TYPE_MAP = {
     "rijndael":                     "block_cipher",
     "romulus":                      "aead",
     "saeaes":                       "aead",
+    "saecham":                      "block_cipher",
     "safer":                        "block_cipher",
     "safer+":                       "block_cipher",
     "safer++":                      "block_cipher",
@@ -266,6 +269,10 @@ TYPE_MAP = {
 #   pdf_stem: stem of file in references/ (without YYYY- prefix), or "" if none
 # ─────────────────────────────────────────────────────────────────────────────
 NEW_ENTRIES = [
+    # CHAM family
+    ("[x]", "CHAM",                     "CHAM",                 "block_cipher",         "2018", "https://link.springer.com/chapter/10.1007/978-3-319-78556-1_1", "Full", "2018-cham"),
+    ("[x]", "CHAM Revised",             "CHAM Revised",         "block_cipher",         "2020", "https://link.springer.com/chapter/10.1007/978-3-030-40921-0_1", "Full", "2020-cham-revised"),
+    ("[x]", "SAECHAM",                  "SAECHAM",              "block_cipher",         "2025", "https://ieeexplore.ieee.org/document/11003085", "Full", "2025-saecham"),
     # ── From cryptospecs/symmetrical ────────────────────────────────────────
     ("[ ]", "ACHTERBAHN",               "ACHTERBAHN",           "stream_cipher",        "2005", "https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/achterbahn.pdf", "Full", "2005-achterbahn"),
     ("[ ]", "Blowfish",                 "Blowfish",             "block_cipher",         "1994", "https://www.schneier.com/academic/blowfish/", "TODO", "1994-blowfish"),
@@ -341,6 +348,8 @@ SCHEME_TYPE_OVERRIDE = {
     "CAST-128":                         "block_cipher",
     "CAST-256":                         "block_cipher",
     "ChaCha":                           "stream_cipher",
+    "CHAM":                             "block_cipher",
+    "CHAM Revised":                     "block_cipher",
     "Chaskey":                          "mac",
     "ChiLow":                           "tweakable_block_cipher",
     "CiliPadi":                         "aead",
@@ -466,6 +475,7 @@ SCHEME_TYPE_OVERRIDE = {
     "Rijndael":                         "block_cipher",
     "Romulus":                          "aead",
     "SAEAES":                           "aead",
+    "SAECHAM":                          "block_cipher",
     "SAFER":                            "block_cipher",
     "SAFER+":                           "block_cipher",
     "SAFER++":                          "block_cipher",
