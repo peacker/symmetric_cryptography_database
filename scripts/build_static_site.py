@@ -270,7 +270,7 @@ def build_site() -> None:
 
       <section class=\"panel view-panel\" data-view=\"genealogy\">
         <h2>Genealogy</h2>
-        <p class=\"small-note\">Design lineage and influence graph. X axis = publication year; arrows show influence between families.</p>
+        <p class=\"small-note\">Design lineage and influence graph. Arrows flow from ancestor (top) to descendant (bottom); generation depth determined by the longest influence path.</p>
         <div class=\"toolbar viz-toolbar\">
           <label class=\"toolbar-field\">Color nodes by
             <select id=\"genColorBy\">
@@ -280,6 +280,10 @@ def build_site() -> None:
             </select>
           </label>
           <div class=\"viz-display-group\">
+            <div class=\"viz-name-section\">
+              <span class=\"viz-name-section-label\">Font size</span>
+              <div class=\"viz-name-mode\"><button id=\"genFontMinus\" type=\"button\" class=\"name-mode-btn\">A-</button><button id=\"genFontPlus\" type=\"button\" class=\"name-mode-btn\">A+</button><button id=\"genFontReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genFontValue\" class=\"viz-ctrl-value\">12px</span></div>
+            </div>
             <label class=\"inline-check\"><input id=\"genConnectedOnly\" type=\"checkbox\" checked /> Only connected families</label>
             <label class=\"inline-check\"><input id=\"genStandardsOnly\" type=\"checkbox\" /> Standards only</label>
           </div>
@@ -2479,7 +2483,14 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const genProcessNone = document.getElementById("genProcessNone");
     const genEdgeInfo = document.getElementById("genEdgeInfo");
     const genLegend = document.getElementById("genLegend");
+    const genFontMinus = document.getElementById("genFontMinus");
+    const genFontPlus = document.getElementById("genFontPlus");
+    const genFontReset = document.getElementById("genFontReset");
+    const genFontValue = document.getElementById("genFontValue");
     if (!genPlot || !genPlotScroll || !genFrame) return;
+
+    const GEN_BASE_FONT = 12;
+    let genFontPx = GEN_BASE_FONT;
 
     // ── Data ─────────────────────────────────────────────────────────
     const tables = data.tables || {};
@@ -2612,18 +2623,17 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       return true;
     }
 
-    // ── Layout constants ──────────────────────────────────────────────
-    const NODE_H = 22;
-    const ROW_GAP = 36;
+    // ── Layout constants (some are dynamic on genFontPx) ─────────────
     const COL_GAP = 10;
     const TOP_PAD = 20;
     const SIDE_PAD = 20;
-    const NODE_FONT = 11;
     const NODE_PAD_X = 7;
-    const ISO_W = 90;
     const BASE_EDGE_INFO = "Hover an influence arrow to see relation details.";
 
-    function nw(name) { return Math.min(152, Math.max(54, Math.ceil(String(name).length * NODE_FONT * 0.58) + NODE_PAD_X * 2)); }
+    function nodeH() { return Math.round(genFontPx * 1.85); }
+    function rowGap() { return Math.round(genFontPx * 4.5); }
+    function isoW() { return Math.round(genFontPx * 7.5); }
+    function nw(name) { return Math.min(Math.round(genFontPx * 12.5), Math.max(Math.round(genFontPx * 4.5), Math.ceil(String(name).length * genFontPx * 0.58) + NODE_PAD_X * 2)); }
 
     const SVG_NS = "http://www.w3.org/2000/svg";
     function svgEl(tag, attrs) {
@@ -2687,6 +2697,8 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
       const visEdges = influences.filter((e) => visSet.has(String(e.source_family_id || "")) && visSet.has(String(e.target_family_id || "")));
 
+      const NH = nodeH(); const RG = rowGap(); const IW = isoW();
+
       const inE = new Map(visIds.map((n) => [n, []])); const outE = new Map(visIds.map((n) => [n, []]));
       visEdges.forEach((e) => { const src = String(e.source_family_id); const tgt = String(e.target_family_id); inE.get(tgt).push(src); outE.get(src).push(tgt); });
 
@@ -2706,11 +2718,11 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       function layerW(lg) { return lg.reduce((s, n) => s + nw(String((genFamById.get(n) || {}).name || n)) + COL_GAP, 0) - (lg.length ? COL_GAP : 0); }
       const maxLW = numLayers ? Math.max(...layerGroups.map(layerW)) : 0;
 
-      const ISO_COLS = Math.max(1, Math.floor((Math.max(maxLW, 400) + COL_GAP) / (ISO_W + COL_GAP)));
+      const ISO_COLS = Math.max(1, Math.floor((Math.max(maxLW, 400) + COL_GAP) / (IW + COL_GAP)));
       const isoRows = isoNodes.length ? Math.ceil(isoNodes.length / ISO_COLS) : 0;
-      const dagH = numLayers ? numLayers * (NODE_H + ROW_GAP) - ROW_GAP : 0;
-      const isoH = isoRows ? ROW_GAP * 2 + isoRows * (NODE_H + COL_GAP) : 0;
-      const canvasW = Math.max(600, maxLW + SIDE_PAD * 2, ISO_COLS * (ISO_W + COL_GAP) - COL_GAP + SIDE_PAD * 2);
+      const dagH = numLayers ? numLayers * (NH + RG) - RG : 0;
+      const isoH = isoRows ? RG * 2 + isoRows * (NH + COL_GAP) : 0;
+      const canvasW = Math.max(600, maxLW + SIDE_PAD * 2, ISO_COLS * (IW + COL_GAP) - COL_GAP + SIDE_PAD * 2);
       const canvasH = Math.max(260, TOP_PAD + dagH + isoH + 20);
 
       genPlot.setAttribute("viewBox", `0 0 ${canvasW} ${canvasH}`);
@@ -2720,7 +2732,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
       const posX = new Map(); const posY = new Map();
       layerGroups.forEach((lg, li) => {
-        const y = TOP_PAD + li * (NODE_H + ROW_GAP);
+        const y = TOP_PAD + li * (NH + RG);
         const totalW = layerW(lg);
         let x = (canvasW - totalW) / 2;
         lg.forEach((n) => {
@@ -2729,29 +2741,30 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         });
       });
 
-      const isoBase = TOP_PAD + dagH + (numLayers ? ROW_GAP * 2 : 0);
+      const isoBase = TOP_PAD + dagH + (numLayers ? RG * 2 : 0);
       isoNodes.forEach((n, idx) => {
         const col = idx % ISO_COLS; const row = Math.floor(idx / ISO_COLS);
-        posX.set(n, SIDE_PAD + col * (ISO_W + COL_GAP) + ISO_W / 2);
-        posY.set(n, isoBase + row * (NODE_H + COL_GAP));
+        posX.set(n, SIDE_PAD + col * (IW + COL_GAP) + IW / 2);
+        posY.set(n, isoBase + row * (NH + COL_GAP));
       });
 
+      // Arrow marker: refX=10 so tip is at path endpoint (not sticking past it)
       const defs = svgEl("defs", {});
-      const marker = svgEl("marker", { id: "genArrow", markerWidth: "10", markerHeight: "7", markerUnits: "userSpaceOnUse", refX: "9", refY: "3.5", orient: "auto" });
-      marker.appendChild(svgEl("path", { d: "M0,0 L10,3.5 L0,7 z", fill: "rgba(55,75,80,0.75)" }));
+      const marker = svgEl("marker", { id: "genArrow", markerWidth: "10", markerHeight: "7", markerUnits: "userSpaceOnUse", refX: "10", refY: "3.5", orient: "auto" });
+      marker.appendChild(svgEl("path", { d: "M0,0 L10,3.5 L0,7 z", fill: "rgba(55,75,80,0.78)" }));
       defs.appendChild(marker); genPlot.appendChild(defs);
 
       const stripes = ["rgba(231,244,248,0.52)", "rgba(248,244,231,0.52)"];
       layerGroups.forEach((lg, li) => {
-        const y = TOP_PAD + li * (NODE_H + ROW_GAP) - 7;
-        genPlot.appendChild(svgEl("rect", { x: "0", y: String(y), width: String(canvasW), height: String(NODE_H + 14), fill: stripes[li % 2] }));
-        const genLbl = svgEl("text", { x: String(canvasW - 5), y: String(y + NODE_H * 0.65 + 7), "text-anchor": "end", style: "font-size:9px;fill:#8a9ea2;font-family:sans-serif" });
+        const y = TOP_PAD + li * (NH + RG) - 7;
+        genPlot.appendChild(svgEl("rect", { x: "0", y: String(y), width: String(canvasW), height: String(NH + 14), fill: stripes[li % 2] }));
+        const genLbl = svgEl("text", { x: String(canvasW - 5), y: String(y + NH * 0.65 + 7), "text-anchor": "end", style: "font-size:9px;fill:#8a9ea2;font-family:sans-serif" });
         genLbl.textContent = `gen ${li}`;
         genPlot.appendChild(genLbl);
       });
 
       if (isoNodes.length && numLayers) {
-        const sepY = isoBase - ROW_GAP;
+        const sepY = isoBase - RG;
         genPlot.appendChild(svgEl("line", { x1: String(SIDE_PAD), x2: String(canvasW - SIDE_PAD), y1: String(sepY), y2: String(sepY), stroke: "#c8c6b8", "stroke-width": "1", "stroke-dasharray": "4 3" }));
         const sepLbl = svgEl("text", { x: String(SIDE_PAD), y: String(sepY - 4), class: "viz-label", style: "font-size:9px;fill:#8a9ea2" });
         sepLbl.textContent = "No visible influence links";
@@ -2762,10 +2775,10 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       visEdges.forEach((e) => {
         const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
         if (!posX.has(src) || !posX.has(tgt)) return;
-        const sx = posX.get(src); const sy = posY.get(src) + NODE_H;
-        const tx = posX.get(tgt); const ty = posY.get(tgt) - 9;
-        const vGap = Math.max(ROW_GAP, ty - sy);
-        const cpY = Math.min(vGap * 0.5, ROW_GAP + 14);
+        const sx = posX.get(src); const sy = posY.get(src) + NH;   // bottom of source
+        const tx = posX.get(tgt); const ty = posY.get(tgt);         // top of target (arrow tip here)
+        const vGap = Math.max(RG, ty - sy);
+        const cpY = Math.min(vGap * 0.48, RG * 0.85);
         const pd = `M ${sx} ${sy} C ${sx} ${sy + cpY}, ${tx} ${ty - cpY}, ${tx} ${ty}`;
 
         const rels = parseJsonArray(e.relations_json);
@@ -2790,20 +2803,20 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const cx = posX.get(fid); const cy = posY.get(fid); if (cx === undefined || cy === undefined) return;
         const isIso = !dagSet.has(fid); const isStd = stdFamIds.has(fid);
         const name = String(fam.name || fid);
-        const w = isIso ? ISO_W : nw(name);
+        const w = isIso ? IW : nw(name);
         const color = nodeColor(fid);
         const famTypes = Array.from(famToTypes.get(fid) || []).sort().join(", ") || "—";
         const famConstrs = Array.from(famToConstrs.get(fid) || []).sort().join(", ") || "—";
         const pid = genFamilyProcessMap[fid]; const proc = pid ? genProcessList.find((p) => String(p.id) === pid) : null;
         const tip = [`${name} (${fam.year})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : []), ...(fam.notes ? [fam.notes] : [])].join("\\n");
 
-        const rect = svgEl("rect", { x: String(cx - w / 2), y: String(cy), width: String(w), height: String(NODE_H), rx: "4", ry: "4", fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.22)", "stroke-width": isStd ? "2" : "1", opacity: isIso ? "0.58" : "1" });
+        const rect = svgEl("rect", { x: String(cx - w / 2), y: String(cy), width: String(w), height: String(NH), rx: "4", ry: "4", fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.22)", "stroke-width": isStd ? "2" : "1", opacity: isIso ? "0.58" : "1" });
         const rt = svgEl("title", {}); rt.textContent = tip; rect.appendChild(rt);
         genPlot.appendChild(rect);
 
-        const maxCh = Math.max(4, Math.floor((w - NODE_PAD_X * 2) / (NODE_FONT * 0.56)));
+        const maxCh = Math.max(4, Math.floor((w - NODE_PAD_X * 2) / (genFontPx * 0.56)));
         const disp = name.length <= maxCh ? name : name.slice(0, Math.max(1, maxCh - 1)) + "…";
-        const lbl = svgEl("text", { x: String(cx), y: String(cy + NODE_H * 0.67), "text-anchor": "middle", style: `font-size:${NODE_FONT}px;font-family:"IBM Plex Mono",monospace;fill:#fff;pointer-events:none;font-weight:${isStd ? 700 : 400};opacity:${isIso ? "0.8" : "1"}` });
+        const lbl = svgEl("text", { x: String(cx), y: String(cy + NH * 0.67), "text-anchor": "middle", style: `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:#fff;pointer-events:none;font-weight:${isStd ? 700 : 400};opacity:${isIso ? "0.8" : "1"}` });
         lbl.textContent = disp; genPlot.appendChild(lbl);
       });
 
@@ -2839,6 +2852,18 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     genYearReset.addEventListener("click", () => {
       if (!genYrBounds) return;
       genYearStart.value = String(genYrBounds.min); genYearEnd.value = String(genYrBounds.max); render();
+    });
+    if (genFontMinus) genFontMinus.addEventListener("click", () => {
+      genFontPx = Math.max(8, genFontPx - 1);
+      if (genFontValue) genFontValue.textContent = `${genFontPx}px`; render();
+    });
+    if (genFontPlus) genFontPlus.addEventListener("click", () => {
+      genFontPx = Math.min(16, genFontPx + 1);
+      if (genFontValue) genFontValue.textContent = `${genFontPx}px`; render();
+    });
+    if (genFontReset) genFontReset.addEventListener("click", () => {
+      genFontPx = GEN_BASE_FONT;
+      if (genFontValue) genFontValue.textContent = `${genFontPx}px`; render();
     });
 
     initFilters();
