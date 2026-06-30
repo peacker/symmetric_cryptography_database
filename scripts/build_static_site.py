@@ -286,7 +286,7 @@ def build_site() -> None:
             </div>
             <div class=\"viz-name-section\">
               <span class=\"viz-name-section-label\">Radius</span>
-              <div class=\"viz-name-mode\"><button id=\"genRadiusMinus\" type=\"button\" class=\"name-mode-btn\">R−</button><button id=\"genRadiusPlus\" type=\"button\" class=\"name-mode-btn\">R+</button><button id=\"genRadiusReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genRadiusValue\" class=\"viz-ctrl-value\">100%</span></div>
+              <div class=\"viz-name-mode\"><button id=\"genRadiusMinus\" type=\"button\" class=\"name-mode-btn\">R−</button><button id=\"genRadiusPlus\" type=\"button\" class=\"name-mode-btn\">R+</button><button id=\"genRadiusReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genRadiusValue\" class=\"viz-ctrl-value\">8ch</span></div>
             </div>
             <div class=\"viz-name-section\">
               <span class=\"viz-name-section-label\">Font size</span>
@@ -294,7 +294,7 @@ def build_site() -> None:
             </div>
             <label class=\"inline-check\"><input id=\"genConnectedOnly\" type=\"checkbox\" checked /> Only connected families</label>
             <label class=\"inline-check\"><input id=\"genStandardsOnly\" type=\"checkbox\" /> Standards only</label>
-            <label class=\"inline-check\"><input id=\"genShowBullets\" type=\"checkbox\" checked /> Show bullets</label>
+            <label class=\"inline-check\"><input id=\"genShowBullets\" type=\"checkbox\" /> Show bullets</label>
           </div>
         </div>
         <div class=\"viz-secondary-controls\">
@@ -2508,7 +2508,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const GEN_BASE_FONT = 12;
     let genFontPx = GEN_BASE_FONT;
     let genLayoutMode = "layered";
-    let genRadiusScale = 1.0;
+    let genNumChars = 8;
 
     // ── Data ─────────────────────────────────────────────────────────
     const tables = data.tables || {};
@@ -2883,11 +2883,13 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       const maxY = allYears.length ? Math.max(...allYears) : 2025;
       const yPad = Math.max(3, Math.round((maxY - minY) * 0.07));
       const y0 = minY - yPad; const y1 = maxY + yPad;
-      const baseDiam = Math.max(1000, dagNodes.length * 24);
-      const diam = Math.round(baseDiam * genRadiusScale);
+      const charW = genFontPx * 0.58;
+      const decadeGap = genNumChars * charW;
+      const R_MIN = 2;
+      function yr2r(yr) { return R_MIN + Math.max(0, yr - y0) * decadeGap / 10; }
+      const R_MAX = yr2r(y1);
+      const diam = Math.max(400, 2 * Math.ceil(R_MAX + 110));
       const rcx = diam / 2; const rcy = diam / 2;
-      const R_MIN = Math.round(genFontPx * 1.8); const R_MAX = diam / 2 - 100;
-      function yr2r(yr) { return R_MIN + Math.max(0, Math.min(1, (yr - y0) / Math.max(1, y1 - y0))) * (R_MAX - R_MIN); }
 
       // Polar (deg, 0=top clockwise) → cartesian SVG
       function pol(r, deg) {
@@ -2916,7 +2918,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       for (let yr = d1; yr <= d2; yr += 10) {
         const r = yr2r(yr);
         genPlot.appendChild(svgEl("circle", { cx: String(rcx), cy: String(rcy), r: String(r.toFixed(1)), fill: "none", stroke: "#e8e6dc", "stroke-width": "0.8" }));
-        const tp = pol(r + 2, 0);
+        const tp = pol(Math.max(r + 2, genFontPx * 0.8), 0);
         const rl = svgEl("text", { x: String(tp.x.toFixed(1)), y: String(tp.y.toFixed(1)), "text-anchor": "middle", style: "font-size:8px;fill:#b0b0a0;font-family:sans-serif" });
         rl.textContent = String(yr); genPlot.appendChild(rl);
       }
@@ -2968,20 +2970,20 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const pid = genFamilyProcessMap[fid]; const proc = pid ? genProcessList.find((p) => String(p.id) === pid) : null;
         const tip = [`${String(fam.name || fid)} (${yr})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : [])].join("\\n");
         const showBullets = !genShowBullets || genShowBullets.checked;
-        const nodeR = isStd ? 5.5 : 4;
+        const nodeR = isStd ? 4 : 3;
         if (showBullets) {
-          const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeR), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "2" : "1" });
+          const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeR), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "1.5" : "0.8" });
           const ct = svgEl("title", {}); ct.textContent = tip; circ.appendChild(ct); genPlot.appendChild(circ);
         }
         const name = String(fam.name || fid);
         const isRight = deg <= 180;
         const rad = (deg - 90) * Math.PI / 180;
-        const off = nodeR + 5;
-        const lx = nx + (isRight ? 1 : -1) * off * Math.cos(rad);
-        const ly = ny + (isRight ? 1 : -1) * off * Math.sin(rad);
-        const textRot = deg - 90 + (isRight ? 0 : 180);
+        const off = showBullets ? nodeR + 5 : 3;
+        const lx = nx + off * Math.cos(rad);
+        const ly = ny + off * Math.sin(rad);
+        const textRot = isRight ? (deg - 90) : (270 - deg);
         const arcW = yr2r(yr) * (minGapOf.get(fid) || (360 / Math.max(1, dagNodes.length))) * Math.PI / 180;
-        const maxLabelCh = Math.max(3, Math.floor(arcW / (genFontPx * 0.63)));
+        const maxLabelCh = Math.min(genNumChars, Math.max(3, Math.floor(arcW / charW)));
         const disp = name.length <= maxLabelCh ? name : name.slice(0, Math.max(2, maxLabelCh - 1)) + "…";
         const labelFill = showBullets ? (isStd ? "#162022" : "#1a2a2e") : color;
         const lbl = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": isRight ? "start" : "end",
@@ -3057,16 +3059,16 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       if (genFontValue) genFontValue.textContent = `${genFontPx}px`; render();
     });
     if (genRadiusMinus) genRadiusMinus.addEventListener("click", () => {
-      genRadiusScale = Math.max(0.4, Math.round(genRadiusScale * 0.85 * 100) / 100);
-      if (genRadiusValue) genRadiusValue.textContent = `${Math.round(genRadiusScale * 100)}%`; render();
+      genNumChars = Math.max(3, genNumChars - 1);
+      if (genRadiusValue) genRadiusValue.textContent = `${genNumChars}ch`; render();
     });
     if (genRadiusPlus) genRadiusPlus.addEventListener("click", () => {
-      genRadiusScale = Math.min(4.0, Math.round(genRadiusScale * 1.18 * 100) / 100);
-      if (genRadiusValue) genRadiusValue.textContent = `${Math.round(genRadiusScale * 100)}%`; render();
+      genNumChars = Math.min(30, genNumChars + 1);
+      if (genRadiusValue) genRadiusValue.textContent = `${genNumChars}ch`; render();
     });
     if (genRadiusReset) genRadiusReset.addEventListener("click", () => {
-      genRadiusScale = 1.0;
-      if (genRadiusValue) genRadiusValue.textContent = "100%"; render();
+      genNumChars = 8;
+      if (genRadiusValue) genRadiusValue.textContent = "8ch"; render();
     });
     if (genLayoutLayered) genLayoutLayered.addEventListener("click", () => {
       genLayoutMode = "layered";
