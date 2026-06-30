@@ -285,6 +285,10 @@ def build_site() -> None:
               <div class=\"viz-name-mode\"><button id=\"genLayoutLayered\" type=\"button\" class=\"name-mode-btn is-active\">Layered</button><button id=\"genLayoutRadial\" type=\"button\" class=\"name-mode-btn\">Radial</button></div>
             </div>
             <div class=\"viz-name-section\">
+              <span class=\"viz-name-section-label\">Radius</span>
+              <div class=\"viz-name-mode\"><button id=\"genRadiusMinus\" type=\"button\" class=\"name-mode-btn\">R−</button><button id=\"genRadiusPlus\" type=\"button\" class=\"name-mode-btn\">R+</button><button id=\"genRadiusReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genRadiusValue\" class=\"viz-ctrl-value\">100%</span></div>
+            </div>
+            <div class=\"viz-name-section\">
               <span class=\"viz-name-section-label\">Font size</span>
               <div class=\"viz-name-mode\"><button id=\"genFontMinus\" type=\"button\" class=\"name-mode-btn\">A-</button><button id=\"genFontPlus\" type=\"button\" class=\"name-mode-btn\">A+</button><button id=\"genFontReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genFontValue\" class=\"viz-ctrl-value\">12px</span></div>
             </div>
@@ -2493,11 +2497,16 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const genFontValue = document.getElementById("genFontValue");
     const genLayoutLayered = document.getElementById("genLayoutLayered");
     const genLayoutRadial = document.getElementById("genLayoutRadial");
+    const genRadiusMinus = document.getElementById("genRadiusMinus");
+    const genRadiusPlus = document.getElementById("genRadiusPlus");
+    const genRadiusReset = document.getElementById("genRadiusReset");
+    const genRadiusValue = document.getElementById("genRadiusValue");
     if (!genPlot || !genPlotScroll || !genFrame) return;
 
     const GEN_BASE_FONT = 12;
     let genFontPx = GEN_BASE_FONT;
     let genLayoutMode = "layered";
+    let genRadiusScale = 1.0;
 
     // ── Data ─────────────────────────────────────────────────────────
     const tables = data.tables || {};
@@ -2711,6 +2720,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
     // ── Sugiyama layered layout ────────────────────────────────────────
     function drawSugiyama(dagNodes, isoNodes, inE, outE, dagSet, visEdges) {
+      genPlot.style.display = ""; genPlot.style.margin = "";
       const NH = nodeH(); const RG = rowGap(); const IW = isoW();
 
       const layerOf = assignLayers(new Set(dagNodes), inE);
@@ -2871,9 +2881,10 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       const maxY = allYears.length ? Math.max(...allYears) : 2025;
       const yPad = Math.max(3, Math.round((maxY - minY) * 0.07));
       const y0 = minY - yPad; const y1 = maxY + yPad;
-      const diam = Math.min(760, Math.max(500, window.innerWidth - 60));
+      const baseDiam = Math.max(1000, dagNodes.length * 24);
+      const diam = Math.round(baseDiam * genRadiusScale);
       const rcx = diam / 2; const rcy = diam / 2;
-      const R_MIN = 55; const R_MAX = diam / 2 - 95;
+      const R_MIN = Math.round(diam * 0.06); const R_MAX = diam / 2 - 100;
       function yr2r(yr) { return R_MIN + Math.max(0, Math.min(1, (yr - y0) / Math.max(1, y1 - y0))) * (R_MAX - R_MIN); }
 
       // Polar (deg, 0=top clockwise) → cartesian SVG
@@ -2882,9 +2893,20 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         return { x: rcx + r * Math.cos(a), y: rcy + r * Math.sin(a) };
       }
 
+      // Minimum angular gap per node (degrees) → used for label truncation
+      const sortedByAngle = [...angleOf.entries()].sort((a, b) => a[1] - b[1]);
+      const minGapOf = new Map();
+      const nAng = sortedByAngle.length;
+      sortedByAngle.forEach(([id, ang], i) => {
+        const prev = sortedByAngle[(i - 1 + nAng) % nAng][1] + (i === 0 ? -360 : 0);
+        const next = sortedByAngle[(i + 1) % nAng][1] + (i === nAng - 1 ? 360 : 0);
+        minGapOf.set(id, Math.min(ang - prev, next - ang));
+      });
+
       genPlot.setAttribute("viewBox", `0 0 ${diam} ${diam}`);
       genPlot.setAttribute("width", String(diam));
       genPlot.setAttribute("height", String(diam));
+      genPlot.style.display = "block"; genPlot.style.margin = "0 auto";
       genFrame.style.height = `${Math.max(320, Math.min(Math.round(window.innerHeight * 0.82), diam + 8))}px`;
 
       // Decade rings
@@ -2952,7 +2974,9 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const lx = nx + (isRight ? 1 : -1) * off * Math.cos(rad);
         const ly = ny + (isRight ? 1 : -1) * off * Math.sin(rad);
         const textRot = deg - 90 + (isRight ? 0 : 180);
-        const disp = name.length <= 14 ? name : name.slice(0, 13) + "…";
+        const arcW = yr2r(yr) * (minGapOf.get(fid) || (360 / Math.max(1, dagNodes.length))) * Math.PI / 180;
+        const maxLabelCh = Math.max(3, Math.floor(arcW / (genFontPx * 0.63)));
+        const disp = name.length <= maxLabelCh ? name : name.slice(0, Math.max(2, maxLabelCh - 1)) + "…";
         const lbl = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": isRight ? "start" : "end",
           transform: `rotate(${textRot.toFixed(1)},${lx.toFixed(1)},${ly.toFixed(1)})`,
           style: `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:${isStd ? "#000" : "#1a2a2e"};pointer-events:none;font-weight:${isStd ? 700 : 400}` });
@@ -3021,6 +3045,18 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     if (genFontReset) genFontReset.addEventListener("click", () => {
       genFontPx = GEN_BASE_FONT;
       if (genFontValue) genFontValue.textContent = `${genFontPx}px`; render();
+    });
+    if (genRadiusMinus) genRadiusMinus.addEventListener("click", () => {
+      genRadiusScale = Math.max(0.4, Math.round(genRadiusScale * 0.85 * 100) / 100);
+      if (genRadiusValue) genRadiusValue.textContent = `${Math.round(genRadiusScale * 100)}%`; render();
+    });
+    if (genRadiusPlus) genRadiusPlus.addEventListener("click", () => {
+      genRadiusScale = Math.min(4.0, Math.round(genRadiusScale * 1.18 * 100) / 100);
+      if (genRadiusValue) genRadiusValue.textContent = `${Math.round(genRadiusScale * 100)}%`; render();
+    });
+    if (genRadiusReset) genRadiusReset.addEventListener("click", () => {
+      genRadiusScale = 1.0;
+      if (genRadiusValue) genRadiusValue.textContent = "100%"; render();
     });
     if (genLayoutLayered) genLayoutLayered.addEventListener("click", () => {
       genLayoutMode = "layered";
