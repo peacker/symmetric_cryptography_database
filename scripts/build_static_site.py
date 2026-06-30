@@ -285,8 +285,8 @@ def build_site() -> None:
               <div class=\"viz-name-mode\"><button id=\"genLayoutLayered\" type=\"button\" class=\"name-mode-btn is-active\">Layered</button><button id=\"genLayoutRadial\" type=\"button\" class=\"name-mode-btn\">Radial</button></div>
             </div>
             <div class=\"viz-name-section\">
-              <span class=\"viz-name-section-label\">Radius</span>
-              <div class=\"viz-name-mode\"><button id=\"genRadiusMinus\" type=\"button\" class=\"name-mode-btn\">R−</button><button id=\"genRadiusPlus\" type=\"button\" class=\"name-mode-btn\">R+</button><button id=\"genRadiusReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genRadiusValue\" class=\"viz-ctrl-value\">8ch</span></div>
+              <span class=\"viz-name-section-label\">Chars</span>
+              <div class=\"viz-name-mode\"><button id=\"genRadiusMinus\" type=\"button\" class=\"name-mode-btn\">−</button><button id=\"genRadiusPlus\" type=\"button\" class=\"name-mode-btn\">+</button><button id=\"genRadiusReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genRadiusValue\" class=\"viz-ctrl-value\">8ch</span></div>
             </div>
             <div class=\"viz-name-section\">
               <span class=\"viz-name-section-label\">Font size</span>
@@ -2505,7 +2505,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const genShowBullets = document.getElementById("genShowBullets");
     if (!genPlot || !genPlotScroll || !genFrame) return;
 
-    const GEN_BASE_FONT = 12;
+    const GEN_BASE_FONT = 8;
     let genFontPx = GEN_BASE_FONT;
     let genLayoutMode = "layered";
     let genNumChars = 8;
@@ -2651,7 +2651,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     function nodeH() { return Math.round(genFontPx * 1.85); }
     function rowGap() { return Math.round(genFontPx * 4.5); }
     function isoW() { return Math.round(genFontPx * 7.5); }
-    function nw(name) { return Math.min(Math.round(genFontPx * 12.5), Math.max(Math.round(genFontPx * 4.5), Math.ceil(String(name).length * genFontPx * 0.58) + NODE_PAD_X * 2)); }
+    function nw(name) { const n = Math.min(String(name).length, genNumChars); return Math.min(Math.round(genFontPx * 12.5), Math.max(Math.round(genFontPx * 4.5), Math.ceil(n * genFontPx * 0.58) + NODE_PAD_X * 2)); }
 
     const SVG_NS = "http://www.w3.org/2000/svg";
     function svgEl(tag, attrs) {
@@ -2828,7 +2828,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const rect = svgEl("rect", { x: String(cx - w / 2), y: String(cy), width: String(w), height: String(NH), rx: "4", ry: "4", fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.22)", "stroke-width": isStd ? "2" : "1", opacity: isIso ? "0.58" : "1" });
         const rt = svgEl("title", {}); rt.textContent = tip; rect.appendChild(rt);
         genPlot.appendChild(rect);
-        const maxCh = Math.max(4, Math.floor((w - NODE_PAD_X * 2) / (genFontPx * 0.56)));
+        const maxCh = Math.min(genNumChars, Math.max(4, Math.floor((w - NODE_PAD_X * 2) / (genFontPx * 0.56))));
         const disp = name.length <= maxCh ? name : name.slice(0, Math.max(1, maxCh - 1)) + "…";
         const lbl = svgEl("text", { x: String(cx), y: String(cy + NH * 0.67), "text-anchor": "middle", style: `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:#fff;pointer-events:none;font-weight:${isStd ? 700 : 400};opacity:${isIso ? "0.8" : "1"}` });
         lbl.textContent = disp; genPlot.appendChild(lbl);
@@ -2881,14 +2881,12 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       const allYears = dagNodes.map((n) => Number((genFamById.get(n) || {}).year)).filter((y) => y > 1800 && y < 2200);
       const minY = allYears.length ? Math.min(...allYears) : 1970;
       const maxY = allYears.length ? Math.max(...allYears) : 2025;
-      const yPad = Math.max(3, Math.round((maxY - minY) * 0.07));
-      const y0 = minY - yPad; const y1 = maxY + yPad;
+      const y0 = minY; const y1 = maxY;
       const charW = genFontPx * 0.58;
-      const decadeGap = genNumChars * charW;
       const R_MIN = 2;
-      function yr2r(yr) { return R_MIN + Math.max(0, yr - y0) * decadeGap / 10; }
+      function yr2r(yr) { return R_MIN + Math.max(0, yr - y0) * genNumChars * charW; }
       const R_MAX = yr2r(y1);
-      const diam = Math.max(400, 2 * Math.ceil(R_MAX + 110));
+      const diam = Math.max(400, 2 * Math.ceil(R_MAX + genNumChars * charW + 20));
       const rcx = diam / 2; const rcy = diam / 2;
 
       // Polar (deg, 0=top clockwise) → cartesian SVG
@@ -2914,7 +2912,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       genFrame.style.height = `${Math.max(320, Math.min(Math.round(window.innerHeight * 0.82), diam + 8))}px`;
 
       // Decade rings
-      const d1 = Math.ceil(y0 / 10) * 10; const d2 = Math.floor(y1 / 10) * 10;
+      const d1 = Math.floor(minY / 10) * 10; const d2 = Math.floor(y1 / 10) * 10;
       for (let yr = d1; yr <= d2; yr += 10) {
         const r = yr2r(yr);
         genPlot.appendChild(svgEl("circle", { cx: String(rcx), cy: String(rcy), r: String(r.toFixed(1)), fill: "none", stroke: "#e8e6dc", "stroke-width": "0.8" }));
@@ -2981,7 +2979,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const off = showBullets ? nodeR + 5 : 3;
         const lx = nx + off * Math.cos(rad);
         const ly = ny + off * Math.sin(rad);
-        const textRot = isRight ? (deg - 90) : (270 - deg);
+        const textRot = isRight ? (deg - 90) : (deg + 90);
         const arcW = yr2r(yr) * (minGapOf.get(fid) || (360 / Math.max(1, dagNodes.length))) * Math.PI / 180;
         const maxLabelCh = Math.min(genNumChars, Math.max(3, Math.floor(arcW / charW)));
         const disp = name.length <= maxLabelCh ? name : name.slice(0, Math.max(2, maxLabelCh - 1)) + "…";
@@ -3047,7 +3045,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       genYearStart.value = String(genYrBounds.min); genYearEnd.value = String(genYrBounds.max); render();
     });
     if (genFontMinus) genFontMinus.addEventListener("click", () => {
-      genFontPx = Math.max(8, genFontPx - 1);
+      genFontPx = Math.max(6, genFontPx - 1);
       if (genFontValue) genFontValue.textContent = `${genFontPx}px`; render();
     });
     if (genFontPlus) genFontPlus.addEventListener("click", () => {
