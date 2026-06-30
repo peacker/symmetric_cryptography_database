@@ -294,6 +294,7 @@ def build_site() -> None:
             </div>
             <label class=\"inline-check\"><input id=\"genConnectedOnly\" type=\"checkbox\" checked /> Only connected families</label>
             <label class=\"inline-check\"><input id=\"genStandardsOnly\" type=\"checkbox\" /> Standards only</label>
+            <label class=\"inline-check\"><input id=\"genShowBullets\" type=\"checkbox\" checked /> Show bullets</label>
           </div>
         </div>
         <div class=\"viz-secondary-controls\">
@@ -2501,6 +2502,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const genRadiusPlus = document.getElementById("genRadiusPlus");
     const genRadiusReset = document.getElementById("genRadiusReset");
     const genRadiusValue = document.getElementById("genRadiusValue");
+    const genShowBullets = document.getElementById("genShowBullets");
     if (!genPlot || !genPlotScroll || !genFrame) return;
 
     const GEN_BASE_FONT = 12;
@@ -2884,7 +2886,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       const baseDiam = Math.max(1000, dagNodes.length * 24);
       const diam = Math.round(baseDiam * genRadiusScale);
       const rcx = diam / 2; const rcy = diam / 2;
-      const R_MIN = Math.round(diam * 0.06); const R_MAX = diam / 2 - 100;
+      const R_MIN = Math.round(genFontPx * 1.8); const R_MAX = diam / 2 - 100;
       function yr2r(yr) { return R_MIN + Math.max(0, Math.min(1, (yr - y0) / Math.max(1, y1 - y0))) * (R_MAX - R_MIN); }
 
       // Polar (deg, 0=top clockwise) → cartesian SVG
@@ -2965,22 +2967,29 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const famConstrs = Array.from(famToConstrs.get(fid) || []).sort().join(", ") || "—";
         const pid = genFamilyProcessMap[fid]; const proc = pid ? genProcessList.find((p) => String(p.id) === pid) : null;
         const tip = [`${String(fam.name || fid)} (${yr})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : [])].join("\\n");
-        const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: isStd ? "5.5" : "4", fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "2" : "1" });
-        const ct = svgEl("title", {}); ct.textContent = tip; circ.appendChild(ct); genPlot.appendChild(circ);
+        const showBullets = !genShowBullets || genShowBullets.checked;
+        const nodeR = isStd ? 5.5 : 4;
+        if (showBullets) {
+          const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeR), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "2" : "1" });
+          const ct = svgEl("title", {}); ct.textContent = tip; circ.appendChild(ct); genPlot.appendChild(circ);
+        }
         const name = String(fam.name || fid);
         const isRight = deg <= 180;
         const rad = (deg - 90) * Math.PI / 180;
-        const off = isStd ? 8 : 6;
+        const off = nodeR + 5;
         const lx = nx + (isRight ? 1 : -1) * off * Math.cos(rad);
         const ly = ny + (isRight ? 1 : -1) * off * Math.sin(rad);
         const textRot = deg - 90 + (isRight ? 0 : 180);
         const arcW = yr2r(yr) * (minGapOf.get(fid) || (360 / Math.max(1, dagNodes.length))) * Math.PI / 180;
         const maxLabelCh = Math.max(3, Math.floor(arcW / (genFontPx * 0.63)));
         const disp = name.length <= maxLabelCh ? name : name.slice(0, Math.max(2, maxLabelCh - 1)) + "…";
+        const labelFill = showBullets ? (isStd ? "#162022" : "#1a2a2e") : color;
         const lbl = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": isRight ? "start" : "end",
           transform: `rotate(${textRot.toFixed(1)},${lx.toFixed(1)},${ly.toFixed(1)})`,
-          style: `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:${isStd ? "#000" : "#1a2a2e"};pointer-events:none;font-weight:${isStd ? 700 : 400}` });
-        lbl.textContent = disp; genPlot.appendChild(lbl);
+          style: `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:${labelFill};pointer-events:${showBullets ? "none" : "all"};font-weight:${isStd ? 700 : 400}` });
+        lbl.textContent = disp;
+        if (!showBullets) { const lt = svgEl("title", {}); lt.textContent = tip; lbl.appendChild(lt); }
+        genPlot.appendChild(lbl);
       });
 
       if (isoNodes.length) {
@@ -3026,6 +3035,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     genColorBy.addEventListener("change", render);
     genConnectedOnly.addEventListener("change", render);
     genStandardsOnly.addEventListener("change", render);
+    if (genShowBullets) genShowBullets.addEventListener("change", render);
     genFamilySearch.addEventListener("input", render);
     genFamilySearch.addEventListener("change", render);
     genYearStart.addEventListener("input", render);
