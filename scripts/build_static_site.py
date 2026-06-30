@@ -294,6 +294,7 @@ def build_site() -> None:
             </div>
             <label class=\"inline-check\"><input id=\"genConnectedOnly\" type=\"checkbox\" checked /> Only connected families</label>
             <label class=\"inline-check\"><input id=\"genStandardsOnly\" type=\"checkbox\" /> Standards only</label>
+            <label class=\"inline-check\"><input id=\"genByGeneration\" type=\"checkbox\" /> By generation</label>
             <label class=\"inline-check\"><input id=\"genShowBullets\" type=\"checkbox\" /> Show bullets</label>
           </div>
         </div>
@@ -2502,6 +2503,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const genRadiusPlus = document.getElementById("genRadiusPlus");
     const genRadiusReset = document.getElementById("genRadiusReset");
     const genRadiusValue = document.getElementById("genRadiusValue");
+    const genByGeneration = document.getElementById("genByGeneration");
     const genShowBullets = document.getElementById("genShowBullets");
     if (!genPlot || !genPlotScroll || !genFrame) return;
 
@@ -2839,15 +2841,28 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
     // ── Radial (Lepage-Bandet style): year → radius, angle from tree ──
     function drawRadial(dagNodes, isoNodes, inE, outE, dagSet, visEdges) {
-      // Build spanning tree: pick the earliest-year parent for each node
+      const useGen = !!(genByGeneration && genByGeneration.checked);
+
+      // Pre-compute DAG layers when in generation mode
+      let layerOf;
+      if (useGen) layerOf = assignLayers(new Set(dagNodes), inE);
+
+      // Build spanning tree: primary parent chosen by layer (gen mode) or earliest year
       const treeChildren = new Map(dagNodes.map((n) => [n, []]));
       const treeParentOf = new Map();
       const roots = [];
       dagNodes.forEach((n) => {
         const parents = (inE.get(n) || []).filter((p) => dagSet.has(p));
         if (!parents.length) { roots.push(n); return; }
-        const prim = parents.reduce((best, p) =>
-          Number((genFamById.get(p) || {}).year || 9999) < Number((genFamById.get(best) || {}).year || 9999) ? p : best);
+        let prim;
+        if (useGen) {
+          const myL = layerOf.get(n) || 0;
+          const prevLayer = parents.filter((p) => (layerOf.get(p) || 0) === myL - 1);
+          prim = prevLayer.length ? prevLayer[0] : parents[0];
+        } else {
+          prim = parents.reduce((best, p) =>
+            Number((genFamById.get(p) || {}).year || 9999) < Number((genFamById.get(best) || {}).year || 9999) ? p : best);
+        }
         treeParentOf.set(n, prim);
         treeChildren.get(prim).push(n);
       });
@@ -2877,16 +2892,30 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       let aPos = 0;
       roots.forEach((r) => { const span = 360 * lc(r) / totalLeaves; assignAngles(r, aPos, span); aPos += span; });
 
-      // Year → radius
-      const allYears = dagNodes.map((n) => Number((genFamById.get(n) || {}).year)).filter((y) => y > 1800 && y < 2200);
-      const minY = allYears.length ? Math.min(...allYears) : 1970;
-      const maxY = allYears.length ? Math.max(...allYears) : 2025;
-      const y0 = minY; const y1 = maxY;
+      // Radius mapping: year mode or generation mode
       const charW = genFontPx * 0.58;
       const R_MIN = 2;
-      function yr2r(yr) { return R_MIN + Math.max(0, yr - y0) * genNumChars * charW; }
-      const R_MAX = yr2r(y1);
-      const diam = Math.max(400, 2 * Math.ceil(R_MAX + genNumChars * charW + 20));
+      let nodeR;      // fid → radius (px)
+      let maxR;
+      let ringLabels; // [{r, label}] for concentric guide rings
+
+      if (useGen) {
+        const maxLayer = dagNodes.length ? Math.max(...dagNodes.map((n) => layerOf.get(n) || 0)) : 0;
+        nodeR = (fid) => R_MIN + (layerOf.get(fid) || 0) * genNumChars * charW;
+        maxR = R_MIN + maxLayer * genNumChars * charW;
+        ringLabels = Array.from({ length: maxLayer + 1 }, (_, g) => ({ r: R_MIN + g * genNumChars * charW, label: `G${g}` }));
+      } else {
+        const allYears = dagNodes.map((n) => Number((genFamById.get(n) || {}).year)).filter((y) => y > 1800 && y < 2200);
+        const minY = allYears.length ? Math.min(...allYears) : 1970;
+        const maxY = allYears.length ? Math.max(...allYears) : 2025;
+        nodeR = (fid) => R_MIN + Math.max(0, Number((genFamById.get(fid) || {}).year || minY) - minY) * genNumChars * charW;
+        maxR = R_MIN + (maxY - minY) * genNumChars * charW;
+        const d1 = Math.floor(minY / 10) * 10; const d2 = Math.floor(maxY / 10) * 10;
+        ringLabels = [];
+        for (let yr = d1; yr <= d2; yr += 10) ringLabels.push({ r: Math.max(R_MIN, R_MIN + (yr - minY) * genNumChars * charW), label: String(yr) });
+      }
+
+      const diam = Math.max(400, 2 * Math.ceil(maxR + genNumChars * charW + 20));
       const rcx = diam / 2; const rcy = diam / 2;
 
       // Polar (deg, 0=top clockwise) → cartesian SVG
@@ -2911,21 +2940,17 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       genPlot.style.display = "block"; genPlot.style.margin = "0 auto";
       genFrame.style.height = `${Math.max(320, Math.min(Math.round(window.innerHeight * 0.82), diam + 8))}px`;
 
-      // Decade rings
-      const d1 = Math.floor(minY / 10) * 10; const d2 = Math.floor(y1 / 10) * 10;
-      for (let yr = d1; yr <= d2; yr += 10) {
-        const r = yr2r(yr);
+      // Concentric guide rings (decade rings in year mode, generation rings in gen mode)
+      ringLabels.forEach(({ r, label }) => {
         genPlot.appendChild(svgEl("circle", { cx: String(rcx), cy: String(rcy), r: String(r.toFixed(1)), fill: "none", stroke: "#e8e6dc", "stroke-width": "0.8" }));
         const tp = pol(Math.max(r + 2, genFontPx * 0.8), 0);
         const rl = svgEl("text", { x: String(tp.x.toFixed(1)), y: String(tp.y.toFixed(1)), "text-anchor": "middle", style: "font-size:8px;fill:#b0b0a0;font-family:sans-serif" });
-        rl.textContent = String(yr); genPlot.appendChild(rl);
-      }
+        rl.textContent = label; genPlot.appendChild(rl);
+      });
 
-      // Radial S-curve bezier between two (angle, radius) positions
+      // Radial S-curve bezier between two polar positions
       function rPath(srcId, tgtId) {
-        const sy = Number((genFamById.get(srcId) || {}).year || minY);
-        const ty = Number((genFamById.get(tgtId) || {}).year || minY);
-        const sr = yr2r(sy); const tr = yr2r(ty);
+        const sr = nodeR(srcId); const tr = nodeR(tgtId);
         const sd = angleOf.get(srcId) || 0; const td = angleOf.get(tgtId) || 0;
         const mr = (sr + tr) / 2;
         const s = pol(sr, sd); const cp1 = pol(mr, sd); const cp2 = pol(mr, td); const t = pol(tr, td);
@@ -2958,29 +2983,31 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       dagNodes.forEach((fid) => {
         if (!angleOf.has(fid)) return;
         const fam = genFamById.get(fid); if (!fam) return;
-        const yr = Number(fam.year || minY);
+        const yr = Number(fam.year || 0);
+        const rr = nodeR(fid);
         const deg = angleOf.get(fid);
-        const { x: nx, y: ny } = pol(yr2r(yr), deg);
+        const { x: nx, y: ny } = pol(rr, deg);
         const isStd = stdFamIds.has(fid);
         const color = nodeColor(fid);
         const famTypes = Array.from(famToTypes.get(fid) || []).sort().join(", ") || "—";
         const famConstrs = Array.from(famToConstrs.get(fid) || []).sort().join(", ") || "—";
         const pid = genFamilyProcessMap[fid]; const proc = pid ? genProcessList.find((p) => String(p.id) === pid) : null;
-        const tip = [`${String(fam.name || fid)} (${yr})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : [])].join("\\n");
+        const genLabel = useGen ? `Gen ${layerOf.get(fid) || 0}` : String(yr);
+        const tip = [`${String(fam.name || fid)} (${genLabel})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : [])].join("\\n");
         const showBullets = !genShowBullets || genShowBullets.checked;
-        const nodeR = isStd ? 4 : 3;
+        const nodeRad = isStd ? 4 : 3;
         if (showBullets) {
-          const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeR), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "1.5" : "0.8" });
+          const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeRad), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "1.5" : "0.8" });
           const ct = svgEl("title", {}); ct.textContent = tip; circ.appendChild(ct); genPlot.appendChild(circ);
         }
         const name = String(fam.name || fid);
         const isRight = deg <= 180;
         const rad = (deg - 90) * Math.PI / 180;
-        const off = showBullets ? nodeR + 5 : 3;
+        const off = showBullets ? nodeRad + 5 : 3;
         const lx = nx + off * Math.cos(rad);
         const ly = ny + off * Math.sin(rad);
         const textRot = isRight ? (deg - 90) : (deg + 90);
-        const arcW = yr2r(yr) * (minGapOf.get(fid) || (360 / Math.max(1, dagNodes.length))) * Math.PI / 180;
+        const arcW = rr * (minGapOf.get(fid) || (360 / Math.max(1, dagNodes.length))) * Math.PI / 180;
         const maxLabelCh = Math.min(genNumChars, Math.max(3, Math.floor(arcW / charW)));
         const disp = name.length <= maxLabelCh ? name : name.slice(0, Math.max(2, maxLabelCh - 1)) + "…";
         const labelFill = showBullets ? (isStd ? "#162022" : "#1a2a2e") : color;
@@ -2991,13 +3018,6 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         if (!showBullets) { const lt = svgEl("title", {}); lt.textContent = tip; lbl.appendChild(lt); }
         genPlot.appendChild(lbl);
       });
-
-      if (isoNodes.length) {
-        const note = svgEl("text", { x: String(rcx), y: String(diam - 6), "text-anchor": "middle", style: "font-size:9px;fill:#aaa;font-family:sans-serif" });
-        note.textContent = `${isoNodes.length} famil${isoNodes.length === 1 ? "y" : "ies"} with no visible links not shown in radial view`;
-        genPlot.appendChild(note);
-      }
-
       hoverPaths.forEach((hp) => genPlot.appendChild(hp));
     }
 
@@ -3035,6 +3055,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     genColorBy.addEventListener("change", render);
     genConnectedOnly.addEventListener("change", render);
     genStandardsOnly.addEventListener("change", render);
+    if (genByGeneration) genByGeneration.addEventListener("change", render);
     if (genShowBullets) genShowBullets.addEventListener("change", render);
     genFamilySearch.addEventListener("input", render);
     genFamilySearch.addEventListener("change", render);
