@@ -182,10 +182,9 @@ def build_site() -> None:
           <button type=\"button\" class=\"nav-tab\" data-view-target=\"genealogy\">Genealogy</button>
           <button type=\"button\" class=\"nav-tab\" data-view-target=\"tables\">All SQLite Tables</button>
           <button type=\"button\" class=\"nav-tab\" data-view-target=\"builder\">Custom Query Builder</button>
+          <button type=\"button\" class=\"nav-tab\" data-view-target=\"about\">About</button>
         </nav>
       </header>
-
-      <section class=\"panel meta\" id=\"summary\"></section>
 
       <section class=\"panel view-panel is-active\" data-view=\"visualizations\">
         <h2>Timelines</h2>
@@ -282,19 +281,19 @@ def build_site() -> None:
           <div class=\"viz-display-group\">
             <div class=\"viz-name-section\">
               <span class=\"viz-name-section-label\">Layout</span>
-              <div class=\"viz-name-mode\"><button id=\"genLayoutLayered\" type=\"button\" class=\"name-mode-btn is-active\">Layered</button><button id=\"genLayoutRadial\" type=\"button\" class=\"name-mode-btn\">Radial</button></div>
+              <div class=\"viz-name-mode\"><button id=\"genLayoutLayered\" type=\"button\" class=\"name-mode-btn\">Layered</button><button id=\"genLayoutRadial\" type=\"button\" class=\"name-mode-btn is-active\">Radial</button></div>
             </div>
             <div class=\"viz-name-section\">
-              <span class=\"viz-name-section-label\">Chars</span>
+              <span class=\"viz-name-section-label\">Number of Chars</span>
               <div class=\"viz-name-mode\"><button id=\"genRadiusMinus\" type=\"button\" class=\"name-mode-btn\">−</button><button id=\"genRadiusPlus\" type=\"button\" class=\"name-mode-btn\">+</button><button id=\"genRadiusReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genRadiusValue\" class=\"viz-ctrl-value\">8ch</span></div>
             </div>
             <div class=\"viz-name-section\">
               <span class=\"viz-name-section-label\">Font size</span>
-              <div class=\"viz-name-mode\"><button id=\"genFontMinus\" type=\"button\" class=\"name-mode-btn\">A-</button><button id=\"genFontPlus\" type=\"button\" class=\"name-mode-btn\">A+</button><button id=\"genFontReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genFontValue\" class=\"viz-ctrl-value\">8px</span></div>
+              <div class=\"viz-name-mode\"><button id=\"genFontMinus\" type=\"button\" class=\"name-mode-btn\">A-</button><button id=\"genFontPlus\" type=\"button\" class=\"name-mode-btn\">A+</button><button id=\"genFontReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genFontValue\" class=\"viz-ctrl-value\">12px</span></div>
             </div>
             <label class=\"inline-check\"><input id=\"genConnectedOnly\" type=\"checkbox\" checked /> Only connected families</label>
             <label class=\"inline-check\"><input id=\"genStandardsOnly\" type=\"checkbox\" /> Standards only</label>
-            <label class=\"inline-check\"><input id=\"genByGeneration\" type=\"checkbox\" /> By generation</label>
+            <label class=\"inline-check\"><input id=\"genByGeneration\" type=\"checkbox\" checked /> By generation</label>
             <label class=\"inline-check\"><input id=\"genShowBullets\" type=\"checkbox\" /> Show bullets</label>
           </div>
         </div>
@@ -314,7 +313,7 @@ def build_site() -> None:
           </div>
         </div>
         <div class=\"gen-filters-row\">
-          <details class=\"collapsible gen-filter-panel\" open>
+          <details class=\"collapsible gen-filter-panel\">
             <summary>Primitive types</summary>
             <div class=\"collapsible-body\">
               <div class=\"viz-filter-actions\">
@@ -324,7 +323,7 @@ def build_site() -> None:
               <div id=\"genPrimitiveFilters\" class=\"filter-checklist viz-filter-checklist\"></div>
             </div>
           </details>
-          <details class=\"collapsible gen-filter-panel\" open>
+          <details class=\"collapsible gen-filter-panel\">
             <summary>Construction types</summary>
             <div class=\"collapsible-body\">
               <div class=\"viz-filter-actions\">
@@ -334,7 +333,7 @@ def build_site() -> None:
               <div id=\"genConstructionFilters\" class=\"filter-checklist viz-filter-checklist\"></div>
             </div>
           </details>
-          <details class=\"collapsible gen-filter-panel\" open>
+          <details class=\"collapsible gen-filter-panel\">
             <summary>Processes</summary>
             <div class=\"collapsible-body\">
               <div class=\"viz-filter-actions\">
@@ -416,6 +415,22 @@ def build_site() -> None:
         <p class=\"small-note\">Tip: drag the divider at the right edge of each header to resize columns.</p>
 
         <div class=\"table-wrap\"><table id=\"builderView\"><thead></thead><tbody></tbody></table></div>
+      </section>
+
+      <section class=\"panel view-panel\" data-view=\"about\">
+        <h2>About</h2>
+        <div class=\"about-body\">
+          <p>The <strong>Symmetric Cryptography Database</strong> is a structured, curated collection of symmetric-key primitive families — block ciphers, stream ciphers, hash functions, MACs, and authenticated-encryption schemes — together with their design lineage, construction types, and participation in standardisation processes.</p>
+          <p>The data is stored in a SQLite database built from hand-curated JSON source files. Families are linked by explicit influence edges (e.g. <em>same S-box</em>, <em>improvement of</em>, <em>variant of</em>) which make up the genealogy graph. The <strong>Timelines</strong> tab places each primitive on a publication-year axis grouped by any chosen dimension; the <strong>Genealogy</strong> tab renders the influence graph as a layered DAG or as a radial tree.</p>
+          <p>Primitive families are annotated with:</p>
+          <ul>
+            <li><strong>Construction type</strong> — SPN, Feistel, ARX, sponge, etc.</li>
+            <li><strong>Primitive type</strong> — block cipher, stream cipher, hash, MAC, AEAD, …</li>
+            <li><strong>Standardisation process</strong> — AES, SHA-3, CAESAR, NIST-LWC, …</li>
+            <li><strong>Design components</strong> — S-boxes, permutation layers, MixColumns, key schedules.</li>
+          </ul>
+          <p class=\"small-note\">Data is updated manually. The site is generated from source by a Python build pipeline and contains no server-side logic.</p>
+        </div>
       </section>
     </main>
   </body>
@@ -543,6 +558,10 @@ input, select, button {
 button { cursor: pointer; width: auto; background: var(--accent-soft); }
 
 .small-note { color: var(--muted); margin: 0 0 0.7rem; }
+.about-body { max-width: 680px; line-height: 1.65; }
+.about-body p, .about-body ul { margin: 0 0 1rem; }
+.about-body ul { padding-left: 1.4rem; }
+.about-body li { margin-bottom: 0.3rem; }
 
 .builder-grid {
   display: grid;
@@ -1087,18 +1106,6 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
   function isHttpUrl(text) {
     return /^https?:\\/\\//i.test(String(text || "").trim());
-  }
-
-  function renderSummary() {
-    const host = document.getElementById("summary");
-    const rows = [
-      ["SQLite tables", data.summary.tableCount],
-      ["Rows across all tables", data.summary.totalRows],
-      ["Rows in builder join", data.summary.builderRows],
-    ];
-    host.innerHTML = rows
-      .map(([label, value]) => `<article class=\"meta-item\"><div class=\"label\">${label}</div><div class=\"value\">${value}</div></article>`)
-      .join("");
   }
 
   function setupNavigator() {
@@ -2507,9 +2514,9 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const genShowBullets = document.getElementById("genShowBullets");
     if (!genPlot || !genPlotScroll || !genFrame) return;
 
-    const GEN_BASE_FONT = 8;
+    const GEN_BASE_FONT = 12;
     let genFontPx = GEN_BASE_FONT;
-    let genLayoutMode = "layered";
+    let genLayoutMode = "radial";
     let genNumChars = 8;
 
     // ── Data ─────────────────────────────────────────────────────────
@@ -3125,7 +3132,6 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
   }
 
-  renderSummary();
   setupNavigator();
   setupAllTablesBrowser();
   setupBuilder();
