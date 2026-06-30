@@ -281,6 +281,10 @@ def build_site() -> None:
           </label>
           <div class=\"viz-display-group\">
             <div class=\"viz-name-section\">
+              <span class=\"viz-name-section-label\">Layout</span>
+              <div class=\"viz-name-mode\"><button id=\"genLayoutLayered\" type=\"button\" class=\"name-mode-btn is-active\">Layered</button><button id=\"genLayoutRadial\" type=\"button\" class=\"name-mode-btn\">Radial</button></div>
+            </div>
+            <div class=\"viz-name-section\">
               <span class=\"viz-name-section-label\">Font size</span>
               <div class=\"viz-name-mode\"><button id=\"genFontMinus\" type=\"button\" class=\"name-mode-btn\">A-</button><button id=\"genFontPlus\" type=\"button\" class=\"name-mode-btn\">A+</button><button id=\"genFontReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genFontValue\" class=\"viz-ctrl-value\">12px</span></div>
             </div>
@@ -2487,10 +2491,13 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const genFontPlus = document.getElementById("genFontPlus");
     const genFontReset = document.getElementById("genFontReset");
     const genFontValue = document.getElementById("genFontValue");
+    const genLayoutLayered = document.getElementById("genLayoutLayered");
+    const genLayoutRadial = document.getElementById("genLayoutRadial");
     if (!genPlot || !genPlotScroll || !genFrame) return;
 
     const GEN_BASE_FONT = 12;
     let genFontPx = GEN_BASE_FONT;
+    let genLayoutMode = "layered";
 
     // ── Data ─────────────────────────────────────────────────────────
     const tables = data.tables || {};
@@ -2681,30 +2688,30 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       }
     }
 
-    // ── Render ────────────────────────────────────────────────────────
-    function render() {
-      updateYrLbl();
-      while (genPlot.firstChild) genPlot.removeChild(genPlot.firstChild);
+    // ── Legend helper (shared by both layouts) ─────────────────────────
+    function drawLegend() {
+      if (!genLegend) return;
+      while (genLegend.firstChild) genLegend.removeChild(genLegend.firstChild);
+      const mode = genColorBy.value;
+      const items = mode === "process"
+        ? [...genProcessList.map((p) => ({ color: genProcColorMap.get(String(p.id)), label: String(p.name) })), { color: genProcColorMap.get("__none__"), label: "No process" }]
+        : mode === "construction"
+          ? allConstrs.filter((c) => constrSel.get(c) !== false).map((c) => ({ color: constrColorMap.get(c) || "#7a8c8f", label: c }))
+          : allTypes.filter((t) => primSel.get(t) !== false).map((t) => ({ color: typeColorMap.get(t) || "#7a8c8f", label: t }));
+      const mkItem = (color, label, bold) => {
+        const s = document.createElement("span"); s.className = "viz-process-legend-item";
+        const d = document.createElement("span"); d.className = "viz-process-legend-dot"; d.style.cssText = `background:${color};${bold ? "border:2px solid #000;box-sizing:border-box" : ""}`;
+        const l = document.createElement("span"); l.textContent = label; if (bold) l.style.fontWeight = "700";
+        s.appendChild(d); s.appendChild(l); return s;
+      };
+      genLegend.appendChild(mkItem("#152021", "Standard", true));
+      items.forEach(({ color, label }) => genLegend.appendChild(mkItem(color || "#7a8c8f", label, false)));
+      genLegend.hidden = false;
+    }
 
-      const visIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVis(fid));
-      const visSet = new Set(visIds);
-
-      if (!visIds.length) {
-        genPlot.setAttribute("viewBox", "0 0 620 160"); genPlot.setAttribute("width", "620"); genPlot.setAttribute("height", "160");
-        const msg = svgEl("text", { x: "24", y: "42", class: "viz-label" }); msg.textContent = "No families match the current filters.";
-        genPlot.appendChild(msg); genFrame.style.height = "200px"; if (genLegend) genLegend.hidden = true; return;
-      }
-
-      const visEdges = influences.filter((e) => visSet.has(String(e.source_family_id || "")) && visSet.has(String(e.target_family_id || "")));
-
+    // ── Sugiyama layered layout ────────────────────────────────────────
+    function drawSugiyama(dagNodes, isoNodes, inE, outE, dagSet, visEdges) {
       const NH = nodeH(); const RG = rowGap(); const IW = isoW();
-
-      const inE = new Map(visIds.map((n) => [n, []])); const outE = new Map(visIds.map((n) => [n, []]));
-      visEdges.forEach((e) => { const src = String(e.source_family_id); const tgt = String(e.target_family_id); inE.get(tgt).push(src); outE.get(src).push(tgt); });
-
-      const dagSet = new Set(); visEdges.forEach((e) => { dagSet.add(String(e.source_family_id)); dagSet.add(String(e.target_family_id)); });
-      const dagNodes = visIds.filter((n) => dagSet.has(n));
-      const isoNodes = genConnectedOnly.checked ? [] : visIds.filter((n) => !dagSet.has(n));
 
       const layerOf = assignLayers(new Set(dagNodes), inE);
       const maxLayer = dagNodes.length ? Math.max(...dagNodes.map((n) => layerOf.get(n) || 0)) : -1;
@@ -2748,8 +2755,6 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         posY.set(n, isoBase + row * (NH + COL_GAP));
       });
 
-      // Arrow marker: refX=0 so the path ends at the arrowhead BASE; the tip
-      // then extends 10 px further in the path direction, toward the target node.
       const defs = svgEl("defs", {});
       const marker = svgEl("marker", { id: "genArrow", markerWidth: "10", markerHeight: "7", markerUnits: "userSpaceOnUse", refX: "0", refY: "3.5", orient: "auto" });
       marker.appendChild(svgEl("path", { d: "M0,0 L10,3.5 L0,7 z", fill: "rgba(55,75,80,0.78)" }));
@@ -2776,12 +2781,11 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       visEdges.forEach((e) => {
         const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
         if (!posX.has(src) || !posX.has(tgt)) return;
-        const sx = posX.get(src); const sy = posY.get(src) + NH;   // bottom of source
-        const tx = posX.get(tgt); const ty = posY.get(tgt) - 12;  // 12 px above target top; arrow base here, tip at ty+10
+        const sx = posX.get(src); const sy = posY.get(src) + NH;
+        const tx = posX.get(tgt); const ty = posY.get(tgt) - 12;
         const vGap = Math.max(RG, ty - sy);
         const cpY = Math.min(vGap * 0.48, RG * 0.85);
         const pd = `M ${sx} ${sy} C ${sx} ${sy + cpY}, ${tx} ${ty - cpY}, ${tx} ${ty}`;
-
         const rels = parseJsonArray(e.relations_json);
         const fb = String(e.relation || "").trim();
         const relLabel = (rels.length ? rels : (fb ? [fb] : ["related"])).map((r) => String(r).replace(/_/g, " ")).join(", ");
@@ -2790,7 +2794,6 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const tgtName = String((genFamById.get(tgt) || {}).name || tgt);
         const note = String(e.note || "").trim();
         const hoverTxt = `${srcName} → ${tgtName}: ${relLabel}${note ? " | " + note : ""}`;
-
         genPlot.appendChild(svgEl("path", { d: pd, stroke: "rgba(55,75,80,0.45)", "stroke-width": String(strokeW), fill: "none", "marker-end": "url(#genArrow)", "pointer-events": "none" }));
         const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, strokeW + 8)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
@@ -2810,11 +2813,9 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const famConstrs = Array.from(famToConstrs.get(fid) || []).sort().join(", ") || "—";
         const pid = genFamilyProcessMap[fid]; const proc = pid ? genProcessList.find((p) => String(p.id) === pid) : null;
         const tip = [`${name} (${fam.year})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : []), ...(fam.notes ? [fam.notes] : [])].join("\\n");
-
         const rect = svgEl("rect", { x: String(cx - w / 2), y: String(cy), width: String(w), height: String(NH), rx: "4", ry: "4", fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.22)", "stroke-width": isStd ? "2" : "1", opacity: isIso ? "0.58" : "1" });
         const rt = svgEl("title", {}); rt.textContent = tip; rect.appendChild(rt);
         genPlot.appendChild(rect);
-
         const maxCh = Math.max(4, Math.floor((w - NODE_PAD_X * 2) / (genFontPx * 0.56)));
         const disp = name.length <= maxCh ? name : name.slice(0, Math.max(1, maxCh - 1)) + "…";
         const lbl = svgEl("text", { x: String(cx), y: String(cy + NH * 0.67), "text-anchor": "middle", style: `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:#fff;pointer-events:none;font-weight:${isStd ? 700 : 400};opacity:${isIso ? "0.8" : "1"}` });
@@ -2822,25 +2823,180 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       });
 
       hoverPaths.forEach((hp) => genPlot.appendChild(hp));
+    }
 
-      if (genLegend) {
-        while (genLegend.firstChild) genLegend.removeChild(genLegend.firstChild);
-        const mode = genColorBy.value;
-        const items = mode === "process"
-          ? [...genProcessList.map((p) => ({ color: genProcColorMap.get(String(p.id)), label: String(p.name) })), { color: genProcColorMap.get("__none__"), label: "No process" }]
-          : mode === "construction"
-            ? allConstrs.filter((c) => constrSel.get(c) !== false).map((c) => ({ color: constrColorMap.get(c) || "#7a8c8f", label: c }))
-            : allTypes.filter((t) => primSel.get(t) !== false).map((t) => ({ color: typeColorMap.get(t) || "#7a8c8f", label: t }));
-        const mkItem = (color, label, bold) => {
-          const s = document.createElement("span"); s.className = "viz-process-legend-item";
-          const d = document.createElement("span"); d.className = "viz-process-legend-dot"; d.style.cssText = `background:${color};${bold ? "border:2px solid #000;box-sizing:border-box" : ""}`;
-          const l = document.createElement("span"); l.textContent = label; if (bold) l.style.fontWeight = "700";
-          s.appendChild(d); s.appendChild(l); return s;
-        };
-        genLegend.appendChild(mkItem("#152021", "Standard", true));
-        items.forEach(({ color, label }) => genLegend.appendChild(mkItem(color || "#7a8c8f", label, false)));
-        genLegend.hidden = false;
+    // ── Radial (Lepage-Bandet style): year → radius, angle from tree ──
+    function drawRadial(dagNodes, isoNodes, inE, outE, dagSet, visEdges) {
+      // Build spanning tree: pick the earliest-year parent for each node
+      const treeChildren = new Map(dagNodes.map((n) => [n, []]));
+      const treeParentOf = new Map();
+      const roots = [];
+      dagNodes.forEach((n) => {
+        const parents = (inE.get(n) || []).filter((p) => dagSet.has(p));
+        if (!parents.length) { roots.push(n); return; }
+        const prim = parents.reduce((best, p) =>
+          Number((genFamById.get(p) || {}).year || 9999) < Number((genFamById.get(best) || {}).year || 9999) ? p : best);
+        treeParentOf.set(n, prim);
+        treeChildren.get(prim).push(n);
+      });
+      treeChildren.forEach((kids) => kids.sort((a, b) =>
+        Number((genFamById.get(a) || {}).year || 9999) - Number((genFamById.get(b) || {}).year || 9999)));
+
+      // Leaf count (memoised)
+      const lcCache = new Map();
+      function lc(id) {
+        if (lcCache.has(id)) return lcCache.get(id);
+        const kids = treeChildren.get(id) || [];
+        const v = kids.length ? kids.reduce((s, k) => s + lc(k), 0) : 1;
+        lcCache.set(id, v); return v;
       }
+
+      // Assign angles (degrees, 0 = top, clockwise)
+      const angleOf = new Map();
+      function assignAngles(id, start, span) {
+        const kids = treeChildren.get(id) || [];
+        if (!kids.length) { angleOf.set(id, start + span / 2); return; }
+        const total = lc(id); let pos = start;
+        kids.forEach((k) => { const s = span * lc(k) / total; assignAngles(k, pos, s); pos += s; });
+        const ca = kids.map((k) => angleOf.get(k));
+        angleOf.set(id, (Math.min(...ca) + Math.max(...ca)) / 2);
+      }
+      const totalLeaves = roots.reduce((s, r) => s + lc(r), 0) || 1;
+      let aPos = 0;
+      roots.forEach((r) => { const span = 360 * lc(r) / totalLeaves; assignAngles(r, aPos, span); aPos += span; });
+
+      // Year → radius
+      const allYears = dagNodes.map((n) => Number((genFamById.get(n) || {}).year)).filter((y) => y > 1800 && y < 2200);
+      const minY = allYears.length ? Math.min(...allYears) : 1970;
+      const maxY = allYears.length ? Math.max(...allYears) : 2025;
+      const yPad = Math.max(3, Math.round((maxY - minY) * 0.07));
+      const y0 = minY - yPad; const y1 = maxY + yPad;
+      const diam = Math.min(760, Math.max(500, window.innerWidth - 60));
+      const rcx = diam / 2; const rcy = diam / 2;
+      const R_MIN = 55; const R_MAX = diam / 2 - 95;
+      function yr2r(yr) { return R_MIN + Math.max(0, Math.min(1, (yr - y0) / Math.max(1, y1 - y0))) * (R_MAX - R_MIN); }
+
+      // Polar (deg, 0=top clockwise) → cartesian SVG
+      function pol(r, deg) {
+        const a = (deg - 90) * Math.PI / 180;
+        return { x: rcx + r * Math.cos(a), y: rcy + r * Math.sin(a) };
+      }
+
+      genPlot.setAttribute("viewBox", `0 0 ${diam} ${diam}`);
+      genPlot.setAttribute("width", String(diam));
+      genPlot.setAttribute("height", String(diam));
+      genFrame.style.height = `${Math.max(320, Math.min(Math.round(window.innerHeight * 0.82), diam + 8))}px`;
+
+      // Decade rings
+      const d1 = Math.ceil(y0 / 10) * 10; const d2 = Math.floor(y1 / 10) * 10;
+      for (let yr = d1; yr <= d2; yr += 10) {
+        const r = yr2r(yr);
+        genPlot.appendChild(svgEl("circle", { cx: String(rcx), cy: String(rcy), r: String(r.toFixed(1)), fill: "none", stroke: "#e8e6dc", "stroke-width": "0.8" }));
+        const tp = pol(r + 2, 0);
+        const rl = svgEl("text", { x: String(tp.x.toFixed(1)), y: String(tp.y.toFixed(1)), "text-anchor": "middle", style: "font-size:8px;fill:#b0b0a0;font-family:sans-serif" });
+        rl.textContent = String(yr); genPlot.appendChild(rl);
+      }
+
+      // Radial S-curve bezier between two (angle, radius) positions
+      function rPath(srcId, tgtId) {
+        const sy = Number((genFamById.get(srcId) || {}).year || minY);
+        const ty = Number((genFamById.get(tgtId) || {}).year || minY);
+        const sr = yr2r(sy); const tr = yr2r(ty);
+        const sd = angleOf.get(srcId) || 0; const td = angleOf.get(tgtId) || 0;
+        const mr = (sr + tr) / 2;
+        const s = pol(sr, sd); const cp1 = pol(mr, sd); const cp2 = pol(mr, td); const t = pol(tr, td);
+        return `M ${s.x.toFixed(1)} ${s.y.toFixed(1)} C ${cp1.x.toFixed(1)} ${cp1.y.toFixed(1)}, ${cp2.x.toFixed(1)} ${cp2.y.toFixed(1)}, ${t.x.toFixed(1)} ${t.y.toFixed(1)}`;
+      }
+
+      // Draw edges (tree edges solid, non-tree edges dashed)
+      const hoverPaths = [];
+      visEdges.forEach((e) => {
+        const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
+        if (!angleOf.has(src) || !angleOf.has(tgt)) return;
+        const isTree = treeParentOf.get(tgt) === src;
+        const pd = rPath(src, tgt);
+        const rels = parseJsonArray(e.relations_json);
+        const fb = String(e.relation || "").trim();
+        const relLabel = (rels.length ? rels : (fb ? [fb] : ["related"])).map((r) => String(r).replace(/_/g, " ")).join(", ");
+        const strokeW = 1.0 + Math.min((rels.length || 1) - 1, 4) * 0.35;
+        const hoverTxt = `${String((genFamById.get(src) || {}).name || src)} → ${String((genFamById.get(tgt) || {}).name || tgt)}: ${relLabel}${e.note ? " | " + String(e.note) : ""}`;
+        const pathAttrs = { d: pd, stroke: isTree ? "rgba(55,75,80,0.5)" : "rgba(140,100,50,0.4)", "stroke-width": String(strokeW), fill: "none" };
+        if (!isTree) pathAttrs["stroke-dasharray"] = "3 2";
+        genPlot.appendChild(svgEl("path", pathAttrs));
+        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, strokeW + 8)), fill: "none", "pointer-events": "all" });
+        const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
+        hp.addEventListener("mouseenter", () => { if (genEdgeInfo) genEdgeInfo.textContent = hoverTxt; });
+        hp.addEventListener("mouseleave", () => { if (genEdgeInfo) genEdgeInfo.textContent = BASE_EDGE_INFO; });
+        hoverPaths.push(hp);
+      });
+
+      // Draw nodes and radial labels
+      dagNodes.forEach((fid) => {
+        if (!angleOf.has(fid)) return;
+        const fam = genFamById.get(fid); if (!fam) return;
+        const yr = Number(fam.year || minY);
+        const deg = angleOf.get(fid);
+        const { x: nx, y: ny } = pol(yr2r(yr), deg);
+        const isStd = stdFamIds.has(fid);
+        const color = nodeColor(fid);
+        const famTypes = Array.from(famToTypes.get(fid) || []).sort().join(", ") || "—";
+        const famConstrs = Array.from(famToConstrs.get(fid) || []).sort().join(", ") || "—";
+        const pid = genFamilyProcessMap[fid]; const proc = pid ? genProcessList.find((p) => String(p.id) === pid) : null;
+        const tip = [`${String(fam.name || fid)} (${yr})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : [])].join("\\n");
+        const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: isStd ? "5.5" : "4", fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "2" : "1" });
+        const ct = svgEl("title", {}); ct.textContent = tip; circ.appendChild(ct); genPlot.appendChild(circ);
+        const name = String(fam.name || fid);
+        const isRight = deg <= 180;
+        const rad = (deg - 90) * Math.PI / 180;
+        const off = isStd ? 8 : 6;
+        const lx = nx + (isRight ? 1 : -1) * off * Math.cos(rad);
+        const ly = ny + (isRight ? 1 : -1) * off * Math.sin(rad);
+        const textRot = deg - 90 + (isRight ? 0 : 180);
+        const disp = name.length <= 14 ? name : name.slice(0, 13) + "…";
+        const lbl = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": isRight ? "start" : "end",
+          transform: `rotate(${textRot.toFixed(1)},${lx.toFixed(1)},${ly.toFixed(1)})`,
+          style: `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:${isStd ? "#000" : "#1a2a2e"};pointer-events:none;font-weight:${isStd ? 700 : 400}` });
+        lbl.textContent = disp; genPlot.appendChild(lbl);
+      });
+
+      if (isoNodes.length) {
+        const note = svgEl("text", { x: String(rcx), y: String(diam - 6), "text-anchor": "middle", style: "font-size:9px;fill:#aaa;font-family:sans-serif" });
+        note.textContent = `${isoNodes.length} famil${isoNodes.length === 1 ? "y" : "ies"} with no visible links not shown in radial view`;
+        genPlot.appendChild(note);
+      }
+
+      hoverPaths.forEach((hp) => genPlot.appendChild(hp));
+    }
+
+    // ── Render dispatcher ─────────────────────────────────────────────
+    function render() {
+      updateYrLbl();
+      while (genPlot.firstChild) genPlot.removeChild(genPlot.firstChild);
+
+      const visIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVis(fid));
+      const visSet = new Set(visIds);
+
+      if (!visIds.length) {
+        genPlot.setAttribute("viewBox", "0 0 620 160"); genPlot.setAttribute("width", "620"); genPlot.setAttribute("height", "160");
+        const msg = svgEl("text", { x: "24", y: "42", class: "viz-label" }); msg.textContent = "No families match the current filters.";
+        genPlot.appendChild(msg); genFrame.style.height = "200px"; if (genLegend) genLegend.hidden = true; return;
+      }
+
+      const visEdges = influences.filter((e) => visSet.has(String(e.source_family_id || "")) && visSet.has(String(e.target_family_id || "")));
+
+      const inE = new Map(visIds.map((n) => [n, []])); const outE = new Map(visIds.map((n) => [n, []]));
+      visEdges.forEach((e) => { const src = String(e.source_family_id); const tgt = String(e.target_family_id); inE.get(tgt).push(src); outE.get(src).push(tgt); });
+
+      const dagSet = new Set(); visEdges.forEach((e) => { dagSet.add(String(e.source_family_id)); dagSet.add(String(e.target_family_id)); });
+      const dagNodes = visIds.filter((n) => dagSet.has(n));
+      const isoNodes = genConnectedOnly.checked ? [] : visIds.filter((n) => !dagSet.has(n));
+
+      if (genLayoutMode === "radial") {
+        drawRadial(dagNodes, isoNodes, inE, outE, dagSet, visEdges);
+      } else {
+        drawSugiyama(dagNodes, isoNodes, inE, outE, dagSet, visEdges);
+      }
+      drawLegend();
     }
 
     genColorBy.addEventListener("change", render);
@@ -2865,6 +3021,18 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     if (genFontReset) genFontReset.addEventListener("click", () => {
       genFontPx = GEN_BASE_FONT;
       if (genFontValue) genFontValue.textContent = `${genFontPx}px`; render();
+    });
+    if (genLayoutLayered) genLayoutLayered.addEventListener("click", () => {
+      genLayoutMode = "layered";
+      if (genLayoutLayered) genLayoutLayered.classList.add("is-active");
+      if (genLayoutRadial) genLayoutRadial.classList.remove("is-active");
+      render();
+    });
+    if (genLayoutRadial) genLayoutRadial.addEventListener("click", () => {
+      genLayoutMode = "radial";
+      if (genLayoutRadial) genLayoutRadial.classList.add("is-active");
+      if (genLayoutLayered) genLayoutLayered.classList.remove("is-active");
+      render();
     });
 
     initFilters();
