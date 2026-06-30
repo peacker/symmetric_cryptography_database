@@ -332,13 +332,8 @@ def build_site() -> None:
           </details>
         </div>
         <div class=\"gen-frame\" id=\"genFrame\">
-          <div id=\"genPlotScroll\" class=\"viz-plot-scroll gen-plot-scroll\">
+          <div id=\"genPlotScroll\" class=\"gen-plot-scroll\">
             <svg id=\"genPlot\" role=\"img\" aria-label=\"Genealogy influence graph\"></svg>
-          </div>
-          <div class=\"viz-xaxis-pane\">
-            <div id=\"genXAxisTrack\" class=\"viz-axis-track\">
-              <svg id=\"genXAxis\" role=\"presentation\" aria-hidden=\"true\"></svg>
-            </div>
           </div>
         </div>
         <p id=\"genEdgeInfo\" class=\"small-note gen-edge-info\">Hover an influence arrow to see relation details.</p>
@@ -998,20 +993,19 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
   border-radius: 10px;
   overflow: hidden;
   background: #fff;
-  display: grid;
-  grid-template-rows: 1fr 48px;
+  min-height: 220px;
 }
 
 .gen-plot-scroll {
   overflow: auto;
   background: #fff;
-  min-height: 160px;
+  width: 100%;
+  height: 100%;
 }
 
 .gen-edge-info {
   margin: 0.55rem 0 0;
   min-height: 1.4rem;
-  white-space: pre;
 }
 
 @media (max-width: 980px) {
@@ -2464,9 +2458,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
   function setupGenealogy() {
     const genPlot = document.getElementById("genPlot");
-    const genXAxis = document.getElementById("genXAxis");
     const genPlotScroll = document.getElementById("genPlotScroll");
-    const genXAxisTrack = document.getElementById("genXAxisTrack");
     const genFrame = document.getElementById("genFrame");
     const genColorBy = document.getElementById("genColorBy");
     const genConnectedOnly = document.getElementById("genConnectedOnly");
@@ -2487,8 +2479,9 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const genProcessNone = document.getElementById("genProcessNone");
     const genEdgeInfo = document.getElementById("genEdgeInfo");
     const genLegend = document.getElementById("genLegend");
-    if (!genPlot || !genXAxis || !genPlotScroll || !genFrame) return;
+    if (!genPlot || !genPlotScroll || !genFrame) return;
 
+    // ── Data ─────────────────────────────────────────────────────────
     const tables = data.tables || {};
     const families = (tables.families && tables.families.rows) || [];
     const primitives = (tables.primitives && tables.primitives.rows) || [];
@@ -2504,194 +2497,133 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const genFamilyProcessMap = genProcessData.familyProcessMap || {};
 
     const typeNameById = new Map(primitiveTypes.map((r) => [String(r.id), String(r.name)]));
-    const constructionNameById = new Map(constructions.map((r) => [String(r.id), String(r.name)]));
-    const genFamilyById = new Map(families.map((r) => [String(r.id), r]));
-    const primFamilyById = new Map(primitives.map((r) => [String(r.id), String(r.family_id || "")]));
+    const constrNameById = new Map(constructions.map((r) => [String(r.id), String(r.name)]));
+    const genFamById = new Map(families.map((r) => [String(r.id), r]));
+    const primFamById = new Map(primitives.map((r) => [String(r.id), String(r.family_id || "")]));
 
-    const stdFamilyIds = new Set(familyStandards.map((r) => String(r.family_id)));
-    primitiveStandards.forEach((r) => {
-      const fid = primFamilyById.get(String(r.primitive_id));
-      if (fid) stdFamilyIds.add(fid);
-    });
+    const stdFamIds = new Set(familyStandards.map((r) => String(r.family_id)));
+    primitiveStandards.forEach((r) => { const f = primFamById.get(String(r.primitive_id)); if (f) stdFamIds.add(f); });
 
     const famToTypes = new Map();
     primitives.forEach((r) => {
-      const fid = String(r.family_id || "");
-      if (!fid) return;
+      const fid = String(r.family_id || ""); if (!fid) return;
       if (!famToTypes.has(fid)) famToTypes.set(fid, new Set());
-      const tn = typeNameById.get(String(r.primitive_type || "")) || "";
-      if (tn) famToTypes.get(fid).add(tn);
+      const tn = typeNameById.get(String(r.primitive_type || "")) || ""; if (tn) famToTypes.get(fid).add(tn);
     });
-
     const famToConstrs = new Map();
     familyConstructions.forEach((r) => {
-      const fid = String(r.family_id || "");
-      if (!fid) return;
+      const fid = String(r.family_id || ""); if (!fid) return;
       if (!famToConstrs.has(fid)) famToConstrs.set(fid, new Set());
-      const cn = constructionNameById.get(String(r.construction_id || "")) || "";
-      if (cn) famToConstrs.get(fid).add(cn);
+      const cn = constrNameById.get(String(r.construction_id || "")) || ""; if (cn) famToConstrs.get(fid).add(cn);
     });
 
-    const outEdgesMap = new Map();
-    const inEdgesMap = new Map();
-    influences.forEach((e) => {
-      const src = String(e.source_family_id || "");
-      const tgt = String(e.target_family_id || "");
-      if (!src || !tgt) return;
-      if (!outEdgesMap.has(src)) outEdgesMap.set(src, []);
-      outEdgesMap.get(src).push(tgt);
-      if (!inEdgesMap.has(tgt)) inEdgesMap.set(tgt, []);
-      inEdgesMap.get(tgt).push(src);
-    });
-    const connectedIds = new Set([...outEdgesMap.keys(), ...inEdgesMap.keys()]);
-
-    const PROC_COLORS = [
-      "#1a73c9", "#d4501a", "#1e9c5e", "#9b42b8", "#c9961a",
-      "#c91a4e", "#1ab8c9", "#5e6e1a", "#7a1ac9", "#1a4ec9",
-      "#a85a1a", "#1a9b9b",
-    ];
-    const TYPE_COLORS = [
-      "#1e6fa8", "#b85a28", "#1a8e5c", "#7b30a0", "#a07818",
-      "#98183c", "#169aa8", "#4c6218", "#601aa0", "#1a40a0",
-      "#8a4818", "#1a8080",
-    ];
+    const PROC_COLORS = ["#1a73c9","#d4501a","#1e9c5e","#9b42b8","#c9961a","#c91a4e","#1ab8c9","#5e6e1a","#7a1ac9","#1a4ec9","#a85a1a","#1a9b9b"];
+    const TYPE_COLORS = ["#1e6fa8","#b85a28","#1a8e5c","#7b30a0","#a07818","#98183c","#169aa8","#4c6218","#601aa0","#1a40a0","#8a4818","#1a8080"];
     const genProcColorMap = new Map();
-    genProcessList.forEach((proc, idx) => genProcColorMap.set(String(proc.id), PROC_COLORS[idx % PROC_COLORS.length]));
+    genProcessList.forEach((p, i) => genProcColorMap.set(String(p.id), PROC_COLORS[i % PROC_COLORS.length]));
     genProcColorMap.set("__none__", "#7a8c8f");
-
     const typeColorMap = new Map();
     const allTypes = Array.from(new Set(Array.from(famToTypes.values()).flatMap((s) => Array.from(s)))).sort();
-    allTypes.forEach((t, idx) => typeColorMap.set(t, TYPE_COLORS[idx % TYPE_COLORS.length]));
-
+    allTypes.forEach((t, i) => typeColorMap.set(t, TYPE_COLORS[i % TYPE_COLORS.length]));
     const constrColorMap = new Map();
     const allConstrs = Array.from(new Set(Array.from(famToConstrs.values()).flatMap((s) => Array.from(s)))).sort();
-    allConstrs.forEach((c, idx) => constrColorMap.set(c, TYPE_COLORS[idx % TYPE_COLORS.length]));
+    allConstrs.forEach((c, i) => constrColorMap.set(c, TYPE_COLORS[i % TYPE_COLORS.length]));
 
-    const primitiveSelection = new Map();
-    const constructionSelection = new Map();
-    const processSelection = new Map();
-    let genYearsBounds = null;
+    // ── Filter state ──────────────────────────────────────────────────
+    const primSel = new Map();
+    const constrSel = new Map();
+    const procSel = new Map();
+    let genYrBounds = null;
 
     function initFilters() {
-      allTypes.forEach((t) => { if (!primitiveSelection.has(t)) primitiveSelection.set(t, true); });
-      allConstrs.forEach((c) => { if (!constructionSelection.has(c)) constructionSelection.set(c, true); });
-      genProcessList.forEach((p) => { if (!processSelection.has(String(p.id))) processSelection.set(String(p.id), true); });
-      processSelection.set("__none__", true);
+      allTypes.forEach((t) => { if (!primSel.has(t)) primSel.set(t, true); });
+      allConstrs.forEach((c) => { if (!constrSel.has(c)) constrSel.set(c, true); });
+      genProcessList.forEach((p) => { if (!procSel.has(String(p.id))) procSel.set(String(p.id), true); });
+      procSel.set("__none__", true);
 
-      buildCheckFilter(genPrimitiveFilters, primitiveSelection, genPrimitiveAll, genPrimitiveNone, null);
-      buildCheckFilter(genConstructionFilters, constructionSelection, genConstructionAll, genConstructionNone, null);
-      const procItems = genProcessList.map((p) => ({ key: String(p.id), label: String(p.name) }));
-      procItems.push({ key: "__none__", label: "No process" });
-      buildCheckFilterKeyed(genProcessFilters, processSelection, procItems, genProcessAll, genProcessNone);
+      buildChk(genPrimitiveFilters, primSel, null, genPrimitiveAll, genPrimitiveNone);
+      buildChk(genConstructionFilters, constrSel, null, genConstructionAll, genConstructionNone);
+      buildChk(genProcessFilters, procSel,
+        [...genProcessList.map((p) => ({ key: String(p.id), label: String(p.name) })), { key: "__none__", label: "No process" }],
+        genProcessAll, genProcessNone);
 
-      const years = families.map((f) => Number(f.year)).filter((y) => isFinite(y)).sort((a, b) => a - b);
-      if (years.length) {
-        genYearsBounds = { min: years[0], max: years[years.length - 1] };
-        [genYearStart, genYearEnd].forEach((el) => {
-          el.min = String(genYearsBounds.min);
-          el.max = String(genYearsBounds.max);
-          el.step = "1";
-        });
-        genYearStart.value = String(genYearsBounds.min);
-        genYearEnd.value = String(genYearsBounds.max);
-        updateYearLbl();
+      const yrs = families.map((f) => Number(f.year)).filter(isFinite).sort((a, b) => a - b);
+      if (yrs.length) {
+        genYrBounds = { min: yrs[0], max: yrs[yrs.length - 1] };
+        [genYearStart, genYearEnd].forEach((el) => { el.min = String(genYrBounds.min); el.max = String(genYrBounds.max); el.step = "1"; });
+        genYearStart.value = String(genYrBounds.min); genYearEnd.value = String(genYrBounds.max);
+        updateYrLbl();
       }
     }
 
-    function buildCheckFilter(container, selMap, btnAll, btnNone, keyed) {
+    function buildChk(container, selMap, keyed, btnAll, btnNone) {
+      if (!container) return;
       const entries = keyed || Array.from(selMap.keys()).map((k) => ({ key: k, label: k }));
-      container.innerHTML = entries
-        .map(({ key, label }) => {
-          const esc = escapeHtml(label);
-          const chk = selMap.get(key) !== false ? " checked" : "";
-          return `<label><input type="checkbox" data-value="${escapeHtml(key)}"${chk}/><span>${esc}</span></label>`;
-        })
-        .join("");
+      container.innerHTML = entries.map(({ key, label }) => {
+        const esc = escapeHtml(label);
+        return `<label><input type="checkbox" data-value="${escapeHtml(key)}"${selMap.get(key) !== false ? " checked" : ""}/><span>${esc}</span></label>`;
+      }).join("");
       container.addEventListener("change", (ev) => {
         const t = ev.target;
-        if (t && t.type === "checkbox" && t.dataset.value !== undefined) {
-          selMap.set(t.dataset.value, t.checked);
-          render();
-        }
+        if (t && t.type === "checkbox" && t.dataset.value !== undefined) { selMap.set(t.dataset.value, t.checked); render(); }
       });
       if (btnAll) btnAll.addEventListener("click", () => {
         entries.forEach(({ key }) => selMap.set(key, true));
-        Array.from(container.querySelectorAll("input[type=checkbox]")).forEach((c) => { c.checked = true; });
-        render();
+        Array.from(container.querySelectorAll("input[type=checkbox]")).forEach((c) => { c.checked = true; }); render();
       });
       if (btnNone) btnNone.addEventListener("click", () => {
         entries.forEach(({ key }) => selMap.set(key, false));
-        Array.from(container.querySelectorAll("input[type=checkbox]")).forEach((c) => { c.checked = false; });
-        render();
+        Array.from(container.querySelectorAll("input[type=checkbox]")).forEach((c) => { c.checked = false; }); render();
       });
     }
 
-    function buildCheckFilterKeyed(container, selMap, items, btnAll, btnNone) {
-      buildCheckFilter(container, selMap, btnAll, btnNone, items);
-    }
-
-    function updateYearLbl() {
-      if (!genYearsBounds) return;
-      const s = Number(genYearStart.value);
-      const e = Number(genYearEnd.value);
+    function updateYrLbl() {
+      if (!genYrBounds || !genYearRangeValue) return;
+      const s = Number(genYearStart.value); const e = Number(genYearEnd.value);
       genYearRangeValue.textContent = s === e ? String(s) : `${s} - ${e}`;
     }
 
-    function getYearRange() {
-      if (!genYearsBounds) return null;
-      let s = Number(genYearStart.value || genYearsBounds.min);
-      let e = Number(genYearEnd.value || genYearsBounds.max);
-      if (s > e) { const tmp = s; s = e; e = tmp; }
-      return { start: s, end: e };
+    function getYrRange() {
+      if (!genYrBounds) return null;
+      let s = Number(genYearStart.value || genYrBounds.min); let e = Number(genYearEnd.value || genYrBounds.max);
+      if (s > e) { const tmp = s; s = e; e = tmp; } return { start: s, end: e };
     }
 
-    function nodeColorFor(fid) {
+    function nodeColor(fid) {
       const mode = genColorBy.value;
-      if (mode === "process") {
-        const pid = genFamilyProcessMap[fid];
-        return pid ? (genProcColorMap.get(pid) || "#7a8c8f") : "#7a8c8f";
-      }
-      if (mode === "construction") {
-        const cc = Array.from(famToConstrs.get(fid) || []).sort();
-        return cc.length ? (constrColorMap.get(cc[0]) || "#5a7a8a") : "#7a8c8f";
-      }
-      const tt = Array.from(famToTypes.get(fid) || []).sort();
-      return tt.length ? (typeColorMap.get(tt[0]) || "#5a7a8a") : "#7a8c8f";
+      if (mode === "process") { const pid = genFamilyProcessMap[fid]; return pid ? (genProcColorMap.get(pid) || "#7a8c8f") : "#7a8c8f"; }
+      if (mode === "construction") { const cc = Array.from(famToConstrs.get(fid) || []).sort(); return cc.length ? (constrColorMap.get(cc[0]) || "#5a7a8a") : "#7a8c8f"; }
+      const tt = Array.from(famToTypes.get(fid) || []).sort(); return tt.length ? (typeColorMap.get(tt[0]) || "#5a7a8a") : "#7a8c8f";
     }
 
-    function isVisible(fid) {
-      const fam = genFamilyById.get(fid);
-      if (!fam) return false;
-      const yr = getYearRange();
-      const year = Number(fam.year);
+    function isVis(fid) {
+      const fam = genFamById.get(fid); if (!fam) return false;
+      const yr = getYrRange(); const year = Number(fam.year);
       if (yr && (year < yr.start || year > yr.end)) return false;
       const needle = genFamilySearch.value.trim().toLowerCase();
       if (needle && !String(fam.name || fid).toLowerCase().includes(needle)) return false;
-      if (genStandardsOnly.checked && !stdFamilyIds.has(fid)) return false;
-      if (genConnectedOnly.checked && !connectedIds.has(fid)) return false;
-
-      const anyType = Array.from(primitiveSelection.values()).some((v) => v);
-      if (anyType) {
-        const ft = famToTypes.get(fid) || new Set();
-        if (ft.size === 0) { if (primitiveSelection.get("") === false) return false; }
-        else if (!Array.from(ft).some((t) => primitiveSelection.get(t) !== false)) return false;
-      }
-
-      const anyConstr = Array.from(constructionSelection.values()).some((v) => v);
-      if (anyConstr) {
-        const fc = famToConstrs.get(fid) || new Set();
-        if (fc.size === 0) { if (constructionSelection.get("") === false) return false; }
-        else if (!Array.from(fc).some((c) => constructionSelection.get(c) !== false)) return false;
-      }
-
-      const anyProc = Array.from(processSelection.values()).some((v) => v);
-      if (anyProc) {
-        const pid = genFamilyProcessMap[fid] || "__none__";
-        if (processSelection.get(pid) === false) return false;
-      }
-
+      if (genStandardsOnly.checked && !stdFamIds.has(fid)) return false;
+      const anyType = Array.from(primSel.values()).some((v) => v);
+      if (anyType) { const ft = famToTypes.get(fid) || new Set(); if (!ft.size ? primSel.get("") === false : !Array.from(ft).some((t) => primSel.get(t) !== false)) return false; }
+      const anyCon = Array.from(constrSel.values()).some((v) => v);
+      if (anyCon) { const fc = famToConstrs.get(fid) || new Set(); if (!fc.size ? constrSel.get("") === false : !Array.from(fc).some((c) => constrSel.get(c) !== false)) return false; }
+      const anyProc = Array.from(procSel.values()).some((v) => v);
+      if (anyProc) { const pid = genFamilyProcessMap[fid] || "__none__"; if (procSel.get(pid) === false) return false; }
       return true;
     }
+
+    // ── Layout constants ──────────────────────────────────────────────
+    const NODE_H = 22;
+    const ROW_GAP = 36;
+    const COL_GAP = 10;
+    const TOP_PAD = 20;
+    const SIDE_PAD = 20;
+    const NODE_FONT = 11;
+    const NODE_PAD_X = 7;
+    const ISO_W = 90;
+    const BASE_EDGE_INFO = "Hover an influence arrow to see relation details.";
+
+    function nw(name) { return Math.min(152, Math.max(54, Math.ceil(String(name).length * NODE_FONT * 0.58) + NODE_PAD_X * 2)); }
 
     const SVG_NS = "http://www.w3.org/2000/svg";
     function svgEl(tag, attrs) {
@@ -2700,285 +2632,199 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       return el;
     }
 
-    const NODE_H = 20;
-    const NODE_VGAP = 9;
-    const NODE_FONT = 11;
-    const NODE_PAD_X = 6;
-    const AXIS_H = 48;
-    const TOP_PAD = 14;
-    const COL_MIN_W = 170;
-    const BASE_EDGE_INFO = "Hover an influence arrow to see relation details.";
-
-    function nodeW(fid) {
-      const name = String((genFamilyById.get(fid) || {}).name || fid);
-      return Math.min(150, Math.max(52, Math.ceil(name.length * NODE_FONT * 0.6) + NODE_PAD_X * 2));
+    // ── Sugiyama DAG layout helpers ───────────────────────────────────
+    function assignLayers(nodeSet, inE) {
+      const L = new Map(); const vis = new Set();
+      function d(id) {
+        if (L.has(id)) return L.get(id);
+        if (vis.has(id)) { L.set(id, 0); return 0; }
+        vis.add(id);
+        const preds = (inE.get(id) || []).filter((p) => nodeSet.has(p));
+        const l = preds.length ? Math.max(...preds.map(d)) + 1 : 0;
+        L.set(id, l); vis.delete(id); return l;
+      }
+      nodeSet.forEach(d); return L;
     }
 
+    function minimiseCrossings(layers, inE, outE) {
+      for (let pass = 0; pass < 4; pass++) {
+        const pm = new Map();
+        layers.forEach((lg) => { const n = lg.length; lg.forEach((id, i) => pm.set(id, n <= 1 ? 0.5 : i / (n - 1))); });
+        for (let li = 1; li < layers.length; li++) {
+          layers[li].sort((a, b) => {
+            const pA = inE.get(a) || []; const pB = inE.get(b) || [];
+            const bA = pA.length ? pA.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / pA.length : pm.get(a) || 0.5;
+            const bB = pB.length ? pB.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / pB.length : pm.get(b) || 0.5;
+            return bA - bB;
+          });
+          const n = layers[li].length; layers[li].forEach((id, i) => pm.set(id, n <= 1 ? 0.5 : i / (n - 1)));
+        }
+        for (let li = layers.length - 2; li >= 0; li--) {
+          layers[li].sort((a, b) => {
+            const sA = outE.get(a) || []; const sB = outE.get(b) || [];
+            const bA = sA.length ? sA.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / sA.length : pm.get(a) || 0.5;
+            const bB = sB.length ? sB.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / sB.length : pm.get(b) || 0.5;
+            return bA - bB;
+          });
+          const n = layers[li].length; layers[li].forEach((id, i) => pm.set(id, n <= 1 ? 0.5 : i / (n - 1)));
+        }
+      }
+    }
+
+    // ── Render ────────────────────────────────────────────────────────
     function render() {
-      updateYearLbl();
+      updateYrLbl();
       while (genPlot.firstChild) genPlot.removeChild(genPlot.firstChild);
-      while (genXAxis.firstChild) genXAxis.removeChild(genXAxis.firstChild);
 
-      const visibleIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVisible(fid));
+      const visIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVis(fid));
+      const visSet = new Set(visIds);
 
-      if (!visibleIds.length) {
-        genPlot.setAttribute("viewBox", "0 0 800 200");
-        genPlot.setAttribute("width", "800"); genPlot.setAttribute("height", "200");
-        const msg = svgEl("text", { x: "24", y: "42", class: "viz-label" });
-        msg.textContent = "No families match the current filters.";
-        genPlot.appendChild(msg);
-        genFrame.style.height = "200px";
-        if (genLegend) genLegend.hidden = true;
-        return;
+      if (!visIds.length) {
+        genPlot.setAttribute("viewBox", "0 0 620 160"); genPlot.setAttribute("width", "620"); genPlot.setAttribute("height", "160");
+        const msg = svgEl("text", { x: "24", y: "42", class: "viz-label" }); msg.textContent = "No families match the current filters.";
+        genPlot.appendChild(msg); genFrame.style.height = "200px"; if (genLegend) genLegend.hidden = true; return;
       }
 
-      const visSet = new Set(visibleIds);
-      const visEdges = influences.filter(
-        (e) => visSet.has(String(e.source_family_id || "")) && visSet.has(String(e.target_family_id || ""))
-      );
+      const visEdges = influences.filter((e) => visSet.has(String(e.source_family_id || "")) && visSet.has(String(e.target_family_id || "")));
 
-      // Build year groups
-      const yearGroups = new Map();
-      visibleIds.forEach((fid) => {
-        const yr = Number(genFamilyById.get(fid).year);
-        if (!yearGroups.has(yr)) yearGroups.set(yr, []);
-        yearGroups.get(yr).push(fid);
-      });
-      const sortedYears = Array.from(yearGroups.keys()).sort((a, b) => a - b);
-      const minYr = sortedYears[0];
-      const maxYr = sortedYears[sortedYears.length - 1];
-      const yrSpan = Math.max(1, maxYr - minYr);
+      const inE = new Map(visIds.map((n) => [n, []])); const outE = new Map(visIds.map((n) => [n, []]));
+      visEdges.forEach((e) => { const src = String(e.source_family_id); const tgt = String(e.target_family_id); inE.get(tgt).push(src); outE.get(src).push(tgt); });
 
-      // Compute plot width
-      const colW = Math.max(COL_MIN_W, 160 + Math.floor(NODE_FONT * 0.6 * 10));
-      const innerW = yrSpan * colW;
-      const plotW = Math.max(820, innerW + 24);
+      const dagSet = new Set(); visEdges.forEach((e) => { dagSet.add(String(e.source_family_id)); dagSet.add(String(e.target_family_id)); });
+      const dagNodes = visIds.filter((n) => dagSet.has(n));
+      const isoNodes = genConnectedOnly.checked ? [] : visIds.filter((n) => !dagSet.has(n));
 
-      function xFor(yr) {
-        if (minYr === maxYr) return plotW / 2;
-        return 12 + ((yr - minYr) / yrSpan) * innerW;
-      }
+      const layerOf = assignLayers(new Set(dagNodes), inE);
+      const maxLayer = dagNodes.length ? Math.max(...dagNodes.map((n) => layerOf.get(n) || 0)) : -1;
+      const numLayers = maxLayer + 1;
 
-      // Compute Y positions using gravity-toward-predecessors algorithm
-      const posY = new Map();
-      const inEdgesVis = new Map();
-      visEdges.forEach((e) => {
-        const tgt = String(e.target_family_id || "");
-        if (!inEdgesVis.has(tgt)) inEdgesVis.set(tgt, []);
-        inEdgesVis.get(tgt).push(String(e.source_family_id || ""));
-      });
+      const layerGroups = Array.from({ length: numLayers }, () => []);
+      dagNodes.forEach((n) => layerGroups[layerOf.get(n) || 0].push(n));
+      layerGroups.forEach((lg) => lg.sort((a, b) => Number((genFamById.get(a) || {}).year || 9999) - Number((genFamById.get(b) || {}).year || 9999)));
+      if (numLayers > 1) minimiseCrossings(layerGroups, inE, outE);
 
-      const NODE_ROW = NODE_H + NODE_VGAP;
-      let globalMaxY = TOP_PAD;
+      function layerW(lg) { return lg.reduce((s, n) => s + nw(String((genFamById.get(n) || {}).name || n)) + COL_GAP, 0) - (lg.length ? COL_GAP : 0); }
+      const maxLW = numLayers ? Math.max(...layerGroups.map(layerW)) : 0;
 
-      sortedYears.forEach((yr) => {
-        const col = yearGroups.get(yr);
+      const ISO_COLS = Math.max(1, Math.floor((Math.max(maxLW, 400) + COL_GAP) / (ISO_W + COL_GAP)));
+      const isoRows = isoNodes.length ? Math.ceil(isoNodes.length / ISO_COLS) : 0;
+      const dagH = numLayers ? numLayers * (NODE_H + ROW_GAP) - ROW_GAP : 0;
+      const isoH = isoRows ? ROW_GAP * 2 + isoRows * (NODE_H + COL_GAP) : 0;
+      const canvasW = Math.max(600, maxLW + SIDE_PAD * 2, ISO_COLS * (ISO_W + COL_GAP) - COL_GAP + SIDE_PAD * 2);
+      const canvasH = Math.max(260, TOP_PAD + dagH + isoH + 20);
 
-        // Compute ideal Y from predecessors already placed
-        const withIdeal = [];
-        const noIdeal = [];
-        col.forEach((fid) => {
-          const preds = (inEdgesVis.get(fid) || []).filter((src) => posY.has(src));
-          if (preds.length) {
-            const avg = preds.reduce((s, src) => s + posY.get(src), 0) / preds.length;
-            withIdeal.push({ fid, ideal: avg });
-          } else {
-            noIdeal.push({ fid, ideal: null });
-          }
+      genPlot.setAttribute("viewBox", `0 0 ${canvasW} ${canvasH}`);
+      genPlot.setAttribute("width", String(canvasW));
+      genPlot.setAttribute("height", String(canvasH));
+      genFrame.style.height = `${Math.max(220, Math.min(Math.round(window.innerHeight * 0.70), canvasH + 8))}px`;
+
+      const posX = new Map(); const posY = new Map();
+      layerGroups.forEach((lg, li) => {
+        const y = TOP_PAD + li * (NODE_H + ROW_GAP);
+        const totalW = layerW(lg);
+        let x = (canvasW - totalW) / 2;
+        lg.forEach((n) => {
+          const w = nw(String((genFamById.get(n) || {}).name || n));
+          posX.set(n, x + w / 2); posY.set(n, y); x += w + COL_GAP;
         });
-        withIdeal.sort((a, b) => a.ideal - b.ideal);
-
-        // Interleave: split noIdeal into slots around withIdeal
-        const ordered = [];
-        const noHalf = Math.floor(noIdeal.length / 2);
-        noIdeal.slice(0, noHalf).forEach((x) => ordered.push(x));
-        withIdeal.forEach((x) => ordered.push(x));
-        noIdeal.slice(noHalf).forEach((x) => ordered.push(x));
-
-        const totalH = (ordered.length - 1) * NODE_ROW;
-        let baseY;
-        if (withIdeal.length) {
-          const avgIdeal = withIdeal.reduce((s, x) => s + x.ideal, 0) / withIdeal.length;
-          baseY = Math.max(TOP_PAD, avgIdeal - totalH / 2);
-        } else {
-          baseY = TOP_PAD + Math.max(0, globalMaxY - TOP_PAD) / 2 - totalH / 2;
-          if (baseY < TOP_PAD) baseY = TOP_PAD;
-        }
-
-        ordered.forEach((item, i) => {
-          posY.set(item.fid, baseY + i * NODE_ROW);
-        });
-        globalMaxY = Math.max(globalMaxY, baseY + totalH + NODE_H);
       });
 
-      const plotH = Math.max(240, globalMaxY + NODE_H + 16);
+      const isoBase = TOP_PAD + dagH + (numLayers ? ROW_GAP * 2 : 0);
+      isoNodes.forEach((n, idx) => {
+        const col = idx % ISO_COLS; const row = Math.floor(idx / ISO_COLS);
+        posX.set(n, SIDE_PAD + col * (ISO_W + COL_GAP) + ISO_W / 2);
+        posY.set(n, isoBase + row * (NODE_H + COL_GAP));
+      });
 
-      genPlot.setAttribute("viewBox", `0 0 ${plotW} ${plotH}`);
-      genPlot.setAttribute("width", String(plotW));
-      genPlot.setAttribute("height", String(plotH));
-      genXAxis.setAttribute("viewBox", `0 0 ${plotW} ${AXIS_H}`);
-      genXAxis.setAttribute("width", String(plotW));
-      genXAxis.setAttribute("height", String(AXIS_H));
-      genFrame.style.height = `${Math.max(200, Math.min(Math.round(window.innerHeight * 0.68), plotH + AXIS_H))}px`;
-
-      // X axis
-      genXAxis.appendChild(svgEl("line", { x1: "0", x2: String(plotW), y1: "0.5", y2: "0.5", class: "viz-axis" }));
-      const pxPerYr = yrSpan ? innerW / yrSpan : innerW;
-      const lblStep = pxPerYr >= 44 ? 1 : pxPerYr >= 22 ? 2 : pxPerYr >= 11 ? 5 : 10;
-      for (let y = minYr; y <= maxYr; y++) {
-        const x = xFor(y);
-        genPlot.appendChild(svgEl("line", { x1: String(x), x2: String(x), y1: "0", y2: String(plotH), class: "viz-grid" }));
-        if ((y - minYr) % lblStep === 0) {
-          genXAxis.appendChild(svgEl("line", { x1: String(x), x2: String(x), y1: "0", y2: "9", class: "viz-axis" }));
-          const lbl = svgEl("text", { x: String(x), y: "24", "text-anchor": "middle", class: "viz-label", style: "font-size:11px" });
-          lbl.textContent = String(y);
-          genXAxis.appendChild(lbl);
-        }
-      }
-
-      // Arrow head marker
       const defs = svgEl("defs", {});
-      const marker = svgEl("marker", {
-        id: "genArrow", markerWidth: "10", markerHeight: "7",
-        markerUnits: "userSpaceOnUse", refX: "9", refY: "3.5", orient: "auto",
+      const marker = svgEl("marker", { id: "genArrow", markerWidth: "10", markerHeight: "7", markerUnits: "userSpaceOnUse", refX: "9", refY: "3.5", orient: "auto" });
+      marker.appendChild(svgEl("path", { d: "M0,0 L10,3.5 L0,7 z", fill: "rgba(55,75,80,0.75)" }));
+      defs.appendChild(marker); genPlot.appendChild(defs);
+
+      const stripes = ["rgba(231,244,248,0.52)", "rgba(248,244,231,0.52)"];
+      layerGroups.forEach((lg, li) => {
+        const y = TOP_PAD + li * (NODE_H + ROW_GAP) - 7;
+        genPlot.appendChild(svgEl("rect", { x: "0", y: String(y), width: String(canvasW), height: String(NODE_H + 14), fill: stripes[li % 2] }));
+        const genLbl = svgEl("text", { x: String(canvasW - 5), y: String(y + NODE_H * 0.65 + 7), "text-anchor": "end", style: "font-size:9px;fill:#8a9ea2;font-family:sans-serif" });
+        genLbl.textContent = `gen ${li}`;
+        genPlot.appendChild(genLbl);
       });
-      const mp = svgEl("path", { d: "M0,0 L10,3.5 L0,7 z", fill: "rgba(76,91,95,0.72)" });
-      marker.appendChild(mp);
-      defs.appendChild(marker);
-      genPlot.appendChild(defs);
 
-      // Node X centers
-      const posX = new Map();
-      visibleIds.forEach((fid) => posX.set(fid, xFor(Number(genFamilyById.get(fid).year))));
+      if (isoNodes.length && numLayers) {
+        const sepY = isoBase - ROW_GAP;
+        genPlot.appendChild(svgEl("line", { x1: String(SIDE_PAD), x2: String(canvasW - SIDE_PAD), y1: String(sepY), y2: String(sepY), stroke: "#c8c6b8", "stroke-width": "1", "stroke-dasharray": "4 3" }));
+        const sepLbl = svgEl("text", { x: String(SIDE_PAD), y: String(sepY - 4), class: "viz-label", style: "font-size:9px;fill:#8a9ea2" });
+        sepLbl.textContent = "No visible influence links";
+        genPlot.appendChild(sepLbl);
+      }
 
-      // Draw edges
       const hoverPaths = [];
       visEdges.forEach((e) => {
-        const src = String(e.source_family_id || "");
-        const tgt = String(e.target_family_id || "");
-        if (!posX.has(src) || !posX.has(tgt) || !posY.has(src) || !posY.has(tgt)) return;
-
-        const sw = nodeW(src); const tw = nodeW(tgt);
-        const sx = posX.get(src) + sw / 2;
-        const sy = posY.get(src) + NODE_H / 2;
-        const tx = posX.get(tgt) - tw / 2;
-        const ty = posY.get(tgt) + NODE_H / 2;
-        const dx = tx - sx;
-        const cpx1 = sx + Math.abs(dx) * 0.38;
-        const cpx2 = tx - Math.abs(dx) * 0.38;
+        const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
+        if (!posX.has(src) || !posX.has(tgt)) return;
+        const sx = posX.get(src); const sy = posY.get(src) + NODE_H;
+        const tx = posX.get(tgt); const ty = posY.get(tgt) - 9;
+        const vGap = Math.max(ROW_GAP, ty - sy);
+        const cpY = Math.min(vGap * 0.5, ROW_GAP + 14);
+        const pd = `M ${sx} ${sy} C ${sx} ${sy + cpY}, ${tx} ${ty - cpY}, ${tx} ${ty}`;
 
         const rels = parseJsonArray(e.relations_json);
         const fb = String(e.relation || "").trim();
-        const relLabel = (rels.length ? rels : (fb ? [fb] : ["related"]))
-          .map((r) => String(r).replace(/_/g, " ")).join(", ");
-        const strokeW = 1.1 + Math.min(rels.length - 1, 4) * 0.55;
-
-        const srcName = String((genFamilyById.get(src) || {}).name || src);
-        const tgtName = String((genFamilyById.get(tgt) || {}).name || tgt);
+        const relLabel = (rels.length ? rels : (fb ? [fb] : ["related"])).map((r) => String(r).replace(/_/g, " ")).join(", ");
+        const strokeW = 1.1 + Math.min((rels.length || 1) - 1, 4) * 0.45;
+        const srcName = String((genFamById.get(src) || {}).name || src);
+        const tgtName = String((genFamById.get(tgt) || {}).name || tgt);
         const note = String(e.note || "").trim();
         const hoverTxt = `${srcName} → ${tgtName}: ${relLabel}${note ? " | " + note : ""}`;
 
-        const pd = `M ${sx} ${sy} C ${cpx1} ${sy}, ${cpx2} ${ty}, ${tx} ${ty}`;
-        genPlot.appendChild(svgEl("path", {
-          d: pd, stroke: "rgba(76,91,95,0.55)", "stroke-width": String(strokeW),
-          fill: "none", "marker-end": "url(#genArrow)", "pointer-events": "none",
-        }));
-
-        const hp = svgEl("path", {
-          d: pd, stroke: "rgba(0,0,0,0.001)",
-          "stroke-width": String(Math.max(10, strokeW + 8)),
-          fill: "none", "pointer-events": "all", style: "cursor:default",
-        });
-        const hpTitle = svgEl("title", {});
-        hpTitle.textContent = hoverTxt;
-        hp.appendChild(hpTitle);
-        hp.addEventListener("mouseenter", () => { genEdgeInfo.textContent = hoverTxt; });
-        hp.addEventListener("mouseleave", () => { genEdgeInfo.textContent = BASE_EDGE_INFO; });
+        genPlot.appendChild(svgEl("path", { d: pd, stroke: "rgba(55,75,80,0.45)", "stroke-width": String(strokeW), fill: "none", "marker-end": "url(#genArrow)", "pointer-events": "none" }));
+        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, strokeW + 8)), fill: "none", "pointer-events": "all" });
+        const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
+        hp.addEventListener("mouseenter", () => { if (genEdgeInfo) genEdgeInfo.textContent = hoverTxt; });
+        hp.addEventListener("mouseleave", () => { if (genEdgeInfo) genEdgeInfo.textContent = BASE_EDGE_INFO; });
         hoverPaths.push(hp);
       });
 
-      // Draw nodes
-      visibleIds.forEach((fid) => {
-        const fam = genFamilyById.get(fid);
-        const cx = posX.get(fid);
-        const cy = posY.get(fid);
-        if (cx === undefined || cy === undefined) return;
-
-        const nw = nodeW(fid);
-        const nx = cx - nw / 2;
-        const color = nodeColorFor(fid);
-        const isStd = stdFamilyIds.has(fid);
+      [...dagNodes, ...isoNodes].forEach((fid) => {
+        const fam = genFamById.get(fid); if (!fam) return;
+        const cx = posX.get(fid); const cy = posY.get(fid); if (cx === undefined || cy === undefined) return;
+        const isIso = !dagSet.has(fid); const isStd = stdFamIds.has(fid);
         const name = String(fam.name || fid);
+        const w = isIso ? ISO_W : nw(name);
+        const color = nodeColor(fid);
         const famTypes = Array.from(famToTypes.get(fid) || []).sort().join(", ") || "—";
         const famConstrs = Array.from(famToConstrs.get(fid) || []).sort().join(", ") || "—";
-        const pid = genFamilyProcessMap[fid];
-        const proc = pid ? genProcessList.find((p) => String(p.id) === pid) : null;
-        const tipParts = [`${name} (${fam.year})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`];
-        if (isStd) tipParts.push("Standard: yes");
-        if (proc) tipParts.push(`Process: ${proc.name}`);
-        if (fam.notes) tipParts.push(fam.notes);
+        const pid = genFamilyProcessMap[fid]; const proc = pid ? genProcessList.find((p) => String(p.id) === pid) : null;
+        const tip = [`${name} (${fam.year})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : []), ...(fam.notes ? [fam.notes] : [])].join("\\n");
 
-        const rect = svgEl("rect", {
-          x: String(nx), y: String(cy), width: String(nw), height: String(NODE_H),
-          rx: "4", ry: "4",
-          fill: isStd ? "#152021" : color,
-          stroke: isStd ? "#000000" : "rgba(0,0,0,0.22)",
-          "stroke-width": isStd ? "2" : "1",
-        });
-        const rectTitle = svgEl("title", {});
-        rectTitle.textContent = tipParts.join("\\n");
-        rect.appendChild(rectTitle);
+        const rect = svgEl("rect", { x: String(cx - w / 2), y: String(cy), width: String(w), height: String(NODE_H), rx: "4", ry: "4", fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.22)", "stroke-width": isStd ? "2" : "1", opacity: isIso ? "0.58" : "1" });
+        const rt = svgEl("title", {}); rt.textContent = tip; rect.appendChild(rt);
         genPlot.appendChild(rect);
 
-        const maxChars = Math.max(4, Math.floor((nw - NODE_PAD_X * 2) / (NODE_FONT * 0.58)));
-        const displayName = name.length <= maxChars ? name : name.slice(0, Math.max(1, maxChars - 1)) + "\\u2026";
-        const lbl = svgEl("text", {
-          x: String(cx), y: String(cy + NODE_H * 0.67),
-          "text-anchor": "middle",
-          style: `font-size:${NODE_FONT}px;font-family:"IBM Plex Mono",monospace;fill:#fff;pointer-events:none;font-weight:${isStd ? 700 : 400}`,
-        });
-        lbl.textContent = displayName;
-        genPlot.appendChild(lbl);
+        const maxCh = Math.max(4, Math.floor((w - NODE_PAD_X * 2) / (NODE_FONT * 0.56)));
+        const disp = name.length <= maxCh ? name : name.slice(0, Math.max(1, maxCh - 1)) + "…";
+        const lbl = svgEl("text", { x: String(cx), y: String(cy + NODE_H * 0.67), "text-anchor": "middle", style: `font-size:${NODE_FONT}px;font-family:"IBM Plex Mono",monospace;fill:#fff;pointer-events:none;font-weight:${isStd ? 700 : 400};opacity:${isIso ? "0.8" : "1"}` });
+        lbl.textContent = disp; genPlot.appendChild(lbl);
       });
 
       hoverPaths.forEach((hp) => genPlot.appendChild(hp));
 
-      // Sync x-axis track
-      genXAxisTrack.style.transform = `translateX(${-genPlotScroll.scrollLeft}px)`;
-
-      // Legend
       if (genLegend) {
         while (genLegend.firstChild) genLegend.removeChild(genLegend.firstChild);
         const mode = genColorBy.value;
-        const legendItems = [];
-        if (mode === "process") {
-          genProcessList.forEach((p) => legendItems.push({ color: genProcColorMap.get(String(p.id)), label: String(p.name) }));
-          legendItems.push({ color: genProcColorMap.get("__none__"), label: "No process" });
-        } else if (mode === "construction") {
-          allConstrs.forEach((c) => { if (constructionSelection.get(c) !== false) legendItems.push({ color: constrColorMap.get(c) || "#7a8c8f", label: c }); });
-        } else {
-          allTypes.forEach((t) => { if (primitiveSelection.get(t) !== false) legendItems.push({ color: typeColorMap.get(t) || "#7a8c8f", label: t }); });
-        }
-        const stdSpan = document.createElement("span");
-        stdSpan.className = "viz-process-legend-item";
-        const stdDot = document.createElement("span");
-        stdDot.className = "viz-process-legend-dot";
-        stdDot.style.cssText = "background:#152021;border:2px solid #000;box-sizing:border-box";
-        const stdLbl = document.createElement("span");
-        stdLbl.textContent = "Standard"; stdLbl.style.fontWeight = "700";
-        stdSpan.appendChild(stdDot); stdSpan.appendChild(stdLbl);
-        genLegend.appendChild(stdSpan);
-        legendItems.forEach(({ color, label }) => {
-          const item = document.createElement("span");
-          item.className = "viz-process-legend-item";
-          const dot = document.createElement("span");
-          dot.className = "viz-process-legend-dot";
-          dot.style.background = color || "#7a8c8f";
-          const lbl2 = document.createElement("span");
-          lbl2.textContent = label;
-          item.appendChild(dot); item.appendChild(lbl2);
-          genLegend.appendChild(item);
-        });
+        const items = mode === "process"
+          ? [...genProcessList.map((p) => ({ color: genProcColorMap.get(String(p.id)), label: String(p.name) })), { color: genProcColorMap.get("__none__"), label: "No process" }]
+          : mode === "construction"
+            ? allConstrs.filter((c) => constrSel.get(c) !== false).map((c) => ({ color: constrColorMap.get(c) || "#7a8c8f", label: c }))
+            : allTypes.filter((t) => primSel.get(t) !== false).map((t) => ({ color: typeColorMap.get(t) || "#7a8c8f", label: t }));
+        const mkItem = (color, label, bold) => {
+          const s = document.createElement("span"); s.className = "viz-process-legend-item";
+          const d = document.createElement("span"); d.className = "viz-process-legend-dot"; d.style.cssText = `background:${color};${bold ? "border:2px solid #000;box-sizing:border-box" : ""}`;
+          const l = document.createElement("span"); l.textContent = label; if (bold) l.style.fontWeight = "700";
+          s.appendChild(d); s.appendChild(l); return s;
+        };
+        genLegend.appendChild(mkItem("#152021", "Standard", true));
+        items.forEach(({ color, label }) => genLegend.appendChild(mkItem(color || "#7a8c8f", label, false)));
         genLegend.hidden = false;
       }
     }
@@ -2991,17 +2837,13 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     genYearStart.addEventListener("input", render);
     genYearEnd.addEventListener("input", render);
     genYearReset.addEventListener("click", () => {
-      if (!genYearsBounds) return;
-      genYearStart.value = String(genYearsBounds.min);
-      genYearEnd.value = String(genYearsBounds.max);
-      render();
-    });
-    genPlotScroll.addEventListener("scroll", () => {
-      genXAxisTrack.style.transform = `translateX(${-genPlotScroll.scrollLeft}px)`;
+      if (!genYrBounds) return;
+      genYearStart.value = String(genYrBounds.min); genYearEnd.value = String(genYrBounds.max); render();
     });
 
     initFilters();
     render();
+
   }
 
   renderSummary();
