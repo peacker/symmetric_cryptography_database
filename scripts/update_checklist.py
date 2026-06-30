@@ -24,6 +24,10 @@ REFS = REPO / "references"
 # TYPE MAP: scheme name (lower) -> primary type
 # ─────────────────────────────────────────────────────────────────────────────
 TYPE_MAP = {
+    "a5/1":                         "stream_cipher",
+    "a5/2":                         "stream_cipher",
+    "a5/3":                         "stream_cipher",
+    "a5/4":                         "stream_cipher",
     "ace":                          "permutation",
     "achterbahn":                   "stream_cipher",
     "aes":                          "block_cipher",
@@ -35,6 +39,7 @@ TYPE_MAP = {
     "ascon":                        "permutation",
     "ballet":                       "block_cipher",
     "bear/lion":                    "construction",
+    "bea-1":                        "block_cipher",
     "belt":                         "block_cipher",
     "bipbip":                       "tweakable_block_cipher",
     "bleep64":                      "aead",
@@ -170,6 +175,8 @@ TYPE_MAP = {
     "rc6":                          "block_cipher",
     "remus":                        "aead",
     "rijndael":                     "block_cipher",
+    "tcast":                        "block_cipher",
+    "tloki":                        "block_cipher",
     "romulus":                      "aead",
     "saeaes":                       "aead",
     "saecham":                      "block_cipher",
@@ -259,6 +266,7 @@ TYPE_MAP = {
     "md5":                          "hash",
     "ripemd":                       "hash",
     "sha-1 / sha-2":                "hash",
+    "sha-0":                        "hash",
     "tiger":                        "hash",
     "whirlpool":                    "hash",
 }
@@ -269,6 +277,15 @@ TYPE_MAP = {
 #   pdf_stem: stem of file in references/ (without YYYY- prefix), or "" if none
 # ─────────────────────────────────────────────────────────────────────────────
 NEW_ENTRIES = [
+    # Early SHA, GSM A5, and deliberately trapdoored research ciphers
+    ("[x]", "A5/1",                     "A5/1",                 "stream_cipher",        "1987", "https://cryptome.org/jya/a51-pi.htm", "Original unavailable; detailed 2012 paper", "1987-a5_1-[original_not_available_extracted_from_2012_publication]"),
+    ("[x]", "A5/2",                     "A5/2",                 "stream_cipher",        "1993", "https://doi.org/10.1007/978-3-540-45146-4_35", "Original unavailable; detailed 2008 paper", "1993-a5_2-[original_not_available_extracted_from_2008_publication]"),
+    ("[x]", "A5/3",                     "KASUMI",               "stream_cipher",        "2002", "https://www.3gpp.org/ftp/Specs/archive/55_series/55.216/", "Full specification licensed/unavailable", ""),
+    ("[x]", "A5/4",                     "KASUMI",               "stream_cipher",        "2004", "https://www.3gpp.org/ftp/Specs/archive/55_series/55.226/", "Full specification licensed/unavailable", ""),
+    ("[x]", "BEA-1",                    "BEA-1",                "block_cipher",         "2017", "https://doi.org/10.5220/0006244406220631", "Full", "2017-bea1"),
+    ("[x]", "tCAST",                    "tCAST",                "block_cipher",         "1997", "https://doi.org/10.1007/BFb0052342", "Full", "1997-tcast_tloki"),
+    ("[x]", "tLOKI",                    "tLOKI",                "block_cipher",         "1997", "https://doi.org/10.1007/BFb0052342", "Full", "1997-tcast_tloki"),
+    ("[x]", "SHA-0",                    "SHA-0",                "hash",                 "1993", "https://csrc.nist.gov/pubs/fips/180/final", "Full", "1993-sha0-fips180"),
     # CHAM family
     ("[x]", "CHAM",                     "CHAM",                 "block_cipher",         "2018", "https://link.springer.com/chapter/10.1007/978-3-319-78556-1_1", "Full", "2018-cham"),
     ("[x]", "CHAM Revised",             "CHAM Revised",         "block_cipher",         "2020", "https://link.springer.com/chapter/10.1007/978-3-030-40921-0_1", "Full", "2020-cham-revised"),
@@ -327,6 +344,10 @@ NEW_ENTRIES = [
 # TYPE overrides for existing entries where the scheme name may differ
 # ─────────────────────────────────────────────────────────────────────────────
 SCHEME_TYPE_OVERRIDE = {
+    "A5/1":                             "stream_cipher",
+    "A5/2":                             "stream_cipher",
+    "A5/3":                             "stream_cipher",
+    "A5/4":                             "stream_cipher",
     "ACE":                              "permutation",
     "ACHTERBAHN":                       "stream_cipher",
     "AES":                              "block_cipher",
@@ -338,6 +359,7 @@ SCHEME_TYPE_OVERRIDE = {
     "ASCON":                            "permutation",
     "Ballet":                           "block_cipher",
     "BEAR/LION":                        "construction",
+    "BEA-1":                            "block_cipher",
     "BelT":                             "block_cipher",
     "BipBip":                           "tweakable_block_cipher",
     "Bleep64":                          "aead",
@@ -473,6 +495,8 @@ SCHEME_TYPE_OVERRIDE = {
     "RC6":                              "block_cipher",
     "REMUS":                            "aead",
     "Rijndael":                         "block_cipher",
+    "tCAST":                            "block_cipher",
+    "tLOKI":                            "block_cipher",
     "Romulus":                          "aead",
     "SAEAES":                           "aead",
     "SAECHAM":                          "block_cipher",
@@ -559,6 +583,7 @@ SCHEME_TYPE_OVERRIDE = {
     "MD5":                              "hash",
     "RIPEMD":                           "hash",
     "SHA-1 / SHA-2":                    "hash",
+    "SHA-0":                            "hash",
     "Tiger":                            "hash",
     "Whirlpool":                        "hash",
 }

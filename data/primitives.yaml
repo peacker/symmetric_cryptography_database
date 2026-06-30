@@ -1,5 +1,119 @@
 version: 1
 primitives:
+- id: sha0_v1
+  name: SHA-0
+  family_id: sha0
+  primitive_type: hash_function
+  reference_ids:
+  - nist_1993_fips180_sha0
+  characteristics:
+    output_size_bits: 160
+    block_size_bits: 512
+    state_size_bits: 160
+    rounds: 80
+  notes: Original FIPS PUB 180 hash function, retrospectively named SHA-0.
+- id: a5_1_gsm
+  name: A5/1
+  family_id: a5_1
+  primitive_type: stream_cipher
+  reference_ids:
+  - briceno_goldberg_wagner_1999_a5
+  - biryukov_shamir_wagner_2000_a5_1
+  - shah_mahalanobis_2012_a5_1
+  characteristics:
+    key_size_bits: 64
+    iv_size_bits: 22
+    state_size_bits: 64
+  notes: Produces two 114-bit GSM bursts (228 keystream bits) for each initialized
+    frame state.
+- id: a5_2_gsm
+  name: A5/2
+  family_id: a5_2
+  primitive_type: stream_cipher
+  reference_ids:
+  - briceno_goldberg_wagner_1999_a5
+  - barkan_biham_keller_2003_gsm
+  - barkan_biham_keller_2008_gsm_joc
+  characteristics:
+    key_size_bits: 64
+    iv_size_bits: 22
+    state_size_bits: 81
+  notes: Deliberately weakened GSM export cipher; prohibited by 3GPP after practical
+    key-recovery and downgrade attacks.
+- id: a5_3_gsm
+  name: A5/3
+  family_id: kasumi
+  primitive_type: stream_cipher
+  reference_ids:
+  - 3gpp_ts_55_216_a5_3
+  - ts_35_202_kasumi
+  characteristics:
+    key_size_bits: 64
+    iv_size_bits: 22
+    state_size_bits: 64
+  notes: GSM confidentiality algorithm constructed from KASUMI; listed under the
+    KASUMI family rather than as a duplicate cipher family.
+- id: a5_4_gsm
+  name: A5/4
+  family_id: kasumi
+  primitive_type: stream_cipher
+  reference_ids:
+  - 3gpp_ts_55_226_a5_4
+  - ts_35_202_kasumi
+  characteristics:
+    key_size_bits: 128
+    iv_size_bits: 22
+    state_size_bits: 64
+  notes: 128-bit-key GSM confidentiality algorithm constructed from KASUMI.
+- id: tcast_64
+  name: tCAST-64
+  family_id: tcast
+  primitive_type: block_cipher
+  reference_ids:
+  - rijmen_preneel_1997_tcast_tloki
+  - wu_bao_deng_ye_1998_trapdoor_cryptanalysis
+  characteristics:
+    block_size_bits: 64
+    output_size_bits: 64
+  notes: CAST-style research construction using four trapdoored 8-to-32-bit S-boxes;
+    round count and key schedule depend on the selected CAST variant.
+- id: tcast_80_16
+  name: tCAST-80/16
+  family_id: tcast
+  primitive_type: block_cipher
+  reference_ids:
+  - rijmen_preneel_1997_tcast_tloki
+  characteristics:
+    block_size_bits: 80
+    output_size_bits: 80
+    rounds: 16
+  notes: Explicit example from the paper using four trapdoored 10-to-40-bit S-boxes.
+- id: tloki_64
+  name: tLOKI
+  family_id: tloki
+  primitive_type: block_cipher
+  reference_ids:
+  - rijmen_preneel_1997_tcast_tloki
+  - wu_bao_deng_ye_1998_trapdoor_cryptanalysis
+  characteristics:
+    block_size_bits: 64
+    key_size_bits: 64
+    output_size_bits: 64
+    rounds: 16
+  notes: Trapdoored LOKI91 research variant with a round-level hidden correlation.
+- id: bea1_80_120
+  name: BEA-1
+  family_id: bea1
+  primitive_type: block_cipher
+  reference_ids:
+  - bannier_filiol_2017_bea1
+  characteristics:
+    block_size_bits: 80
+    key_size_bits: 120
+    output_size_bits: 80
+    rounds: 11
+  notes: Explicitly backdoored research cipher with twelve 80-bit round keys and
+    eleven rounds; unsuitable for real protection.
 - id: cham_64_128
   name: CHAM-64/128
   family_id: cham

@@ -1,5 +1,143 @@
 version: 1
 references:
+- id: nist_1993_fips180_sha0
+  kind: standard
+  title: 'Secure Hash Standard (SHS), FIPS PUB 180'
+  authors:
+  - National Institute of Standards and Technology (NIST)
+  year: 1993
+  venue: Federal Information Processing Standards Publication 180
+  organization: NIST
+  status: withdrawn
+  url: https://csrc.nist.gov/pubs/fips/180/final
+  notes: 'Original Secure Hash Standard, now conventionally called SHA-0. It was
+    superseded by FIPS 180-1 in 1995 after a change to the message schedule. Local
+    copy: references/1993-sha0-fips180.pdf.'
+- id: briceno_goldberg_wagner_1999_a5
+  kind: technical_report
+  title: A pedagogical implementation of A5/1
+  authors:
+  - Marc Briceno
+  - Ian Goldberg
+  - David Wagner
+  year: 1999
+  venue: Public reverse-engineered description of the GSM A5 algorithms
+  url: https://cryptome.org/jya/a51-pi.htm
+  notes: Public description and reference-style implementation produced after the
+    formerly secret A5/1 design was reverse engineered.
+- id: biryukov_shamir_wagner_2000_a5_1
+  kind: paper
+  title: Real Time Cryptanalysis of A5/1 on a PC
+  authors:
+  - Alex Biryukov
+  - Adi Shamir
+  - David Wagner
+  year: 2000
+  venue: Fast Software Encryption 2000, LNCS 1978, pp. 1–18
+  publisher: Springer
+  url: https://doi.org/10.1007/3-540-44706-7_1
+  notes: Canonical cryptanalysis reference for A5/1.
+- id: shah_mahalanobis_2012_a5_1
+  kind: paper
+  title: A New Guess-and-Determine Attack on the A5/1 Stream Cipher
+  authors:
+  - Jay Shah
+  - Ayan Mahalanobis
+  year: 2012
+  venue: Cryptology ePrint Archive 2012/208 / arXiv 1204.4535
+  url: https://arxiv.org/abs/1204.4535
+  notes: 'Contains a detailed A5/1 description and attack. The filename uses the
+    cipher''s 1987 design year, not this paper''s year. Local copy: references/1987-a5_1-[original_not_available_extracted_from_2012_publication].pdf.'
+- id: barkan_biham_keller_2003_gsm
+  kind: paper
+  title: Instant Ciphertext-Only Cryptanalysis of GSM Encrypted Communication
+  authors:
+  - Elad Barkan
+  - Eli Biham
+  - Nathan Keller
+  year: 2003
+  venue: CRYPTO 2003, LNCS 2729, pp. 600–616
+  publisher: Springer
+  url: https://doi.org/10.1007/978-3-540-45146-4_35
+  notes: Describes practical attacks exploiting A5/2 and GSM cipher-mode downgrade
+    behavior, including recovery of the session key.
+- id: barkan_biham_keller_2008_gsm_joc
+  kind: paper
+  title: Instant Ciphertext-Only Cryptanalysis of GSM Encrypted Communication
+  authors:
+  - Elad Barkan
+  - Eli Biham
+  - Nathan Keller
+  year: 2008
+  venue: Journal of Cryptology, vol. 21, pp. 392–429
+  publisher: Springer
+  url: https://doi.org/10.1007/s00145-007-9001-y
+  notes: 'Expanded journal version of the CRYPTO 2003 work, including A5/2 details.
+    The filename uses the cipher''s 1993 completion year. Local copy: references/1993-a5_2-[original_not_available_extracted_from_2008_publication].pdf.'
+- id: 3gpp_ts_55_216_a5_3
+  kind: standard
+  title: '3GPP TS 55.216: A5/3 and GEA3 Specification Wrapper'
+  year: 2002
+  venue: 3GPP
+  organization: 3GPP
+  status: active
+  url: https://www.3gpp.org/ftp/Specs/archive/55_series/55.216/
+  notes: 'This is only a 3GPP wrapper pointing to a separately licensed Task Force
+    specification; it does not contain the A5/3 algorithm. The earliest archive
+    package states that the specification was withdrawn pending French export-control
+    procedures. No full public PDF is available in the repository.'
+- id: 3gpp_ts_55_226_a5_4
+  kind: standard
+  title: '3GPP TS 55.226: A5/4 and GEA4 Specification Wrapper'
+  year: 2004
+  venue: 3GPP
+  organization: 3GPP
+  status: active
+  url: https://www.3gpp.org/ftp/Specs/archive/55_series/55.226/
+  notes: 'This is only a 3GPP wrapper pointing to a separately licensed Task Force
+    specification; it does not contain the A5/4 algorithm. The initial 2004 archive
+    package contains only a French export-licensing notice. No full public PDF is
+    available in the repository.'
+- id: rijmen_preneel_1997_tcast_tloki
+  kind: paper
+  title: A Family of Trapdoor Ciphers
+  authors:
+  - Vincent Rijmen
+  - Bart Preneel
+  year: 1997
+  venue: Fast Software Encryption 1997, LNCS 1267, pp. 139–148
+  publisher: Springer
+  url: https://doi.org/10.1007/BFb0052342
+  notes: 'Introduces tCAST and tLOKI, deliberately trapdoored variants of CAST-family
+    and LOKI91 round functions. Local copy: references/1997-tcast_tloki.pdf.'
+- id: wu_bao_deng_ye_1998_trapdoor_cryptanalysis
+  kind: paper
+  title: Cryptanalysis of Rijmen–Preneel Trapdoor Ciphers
+  authors:
+  - Hongjun Wu
+  - Feng Bao
+  - Robert H. Deng
+  - Qin-Zhong Ye
+  year: 1998
+  venue: ASIACRYPT 1998, LNCS 1514, pp. 126–132
+  publisher: Springer
+  url: https://doi.org/10.1007/3-540-49649-1_11
+  notes: Shows how to recover and exploit the concealed trapdoor structure without
+    knowing the original secret trapdoor parameters. No local PDF is retained.
+- id: bannier_filiol_2017_bea1
+  kind: paper
+  title: Mathematical Backdoors in Symmetric Encryption Systems — Proposal for
+    a Backdoored AES-like Block Cipher
+  authors:
+  - Arnaud Bannier
+  - Eric Filiol
+  year: 2017
+  venue: ICISSP 2017 / ForSE 2017, pp. 622–631
+  publisher: SciTePress
+  url: https://doi.org/10.5220/0006244406220631
+  notes: 'Defines BEA-1 for research into partition-based mathematical backdoors.
+    Local copy: references/2017-bea1.pdf. The cipher is explicitly unsuitable for
+    protecting information.'
 - id: koo_et_al_2018_cham
   kind: paper
   title: 'CHAM: A Family of Lightweight Block Ciphers for Resource-Constrained Devices'

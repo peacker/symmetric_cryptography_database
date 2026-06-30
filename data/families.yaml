@@ -1,5 +1,264 @@
 version: 1
 families:
+- id: sha0
+  name: SHA-0
+  construction_ids:
+  - davies_meyer
+  round_ids:
+  - sha0_round
+  target_applications:
+  - historical
+  - digital_signatures
+  - cryptanalysis
+  characteristics:
+    block_size_bits: 512
+    state_size_bits: 160
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+    - id: and
+    - id: or
+    - id: not
+    - id: constant
+  reference_ids:
+  - nist_1993_fips180_sha0
+  process_participations: []
+  influences:
+  - source_family_id: md4
+    relations:
+    - inspired_by
+    - improvement_of
+    note: SHA-0 follows the MD4-style Merkle–Damgård lineage while expanding the
+      state and compression function to 160 bits and 80 steps.
+  innovative_ideas:
+  - id: sha0_160_bit_md4_lineage
+    name: 160-bit, 80-step MD4-derived compression function
+    note: SHA-0 introduced the five-word state and four-phase 80-step structure
+      later retained by SHA-1.
+  notes: SHA-0 is the retrospective name for the hash function standardized in
+    the original FIPS PUB 180 (1993). It hashes 512-bit blocks to 160 bits in 80
+    steps. SHA-1 changed only the message expansion by rotating each newly derived
+    schedule word left by one bit; SHA-0 omits that rotation. SHA-0 is withdrawn
+    and cryptographically broken.
+- id: a5_1
+  name: A5/1
+  construction_ids:
+  - lfsr_nlfsr_register_network
+  round_ids:
+  - a5_1_clock_step
+  target_applications:
+  - mobile_networks
+  - gsm
+  - historical
+  characteristics:
+    state_size_bits: 64
+    components:
+    - id: lfsr
+      params:
+        length: 19
+    - id: lfsr
+      params:
+        length: 22
+    - id: lfsr
+      params:
+        length: 23
+    - id: and
+    - id: or
+    - id: xor
+  reference_ids:
+  - briceno_goldberg_wagner_1999_a5
+  - biryukov_shamir_wagner_2000_a5_1
+  - shah_mahalanobis_2012_a5_1
+  process_participations: []
+  influences: []
+  innovative_ideas:
+  - id: a5_1_majority_clocking
+    name: Majority-controlled irregular clocking of three LFSRs
+    note: On each cycle, only registers whose clock bit agrees with the majority
+      of the three clock bits advance.
+  notes: A5/1 is the stronger original GSM voice-encryption stream cipher, developed
+    in 1987. A 64-bit
+    session key and 22-bit frame number initialize three LFSRs of lengths 19, 22,
+    and 23; after warm-up, their output bits are XORed to produce 228 keystream
+    bits per GSM frame. Its proprietary design became public through reverse engineering
+    in 1999 and is now practically breakable.
+- id: a5_2
+  name: A5/2
+  construction_ids:
+  - lfsr_nlfsr_register_network
+  round_ids:
+  - a5_2_clock_step
+  target_applications:
+  - mobile_networks
+  - gsm
+  - historical
+  - export_control
+  characteristics:
+    state_size_bits: 81
+    components:
+    - id: lfsr
+      params:
+        length: 19
+    - id: lfsr
+      params:
+        length: 22
+    - id: lfsr
+      params:
+        length: 23
+    - id: lfsr
+      params:
+        length: 17
+    - id: and
+    - id: or
+    - id: xor
+  reference_ids:
+  - briceno_goldberg_wagner_1999_a5
+  - barkan_biham_keller_2003_gsm
+  - barkan_biham_keller_2008_gsm_joc
+  process_participations: []
+  influences:
+  - source_family_id: a5_1
+    relations:
+    - variant_of
+    - related_to
+    note: A5/2 is a deliberately weakened export-oriented GSM alternative. It shares
+      three register lengths with A5/1 but adds a fourth control register and a different
+      nonlinear output function.
+  notes: A5/2 was designed in 1992–1993 and completed in March 1993. It uses a 64-bit
+    session key, 22-bit frame number, and four LFSRs totaling 81 state bits. It was
+    intentionally designed as a weaker export algorithm. Practical
+    attacks recover the session key from very little traffic; 3GPP prohibited its use
+    after 2006.
+- id: tcast
+  name: tCAST
+  construction_ids:
+  - feistel
+  round_ids:
+  - tcast_round
+  target_applications:
+  - research
+  - cryptanalysis
+  - backdoor_research
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - id: xor
+  reference_ids:
+  - rijmen_preneel_1997_tcast_tloki
+  - wu_bao_deng_ye_1998_trapdoor_cryptanalysis
+  process_participations: []
+  influences:
+  - source_family_id: cast128
+    relations:
+    - variant_of
+    - inspired_by
+    - related_to
+    note: tCAST modifies CAST-family round-function S-boxes to share a hidden linear
+      relation. The base construction is a 64-bit CAST-style Feistel cipher.
+  innovative_ideas:
+  - id: hidden_linear_sbox_trapdoor
+    name: Secret linear approximations embedded in large S-boxes
+    note: Knowledge of hidden S-box construction parameters reveals strong linear
+      approximations, while the full linear approximation tables are intended to
+      be impractical to inspect exhaustively.
+  notes: tCAST is a research family of deliberately trapdoored CAST variants proposed
+    by Rijmen and Preneel in 1997. The 64-bit form uses four 8-to-32-bit S-boxes
+    sharing a secret linear approximation. The paper also gives an explicit 16-round,
+    80-bit-block example using four 10-to-40-bit S-boxes, and discusses natural
+    extensions to 128-bit blocks. It is not intended for deployment.
+- id: tloki
+  name: tLOKI
+  construction_ids:
+  - feistel
+  round_ids:
+  - tloki_round
+  target_applications:
+  - research
+  - cryptanalysis
+  - backdoor_research
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: sbox
+      params:
+        input_bits: 12
+        output_bits: 8
+    - id: bit_permutation
+    - id: xor
+  reference_ids:
+  - rijmen_preneel_1997_tcast_tloki
+  - wu_bao_deng_ye_1998_trapdoor_cryptanalysis
+  process_participations: []
+  influences:
+  - source_family_id: loki
+    relations:
+    - variant_of
+    - inspired_by
+    - same_state_layout
+    note: tLOKI embeds correlated nonlinear relations across the four expanded
+      LOKI91 S-box inputs while retaining its 64-bit Feistel framework.
+  innovative_ideas:
+  - id: tloki_round_function_trapdoor
+    name: Round-level trapdoor hidden across expanded S-box inputs
+    note: The trapdoor is not visible in an individual 12-to-8-bit S-box; it emerges
+      from nonlinear relations coordinated across all four S-box applications in
+      the LOKI91 expansion structure.
+  notes: tLOKI is the deliberately trapdoored LOKI91 variant defined by Rijmen and
+    Preneel in 1997. It uses the LOKI91 64-bit block, 64-bit key, 16-round Feistel
+    structure and four applications of a 12-to-8-bit S-box. The trapdoor is embedded
+    in the complete round function and is not intended for deployment.
+- id: bea1
+  name: BEA-1
+  construction_ids:
+  - aligned_spn
+  round_ids:
+  - bea1_round
+  target_applications:
+  - research
+  - cryptanalysis
+  - backdoor_research
+  characteristics:
+    block_size_bits: 80
+    components:
+    - id: xor
+    - id: sbox
+      params:
+        input_bits: 10
+        output_bits: 10
+    - id: word_permutation
+      params:
+        word_size_bits: 10
+    - id: binary_matrix_mul
+    - id: constant
+  reference_ids:
+  - bannier_filiol_2017_bea1
+  - rijmen_preneel_1997_tcast_tloki
+  process_participations: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - inspired_by
+    - related_to
+    note: BEA-1 deliberately mirrors the AES sequence of key addition, parallel
+      substitution, row shifting, and column mixing, but operates on eight 10-bit
+      bundles.
+  innovative_ideas:
+  - id: bea1_partition_backdoor
+    name: Partition-based mathematical backdoor
+    note: The round components preserve a hidden partition that enables key recovery
+      for an attacker who knows the trapdoor while remaining resistant to ordinary
+      differential, linear, and statistical screening.
+  notes: BEA-1 (Backdoored Encryption Algorithm version 1) is an explicitly malicious
+    research cipher, not a deployable primitive. It encrypts 80-bit blocks under
+    120-bit keys using eleven AES-like rounds, four 10-bit S-boxes, and a hidden
+    partition-based trapdoor. Its authors state that it is absolutely unsuitable
+    for protecting information.
 - id: cham
   name: CHAM
   construction_ids:
@@ -1035,8 +1294,9 @@ families:
   influences: []
 - id: kasumi
   name: KASUMI
-  notes: KASUMI is a 64-bit, 128-bit-key Feistel cipher derived from MISTY1 and adapted for the 3GPP confidentiality and integrity
-    algorithms used in UMTS.
+  notes: KASUMI is a 64-bit, 128-bit-key Feistel cipher derived from MISTY1 and adapted
+    for 3GPP confidentiality and integrity algorithms. GSM A5/3 maps a 64-bit Kc
+    into its KASUMI-based construction, while A5/4 uses a full 128-bit key.
   construction_ids:
   - feistel
   round_ids:
@@ -1057,6 +1317,8 @@ families:
         output_bits: 8
   reference_ids:
   - ts_35_202_kasumi
+  - 3gpp_ts_55_216_a5_3
+  - 3gpp_ts_55_226_a5_4
   process_participations: []
   influences: []
 - id: clefia
@@ -6652,6 +6914,14 @@ families:
     - standardized
     status: winner
   influences:
+  - source_family_id: sha0
+    relations:
+    - improvement_of
+    - variant_of
+    - same_round_function
+    note: SHA-1 corrects SHA-0's message expansion by applying a one-bit left rotation
+      to every newly derived schedule word while retaining the five-word state and
+      80-step compression structure.
   - source_family_id: md4
     relations:
     - improvement_of

@@ -1,5 +1,117 @@
 version: 1
 rounds:
+- id: sha0_round
+  name: SHA-0 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: and
+    - component_id: or
+    - component_id: not
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: constant
+    state_model:
+      state_bits: 160
+      word_bits: 32
+      branches: 5
+    constant_injection: scheduled_message_word_and_round_constant
+  notes: SHA-0 uses the SHA-1 compression step and four Boolean-function phases,
+    but its expanded message words are XORs of earlier words without SHA-1's added
+    one-bit rotation.
+- id: a5_1_clock_step
+  name: A5/1 irregular clock step
+  kind: step
+  spec:
+    component_flow:
+    - component_id: and
+    - component_id: or
+    - component_id: lfsr
+    - component_id: xor
+    state_model:
+      state_bits: 64
+      register_lengths:
+      - 19
+      - 22
+      - 23
+    constant_injection: none
+  notes: Compute the majority of the three designated clock bits; clock each LFSR
+    whose clock bit equals the majority, then XOR the three output bits.
+- id: a5_2_clock_step
+  name: A5/2 controlled clock step
+  kind: step
+  spec:
+    component_flow:
+    - component_id: and
+    - component_id: or
+    - component_id: lfsr
+    - component_id: xor
+    state_model:
+      state_bits: 81
+      register_lengths:
+      - 19
+      - 22
+      - 23
+      - 17
+    constant_injection: none
+  notes: The fourth 17-bit register controls irregular clocking of the other three;
+    the output applies additional majority functions to selected state bits.
+- id: tcast_round
+  name: tCAST trapdoor Feistel round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - component_id: xor
+    constant_injection: subkey
+  notes: CAST-style Feistel round using four expanding S-boxes that share a hidden
+    output relation. The base form uses 8-to-32-bit S-boxes; the paper's 80-bit
+    example uses 10-to-40-bit S-boxes.
+- id: tloki_round
+  name: tLOKI trapdoor Feistel round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 12
+        output_bits: 8
+    - component_id: bit_permutation
+    - component_id: xor
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+    constant_injection: subkey_before_expansion
+  notes: LOKI91-style round using four overlapping expanded inputs to the same 12-to-8-bit
+    S-box. Coordinated nonlinear relations across the four calls create the trapdoor.
+- id: bea1_round
+  name: BEA-1 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 10
+        output_bits: 10
+    - component_id: word_permutation
+      params:
+        word_size_bits: 10
+    - component_id: binary_matrix_mul
+    state_model:
+      state_bits: 80
+      word_bits: 10
+      branches: 8
+    constant_injection: round_key
+  notes: AddRoundKey, eight parallel 10-bit substitutions cycling through four S-boxes,
+    ShiftRows-like bundle permutation, and two 40-bit linear MixColumns applications.
+    The final round omits MixColumns and ends with an additional round key.
 - id: cham_round
   name: CHAM round
   kind: full_round

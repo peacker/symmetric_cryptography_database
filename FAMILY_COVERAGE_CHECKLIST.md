@@ -67,6 +67,10 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 
 | status | scheme | underlying primitive name | type | spec_year | spec_url | spec_section_or_page | pdf_available_in_repo |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| [x] | A5/1 | A5/1 | stream_cipher | 1987 | https://cryptome.org/jya/a51-pi.htm | Original unavailable; detailed 2012 paper | yes |
+| [x] | A5/2 | A5/2 | stream_cipher | 1993 | https://doi.org/10.1007/978-3-540-45146-4_35 | Original unavailable; detailed 2008 paper | yes |
+| [x] | A5/3 | KASUMI | stream_cipher | 2002 | https://www.3gpp.org/ftp/Specs/archive/55_series/55.216/ | Full specification licensed/unavailable | no |
+| [x] | A5/4 | KASUMI | stream_cipher | 2004 | https://www.3gpp.org/ftp/Specs/archive/55_series/55.226/ | Full specification licensed/unavailable | no |
 | [x] | ACE | ACE permutation | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ace-spec.pdf | Full | yes |
 | [x] | ACHTERBAHN | ACHTERBAHN | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/achterbahn.pdf | Full | yes |
 | [x] | AES | AES | block_cipher | 2001 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf | Full | no |
@@ -83,6 +87,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Ascon-Hash256 | Ascon-Hash256 | hash_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
 | [x] | Ascon-XOF128 | Ascon-XOF128 | extendable_output_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
 | [x] | Ballet | Ballet | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
+| [x] | BEA-1 | BEA-1 | block_cipher | 2017 | https://doi.org/10.5220/0006244406220631 | Full | yes |
 | [x] | battcrypt | battcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/battcrypt-v0.pdf | Full | yes |
 | [x] | BEAR/LION | BEAR/LION | construction | 1996 | https://www.cl.cam.ac.uk/archive/rja14/Papers/bear-lion.pdf | Full | yes |
 | [x] | BelT | BelT | block_cipher | 2012 | https://apmi.bsu.by/assets/files/std/belt-spec27.pdf | Full | yes |
@@ -265,6 +270,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | SEED | SEED | block_cipher | 2005 | https://www.rfc-editor.org/rfc/rfc4269 | TODO | no |
 | [x] | Serpent | Serpent | block_cipher | 1998 | https://www.cl.cam.ac.uk/archive/rja14/Papers/serpent.pdf | TODO | yes |
 | [x] | SFINKS | SFINKS | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/sfinks.pdf | Full | yes |
+| [x] | SHA-0 | SHA-0 | hash | 1993 | https://csrc.nist.gov/pubs/fips/180/final | Full | yes |
 | [x] | SHA-1 | SHA-1 | hash | 1995 | https://csrc.nist.gov/publications/detail/fips/180/1/archive/1995-04-17 | Full | yes |
 | [x] | SHA-2 | SHA-2 | hash | 2015 | https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf | Full | yes |
 | [x] | Keccak (SHA-3 winner) | Keccak-f[1600] permutation | hash | 2008 | https://keccak.team/files/Keccak-reference-3.0.pdf | Full | yes |
@@ -309,6 +315,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Subterranean 2.0 | Subterranean 2.0 | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf | Full | yes |
 | [x] | SUNDAE-GIFT | GIFT | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SUNDAE-GIFT-spec.pdf | Full | yes |
 | [x] | Sycon | Sycon | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
+| [x] | tCAST | tCAST | block_cipher | 1997 | https://doi.org/10.1007/BFb0052342 | Full | yes |
 | [x] | TANGRAM | TANGRAM | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000337 | Full | yes |
 | [x] | TEA | TEA | block_cipher | 1994 | https://doi.org/10.1007/3-540-60590-8_29 | TODO | yes |
 | [x] | Thank Goodness It's Friday (TGIF) | Thank Goodness It's Friday (TGIF) | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TGIF-spec.pdf | Full | yes |
@@ -316,6 +323,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Threefish | Threefish | block_cipher | 2010 | https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf | Full | yes |
 | [x] | Tiger | Tiger | hash | 1995 | https://www.cl.cam.ac.uk/~rja14/Papers/tiger.pdf | Full | yes |
 | [x] | TinyJambu | TinyJambu | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
+| [x] | tLOKI | tLOKI | block_cipher | 1997 | https://doi.org/10.1007/BFb0052342 | Full | yes |
 | [x] | Tortuga | Tortuga | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Tortuga-v0.pdf | Full | yes |
 | [x] | TREYFER | TREYFER | block_cipher | 2008 | https://users.encs.concordia.ca/~youssef/Publications/Papers/A%20Related-Key%20Attack%20on%20TREYFER.pdf | Full | yes |
 | [x] | Triad | Triad | stream_cipher | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TRIAD-spec.pdf | Full | yes |
