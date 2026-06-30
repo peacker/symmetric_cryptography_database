@@ -2906,7 +2906,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       roots.forEach((r) => { const span = 360 * lc(r) / totalLeaves; assignAngles(r, aPos, span); aPos += span; });
 
       // Radius mapping: year mode or generation mode
-      const charW = genFontPx * 0.60;
+      const charW = genFontPx * 0.62; // use bold advance width (synthesised bold ≈ 0.62 em)
       const R_MIN = 2;
       let nodeR;      // fid → radius (px)
       let maxR;
