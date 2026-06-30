@@ -290,7 +290,7 @@ def build_site() -> None:
             </div>
             <div class=\"viz-name-section\">
               <span class=\"viz-name-section-label\">Font size</span>
-              <div class=\"viz-name-mode\"><button id=\"genFontMinus\" type=\"button\" class=\"name-mode-btn\">A-</button><button id=\"genFontPlus\" type=\"button\" class=\"name-mode-btn\">A+</button><button id=\"genFontReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genFontValue\" class=\"viz-ctrl-value\">12px</span></div>
+              <div class=\"viz-name-mode\"><button id=\"genFontMinus\" type=\"button\" class=\"name-mode-btn\">A-</button><button id=\"genFontPlus\" type=\"button\" class=\"name-mode-btn\">A+</button><button id=\"genFontReset\" type=\"button\" class=\"name-mode-btn\">Reset</button><span id=\"genFontValue\" class=\"viz-ctrl-value\">8px</span></div>
             </div>
             <label class=\"inline-check\"><input id=\"genConnectedOnly\" type=\"checkbox\" checked /> Only connected families</label>
             <label class=\"inline-check\"><input id=\"genStandardsOnly\" type=\"checkbox\" /> Standards only</label>
@@ -2726,8 +2726,21 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     function drawSugiyama(dagNodes, isoNodes, inE, outE, dagSet, visEdges) {
       genPlot.style.display = ""; genPlot.style.margin = "";
       const NH = nodeH(); const RG = rowGap(); const IW = isoW();
+      const useGen = !!(genByGeneration && genByGeneration.checked);
 
-      const layerOf = assignLayers(new Set(dagNodes), inE);
+      // Layer assignment: by graph depth (generation) or by publication year
+      let layerOf; let rowLabel;
+      if (useGen) {
+        layerOf = assignLayers(new Set(dagNodes), inE);
+        rowLabel = (li) => `gen ${li}`;
+      } else {
+        const yrOf = (n) => { const y = Number((genFamById.get(n) || {}).year); return (y > 1800 && y < 2200) ? y : 9999; };
+        const uniqueYears = [...new Set(dagNodes.map(yrOf))].sort((a, b) => a - b);
+        const yearToLayer = new Map(uniqueYears.map((y, i) => [y, i]));
+        layerOf = new Map(dagNodes.map((n) => [n, yearToLayer.get(yrOf(n)) ?? 0]));
+        rowLabel = (li) => String(uniqueYears[li] ?? li);
+      }
+
       const maxLayer = dagNodes.length ? Math.max(...dagNodes.map((n) => layerOf.get(n) || 0)) : -1;
       const numLayers = maxLayer + 1;
 
@@ -2779,7 +2792,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const y = TOP_PAD + li * (NH + RG) - 7;
         genPlot.appendChild(svgEl("rect", { x: "0", y: String(y), width: String(canvasW), height: String(NH + 14), fill: stripes[li % 2] }));
         const genLbl = svgEl("text", { x: String(canvasW - 5), y: String(y + NH * 0.65 + 7), "text-anchor": "end", style: "font-size:9px;fill:#8a9ea2;font-family:sans-serif" });
-        genLbl.textContent = `gen ${li}`;
+        genLbl.textContent = rowLabel(li);
         genPlot.appendChild(genLbl);
       });
 
@@ -2901,9 +2914,9 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
       if (useGen) {
         const maxLayer = dagNodes.length ? Math.max(...dagNodes.map((n) => layerOf.get(n) || 0)) : 0;
-        nodeR = (fid) => R_MIN + (layerOf.get(fid) || 0) * genNumChars * charW;
-        maxR = R_MIN + maxLayer * genNumChars * charW;
-        ringLabels = Array.from({ length: maxLayer + 1 }, (_, g) => ({ r: R_MIN + g * genNumChars * charW, label: `G${g}` }));
+        nodeR = (fid) => R_MIN + (1 + (layerOf.get(fid) || 0)) * genNumChars * charW;
+        maxR = R_MIN + (1 + maxLayer) * genNumChars * charW;
+        ringLabels = Array.from({ length: maxLayer + 1 }, (_, g) => ({ r: R_MIN + (1 + g) * genNumChars * charW, label: `G${g}` }));
       } else {
         const allYears = dagNodes.map((n) => Number((genFamById.get(n) || {}).year)).filter((y) => y > 1800 && y < 2200);
         const minY = allYears.length ? Math.min(...allYears) : 1970;
@@ -3007,8 +3020,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const lx = nx + off * Math.cos(rad);
         const ly = ny + off * Math.sin(rad);
         const textRot = isRight ? (deg - 90) : (deg + 90);
-        const arcW = rr * (minGapOf.get(fid) || (360 / Math.max(1, dagNodes.length))) * Math.PI / 180;
-        const maxLabelCh = Math.min(genNumChars, Math.max(3, Math.floor(arcW / charW)));
+        const maxLabelCh = genNumChars;
         const disp = name.length <= maxLabelCh ? name : name.slice(0, Math.max(2, maxLabelCh - 1)) + "…";
         const labelFill = showBullets ? (isStd ? "#162022" : "#1a2a2e") : color;
         const lbl = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": isRight ? "start" : "end",
