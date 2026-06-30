@@ -2748,9 +2748,10 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         posY.set(n, isoBase + row * (NH + COL_GAP));
       });
 
-      // Arrow marker: refX=10 so tip is at path endpoint (not sticking past it)
+      // Arrow marker: refX=0 so the path ends at the arrowhead BASE; the tip
+      // then extends 10 px further in the path direction, toward the target node.
       const defs = svgEl("defs", {});
-      const marker = svgEl("marker", { id: "genArrow", markerWidth: "10", markerHeight: "7", markerUnits: "userSpaceOnUse", refX: "10", refY: "3.5", orient: "auto" });
+      const marker = svgEl("marker", { id: "genArrow", markerWidth: "10", markerHeight: "7", markerUnits: "userSpaceOnUse", refX: "0", refY: "3.5", orient: "auto" });
       marker.appendChild(svgEl("path", { d: "M0,0 L10,3.5 L0,7 z", fill: "rgba(55,75,80,0.78)" }));
       defs.appendChild(marker); genPlot.appendChild(defs);
 
@@ -2776,7 +2777,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
         if (!posX.has(src) || !posX.has(tgt)) return;
         const sx = posX.get(src); const sy = posY.get(src) + NH;   // bottom of source
-        const tx = posX.get(tgt); const ty = posY.get(tgt);         // top of target (arrow tip here)
+        const tx = posX.get(tgt); const ty = posY.get(tgt) - 12;  // 12 px above target top; arrow base here, tip at ty+10
         const vGap = Math.max(RG, ty - sy);
         const cpY = Math.min(vGap * 0.48, RG * 0.85);
         const pd = `M ${sx} ${sy} C ${sx} ${sy + cpY}, ${tx} ${ty - cpY}, ${tx} ${ty}`;
