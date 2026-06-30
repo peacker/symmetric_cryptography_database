@@ -2906,7 +2906,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       roots.forEach((r) => { const span = 360 * lc(r) / totalLeaves; assignAngles(r, aPos, span); aPos += span; });
 
       // Radius mapping: year mode or generation mode
-      const charW = genFontPx * 0.58;
+      const charW = genFontPx * 0.60;
       const R_MIN = 2;
       let nodeR;      // fid → radius (px)
       let maxR;
@@ -2925,7 +2925,11 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         maxR = R_MIN + (maxY - minY) * genNumChars * charW;
         const d1 = Math.floor(minY / 10) * 10; const d2 = Math.floor(maxY / 10) * 10;
         ringLabels = [];
-        for (let yr = d1; yr <= d2; yr += 10) ringLabels.push({ r: Math.max(R_MIN, R_MIN + (yr - minY) * genNumChars * charW), label: String(yr) });
+        for (let yr = d1; yr <= maxY; yr++) {
+          const r = Math.max(R_MIN, R_MIN + (yr - minY) * genNumChars * charW);
+          const isDecade = yr % 10 === 0;
+          ringLabels.push({ r, label: isDecade ? String(yr) : null, minor: !isDecade });
+        }
       }
 
       const diam = Math.max(400, 2 * Math.ceil(maxR + genNumChars * charW + 20));
@@ -2953,12 +2957,14 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       genPlot.style.display = "block"; genPlot.style.margin = "0 auto";
       genFrame.style.height = `${Math.max(320, Math.min(Math.round(window.innerHeight * 0.82), diam + 8))}px`;
 
-      // Concentric guide rings (decade rings in year mode, generation rings in gen mode)
-      ringLabels.forEach(({ r, label }) => {
-        genPlot.appendChild(svgEl("circle", { cx: String(rcx), cy: String(rcy), r: String(r.toFixed(1)), fill: "none", stroke: "#e8e6dc", "stroke-width": "0.8" }));
-        const tp = pol(Math.max(r + 2, genFontPx * 0.8), 0);
-        const rl = svgEl("text", { x: String(tp.x.toFixed(1)), y: String(tp.y.toFixed(1)), "text-anchor": "middle", style: "font-size:8px;fill:#b0b0a0;font-family:sans-serif" });
-        rl.textContent = label; genPlot.appendChild(rl);
+      // Concentric guide rings (per-year + decade in year mode, per-gen in gen mode)
+      ringLabels.forEach(({ r, label, minor }) => {
+        genPlot.appendChild(svgEl("circle", { cx: String(rcx), cy: String(rcy), r: String(r.toFixed(1)), fill: "none", stroke: minor ? "#eeece6" : "#d8d5cc", "stroke-width": minor ? "0.4" : "0.8" }));
+        if (label) {
+          const tp = pol(Math.max(r + 2, genFontPx * 0.8), 0);
+          const rl = svgEl("text", { x: String(tp.x.toFixed(1)), y: String(tp.y.toFixed(1)), "text-anchor": "middle", style: "font-size:8px;fill:#b0b0a0;font-family:sans-serif" });
+          rl.textContent = label; genPlot.appendChild(rl);
+        }
       });
 
       // Radial S-curve bezier between two polar positions
