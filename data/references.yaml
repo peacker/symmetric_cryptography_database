@@ -1,5 +1,21 @@
 version: 1
 references:
+- id: hu_et_al_2026_uknit_bc
+  kind: paper
+  title: 'uKNIT: Breaking Round-Alignment for Cipher Design — Featuring uKNIT-BC,
+    an Ultra Low-Latency Block Cipher'
+  authors:
+  - Kai Hu
+  - Mustafa Khairallah
+  - Thomas Peyrin
+  - Quan Quan Tan
+  year: 2026
+  venue: IACR Transactions on Symmetric Cryptology, 2026(2), 59 pages
+  publisher: IACR
+  url: https://tosc.iacr.org/index.php/ToSC/article/view/13006/12584
+  notes: 'Defines the uKNIT framework and its concrete uKNIT-BC block cipher. DOI:
+    10.46586/tosc.a0zo-4njsuvm. Implementation and test vectors: https://github.com/syllab-ntu/UKNIT.
+    Local copy: references/2026-uknitbc.pdf.'
 - id: nist_1993_fips180_sha0
   kind: standard
   title: 'Secure Hash Standard (SHS), FIPS PUB 180'

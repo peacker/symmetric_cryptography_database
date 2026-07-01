@@ -1,5 +1,18 @@
 version: 1
 primitives:
+- id: uknit_bc_64_128
+  name: uKNIT-BC
+  family_id: uknit_bc
+  primitive_type: block_cipher
+  reference_ids:
+  - hu_et_al_2026_uknit_bc
+  characteristics:
+    block_size_bits: 64
+    key_size_bits: 128
+    output_size_bits: 64
+    rounds: 12
+  notes: Concrete uKNIT ultra-low-latency block cipher with 12 substitution layers,
+    11 sparse binary linear layers, and 13 round-key additions.
 - id: sha0_v1
   name: SHA-0
   family_id: sha0

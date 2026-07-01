@@ -1,5 +1,29 @@
 version: 1
 rounds:
+- id: uknit_bc_round
+  name: uKNIT-BC heterogeneous round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: binary_matrix_mul
+    state_model:
+      state_bits: 64
+      word_bits: 4
+      branches: 16
+    constant_injection: round_key
+    round_variation:
+      substitution_layers: 12_distinct_bit_transpositions_of_mantis_sbox
+      linear_layers: 11_distinct_sparse_64x64_binary_matrices
+      final_round_omits_linear_layer: true
+  notes: Each round first adds a 64-bit round key, applies sixteen 4-bit S-boxes,
+    then (except in round 12) applies that round's sparse binary linear layer. Every
+    substitution and linear layer is independently specified; this entry represents
+    the heterogeneous twelve-round sequence rather than one repeated transformation.
 - id: sha0_round
   name: SHA-0 round
   kind: full_round

@@ -336,6 +336,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | uBlock | uBlock | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000334 | Full | yes |
 | [x] | UEA2 / ZUC | ZUC | stream_cipher | 2011 | https://www.3gpp.org/ftp/Specs/archive/35_series/35.221/ | Full | no |
 | [x] | uLBC | uLBC | block_cipher | 2025 | https://cic.iacr.org/p/1/4/25 | TODO | no |
+| [x] | uKNIT-BC | uKNIT-BC | block_cipher | 2026 | https://tosc.iacr.org/index.php/ToSC/article/view/13006/12584 | Full | yes |
 | [x] | VMPC | VMPC | stream_cipher | 2004 | https://eprint.iacr.org/2004/379 | Full | no |
 | [x] | WAGE | WAGE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/WAGE-spec.pdf | Full | yes |
 | [x] | WAKE | WAKE | stream_cipher | 1994 | https://link.springer.com/chapter/10.1007/3-540-60590-8_26 | Full | no |

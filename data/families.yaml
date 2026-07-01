@@ -1,5 +1,67 @@
 version: 1
 families:
+- id: uknit_bc
+  name: uKNIT-BC
+  construction_ids:
+  - aligned_spn
+  round_ids:
+  - uknit_bc_round
+  target_applications:
+  - ultra_low_latency
+  - hardware
+  - circuit_depth_constrained
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: binary_matrix_mul
+    - id: bit_permutation
+    - id: lfsr
+      params:
+        length: 4
+    - id: xor
+  reference_ids:
+  - hu_et_al_2026_uknit_bc
+  process_participations: []
+  influences:
+  - source_family_id: mantis
+    relations:
+    - same_sbox
+    - inspired_by
+    note: Each 4-bit uKNIT-BC S-box uses the MANTIS S-box as its nonlinear core,
+      composed with independently selected input and output bit transpositions.
+      MANTIS matrices were also used as starting points for the genetic search.
+  - source_family_id: skinny
+    relations:
+    - inspired_by
+    - related_to
+    note: The L_LFSR operation applies the SKINNY-64 4-bit LFSR independently to
+      each nibble of one 64-bit key half before the remaining generalized
+      Superposition-Tweakey linear mixing and permutation.
+  - source_family_id: prince
+    relations:
+    - inspired_by
+    - related_to
+    note: PRINCE matrices were used, together with MANTIS matrices, as starting
+      points for the genetic search that produced the uKNIT-BC linear layers.
+  innovative_ideas:
+  - id: uknit_round_non_alignment
+    name: Round-by-round non-aligned SPN construction
+    note: All twelve substitution layers and eleven linear layers may differ, replacing
+      repetition of one aligned round function with a genetically optimized sequence.
+  - id: uknit_gstk_key_schedule
+    name: Generalized Superposition-Tweakey key schedule
+    note: gSTK generalizes STK to bit-oriented ciphers and derives thirteen 64-bit round
+      keys from two 64-bit master-key halves using sparse matrices, a nibble permutation,
+      and a 4-bit LFSR.
+  notes: uKNIT-BC is a 64-bit-block, 128-bit-key, 12-round ultra-low-latency SPN.
+    It contains twelve distinct substitution layers, eleven distinct sparse 64-by-64
+    binary linear layers, and thirteen round-key additions. The last round omits the
+    linear layer. Unlike conventional iterative ciphers, its components are optimized
+    independently round by round under the uKNIT design framework.
 - id: sha0
   name: SHA-0
   construction_ids:

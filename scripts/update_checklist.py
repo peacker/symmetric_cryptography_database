@@ -244,6 +244,7 @@ TYPE_MAP = {
     "ublock":                       "block_cipher",
     "uea2 / zuc":                   "stream_cipher",
     "ulbc":                         "block_cipher",
+    "uknit-bc":                     "block_cipher",
     "vmpc":                         "stream_cipher",
     "wage":                         "aead",
     "wake":                         "stream_cipher",
@@ -277,6 +278,7 @@ TYPE_MAP = {
 #   pdf_stem: stem of file in references/ (without YYYY- prefix), or "" if none
 # ─────────────────────────────────────────────────────────────────────────────
 NEW_ENTRIES = [
+    ("[x]", "uKNIT-BC",                 "uKNIT-BC",             "block_cipher",         "2026", "https://tosc.iacr.org/index.php/ToSC/article/view/13006/12584", "Full", "2026-uknitbc"),
     # Early SHA, GSM A5, and deliberately trapdoored research ciphers
     ("[x]", "A5/1",                     "A5/1",                 "stream_cipher",        "1987", "https://cryptome.org/jya/a51-pi.htm", "Original unavailable; detailed 2012 paper", "1987-a5_1-[original_not_available_extracted_from_2012_publication]"),
     ("[x]", "A5/2",                     "A5/2",                 "stream_cipher",        "1993", "https://doi.org/10.1007/978-3-540-45146-4_35", "Original unavailable; detailed 2008 paper", "1993-a5_2-[original_not_available_extracted_from_2008_publication]"),
@@ -562,6 +564,7 @@ SCHEME_TYPE_OVERRIDE = {
     "uBlock":                           "block_cipher",
     "UEA2 / ZUC":                       "stream_cipher",
     "uLBC":                             "block_cipher",
+    "uKNIT-BC":                         "block_cipher",
     "VMPC":                             "stream_cipher",
     "WAGE":                             "aead",
     "WAKE":                             "stream_cipher",
