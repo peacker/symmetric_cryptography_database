@@ -2566,6 +2566,19 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const constrColorMap = new Map();
     const allConstrs = Array.from(new Set(Array.from(famToConstrs.values()).flatMap((s) => Array.from(s)))).sort();
     allConstrs.forEach((c, i) => constrColorMap.set(c, TYPE_COLORS[i % TYPE_COLORS.length]));
+    const relationTypes = Array.from(new Set(influences.flatMap((e) => {
+      const rs = parseJsonArray(e.relations_json);
+      const fb = String(e.relation || "").trim();
+      return rs.length ? rs : (fb ? [fb] : ["related"]);
+    }))).sort();
+    const relationColorMap = new Map(relationTypes.map((r, i) =>
+      [r, `hsl(${Math.round((i * 137.508) % 360)} 68% 38%)`]));
+
+    function edgeRelations(edge) {
+      const rs = parseJsonArray(edge.relations_json);
+      const fb = String(edge.relation || "").trim();
+      return rs.length ? rs : (fb ? [fb] : ["related"]);
+    }
 
     // ── Filter state ──────────────────────────────────────────────────
     const primSel = new Map();
@@ -2634,11 +2647,11 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       const tt = Array.from(famToTypes.get(fid) || []).sort(); return tt.length ? (typeColorMap.get(tt[0]) || "#5a7a8a") : "#7a8c8f";
     }
 
-    function isVis(fid) {
+    function isVis(fid, ignoreSearch = false) {
       const fam = genFamById.get(fid); if (!fam) return false;
       const yr = getYrRange(); const year = Number(fam.year);
       if (yr && (year < yr.start || year > yr.end)) return false;
-      const needle = genFamilySearch.value.trim().toLowerCase();
+      const needle = ignoreSearch ? "" : genFamilySearch.value.trim().toLowerCase();
       if (needle && !String(fam.name || fid).toLowerCase().includes(needle)) return false;
       if (genStandardsOnly.checked && !stdFamIds.has(fid)) return false;
       const anyType = Array.from(primSel.values()).some((v) => v);
@@ -2684,7 +2697,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     }
 
     function minimiseCrossings(layers, inE, outE) {
-      for (let pass = 0; pass < 4; pass++) {
+      for (let pass = 0; pass < 8; pass++) {
         const pm = new Map();
         layers.forEach((lg) => { const n = lg.length; lg.forEach((id, i) => pm.set(id, n <= 1 ? 0.5 : i / (n - 1))); });
         for (let li = 1; li < layers.length; li++) {
@@ -2726,6 +2739,11 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       };
       genLegend.appendChild(mkItem("#152021", "Standard", true));
       items.forEach(({ color, label }) => genLegend.appendChild(mkItem(color || "#7a8c8f", label, false)));
+      relationTypes.forEach((relation) => {
+        const item = mkItem(relationColorMap.get(relation), relation.replace(/_/g, " "), false);
+        item.firstChild.style.cssText += ";border-radius:1px;height:3px";
+        genLegend.appendChild(item);
+      });
       genLegend.hidden = false;
     }
 
@@ -2820,16 +2838,19 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const vGap = Math.max(RG, ty - sy);
         const cpY = Math.min(vGap * 0.48, RG * 0.85);
         const pd = `M ${sx} ${sy} C ${sx} ${sy + cpY}, ${tx} ${ty - cpY}, ${tx} ${ty}`;
-        const rels = parseJsonArray(e.relations_json);
-        const fb = String(e.relation || "").trim();
-        const relLabel = (rels.length ? rels : (fb ? [fb] : ["related"])).map((r) => String(r).replace(/_/g, " ")).join(", ");
-        const strokeW = 1.1 + Math.min((rels.length || 1) - 1, 4) * 0.45;
+        const rels = edgeRelations(e);
+        const relLabel = rels.map((r) => String(r).replace(/_/g, " ")).join(", ");
         const srcName = String((genFamById.get(src) || {}).name || src);
         const tgtName = String((genFamById.get(tgt) || {}).name || tgt);
         const note = String(e.note || "").trim();
         const hoverTxt = `${srcName} → ${tgtName}: ${relLabel}${note ? " | " + note : ""}`;
-        genPlot.appendChild(svgEl("path", { d: pd, stroke: "rgba(55,75,80,0.45)", "stroke-width": String(strokeW), fill: "none", "marker-end": "url(#genArrow)", "pointer-events": "none" }));
-        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, strokeW + 8)), fill: "none", "pointer-events": "all" });
+        rels.forEach((relation, i) => {
+          const strokeW = 1.5 + (rels.length - i - 1) * 2.2;
+          const attrs = { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", "pointer-events": "none" };
+          if (i === rels.length - 1) attrs["marker-end"] = "url(#genArrow)";
+          genPlot.appendChild(svgEl("path", attrs));
+        });
+        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.2 + 5)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         hp.addEventListener("mouseenter", () => { if (genEdgeInfo) genEdgeInfo.textContent = hoverTxt; });
         hp.addEventListener("mouseleave", () => { if (genEdgeInfo) genEdgeInfo.textContent = BASE_EDGE_INFO; });
@@ -2867,7 +2888,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       let layerOf;
       if (useGen) layerOf = assignLayers(new Set(dagNodes), inE);
 
-      // Build spanning tree: primary parent chosen by layer (gen mode) or earliest year
+      // Build spanning tree for angular placement only. All influence edges are rendered alike.
       const treeChildren = new Map(dagNodes.map((n) => [n, []]));
       const treeParentOf = new Map();
       const roots = [];
@@ -2878,10 +2899,12 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         if (useGen) {
           const myL = layerOf.get(n) || 0;
           const prevLayer = parents.filter((p) => (layerOf.get(p) || 0) === myL - 1);
-          prim = prevLayer.length ? prevLayer[0] : parents[0];
+          const candidates = prevLayer.length ? prevLayer : parents;
+          prim = [...candidates].sort((a, b) =>
+            Number((genFamById.get(b) || {}).year || 0) - Number((genFamById.get(a) || {}).year || 0) || a.localeCompare(b))[0];
         } else {
           prim = parents.reduce((best, p) =>
-            Number((genFamById.get(p) || {}).year || 9999) < Number((genFamById.get(best) || {}).year || 9999) ? p : best);
+            Number((genFamById.get(p) || {}).year || 0) > Number((genFamById.get(best) || {}).year || 0) ? p : best);
         }
         treeParentOf.set(n, prim);
         treeChildren.get(prim).push(n);
@@ -2983,22 +3006,21 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         return `M ${s.x.toFixed(1)} ${s.y.toFixed(1)} C ${cp1.x.toFixed(1)} ${cp1.y.toFixed(1)}, ${cp2.x.toFixed(1)} ${cp2.y.toFixed(1)}, ${t.x.toFixed(1)} ${t.y.toFixed(1)}`;
       }
 
-      // Draw edges (tree edges solid, non-tree edges dashed)
+      // Draw every relation as a solid colored band. Wider bands are drawn first so
+      // multi-relation edges retain a visible stripe for each relation type.
       const hoverPaths = [];
       visEdges.forEach((e) => {
         const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
         if (!angleOf.has(src) || !angleOf.has(tgt)) return;
-        const isTree = treeParentOf.get(tgt) === src;
         const pd = rPath(src, tgt);
-        const rels = parseJsonArray(e.relations_json);
-        const fb = String(e.relation || "").trim();
-        const relLabel = (rels.length ? rels : (fb ? [fb] : ["related"])).map((r) => String(r).replace(/_/g, " ")).join(", ");
-        const strokeW = 1.0 + Math.min((rels.length || 1) - 1, 4) * 0.35;
+        const rels = edgeRelations(e);
+        const relLabel = rels.map((r) => String(r).replace(/_/g, " ")).join(", ");
         const hoverTxt = `${String((genFamById.get(src) || {}).name || src)} → ${String((genFamById.get(tgt) || {}).name || tgt)}: ${relLabel}${e.note ? " | " + String(e.note) : ""}`;
-        const pathAttrs = { d: pd, stroke: isTree ? "rgba(55,75,80,0.5)" : "rgba(140,100,50,0.4)", "stroke-width": String(strokeW), fill: "none" };
-        if (!isTree) pathAttrs["stroke-dasharray"] = "3 2";
-        genPlot.appendChild(svgEl("path", pathAttrs));
-        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, strokeW + 8)), fill: "none", "pointer-events": "all" });
+        rels.forEach((relation, i) => {
+          const strokeW = 1.4 + (rels.length - i - 1) * 2.1;
+          genPlot.appendChild(svgEl("path", { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", opacity: "0.8" }));
+        });
+        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.1 + 5)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         hp.addEventListener("mouseenter", () => { if (genEdgeInfo) genEdgeInfo.textContent = hoverTxt; });
         hp.addEventListener("mouseleave", () => { if (genEdgeInfo) genEdgeInfo.textContent = BASE_EDGE_INFO; });
@@ -3051,7 +3073,21 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       updateYrLbl();
       while (genPlot.firstChild) genPlot.removeChild(genPlot.firstChild);
 
-      const visIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVis(fid));
+      const eligibleIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVis(fid, true));
+      const eligibleSet = new Set(eligibleIds);
+      const needle = genFamilySearch.value.trim().toLowerCase();
+      let visIds = eligibleIds;
+      if (needle) {
+        const matched = new Set(eligibleIds.filter((fid) =>
+          String((genFamById.get(fid) || {}).name || fid).toLowerCase().includes(needle)));
+        const expanded = new Set(matched);
+        influences.forEach((e) => {
+          const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
+          if (matched.has(src) && eligibleSet.has(tgt)) expanded.add(tgt);
+          if (matched.has(tgt) && eligibleSet.has(src)) expanded.add(src);
+        });
+        visIds = eligibleIds.filter((fid) => expanded.has(fid));
+      }
       const visSet = new Set(visIds);
 
       if (!visIds.length) {
