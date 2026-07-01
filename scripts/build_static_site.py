@@ -295,6 +295,7 @@ def build_site() -> None:
             <label class=\"inline-check\"><input id=\"genStandardsOnly\" type=\"checkbox\" /> Standards only</label>
             <label class=\"inline-check\"><input id=\"genByGeneration\" type=\"checkbox\" checked /> By generation</label>
             <label class=\"inline-check\"><input id=\"genShowBullets\" type=\"checkbox\" /> Show bullets</label>
+            <label class=\"inline-check\"><input id=\"genCollapseEdges\" type=\"checkbox\" /> Collapse edges</label>
           </div>
         </div>
         <div class=\"viz-secondary-controls\">
@@ -2512,6 +2513,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const genRadiusValue = document.getElementById("genRadiusValue");
     const genByGeneration = document.getElementById("genByGeneration");
     const genShowBullets = document.getElementById("genShowBullets");
+    const genCollapseEdges = document.getElementById("genCollapseEdges");
     if (!genPlot || !genPlotScroll || !genFrame) return;
 
     const GEN_BASE_FONT = 12;
@@ -2844,12 +2846,16 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const tgtName = String((genFamById.get(tgt) || {}).name || tgt);
         const note = String(e.note || "").trim();
         const hoverTxt = `${srcName} → ${tgtName}: ${relLabel}${note ? " | " + note : ""}`;
-        rels.forEach((relation, i) => {
-          const strokeW = 1.5 + (rels.length - i - 1) * 2.2;
-          const attrs = { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", "pointer-events": "none" };
-          if (i === rels.length - 1) attrs["marker-end"] = "url(#genArrow)";
-          genPlot.appendChild(svgEl("path", attrs));
-        });
+        if (genCollapseEdges && genCollapseEdges.checked) {
+          genPlot.appendChild(svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.32)", "stroke-width": "0.9", fill: "none", "pointer-events": "none", "marker-end": "url(#genArrow)" }));
+        } else {
+          rels.forEach((relation, i) => {
+            const strokeW = 0.8 + (rels.length - i - 1) * 1.3;
+            const attrs = { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", "pointer-events": "none", opacity: "0.5" };
+            if (i === rels.length - 1) attrs["marker-end"] = "url(#genArrow)";
+            genPlot.appendChild(svgEl("path", attrs));
+          });
+        }
         const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.2 + 5)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         hp.addEventListener("mouseenter", () => { if (genEdgeInfo) genEdgeInfo.textContent = hoverTxt; });
@@ -3016,10 +3022,14 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const rels = edgeRelations(e);
         const relLabel = rels.map((r) => String(r).replace(/_/g, " ")).join(", ");
         const hoverTxt = `${String((genFamById.get(src) || {}).name || src)} → ${String((genFamById.get(tgt) || {}).name || tgt)}: ${relLabel}${e.note ? " | " + String(e.note) : ""}`;
-        rels.forEach((relation, i) => {
-          const strokeW = 1.4 + (rels.length - i - 1) * 2.1;
-          genPlot.appendChild(svgEl("path", { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", opacity: "0.8" }));
-        });
+        if (genCollapseEdges && genCollapseEdges.checked) {
+          genPlot.appendChild(svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.28)", "stroke-width": "0.9", fill: "none" }));
+        } else {
+          rels.forEach((relation, i) => {
+            const strokeW = 0.8 + (rels.length - i - 1) * 1.3;
+            genPlot.appendChild(svgEl("path", { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", opacity: "0.5" }));
+          });
+        }
         const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.1 + 5)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         hp.addEventListener("mouseenter", () => { if (genEdgeInfo) genEdgeInfo.textContent = hoverTxt; });
@@ -3118,6 +3128,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     genStandardsOnly.addEventListener("change", render);
     if (genByGeneration) genByGeneration.addEventListener("change", render);
     if (genShowBullets) genShowBullets.addEventListener("change", render);
+    if (genCollapseEdges) genCollapseEdges.addEventListener("change", render);
     genFamilySearch.addEventListener("input", render);
     genFamilySearch.addEventListener("change", render);
     genYearStart.addEventListener("input", render);
