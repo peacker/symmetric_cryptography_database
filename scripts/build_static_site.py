@@ -2918,7 +2918,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       treeChildren.forEach((kids) => kids.sort((a, b) =>
         Number((genFamById.get(a) || {}).year || 9999) - Number((genFamById.get(b) || {}).year || 9999)));
 
-      // Leaf count (memoised)
+      // Leaf count (memoised — fixed by tree structure, not affected by child ordering)
       const lcCache = new Map();
       function lc(id) {
         if (lcCache.has(id)) return lcCache.get(id);
@@ -2927,19 +2927,90 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         lcCache.set(id, v); return v;
       }
 
-      // Assign angles (degrees, 0 = top, clockwise)
+      // Angle assignment wrapped to be re-callable as child ordering is refined
       const angleOf = new Map();
-      function assignAngles(id, start, span) {
-        const kids = treeChildren.get(id) || [];
-        if (!kids.length) { angleOf.set(id, start + span / 2); return; }
-        const total = lc(id); let pos = start;
-        kids.forEach((k) => { const s = span * lc(k) / total; assignAngles(k, pos, s); pos += s; });
-        const ca = kids.map((k) => angleOf.get(k));
-        angleOf.set(id, (Math.min(...ca) + Math.max(...ca)) / 2);
+      function runAssignAngles() {
+        angleOf.clear();
+        function rec(id, start, span) {
+          const kids = treeChildren.get(id) || [];
+          if (!kids.length) { angleOf.set(id, start + span / 2); return; }
+          const total = lc(id); let pos = start;
+          kids.forEach((k) => { const s = span * lc(k) / total; rec(k, pos, s); pos += s; });
+          const ca = kids.map((k) => angleOf.get(k));
+          angleOf.set(id, (Math.min(...ca) + Math.max(...ca)) / 2);
+        }
+        const totalLeaves = roots.reduce((s, r) => s + lc(r), 0) || 1;
+        let aPos = 0;
+        roots.forEach((r) => { const span = 360 * lc(r) / totalLeaves; rec(r, aPos, span); aPos += span; });
       }
-      const totalLeaves = roots.reduce((s, r) => s + lc(r), 0) || 1;
-      let aPos = 0;
-      roots.forEach((r) => { const span = 360 * lc(r) / totalLeaves; assignAngles(r, aPos, span); aPos += span; });
+      runAssignAngles();
+
+      // Subtree membership cache (fixed — membership doesn't change, only ordering does)
+      const stNodesCache = new Map();
+      function stNodes(id) {
+        if (stNodesCache.has(id)) return stNodesCache.get(id);
+        const s = new Set([id]);
+        (treeChildren.get(id) || []).forEach((k) => stNodes(k).forEach((n) => s.add(n)));
+        stNodesCache.set(id, s); return s;
+      }
+      dagNodes.forEach((n) => stNodes(n));
+
+      // Circular mean angle of cross-edges for a subtree (null when there are none)
+      function extBary(rootId) {
+        const inside = stNodes(rootId);
+        let sx = 0, sy = 0, cnt = 0;
+        inside.forEach((id) => {
+          [...(outE.get(id) || []), ...(inE.get(id) || [])].forEach((nb) => {
+            if (!inside.has(nb) && angleOf.has(nb)) {
+              const a = (angleOf.get(nb) || 0) * Math.PI / 180;
+              sx += Math.cos(a); sy += Math.sin(a); cnt++;
+            }
+          });
+        });
+        return cnt === 0 ? null : Math.atan2(sy, sx) * 180 / Math.PI;
+      }
+
+      // Circular Sugiyama barycenter heuristic: iteratively reorder children so that
+      // subtrees whose cross-edges point in the same direction are placed adjacent,
+      // reducing angular crossings. Angles are normalized relative to the parent arc
+      // midpoint to handle the 0°/360° wraparound correctly.
+      for (let pass = 0; pass < 6; pass++) {
+        let changed = false;
+        const baryMap = new Map();
+        dagNodes.forEach((id) => { baryMap.set(id, extBary(id)); });
+
+        treeChildren.forEach((kids, _par) => {
+          if (kids.length < 2) return;
+          const parAngles = kids.map((k) => angleOf.get(k) || 0);
+          const parMid = (Math.min(...parAngles) + Math.max(...parAngles)) / 2;
+          const prev = [...kids];
+          kids.sort((a, b) => {
+            const ba = baryMap.get(a); const bb = baryMap.get(b);
+            if (ba == null && bb == null) return 0;
+            if (ba == null) return 1; if (bb == null) return -1;
+            let ra = ba - parMid; while (ra > 180) ra -= 360; while (ra < -180) ra += 360;
+            let rb = bb - parMid; while (rb > 180) rb -= 360; while (rb < -180) rb += 360;
+            return ra - rb;
+          });
+          if (kids.some((k, i) => k !== prev[i])) changed = true;
+        });
+
+        if (roots.length > 1) {
+          const prev = [...roots];
+          roots.sort((a, b) => {
+            const ba = baryMap.get(a); const bb = baryMap.get(b);
+            if (ba == null && bb == null) return 0;
+            if (ba == null) return 1; if (bb == null) return -1;
+            const ra = ba < 0 ? ba + 360 : ba;
+            const rb = bb < 0 ? bb + 360 : bb;
+            return ra - rb;
+          });
+          if (roots.some((r, i) => r !== prev[i])) changed = true;
+        }
+
+        runAssignAngles();
+        if (!changed) break;
+      }
 
       // Radius mapping: year mode or generation mode
       const charW = genFontPx * 0.62; // use bold advance width (synthesised bold ≈ 0.62 em)
