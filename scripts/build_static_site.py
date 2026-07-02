@@ -285,7 +285,7 @@ def build_site() -> None:
             </div>
             <div class=\"viz-name-section\">
               <span class=\"viz-name-section-label\">Names</span>
-              <div class=\"viz-name-mode\" role=\"group\"><button id=\"genNameClip\" type=\"button\" class=\"name-mode-btn is-active\">Clip</button><button id=\"genNameWrap\" type=\"button\" class=\"name-mode-btn\">Wrap</button><button id=\"genNameFull\" type=\"button\" class=\"name-mode-btn\">Full</button></div>
+              <div class=\"viz-name-mode\" role=\"group\"><button id=\"genNameClip\" type=\"button\" class=\"name-mode-btn is-active\">Clip</button><button id=\"genNameFull\" type=\"button\" class=\"name-mode-btn\">Full</button></div>
             </div>
             <div class=\"viz-name-section\">
               <span class=\"viz-name-section-label\">Number of Chars</span>
@@ -2519,7 +2519,6 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     const genShowBullets = document.getElementById("genShowBullets");
     const genCollapseEdges = document.getElementById("genCollapseEdges");
     const genNameClip = document.getElementById("genNameClip");
-    const genNameWrap = document.getElementById("genNameWrap");
     const genNameFull = document.getElementById("genNameFull");
     if (!genPlot || !genPlotScroll || !genFrame) return;
 
@@ -2683,7 +2682,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
     function nodeH() { return Math.round(genFontPx * 1.85); }
     function rowGap() { return Math.round(genFontPx * 4.5); }
     function isoW() { return Math.round(genFontPx * 7.5); }
-    function nw(name) { const n = Math.min(String(name).length, genNumChars); return Math.min(Math.round(genFontPx * 12.5), Math.max(Math.round(genFontPx * 4.5), Math.ceil(n * genFontPx * 0.58) + NODE_PAD_X * 2)); }
+    function nw(name) { const n = genNameMode === "full" ? String(name).length : Math.min(String(name).length, genNumChars); const raw = Math.ceil(n * genFontPx * 0.58) + NODE_PAD_X * 2; return Math.max(Math.round(genFontPx * 4.5), genNameMode === "full" ? raw : Math.min(Math.round(genFontPx * 12.5), raw)); }
 
     const SVG_NS = "http://www.w3.org/2000/svg";
     function svgEl(tag, attrs) {
@@ -2888,26 +2887,10 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const maxCh = Math.min(genNumChars, Math.max(4, Math.floor((w - NODE_PAD_X * 2) / (genFontPx * 0.56))));
         const lblStyle = `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:#fff;pointer-events:none;font-weight:${isStd ? 700 : 400};opacity:${isIso ? "0.8" : "1"}`;
         const lbl = svgEl("text", { "text-anchor": "middle", style: lblStyle });
-        if (genNameMode === "wrap" && name.includes(" ")) {
-          const words = name.split(" ");
-          const mid = Math.ceil(words.length / 2);
-          const line1 = words.slice(0, mid).join(" ");
-          const line2 = words.slice(mid).join(" ");
-          const lh = Math.round(genFontPx * 1.2);
-          const t1 = svgEl("tspan", { x: String(cx), y: String(cy + NH * 0.42) });
-          t1.textContent = line1.length <= maxCh ? line1 : line1.slice(0, Math.max(1, maxCh - 1)) + "…";
-          lbl.appendChild(t1);
-          if (line2) {
-            const t2 = svgEl("tspan", { x: String(cx), y: String(cy + NH * 0.42 + lh) });
-            t2.textContent = line2.length <= maxCh ? line2 : line2.slice(0, Math.max(1, maxCh - 1)) + "…";
-            lbl.appendChild(t2);
-          }
-        } else {
-          const disp = genNameMode === "full" ? name : (name.length <= maxCh ? name : name.slice(0, Math.max(1, maxCh - 1)) + "…");
-          lbl.setAttribute("x", String(cx));
-          lbl.setAttribute("y", String(cy + NH * 0.67));
-          lbl.textContent = disp;
-        }
+        const disp = genNameMode === "full" ? name : (name.length <= maxCh ? name : name.slice(0, Math.max(1, maxCh - 1)) + "…");
+        lbl.setAttribute("x", String(cx));
+        lbl.setAttribute("y", String(cy + NH * 0.67));
+        lbl.textContent = disp;
         genPlot.appendChild(lbl);
       });
 
@@ -3168,35 +3151,12 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         const labelFill = showBullets ? (isStd ? "#162022" : "#1a2a2e") : color;
         const radStyle = `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:${labelFill};pointer-events:${showBullets ? "none" : "all"};font-weight:${isStd ? 700 : 400}`;
         const anchor = isRight ? "start" : "end";
-        if (genNameMode === "wrap" && name.includes(" ")) {
-          const words = name.split(" ");
-          const mid = Math.ceil(words.length / 2);
-          const line1 = words.slice(0, mid).join(" ");
-          const line2 = words.slice(mid).join(" ");
-          const lineStep = genFontPx * 1.35;
-          const disp1 = line1.length <= maxLabelCh ? line1 : line1.slice(0, Math.max(2, maxLabelCh - 1)) + "…";
-          const lbl1 = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": anchor,
-            transform: `rotate(${textRot.toFixed(1)},${lx.toFixed(1)},${ly.toFixed(1)})`, style: radStyle });
-          lbl1.textContent = disp1;
-          if (!showBullets) { const lt = svgEl("title", {}); lt.textContent = tip; lbl1.appendChild(lt); }
-          genPlot.appendChild(lbl1);
-          if (line2) {
-            const lx2 = lx + lineStep * Math.cos(rad);
-            const ly2 = ly + lineStep * Math.sin(rad);
-            const disp2 = line2.length <= maxLabelCh ? line2 : line2.slice(0, Math.max(2, maxLabelCh - 1)) + "…";
-            const lbl2 = svgEl("text", { x: String(lx2.toFixed(1)), y: String(ly2.toFixed(1)), "text-anchor": anchor,
-              transform: `rotate(${textRot.toFixed(1)},${lx2.toFixed(1)},${ly2.toFixed(1)})`, style: radStyle });
-            lbl2.textContent = disp2;
-            genPlot.appendChild(lbl2);
-          }
-        } else {
-          const disp = genNameMode === "full" ? name : (name.length <= maxLabelCh ? name : name.slice(0, Math.max(2, maxLabelCh - 1)) + "…");
-          const lbl = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": anchor,
-            transform: `rotate(${textRot.toFixed(1)},${lx.toFixed(1)},${ly.toFixed(1)})`, style: radStyle });
-          lbl.textContent = disp;
-          if (!showBullets) { const lt = svgEl("title", {}); lt.textContent = tip; lbl.appendChild(lt); }
-          genPlot.appendChild(lbl);
-        }
+        const disp = genNameMode === "full" ? name : (name.length <= maxLabelCh ? name : name.slice(0, Math.max(2, maxLabelCh - 1)) + "…");
+        const lbl = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": anchor,
+          transform: `rotate(${textRot.toFixed(1)},${lx.toFixed(1)},${ly.toFixed(1)})`, style: radStyle });
+        lbl.textContent = disp;
+        if (!showBullets) { const lt = svgEl("title", {}); lt.textContent = tip; lbl.appendChild(lt); }
+        genPlot.appendChild(lbl);
       });
       hoverPaths.forEach((hp) => genPlot.appendChild(hp));
     }
@@ -3296,11 +3256,11 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       if (genLayoutLayered) genLayoutLayered.classList.remove("is-active");
       render();
     });
-    [[genNameClip, "clip"], [genNameWrap, "wrap"], [genNameFull, "full"]].forEach(([btn, mode]) => {
+    [[genNameClip, "clip"], [genNameFull, "full"]].forEach(([btn, mode]) => {
       if (!btn) return;
       btn.addEventListener("click", () => {
         genNameMode = mode;
-        [genNameClip, genNameWrap, genNameFull].forEach((b) => { if (b) b.classList.remove("is-active"); });
+        [genNameClip, genNameFull].forEach((b) => { if (b) b.classList.remove("is-active"); });
         btn.classList.add("is-active");
         render();
       });

@@ -980,6 +980,19 @@ references:
   year: 2018
   venue: Cryptology ePrint Archive
   url: https://keccak.team/xoodoo.html
+- id: daemen_et_al_2018_xoodoo_design
+  kind: article
+  title: The Design of Xoodoo and Xoofff
+  authors:
+  - Joan Daemen
+  - Seth Hoffert
+  - Gilles Van Assche
+  - Ronny Van Keer
+  year: 2018
+  venue: IACR Transactions on Symmetric Cryptology 2018(4), 1-38
+  url: https://doi.org/10.46586/tosc.v2018.i4.1-38
+  notes: Design rationale establishing the Keccak-p inspiration and the 3-bit-column
+    chi layer.
 - id: sparkle_2020
   kind: article
   title: 'SPARKLE: Lightweight Cryptographic Permutations'

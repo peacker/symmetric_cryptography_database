@@ -2036,6 +2036,10 @@ families:
     - id: not
     - id: rotation_fixed
     - id: constant
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
   reference_ids:
   - ascon_caesar_submission_2016
   - ascon_nist_lwc_submission_2021
@@ -2050,7 +2054,14 @@ families:
     - finalist
     - winner
     status: winner
-  influences: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - inspired_by
+    - same_sbox_size
+    note: Ascon's paper states that its 5-bit substitution layer is an affine
+      equivalent of Keccak's chi mapping. The affine input and output transforms
+      raise Ascon's branch number, so the S-boxes are related but not identical.
   notes: First appeared in the 2016 CAESAR submission. NIST SP 800-232 standardizes the Ascon-p permutation together with
     Ascon-AEAD128, Ascon-Hash256, Ascon-XOF128, and Ascon-CXOF128.
 - id: photon
@@ -2184,10 +2195,29 @@ families:
     - id: not
     - id: rotation_fixed
     - id: constant
+    - id: sbox
+      params:
+        input_bits: 3
+        output_bits: 3
   reference_ids:
   - xoodoo_2018
+  - daemen_et_al_2018_xoodoo_design
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - inspired_by
+    note: The Xoodoo design paper says its design approach is inspired by Keccak-p
+      and that its bit-oriented round function uses similar operations, including
+      the column-parity mixer theta and nonlinear chi mapping.
+  - source_family_id: threeway
+    relations:
+    - same_sbox_size
+    - related_to
+    note: 3-Way's paper specifies gamma as parallel 3-bit substitution boxes;
+      Xoodoo's paper specifies chi on 3-bit columns. This records the shared S-box
+      width, not a claim that their S-boxes are identical or that Xoodoo descends
+      from 3-Way.
 - id: elephant
   name: Elephant
   notes: Elephant is a lightweight nonce-based AEAD family that masks short permutations such as Spongent-pi, Keccak-p, or
@@ -3612,6 +3642,13 @@ families:
     relations:
     - inspired_by
     note: FEAL was designed as a faster software-oriented Feistel cipher, taking DES as the structural starting point.
+  innovative_ideas:
+  - id: feal_early_arx_round
+    name: Earliest published ARX block-cipher round in the database
+    note: FEAL's 1987 round combines bytewise modular addition, XOR, and fixed
+      two-bit rotations. Later literature commonly identifies FEAL as the first
+      ARX cipher; this is a historical classification, not a claim that later ARX
+      designs directly descend from FEAL.
   notes: 'FEAL is a software-oriented Feistel family originally proposed as a fast DES alternative with 64-bit block size.
 
     '
@@ -7205,7 +7242,14 @@ families:
     - round_2
     - round_3
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: chacha
+    relations:
+    - inspired_by
+    note: BLAKE's specification describes its compression algorithm as a modified
+      version of ChaCha and its G function as inspired by ChaCha's quarter-round;
+      BLAKE adds message words and constants while retaining ChaCha's rotation
+      distances.
   innovative_ideas:
   - id: blake_haifa_with_chacha
     name: HAIFA iteration with a ChaCha-derived compression function (G-function)
@@ -7246,6 +7290,12 @@ families:
     - same_round_function
     note: BLAKE2 simplifies and accelerates BLAKE while retaining its ARX G mixing function with revised rotations, round
       counts, and initialization.
+  - source_family_id: chacha
+    relations:
+    - inspired_by
+    note: The BLAKE2 paper states that BLAKE2 and BLAKE rely on a similar core
+      permutation originally used in ChaCha; BLAKE2 inherits that lineage through
+      BLAKE while changing rotations and simplifying the G function.
   innovative_ideas:
   - id: blake2_parameter_block
     name: Parameter-block initialization
