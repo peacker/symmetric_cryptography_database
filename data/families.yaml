@@ -967,6 +967,13 @@ families:
     relations:
     - inspired_by
     note: SIMON is a lightweight balanced Feistel cipher whose design philosophy follows the DES round structure.
+  innovative_ideas:
+  - id: simon_and_rx_round
+    name: Foundational modern AND-RX round function
+    note: SIMON's round function uses only fixed rotations, AND, and XOR and is
+      the earliest design conventionally treated as the starting point of the
+      modern AND-RX/SIMON-like cipher class. This does not claim that no earlier
+      primitive ever combined those individual Boolean operations.
 - id: speck
   name: SPECK
   notes: SPECK is a software-oriented family of lightweight ARX Feistel ciphers, parameterized for multiple word, block, and
@@ -1017,7 +1024,15 @@ families:
   reference_ids:
   - borghoff_et_al_2012_prince
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - inspired_by
+    - similar_mix_column
+    - similar_shift_row
+    note: The SKINNY/MANTIS paper states that PRINCE's round function basically
+      follows the AES structure, but uses a MixColumns-like mapping with branch
+      number 4 instead of AES's branch number 5 and adds reflection symmetry.
   innovative_ideas:
   - id: prince_alpha_reflexivity
     name: Alpha-reflexivity
@@ -1062,6 +1077,37 @@ families:
     - similar_mix_column
     - similar_shift_row
     note: LED follows a compact nibble-oriented SPN style suited for lightweight hardware.
+- id: piccolo
+  name: Piccolo
+  construction_ids:
+  - generalized_feistel
+  round_ids:
+  - piccolo_round
+  target_applications:
+  - constrained_hardware
+  - iot
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: field_matrix_mul
+      params:
+        field_size: 16
+    - id: word_permutation
+      params:
+        word_size_bits: 16
+    - id: xor
+    - id: constant
+  reference_ids:
+  - shibutani_et_al_2011_piccolo
+  process_participations: []
+  influences: []
+  notes: Piccolo is a 64-bit generalized-Feistel lightweight block cipher with
+    80- and 128-bit key variants, designed for compact hardware and inexpensive
+    combined encryption/decryption implementations.
 - id: katan
   name: KATAN
   notes: KATAN is an ultra-lightweight block-cipher family built from two shift registers and nonlinear Boolean feedback,
@@ -2064,6 +2110,45 @@ families:
       raise Ascon's branch number, so the S-boxes are related but not identical.
   notes: First appeared in the 2016 CAESAR submission. NIST SP 800-232 standardizes the Ascon-p permutation together with
     Ascon-AEAD128, Ascon-Hash256, Ascon-XOF128, and Ascon-CXOF128.
+- id: gaston
+  name: Gaston
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - gaston_permutation_round
+  target_applications:
+  - lightweight
+  - constrained_hardware
+  - keyed_hashing
+  characteristics:
+    state_size_bits: 320
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: constant
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+  reference_ids:
+  - el_hirch_et_al_2023_gaston
+  process_participations: []
+  influences:
+  - source_family_id: ascon
+    relations:
+    - inspired_by
+    - same_state_layout
+    - same_sbox_size
+    - improved_diffusion
+    note: Gaston retains an Ascon-sized 5-by-64-bit state and a column-wise
+      quadratic 5-bit nonlinear layer, but uses a circulant twin column-parity
+      mixing layer. Its paper reports much higher weights for the best found
+      three-round differential and linear trails than Ascon.
+  notes: Gaston is a 320-bit permutation introduced with the twin column-parity
+    mixer. Its stronger diffusion raises trail weights at a higher XOR cost than
+    simpler column-parity mixers.
 - id: photon
   name: PHOTON
   notes: PHOTON is a family of lightweight sponge hash functions whose internal permutations use AES-like 4-bit substitution,
@@ -2115,10 +2200,61 @@ families:
     - id: constant
     - id: xor
     - id: bit_permutation
+    - id: binary_matrix_mul
+    - id: word_permutation
+      params:
+        word_size_bits: 4
+    - id: lfsr
+      params:
+        length: 6
   reference_ids:
   - skinny_2016
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: piccolo
+    relations:
+    - inspired_by
+    - same_sbox_size
+    note: The SKINNY paper states that S4 is essentially Piccolo's 4-bit S-box
+      with the final NOT gate removed. They are therefore closely related but
+      not identical S-boxes.
+  - source_family_id: simon
+    relations:
+    - inspired_by
+    - related_to
+    note: SKINNY was designed as an SPN competitor to SIMON and is described as
+      lying between an SPN and a SIMON-like AND-rotation-XOR function, combining
+      cheap components with SPN-style active-S-box bounds.
+  - source_family_id: led
+    relations:
+    - same_round_constants
+    note: SKINNY uses the same cheap six-bit affine-LFSR recurrence as LED to
+      generate its round counter, requiring one XNOR gate per update.
+  - source_family_id: aes
+    relations:
+    - same_state_layout
+    - similar_shift_row
+    - similar_mix_column
+    note: SKINNY uses a 4-by-4 cell array and an AES-style ShiftRows step, with
+      rightward rather than AES's leftward rotations. Its binary MixColumns is
+      deliberately much sparser and has branch number 2 rather than an MDS layer.
+  innovative_ideas:
+  - id: skinny_locally_nonoptimal_components
+    name: Security from iterating locally non-optimal lightweight components
+    note: SKINNY pushes the lightweight trend of combining a compact S-box, a
+      very sparse diffusion layer, and a light key schedule while obtaining
+      strong global differential and linear bounds. The paper does not attribute
+      the start of this broad trend to one cipher.
+  - id: skinny_sparse_binary_diffusion
+    name: Three-XOR sparse binary MixColumns layer
+    note: The branch-number-2 binary matrix was selected jointly with ShiftRows
+      for strong multi-round diffusion and can be implemented with at most three
+      XOR operations per column.
+  - id: skinny_s8_gate_optimized_sbox
+    name: Gate-optimized original 8-bit S-box
+    note: S8 iterates NOR/XOR combinations and bit permutations and uses eight
+      NOR plus eight XOR gates; special four-input AND-NOR and OR-NAND cells
+      reduce its implementation cost.
 - id: sparkle
   name: SPARKLE
   notes: SPARKLE is an ARX permutation family built from the Alzette box and a branch-linear layer; it underpins the SCHWAEMM
@@ -4431,10 +4567,28 @@ families:
   - mantis_ref
   process_participations: []
   influences:
+  - source_family_id: skinny
+    relations:
+    - variant_of
+    - related_to
+    note: The joint specification presents MANTIS as a dedicated low-latency
+      tweakable variant of SKINNY, reusing SKINNY design principles while using
+      a distinct PRINCE/MIDORI-based round architecture.
   - source_family_id: prince
     relations:
     - inspired_by
-    note: MANTIS adopts the reflection-based FX construction from PRINCE.
+    - inherits_alpha_reflexivity_structure
+    note: MANTIS retains PRINCE's reflected FX construction and alpha-reflection
+      property while replacing its round function and adding a tweak schedule.
+  - source_family_id: midori
+    relations:
+    - inspired_by
+    - same_sbox
+    - same_mix_column
+    - same_shift_row
+    note: MANTIS starts from a PRINCE-like MIDORI design. It uses MIDORI's Sb0
+      S-box, cell permutation, and binary MixColumns matrix; its round constants
+      follow PRINCE's first-digits-of-pi method.
   notes: 'MANTIS (Beierle et al., CRYPTO 2016; part of the SKINNY paper) is a lightweight tweakable 64-bit block cipher using
     a 128-bit tweakey (64-bit key + 64-bit tweak). It uses a reflection structure: r forward half-rounds, a middle layer,
     then r backward half-rounds, achieving encryption = decryption with swapped keys. MANTIS-7 (r=7) is the primary recommendation.'
@@ -4511,7 +4665,15 @@ families:
   reference_ids:
   - midori_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - inspired_by
+    - similar_shift_row
+    - similar_mix_column
+    note: 'The MIDORI and SKINNY/MANTIS papers describe MIDORI as AES-like: it
+      combines parallel S-boxes, a row-based cell permutation, and a 4-by-4
+      almost-MDS MixColumns layer, optimized for energy rather than AES compatibility.'
   notes: 'Midori (Banik et al., ASIACRYPT 2015) is an energy-efficient SPN block cipher with two variants: Midori64 (64-bit
     block, 128-bit key, 16 rounds) using 4-bit S-boxes, and Midori128 (128-bit block, 128-bit key, 20 rounds) using byte-based
     substitution. Both use a MixColumns-like linear layer and target minimal energy consumption in hardware circuits.'

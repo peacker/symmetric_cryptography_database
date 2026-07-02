@@ -455,6 +455,28 @@ rounds:
     are inserted every six rounds.
 
     '
+- id: piccolo_round
+  name: Piccolo Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branches: 4
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: field_matrix_mul
+      params:
+        field_size: 16
+    - component_id: xor
+    - component_id: word_permutation
+      params:
+        word_size_bits: 16
+    constant_injection: round_key
+  notes: Piccolo generalized-Feistel round with two nonlinear F-functions and
+    a 16-bit-word round permutation.
 - id: simon_round
   name: SIMON Round
   kind: full_round
@@ -1288,6 +1310,23 @@ rounds:
     used in the SCHWAEMM/ESCH suite.
 
     '
+- id: gaston_permutation_round
+  name: Gaston Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 320
+      rows: 5
+      lane_bits: 64
+    component_flow:
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: and
+    - component_id: not
+    - component_id: constant
+    constant_injection: round_constant
+  notes: Gaston round abstraction using a circulant twin column-parity mixer,
+    ShiftRows-like rotations, column-wise quadratic nonlinearity, and constants.
 - id: tinyjambu_state_update
   name: TinyJambu State Update
   kind: full_round

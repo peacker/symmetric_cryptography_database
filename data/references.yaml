@@ -501,6 +501,19 @@ references:
   year: 2004
   venue: RFC 3713
   url: https://www.rfc-editor.org/rfc/rfc3713
+- id: shibutani_et_al_2011_piccolo
+  kind: article
+  title: 'Piccolo: An Ultra-Lightweight Blockcipher'
+  authors:
+  - Kyoji Shibutani
+  - Takanori Isobe
+  - Harunaga Hiwatari
+  - Atsushi Mitsuda
+  - Toru Akishita
+  - Taizo Shirai
+  year: 2011
+  venue: CHES 2011, LNCS 6917, 342-357
+  url: https://www.iacr.org/archive/ches2011/69170343/69170343.pdf
 - id: beaulieu_et_al_2013_simon_speck
   kind: article
   title: The SIMON and SPECK Families of Lightweight Block Ciphers
@@ -949,6 +962,19 @@ references:
   url: https://link.springer.com/chapter/10.1007/978-3-031-58868-6_15
   notes: Specifies the Ascon pseudorandom functions and message authentication codes
     (PRF and MAC).
+- id: el_hirch_et_al_2023_gaston
+  kind: article
+  title: Twin Column Parity Mixers and Gaston - A New Mixing Layer and Permutation
+  authors:
+  - Solane El Hirch
+  - Joan Daemen
+  - Raghvendra Rohit
+  - Rusydi H. Makarim
+  year: 2023
+  venue: CRYPTO 2023, LNCS 14083, 475-506
+  url: https://eprint.iacr.org/2023/799.pdf
+  notes: Primary Gaston design paper; defines the 320-bit permutation and compares
+    its three-round differential and linear trail weights with Ascon.
 - id: skinny_2016
   kind: article
   title: The SKINNY Family of Block Ciphers and its Low-Latency Variant MANTIS

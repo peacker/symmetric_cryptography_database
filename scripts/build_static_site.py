@@ -218,6 +218,7 @@ def build_site() -> None:
             <label class=\"inline-check\"><input id=\"vizHideDots\" type=\"checkbox\" /> Bullet points</label>
             <label class=\"inline-check\"><input id=\"vizShowArrows\" type=\"checkbox\" /> Show relation arrows</label>
             <label class=\"inline-check\"><input id=\"vizColorByProcess\" type=\"checkbox\" checked /> Color by process</label>
+            <button id=\"vizDownloadPng\" type=\"button\" class=\"name-mode-btn\">Download PNG</button>
           </div>
         </div>
         <div class=\"viz-secondary-controls\">
@@ -300,6 +301,7 @@ def build_site() -> None:
             <label class=\"inline-check\"><input id=\"genByGeneration\" type=\"checkbox\" checked /> By generation</label>
             <label class=\"inline-check\"><input id=\"genShowBullets\" type=\"checkbox\" /> Show bullets</label>
             <label class=\"inline-check\"><input id=\"genCollapseEdges\" type=\"checkbox\" /> Collapse edges</label>
+            <button id=\"genDownloadPng\" type=\"button\" class=\"name-mode-btn\">Download PNG</button>
           </div>
         </div>
         <div class=\"viz-secondary-controls\">
@@ -2479,6 +2481,33 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       const factor = event.deltaY < 0 ? ZOOM_FACTOR : 1 / ZOOM_FACTOR;
       setZoom(zoomScale * factor);
     }, { passive: false });
+    const vizDownloadPng = document.getElementById("vizDownloadPng");
+    if (vizDownloadPng) vizDownloadPng.addEventListener("click", () => {
+      const yW = Number(yAxisSvg.getAttribute("width") || 0);
+      const pW = Number(plotSvg.getAttribute("width") || 0);
+      const pH = Number(plotSvg.getAttribute("height") || 0);
+      const xH = Number(xAxisSvg.getAttribute("height") || 0);
+      const scale = 2;
+      const canvas = document.createElement("canvas");
+      canvas.width = (yW + pW) * scale;
+      canvas.height = (pH + xH) * scale;
+      const ctx = canvas.getContext("2d");
+      ctx.scale(scale, scale);
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, yW + pW, pH + xH);
+      function drawEl(el, dx, dy) {
+        return new Promise((ok) => {
+          const url = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(el)], { type: "image/svg+xml" }));
+          const img = new Image();
+          img.onload = () => { ctx.drawImage(img, dx, dy); URL.revokeObjectURL(url); ok(); };
+          img.onerror = () => { URL.revokeObjectURL(url); ok(); };
+          img.src = url;
+        });
+      }
+      drawEl(yAxisSvg, 0, 0).then(() => drawEl(plotSvg, yW, 0)).then(() => drawEl(xAxisSvg, yW, pH)).then(() => {
+        const a = document.createElement("a"); a.download = "timelines.png"; a.href = canvas.toDataURL("image/png"); a.click();
+      });
+    });
     render();
   }
 
@@ -3266,6 +3295,23 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       });
     });
 
+    const genDownloadPng = document.getElementById("genDownloadPng");
+    if (genDownloadPng) genDownloadPng.addEventListener("click", () => {
+      const w = Number(genPlot.getAttribute("width") || 800);
+      const h = Number(genPlot.getAttribute("height") || 600);
+      const scale = 2;
+      const canvas = document.createElement("canvas");
+      canvas.width = w * scale; canvas.height = h * scale;
+      const ctx = canvas.getContext("2d");
+      ctx.scale(scale, scale);
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, w, h);
+      const url = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(genPlot)], { type: "image/svg+xml" }));
+      const img = new Image();
+      img.onload = () => { ctx.drawImage(img, 0, 0); URL.revokeObjectURL(url); const a = document.createElement("a"); a.download = "genealogy.png"; a.href = canvas.toDataURL("image/png"); a.click(); };
+      img.onerror = () => URL.revokeObjectURL(url);
+      img.src = url;
+    });
     initFilters();
     render();
 
