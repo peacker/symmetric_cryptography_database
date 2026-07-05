@@ -3242,6 +3242,27 @@ rounds:
   name: LEX Round
   kind: full_round
   spec: {}
+- id: argon_pass
+  name: Argon Memory Pass
+  kind: full_round
+  spec:
+    state_model:
+      block_bits: 128
+      memory_size_parameterized: true
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+    - component_id: xor
+  notes: Argon memory-mixing pass using the fixed-key five-round AES-128
+    permutation inside its SubGroups and ShuffleSlices memory schedule.
 - id: argon2_pass
   name: Argon2 Pass
   kind: full_round

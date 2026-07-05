@@ -1,0 +1,34 @@
+- expand incomplete construction entries, e.g.:
+  - id: filtered_fcsr
+    name: Filtered FCSR
+
+  - id: filtered_lfsr
+    name: Filtered LFSR
+
+- merge families and primitives into primitives only
+
+- create clear definition of component/round/primitive/construction/mode/etc.
+
+- ciphers to add:
+  ZORRO (together with PICARO and earlier NOEKEON, designed with Side-Channel protection in mind)
+  Joltic-BC, SCREAM internal cipher -> leakage resilient design with extra tweak input
+
+- add TWEAKEY framework among the constructions:
+   Tweaks and keys for block ciphers: The TWEAKEY framework. ASIACRYPT 2014
+
+Which is the first AndRX cipher?
+
+Other relations (verify them by reading the corresponding pdf):
+- SKINNY:
+  + follows trend of locally non-optimal internal components: who started it?
+  + introduces sparse linear layer 
+  + MANTIS is a tweakable variant of SKINNY for low-latency implementations. MANTIS uses components from PRINCE and MIDORI
+  + 4-bit Sbox candidate S4 is essentially the PICCOLO Sbox with the last NOT gate at the end being removed 
+  + one can view the cipher as a primitive in between an SPN and an “ANDrotation-XOR” function like SIMON
+  + 8-bit sbox is original and uses 4-input AND-NOR and 4-input OR-NAND gates
+  + In order to differentiate the rounds, we simply need a counter, and since the number of rounds of all SKINNY versions is smaller than 64, the most hardware friendly solution is to use a very cheap 6-bit affine LFSR (like in LED)
+  + uses 4x4 matrix state as in AES or PRESENT, 
+  + same shift row of AES, but simpler mixcolumn
+- GASTON permutation is derived from ASCON permutation by improving its linear layer (more diffusion)
+- PRINCE round function basically follows the AES structure, with the exception of using a MixColumns-like mapping with branch number 4 instead of 5.
+- MIDORI is an AES-like design

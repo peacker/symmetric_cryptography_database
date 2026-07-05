@@ -3065,6 +3065,19 @@ references:
   notes: LEX (Leak EXtraction) is an AES-based stream cipher that leaks 4 bytes from
     each AES round; 128-bit key, 128-bit IV; ~2.5× faster than AES encryption; eSTREAM
     submission; local copy references/2008-lex.pdf.
+- id: biryukov_et_al_2015_argon_argon2
+  kind: report
+  title: Argon and Argon2
+  authors:
+  - Alex Biryukov
+  - Daniel Dinu
+  - Dmitry Khovratovich
+  year: 2015
+  venue: Password Hashing Competition Submission, Argon v1.1 and Argon2 v1.0
+  url: https://orbilu.uni.lu/bitstream/10993/19901/1/Argon.pdf
+  notes: Joint primary specification. Argon is the original PHC submission and
+    uses five-round AES-128 with a fixed key as its memory permutation and
+    BLAKE2b for initial/final hashing; Argon2 is the streamlined successor.
 - id: biryukov_et_al_2015_argon2_v12
   kind: report
   title: Argon2 (Version 1.2)

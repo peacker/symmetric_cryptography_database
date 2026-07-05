@@ -535,6 +535,7 @@ processes:
     kind: other
     participants:
     - family_id: antcrypt
+    - family_id: argon
     - family_id: argon2
     - family_id: battcrypt
     - family_id: catena

@@ -8257,6 +8257,71 @@ families:
     AES encryptions (more secure variant).
 
     '
+- id: argon
+  name: Argon
+  construction_ids:
+  - memory_hard_sponge
+  round_ids:
+  - argon_pass
+  target_applications:
+  - password_hashing
+  - key_derivation
+  - proof_of_work
+  characteristics:
+    components:
+    - id: compression_function
+      params:
+        name: BLAKE2b
+        note: Used for initial hashing and iterative final tag generation
+    - id: permutation
+      params:
+        name: Reduced AES-128
+        state_bits: 128
+        note: Five AES rounds with a fixed key, including final-round MixColumns
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+  reference_ids:
+  - biryukov_et_al_2015_argon_argon2
+  process_participations:
+  - process_id: phc_competition_nist_2013_2015
+    stage_ids:
+    - submissions
+    status: submitted
+  influences:
+  - source_family_id: aes
+    relations:
+    - inspired_by
+    - same_sbox
+    - same_mix_column
+    - same_shift_row
+    note: Argon's primary specification defines its 128-bit permutation F as
+      five rounds of AES-128 under a fixed public key, retaining MixColumns in
+      the fifth round.
+  - source_family_id: blake2
+    relations:
+    - inspired_by
+    note: Argon directly uses BLAKE2b as its cryptographic hash for input
+      initialization and iterative final-tag generation; its memory permutation
+      itself is reduced AES rather than BLAKE2-based.
+  innovative_ideas:
+  - id: argon_tradeoff_resilient_memory_schedule
+    name: Tradeoff-resilient SubGroups and ShuffleSlices memory schedule
+    note: Argon prioritizes steep computational and time penalties for any
+      reduction in the requested memory, alternating subgroup mixing with
+      slice shuffling over an array of 128-bit blocks.
+  notes: Argon is the original memory-hard PHC submission by Biryukov, Dinu,
+    and Khovratovich. It prioritizes resistance to time-memory tradeoffs over
+    the higher memory-filling speed and parallel scalability later pursued by
+    Argon2.
 - id: argon2
   name: Argon2
   construction_ids:
@@ -8279,6 +8344,7 @@ families:
         note: Blake2b compression function operating on 8×16 64-bit words
     - id: xor
   reference_ids:
+  - biryukov_et_al_2015_argon_argon2
   - biryukov_et_al_2015_argon2_v12
   - biryukov_et_al_2017_argon2_v13
   - rfc_9106_argon2
@@ -8289,7 +8355,22 @@ families:
     - finalist
     - winner
     status: winner
-  influences: []
+  influences:
+  - source_family_id: argon
+    relations:
+    - improvement_of
+    - related_to
+    note: The joint specification presents Argon as the designers' original PHC
+      submission and Argon2 as its streamlined next generation, trading Argon's
+      extreme memory-reduction penalties for faster, parallel memory filling and
+      a simpler design.
+  - source_family_id: blake2
+    relations:
+    - inspired_by
+    note: Argon2 directly uses BLAKE2b for its hash H and bases compression
+      permutation P on the BLAKE2b round function. Version 1.2 modifies the
+      modular additions with BlaMka multiplications, so the round is derived
+      from rather than identical to BLAKE2b.
   innovative_ideas:
   - id: argon2_memory_hard_compression
     name: Memory-hard compression function using large memory array
