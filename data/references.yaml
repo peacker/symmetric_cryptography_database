@@ -450,6 +450,9 @@ references:
   year: 1991
   venue: EUROCRYPT 1990
   url: https://doi.org/10.1007/3-540-46877-3_35
+  notes: 'Primary PES paper from the authors'' ETH archive: references/1991-pes.pdf.
+    The repository also retains references/1991-idea.pdf, a later chapter describing
+    IDEA as the differential-cryptanalysis-resistant improvement of PES.'
 - id: needham_wheeler_1994_tea
   kind: article
   title: TEA, a Tiny Encryption Algorithm
