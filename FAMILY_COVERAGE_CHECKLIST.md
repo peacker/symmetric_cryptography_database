@@ -87,7 +87,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Ascon-Hash256 | Ascon-Hash256 | hash_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
 | [x] | Ascon-XOF128 | Ascon-XOF128 | extendable_output_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
 | [x] | Ballet | Ballet | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
-| [x] | BEA-1 | BEA-1 | block_cipher | 2017 | https://doi.org/10.5220/0006244406220631 | Full | yes |
+| [x] | BEA-1 | BEA-1 | block_cipher | 2017 | https://arxiv.org/abs/1702.06475 | Full | yes |
 | [x] | battcrypt | battcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/battcrypt-v0.pdf | Full | yes |
 | [x] | BEAR/LION | BEAR/LION | construction | 1996 | https://www.cl.cam.ac.uk/archive/rja14/Papers/bear-lion.pdf | Full | yes |
 | [x] | BelT | BelT | block_cipher | 2012 | https://apmi.bsu.by/assets/files/std/belt-spec27.pdf | Full | yes |
@@ -224,6 +224,8 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Oribatida | Oribatida | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Oribatida-spec.pdf | Full | yes |
 | [x] | ORYX | ORYX | stream_cipher | 1995 | N/A — proprietary | N/A | no |
 | [x] | Parallel | Parallel | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Parallel-v1.pdf | Full | yes |
+| [x] | Parity-check DES/Triple-DES variants | Parity-check DES/Triple-DES variants | block_cipher | 2013 | https://doi.org/10.55630/sjc.2013.7.257-270 | Full | yes |
+| [x] | Paterson trapdoor cipher | Paterson trapdoor cipher | block_cipher | 1999 | https://doi.org/10.1007/3-540-48519-8_15 | Full | yes |
 | [ ] | PEA | PEA | block_cipher | TODO | TODO | TODO — spec not found | no |
 | [x] | PHOTON | PHOTON | permutation | 2021 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | PHOTON-Beetle | PHOTON | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/PHOTON-Beetle-spec.pdf | Full | yes |

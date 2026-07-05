@@ -138,8 +138,52 @@ references:
   venue: ASIACRYPT 1998, LNCS 1514, pp. 126–132
   publisher: Springer
   url: https://doi.org/10.1007/3-540-49649-1_11
-  notes: Shows how to recover and exploit the concealed trapdoor structure without
-    knowing the original secret trapdoor parameters. No local PDF is retained.
+  notes: >-
+    Shows how to recover and exploit the concealed trapdoor structure without
+    knowing the original secret trapdoor parameters. Local author copy:
+    references/1998-rijmen-preneel-trapdoor-cryptanalysis.pdf.
+- id: paterson_1999_imprimitive_trapdoor
+  kind: paper
+  title: Imprimitive Permutation Groups and Trapdoors in Iterated Block Ciphers
+  authors:
+  - Kenneth G. Paterson
+  year: 1999
+  venue: Fast Software Encryption 1999, LNCS 1636, pp. 201–214
+  publisher: Springer
+  url: https://doi.org/10.1007/3-540-48519-8_15
+  notes: >-
+    Defines a concrete 64-bit, 32-round, 80-bit-key DES-like cipher whose
+    round functions preserve a hidden block system. Local copy:
+    references/1999-paterson-trapdoor-cipher.pdf.
+- id: angelova_borissov_2013_parity_check_des
+  kind: paper
+  title: Plaintext Recovery in DES-like Cryptosystems Based on S-boxes with Embedded
+    Parity Check
+  authors:
+  - Vesela Angelova
+  - Yuri Borissov
+  year: 2013
+  venue: Serdica Journal of Computing 7(3), pp. 257–270
+  url: https://doi.org/10.55630/sjc.2013.7.257-270
+  notes: >-
+    Constructs modified DES and Triple-DES variants whose non-surjective
+    S-box outputs lie in affine parity-check subspaces, enabling ciphertext-only
+    plaintext recovery. Local publisher copy:
+    references/2013-parity-check-des-like.pdf.
+- id: bannier_filiol_2017_partition_trapdoor
+  kind: book_chapter
+  title: Partition-Based Trapdoor Ciphers
+  authors:
+  - Arnaud Bannier
+  - Eric Filiol
+  year: 2017
+  venue: Partition-Based Trapdoor Ciphers, IntechOpen
+  publisher: IntechOpen
+  url: https://doi.org/10.5772/intechopen.70420
+  notes: >-
+    Develops the partition-based trapdoor framework and gives the full BEA-1
+    construction and cryptanalysis. Local open-access book copy:
+    references/2017-partition-trapdoor-ciphers.pdf.
 - id: bannier_filiol_2017_bea1
   kind: paper
   title: Mathematical Backdoors in Symmetric Encryption Systems — Proposal for
@@ -150,10 +194,11 @@ references:
   year: 2017
   venue: ICISSP 2017 / ForSE 2017, pp. 622–631
   publisher: SciTePress
-  url: https://doi.org/10.5220/0006244406220631
+  url: https://arxiv.org/abs/1702.06475
   notes: 'Defines BEA-1 for research into partition-based mathematical backdoors.
-    Local copy: references/2017-bea1.pdf. The cipher is explicitly unsuitable for
-    protecting information.'
+    The supplied local copy is the 12-page arXiv manuscript dated 21 February
+    2017: references/2017-bea1.pdf. The cipher is explicitly unsuitable for protecting
+    information. Conference DOI: 10.5220/0006244406220631.'
 - id: koo_et_al_2018_cham
   kind: paper
   title: 'CHAM: A Family of Lightweight Block Ciphers for Resource-Constrained Devices'

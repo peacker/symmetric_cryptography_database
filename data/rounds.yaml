@@ -136,6 +136,46 @@ rounds:
   notes: AddRoundKey, eight parallel 10-bit substitutions cycling through four S-boxes,
     ShiftRows-like bundle permutation, and two 40-bit linear MixColumns applications.
     The final round omits MixColumns and ends with an additional round key.
+- id: paterson_trapdoor_round
+  name: Paterson DES-like trapdoor round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: linear_transform
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 6
+        output_bits: 4
+        count: 8
+    - component_id: bit_permutation
+    - component_id: xor
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+    constant_injection: 48_bit_round_key
+  notes: DES Feistel round P(S(E(R) XOR k)) using Paterson's replacement S-boxes;
+    E and P are the original DES mappings.
+- id: parity_check_des_round
+  name: Parity-check DES-like round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: linear_transform
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 6
+        output_bits: 4
+        count: 8
+    - component_id: bit_permutation
+    - component_id: xor
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+    constant_injection: des_round_key
+  notes: Standard DES-like Feistel round with each S-box modified so one output
+    coordinate is the parity check of the other three.
 - id: cham_round
   name: CHAM round
   kind: full_round

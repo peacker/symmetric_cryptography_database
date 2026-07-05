@@ -300,6 +300,7 @@ families:
     - id: constant
   reference_ids:
   - bannier_filiol_2017_bea1
+  - bannier_filiol_2017_partition_trapdoor
   - rijmen_preneel_1997_tcast_tloki
   process_participations: []
   influences:
@@ -310,6 +311,14 @@ families:
     note: BEA-1 deliberately mirrors the AES sequence of key addition, parallel
       substitution, row shifting, and column mixing, but operates on eight 10-bit
       bundles.
+  - source_family_id: paterson_trapdoor_cipher
+    relations:
+    - inspired_by
+    - generalization_of
+    - related_to
+    note: The partition-based approach underlying BEA-1 explicitly generalizes
+      Paterson's hidden-block-system trapdoor from a DES-like Feistel cipher to
+      an AES-like substitution-permutation network.
   innovative_ideas:
   - id: bea1_partition_backdoor
     name: Partition-based mathematical backdoor
@@ -321,6 +330,90 @@ families:
     120-bit keys using eleven AES-like rounds, four 10-bit S-boxes, and a hidden
     partition-based trapdoor. Its authors state that it is absolutely unsuitable
     for protecting information.
+- id: paterson_trapdoor_cipher
+  name: Paterson trapdoor cipher
+  construction_ids:
+  - feistel
+  round_ids:
+  - paterson_trapdoor_round
+  target_applications:
+  - research
+  - cryptanalysis
+  - backdoor_research
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: linear_transform
+    - id: xor
+    - id: sbox
+      params:
+        input_bits: 6
+        output_bits: 4
+        count: 8
+    - id: bit_permutation
+  reference_ids:
+  - paterson_1999_imprimitive_trapdoor
+  process_participations: []
+  influences:
+  - source_family_id: des
+    relations:
+    - variant_of
+    - inspired_by
+    - same_state_layout
+    note: Paterson retains DES's 64-bit Feistel layout, expansion E, permutation
+      P, and eight 6-to-4-bit S-box positions, but substitutes specially designed
+      S-boxes, doubles the rounds to 32, and proposes an 80-bit session key.
+  innovative_ideas:
+  - id: imprimitive_group_trapdoor
+    name: Hidden imprimitive-group block-system trapdoor
+    note: The round functions preserve a concealed nontrivial block system. Knowing
+      it permits plaintext recovery and, with a suitable key schedule, divide-and-conquer
+      recovery of the full key despite conventional linear and differential screening.
+  notes: This deliberately weak 1999 research cipher is a concrete DES-like example,
+    not a deployable primitive. Its paper specifies the round function and S-boxes
+    but deliberately leaves selection of the 80-bit-to-round-key schedule open.
+- id: parity_check_des_variants
+  name: Parity-check DES/Triple-DES variants
+  construction_ids:
+  - feistel
+  round_ids:
+  - parity_check_des_round
+  target_applications:
+  - research
+  - cryptanalysis
+  - backdoor_research
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: linear_transform
+    - id: xor
+    - id: sbox
+      params:
+        input_bits: 6
+        output_bits: 4
+        count: 8
+    - id: bit_permutation
+  reference_ids:
+  - angelova_borissov_2013_parity_check_des
+  process_participations: []
+  influences:
+  - source_family_id: des
+    relations:
+    - variant_of
+    - related_to
+    - same_state_layout
+    note: The experiments modify DES and Triple-DES only by replacing each S-box's
+      fourth output coordinate with a parity check of the other three; the standard
+      Feistel structure and surrounding permutations remain.
+  innovative_ideas:
+  - id: parity_check_sbox_backdoor
+    name: Non-surjective parity-check S-box backdoor
+    note: Every modified S-box maps into an eight-element affine parity subspace.
+      This preserved structure enables ciphertext-only recovery of redundant plaintext
+      without recovering the encryption key.
+  notes: This descriptive family represents the deliberately damaged DES and Triple-DES
+    instances evaluated by Angelova and Borissov; their paper does not assign them
+    a standalone cipher name.
 - id: cham
   name: CHAM
   construction_ids:

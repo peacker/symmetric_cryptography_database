@@ -127,6 +127,43 @@ primitives:
     rounds: 11
   notes: Explicitly backdoored research cipher with twelve 80-bit round keys and
     eleven rounds; unsuitable for real protection.
+- id: paterson_trapdoor_64_80
+  name: Paterson trapdoor cipher
+  family_id: paterson_trapdoor_cipher
+  primitive_type: block_cipher
+  reference_ids:
+  - paterson_1999_imprimitive_trapdoor
+  characteristics:
+    block_size_bits: 64
+    key_size_bits: 80
+    output_size_bits: 64
+    rounds: 32
+  notes: Concrete DES-like research cipher with a hidden imprimitive block system;
+    the paper leaves the exact key schedule unspecified.
+- id: parity_check_des
+  name: Parity-check DES
+  family_id: parity_check_des_variants
+  primitive_type: block_cipher
+  reference_ids:
+  - angelova_borissov_2013_parity_check_des
+  characteristics:
+    block_size_bits: 64
+    key_size_bits: 56
+    output_size_bits: 64
+    rounds: 16
+  notes: Deliberately modified DES using non-surjective parity-check S-boxes.
+- id: parity_check_3des
+  name: Parity-check Triple-DES
+  family_id: parity_check_des_variants
+  primitive_type: block_cipher
+  reference_ids:
+  - angelova_borissov_2013_parity_check_des
+  characteristics:
+    block_size_bits: 64
+    output_size_bits: 64
+    rounds: 48
+  notes: Triple-DES experiment using the same deliberately modified parity-check
+    S-boxes; the paper studies ciphertext-only plaintext recovery in ECB mode.
 - id: cham_64_128
   name: CHAM-64/128
   family_id: cham
