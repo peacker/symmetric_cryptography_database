@@ -468,6 +468,22 @@ references:
   year: 1997
   venue: Technical Report
   url: https://www.cix.co.uk/~klockstone/xtea.pdf
+- id: polimon_et_al_2008_raiden
+  kind: article
+  title: Automated Design of a Lightweight Block Cipher with Genetic Programming
+  authors:
+  - Javier Polimón
+  - Julio C. Hernández-Castro
+  - Juan M. Estévez-Tapiador
+  - Arturo Ribagorda
+  year: 2008
+  venue: International Journal of Knowledge-Based and Intelligent Engineering Systems 12(1), 3-14
+  url: https://doi.org/10.3233/KES-2008-12102
+  notes: >-
+    Primary Raiden design paper; proposes the cipher as a compact alternative
+    retaining TEA's implementation advantages while evolving a new round function
+    and key schedule through genetic programming. Local copy:
+    references/2008-raiden.pdf.
 - id: schneier_et_al_1998_twofish
   kind: article
   title: 'Twofish: A 128-Bit Block Cipher'
@@ -639,6 +655,18 @@ references:
   organization: SAC
   status: active
   url: http://www.gmbz.org.cn/upload/2018-04-04/1522788048733065051.pdf
+  notes: 'Local English translation/specification copy: references/2016-sm4.pdf.'
+- id: guo_2022_sm4_constant_time
+  kind: paper
+  title: Efficient Constant-Time Implementation of SM4
+  authors:
+  - Weiji Guo
+  year: 2022
+  venue: Cryptology ePrint Archive, Report 2022/1154
+  url: https://eprint.iacr.org/2022/1154.pdf
+  notes: Gives the corrected algebraic expression of the SM4 S-box as affine
+    transformations around inversion in SM4's GF(2^8), and maps that field to
+    the distinct AES field for implementation.
 - id: yang_2021_sm_tls
   kind: standard
   title: 'RFC 8998: ShangMi (SM) Cipher Suites for TLS 1.3'
@@ -1123,6 +1151,9 @@ references:
   year: 2019
   venue: NIST LWC Round 1 Submission
   url: https://csrc.nist.gov/projects/lightweight-cryptography
+  notes: >-
+    The submission specifies the GASCON permutation family used by DryGASCON.
+    Local copy: references/2019-drygascon.pdf.
 - id: sneik_2019
   kind: article
   title: SNEIK - Submission to NIST Lightweight Cryptography

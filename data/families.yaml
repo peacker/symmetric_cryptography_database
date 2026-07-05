@@ -770,6 +770,13 @@ families:
     - submissions_block_64bit
     status: submitted
   influences: []
+  innovative_ideas:
+  - id: idea_lai_massey_lineage
+    name: Origin of the Lai–Massey block-cipher structure
+    note: The structure later called the Lai–Massey scheme was introduced by PES,
+      Lai and Massey's direct predecessor to IDEA. IDEA retained and refined that
+      structure, so the PES/IDEA lineage is its origin; strictly, PES predates the
+      renamed IDEA design.
 - id: tea
   name: TEA
   notes: TEA is a compact 64-bit Feistel cipher using 32 cycles of ARX-style mixing under a 128-bit key; its minimal implementation
@@ -837,6 +844,46 @@ families:
     - tea_arx_feistel
     - tea_delta_constant_mixing
     note: XTEA improves TEA's key schedule and resistance to related-key attacks.
+- id: raiden
+  name: Raiden
+  construction_ids:
+  - feistel
+  round_ids:
+  - raiden_round
+  target_applications:
+  - software
+  - embedded
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: sub_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_variable
+  reference_ids:
+  - polimon_et_al_2008_raiden
+  process_participations: []
+  influences:
+  - source_family_id: tea
+    relations:
+    - inspired_by
+    - related_to
+    note: Raiden's paper develops it as a secure alternative intended to retain
+      TEA's speed, compact code, low gate count, portability, 64-bit block, and
+      128-bit key, while replacing the round function and key schedule with
+      functions found through genetic programming.
+  innovative_ideas:
+  - id: raiden_genetically_evolved_components
+    name: Genetically evolved round function and key schedule
+    note: Raiden uses genetic programming to search for compact nonlinear
+      functions with strong avalanche behavior, then places the selected round
+      function in a classical Feistel network.
+  notes: Raiden is a 16-round, 64-bit block cipher with a 128-bit key, proposed
+    as an automatically designed lightweight alternative to TEA.
 - id: twofish
   name: Twofish
   notes: Twofish is a 16-round, 128-bit Feistel-like AES finalist using key-dependent S-boxes, an MDS matrix, a pseudo-Hadamard
@@ -1398,8 +1445,19 @@ families:
   reference_ids:
   - yang_2021_sm_tls
   - gbt_32907_2016_sm4
+  - guo_2022_sm4_constant_time
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - inspired_by
+    - same_sbox_size
+    - related_to
+    note: 'AES and SM4 both use 8-bit S-boxes built from multiplicative inversion
+      over GF(2^8) and affine transformations. They are not the same S-box: SM4
+      uses a different irreducible polynomial and different affine mappings. The
+      inspiration edge records adoption of AES''s inversion-affine S-box design
+      idea, not reuse of the AES S-box or descent of the complete cipher.'
 - id: kasumi
   name: KASUMI
   notes: KASUMI is a 64-bit, 128-bit-key Feistel cipher derived from MISTY1 and adapted
@@ -2534,6 +2592,39 @@ families:
     - round_1
     status: candidate
   influences: []
+- id: gascon
+  name: GASCON
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - gascon_permutation_round
+  target_applications:
+  - iot
+  - software
+  - generic
+  characteristics:
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - drygascon_2019
+  process_participations: []
+  influences:
+  - source_family_id: ascon
+    relations:
+    - inspired_by
+    - generalization_of
+    - related_to
+    note: The DryGASCON specification defines GASCON as Generalized ASCON,
+      extending the permutation to any odd number of at least five 64-bit words.
+      GASCONC5R12 is closely related to Ascon-p but changes byte order, internal
+      representation, two rotations, and round-constant scheduling.
+  notes: GASCON is the parameterized permutation family underlying DryGASCON.
+    Its state contains an odd number of 64-bit words, with five-word and
+    nine-word instances supporting the 128- and 256-bit DryGASCON variants.
 - id: drygascon
   name: DryGASCON
   notes: DryGASCON is a permutation-based AEAD and hashing design derived from the GASCON/Ascon lineage, separating a capacity
@@ -2562,6 +2653,12 @@ families:
     - round_2
     status: candidate
   influences:
+  - source_family_id: gascon
+    relations:
+    - inspired_by
+    - related_to
+    note: DryGASCON instantiates its DrySponge construction with members of the
+      GASCON permutation family.
   - source_family_id: ascon
     relations:
     - inspired_by
@@ -6200,7 +6297,15 @@ families:
   reference_ids:
   - xxtea_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: xtea
+    relations:
+    - variant_of
+    - related_to
+    note: Wheeler and Needham's "Correction to XTEA" replaces the vulnerable
+      Block TEA construction with Corrected Block TEA, now commonly called
+      XXTEA. It retains XTEA/TEA-derived word operations and keying while fixing
+      Block TEA's lack of backward difference propagation.
   notes: XXTEA (Corrected Block TEA) is a word-oriented ARX cipher operating on variable-length blocks. Its structure is a
     consistent, incomplete, source-heavy, heterogeneous UFN (unbalanced [Feistel network](https://en.wikipedia.org/wiki/Feistel_network)).
 - id: yarara_and_coral
@@ -6308,9 +6413,13 @@ families:
     note: MacGuffin's 8 S-boxes (6→2 bits) are DES-derived, adapted for the GUFN structure.
   innovative_ideas:
   - id: macguffin_gufn
-    name: Generalized Unbalanced Feistel Network (GUFN)
-    note: 'MacGuffin introduced the GUFN where the 64-bit block is split into a 16-bit target half and a 48-bit control half,
-      unlike a standard balanced Feistel split.
+    name: First block cipher based on a Generalized Unbalanced Feistel Network (GUFN)
+    note: 'The 1994 MacGuffin paper presents earlier Feistel block ciphers as using
+      equal-sized halves and introduces MacGuffin as the first published block
+      cipher built around a GUFN. Its 64-bit block is split into a 16-bit target
+      half and a 48-bit control half. The paper separately notes somewhat similar
+      unbalanced structures in MD5 and SHA, which are hash functions rather than
+      block ciphers.
 
       '
   notes: 'MacGuffin is a 64-bit block cipher designed by Matt Blaze and Bruce Schneier (FSE 1994). It introduced the Generalized

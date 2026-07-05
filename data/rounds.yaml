@@ -374,6 +374,25 @@ rounds:
   notes: 'One TEA cycle (two Feistel rounds) with delta constant accumulation.
 
     '
+- id: raiden_round
+  name: Raiden Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branches: 2
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: sub_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_variable
+    constant_injection: evolved_key_schedule
+  notes: Classical Feistel round using the genetically evolved Raiden round
+    function and key schedule over 32-bit words.
 - id: xtea_round
   name: XTEA Round Pair
   kind: full_round
@@ -1466,6 +1485,22 @@ rounds:
     chi-style update and bit-level diffusion.
 
     '
+- id: gascon_permutation_round
+  name: GASCON Permutation Round
+  kind: full_round
+  spec:
+    state_model:
+      word_size_bits: 64
+      word_count_parameterized: true
+    component_flow:
+    - component_id: constant
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: rotation_fixed
+    constant_injection: round_constant
+  notes: Generalized Ascon-style permutation round supporting any odd number of
+    at least five 64-bit words.
 - id: drygascon_permutation_round
   name: DryGASCON Permutation Round
   kind: full_round

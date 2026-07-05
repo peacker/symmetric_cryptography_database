@@ -146,6 +146,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | FROG | FROG | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
 | [x] | GAGE and InGAGE | GAGE and InGAGE | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | Full | yes |
 | [x] | Gambit | Gambit | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Gambit-v1.pdf | Full | yes |
+| [x] | GASCON | GASCON | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/DryGASCON-spec.pdf | Full | yes |
 | [x] | GIFT | GIFT | block_cipher | 2017 | https://iacr.org/archive/ches2017/105290001/105290001.pdf | TODO | no |
 | [x] | GIFT-COFB | GIFT | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/GIFT-COFB-spec.pdf | Full | yes |
 | [x] | Gimli | Gimli | permutation | 2017 | https://gimli.cr.yp.to/ | TODO | yes |
@@ -241,6 +242,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | QARMAv2 | QARMAv2 | tweakable_block_cipher | 2023 | https://eprint.iacr.org/2023/929 | TODO | yes |
 | [x] | Quartet | Quartet | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Quartet-spec.pdf | Full | yes |
 | [x] | Rabbit | Rabbit | stream_cipher | 2003 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_7 | Full | yes |
+| [x] | Raiden | Raiden | block_cipher | 2008 | https://doi.org/10.3233/KES-2008-12102 | Full | yes |
 | [x] | Raindrop | Raindrop | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000342 | Full | yes |
 | [x] | RC2 | RC2 | block_cipher | 1998 | https://datatracker.ietf.org/doc/html/rfc2268 | Full | yes |
 | [x] | RC4 | RC4 | stream_cipher | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
