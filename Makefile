@@ -31,6 +31,7 @@ validate:
 
 test: validate
 	$(PYTHON) scripts/test_process_alignment.py
+	$(PYTHON) scripts/test_family_coverage.py
 
 build-db:
 	$(PYTHON) scripts/build_db.py
