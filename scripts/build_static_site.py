@@ -3083,6 +3083,19 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       let layerOf;
       if (useGen) layerOf = assignLayers(new Set(dagNodes), inE);
 
+      // Which recorded relation actually denotes direct lineage vs. a looser design
+      // similarity — used below so a node with several DAG parents picks its strongest
+      // relationship as the tree parent, instead of just whichever parent is most recent.
+      const REL_TIER = { improvement_of: 3, variant_of: 3, standardization_of: 3, generalization_of: 3, inspired_by: 2 };
+      const edgeTier = new Map();
+      visEdges.forEach((e) => {
+        const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
+        const tier = edgeRelations(e).reduce((m, r) => Math.max(m, REL_TIER[r] || 1), 1);
+        const key = `${src}|${tgt}`;
+        edgeTier.set(key, Math.max(edgeTier.get(key) || 0, tier));
+      });
+      const parentTier = (parent, node) => edgeTier.get(`${parent}|${node}`) || 1;
+
       // Build spanning tree for angular placement only. All influence edges are rendered alike.
       const treeChildren = new Map(dagNodes.map((n) => [n, []]));
       const treeParentOf = new Map();
@@ -3096,10 +3109,12 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
           const prevLayer = parents.filter((p) => (layerOf.get(p) || 0) === myL - 1);
           const candidates = prevLayer.length ? prevLayer : parents;
           prim = [...candidates].sort((a, b) =>
+            parentTier(b, n) - parentTier(a, n) ||
             Number((genFamById.get(b) || {}).year || 0) - Number((genFamById.get(a) || {}).year || 0) || a.localeCompare(b))[0];
         } else {
-          prim = parents.reduce((best, p) =>
-            Number((genFamById.get(p) || {}).year || 0) > Number((genFamById.get(best) || {}).year || 0) ? p : best);
+          prim = [...parents].sort((a, b) =>
+            parentTier(b, n) - parentTier(a, n) ||
+            Number((genFamById.get(b) || {}).year || 0) - Number((genFamById.get(a) || {}).year || 0))[0];
         }
         treeParentOf.set(n, prim);
         treeChildren.get(prim).push(n);
@@ -3159,11 +3174,36 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         return cnt === 0 ? null : Math.atan2(sy, sx) * 180 / Math.PI;
       }
 
+      // Total angular "stress": sum over every visible edge of the angular distance
+      // between its two endpoints. This is the real objective — low stress means related
+      // families sit close together on the circle — and lets us verify a re-ordering
+      // actually helped instead of trusting the barycenter heuristic blindly (it isn't
+      // monotonic pass-to-pass, so without this a later, worse pass could win).
+      function totalStress() {
+        let s = 0;
+        visEdges.forEach((e) => {
+          const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
+          if (!angleOf.has(src) || !angleOf.has(tgt)) return;
+          let d = Math.abs(angleOf.get(src) - angleOf.get(tgt)) % 360;
+          if (d > 180) d = 360 - d;
+          s += d;
+        });
+        return s;
+      }
+      function snapshotOrder() { return { children: new Map([...treeChildren].map(([k, v]) => [k, v.slice()])), roots: roots.slice() }; }
+      function restoreOrder(snap) {
+        snap.children.forEach((arr, k) => { const cur = treeChildren.get(k); cur.length = 0; cur.push(...arr); });
+        roots.length = 0; roots.push(...snap.roots);
+      }
+
+      let best = snapshotOrder();
+      let bestStress = totalStress();
+
       // Circular Sugiyama barycenter heuristic: iteratively reorder children so that
       // subtrees whose cross-edges point in the same direction are placed adjacent,
       // reducing angular crossings. Angles are normalized relative to the parent arc
       // midpoint to handle the 0°/360° wraparound correctly.
-      for (let pass = 0; pass < 6; pass++) {
+      for (let pass = 0; pass < 8; pass++) {
         let changed = false;
         const baryMap = new Map();
         dagNodes.forEach((id) => { baryMap.set(id, extBary(id)); });
@@ -3198,8 +3238,31 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         }
 
         runAssignAngles();
+        const stress = totalStress();
+        if (stress < bestStress) { bestStress = stress; best = snapshotOrder(); }
         if (!changed) break;
       }
+      restoreOrder(best); runAssignAngles();
+
+      // Transpose refinement: adjacent-swap local search on top of the best barycenter
+      // ordering found above, at every level of the tree (including the root ring).
+      // A swap is kept only when it strictly lowers total stress, so this can only match
+      // or improve on the barycenter passes — it never regresses relative to sweeping alone.
+      function transposeGroup(arr) {
+        let improved = true; let guard = 0;
+        while (improved && guard++ < 4) {
+          improved = false;
+          for (let i = 0; i < arr.length - 1; i++) {
+            [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+            runAssignAngles();
+            const s = totalStress();
+            if (s < bestStress) { bestStress = s; improved = true; }
+            else { [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]]; runAssignAngles(); }
+          }
+        }
+      }
+      treeChildren.forEach((kids) => { if (kids.length > 1) transposeGroup(kids); });
+      if (roots.length > 1) transposeGroup(roots);
 
       // Radius mapping: year mode or generation mode
       const charW = genFontPx * 0.62; // use bold advance width (synthesised bold ≈ 0.62 em)
