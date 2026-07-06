@@ -301,7 +301,6 @@ families:
   reference_ids:
   - bannier_filiol_2017_bea1
   - bannier_filiol_2017_partition_trapdoor
-  - rijmen_preneel_1997_tcast_tloki
   process_participations: []
   influences:
   - source_family_id: aes
