@@ -704,6 +704,56 @@ references:
   status: active
   url: http://www.gmbz.org.cn/upload/2018-04-04/1522788048733065051.pdf
   notes: 'Local English translation/specification copy: references/2016-sm4.pdf.'
+- id: gb_15629_11_2003_sms4
+  kind: standard
+  title: 'GB 15629.11-2003: Wireless LAN Medium Access Control and Physical Layer Specifications'
+  authors: []
+  year: 2003
+  venue: Standardization Administration of China
+  organization: SAC
+  status: active
+  url: http://www.gb688.cn/bzgk/gb/newGbInfo?hcno=74B9DD11287E72408C19C4D3A360D1BD
+  notes: First publication of the cipher, under its original SMS4 name, as the
+    cipher mandated for WAPI wireless networks. The full standard is not retained
+    locally.
+- id: gmt_0002_2012_sm4
+  kind: standard
+  title: 'GM/T 0002-2012: SM4 Block Cipher Algorithm'
+  authors: []
+  year: 2012
+  venue: Office of State Commercial Cryptography Administration of China
+  organization: OSCCA
+  status: superseded
+  url: http://www.oscca.gov.cn/Column/Column_32.htm
+  notes: Industry cryptographic standard that renamed the formerly published SMS4
+    algorithm to SM4.
+- id: iso_iec_18033_3_amd2_2017_sm4
+  kind: standard
+  title: 'ISO/IEC 18033-3:2010/Amd 2:2017 — Addition of the SM4 Block Cipher'
+  authors: []
+  year: 2017
+  venue: ISO/IEC 18033-3 Amendment 2
+  organization: ISO/IEC
+  status: active
+  url: https://www.iso.org/standard/54531.html
+  notes: Adds SM4 to the international block-cipher standard and assigns its ISO
+    object identifier.
+- id: tse_wong_saarinen_2018_sm4_draft
+  kind: internet_draft
+  title: The SM4 Blockcipher Algorithm and Its Modes of Operations
+  authors:
+  - Ronald Tse
+  - Wong Wai Kit
+  - Markku-Juhani O. Saarinen
+  year: 2018
+  venue: IRTF CFRG Internet-Draft draft-ribose-cfrg-sm4-10
+  organization: IETF
+  status: expired
+  url: https://datatracker.ietf.org/doc/html/draft-ribose-cfrg-sm4-10
+  notes: Section 1.2 documents the publication history from SMS4 in the 2003 WAPI
+    standard through the 2006 independent publication, 2012 SM4 renaming, 2016
+    Chinese national standard, and 2017 ISO standardization. No local PDF is available;
+    the authoritative archived HTML is linked.
 - id: guo_2022_sm4_constant_time
   kind: paper
   title: Efficient Constant-Time Implementation of SM4

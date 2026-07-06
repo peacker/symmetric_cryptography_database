@@ -1514,8 +1514,10 @@ families:
     note: RC6 extends RC5 with four registers and multiplication for faster diffusion.
 - id: sm4
   name: SM4
-  notes: SM4 is a 32-round, 128-bit unbalanced Feistel-like cipher with a 128-bit key, standardized in China as GB/T 32907
-    and used in ShangMi protocols.
+  notes: SM4, originally named SMS4, is a 32-round, 128-bit unbalanced Feistel-like
+    cipher with a 128-bit key. It was first published in the 2003 WAPI standard,
+    renamed SM4 in 2012, national-standardized as GB/T 32907-2016, and added to
+    ISO/IEC 18033-3 in 2017.
   construction_ids:
   - generalized_feistel
   round_ids:
@@ -1535,8 +1537,12 @@ families:
     - id: rotation_fixed
     - id: constant
   reference_ids:
-  - yang_2021_sm_tls
+  - gb_15629_11_2003_sms4
+  - gmt_0002_2012_sm4
   - gbt_32907_2016_sm4
+  - iso_iec_18033_3_amd2_2017_sm4
+  - tse_wong_saarinen_2018_sm4_draft
+  - yang_2021_sm_tls
   - guo_2022_sm4_constant_time
   process_participations: []
   influences:

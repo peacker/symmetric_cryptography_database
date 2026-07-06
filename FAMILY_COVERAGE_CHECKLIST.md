@@ -296,7 +296,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | SKINNY | SKINNY | tweakable_block_cipher | 2016 | https://doi.org/10.1007/978-3-662-53008-5_5 | TODO | no |
 | [x] | SKINNY-AEAD/SKINNY-HASH | SKINNY | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SKINNY-spec.pdf | Full | yes |
 | [x] | SKIPJACK | SKIPJACK | block_cipher | 1998 | https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub185.pdf | Full | yes |
-| [x] | SM4 | SM4 | block_cipher | 2021 | https://www.rfc-editor.org/rfc/rfc8998 | TODO | yes |
+| [x] | SM4 | SM4 | block_cipher | 2003 | http://www.gb688.cn/bzgk/gb/newGbInfo?hcno=74B9DD11287E72408C19C4D3A360D1BD | Full history in IETF draft §1.2; algorithm in local 2016 specification | yes |
 | [x] | SMBA | SMBA | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000341 | Full | yes |
 | [x] | SNEIK | SNEIK | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | SNOW | SNOW | stream_cipher | 2001 | https://web.archive.org/web/20201017161826/http://www.madchat.fr/crypto/hash-lib-algo/snow/snow10.pdf | Full | yes |

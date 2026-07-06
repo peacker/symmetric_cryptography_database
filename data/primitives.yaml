@@ -795,6 +795,10 @@ primitives:
   name: SM4
   family_id: sm4
   primitive_type: block_cipher
+  reference_ids:
+  - gb_15629_11_2003_sms4
+  - gbt_32907_2016_sm4
+  - tse_wong_saarinen_2018_sm4_draft
   characteristics:
     block_size_bits: 128
     key_size_bits: 128
