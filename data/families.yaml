@@ -2491,6 +2491,14 @@ families:
   - daemen_et_al_2018_xoodoo_design
   process_participations: []
   influences:
+  - source_family_id: subterranean
+    relations:
+    - inspired_by
+    - related_to
+    note: The Subterranean 2.0 paper states that Xoodoo adopted Subterranean round
+      features including chi, bit-level shift-invariant operations, lightweight
+      mixing with a heavy inverse, and bit transposition, while moving to a
+      3-dimensional, software-friendly 384-bit state.
   - source_family_id: keccak
     relations:
     - inspired_by
@@ -2661,30 +2669,76 @@ families:
   influences: []
 - id: subterranean
   name: Subterranean
-  notes: Subterranean 2.0 is a duplex construction over a 257-bit permutation, offering lightweight hashing and authenticated
-    encryption with bit-oriented nonlinear feedback.
+  notes: The original Subterranean design dates to 1992 and was published in 1993.
+    Its 257-bit keyed state machine supports the Substream pseudorandom stream
+    generator and Subhash hash function, with a 256-bit key/input buffer.
   construction_ids:
-  - sponge_permutation
+  - stream_state_update_generator
+  - permutation_based_hash
   round_ids:
   - subterranean_duplex_round
   target_applications:
-  - iot
-  - software
+  - hardware
+  - stream_cipher
+  - hash
   characteristics:
     state_size_bits: 257
     components:
     - id: xor
     - id: and
     - id: not
-    - id: rotation_fixed
+    - id: linear_transform
+    - id: bit_permutation
+    - id: constant
   reference_ids:
-  - subterranean_2019
-  process_participations:
-  - process_id: lightweight_crypto_nist_2018_2023
-    stage_ids:
-    - round_1
-    status: candidate
+  - claesen_daemen_genoe_peeters_1993_subterranean
+  - bertoni_et_al_2007_sponge_functions
+  - daemen_2019_subterranean_v2
+  process_participations: []
   influences: []
+  innovative_ideas:
+  - id: subterranean_absorb_then_squeeze_precursor
+    name: Pre-sponge absorbing and squeezing phases
+    note: The Subterranean 2.0 paper says that, with some imagination, the original
+      mode can be viewed as a precursor to the 2007 sponge construction because
+      it has an absorbing phase followed by a squeezing phase. This is a historical
+      analogy, not a claim that the 1992 design instantiated the later formal sponge.
+  - id: subterranean_bit_shift_invariant_round
+    name: Bit-level shift-invariant chi-based round
+    note: Except for constant addition, its operations are bit-level shift-invariant;
+      the round combines chi nonlinearity, lightweight mixing with a heavy inverse,
+      and bit transposition. The 2019 paper identifies these as features later adopted
+      by Keccak-p and Xoodoo.
+- id: radiogatun
+  name: RadioGatún
+  construction_ids:
+  - permutation_based_hash
+  round_ids:
+  - radiogatun_round
+  target_applications:
+  - hash
+  - stream_cipher
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: word_permutation
+  reference_ids:
+  - bertoni_et_al_2006_radiogatun
+  process_participations: []
+  influences:
+  - source_family_id: subterranean
+    relations:
+    - related_to
+    note: The Subterranean 2.0 paper compares the original Subterranean input/key
+      buffer to the belt in belt-and-mill designs such as RadioGatún. This records
+      a structural analogy, not descent; RadioGatún itself develops the Panama lineage.
+  notes: RadioGatún is a variable-word-size belt-and-mill hash and stream-output
+    family introduced in 2006, with a 19-word mill coupled to a 13-by-3-word belt.
 - id: gascon
   name: GASCON
   construction_ids:
@@ -7381,7 +7435,7 @@ families:
     relations:
     - improvement_of
     - variant_of
-    - same_round_function
+    - related_to
     note: SHA-1 corrects SHA-0's message expansion by applying a one-bit left rotation
       to every newly derived schedule word while retaining the five-word state and
       80-step compression structure.
@@ -7498,7 +7552,17 @@ families:
     - round_3
     - winner
     status: winner
-  influences: []
+  influences:
+  - source_family_id: subterranean
+    relations:
+    - inspired_by
+    - related_to
+    note: >-
+      The Subterranean 2.0 paper states that Keccak-p adopted features already
+      present in Subterranean: bit-level shift-invariant operations, chi nonlinearity,
+      lightweight mixing with a heavy inverse, and bit transposition. Keccak's
+      3-dimensional state remains substantially different from Subterranean's
+      essentially 1-dimensional 257-bit state.
   innovative_ideas:
   - id: keccak_sponge
     name: Sponge construction over a fixed permutation
@@ -8125,7 +8189,21 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: subterranean
+    relations:
+    - improvement_of
+    - variant_of
+    - same_round_function
+    note: Subterranean 2.0 refurbishes the original Subterranean by retaining its
+      257-bit chi/theta/pi round, removing the key/input buffer, and replacing
+      Subhash and Substream with duplex-based modes.
+  - source_family_id: xoodyak
+    relations:
+    - inspired_by
+    - related_to
+    note: The Subterranean 2.0 specification explicitly says its duplex-based
+      construction and modes were inspired by Xoodyak.
   notes: 'Daemen et al. 2019. Subterranean 2.0 is a duplex object on a 257-bit state using a single-round permutation R =
     π ∘ θ ∘ ι ∘ χ: χ (nonlinear, s_i ← s_i + (s_{i+1}+1)·s_{i+2}, AND+XOR), ι (Kronecker delta constant XOR at bit 0), θ (linear
     mixing, s_i ← s_i+s_{i+3}+s_{i+8}), π (bit transposition, s_i ← s_{12i mod 257}). Injection rate: 32 bits (keyed) or 8

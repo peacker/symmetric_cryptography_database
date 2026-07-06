@@ -668,7 +668,6 @@ processes:
     - family_id: spix
     - family_id: spoc
     - family_id: spook
-    - family_id: subterranean
     - family_id: subterranean_2_0
     - family_id: sundae_gift
     - family_id: sycon

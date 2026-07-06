@@ -1191,6 +1191,51 @@ references:
   year: 2019
   venue: NIST LWC Round 1 Submission
   url: https://csrc.nist.gov/projects/lightweight-cryptography
+  notes: 'Local copy: references/2019-subterranean_v2.pdf.'
+- id: claesen_daemen_genoe_peeters_1993_subterranean
+  kind: paper
+  title: 'Subterranean: A 600 Mbit/sec Cryptographic VLSI Chip'
+  authors:
+  - Luc J. M. Claesen
+  - Joan Daemen
+  - Mark Genoe
+  - G. Peeters
+  year: 1993
+  venue: ICCD 1993, pp. 610–613
+  publisher: IEEE Computer Society Press
+  url: https://www.researchgate.net/publication/3601817_Subterranean_A_600_Mbitsec_cryptographic_VLSI_chip
+  notes: >-
+    Defines the original 257-bit Subterranean state update and its Substream
+    and Subhash modes. The design dates to 1992; this paper appeared in 1993.
+    Local copy supplied by the user: references/1993-subterranean.pdf.
+- id: bertoni_et_al_2006_radiogatun
+  kind: paper
+  title: 'RadioGatún, a Belt-and-Mill Hash Function'
+  authors:
+  - Guido Bertoni
+  - Joan Daemen
+  - Michaël Peeters
+  - Gilles Van Assche
+  year: 2006
+  venue: Second NIST Cryptographic Hash Workshop
+  url: https://radiogatun.noekeon.org/RadioGatun.pdf
+  notes: >-
+    Defines the RadioGatún belt-and-mill family. Local copy:
+    references/2006-radiogatun.pdf.
+- id: bertoni_et_al_2007_sponge_functions
+  kind: presentation
+  title: Sponge Functions
+  authors:
+  - Guido Bertoni
+  - Joan Daemen
+  - Michaël Peeters
+  - Gilles Van Assche
+  year: 2007
+  venue: ECRYPT Hash Workshop 2007
+  url: https://keccak.team/files/SpongeFunctions.pdf
+  notes: >-
+    Introduces the sponge construction formalizing separate absorbing and
+    squeezing phases. Local presentation copy: references/2007-sponge-functions.pdf.
 - id: drygascon_2019
   kind: article
   title: DryGASCON - Submission to NIST Lightweight Cryptography
@@ -3033,6 +3078,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography (Round 1 submission)
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf
+  notes: 'Local copy: references/2019-subterranean_v2.pdf.'
 - id: banik_2019_sundae_gift
   kind: report
   title: SUNDAE-GIFT v1.0

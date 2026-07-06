@@ -1530,14 +1530,52 @@ primitives:
     block_size_bits: 384
     output_size_bits: 384
 - id: subterranean_permutation_257
-  name: Subterranean Permutation (257-bit)
+  name: Original Subterranean keyed state update
   family_id: subterranean
   primitive_type: permutation
+  reference_ids:
+  - claesen_daemen_genoe_peeters_1993_subterranean
   characteristics:
     state_size_bits: 257
-    rounds: 257
+    key_size_bits: 256
+    rounds: 1
     block_size_bits: 257
     output_size_bits: 257
+  notes: One invertible update of the original 257-bit state for a fixed 256-bit
+    key register; each clock emits 16 selected state bits.
+- id: subterranean_substream
+  name: Substream
+  family_id: subterranean
+  primitive_type: stream_cipher
+  reference_ids:
+  - claesen_daemen_genoe_peeters_1993_subterranean
+  characteristics:
+    key_size_bits: 256
+    state_size_bits: 257
+    output_size_bits: 16
+  notes: Original Subterranean pseudorandom-sequence and stream-encryption mode,
+    producing 16 output bits per state update after initialization.
+- id: subterranean_subhash
+  name: Subhash
+  family_id: subterranean
+  primitive_type: hash_function
+  reference_ids:
+  - claesen_daemen_genoe_peeters_1993_subterranean
+  characteristics:
+    state_size_bits: 257
+    output_size_bits: 256
+  notes: Original Subterranean hash mode; message words are absorbed through the
+    256-bit key/input register before blank updates and 16 output words.
+- id: radiogatun_hash
+  name: RadioGatún
+  family_id: radiogatun
+  primitive_type: hash_function
+  reference_ids:
+  - bertoni_et_al_2006_radiogatun
+  characteristics:
+    output_size_bits: 256
+  notes: Belt-and-mill hash family parameterized by word width; it can also emit
+    an arbitrarily long stream after blank rounds.
 - id: drygascon_permutation_320
   name: DryGASCON Permutation (320-bit)
   family_id: drygascon

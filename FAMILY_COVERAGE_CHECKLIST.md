@@ -244,6 +244,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | QARMAv2 | QARMAv2 | tweakable_block_cipher | 2023 | https://eprint.iacr.org/2023/929 | TODO | yes |
 | [x] | Quartet | Quartet | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Quartet-spec.pdf | Full | yes |
 | [x] | Rabbit | Rabbit | stream_cipher | 2003 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_7 | Full | yes |
+| [x] | RadioGatún | RadioGatún | hash+stream_cipher | 2006 | https://radiogatun.noekeon.org/RadioGatun.pdf | Full | yes |
 | [x] | Raiden | Raiden | block_cipher | 2008 | https://doi.org/10.3233/KES-2008-12102 | Full | yes |
 | [x] | Raindrop | Raindrop | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000342 | Full | yes |
 | [x] | RC2 | RC2 | block_cipher | 1998 | https://datatracker.ietf.org/doc/html/rfc2268 | Full | yes |
@@ -315,7 +316,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | SPRING | SPRING | prng | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000343 | Full | yes |
 | [x] | Spritz | Spritz | stream_cipher | 2014 | https://people.csail.mit.edu/rivest/pubs/RS14.pdf | Full | yes |
 | [x] | SQUARE | SQUARE | block_cipher | 1997 | https://link.springer.com/chapter/10.1007/BFb0052343 | Full | yes |
-| [x] | Subterranean | Subterranean permutation | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf | Full | yes |
+| [x] | Subterranean | Substream / Subhash | stream_cipher+hash | 1993 | https://www.researchgate.net/publication/3601817_Subterranean_A_600_Mbitsec_cryptographic_VLSI_chip | Full | yes |
 | [x] | Subterranean 2.0 | Subterranean 2.0 | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf | Full | yes |
 | [x] | SUNDAE-GIFT | GIFT | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SUNDAE-GIFT-spec.pdf | Full | yes |
 | [x] | Sycon | Sycon | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |

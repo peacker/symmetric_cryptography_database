@@ -1510,7 +1510,7 @@ rounds:
 
     '
 - id: subterranean_duplex_round
-  name: Subterranean Duplex Round
+  name: Original Subterranean state update
   kind: full_round
   spec:
     state_model:
@@ -1519,12 +1519,32 @@ rounds:
     - component_id: xor
     - component_id: and
     - component_id: not
+    - component_id: constant
+    - component_id: linear_transform
+    - component_id: xor
+    - component_id: bit_permutation
+    constant_injection: key_register_bits
+  notes: The five steps are chi-style nonlinear cellular-automaton update; complement
+    state bit zero; theta mixing s_i XOR s_{i+3} XOR s_{i+8}; inject 256 key/input
+    register bits into state positions 1 through 256; and transpose s_i to s_{12i mod 257}.
+- id: radiogatun_round
+  name: RadioGatún belt-and-mill round
+  kind: full_round
+  spec:
+    state_model:
+      mill_words: 19
+      belt_stages: 13
+      belt_words_per_stage: 3
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: not
     - component_id: rotation_fixed
-    constant_injection: domain_bit
-  notes: 'Subterranean duplex round abstraction over a 257-bit state with nonlinear
-    chi-style update and bit-level diffusion.
-
-    '
+    - component_id: word_permutation
+    - component_id: constant
+    constant_injection: mill_word_zero
+  notes: One belt circulation coupled to the nonlinear mill transformation; the
+    design is parameterized by word size.
 - id: gascon_permutation_round
   name: GASCON Permutation Round
   kind: full_round
@@ -3267,8 +3287,20 @@ rounds:
   spec: {}
 - id: subterranean_2_0_round
   name: Subterranean 2.0 Round
-  kind: step
-  spec: {}
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 257
+    component_flow:
+    - component_id: xor
+    - component_id: and
+    - component_id: not
+    - component_id: constant
+    - component_id: linear_transform
+    - component_id: bit_permutation
+    constant_injection: bit_zero
+  notes: The retained Subterranean round R = pi after theta after iota after chi;
+    input injection and output extraction belong to the duplex call outside R.
 - id: sundae_gift_round
   name: SUNDAE-GIFT Round
   kind: full_round
