@@ -2734,15 +2734,42 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       nodeSet.forEach(d); return L;
     }
 
+    // Exact crossing count between every adjacent pair of layers (small graph, so the
+    // naive O(k^2) pairwise check per boundary is cheap and lets us actually verify
+    // whether a re-ordering helped, instead of trusting the barycenter heuristic blindly.
+    function countCrossings(layers, inE) {
+      let total = 0;
+      for (let li = 1; li < layers.length; li++) {
+        const posPrev = new Map(layers[li - 1].map((id, i) => [id, i]));
+        const edges = [];
+        layers[li].forEach((id, ci) => {
+          (inE.get(id) || []).forEach((p) => { const pi = posPrev.get(p); if (pi !== undefined) edges.push([pi, ci]); });
+        });
+        for (let a = 0; a < edges.length; a++) {
+          for (let b = a + 1; b < edges.length; b++) {
+            if ((edges[a][0] - edges[b][0]) * (edges[a][1] - edges[b][1]) < 0) total++;
+          }
+        }
+      }
+      return total;
+    }
+
     function minimiseCrossings(layers, inE, outE) {
-      for (let pass = 0; pass < 8; pass++) {
+      const cloneLayers = () => layers.map((lg) => lg.slice());
+      let best = cloneLayers();
+      let bestCount = countCrossings(layers, inE);
+
+      // One barycenter pass: a single position map is seeded from the current order and
+      // threaded through both the forward (parent-driven) and backward (child-driven)
+      // sub-sweeps, exactly as a classic Sugiyama median/barycenter pass does.
+      function pass() {
         const pm = new Map();
         layers.forEach((lg) => { const n = lg.length; lg.forEach((id, i) => pm.set(id, n <= 1 ? 0.5 : i / (n - 1))); });
         for (let li = 1; li < layers.length; li++) {
           layers[li].sort((a, b) => {
             const pA = inE.get(a) || []; const pB = inE.get(b) || [];
-            const bA = pA.length ? pA.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / pA.length : pm.get(a) || 0.5;
-            const bB = pB.length ? pB.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / pB.length : pm.get(b) || 0.5;
+            const bA = pA.length ? pA.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / pA.length : (pm.get(a) ?? 0.5);
+            const bB = pB.length ? pB.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / pB.length : (pm.get(b) ?? 0.5);
             return bA - bB;
           });
           const n = layers[li].length; layers[li].forEach((id, i) => pm.set(id, n <= 1 ? 0.5 : i / (n - 1)));
@@ -2750,13 +2777,131 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
         for (let li = layers.length - 2; li >= 0; li--) {
           layers[li].sort((a, b) => {
             const sA = outE.get(a) || []; const sB = outE.get(b) || [];
-            const bA = sA.length ? sA.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / sA.length : pm.get(a) || 0.5;
-            const bB = sB.length ? sB.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / sB.length : pm.get(b) || 0.5;
+            const bA = sA.length ? sA.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / sA.length : (pm.get(a) ?? 0.5);
+            const bB = sB.length ? sB.reduce((s, p) => s + (pm.has(p) ? pm.get(p) : 0.5), 0) / sB.length : (pm.get(b) ?? 0.5);
             return bA - bB;
           });
           const n = layers[li].length; layers[li].forEach((id, i) => pm.set(id, n <= 1 ? 0.5 : i / (n - 1)));
         }
       }
+
+      function crossingsAround(li) {
+        let c = 0;
+        if (li > 0) c += countCrossings([layers[li - 1], layers[li]], inE);
+        if (li < layers.length - 1) c += countCrossings([layers[li], layers[li + 1]], inE);
+        return c;
+      }
+
+      // Adjacent-swap local search ("transpose"): the barycenter sweeps above can settle
+      // into a local optimum they can't escape on their own, so after each pass try
+      // swapping neighbouring nodes within a layer and keep the swap only if it actually
+      // lowers the crossing count around that layer.
+      function transpose() {
+        let improved = true; let guard = 0;
+        while (improved && guard++ < 4) {
+          improved = false;
+          for (let li = 0; li < layers.length; li++) {
+            const lg = layers[li];
+            for (let i = 0; i < lg.length - 1; i++) {
+              const before = crossingsAround(li);
+              [lg[i], lg[i + 1]] = [lg[i + 1], lg[i]];
+              const after = crossingsAround(li);
+              if (after < before) improved = true;
+              else [lg[i], lg[i + 1]] = [lg[i + 1], lg[i]];
+            }
+          }
+        }
+      }
+
+      function checkpoint() {
+        const count = countCrossings(layers, inE);
+        if (count < bestCount) { bestCount = count; best = cloneLayers(); }
+        return bestCount === 0;
+      }
+
+      // Phase 1: plain barycenter passes, checkpointing the best ordering seen. (The old
+      // implementation just ran 8 of these and kept whatever the last one produced, even
+      // if an earlier pass had fewer crossings — checkpointing alone is a free improvement.)
+      for (let i = 0; i < 8; i++) {
+        pass();
+        if (checkpoint()) break;
+      }
+
+      // Phase 2: restart from the best barycenter ordering and refine with the transpose
+      // local search. Every accepted swap strictly lowers the crossing count around its
+      // layer (and leaves every other layer's crossings untouched), so this phase can only
+      // match or improve on phase 1 — it never regresses relative to sweeping alone.
+      if (bestCount > 0) {
+        layers.forEach((lg, li) => { lg.length = 0; lg.push(...best[li]); });
+        transpose();
+        checkpoint();
+      }
+
+      layers.forEach((lg, li) => { lg.length = 0; lg.push(...best[li]); });
+    }
+
+    // Least-squares fit of a non-decreasing sequence to `y` (pool-adjacent-violators).
+    // Used to place a row of nodes as close as possible to their desired x position
+    // while keeping the left-to-right order fixed and never violating a minimum gap.
+    function isotonicNonDecreasing(y) {
+      const pools = [];
+      for (let i = 0; i < y.length; i++) {
+        let avg = y[i]; let w = 1; let start = i;
+        while (pools.length && pools[pools.length - 1].avg > avg + 1e-9) {
+          const p = pools.pop();
+          avg = (avg * w + p.avg * p.w) / (w + p.w);
+          w += p.w; start = p.start;
+        }
+        pools.push({ avg, w, start, end: i });
+      }
+      const out = new Array(y.length);
+      pools.forEach((p) => { for (let i = p.start; i <= p.end; i++) out[i] = p.avg; });
+      return out;
+    }
+
+    function resolveRow(ids, desired, widthOf, posX) {
+      const n = ids.length; if (!n) return;
+      const half = ids.map((id) => widthOf(id) / 2);
+      const cum = new Array(n).fill(0);
+      for (let i = 1; i < n; i++) cum[i] = cum[i - 1] + half[i - 1] + COL_GAP + half[i];
+      const z = desired.map((d, i) => d - cum[i]);
+      const w = isotonicNonDecreasing(z);
+      ids.forEach((id, i) => posX.set(id, w[i] + cum[i]));
+    }
+
+    // Iterative median alignment: repeatedly pulls each node towards the median x of its
+    // already-placed neighbours (parents on the down sweep, children on the up sweep), then
+    // re-solves each row to keep spacing valid. This is what actually straightens chains of
+    // influence edges — crossing-minimisation alone fixes left-to-right order but leaves
+    // nodes packed arbitrarily, which is what made the old layout look zig-zaggy.
+    function assignXCoordinates(layerGroups, inE, outE, widthOf) {
+      const posX = new Map();
+      layerGroups.forEach((lg) => {
+        let x = 0;
+        lg.forEach((id, i) => {
+          const w = widthOf(id);
+          x += i === 0 ? w / 2 : widthOf(lg[i - 1]) / 2 + COL_GAP + w / 2;
+          posX.set(id, x);
+        });
+      });
+
+      const ITERS = 10;
+      for (let it = 0; it < ITERS; it++) {
+        const downward = it % 2 === 0;
+        const rows = downward ? layerGroups : [...layerGroups].reverse();
+        rows.forEach((lg) => {
+          if (!lg.length) return;
+          const desired = lg.map((id) => {
+            const nbrs = ((downward ? inE.get(id) : outE.get(id)) || []).filter((n) => posX.has(n));
+            if (!nbrs.length) return posX.get(id);
+            const xs = nbrs.map((n) => posX.get(n)).sort((a, b) => a - b);
+            const mid = (xs.length - 1) / 2;
+            return xs.length % 2 ? xs[mid] : (xs[Math.floor(mid)] + xs[Math.ceil(mid)]) / 2;
+          });
+          resolveRow(lg, desired, widthOf, posX);
+        });
+      }
+      return posX;
     }
 
     // ── Legend helper (shared by both layouts) ─────────────────────────
@@ -2812,14 +2957,24 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       layerGroups.forEach((lg) => lg.sort((a, b) => Number((genFamById.get(a) || {}).year || 9999) - Number((genFamById.get(b) || {}).year || 9999)));
       if (numLayers > 1) minimiseCrossings(layerGroups, inE, outE);
 
-      function layerW(lg) { return lg.reduce((s, n) => s + nw(String((genFamById.get(n) || {}).name || n)) + COL_GAP, 0) - (lg.length ? COL_GAP : 0); }
-      const maxLW = numLayers ? Math.max(...layerGroups.map(layerW)) : 0;
+      const widthOf = (id) => nw(String((genFamById.get(id) || {}).name || id));
+      const posX = numLayers ? assignXCoordinates(layerGroups, inE, outE, widthOf) : new Map();
+      const posY = new Map();
+      layerGroups.forEach((lg, li) => { const y = TOP_PAD + li * (NH + RG); lg.forEach((n) => posY.set(n, y)); });
 
-      const ISO_COLS = Math.max(1, Math.floor((Math.max(maxLW, 400) + COL_GAP) / (IW + COL_GAP)));
+      let dagMinX = Infinity; let dagMaxX = -Infinity;
+      dagNodes.forEach((n) => {
+        const cx = posX.get(n); if (cx === undefined) return;
+        const w = widthOf(n);
+        dagMinX = Math.min(dagMinX, cx - w / 2); dagMaxX = Math.max(dagMaxX, cx + w / 2);
+      });
+      const dagW = dagNodes.length ? (dagMaxX - dagMinX) : 0;
+
+      const ISO_COLS = Math.max(1, Math.floor((Math.max(dagW, 400) + COL_GAP) / (IW + COL_GAP)));
       const isoRows = isoNodes.length ? Math.ceil(isoNodes.length / ISO_COLS) : 0;
       const dagH = numLayers ? numLayers * (NH + RG) - RG : 0;
       const isoH = isoRows ? RG * 2 + isoRows * (NH + COL_GAP) : 0;
-      const canvasW = Math.max(600, maxLW + SIDE_PAD * 2, ISO_COLS * (IW + COL_GAP) - COL_GAP + SIDE_PAD * 2);
+      const canvasW = Math.max(600, dagW + SIDE_PAD * 2, ISO_COLS * (IW + COL_GAP) - COL_GAP + SIDE_PAD * 2);
       const canvasH = Math.max(260, TOP_PAD + dagH + isoH + 20);
 
       genPlot.setAttribute("viewBox", `0 0 ${canvasW} ${canvasH}`);
@@ -2827,16 +2982,10 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
       genPlot.setAttribute("height", String(canvasH));
       genFrame.style.height = `${Math.max(220, Math.min(Math.round(window.innerHeight * 0.70), canvasH + 8))}px`;
 
-      const posX = new Map(); const posY = new Map();
-      layerGroups.forEach((lg, li) => {
-        const y = TOP_PAD + li * (NH + RG);
-        const totalW = layerW(lg);
-        let x = (canvasW - totalW) / 2;
-        lg.forEach((n) => {
-          const w = nw(String((genFamById.get(n) || {}).name || n));
-          posX.set(n, x + w / 2); posY.set(n, y); x += w + COL_GAP;
-        });
-      });
+      if (dagNodes.length) {
+        const shift = (canvasW - dagW) / 2 - dagMinX;
+        dagNodes.forEach((n) => posX.set(n, posX.get(n) + shift));
+      }
 
       const isoBase = TOP_PAD + dagH + (numLayers ? RG * 2 : 0);
       isoNodes.forEach((n, idx) => {
