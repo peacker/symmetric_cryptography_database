@@ -958,7 +958,7 @@
       marker.setAttribute("orient", "auto");
       const markerPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
       markerPath.setAttribute("d", "M0,0 L10,3.5 L0,7 z");
-      markerPath.setAttribute("fill", "rgba(76, 91, 95, 0.72)");
+      markerPath.setAttribute("fill", "rgba(76, 91, 95, 0.35)");
       marker.appendChild(markerPath);
       defs.appendChild(marker);
       plotSvg.appendChild(defs);

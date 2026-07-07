@@ -503,7 +503,7 @@ pre {
 }
 
 .viz-edge {
-  stroke: rgba(76, 91, 95, 0.75);
+  stroke: rgba(76, 91, 95, 0.35);
   fill: none;
 }
 
