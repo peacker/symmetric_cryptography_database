@@ -1118,56 +1118,11 @@
         });
       }
 
-      const hoverLines = [];
-      if (showArrows.checked) {
-        influences.forEach((edge) => {
-          const sourceId = String(edge.source_family_id || "");
-          const targetId = String(edge.target_family_id || "");
-          const endpointPairs = relationEndpointPairs(sourceId, targetId);
-          if (!endpointPairs.length) return;
-
-          const rel = relationInfo(edge);
-          const width = 1.15 + (rel.count - 1) * 1.05;
-          const hoverText = `${edge.source_family_id} -> ${edge.target_family_id} | Relations: ${rel.label} | ${normalizeValue(edge.note)}`;
-
-          endpointPairs.forEach((endpoints) => {
-            const sx = endpoints.source.x;
-            const sy = endpoints.source.y;
-            const tx = endpoints.target.x;
-            const ty = endpoints.target.y;
-
-            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-            line.setAttribute("x1", String(sx));
-            line.setAttribute("y1", String(sy));
-            line.setAttribute("x2", String(tx));
-            line.setAttribute("y2", String(ty));
-            line.setAttribute("stroke-width", String(width));
-            line.setAttribute("marker-end", "url(#vizArrowHead)");
-            line.setAttribute("class", "viz-edge");
-            line.setAttribute("pointer-events", "none");
-            plotSvg.appendChild(line);
-
-            const hoverLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-            hoverLine.setAttribute("x1", String(sx));
-            hoverLine.setAttribute("y1", String(sy));
-            hoverLine.setAttribute("x2", String(tx));
-            hoverLine.setAttribute("y2", String(ty));
-            hoverLine.setAttribute("stroke", "rgba(0,0,0,0.001)");
-            hoverLine.setAttribute("stroke-width", String(Math.max(10, width + 8)));
-            hoverLine.setAttribute("pointer-events", "all");
-            const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
-            title.textContent = hoverText;
-            hoverLine.appendChild(title);
-            hoverLine.addEventListener("mouseenter", () => {
-              relationInfoBox.textContent = hoverText;
-            });
-            hoverLine.addEventListener("mouseleave", () => {
-              relationInfoBox.textContent = BASE_RELATION_TEXT;
-            });
-            hoverLines.push(hoverLine);
-          });
-        });
-      }
+      // Keep relation lines behind the dots and text even though their endpoints
+      // are calculated after the rendered labels have been measured.
+      const edgeLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      plotSvg.appendChild(edgeLayer);
+      const labelBounds = new Map();
 
       const useProcessColor = colorByProcess.checked;
 
@@ -1226,8 +1181,62 @@
           fullTitle.textContent = richTip;
           label.appendChild(fullTitle);
           plotSvg.appendChild(label);
+          labelBounds.set(point, label.getBBox());
         }
       });
+
+      const hoverLines = [];
+      if (showArrows.checked) {
+        influences.forEach((edge) => {
+          const sourceId = String(edge.source_family_id || "");
+          const targetId = String(edge.target_family_id || "");
+          const endpointPairs = relationEndpointPairs(sourceId, targetId);
+          if (!endpointPairs.length) return;
+
+          const rel = relationInfo(edge);
+          const width = 1.15 + (rel.count - 1) * 1.05;
+          const hoverText = `${edge.source_family_id} -> ${edge.target_family_id} | Relations: ${rel.label} | ${normalizeValue(edge.note)}`;
+
+          endpointPairs.forEach((endpoints) => {
+            const sourceBounds = labelBounds.get(endpoints.source);
+            const targetBounds = labelBounds.get(endpoints.target);
+            const sx = sourceBounds ? sourceBounds.x + sourceBounds.width : endpoints.source.x;
+            const sy = sourceBounds ? sourceBounds.y + sourceBounds.height : endpoints.source.y;
+            const tx = targetBounds ? targetBounds.x : endpoints.target.x;
+            const ty = targetBounds ? targetBounds.y + targetBounds.height : endpoints.target.y;
+
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", String(sx));
+            line.setAttribute("y1", String(sy));
+            line.setAttribute("x2", String(tx));
+            line.setAttribute("y2", String(ty));
+            line.setAttribute("stroke-width", String(width));
+            line.setAttribute("marker-end", "url(#vizArrowHead)");
+            line.setAttribute("class", "viz-edge");
+            line.setAttribute("pointer-events", "none");
+            edgeLayer.appendChild(line);
+
+            const hoverLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            hoverLine.setAttribute("x1", String(sx));
+            hoverLine.setAttribute("y1", String(sy));
+            hoverLine.setAttribute("x2", String(tx));
+            hoverLine.setAttribute("y2", String(ty));
+            hoverLine.setAttribute("stroke", "rgba(0,0,0,0.001)");
+            hoverLine.setAttribute("stroke-width", String(Math.max(10, width + 8)));
+            hoverLine.setAttribute("pointer-events", "all");
+            const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+            title.textContent = hoverText;
+            hoverLine.appendChild(title);
+            hoverLine.addEventListener("mouseenter", () => {
+              relationInfoBox.textContent = hoverText;
+            });
+            hoverLine.addEventListener("mouseleave", () => {
+              relationInfoBox.textContent = BASE_RELATION_TEXT;
+            });
+            hoverLines.push(hoverLine);
+          });
+        });
+      }
 
       hoverLines.forEach((hoverLine) => plotSvg.appendChild(hoverLine));
 
