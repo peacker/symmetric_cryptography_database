@@ -329,8 +329,8 @@ NEW_ENTRIES = [
     # ── From cryptospecs/hash ───────────────────────────────────────────────
     ("[ ]", "FNV-1",                    "FNV-1",                "hash",                 "1991", "https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/fnv1.pdf", "Full", "1991-fnv1"),
     ("[ ]", "HAVAL",                    "HAVAL",                "hash",                 "1992", "https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/haval.pdf", "Full", "1992-haval"),
-    ("[ ]", "MD2",                      "MD2",                  "hash",                 "1992", "https://www.rfc-editor.org/rfc/rfc1319", "TODO", "1992-md2"),
-    ("[ ]", "MD4",                      "MD4",                  "hash",                 "1990", "https://www.rfc-editor.org/rfc/rfc1320", "TODO", "1990-md4"),
+    ("[ ]", "MD2",                      "MD2",                  "hash",                 "1989", "https://www.rfc-editor.org/rfc/rfc1115", "TODO", "1989-rsamd2-rfc1115"),
+    ("[ ]", "MD4",                      "MD4",                  "hash",                 "1990", "https://doi.org/10.1007/3-540-38424-3_22", "TODO", "1990-md4-crypto"),
     ("[ ]", "MD5",                      "MD5",                  "hash",                 "1992", "https://www.rfc-editor.org/rfc/rfc1321", "TODO", "1992-md5"),
     ("[ ]", "RIPEMD",                   "RIPEMD",               "hash",                 "1995", "https://homes.esat.kuleuven.be/~bosselae/ripemd160.html", "TODO", "1995-ripemd"),
     ("[ ]", "SHA-1 / SHA-2",            "SHA-1 / SHA-2",        "hash",                 "2002", "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf", "TODO", "2002-sha1"),

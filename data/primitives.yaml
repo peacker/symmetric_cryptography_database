@@ -3863,13 +3863,14 @@ primitives:
   family_id: md2
   primitive_type: hash_function
   reference_ids:
+  - linn_1989_rsa_md2
   - kaliski_1992_md2
   characteristics:
     output_size_bits: 128
     block_size_bits: 128
     state_size_bits: 384
     rounds: 18
-  notes: 'RFC 1319 (1992). Block=16 bytes=128 bits. State X=48 bytes=384 bits (three
+  notes: 'First published as RSA-MD2 in RFC 1115 (1989), section 4.2; later documented separately in RFC 1319 (1992). Not a Merkle–Damgård construction. Block=16 bytes=128 bits. State X=48 bytes=384 bits (three
     16-byte rows). Per-block: 18 rounds of mixing using the 256-byte pi-derived S
     permutation. Preprocessing: PKCS-style padding (1–16 bytes) + 16-byte checksum
     appended. Output = X[0..15] (first 16 bytes = 128 bits). Deprecated.
@@ -3880,13 +3881,13 @@ primitives:
   family_id: md4
   primitive_type: hash_function
   reference_ids:
-  - rivest_1992_md4
+  - rivest_1990_md4
   characteristics:
     output_size_bits: 128
     block_size_bits: 512
     state_size_bits: 128
     rounds: 48
-  notes: 'RFC 1320 (1992). Block=512 bits (padded to 448 mod 512; then 64-bit length
+  notes: 'Introduced by Ronald Rivest at CRYPTO ''90 as a much faster successor to MD2. Block=512 bits (padded to 448 mod 512; then 64-bit length
     appended). State=4×32-bit words A,B,C,D=128 bits. 3 rounds × 16 operations = 48
     total. Round 1: F(b,c,d)=(b AND c) OR ((NOT b) AND d); Round 2: G=(b AND c) OR
     (b AND d) OR (c AND d); Round 3: H=b XOR c XOR d. Constants: 0, sqrt(2)×2^32,
@@ -3904,7 +3905,7 @@ primitives:
     block_size_bits: 512
     state_size_bits: 128
     rounds: 64
-  notes: 'RFC 1321 (1992). Block=512 bits (same padding as MD4). State=4×32-bit A,B,C,D=128
+  notes: 'Published as RFC 1321 (1992) to replace MD4 after indications of potential weakness. Block=512 bits (same padding as MD4). State=4×32-bit A,B,C,D=128
     bits. 4 rounds × 16 operations = 64 total. Functions: F(b,c,d)=(b AND c) OR ((NOT
     b) AND d); G=(b AND d) OR (c AND (NOT d)); H=b XOR c XOR d; I=c XOR (b OR (NOT
     d)). 64 per-step constants T[i]=floor(4294967296×|sin(i)|). Deprecated (collisions

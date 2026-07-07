@@ -201,8 +201,8 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | MCRYPTON | MCRYPTON | block_cipher | 2005 | https://link.springer.com/chapter/10.1007/11604938_15 | Full | no |
 | [x] | M3lcrypt | M3lcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions.html | N/A — no spec PDF | no |
 | [x] | MCS_PHS | MCS_PHS | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/MCS_PHS-v2.pdf | Full | yes |
-| [x] | MD2 | MD2 | hash | 1992 | https://www.rfc-editor.org/rfc/rfc1319 | Full | yes |
-| [x] | MD4 | MD4 | hash | 1990 | https://www.rfc-editor.org/rfc/rfc1320 | Full | yes |
+| [x] | MD2 | MD2 | hash | 1989 | https://www.rfc-editor.org/rfc/rfc1115 | Full | yes |
+| [x] | MD4 | MD4 | hash | 1990 | https://doi.org/10.1007/3-540-38424-3_22 | Full | yes |
 | [x] | MD5 | MD5 | hash | 1992 | https://www.rfc-editor.org/rfc/rfc1321 | Full | yes |
 | [x] | MIBS | MIBS | block_cipher | 2009 | https://link.springer.com/chapter/10.1007/978-3-642-10433-6_19 | Full | no |
 | [x] | MICKEY | MICKEY | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/mickey.pdf | Full | yes |

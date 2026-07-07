@@ -2772,6 +2772,16 @@ references:
   year: 1992
   venue: Advances in Cryptology — AUSCRYPT'92, LNCS 718, Springer-Verlag, pp. 83-104
   url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/haval.pdf
+  notes: 'Original HAVAL publication. Local copy: references/1992-haval.pdf.'
+- id: linn_1989_rsa_md2
+  kind: standard
+  title: 'Privacy Enhancement for Internet Electronic Mail: Part III — Algorithms, Modes, and Identifiers'
+  authors:
+  - John Linn
+  year: 1989
+  venue: RFC 1115, Internet Engineering Task Force (IETF)
+  url: https://www.rfc-editor.org/rfc/rfc1115
+  notes: 'Section 4.2 defines RSA-MD2 through a C reference implementation supplied by Ronald Rivest of RSA Data Security for privacy-enhanced electronic mail. This is the earliest published MD2 specification in the database. Local copy: references/1989-rsamd2-rfc1115.txt.'
 - id: kaliski_1992_md2
   kind: standard
   title: The MD2 Message-Digest Algorithm
@@ -2780,14 +2790,16 @@ references:
   year: 1992
   venue: RFC 1319, Internet Engineering Task Force (IETF)
   url: https://www.rfc-editor.org/rfc/rfc1319
-- id: rivest_1992_md4
-  kind: standard
+  notes: 'Later standalone MD2 specification. Local copy: references/1992-md2.pdf.'
+- id: rivest_1990_md4
+  kind: article
   title: The MD4 Message-Digest Algorithm
   authors:
-  - R. Rivest
-  year: 1992
-  venue: RFC 1320, Internet Engineering Task Force (IETF)
-  url: https://www.rfc-editor.org/rfc/rfc1320
+  - Ronald L. Rivest
+  year: 1990
+  venue: Advances in Cryptology — CRYPTO '90, LNCS 537, Springer-Verlag, pp. 303-311
+  url: https://doi.org/10.1007/3-540-38424-3_22
+  notes: 'Original MD4 conference publication; the proceedings appeared in 1991. Local copy: references/1990-md4-crypto.pdf.'
 - id: rivest_1992_md5
   kind: standard
   title: The MD5 Message-Digest Algorithm
@@ -2796,6 +2808,7 @@ references:
   year: 1992
   venue: RFC 1321, Internet Engineering Task Force (IETF)
   url: https://www.rfc-editor.org/rfc/rfc1321
+  notes: 'Introduces MD5 as a more conservative successor to MD4 following indications that MD4 was likely too fast for adequate security. Local copy: references/1992-md5.pdf.'
 - id: dobbertin_1996_ripemd160
   kind: article
   title: 'RIPEMD-160: A Strengthened Version of RIPEMD'

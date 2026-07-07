@@ -7186,7 +7186,7 @@ families:
 - id: haval
   name: HAVAL
   construction_ids:
-  - davies_meyer
+  - merkle_damgard
   round_ids:
   - haval_pass
   target_applications:
@@ -7250,6 +7250,7 @@ families:
         table_size: 256
     - id: xor
   reference_ids:
+  - linn_1989_rsa_md2
   - kaliski_1992_md2
   process_participations: []
   influences: []
@@ -7266,7 +7267,7 @@ families:
       the main compression loop. This binds the final hash to the complete message structure.
 
       '
-  notes: 'MD2 (RFC 1319, 1992, Kaliski/RSA Laboratories) processes 16-byte (128-bit) blocks. State X = 48 bytes = 384 bits
+  notes: 'MD2 was published in RFC 1115 (1989) as RSA-MD2, with a reference implementation supplied by Ronald Rivest for privacy-enhanced Internet mail; RFC 1319 (1992) later documented it separately. It is not a Merkle–Damgård construction. MD2 processes 16-byte (128-bit) blocks. State X = 48 bytes = 384 bits
     (initialized to 0). Each block processed in 18 rounds using the pi-derived S-table. Output = X[0..15] (128 bits). Designed
     for 8-bit microprocessors; much slower than MD4/MD5. Deprecated for cryptographic use.
 
@@ -7274,7 +7275,7 @@ families:
 - id: md4
   name: MD4
   construction_ids:
-  - davies_meyer
+  - merkle_damgard
   round_ids:
   - md4_round
   target_applications:
@@ -7293,7 +7294,7 @@ families:
     - id: or
     - id: not
   reference_ids:
-  - rivest_1992_md4
+  - rivest_1990_md4
   process_participations: []
   influences: []
   innovative_ideas:
@@ -7304,15 +7305,15 @@ families:
       sqrt(3) are added in rounds 2 and 3.
 
       '
-  notes: 'MD4 (RFC 1320, 1992, Rivest) processes 512-bit blocks in 3 rounds of 16 operations each (48 total) on a 4-word (128-bit)
-    chaining state A,B,C,D. The Merkle-Damgård feedforward step XORs the original state back in after each block (Davies-Meyer
-    mode). Weaknesses found by Dobbertin (1995); deprecated.
+  notes: 'MD4 was introduced by Ronald Rivest at CRYPTO ''90 as a substantially faster, 32-bit-oriented successor to MD2. It processes 512-bit blocks in 3 rounds of 16 operations each (48 total) on a 4-word (128-bit)
+    chaining state A,B,C,D. After each block, the working words are added modulo 2^32 to the incoming chaining state. Weaknesses
+    found by Dobbertin (1995); deprecated.
 
     '
 - id: md5
   name: MD5
   construction_ids:
-  - davies_meyer
+  - merkle_damgard
   round_ids:
   - md5_round
   target_applications:
@@ -7350,7 +7351,7 @@ families:
       constants break symmetry and prevent fixed-point attacks that affected MD4''s simpler (or zero) round constants.
 
       '
-  notes: 'MD5 (RFC 1321, 1992, Rivest) strengthens MD4 with a fourth round (function I) and unique per-step sine-derived constants.
+  notes: 'MD5 was published by Ronald Rivest as RFC 1321 in 1992, replacing MD4 after indications that MD4 was likely too fast for adequate security. MD5 strengthens MD4 with a fourth round (function I) and unique per-step sine-derived constants.
     Processes 512-bit blocks in 4 rounds of 16 operations each (64 total) on a 4-word (128-bit) state. Collisions found by
     Wang et al. (2004); deprecated for cryptographic use.
 

@@ -77,6 +77,16 @@ constructions:
       block cipher by XORing the block-cipher output with the input chaining
       value.
 
+  - id: merkle_damgard
+    name: Merkle–Damgård Construction
+    abbreviation: MD
+    typical_primitive_types: [hash_function]
+    placeholder_family_names: [MD4, MD5, HAVAL]
+    notes: >
+      An iterated hash construction that applies a fixed-input-length
+      compression function to successive message blocks while carrying a
+      chaining value, with strengthening padding encoding the message length.
+
   - id: matyas_meyer_oseas
     name: Matyas-Meyer-Oseas Construction
     abbreviation: MMO
