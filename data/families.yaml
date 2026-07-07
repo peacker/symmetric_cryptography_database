@@ -4210,7 +4210,13 @@ families:
   reference_ids:
   - gost_28147_89_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - related_to
+    note: GOST 28147-89 is the Soviet/Russian counterpart to DES, developed as
+      a national standard around the same period and sharing an iterated
+      Feistel design philosophy, though with a wider 256-bit key and 32 rounds.
   notes: GOST 28147-89 is a 32-round Feistel block cipher with a 256-bit key.
 - id: grand_cru
   name: Grand Cru
@@ -5486,7 +5492,13 @@ families:
   - rc2_ref
   - rc2_rfc2268_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - related_to
+    note: RC2 was designed by Ron Rivest as a drop-in replacement for DES,
+      matching its 64-bit block size and intended to run as fast as or faster
+      than DES on 16-bit hardware.
   notes: RC2 (Rivest Cipher 2) was designed by Ron Rivest in 1989 for RSA Data Security Inc. as a proprietary variable-key-size
     block cipher intended to replace DES. It uses a 64-bit block, a key of 1–128 bytes (with an independent effective key-bits
     parameter T1), and 18 rounds combining a mixing phase and a mashing phase using an 8×8 S-box, 16-bit modular addition,
