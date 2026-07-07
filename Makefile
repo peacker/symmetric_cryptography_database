@@ -32,6 +32,7 @@ validate:
 test: validate
 	$(PYTHON) scripts/test_process_alignment.py
 	$(PYTHON) scripts/test_family_coverage.py
+	$(PYTHON) scripts/test_reference_pdf_coverage.py
 
 build-db:
 	$(PYTHON) scripts/build_db.py
