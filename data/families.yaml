@@ -1010,7 +1010,26 @@ families:
     - round_1
     - round_2
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: blowfish
+    relations:
+    - improvement_of
+    note: Twofish originated from an attempt to take the original Blowfish
+      design and adapt it to a 128-bit block, aiming to keep Blowfish's speed
+      and diffusion while adding a bijective F function and a more efficient
+      key schedule.
+  - source_family_id: safer
+    relations:
+    - inspired_by
+    note: Twofish combines two Blowfish-like 32-bit round functions using a
+      pseudo-Hadamard transform, an idea the designers describe as taken from
+      SAFER.
+  - source_family_id: square
+    relations:
+    - inspired_by
+    note: Twofish's use of 8-by-8-bit S-boxes together with a fixed MDS matrix
+      is credited to Square, though Twofish generalizes it with key-dependent
+      S-boxes rather than Square's single fixed S-box.
 - id: serpent
   name: Serpent
   notes: Serpent is a conservative 32-round, 128-bit bitsliced SPN and AES finalist, supporting 128-, 192-, and 256-bit keys
@@ -1040,7 +1059,15 @@ families:
     - round_1
     - round_2
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - same_sbox
+    - inspired_by
+    note: Serpent-0, the initial published version, directly reused the DES
+      S-boxes inside a new SP-network structure to inherit decades of
+      cryptanalytic study; Serpent-1 later replaced them with new S-boxes
+      designed under the same DES-style criteria.
 - id: camellia
   name: Camellia
   notes: Camellia is a 128-bit Feistel cipher with FL/FL⁻¹ layers and 128-, 192-, or 256-bit keys; it is standardized by ISO/IEC
@@ -1736,7 +1763,20 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: misty1
+    relations:
+    - related_to
+    note: DFC contrasts its combinatorial decorrelation-based approach with the
+      algebraic Nyberg-Knudsen provable-security paradigm used by Matsui in
+      MISTY, noting that paradigm offers less design freedom.
+  - source_family_id: des
+    relations:
+    - related_to
+    note: The paper frames DFC's provable-security goals against the historical
+      backdrop of DES, whose introduction spurred the differential and linear
+      cryptanalysis that DFC's decorrelation technique is designed to provably
+      resist.
   notes: 'DFC (Decorrelated Fast Cipher) uses decorrelation theory to provide provable security against differential and linear
     cryptanalysis.
 
@@ -4364,7 +4404,20 @@ families:
   reference_ids:
   - ice_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - inspired_by
+    note: ICE was explicitly designed to maintain a compatible interface with
+      DES as a drop-in substitute, adopting a DES-like 64-bit Feistel structure
+      whose F function mirrors DES's expansion/S-box/permutation pipeline,
+      extended with a keyed permutation.
+  - source_family_id: loki
+    relations:
+    - inspired_by
+    note: ICE's S-boxes are described as similar in structure to those used in
+      LOKI, both relying on Galois Field exponentiation to generate S-box
+      output from row/column selector bits.
   notes: ICE is a DES-like software-oriented Feistel design with keyed permutation.
 - id: isaac
   name: ISAAC
@@ -4384,7 +4437,14 @@ families:
   reference_ids:
   - isaac_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: rc4
+    relations:
+    - related_to
+    note: The ISAAC paper states ISAAC is similar in form and function to the
+      alleged RC4, though the generators were developed independently; ISAAC is
+      reported to be about three times faster with less bias and a longer
+      minimum cycle length.
   notes: ISAAC is a stream generator using indirection, accumulation, and mixing.
 - id: kcipher_2
   name: KCipher-2
@@ -7013,7 +7073,40 @@ families:
   reference_ids:
   - rogaway_1997_seal
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: feal
+    relations:
+    - related_to
+    note: SEAL's related-work discussion identifies FEAL as an earlier
+      software-oriented block cipher, noting that it and its variants have not
+      proven particularly secure or especially fast.
+  - source_family_id: rc4
+    relations:
+    - related_to
+    note: SEAL is positioned against RC4, Rivest's popular software-efficient
+      stream cipher, which the paper notes is fast but slower than SEAL.
+  - source_family_id: rc5
+    relations:
+    - related_to
+    note: RC5, Rivest's software-efficient block cipher, is cited alongside
+      SEAL as part of the same software-oriented cipher design trend of the
+      mid-1990s.
+  - source_family_id: blowfish
+    relations:
+    - related_to
+    note: Blowfish is listed among the other software-efficient ciphers sharing
+      SEAL's design goals in its related-work discussion.
+  - source_family_id: wake
+    relations:
+    - related_to
+    note: WAKE is listed alongside Blowfish as another software-efficient
+      cipher contemporaneous with SEAL's design goals.
+  - source_family_id: sha1_sha2
+    relations:
+    - related_to
+    note: SEAL directly employs the SHA-1 compression function to preprocess
+      its key into internal tables; SEAL 2.0/3.0 specifically adopted SHA-1 in
+      place of the original SHA used in SEAL 1.0 for this table generation.
   innovative_ideas:
   - id: seal_prf_stream
     name: Length-increasing pseudorandom function as stream cipher
