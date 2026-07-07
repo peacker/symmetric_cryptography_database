@@ -726,7 +726,21 @@ families:
   - iso_iec_29192_2_2019
   - bogdanov_2007_present
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - inspired_by
+    note: PRESENT's authors state they looked back at the pioneering work
+      embodied in DES, drawing on its hardware-efficiency-focused SP/Feistel
+      design tradition and S-box differential/linear design criteria as a
+      starting point for an ultra-lightweight cipher.
+  - source_family_id: serpent
+    relations:
+    - inspired_by
+    note: PRESENT complements the DES-inspired approach with features from the
+      AES finalist Serpent, which demonstrated excellent hardware performance,
+      adopting a bitsliced single small S-box applied in parallel across the
+      state.
   innovative_ideas:
   - id: present_4x4_sbox
     name: 4x4 S-box
@@ -5840,7 +5854,14 @@ families:
   reference_ids:
   - rc4a_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: rc4
+    relations:
+    - variant_of
+    - improvement_of
+    note: RC4A modifies RC4 by introducing a second permuter to hide the correlation
+      between the internal state and the keystream, an explicit attempt to increase
+      RC4's security while retaining its byte-oriented swap-and-output structure.
   notes: RC4A is an RC4-family byte-oriented stream cipher variant using two 256-byte permutations.
 - id: remus
   name: REMUS
@@ -6325,7 +6346,20 @@ families:
   reference_ids:
   - snow_3g_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - same_sbox
+    note: The FSM's S-Box S1 in SNOW 3G is explicitly stated to be based on the
+      Rijndael round function, reusing the AES byte substitution together with
+      a MixColumns-like linear diffusion step over GF(2^8).
+  - source_family_id: snow_2_0
+    relations:
+    - improvement_of
+    note: SNOW 3G was developed by ETSI SAGE as a modification of SNOW 2.0 for
+      3GPP UEA2/UIA2, replacing its S-box for IPR reasons and adding a second
+      FSM register to increase resistance to the linear distinguishing attacks
+      found against SNOW 2.0.
   notes: SNOW 3G stream-cipher family standardized by 3GPP for UEA2/UIA2.
 - id: sober_t16
   name: SOBER-t16
@@ -6646,7 +6680,19 @@ families:
   reference_ids:
   - treyfer_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: tea
+    relations:
+    - related_to
+    note: TREYFER's designer explicitly positioned the cipher against TEA, judging
+      TEA gross overdesign for the resource-constrained targets TREYFER addresses,
+      making TEA a deliberate comparison point for TREYFER's minimalism.
+  - source_family_id: safer
+    relations:
+    - related_to
+    note: TREYFER's designer likewise cited SAFER as overdesigned relative to the intended
+      lightweight use case, a comparison baseline TREYFER's extremely compact round
+      function was designed to undercut.
   notes: TREYFER is a very compact 64-bit lightweight block cipher/MAC design targeting constrained environments.
 - id: triad
   name: Triad
@@ -7595,7 +7641,21 @@ families:
     stage_ids:
     - phase_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: a5_1
+    relations:
+    - inspired_by
+    note: SFINKS's authors cite A5/1's 64-bit LFSR-based internal state as the
+      fielded-hardware precedent motivating their choice of a larger 256-bit
+      LFSR state as a logical next step for a regularly-clocked, hardware-
+      efficient filter generator.
+  - source_family_id: rijndael
+    relations:
+    - related_to
+    note: The side-channel masking scheme proposed for SFINKS's inversion-based
+      nonlinear filter function is explicitly modeled on the masking approach
+      developed for the Rijndael (AES) S-box, extending it from GF(2^8) to
+      GF(2^16) inversion.
   innovative_ideas:
   - id: sfinks_gf2_16_inversion
     name: Inversion S-box over GF(2¹⁶) as nonlinear filter
@@ -8285,7 +8345,15 @@ families:
     - round_2
     - round_3
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - same_sbox
+    - similar_mix_column
+    - inspired_by
+    note: Grøstl's permutations reuse the Rijndael S-box unchanged and construct their
+      diffusion layers in a manner similar to Rijndael's ShiftRows/MixColumns under
+      the wide trail design strategy.
   innovative_ideas:
   - id: groestl_wide_pipe_two_permutations
     name: Wide-pipe hash with two AES-like permutations P and Q
@@ -8330,7 +8398,32 @@ families:
     - round_2
     - round_3
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - generalization_of
+    - inspired_by
+    note: JH's block cipher generalizes the AES/Rijndael SPN design methodology to
+      a multi-dimensional array, reusing an MDS-code-based diffusion layer in place
+      of Rijndael's two-dimensional MixColumns/ShiftRows.
+  - source_family_id: serpent
+    relations:
+    - inspired_by
+    note: JH's block cipher is stated to combine the best features of AES (SPN and
+      MDS code) and Serpent (SPN and bit-slice implementation), adopting Serpent's
+      bit-slice-friendly SPN structure for efficient software implementation.
+  - source_family_id: lucifer
+    relations:
+    - selection_of_possible_configurations
+    note: JH's S-box application uses round-constant bits to select between two S-boxes
+      at each position, a mechanism the specification describes as similar to Lucifer,
+      increasing algebraic complexity versus simple constant XOR.
+  - source_family_id: cs_cipher
+    relations:
+    - related_to
+    note: JH's design rationale notes that CS-Cipher already realized a three-dimensional
+      instance of the same generalized AES design methodology that JH extends to eight
+      dimensions, though CS-Cipher's variant was only efficient on 8-bit platforms.
   innovative_ideas:
   - id: jh_e8_bitsliced
     name: E_8 bijective bitsliced permutation operating on a 1024-bit state
@@ -8827,7 +8920,14 @@ families:
     - phase_2
     - phase_3
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: sober_t32
+    relations:
+    - inspired_by
+    - variant_of
+    note: 'NLSv2''s design traces through the SOBER lineage: Turing evolved from SOBER-t32,
+      SOBER-128 reused Turing''s state-update function, and NLS (NLSv2''s immediate
+      predecessor) is an improved, nonlinear-feedback version of SOBER-128.'
   innovative_ideas:
   - id: nlsv2_nlfsr_replaces_lfsr
     name: NLFSR replacing LFSR for improved algebraic security
