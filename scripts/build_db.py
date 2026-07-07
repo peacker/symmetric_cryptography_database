@@ -5,19 +5,8 @@ from __future__ import annotations
 import json
 import hashlib
 import sqlite3
-from pathlib import Path
 
-import yaml
-
-ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = ROOT / "data"
-BUILD_DIR = ROOT / "build"
-DB_PATH = BUILD_DIR / "symmetric_primitives.db"
-
-
-def load_yaml(path: Path) -> dict:
-    with path.open("r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from common import BUILD_DIR, DB_PATH, load_all_data
 
 
 def ensure_schema(conn: sqlite3.Connection) -> None:
@@ -243,14 +232,18 @@ def main() -> None:
     BUILD_DIR.mkdir(parents=True, exist_ok=True)
     DB_PATH.unlink(missing_ok=True)  # always rebuild from scratch
 
-    families_doc     = load_yaml(DATA_DIR / "families.yaml")
-    primitives_doc   = load_yaml(DATA_DIR / "primitives.yaml")
-    components_doc   = load_yaml(DATA_DIR / "components.yaml")
-    constructions_doc = load_yaml(DATA_DIR / "constructions.yaml")
-    rounds_doc       = load_yaml(DATA_DIR / "rounds.yaml")
-    primitive_types_doc = load_yaml(DATA_DIR / "primitive_types.yaml")
-    references_doc = load_yaml(DATA_DIR / "references.yaml")
-    processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
+    data = load_all_data([
+        "families", "primitives", "components", "constructions",
+        "rounds", "primitive_types", "references", "processes",
+    ])
+    families_doc     = data["families"]
+    primitives_doc   = data["primitives"]
+    components_doc   = data["components"]
+    constructions_doc = data["constructions"]
+    rounds_doc       = data["rounds"]
+    primitive_types_doc = data["primitive_types"]
+    references_doc = data["references"]
+    processes_doc    = data["processes"]
 
     conn = sqlite3.connect(DB_PATH)
     try:
