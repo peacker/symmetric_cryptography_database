@@ -6155,3 +6155,86 @@ primitives:
   - oliynykov_2010_ukraine_competition
   notes: RSB 128-bit variant; round count approximate (specification not publicly
     available). Eliminated from the competition due to speed and statistical weaknesses.
+- id: raiden_64_128
+  name: Raiden
+  family_id: raiden
+  primitive_type: block_cipher
+  reference_ids:
+  - polimon_et_al_2008_raiden
+  characteristics:
+    block_size_bits: 64
+    key_size_bits: 128
+    rounds: 16
+    output_size_bits: 64
+  notes: Reference C implementation and statistical test battery (ENT, Diehard,
+    NIST, SEXTON) in the primary paper both use 16 rounds; the same paper separately
+    recommends at least 32 rounds (16 cycles, in the paper's two-round-per-cycle
+    terminology) for an additional security margin.
+- id: piccolo_64_80
+  name: Piccolo-80
+  family_id: piccolo
+  primitive_type: block_cipher
+  reference_ids:
+  - shibutani_et_al_2011_piccolo
+  characteristics:
+    block_size_bits: 64
+    key_size_bits: 80
+    rounds: 25
+    output_size_bits: 64
+  notes: 80-bit-key variant; encryption function G_25.
+- id: piccolo_64_128
+  name: Piccolo-128
+  family_id: piccolo
+  primitive_type: block_cipher
+  reference_ids:
+  - shibutani_et_al_2011_piccolo
+  characteristics:
+    block_size_bits: 64
+    key_size_bits: 128
+    rounds: 31
+    output_size_bits: 64
+  notes: 128-bit-key variant; encryption function G_31.
+- id: gaston_permutation_320
+  name: Gaston Permutation (320-bit, 4-round Farfalle instance)
+  family_id: gaston
+  primitive_type: permutation
+  reference_ids:
+  - el_hirch_et_al_2023_gaston
+  characteristics:
+    state_size_bits: 320
+    rounds: 4
+    block_size_bits: 320
+    output_size_bits: 320
+  notes: The paper leaves Gaston's round count unfixed and use-case dependent, as
+    with Ascon-p and Xoodoo; Section 8 gives one concrete instantiation using 4
+    rounds for all four permutations (compression, expansion, diversification,
+    key-blinding) of a proposed Farfalle deck function, in place of Xoodoo's
+    6-round variants at comparable security.
+- id: gascon_c9
+  name: GASCON-C9 Permutation (576-bit)
+  family_id: gascon
+  primitive_type: permutation
+  reference_ids:
+  - drygascon_2019
+  characteristics:
+    state_size_bits: 576
+    rounds: 12
+    block_size_bits: 576
+    output_size_bits: 576
+  notes: Nine-word GASCON instance (GASCON_C9) underlying DryGASCON256, the 256-bit-security
+    named member of this submission; DryGASCON256 itself runs GASCON_C9 with
+    Rounds=8 for AEAD/hash message processing and DRounds=12 for key diversification.
+    The five-word GASCON_C5 instance underlying DryGASCON128 is already recorded
+    under the drygascon family as drygascon_permutation_320.
+- id: argon_v1
+  name: Argon
+  family_id: argon
+  primitive_type: pbkdf
+  reference_ids:
+  - biryukov_et_al_2015_argon_argon2
+  characteristics:
+    output_size_bits: 256
+  notes: Original PHC Round 1 submission (Argon v1.1) prioritizing resistance to
+    time-memory tradeoffs via SubGroups mixing and ShuffleSlices memory scheduling,
+    using five-round fixed-key AES-128 as its memory permutation and BLAKE2b for
+    initial/final hashing; superseded by Argon2 in later PHC rounds.

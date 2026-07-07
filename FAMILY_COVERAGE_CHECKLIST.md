@@ -79,6 +79,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Anubis | Anubis | block_cipher | 2000 | https://garykessler.net/library/crypto/Anubis.pdf | Full | yes |
 | [x] | ARADI | ARADI | block_cipher | 2024 | https://eprint.iacr.org/2024/1240 | TODO | yes |
 | [x] | AntCrypt | AntCrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/AntCrypt-v0.pdf | Full | yes |
+| [x] | Argon | Argon | pbkdf | 2015 | https://orbilu.uni.lu/bitstream/10993/19901/1/Argon.pdf | Full | yes |
 | [x] | Argon2 | Argon2 | pbkdf | 2015 | https://www.rfc-editor.org/rfc/rfc9106 | Full | yes |
 | [x] | ARIA | ARIA | block_cipher | 2010 | https://www.rfc-editor.org/rfc/rfc5794 | TODO | no |
 | [x] | Ascon | Ascon-p | permutation | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
@@ -147,6 +148,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | GAGE and InGAGE | GAGE and InGAGE | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | Full | yes |
 | [x] | Gambit | Gambit | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Gambit-v1.pdf | Full | yes |
 | [x] | GASCON | GASCON | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/DryGASCON-spec.pdf | Full | yes |
+| [x] | Gaston | Gaston | permutation | 2023 | https://eprint.iacr.org/2023/799 | Full | yes |
 | [x] | GIFT | GIFT | block_cipher | 2017 | https://iacr.org/archive/ches2017/105290001/105290001.pdf | TODO | no |
 | [x] | GIFT-COFB | GIFT | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/GIFT-COFB-spec.pdf | Full | yes |
 | [x] | Gimli | Gimli | permutation | 2017 | https://gimli.cr.yp.to/ | TODO | yes |
@@ -230,6 +232,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | PHOTON | PHOTON | permutation | 2021 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | PHOTON-Beetle | PHOTON | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/PHOTON-Beetle-spec.pdf | Full | yes |
 | [x] | PICARO | PICARO | block_cipher | 2012 | https://link.springer.com/chapter/10.1007/978-3-642-37288-9_5 | Full | no |
+| [x] | Piccolo | Piccolo | block_cipher | 2011 | https://iacr.org/archive/ches2011/69170343/69170343.pdf | Full | yes |
 | [x] | PolyPassHash | PolyPassHash | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/PolyPassHash-v1.pdf | Full | yes |
 | [x] | Pufferfish | Pufferfish | pbkdf | 2014 | https://github.com/epixoip/pufferfish | N/A — GitHub only, no spec PDF | no |
 | [x] | POMELO | POMELO | pbkdf | 2015 | https://www.password-hashing.net/submissions/specs/POMELO-v3.pdf | Full | yes |

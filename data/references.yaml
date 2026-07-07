@@ -578,6 +578,7 @@ references:
   year: 2011
   venue: CHES 2011, LNCS 6917, 342-357
   url: https://www.iacr.org/archive/ches2011/69170343/69170343.pdf
+  notes: 'Local copy: references/2011-piccolo.pdf.'
 - id: beaulieu_et_al_2013_simon_speck
   kind: article
   title: The SIMON and SPECK Families of Lightweight Block Ciphers
@@ -1099,8 +1100,9 @@ references:
   year: 2023
   venue: CRYPTO 2023, LNCS 14083, 475-506
   url: https://eprint.iacr.org/2023/799.pdf
-  notes: Primary Gaston design paper; defines the 320-bit permutation and compares
-    its three-round differential and linear trail weights with Ascon.
+  notes: 'Primary Gaston design paper; defines the 320-bit permutation and compares
+    its three-round differential and linear trail weights with Ascon. Local copy:
+    references/2023-gaston.pdf.'
 - id: skinny_2016
   kind: article
   title: The SKINNY Family of Block Ciphers and its Low-Latency Variant MANTIS
@@ -3250,9 +3252,10 @@ references:
   year: 2015
   venue: Password Hashing Competition Submission, Argon v1.1 and Argon2 v1.0
   url: https://orbilu.uni.lu/bitstream/10993/19901/1/Argon.pdf
-  notes: Joint primary specification. Argon is the original PHC submission and
+  notes: 'Joint primary specification. Argon is the original PHC submission and
     uses five-round AES-128 with a fixed key as its memory permutation and
-    BLAKE2b for initial/final hashing; Argon2 is the streamlined successor.
+    BLAKE2b for initial/final hashing; Argon2 is the streamlined successor. Local
+    copy: references/2015-argon-argon2.pdf.'
 - id: biryukov_et_al_2015_argon2_v12
   kind: report
   title: Argon2 (Version 1.2)
