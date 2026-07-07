@@ -3865,3 +3865,80 @@ rounds:
   notes: RSB was eliminated early in the competition due to poor encryption speed
     and potentially weak statistical properties. Its full specification was not published
     in open literature; details are limited.
+- id: zorro_round
+  name: ZORRO partial-SPN round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params: {input_bits: 8, output_bits: 8}
+    - component_id: constant
+    - component_id: word_permutation
+    - component_id: field_matrix_mul
+    - component_id: xor
+    state_model: {state_bits: 128, word_bits: 8, branches: 16}
+    constant_injection: round_constant_and_round_key_every_four_rounds
+  notes: Applies four byte S-boxes to one state row, adds constants, then uses AES-like ShiftRows and MixColumns; key addition occurs every four rounds.
+- id: joltik_bc_round
+  name: Joltik-BC tweakable SPN round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params: {input_bits: 4, output_bits: 4}
+    - component_id: word_permutation
+    - component_id: field_matrix_mul
+    - component_id: xor
+    state_model: {state_bits: 64, word_bits: 4, branches: 16}
+    constant_injection: round_tweakey
+  notes: AES-like nibble SPN round with SubCells, ShiftRows, MixNibbles, and a scheduled tweakey addition.
+- id: scream_tbc_round
+  name: Scream tweakable LS-design round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params: {input_bits: 8, output_bits: 8}
+    - component_id: constant
+    - component_id: binary_matrix_mul
+    - component_id: xor
+    state_model: {state_bits: 128, word_bits: 8, branches: 16}
+    constant_injection: round_constant_and_tweakey_every_two_rounds
+  notes: Bitsliced TLS-design round; two rounds form a step followed by tweakey addition.
+- id: blake3_round
+  name: BLAKE3 compression round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      params: {modulus: 4294967296}
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: word_permutation
+    state_model: {state_bits: 512, word_bits: 32, branches: 16}
+    constant_injection: message_words
+  notes: Eight BLAKE2s-derived G functions arranged as column and diagonal steps, followed by the fixed BLAKE3 message permutation.
+- id: warp_round
+  name: WARP generalized-Feistel round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params: {input_bits: 4, output_bits: 4}
+    - component_id: xor
+    - component_id: word_permutation
+    state_model: {state_bits: 128, word_bits: 4, branches: 32}
+    constant_injection: alternating_half_key_and_round_constant
+  notes: Updates the odd nibble branches from S-box outputs of even branches, then applies the optimized 32-branch permutation.
+- id: forro_round
+  name: Forró ARX round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      params: {modulus: 4294967296}
+    - component_id: xor
+    - component_id: rotation_fixed
+    state_model: {state_bits: 512, word_bits: 32, branches: 16}
+    round_variation: {rotation_distances: [10, 27, 8]}
+  notes: Four pollinating subrounds serialize dependencies between ARX operations to improve diffusion over Salsa and ChaCha.

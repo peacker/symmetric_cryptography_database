@@ -3780,3 +3780,51 @@ references:
   notes: 'Overview of all five candidates (Kalyna, Mukhomor, ADE, Labyrinth, RSB)
     submitted to the Ukrainian national competition, and security analysis results
     leading to Kalyna''s selection. Local copy: references/2015-ukranian_competition-[kalyna,mukhomor,ade,labirinth,rsb].pdf.'
+- id: gerard_et_al_2013_zorro
+  kind: paper
+  title: 'Block Ciphers that are Easier to Mask: How Far Can We Go?'
+  authors: [Benoît Gérard, Vincent Grosso, María Naya-Plasencia, François-Xavier Standaert]
+  year: 2013
+  venue: CHES 2013, LNCS 8086, pp. 383-399
+  url: https://doi.org/10.1007/978-3-642-40349-1_22
+  notes: 'Introduces the masking-oriented ZORRO block cipher. Local copy: references/2013-zorro.pdf.'
+- id: jean_nikolic_peyrin_2014_joltik
+  kind: specification
+  title: Joltik Authenticated Encryption and Joltik-BC
+  authors: [Jérémy Jean, Ivica Nikolić, Thomas Peyrin]
+  year: 2014
+  venue: CAESAR Round 1 submission
+  url: https://competitions.cr.yp.to/round1/joltikv1.pdf
+  notes: 'Defines the Joltik authenticated-encryption modes and their internal tweakable block cipher Joltik-BC. Local copy: references/2014-joltik.pdf.'
+- id: grosso_et_al_2015_scream
+  kind: specification
+  title: 'SCREAM: Side-Channel Resistant Authenticated Encryption with Masking'
+  authors: [Vincent Grosso, Gaëtan Leurent, François-Xavier Standaert, Kerem Varici, Anthony Journault, François Durvaux, Lubos Gaspar, Stéphanie Kerckhof]
+  year: 2015
+  venue: CAESAR Round 2 specification, version 3
+  url: https://competitions.cr.yp.to/round2/screamv3.pdf
+  notes: 'Defines SCREAM and its internal 128-bit tweakable LS-design, Scream. Local copy: references/2015-scream.pdf.'
+- id: oconnor_et_al_2020_blake3
+  kind: specification
+  title: 'BLAKE3: One Function, Fast Everywhere'
+  authors: [Jack O'Connor, Jean-Philippe Aumasson, Samuel Neves, Zooko Wilcox-O'Hearn]
+  year: 2020
+  venue: BLAKE3 specification
+  url: https://github.com/BLAKE3-team/BLAKE3-specs/blob/master/blake3.pdf
+  notes: 'Defines BLAKE3''s seven-round BLAKE2s-derived compression function and binary tree mode. Local copy: references/2020-blake3.pdf.'
+- id: banik_et_al_2020_warp
+  kind: paper
+  title: 'WARP: Revisiting GFN for Lightweight 128-bit Block Cipher'
+  authors: [Subhadeep Banik, Zhenzhen Bao, Takanori Isobe, Hiroyasu Kubo, Fukang Liu, Kazuhiko Minematsu, Kosei Sakamoto, Nao Shibata, Maki Shigeri]
+  year: 2020
+  venue: Selected Areas in Cryptography (SAC) 2020
+  url: https://eprint.iacr.org/2020/1320
+  notes: 'Original WARP paper. Local copy: references/2020-warp.pdf.'
+- id: coutinho_et_al_2022_forro
+  kind: paper
+  title: 'Latin Dances Reloaded: Improved Cryptanalysis Against Salsa and ChaCha, and the Proposal of Forró'
+  authors: [Murilo Coutinho, Iago Passos, Juan C. Grados Vásquez, Fábio L. L. de Mendonça, Rafael Timóteo de Sousa Jr., Fábio Borges]
+  year: 2022
+  venue: ASIACRYPT 2022, LNCS 13791, pp. 256-286
+  url: https://doi.org/10.1007/978-3-031-22963-3_9
+  notes: 'Introduces the Forró ARX stream cipher. Local copy: references/2022-forro.pdf.'

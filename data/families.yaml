@@ -10677,3 +10677,157 @@ families:
     It was eliminated after initial analysis due to insufficient encryption/decryption speed and potentially poor statistical
     properties (indicating vulnerability to differential and linear cryptanalysis). Its full specification was not published
     in the open literature.
+- id: zorro
+  name: ZORRO
+  construction_ids: [spn]
+  round_ids: [zorro_round]
+  target_applications: [embedded, hardware, software]
+  characteristics:
+    block_size_bits: 128
+    state_size_bits: 128
+    components:
+    - {id: sbox, params: {input_bits: 8, output_bits: 8}}
+    - {id: word_permutation}
+    - {id: field_matrix_mul}
+    - {id: xor}
+    - {id: constant}
+  reference_ids: [gerard_et_al_2013_zorro]
+  process_participations: []
+  influences:
+  - source_family_id: picaro
+    relations: [inspired_by]
+    note: ZORRO follows PICARO's goal of reducing the cost of higher-order masking, but uses a partial nonlinear layer and infrequent key additions.
+  - source_family_id: noekeon
+    relations: [inspired_by]
+    note: The ZORRO paper identifies NOEKEON as an earlier cipher whose simple key addition and compact structure are attractive for protected implementations.
+  - source_family_id: aes
+    relations: [inspired_by, similar_shift_row, similar_mix_column]
+    note: ZORRO retains a 128-bit AES-like byte state and AES-style linear diffusion while applying only four S-boxes per round.
+  notes: ZORRO is a 24-round, 128-bit block cipher with a 128-bit key, designed to reduce higher-order masking cost. Its sparse nonlinear layer later enabled practical cryptanalytic breaks; it should be treated as historically interesting, not secure for deployment.
+- id: joltik_bc
+  name: Joltik-BC
+  construction_ids: [tweakable_spn]
+  round_ids: [joltik_bc_round]
+  target_applications: [authenticated_encryption, lightweight, hardware]
+  characteristics:
+    block_size_bits: 64
+    state_size_bits: 64
+    components:
+    - {id: sbox, params: {input_bits: 4, output_bits: 4}}
+    - {id: word_permutation}
+    - {id: field_matrix_mul}
+    - {id: xor}
+  reference_ids: [jean_nikolic_peyrin_2014_joltik]
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids: [round_1, round_2]
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations: [inspired_by]
+    note: Joltik-BC uses an AES-like SPN organization scaled to sixteen 4-bit cells and adds a dedicated tweakey schedule.
+  notes: Joltik-BC is the 64-bit internal tweakable block cipher of the CAESAR candidate Joltik. Variants use a combined key-and-tweak width of 64 or 128 bits and 24 or 32 rounds respectively.
+- id: scream_tbc
+  name: Scream
+  construction_ids: [tweakable_spn]
+  round_ids: [scream_tbc_round]
+  target_applications: [authenticated_encryption, software, hardware]
+  characteristics:
+    block_size_bits: 128
+    state_size_bits: 128
+    components:
+    - {id: sbox, params: {input_bits: 8, output_bits: 8}}
+    - {id: binary_matrix_mul}
+    - {id: xor}
+    - {id: constant}
+  reference_ids: [grosso_et_al_2015_scream]
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids: [round_1, round_2]
+    status: candidate
+  influences:
+  - source_family_id: fantomas_robin
+    relations: [improvement_of, variant_of]
+    note: Scream extends the masking-friendly Fantomas LS-design into a tweakable LS-design with scheduled key and tweak material.
+  - source_family_id: picaro
+    relations: [inspired_by]
+    note: PICARO is an explicit predecessor in the line of block ciphers designed for efficient higher-order masking.
+  - source_family_id: led
+    relations: [inspired_by]
+    note: The specification describes its every-second-round tweakey injection as similar to LED's scheduling strategy.
+  notes: Scream is the 128-bit internal tweakable block cipher of SCREAM, designed for efficient masked implementations. Two rounds form a step; recommended single-key and related-key parameter sets use 10 and 12 steps (20 and 24 rounds).
+- id: blake3
+  name: BLAKE3
+  construction_ids: [arx_permutation_network]
+  round_ids: [blake3_round]
+  target_applications: [digital_signatures, message_authentication, key_derivation, software]
+  characteristics:
+    block_size_bits: 512
+    state_size_bits: 512
+    components:
+    - {id: add_mod, params: {modulus: 4294967296}}
+    - {id: xor}
+    - {id: rotation_fixed}
+    - {id: word_permutation}
+  reference_ids: [oconnor_et_al_2020_blake3]
+  process_participations: []
+  influences:
+  - source_family_id: blake2
+    relations: [improvement_of, same_round_function]
+    note: BLAKE3 derives its compression function from BLAKE2s, reduces it from ten to seven rounds, and replaces the message schedule with repeated application of one permutation.
+  - source_family_id: blake
+    relations: [inspired_by]
+    note: BLAKE3 remains in the BLAKE ARX lineage through BLAKE2 and its ChaCha-derived G function.
+  innovative_ideas:
+  - id: blake3_binary_tree_mode
+    name: Fixed binary tree mode with parallel chunk processing
+    note: Independent 1024-byte chunks form leaves; parent compression combines chaining values, enabling SIMD, multithreading, incremental verification, and unbounded XOF output.
+  notes: BLAKE3 is a 2020 cryptographic hash, keyed hash, KDF, and XOF. It uses a seven-round BLAKE2s-derived compression function in a fixed binary tree and normally returns a 256-bit digest.
+- id: warp
+  name: WARP
+  construction_ids: [generalized_feistel]
+  round_ids: [warp_round]
+  target_applications: [lightweight, hardware, embedded]
+  characteristics:
+    block_size_bits: 128
+    state_size_bits: 128
+    components:
+    - {id: sbox, params: {input_bits: 4, output_bits: 4}}
+    - {id: word_permutation}
+    - {id: xor}
+    - {id: constant}
+  reference_ids: [banik_et_al_2020_warp]
+  process_participations: []
+  influences:
+  - source_family_id: twine
+    relations: [inspired_by]
+    note: WARP extends the permutation-optimized Type-2 generalized-Feistel approach used by 16-branch TWINE to 32 nibble branches.
+  - source_family_id: midori
+    relations: [same_sbox]
+    note: WARP adopts MIDORI's Sb0 4-bit S-box for low area and delay.
+  notes: WARP is a 41-round lightweight 128-bit block cipher with a 128-bit key. Its optimized 32-branch Type-2 generalized Feistel network targets exceptionally small encryption-only and unified encryption/decryption hardware.
+- id: forro
+  name: Forró
+  construction_ids: [arx_permutation_network]
+  round_ids: [forro_round]
+  target_applications: [software, embedded, generic]
+  characteristics:
+    state_size_bits: 512
+    components:
+    - {id: add_mod, params: {modulus: 4294967296}}
+    - {id: xor}
+    - {id: rotation_fixed}
+  reference_ids: [coutinho_et_al_2022_forro]
+  process_participations: []
+  influences:
+  - source_family_id: salsa20
+    relations: [improvement_of, variant_of]
+    note: Forró redesigns the Salsa state update using lessons from differential-linear cryptanalysis and retains a 16-word ARX state.
+  - source_family_id: chacha
+    relations: [improvement_of, variant_of]
+    note: Forró targets better diffusion per round and a larger security margin than ChaCha while keeping its 256-bit-key, ARX stream-cipher setting.
+  innovative_ideas:
+  - id: forro_pollination
+    name: Pollinating ARX subround schedule
+    note: Each subround consumes outputs from the preceding operations so diffusion propagates between word groups more rapidly than in Salsa or ChaCha.
+  notes: Forró is a 512-bit-state ARX stream cipher proposed at ASIACRYPT 2022. It uses a 256-bit key, 64-bit nonce, 64-bit counter, rotations 10/27/8, and recommends Forro14 or the faster Forro10 variant.

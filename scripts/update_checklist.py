@@ -46,6 +46,7 @@ TYPE_MAP = {
     "bleep64":                      "aead",
     "blink":                        "block_cipher",
     "blowfish":                     "block_cipher",
+    "blake3":                       "hash",
     "bmgl":                         "prng",
     "camellia":                     "block_cipher",
     "cast-128":                     "block_cipher",
@@ -87,6 +88,7 @@ TYPE_MAP = {
     "forkae":                       "aead",
     "fountain":                     "aead",
     "frog":                         "block_cipher",
+    "forró":                        "stream_cipher",
     "gage and ingage":              "permutation",
     "gift":                         "block_cipher",
     "gift-cofb":                    "aead",
@@ -103,6 +105,7 @@ TYPE_MAP = {
     "hyena":                        "aead",
     "ice":                          "block_cipher",
     "idea":                         "block_cipher",
+    "joltik-bc":                    "tweakable_block_cipher",
     "isaac":                        "prng",
     "isap":                         "aead",
     "kasumi":                       "block_cipher",
@@ -199,6 +202,7 @@ TYPE_MAP = {
     "seed":                         "block_cipher",
     "serpent":                      "block_cipher",
     "sfinks":                       "stream_cipher",
+    "scream":                       "tweakable_block_cipher",
     "shacal":                       "block_cipher",
     "shacal2":                      "block_cipher",
     "shamash & shamashash":         "hash",
@@ -276,6 +280,8 @@ TYPE_MAP = {
     "sha-0":                        "hash",
     "tiger":                        "hash",
     "whirlpool":                    "hash",
+    "warp":                         "block_cipher",
+    "zorro":                        "block_cipher",
 }
 
 # ─────────────────────────────────────────────────────────────────────────────

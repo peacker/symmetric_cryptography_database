@@ -95,6 +95,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | BipBip | BipBip | tweakable_block_cipher | 2023 | https://tches.iacr.org/index.php/TCHES/article/view/9955/9458 | TODO | no |
 | [x] | Bleep64 | Bleep64 | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Bleep64-spec.pdf | Full | yes |
 | [x] | Blink | Blink | block_cipher | 2025 | https://eprint.iacr.org/2025/1314 | TODO | yes |
+| [x] | BLAKE3 | BLAKE3 | hash | 2020 | https://github.com/BLAKE3-team/BLAKE3-specs/blob/master/blake3.pdf | Full | yes |
 | [x] | Blowfish | Blowfish | block_cipher | 1994 | https://www.schneier.com/academic/blowfish/ | TODO | yes |
 | [x] | BMGL | BMGL | prng | 2000 | https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.37.8270&rep=rep1&type=pdf | Full | yes |
 | [x] | Camellia | Camellia | block_cipher | 2004 | https://www.rfc-editor.org/rfc/rfc3713 | TODO | no |
@@ -145,6 +146,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | ForkAE | ForkAE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ForkAE-spec.pdf | Full | yes |
 | [x] | Fountain | Fountain | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Fountain-spec.pdf | Full | yes |
 | [x] | FROG | FROG | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
+| [x] | Forró | Forró | stream_cipher | 2022 | https://doi.org/10.1007/978-3-031-22963-3_9 | Full | yes |
 | [x] | GAGE and InGAGE | GAGE and InGAGE | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | Full | yes |
 | [x] | Gambit | Gambit | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Gambit-v1.pdf | Full | yes |
 | [x] | GASCON | GASCON | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/DryGASCON-spec.pdf | Full | yes |
@@ -166,6 +168,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | HyENA | HyENA | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/HYENA-spec.pdf | Full | yes |
 | [x] | ICE | ICE | block_cipher | 1997 | https://doi.org/10.1007/BFb0052346 | Full | yes |
 | [x] | IDEA | IDEA | block_cipher | 1991 | https://doi.org/10.1007/3-540-46877-3_35 | TODO | yes |
+| [x] | Joltik-BC | Joltik-BC | tweakable_block_cipher | 2014 | https://competitions.cr.yp.to/round1/joltikv1.pdf | Full | yes |
 | [x] | ISAAC | ISAAC | prng | 1997 | https://link.springer.com/chapter/10.1007/3-540-60865-6_41 | Full | yes |
 | [x] | ISAP | ISAP | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | LEX | LEX | stream_cipher | 2004 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_5 | Full | yes |
@@ -270,6 +273,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Salsa20 / Snuffle 2005 | Salsa20 | stream_cipher | 2005 | https://cr.yp.to/snuffle/spec.pdf | Full | yes |
 | [x] | XSalsa20 | XSalsa20 | stream_cipher | 2011 | https://cr.yp.to/snuffle/xsalsa-20110204.pdf | Full | yes |
 | [x] | Sapphire | Sapphire | stream_cipher | 1995 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/sapphire.pdf | Full | yes |
+| [x] | Scream | Scream | tweakable_block_cipher | 2015 | https://competitions.cr.yp.to/round2/screamv3.pdf | Full | yes |
 | [x] | Saturnin | Saturnin | block_cipher | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | SC2000 | SC2000 | block_cipher | 2000 | https://www.cosic.esat.kuleuven.be/nessie/ | Full | yes |
 | [x] | SCARF | SCARF | tweakable_block_cipher | 2023 | https://www.usenix.org/system/files/usenixsecurity23-canale.pdf | TODO | yes |
@@ -348,6 +352,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | VMPC | VMPC | stream_cipher | 2004 | https://eprint.iacr.org/2004/379 | Full | no |
 | [x] | WAGE | WAGE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/WAGE-spec.pdf | Full | yes |
 | [x] | WAKE | WAKE | stream_cipher | 1994 | https://link.springer.com/chapter/10.1007/3-540-60590-8_26 | Full | no |
+| [x] | WARP | WARP | block_cipher | 2020 | https://eprint.iacr.org/2020/1320 | Full | yes |
 | [x] | Whirlpool | Whirlpool | hash | 2003 | https://www.larc.usp.br/~pbarreto/whirlpool.zip | Full | yes |
 | [x] | XChaCha | ChaCha | stream_cipher | 2018 | https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-xchacha | Full | no |
 | [x] | XEX-based families (XTS lineage) | AES | mode | 2010 | https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38e.pdf | Full | no |
@@ -360,6 +365,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Yarara and Coral | Yarara and Coral | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Yarara_and_Coral-spec.pdf | Full | yes |
 | [x] | Yarn | Yarn | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Yarn-v2.pdf | Full | yes |
 | [x] | yescrypt | yescrypt | pbkdf | 2015 | https://www.password-hashing.net/submissions/specs/yescrypt-v2.pdf | Full | yes |
+| [x] | ZORRO | ZORRO | block_cipher | 2013 | https://doi.org/10.1007/978-3-642-40349-1_22 | Full | yes |
 | [x] | 3-Way | 3-Way | block_cipher | 1991 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/threeway.pdf | Full | yes |
 | [x] | Kalyna | Kalyna | block_cipher | 2010 | https://www.sav.sk/journals/uploads/0317154006ogdr.pdf | Section 1 | yes |
 | [x] | Kalyna [DSTU 7624:2014] | Kalyna | block_cipher | 2015 | https://eprint.iacr.org/2015/650 | Full | yes |

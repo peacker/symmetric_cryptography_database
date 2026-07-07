@@ -6239,3 +6239,61 @@ primitives:
     time-memory tradeoffs via SubGroups mixing and ShuffleSlices memory scheduling,
     using five-round fixed-key AES-128 as its memory permutation and BLAKE2b for
     initial/final hashing; superseded by Argon2 in later PHC rounds.
+- id: zorro_128
+  name: ZORRO
+  family_id: zorro
+  primitive_type: block_cipher
+  reference_ids: [gerard_et_al_2013_zorro]
+  characteristics: {block_size_bits: 128, key_size_bits: 128, output_size_bits: 128, rounds: 24}
+  notes: Original masking-oriented ZORRO instance; cryptographically broken.
+- id: joltik_bc_64_64
+  name: Joltik-BC-64-64
+  family_id: joltik_bc
+  primitive_type: tweakable_block_cipher
+  reference_ids: [jean_nikolic_peyrin_2014_joltik]
+  characteristics: {block_size_bits: 64, key_size_bits: 64, tweak_size_bits: 64, tweakey_size_bits: 128, output_size_bits: 64, rounds: 24}
+- id: joltik_bc_128_64
+  name: Joltik-BC-128-64
+  family_id: joltik_bc
+  primitive_type: tweakable_block_cipher
+  reference_ids: [jean_nikolic_peyrin_2014_joltik]
+  characteristics: {block_size_bits: 64, key_size_bits: 128, tweak_size_bits: 64, tweakey_size_bits: 192, output_size_bits: 64, rounds: 32}
+- id: scream_tbc_10_step
+  name: Scream-10
+  family_id: scream_tbc
+  primitive_type: tweakable_block_cipher
+  reference_ids: [grosso_et_al_2015_scream]
+  characteristics: {block_size_bits: 128, key_size_bits: 128, tweak_size_bits: 128, output_size_bits: 128, rounds: 20}
+  notes: Primary single-key recommendation; ten two-round steps.
+- id: scream_tbc_12_step
+  name: Scream-12
+  family_id: scream_tbc
+  primitive_type: tweakable_block_cipher
+  reference_ids: [grosso_et_al_2015_scream]
+  characteristics: {block_size_bits: 128, key_size_bits: 128, tweak_size_bits: 128, output_size_bits: 128, rounds: 24}
+  notes: Related-key-safe recommendation; twelve two-round steps.
+- id: blake3_256
+  name: BLAKE3-256
+  family_id: blake3
+  primitive_type: hash_function
+  reference_ids: [oconnor_et_al_2020_blake3]
+  characteristics: {block_size_bits: 512, state_size_bits: 512, output_size_bits: 256, rounds: 7}
+  notes: Default 32-byte BLAKE3 digest; the same construction supports arbitrary-length XOF output, keyed hashing, and key derivation.
+- id: warp_128
+  name: WARP-128
+  family_id: warp
+  primitive_type: block_cipher
+  reference_ids: [banik_et_al_2020_warp]
+  characteristics: {block_size_bits: 128, key_size_bits: 128, output_size_bits: 128, rounds: 41}
+- id: forro14
+  name: Forro14
+  family_id: forro
+  primitive_type: stream_cipher
+  reference_ids: [coutinho_et_al_2022_forro]
+  characteristics: {key_size_bits: 256, nonce_size_bits: 64, state_size_bits: 512, output_size_bits: 512, rounds: 14}
+- id: forro10
+  name: Forro10
+  family_id: forro
+  primitive_type: stream_cipher
+  reference_ids: [coutinho_et_al_2022_forro]
+  characteristics: {key_size_bits: 256, nonce_size_bits: 64, state_size_bits: 512, output_size_bits: 512, rounds: 10}

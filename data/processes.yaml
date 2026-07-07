@@ -420,14 +420,16 @@ processes:
     - name: Tiaoxin
     - name: HS1-SIV
     - name: ICEPOLE
-    - name: Joltik
+    - family_id: joltik_bc
+      name: Joltik
     - name: Minalpher
     - name: OMD
     - name: PAEQ
     - name: π-Cipher
     - name: POET
     - name: PRIMATEs
-    - name: SCREAM
+    - family_id: scream_tbc
+      name: SCREAM
     - name: SHELL
     - name: STRIBOB
     - name: TriviA-ck
@@ -451,7 +453,8 @@ processes:
     - name: HS1-SIV
     - name: ICEPOLE
     - name: JAMBU
-    - name: Joltik
+    - family_id: joltik_bc
+      name: Joltik
     - name: Ketje
     - name: Keyak
     - name: Minalpher
@@ -460,7 +463,8 @@ processes:
     - name: π-Cipher
     - name: POET
     - name: PRIMATEs
-    - name: SCREAM
+    - family_id: scream_tbc
+      name: SCREAM
     - name: SHELL
     - name: STRIBOB
     - name: TriviA-ck
