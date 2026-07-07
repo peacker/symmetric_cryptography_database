@@ -6,12 +6,10 @@ import json
 import re
 from pathlib import Path
 
-import yaml
 from jsonschema import Draft202012Validator
 
-ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = ROOT / "data"
-SCHEMA_DIR = ROOT / "schema"
+from common import SCHEMA_DIR, load_all_data
+
 TWEAKEY_EXPR_RE = re.compile(r"^([1-9][0-9]*)\s*-\s*key_size_bits$")
 
 
@@ -55,11 +53,6 @@ def validate_range_field(characteristics: dict, base_field: str, pid: str) -> li
     return errors
 
 
-def load_yaml(path: Path) -> dict:
-    with path.open("r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
-
-
 def validate_schema(doc: dict, schema_path: Path, label: str) -> bool:
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
     validator = Draft202012Validator(schema)
@@ -73,15 +66,16 @@ def validate_schema(doc: dict, schema_path: Path, label: str) -> bool:
 
 
 def main() -> None:
-    families_doc     = load_yaml(DATA_DIR / "families.yaml")
-    primitives_doc   = load_yaml(DATA_DIR / "primitives.yaml")
-    components_doc   = load_yaml(DATA_DIR / "components.yaml")
-    constructions_doc = load_yaml(DATA_DIR / "constructions.yaml")
-    rounds_doc       = load_yaml(DATA_DIR / "rounds.yaml")
-    primitive_types_doc = load_yaml(DATA_DIR / "primitive_types.yaml")
-    references_doc = load_yaml(DATA_DIR / "references.yaml")
-    processes_doc    = load_yaml(DATA_DIR / "processes.yaml")
-    modes_doc        = load_yaml(DATA_DIR / "modes.yaml")
+    data = load_all_data()
+    families_doc     = data["families"]
+    primitives_doc   = data["primitives"]
+    components_doc   = data["components"]
+    constructions_doc = data["constructions"]
+    rounds_doc       = data["rounds"]
+    primitive_types_doc = data["primitive_types"]
+    references_doc = data["references"]
+    processes_doc    = data["processes"]
+    modes_doc        = data["modes"]
 
     ok = True
     ok &= validate_schema(families_doc,   SCHEMA_DIR / "families.schema.json",   "families")
