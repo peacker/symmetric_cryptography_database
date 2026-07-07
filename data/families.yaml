@@ -1412,7 +1412,15 @@ families:
   reference_ids:
   - baldwin_rivest_1996_rc5
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - related_to
+    note: Rivest explicitly frames RC5 as a tunable, parameter-matched
+      alternative to DES, proposing RC5-32/16/7 as an equivalent replacement
+      with the same 64-bit block size, round count, and 56-bit key length,
+      while its parameterization addresses DES's fixed, non-upgradable key
+      size.
 - id: seed
   name: SEED
   notes: SEED is a Korean 16-round, 128-bit Feistel cipher with a 128-bit key, standardized in ISO/IEC 18033-3 and described
@@ -2740,7 +2748,14 @@ families:
   - bertoni_et_al_2007_sponge_functions
   - daemen_2019_subterranean_v2
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: xoodyak
+    relations:
+    - inspired_by
+    note: Subterranean 2.0 replaces the original hash/stream-cipher interface
+      of Subterranean with a duplex object and a set of modes (XOF, deck
+      function, session-authenticated-encryption scheme) built on top of it,
+      which the specification states are inspired by Xoodyak.
   innovative_ideas:
   - id: subterranean_absorb_then_squeeze_precursor
     name: Pre-sponge absorbing and squeezing phases
@@ -5701,7 +5716,15 @@ families:
   reference_ids:
   - safer_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - related_to
+    note: The SAFER design rationale explicitly contrasts its
+      substitution/linear-transformation structure with the Feistel structure
+      of DES, arguing Feistel-style diffusion is comparatively slow and using
+      this comparison to motivate SAFER's fast diffusion via its linear
+      transformation matrix.
   notes: SAFER (Secure And Fast Encryption Routine; Massey, 1993) is a 64-bit byte-oriented SPN block cipher. SAFER K-64 uses
     a 64-bit key and 6 rounds; SAFER K-128 uses a 128-bit key and 10 rounds. Each round applies exponential (e^x mod 257)
     and logarithmic (log base e) S-boxes alternating with 8-bit XOR and modular-addition operations.
@@ -6591,7 +6614,14 @@ families:
   reference_ids:
   - daemen_1991_threeway
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - related_to
+    note: 3-Way's self-reciprocal design rationale explicitly benchmarks it
+      against DES, citing DES's weak/semi-weak key symmetry and comparing
+      round-function diffusion strength, motivating the departure from the
+      classical Feistel structure DES uses.
   innovative_ideas:
   - id: threeway_self_reciprocal
     name: Self-reciprocal structure
