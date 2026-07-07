@@ -5218,7 +5218,16 @@ families:
     stage_ids:
     - submissions_block_64bit
     status: submitted
-  influences: []
+  influences:
+  - source_family_id: idea
+    relations:
+    - related_to
+    note: In its impossible-differential analysis, the Nimbus proposal
+      explicitly contrasts itself with IDEA, noting that such attacks exploit
+      IDEA's modular multiplication after block partitioning, and argues Nimbus
+      resists the same attack class because it does not partition the block the
+      way IDEA does; both use modular multiplication as a core nonlinear
+      operation.
   notes: Nimbus (Boesgaard et al., NESSIE Submission, 2000) is a flexible SPN block cipher family supporting 64, 128, and
     256-bit block sizes with a 128-bit key. Its S-boxes and linear layers are parameterised to allow variable security–performance
     trade-offs.
@@ -5248,7 +5257,21 @@ families:
     stage_ids:
     - submissions_block_128bit
     status: submitted
-  influences: []
+  influences:
+  - source_family_id: threeway
+    relations:
+    - inspired_by
+    note: NOEKEON, designed by Joan Daemen with Michael Peeters, Vincent Rijmen
+      and Gilles Van Assche, follows on from Daemen's earlier cipher 3-Way,
+      reusing the same wide-trail design philosophy with a comparable linear
+      diffusion layer surrounding a small nonlinear layer.
+  - source_family_id: rijndael
+    relations:
+    - related_to
+    note: NOEKEON was produced by the same design team responsible for
+      Rijndael/AES (Daemen and Rijmen), and adopts the wide-trail strategy for
+      guaranteeing resistance to differential and linear cryptanalysis that was
+      formalized and popularized through Rijndael.
   notes: NOEKEON (Daemen, Peeters, Rijmen, Van Assche; NESSIE Submission, 2000) is a 128-bit SPN block cipher with a 128-bit
     key and 16 rounds. Its round function (theta-pi-gamma-iota) applies an XOR-based linear layer (θ), two fixed rotations
     (π1, π2), a 4-bit S-box (γ), and a round-constant XOR (ι). Both bit-serial and bit-parallel hardware are efficient.
@@ -5507,7 +5530,23 @@ families:
     stage_ids:
     - submissions_block_128bit
     status: submitted
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - same_sbox
+    note: Q's byte-substitution layer reuses Rijndael's 8-bit S-box unmodified;
+      the design paper states the S-box is taken directly from Rijndael, using
+      a known, publicly vetted S-box to increase confidence that no trapdoor
+      was inserted.
+  - source_family_id: serpent
+    relations:
+    - same_sbox
+    - same_round_constants
+    note: One of Q's two 4-bit bit-slice S-boxes is literally Serpent's S-box
+      3, and the S-box selection criteria are stated to be the same as those
+      used for Serpent; Q's key schedule also reuses the fractional part of the
+      golden ratio (0x9E3779B9) as a round constant explicitly because it was
+      used in Serpent.
   notes: 'Q is a 128-bit block cipher proposal for NESSIE, combining Rijndael-style byte substitution with Serpent-inspired
     bitslice layers.
 
