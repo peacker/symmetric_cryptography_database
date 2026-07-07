@@ -1284,7 +1284,36 @@ families:
   reference_ids:
   - shibutani_et_al_2011_piccolo
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: hight
+    relations:
+    - related_to
+    note: HIGHT is discussed as a prior lightweight generalized-Feistel-network block
+      cipher that was theoretically broken by a related-key differential attack; Piccolo's
+      round-permutation and key-schedule choices are motivated by avoiding this class
+      of weakness.
+  - source_family_id: gost_28147_89
+    relations:
+    - related_to
+    note: GOST is cited as a compact Feistel-network cipher that was nevertheless broken
+      by an improved meet-in-the-middle attack, used as a cautionary comparison point
+      for Feistel-type lightweight block-cipher designs.
+  - source_family_id: present
+    relations:
+    - related_to
+    note: PRESENT, an SPN-based lightweight cipher, is used throughout the Piccolo
+      paper as the principal benchmark for gate-count and energy-consumption comparisons
+      against Piccolo's generalized-Feistel design.
+  - source_family_id: aes
+    relations:
+    - related_to
+    note: AES is cited as the representative SPN structure, explicitly contrasted with
+      the generalized-Feistel-network structure chosen for Piccolo.
+  - source_family_id: des
+    relations:
+    - related_to
+    note: DES is cited as the historical basis of the Feistel-network structural category
+      from which Piccolo's generalized Feistel network descends conceptually.
   notes: Piccolo is a 64-bit generalized-Feistel lightweight block cipher with
     80- and 128-bit key variants, designed for compact hardware and inexpensive
     combined encryption/decryption implementations.
@@ -1309,7 +1338,20 @@ families:
   reference_ids:
   - de_canniere_et_al_2009_katan_ktantan
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: trivium
+    relations:
+    - inspired_by
+    note: KATAN's core structure of two nonlinear-feedback shift registers driving
+      Boolean feedback/filter functions is based on Bivium, the two-register variant
+      of the stream cipher Trivium, generalized from a stream-cipher keystream generator
+      into a block-cipher round function.
+  - source_family_id: present
+    relations:
+    - related_to
+    note: PRESENT is used by the KATAN/KTANTAN designers as the principal hardware-area
+      (gate-equivalent) benchmark against which the new lightweight block-cipher family
+      is compared.
 - id: ktantan
   name: KTANTAN
   notes: KTANTAN specializes KATAN for fixed-key hardware by embedding the 80-bit key into the circuit, trading key agility
@@ -6769,7 +6811,26 @@ families:
   reference_ids:
   - threefish_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: skipjack
+    relations:
+    - inspired_by
+    note: The Threefish key schedule is explicitly stated to be inspired by SKIPJACK's
+      key schedule, which cyclically uses the bytes of a 10-byte key in order; Threefish
+      adopted this simplicity principle while adding tweak and subkey-counter fields.
+  - source_family_id: mars
+    relations:
+    - related_to
+    note: Threefish's round/cycle structure is compared to MARS, noting both share
+      the property of not injecting a subkey every round, instead injecting on a periodic
+      schedule.
+  - source_family_id: aes
+    relations:
+    - related_to
+    note: Threefish's designers describe its substitution-permutation-like network
+      topology as being like AES rather than a Feistel network such as DES or Twofish;
+      its key-schedule constant is also defined directly as the AES-256 encryption
+      of a fixed plaintext under an all-zero key.
   notes: Threefish is the ARX tweakable block-cipher core used by Skein, with 256-, 512-, and 1024-bit block variants. It
     is documented in the Skein specification but was not independently standardized.
 - id: treyfer
@@ -9148,7 +9209,37 @@ families:
     - phase_2
     - phase_3
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - related_to
+    note: Dragon's design rationale benchmarks the nonlinearity of its virtual 32x32
+      S-boxes against the SBOX/MIXCOL operation of AES, stating its heuristically generated
+      S-boxes were designed to avoid the linear-redundancy weakness intrinsic to finite-field-inversion-based
+      S-boxes used in AES.
+  - source_family_id: camellia
+    relations:
+    - related_to
+    note: Camellia is grouped with AES as an example of an international standard cipher
+      using finite-field-inversion-based S-boxes, a design approach Dragon's authors
+      deliberately avoided when constructing their heuristic S-boxes.
+  - source_family_id: mugi
+    relations:
+    - related_to
+    note: Dragon's design rationale directly compares the nonlinearity of its virtual
+      S-boxes against MUGI's 32x32 cryptographic mapping, positioning Dragon as an
+      improvement on this metric.
+  - source_family_id: rc4
+    relations:
+    - related_to
+    note: RC4 is cited as the small-word extreme of the word-based stream-cipher design
+      spectrum that motivated Dragon's choice of 32-bit words, and as a software-speed
+      comparison point.
+  - source_family_id: snow_2_0
+    relations:
+    - related_to
+    note: SNOW 2.0 is cited as a directly comparable word-based eSTREAM-era stream
+      cipher in Dragon's software performance comparison.
   innovative_ideas:
   - id: dragon_word_based_nlfsr
     name: Word-based NLFSR with nonlinear filter for high-throughput keystream
