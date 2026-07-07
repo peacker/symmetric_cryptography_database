@@ -17,16 +17,19 @@ from __future__ import annotations
 from reference_pdfs import build_family_pdf_map
 
 KNOWN_MISSING = {
-    "abacus", "aria", "arirang", "aurora", "blender", "boole", "catfish",
-    "cheetah", "cmea", "crunch", "crypton", "dch", "deal", "dynamic_sha",
-    "dynamic_sha2", "ecoh", "edon_r", "enrupt", "essence", "fsb", "hpc",
-    "kasumi", "khichidi_1", "labyrinth", "lane", "lesamnta", "lux_hash",
+    "abacus", "ade", "aes", "aria", "arirang", "aurora", "blender",
+    "blue_midnight_wish", "boole", "catfish", "cheetah", "chi_hash", "clefia",
+    "cmea", "crunch", "crypton", "cubehash", "dch", "deal", "dynamic_sha",
+    "dynamic_sha2", "echo_hash", "ecoh", "edon_r", "enrupt", "essence",
+    "fantomas_robin", "fsb", "fugue", "hamsi", "hpc", "kasumi", "khichidi_1",
+    "labyrinth", "lane", "lea_iso", "lesamnta", "luffa", "lux_hash",
     "m3lcrypt", "mcrypton", "mcssha3", "md6", "meshhash", "mibs", "mmb",
     "msx", "multi2", "nasha", "newdes", "oryx", "pea", "picaro", "pufferfish",
-    "sandstorm", "sarmal", "sgail", "shacal", "shacal2", "shamata",
-    "spectral_hash", "streamhash", "swifftx", "tangle_hash", "tib3", "twine",
-    "twister_hash", "ulbc", "vmpc", "vortex_hash", "wake", "wamm",
-    "waterfall_hash", "xoodoo", "zuc",
+    "rc4plus", "rsb", "sandstorm", "sarmal", "sgail", "shabal", "shamata",
+    "shavite3", "simd_hash", "spectral_hash", "streamhash", "swifftx",
+    "tangle_hash", "tib3", "twine", "twister_hash", "ulbc", "vmpc",
+    "vortex_hash", "wake", "wamm", "waterfall_hash", "xchacha", "xoodoo",
+    "zuc",
 }
 
 

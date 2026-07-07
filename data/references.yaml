@@ -634,6 +634,7 @@ references:
   year: 2009
   venue: CHES 2009
   url: https://www.iacr.org/archive/ches2009/57470001/57470001.pdf
+  notes: 'KATAN and KTANTAN share this single specification; local copy references/2009-katan.pdf.'
 - id: adams_1997_cast128
   kind: standard
   title: 'RFC 2144: The CAST-128 Encryption Algorithm'
@@ -1050,6 +1051,10 @@ references:
   year: 1987
   venue: Cipher Design (RSA Secret-Key Cryptography Specifications)
   url: https://en.wikipedia.org/wiki/RC4
+  notes: 'No original publication exists — RC4 was an unpublished RSA trade secret
+    anonymously leaked to the Cypherpunks mailing list in 1994. Local supporting
+    analysis PDFs covering RC4 and its variants: references/2004-rc4drop.pdf,
+    references/2007-rc4drop.pdf, references/2007-rc4a_distinguishing_attacks.pdf.'
 - id: ascon_caesar_submission_2016
   kind: article
   title: Ascon v1.2

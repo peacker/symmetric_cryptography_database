@@ -19,13 +19,18 @@ from common import ROOT, load_all_data
 
 REFERENCES_DIR = ROOT / "references"
 
-LOCAL_COPY_RE = re.compile(r"Local copy:\s*(references/[^\s.,;]+(?:\.[A-Za-z0-9]+)?)")
+LOCAL_COPY_RE = re.compile(r"(references/[^\s.,;'\"]+\.[A-Za-z0-9]+)")
 
 STOPWORDS = {
     "the", "a", "an", "of", "and", "for", "on", "in", "to", "new", "algorithm",
-    "cipher", "block", "stream", "hash", "function", "functions", "family",
-    "specification", "spec", "design", "report", "status", "paper", "v1", "v2",
-    "v3", "et", "al",
+    "algorithms", "cipher", "ciphers", "block", "stream", "hash", "function",
+    "functions", "family", "specification", "specifications", "spec", "design",
+    "report", "reports", "status", "paper", "v1", "v2", "v3", "et", "al",
+    "competition", "candidate", "candidates", "cryptographic", "cryptography",
+    "classification", "proposal", "submission", "documentation", "supporting",
+    "round", "first", "second", "third", "part", "posts", "entries", "nist",
+    "primitive", "primitives", "analysis", "attack", "attacks", "security",
+    "efficient", "software", "hardware", "fast", "oriented", "version",
 }
 
 
@@ -41,6 +46,10 @@ def compact(text: str) -> str:
 
 def strip_year_prefix(compact_stem: str) -> str:
     return re.sub(r"^(19|20)\d{2}", "", compact_stem)
+
+
+def strip_version_suffix(compact_stem: str) -> str:
+    return re.sub(r"v\d+(?:\d)*$", "", compact_stem)
 
 
 def local_files() -> list[Path]:
@@ -72,13 +81,14 @@ def fuzzy_match(ref: dict, family_names: list[str], files: list[Path]) -> list[P
         if not stem_compact:
             continue
         for c in id_compacts:
-            # Very short ids (e.g. "q") require an exact stem match to avoid
-            # false substring hits (e.g. "q" inside "qameleon").
-            if len(c) <= 2:
-                if stem_compact == c:
+            # Short ids (e.g. "q", "rig", "chi") require an exact stem match to
+            # avoid false substring hits (e.g. "rig" inside "original",
+            # "chi" inside "kuznyechik").
+            if len(c) <= 3:
+                if stem_compact == c or strip_version_suffix(stem_compact) == c:
                     direct.append(f)
                     break
-            elif c in stem_compact or stem_compact in c:
+            elif c in stem_compact:
                 direct.append(f)
                 break
     if direct:
@@ -100,8 +110,9 @@ def fuzzy_match(ref: dict, family_names: list[str], files: list[Path]) -> list[P
             if abs(file_year - year) > 4:
                 continue
         stem_compact = strip_year_prefix(compact(f.stem))
-        overlap = sum(1 for t in title_tokens if t in stem_compact)
-        if overlap >= 2 or (overlap == 1 and max((len(t) for t in title_tokens), default=0) >= 7):
+        matched = [t for t in title_tokens if t in stem_compact]
+        overlap = len(matched)
+        if overlap >= 2 or (overlap == 1 and len(matched[0]) >= 7):
             candidates.append((overlap, f))
     candidates.sort(key=lambda t: -t[0])
     return [f for score, f in candidates if score == candidates[0][0]] if candidates else []
