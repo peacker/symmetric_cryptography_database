@@ -6,22 +6,13 @@ leftover placeholder that should be removed.
 """
 from __future__ import annotations
 
-from pathlib import Path
-
-import yaml
-
-ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = ROOT / "data"
-
-
-def load_yaml(path: Path) -> dict:
-    with path.open("r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from common import load_all_data
 
 
 def main() -> None:
-    families_doc = load_yaml(DATA_DIR / "families.yaml")
-    primitives_doc = load_yaml(DATA_DIR / "primitives.yaml")
+    data = load_all_data(["families", "primitives"])
+    families_doc = data["families"]
+    primitives_doc = data["primitives"]
 
     family_ids = {f["id"] for f in families_doc.get("families", [])}
     covered_family_ids = {p["family_id"] for p in primitives_doc.get("primitives", [])}
