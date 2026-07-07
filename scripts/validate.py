@@ -53,6 +53,10 @@ def validate_range_field(characteristics: dict, base_field: str, pid: str) -> li
     return errors
 
 
+def load_json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def validate_schema(doc: dict, schema_path: Path, label: str) -> bool:
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
     validator = Draft202012Validator(schema)
@@ -89,6 +93,11 @@ def main() -> None:
     ok &= validate_schema(processes_doc, SCHEMA_DIR / "processes.schema.json", "processes")
     if not ok:
         raise SystemExit(1)
+
+    families_schema = load_json(SCHEMA_DIR / "families.schema.json")
+    known_relations = set(
+        families_schema["$defs"]["influence"]["properties"]["relations"]["items"]["enum"]
+    )
 
     reference_ids = {r["id"] for r in references_doc.get("references", [])}
     standard_reference_ids = {
@@ -187,29 +196,7 @@ def main() -> None:
                 print(f"REFERENCE ERROR: family '{fid}' has influence from '{src}' without any relations")
                 errors_found = True
             for rel in relations:
-                if rel not in {
-                    "selection_of_possible_configurations",
-                    "same_sbox",
-                    "same_sbox_size",
-                    "same_key_schedule",
-                    "same_state_layout",
-                    "same_bit_based_permutation_layer",
-                    "similar_bit_based_permutation_layer",
-                    "same_mix_column",
-                    "similar_mix_column",
-                    "same_shift_row",
-                    "similar_shift_row",
-                    "same_round_function",
-                    "same_round_constants",
-                    "improved_diffusion",
-                    "inherits_alpha_reflexivity_structure",
-                    "inspired_by",
-                    "improvement_of",
-                    "standardization_of",
-                    "variant_of",
-                    "generalization_of",
-                    "related_to",
-                }:
+                if rel not in known_relations:
                     print(f"REFERENCE ERROR: family '{fid}' has unknown influence relation '{rel}'")
                     errors_found = True
             if "standardization_of" in relations:
