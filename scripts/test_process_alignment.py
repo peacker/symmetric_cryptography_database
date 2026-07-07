@@ -12,22 +12,13 @@ Rules checked:
 """
 from __future__ import annotations
 
-from pathlib import Path
-
-import yaml
-
-ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = ROOT / "data"
-
-
-def load_yaml(path: Path) -> dict:
-    with path.open("r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from common import load_all_data
 
 
 def main() -> None:
-    families_doc = load_yaml(DATA_DIR / "families.yaml")
-    processes_doc = load_yaml(DATA_DIR / "processes.yaml")
+    data = load_all_data(["families", "processes"])
+    families_doc = data["families"]
+    processes_doc = data["processes"]
 
     family_ids = {f["id"] for f in families_doc.get("families", [])}
 
