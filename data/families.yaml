@@ -6399,7 +6399,23 @@ families:
   reference_ids:
   - sosemanuk1_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: snow_2_0
+    relations:
+    - inspired_by
+    - improvement_of
+    note: SOSEMANUK reuses SNOW 2.0's underlying LFSR over F_2^32 (same field
+      representation and feedback structure) and its overall combination of an
+      LFSR with a finite-state machine, while aiming to remove structural
+      weaknesses and reduce internal state and static data for better software
+      performance.
+  - source_family_id: serpent
+    relations:
+    - inspired_by
+    note: SOSEMANUK derives its initialization procedure from a 24-round
+      reduction of Serpent's key schedule and round function, and uses one of
+      Serpent's S-boxes in bitslice mode as a nonlinear transformation within
+      its finite state machine.
   notes: SOSEMANUK is an eSTREAM software-profile stream cipher influenced by SNOW 2.0 and Serpent.
 - id: speckey
   name: SPECKEY
@@ -7103,7 +7119,25 @@ families:
     - phase_1
     - phase_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: a5_1
+    relations:
+    - related_to
+    note: Achterbahn's hardware implementation is benchmarked against A5/1 in
+      the paper's comparative table as a reference point for GSM-class stream
+      ciphers, with no shared design structure claimed.
+  - source_family_id: rc4
+    relations:
+    - related_to
+    note: RC4 is included in Achterbahn's hardware comparison table as a widely
+      deployed reference stream cipher, purely for benchmarking
+      area/throughput/efficiency.
+  - source_family_id: aes
+    relations:
+    - related_to
+    note: AES (Rijndael) operated in output feedback mode is used as a
+      benchmark reference in Achterbahn's hardware comparison of throughput and
+      implementation efficiency.
   innovative_ideas:
   - id: achterbahn_nlfsr_combiner
     name: NLFSR combiner with feedforward output functions
@@ -7200,7 +7234,15 @@ families:
     - phase_3
     - portfolio_hw
     status: portfolio
-  influences: []
+  influences:
+  - source_family_id: lili_128
+    relations:
+    - related_to
+    note: MICKEY's design rationale for its mutual irregular clocking
+      explicitly discusses LILI-128's variable-clocking mechanism as a
+      cautionary comparison, noting that guessable clock counts in LILI-128
+      enabled statistical and state-recovery attacks that MICKEY's clocking
+      scheme was designed to avoid.
   innovative_ideas:
   - id: mickey_mutual_irregular_clocking
     name: Mutual irregular clocking between register pair
@@ -7389,7 +7431,14 @@ families:
     - phase_3
     - portfolio_hw
     status: portfolio
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - same_sbox
+    note: The dynamic-filter F-FCSR variants construct their key-dependent
+      filter function using the Rijndael S-box directly, masking the FCSR
+      automaton's algebraic structure while reusing an already-implemented
+      byte-oriented nonlinear component.
   innovative_ideas:
   - id: f_fcsr_carry_nonlinearity
     name: FCSR carry-based nonlinearity without explicit nonlinear filter
@@ -9185,7 +9234,19 @@ families:
     - submissions
     - finalist
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: blowfish
+    relations:
+    - improvement_of
+    note: battcrypt (Blowfish All The Things) is built around the Blowfish
+      block cipher, exploiting Blowfish's CBC-mode key expansion and S-box
+      structure to construct a memory-hard password hashing scheme starting
+      from bcrypt.
+  - source_family_id: sha2
+    relations:
+    - related_to
+    note: SHA-512 is used throughout battcrypt for seeding the key, generating
+      the initial memory buffer, and finalizing the derived key.
   innovative_ideas: []
   notes: 'battcrypt (Blowfish All The Things, PHC 2014) by Steven Thomas. bcrypt variant that applies Blowfish cipher (Eksblowfish
     key schedule) repeatedly with a large memory buffer, inheriting bcrypt''s resistance to GPU acceleration.
@@ -9236,7 +9297,18 @@ families:
     stage_ids:
     - submissions
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - related_to
+    note: Centrifuge's default cipher function is AES with a 256-bit key
+      operated in CFB mode, used as the pseudorandom generator that seeds and
+      evolves the memory table and substitution box.
+  - source_family_id: sha2
+    relations:
+    - related_to
+    note: Centrifuge uses SHA-512 by default as the hash function that seeds
+      the cipher's key/IV from the password and salt.
   innovative_ideas: []
   notes: 'Centrifuge (PHC 2014) by Rafael Alvarez (University of Alicante, Spain). Password hashing algorithm using PBKDF2
     with SHA-512 in a centrifuge-like iterative structure.
@@ -9260,7 +9332,19 @@ families:
     stage_ids:
     - submissions
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - related_to
+    note: earworm embeds the AES round transformation in its core loop, relying
+      on it to be a conjectured shortcut-free function that prevents the
+      memory-bandwidth-bound main loop from being algebraically shortcut.
+  - source_family_id: sha2
+    relations:
+    - related_to
+    note: earworm incorporates SHA-256, relying only on its first-preimage
+      resistance rather than full collision resistance, as part of its
+      construction.
   innovative_ideas: []
   notes: 'EARWORM (PHC 2014, Round 1) by Daniel Franke. Sequential memory-hard function designed to resist GPU and ASIC acceleration.
     Uses cache-hard memory access patterns requiring sequential reads from a large memory buffer.
@@ -9285,7 +9369,13 @@ families:
     stage_ids:
     - submissions
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - inspired_by
+    note: Gambit is a generic sponge-based memory-hard KDF that uses
+      Keccak[1600] as its worked example and reference sponge construction for
+      parameter and performance analysis.
   innovative_ideas: []
   notes: 'Gambit (PHC 2014) by Krisztián Pintér. Memory-hard KDF based on a duplexed sponge. Fills a memory array by squeezing
     the sponge and absorbing the memory-dependent results back. Supports optional read-only random array (ROM) for additional
@@ -9311,7 +9401,13 @@ families:
     stage_ids:
     - submissions
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: blake2
+    relations:
+    - related_to
+    note: The Lanarea Derivation Function uses BLAKE2b as its default internal
+      pseudorandom function for the setup, core, and key-extraction phases,
+      chosen for its public-domain status and vetted security.
   innovative_ideas: []
   notes: 'Lanarea DF (Lanarea Derivation Function, PHC 2014) by Haneef Mubarak. Memory-hard KDF using XOR and hash operations
     over a large array; designed to resist GPU, FPGA, and ASIC attacks.
