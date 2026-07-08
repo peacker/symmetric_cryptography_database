@@ -6222,7 +6222,20 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - inspired_by
+    note: Quartet organizes its 256-bit internal state into four 64-bit lanes, adopting
+      Keccak's lane-based state layout because it is well known to be efficient in
+      hardware.
+  - source_family_id: ascon
+    relations:
+    - inspired_by
+    - similar_bit_based_permutation_layer
+    note: Quartet's linear diffusion step reuses, in an adapted form, the linear diffusion
+      functions from Ascon's permutation to spread differences quickly through the
+      state.
   notes: 'Zhang 2019. Stream cipher-based AEAD with 4 × 64-bit lanes = 256-bit internal state. Key=128, nonce/IV=96, tag=128
     (primary) or 64. χ function (only non-linear step): x_i ← x_i ⊕ (x_{i+2} ⊕ 1) · x_{i+1} — AND+XOR, analogous to Keccak
     χ but on 64-bit words. ρ function: splits each 64-bit lane into two 32-bit words, rotates each left. λ function: 64-bit
@@ -6347,7 +6360,18 @@ families:
   reference_ids:
   - remus_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: skinny
+    relations:
+    - inspired_by
+    note: Remus is instantiated using the SKINNY tweakable block cipher as the underlying
+      primitive of its TBC-based AEAD mode.
+  - source_family_id: romulus
+    relations:
+    - variant_of
+    note: Remus shares its basic architecture with Romulus (both evolved from the block-cipher
+      mode COFB) but replaces Romulus's direct TBC keying with a tweak-dependent key
+      derivation to reduce the size of the required tweakable block cipher.
   notes: REMUS is a lightweight AEAD mode family introduced alongside Romulus and instantiated with Skinny-based primitives.
 - id: saeaes
   name: SAEAES
@@ -6379,7 +6403,15 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - same_sbox
+    - same_key_schedule
+    - same_round_function
+    note: SAEAES instantiates the SAEB lightweight AEAD mode with the unmodified, NIST-standardized
+      AES block cipher, directly reusing AES's S-box, key schedule, and round function
+      without structural change.
   notes: 'Naito et al. (Mitsubishi Electric / Univ. Electro-Communications) 2019. AES instantiation of the SAEB (Small, Slim,
     Sponge-based AEAD from Block cipher) mode. Block size n=128, 10 members varying k∈{128,192,256}, r1∈{64,120}, τ∈{64,128}.
     Primary: SAEAES128_64_128 (k=128, nonce r2=120, plaintext-block r=64, tag τ=128). XOR-only, online, inverse-free, minimum
@@ -7022,7 +7054,25 @@ families:
   reference_ids:
   - thank_goodness_it_s_friday_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: gift
+    relations:
+    - improvement_of
+    - same_sbox
+    note: 'TGIF-TBC is explicitly designed as an improvement over the 128-bit GIFT
+      cipher: it uses GIFT-64 as an internal building block, retaining GIFT''s S-box
+      and the effect of its bit permutation via an equivalent bitslice representation,
+      while adding tweak capability.'
+  - source_family_id: misty1
+    relations:
+    - inspired_by
+    note: TGIF-TBC combines two GIFT-64-based instances into a 128-bit tweakable block
+      cipher using a Misty-type structure.
+  - source_family_id: remus
+    relations:
+    - variant_of
+    note: The TGIF authenticated-encryption mode is taken directly from the Remus submission,
+      with TGIF-TBC substituted as the underlying block cipher.
   notes: TGIF is a lightweight AEAD design based on a tweakable-SPN core TGIF-TBC and an authenticated-encryption mode.
 - id: three_key_triple_des
   name: Three-key Triple DES
@@ -7157,7 +7207,15 @@ families:
   reference_ids:
   - triad_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: trivium
+    relations:
+    - improvement_of
+    - variant_of
+    note: Triad-SC directly inherits Trivium's three-register NLFSR design philosophy,
+      modifying the tap-spacing property from a multiple of 3 to a multiple of 2, shrinking
+      the state from 288 to 256 bits, and adding a fourth AND gate to compensate for
+      the resulting security margin loss.
   notes: TRIAD is a stream-cipher-based construction providing both Triad-AE (AEAD) and Triad-HASH in the NIST LWC Round 1
     submission.
 - id: trivium
@@ -7382,7 +7440,18 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: ascon
+    relations:
+    - same_bit_based_permutation_layer
+    note: The MixRows step of Yarará/Coral's linear diffusion layer applies bit-rotation
+      functions that use the same constants as the first four equivalent functions
+      in Ascon's linear diffusion layer.
+  - source_family_id: serpent
+    relations:
+    - same_sbox
+    note: The shared 4-bit S-box used by both Yarará and Coral is affine equivalent
+      to Serpent's S-box S3, giving it identical differential/linear properties.
   notes: 'Montes & Penazzi 2019. Two related lightweight algorithms sharing a 256-bit permutation (four 64-bit words). Round
     function = LD ∘ S ∘ C: C adds round constant to x_1, S is a substitution layer, LD is a linear diffusion layer. Operations:
     AND, NOT, XOR, 64-bit rotations. Yarará (AEAD): rate=64, capacity=192, key=128, nonce=128, tag=128. Uses permutations
@@ -9017,7 +9086,17 @@ families:
     - round_2
     - finalist
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: photon
+    relations:
+    - variant_of
+    - same_sbox
+    - same_shift_row
+    - same_mix_column
+    - same_round_constants
+    note: PHOTON-Beetle uses PHOTON256, the unmodified 256-bit permutation from the
+      PHOTON hash function, as its underlying permutation, including its S-box, ShiftRows,
+      MixColumnSerial matrix and round constants.
   notes: 'Bao et al. 2019. PHOTON-Beetle uses PHOTON256 (256-bit, 12 rounds, 8×8 array of 4-bit cells) in Beetle sponge mode.
     PHOTON256 round: AddConstant, SubCells (4-bit S-box), ShiftRows, MixColumnSerial (serial matrix M over GF(2^4), poly x^4+x+1).
     Beetle mode uses ρ function (Shuffle + XOR) for ciphertext generation; differs from standard Sponge Duplex. Primary AEAD:
@@ -9056,7 +9135,16 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - variant_of
+    - same_sbox
+    - same_key_schedule
+    - same_round_function
+    note: SIV-Rijndael256 uses Rijndael256, an unmodified member of the Rijndael family
+      with a 256-bit block distinct from the three AES-selected parameter sets, directly
+      as its underlying block cipher inside SIV mode.
   notes: 'Bao et al. 2019. Rijndael256 is the Rijndael block cipher with fixed block length 256 bits (Nb=8) and key length
     128 bits (Nk=4), 14 rounds. SPN: SubBytes (8-bit Rijndael S-box), ShiftRows (shifts 0,1,3,4), MixColumns (GF(2^8), x^8+x^4+x^3+x+1
     irred. poly), AddRoundKey. SIV mode (nonce-misuse resistant): PRF F_K (CBC-MAC variant) generates tag/IV; OFB encryption
@@ -9098,7 +9186,25 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: photon
+    relations:
+    - variant_of
+    - same_shift_row
+    - same_mix_column
+    note: The TEM-PHOTON tweakable block cipher is built directly on the PHOTON permutation
+      P256, reusing its SubCells, ShiftRows and MixColumnSerial layers, extending the
+      round count and modifying the round-constant generator.
+  - source_family_id: present
+    relations:
+    - same_sbox
+    note: TEM-PHOTON's SubCells nonlinear substitution applies the PRESENT S-box to
+      each cell of the internal state.
+  - source_family_id: led
+    relations:
+    - same_round_constants
+    note: The LFSR used to generate the extended round constants for TEM-PHOTON's 20-round
+      permutation is explicitly borrowed from LED.
   notes: 'Bao et al. 2019. TEM-PHOTON = Tweakable Even-Mansour with PHOTON P256 permutation. Block=256 bits, key=128 bits,
     tweak=128 bits. TEM uses 4 iterations, each with 5-round P256[d] (20 total rounds; P256 in original PHOTON has 12). P256
     uses PRESENT 4-bit S-box, ShiftRows, MixColumnSerial over GF(2^4) (poly x^4+x+1), domain separator AddDomain[d]. SIV mode
@@ -9138,7 +9244,18 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: skinny
+    relations:
+    - variant_of
+    - same_sbox
+    - same_key_schedule
+    - same_shift_row
+    - same_mix_column
+    note: SKINNY-AEAD and SKINNY-Hash wrap the unmodified SKINNY-128-256/SKINNY-128-384
+      tweakable block ciphers inside the ThetaCB3 AEAD mode and a sponge construction
+      respectively; the designers state they decided not to modify the cipher from
+      its original specification.
   notes: 'Beierle et al. 2019. SKINNY-AEAD uses SKINNY tweakable block ciphers in ΘCB3 mode (beyond-birthday-bound AEAD via
     tweakable BC). Primary (M1-M4): SKINNY-128-384, block=128 bits, tweakey=384 bits (key=128, tweak=256), 56 rounds. Secondary
     (M5-M6): SKINNY-128-256, block=128, tweakey=256, 48 rounds. SKINNY SPN: SubBytes (8-bit S-box), ShiftRows, MixColumns
