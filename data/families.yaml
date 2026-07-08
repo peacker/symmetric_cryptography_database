@@ -2921,14 +2921,7 @@ families:
   - bertoni_et_al_2007_sponge_functions
   - daemen_2019_subterranean_v2
   process_participations: []
-  influences:
-  - source_family_id: xoodyak
-    relations:
-    - inspired_by
-    note: Subterranean 2.0 replaces the original hash/stream-cipher interface
-      of Subterranean with a duplex object and a set of modes (XOF, deck
-      function, session-authenticated-encryption scheme) built on top of it,
-      which the specification states are inspired by Xoodyak.
+  influences: []
   innovative_ideas:
   - id: subterranean_absorb_then_squeeze_precursor
     name: Pre-sponge absorbing and squeezing phases
@@ -8153,11 +8146,7 @@ families:
     - phase_3
     - portfolio_hw
     status: portfolio
-  influences:
-  - source_family_id: grain_128
-    relations:
-    - related_to
-    note: Grain (v0, 80-bit key) was later extended to Grain-128 (128-bit key) for higher security.
+  influences: []
   innovative_ideas:
   - id: grain_lfsr_nlfsr_pair
     name: Paired LFSR/NFSR for guaranteed minimum period with nonlinearity
