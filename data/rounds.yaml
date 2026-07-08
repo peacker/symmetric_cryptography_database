@@ -1676,6 +1676,25 @@ rounds:
   notes: 'Per text word: clock-controlled LFSR output feeds a multiply-and-subtract nonlinear
     filter with autokey feedback (ciphertext-dependent), then a two-stage XOR/subtract combiner
     produces the output word.'
+- id: cube_cipher_round
+  name: CUBE Cipher round
+  kind: full_round
+  spec:
+    state_model:
+      cube_dimension: 4
+      state_bits: 64
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: mix_columns
+    - component_id: bit_permutation
+    constant_injection: round_key_xor
+  notes: KeyAdd XORs the round subkey; SbLayer applies the involutive S-box to every n-bit
+    word of the n x n x n cube in parallel; MDSLayer applies a quasi-involutive linear Feistel-MDS
+    transform on each plane; the permutation layer then rotates the cube's reference axes.
 - id: radiogatun_round
   name: RadioGatún belt-and-mill round
   kind: full_round

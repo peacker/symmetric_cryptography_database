@@ -1419,6 +1419,20 @@ references:
   publisher: Springer
   url: https://www.iacr.org/archive/fse2002/23650166/23650166.pdf
   notes: 'Local copy: references/2002-beepbeep.pdf.'
+- id: berger_et_al_2015_cube
+  kind: presentation
+  title: 'CUBE Cipher: A Family of Quasi-Involutive Block Ciphers Easy to Mask (slides)'
+  authors:
+  - Thierry Berger
+  - Julien Francq
+  - Marine Minier
+  year: 2015
+  venue: Clermont-Ferrand Seminar, October 2015; based on the C2SI 2015 paper of the same
+    title
+  url: https://doi.org/10.1007/978-3-319-18681-8_8
+  notes: 'The C2SI 2015 conference paper (Springer, DOI above) is paywalled; these seminar
+    slides cover the full design (round function, all three instantiations, key schedule,
+    security analysis) and are used as the local copy: references/2015-cube-presentation.pdf.'
 - id: bertoni_et_al_2006_radiogatun
   kind: paper
   title: 'RadioGatún, a Belt-and-Mill Hash Function'

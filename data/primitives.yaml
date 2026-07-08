@@ -1694,6 +1694,19 @@ primitives:
     state_size_bits: 224
   notes: Key equals the entire 224-bit initial crypto state; no separate block/key-size split
     is defined.
+- id: cube_cipher_64_128
+  name: CUBE (n=4)
+  family_id: cube_cipher
+  primitive_type: block_cipher
+  reference_ids:
+  - berger_et_al_2015_cube
+  characteristics:
+    block_size_bits: 64
+    output_size_bits: 64
+    key_size_bits: 128
+    rounds: 15
+  notes: Primary n=4 instantiation (CUBE and CUBE_AES variants differ only in the permutation-layer
+    choice).
 - id: radiogatun_hash
   name: RadioGatún
   family_id: radiogatun

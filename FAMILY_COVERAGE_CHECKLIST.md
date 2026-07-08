@@ -123,6 +123,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | CRYPTON | CRYPTON | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | CryptMT3 | CryptMT3 | stream_cipher | 2004 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_2 | Full | yes |
 | [x] | CS-Cipher | CS-Cipher | block_cipher | 1998 | https://link.springer.com/chapter/10.1007/3-540-69710-1_3 | Full | yes |
+| [x] | CUBE Cipher | CUBE Cipher | block_cipher | 2015 | https://doi.org/10.1007/978-3-319-18681-8_8 | Slides only (paper paywalled) | yes |
 | [x] | DEAL | DEAL | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
 | [x] | DECIM | DECIM | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/decim.pdf | Full | yes |
 | [x] | Deoxys | Deoxys | tweakable_block_cipher | 2016 | https://competitions.cr.yp.to/caesar-submissions.html | Full | yes |

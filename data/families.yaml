@@ -3253,6 +3253,56 @@ families:
     using a 127-bit clock-controlled LFSR feeding a multiply-and-subtract nonlinear filter
     and a two-stage combiner, with its entire 7-word crypto state fitting in a typical 32-bit
     CPU's register set.
+- id: cube_cipher
+  name: CUBE Cipher
+  construction_ids:
+  - bit_based_spn
+  round_ids:
+  - cube_cipher_round
+  target_applications:
+  - lightweight
+  - hardware
+  - side_channel_resistant
+  characteristics:
+    block_size_bits: 64
+    key_size_bits: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: mix_columns
+    - id: bit_permutation
+    - id: xor
+  reference_ids:
+  - berger_et_al_2015_cube
+  process_participations: []
+  influences:
+  - source_family_id: noekeon
+    relations:
+    - same_sbox
+    note: CUBE's n=4 instantiation uses the involutive NOEKEON S-box applied to each of the
+      16 nibbles in parallel as its SbLayer, chosen for its optimal differential/linear probabilities
+      and cheap masked implementation.
+  - source_family_id: present
+    relations:
+    - same_bit_based_permutation_layer
+    - improved_diffusion
+    note: The CUBE variant (as opposed to CUBE_AES) explicitly keeps PRESENT's bit permutation,
+      adding a quasi-involutive MDS diffusion layer specifically to discard the statistical
+      properties and linear hulls that were exploitable in PRESENT.
+  - source_family_id: photon
+    relations:
+    - inspired_by
+    note: CUBE's recursive, quasi-involutive MDS diffusion is built the same way as PHOTON's,
+      using an iterative generalized-Feistel approach, differing only in that CUBE's underlying
+      matrix is not a companion matrix.
+  notes: CUBE Cipher is a family of quasi-involutive, easy-to-mask lightweight block ciphers
+    (Berger, Francq, and Minier, C2SI 2015) organized as an n x n x n bit cube. Each round
+    applies a subkey XOR, a layer of parallel involutive n-bit S-boxes, a quasi-involutive
+    MDS diffusion layer, and one of two permutation choices (CUBE_AES or CUBE), with instantiations
+    at n=4 (64-bit block, 128-bit key, 15 rounds), n=5, and n=6. Involutive components make
+    decryption near-free to implement alongside encryption.
 - id: radiogatun
   name: RadioGatún
   construction_ids:
@@ -3993,7 +4043,13 @@ families:
     stage_ids:
     - second_prize
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: cube_cipher
+    relations:
+    - inspired_by
+    - generalization_of
+    note: ANT's LFSR-based key-schedule diffusion technique is stated to extend an
+      approach first used in the SPN-based CUBE cipher.
   notes: 'ANT is a lightweight Feistel family with bit-based round functions composed of AND, rotation, and XOR operations.
     Published variants are ANT-128/128, ANT-128/256, and ANT-256/256.
 
