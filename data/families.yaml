@@ -2961,6 +2961,286 @@ families:
     other direction, an arbitrary-length keystream. Its gamma/pi/theta round
     structure and belt-and-mill architecture were carried forward into RadioGatún
     and, ultimately, Keccak, by the same designer.'
+- id: pes
+  name: PES
+  construction_ids:
+  - lay_massey
+  round_ids:
+  - pes_round
+  target_applications:
+  - generic
+  - historical
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: add_mod
+      params:
+        modulus: 65536
+    - id: mul_mod
+      params:
+        modulus: 65537
+    - id: xor
+  reference_ids:
+  - lai_massey_1990_pes
+  process_participations: []
+  influences: []
+  notes: PES (Proposed Encryption Standard) is an 8-round, 64-bit Lai-Massey cipher with a
+    128-bit key, mixing XOR, addition modulo 2^16, and multiplication modulo 2^16+1 under
+    three different algebraic group operations. A weakness in its key schedule found via differential
+    cryptanalysis led its designers to revise it into IPES, later renamed IDEA.
+- id: rectangle
+  name: RECTANGLE
+  construction_ids:
+  - bit_based_spn
+  round_ids:
+  - rectangle_round
+  target_applications:
+  - lightweight
+  - hardware
+  - software
+  characteristics:
+    block_size_bits: 64
+    key_size_bits_min: 80
+    key_size_bits_max: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: rotation_fixed
+  reference_ids:
+  - zhang_et_al_2014_rectangle
+  process_participations: []
+  influences: []
+  notes: RECTANGLE is a bit-slice-oriented lightweight SPN block cipher with a 4x16-bit state
+    (64-bit block), 25 rounds, 16 parallel 4-bit S-boxes per round, and a permutation layer
+    built from three row-wise rotations, chosen to give fast constant-time implementations
+    in both hardware and SIMD software.
+- id: spongent
+  name: spongent
+  construction_ids:
+  - sponge_construction
+  round_ids:
+  - spongent_round
+  target_applications:
+  - lightweight
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: bit_permutation
+    - id: lfsr
+  reference_ids:
+  - bogdanov_et_al_2011_spongent
+  process_participations: []
+  influences:
+  - source_family_id: present
+    relations:
+    - same_sbox
+    - similar_bit_based_permutation_layer
+    - generalization_of
+    note: spongent's present-type permutation reuses the PRESENT S-box unchanged and generalizes
+      PRESENT's bit permutation to arbitrary widths, wrapped in a sponge construction to build
+      a lightweight hash function family.
+  notes: spongent is a family of lightweight sponge hash functions (88- to 256-bit outputs)
+    instantiated with a present-type permutation, following the hermetic sponge strategy.
+- id: sliscp
+  name: sLiSCP
+  construction_ids:
+  - generalized_feistel
+  round_ids:
+  - sliscp_round
+  target_applications:
+  - lightweight
+  - hardware
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: and
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - altawy_et_al_2017_sliscp
+  process_participations: []
+  influences:
+  - source_family_id: simon
+    relations:
+    - variant_of
+    note: sLiSCP's round function uses round-reduced, unkeyed Simeck-48 or Simeck-64 (an AND-rotation-XOR
+      variant of the Simon round function) inside a 4-subblock Type-2 generalized Feistel
+      structure.
+  notes: sLiSCP is a family of lightweight permutations (sLiSCP-192, sLiSCP-256) built from
+    a 4-subblock Type-2 generalized-Feistel structure with round-reduced, unkeyed Simeck as
+    the round function, designed to be used as a unified duplex-sponge core for both encryption
+    and hashing.
+- id: sliscp_light
+  name: sLiSCP-light
+  construction_ids:
+  - generalized_feistel
+  round_ids:
+  - sliscp_light_round
+  target_applications:
+  - lightweight
+  - hardware
+  characteristics:
+    components:
+    - id: and
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - altawy_et_al_2018_sliscp_light
+  process_participations: []
+  influences:
+  - source_family_id: sliscp
+    relations:
+    - improvement_of
+    - variant_of
+    note: sLiSCP-light revisits the sLiSCP design, turning its generalized-Feistel structure
+      into a Partial Substitution-Permutation Network to reduce hardware area by about 16%
+      versus sLiSCP while keeping the same Simeck-based round function.
+  - source_family_id: simon
+    relations:
+    - variant_of
+    note: Like sLiSCP, sLiSCP-light uses round-reduced, unkeyed Simeck as its round function,
+      an AND-rotation-XOR variant of the Simon round function.
+  notes: sLiSCP-light is a lighter-hardware-footprint successor to sLiSCP, replacing its generalized-Feistel
+    structure with a Partial SPN construction while retaining the Simeck-based round function.
+- id: norx
+  name: NORX
+  construction_ids:
+  - duplex_mode
+  round_ids:
+  - norx_round
+  target_applications:
+  - generic
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: add_mod
+    - id: rotation_fixed
+    - id: xor
+  reference_ids:
+  - aumasson_et_al_2016_norx
+  process_participations: []
+  influences:
+  - source_family_id: chacha
+    relations:
+    - inspired_by
+    - similar_bit_based_permutation_layer
+    note: NORX's G function is explicitly inspired by ChaCha's quarter-round function, adapted
+      to a parallel monkeyDuplex-based AEAD construction rather than a stream-cipher core.
+  notes: NORX is a parallel, sponge/monkeyDuplex-based authenticated encryption family submitted
+    to the CAESAR competition, built around an ARX permutation with a tunable parallelism
+    degree and tag size.
+- id: sparx
+  name: SPARX
+  construction_ids:
+  - arx_permutation_network
+  round_ids:
+  - sparx_round
+  target_applications:
+  - lightweight
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: add_mod
+    - id: rotation_fixed
+    - id: xor
+  reference_ids:
+  - dinu_et_al_2016_sparx
+  process_participations: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - inspired_by
+    - generalization_of
+    note: SPARX's Long Trail Strategy for bounding differential/linear trail probabilities
+      is explicitly stated to be inspired by the wide-trail argument introduced in the design
+      of AES, generalized from look-up-table S-boxes to large ARX-based S-boxes.
+  notes: SPARX is a family of ARX-based lightweight block ciphers (Sparx-64/128, Sparx-128/128,
+    Sparx-128/256) designed with the Long Trail Strategy, the first ARX construction with
+    provable bounds on differential and linear trail probabilities.
+- id: wg
+  name: WG
+  construction_ids:
+  - filtered_lfsr
+  round_ids:
+  - wg_round
+  target_applications:
+  - hardware
+  - generic
+  characteristics:
+    state_size_bits: 319
+    components:
+    - id: lfsr
+      params:
+        length: 11
+    - id: nonlinear_filter
+  reference_ids:
+  - nawaz_gong_2005_wg
+  process_participations: []
+  influences: []
+  notes: WG (Welch-Gong) is a word-oriented stream cipher built from an 11-stage LFSR over
+    GF(2^29) filtered by a Welch-Gong transformation, designed to produce keystream with provable
+    randomness properties (balance, long period, ideal 2-level autocorrelation).
+- id: lowmc
+  name: LowMC
+  construction_ids:
+  - bit_based_spn
+  round_ids:
+  - lowmc_round
+  target_applications:
+  - mpc
+  - fhe
+  - zero_knowledge
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 3
+        output_bits: 3
+    - id: binary_matrix_mul
+    - id: xor
+  reference_ids:
+  - albrecht_et_al_2015_lowmc
+  process_participations: []
+  influences: []
+  notes: LowMC is a family of block ciphers parameterized by block size, key size, and the
+    number of 3-bit S-boxes applied per round (a partial substitution layer covering only
+    part of the state, the rest passed through an identity map), designed to minimize multiplicative
+    complexity/depth for MPC, FHE, and zero-knowledge-proof applications.
+- id: beepbeep
+  name: BeepBeep
+  construction_ids:
+  - lfsr_nlfsr_register_network
+  round_ids:
+  - beepbeep_round
+  target_applications:
+  - embedded
+  - real_time
+  - hardware
+  characteristics:
+    state_size_bits: 224
+    components:
+    - id: lfsr
+      params:
+        length: 127
+    - id: mul_mod
+    - id: add_mod
+    - id: xor
+  reference_ids:
+  - driscoll_2002_beepbeep
+  process_participations: []
+  influences: []
+  notes: BeepBeep is a word-oriented autokey stream cipher for embedded real-time systems,
+    using a 127-bit clock-controlled LFSR feeding a multiply-and-subtract nonlinear filter
+    and a two-stage combiner, with its entire 7-word crypto state fitting in a typical 32-bit
+    CPU's register set.
 - id: radiogatun
   name: RadioGatún
   construction_ids:

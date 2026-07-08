@@ -17,7 +17,7 @@ from __future__ import annotations
 from reference_pdfs import build_family_pdf_map
 
 KNOWN_MISSING = {
-    "abacus", "ade", "aes", "aria", "arirang", "aurora", "blender",
+    "abacus", "aes", "aria", "arirang", "aurora", "blender",
     "blue_midnight_wish", "boole", "catfish", "cheetah", "chi_hash", "clefia",
     "cmea", "crunch", "crypton", "cubehash", "dch", "deal", "dynamic_sha",
     "dynamic_sha2", "echo_hash", "ecoh", "edon_r", "enrupt", "essence",
@@ -25,7 +25,7 @@ KNOWN_MISSING = {
     "labyrinth", "lane", "lea_iso", "lesamnta", "luffa", "lux_hash",
     "m3lcrypt", "mcrypton", "mcssha3", "md6", "meshhash", "mibs", "mmb",
     "msx", "multi2", "nasha", "newdes", "oryx", "panama", "pea", "picaro",
-    "pufferfish", "rc4plus", "rsb", "sandstorm", "sarmal", "sgail", "shabal",
+    "pufferfish", "rc4plus", "sandstorm", "sarmal", "sgail", "shabal",
     "shamata", "shavite3", "simd_hash", "siphash", "spectral_hash",
     "streamhash", "swifftx", "tangle_hash", "tib3", "twine", "twister_hash",
     "ulbc", "vmpc", "vortex_hash", "wake", "wamm", "waterfall_hash",

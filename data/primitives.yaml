@@ -1581,6 +1581,119 @@ primitives:
     state_size_bits: 544
   notes: Combined hash/stream-cipher construction; the same state/buffer engine
     can be run in stream-cipher mode to generate a keystream instead of a digest.
+- id: pes_64_128
+  name: PES
+  family_id: pes
+  primitive_type: block_cipher
+  reference_ids:
+  - lai_massey_1990_pes
+  characteristics:
+    block_size_bits: 64
+    output_size_bits: 64
+    key_size_bits: 128
+    rounds: 8
+  notes: Original 1990 design; superseded by IPES/IDEA after Biham and Shamir's differential
+    cryptanalysis exposed a key-schedule weakness.
+- id: rectangle_64_80
+  name: RECTANGLE-80
+  family_id: rectangle
+  primitive_type: block_cipher
+  reference_ids:
+  - zhang_et_al_2014_rectangle
+  characteristics:
+    block_size_bits: 64
+    output_size_bits: 64
+    key_size_bits: 80
+    rounds: 25
+  notes: Primary 80-bit-key parameterization.
+- id: spongent_88
+  name: spongent-88
+  family_id: spongent
+  primitive_type: hash_function
+  reference_ids:
+  - bogdanov_et_al_2011_spongent
+  characteristics:
+    output_size_bits: 88
+    state_size_bits: 88
+    rate_bits: 8
+    capacity_bits: 80
+    rounds: 45
+  notes: Smallest variant, offering preimage resistance only (not collision resistance).
+- id: sliscp_192
+  name: sLiSCP-192
+  family_id: sliscp
+  primitive_type: permutation
+  reference_ids:
+  - altawy_et_al_2017_sliscp
+  characteristics:
+    state_size_bits: 192
+  notes: Built from round-reduced, unkeyed Simeck-48.
+- id: sliscp_light_192
+  name: sLiSCP-light-192
+  family_id: sliscp_light
+  primitive_type: permutation
+  reference_ids:
+  - altawy_et_al_2018_sliscp_light
+  characteristics:
+    state_size_bits: 192
+  notes: Partial-SPN successor to sLiSCP-192 with roughly 16% smaller hardware area.
+- id: norx32_4_1
+  name: NORX32-4-1
+  family_id: norx
+  primitive_type: aead
+  reference_ids:
+  - aumasson_et_al_2016_norx
+  characteristics:
+    state_size_bits: 512
+    key_size_bits: 128
+    nonce_size_bits: 128
+    tag_size_bits: 128
+    rounds: 4
+  notes: 32-bit-word instance with 4 rounds per permutation call and no parallelism (p=1);
+    the NORX reference default.
+- id: sparx_64_128
+  name: Sparx-64/128
+  family_id: sparx
+  primitive_type: block_cipher
+  reference_ids:
+  - dinu_et_al_2016_sparx
+  characteristics:
+    block_size_bits: 64
+    output_size_bits: 64
+    key_size_bits: 128
+  notes: Lightest SPARX instance, with two 32-bit branches.
+- id: wg_29
+  name: WG (GF(2^29))
+  family_id: wg
+  primitive_type: stream_cipher
+  reference_ids:
+  - nawaz_gong_2005_wg
+  characteristics:
+    state_size_bits: 319
+    key_size_bits: 80
+  notes: Original eSTREAM Profile 2 hardware-oriented submission over GF(2^29).
+- id: lowmc_128_256
+  name: LowMC(128,256,...)
+  family_id: lowmc
+  primitive_type: block_cipher
+  reference_ids:
+  - albrecht_et_al_2015_lowmc
+  characteristics:
+    block_size_bits: 256
+    output_size_bits: 256
+    key_size_bits: 128
+  notes: An AES-128-comparable-security parameterization used as a running example in the
+    original paper (AND-depth 12, ~8.85 ANDs/bit).
+- id: beepbeep_224
+  name: BeepBeep
+  family_id: beepbeep
+  primitive_type: stream_cipher
+  reference_ids:
+  - driscoll_2002_beepbeep
+  characteristics:
+    state_size_bits: 224
+  notes: Key equals the entire 224-bit initial crypto state; no separate block/key-size split
+    is defined.
 - id: radiogatun_hash
   name: RadioGatún
   family_id: radiogatun

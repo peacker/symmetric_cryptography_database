@@ -1545,6 +1545,137 @@ rounds:
     and the linear theta diffusion to the 17-word state, XORing in two taps from
     the 32-stage buffer; the buffer itself advances by a linear feedback shift
     driven by the state.
+- id: pes_round
+  name: PES Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      word_bits: 16
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 65536
+    - component_id: mul_mod
+      params:
+        modulus: 65537
+    - component_id: xor
+    constant_injection: none
+  notes: Eight structurally identical rounds followed by an output transformation; the direct
+    structural predecessor of the IDEA round function.
+- id: rectangle_round
+  name: RECTANGLE Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      rows: 4
+      columns: 16
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: rotation_fixed
+    constant_injection: round_key_xor
+  notes: SubColumn applies 16 parallel 4-bit S-boxes down the columns of a 4x16 state; ShiftRow
+    rotates each of the 4 rows by a different fixed amount.
+- id: spongent_round
+  name: spongent present-type round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: lfsr
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: bit_permutation
+    constant_injection: lfsr_counter
+  notes: Each round XORs in an LFSR-derived round constant (added at both ends of the state),
+    applies a layer of parallel 4-bit PRESENT S-boxes, then a PRESENT-style bit permutation
+    generalized to the variant's width.
+- id: sliscp_round
+  name: sLiSCP round
+  kind: full_round
+  spec:
+    state_model:
+      subblocks: 4
+    component_flow:
+    - component_id: and
+    - component_id: rotation_fixed
+    - component_id: xor
+  notes: 4-subblock Type-2 generalized-Feistel step using round-reduced, unkeyed Simeck-48
+    (sLiSCP-192) or Simeck-64 (sLiSCP-256) as the two round functions.
+- id: sliscp_light_round
+  name: sLiSCP-light round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: and
+    - component_id: rotation_fixed
+    - component_id: xor
+  notes: Partial Substitution-Permutation Network step reusing sLiSCP's Simeck-based round
+    function with a lighter-hardware linear/diffusion layer.
+- id: norx_round
+  name: NORX G function
+  kind: quarterround
+  spec:
+    component_flow:
+    - component_id: add_mod
+    - component_id: rotation_fixed
+    - component_id: xor
+  notes: ARX G function applied in column and diagonal steps over the 4x4 word state, in the
+    style of ChaCha/BLAKE2, iterated l times per permutation call.
+- id: sparx_round
+  name: SPARX ARX-box step
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+    - component_id: rotation_fixed
+    - component_id: xor
+  notes: Speck-like ARX-box applied to each branch, followed by a linear layer (Feistel-style
+    mixing of branches) chosen to satisfy the Long Trail Strategy's diffusion requirements.
+- id: wg_round
+  name: WG keystream generation step
+  kind: step
+  spec:
+    component_flow:
+    - component_id: lfsr
+    - component_id: nonlinear_filter
+  notes: Each step clocks the 11-stage GF(2^29) LFSR and applies the WG transformation (a
+    permutation with 2-level autocorrelation, designed via decimation of Kasami/Gold power
+    functions) to a tapped stage to produce one keystream symbol.
+- id: lowmc_round
+  name: LowMC round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 3
+        output_bits: 3
+    - component_id: binary_matrix_mul
+    - component_id: xor
+  notes: A partial substitution layer applies a small number of 3-bit S-boxes to part of the
+    state (the rest is left unchanged), followed by a dense random affine (binary-matrix)
+    layer and round-key/round-constant XOR.
+- id: beepbeep_round
+  name: BeepBeep processing loop
+  kind: step
+  spec:
+    state_model:
+      state_words: 7
+      word_bits: 32
+    component_flow:
+    - component_id: lfsr
+    - component_id: mul_mod
+    - component_id: add_mod
+    - component_id: xor
+  notes: 'Per text word: clock-controlled LFSR output feeds a multiply-and-subtract nonlinear
+    filter with autokey feedback (ciphertext-dependent), then a two-stage XOR/subtract combiner
+    produces the output word.'
 - id: radiogatun_round
   name: RadioGatún belt-and-mill round
   kind: full_round

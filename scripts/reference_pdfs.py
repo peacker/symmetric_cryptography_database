@@ -52,6 +52,19 @@ def strip_version_suffix(compact_stem: str) -> str:
     return re.sub(r"v\d+(?:\d)*$", "", compact_stem)
 
 
+def raw_tokens(stem: str) -> set[str]:
+    """Split a filename stem on non-alnum, dropping a leading 4-digit year.
+    Used to recognize names listed as their own word in multi-cipher
+    filenames (e.g. "...-[kalyna,mukhomor,ade,labirinth,rsb].pdf"), which a
+    single compacted blob would otherwise merge into one unrecognizable run.
+    """
+    parts = re.split(r"[^a-z0-9]+", stem.lower())
+    parts = [p for p in parts if p]
+    if parts and re.fullmatch(r"(19|20)\d{2}", parts[0]):
+        parts = parts[1:]
+    return set(parts)
+
+
 def local_files() -> list[Path]:
     return sorted(p for p in REFERENCES_DIR.iterdir() if p.is_file() and p.suffix.lower() in {".pdf", ".txt"})
 
@@ -80,15 +93,31 @@ def fuzzy_match(ref: dict, family_names: list[str], files: list[Path]) -> list[P
         stem_compact = strip_year_prefix(compact(f.stem))
         if not stem_compact:
             continue
+        tokens = raw_tokens(f.stem)
         for c in id_compacts:
-            # Short ids (e.g. "q", "rig", "chi") require an exact stem match to
-            # avoid false substring hits (e.g. "rig" inside "original",
-            # "chi" inside "kuznyechik").
+            # A name listed as its own word works regardless of length (handles
+            # both short ids and multi-cipher filenames like
+            # "...-[kalyna,mukhomor,ade,labirinth,rsb].pdf" where each bracketed
+            # name is comma-separated, i.e. its own token).
+            if c in tokens:
+                direct.append(f)
+                break
+            # Short ids (e.g. "q", "rig", "chi") additionally require an exact
+            # *whole-stem* match to avoid false substring hits ("rig" inside
+            # "original", "chi" inside "kuznyechik") that a prefix check alone
+            # wouldn't catch.
             if len(c) <= 3:
                 if stem_compact == c or strip_version_suffix(stem_compact) == c:
                     direct.append(f)
                     break
-            elif c in stem_compact:
+                continue
+            # Longer ids: filenames follow a "{year}-{primary_name}[-suffix]"
+            # convention, so the cipher name always starts right after the year
+            # prefix — require a prefix match rather than "appears anywhere",
+            # otherwise names that happen to be English-word fragments of
+            # another word give false positives (e.g. "tangle" inside
+            # "rectangle").
+            if stem_compact.startswith(c):
                 direct.append(f)
                 break
     if direct:

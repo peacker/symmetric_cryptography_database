@@ -1289,6 +1289,136 @@ references:
   publisher: Springer
   url: https://eprint.iacr.org/2012/351
   notes: No local copy available.
+- id: lai_massey_1990_pes
+  kind: article
+  title: A Proposal for a New Block Encryption Standard
+  authors:
+  - Xuejia Lai
+  - James L. Massey
+  year: 1990
+  venue: EUROCRYPT 1990, LNCS 473, pp. 389-404
+  publisher: Springer
+  url: https://doi.org/10.1007/3-540-46877-3_35
+  notes: 'Local copy: references/1991-pes.pdf.'
+- id: zhang_et_al_2014_rectangle
+  kind: paper
+  title: 'RECTANGLE: A Bit-slice Lightweight Block Cipher Suitable for Multiple Platforms'
+  authors:
+  - Wentao Zhang
+  - Zhenzhen Bao
+  - Dongdai Lin
+  - Vincent Rijmen
+  - Bohan Yang
+  - Ingrid Verbauwhede
+  year: 2014
+  venue: IACR ePrint 2014/084; journal version Science China Information Sciences 58(12),
+    2015
+  url: https://eprint.iacr.org/2014/084
+  notes: 'Local copy: references/2014-rectangle.pdf.'
+- id: bogdanov_et_al_2011_spongent
+  kind: paper
+  title: 'spongent: A Lightweight Hash Function'
+  authors:
+  - Andrey Bogdanov
+  - Miroslav Knezevic
+  - Gregor Leander
+  - Deniz Toz
+  - Kerem Varici
+  - Ingrid Verbauwhede
+  year: 2011
+  venue: CHES 2011, LNCS 6917, pp. 312-325
+  publisher: Springer
+  url: https://eprint.iacr.org/2011/697
+  notes: 'Local copy: references/2011-spongent.pdf.'
+- id: altawy_et_al_2017_sliscp
+  kind: paper
+  title: 'sLiSCP: Simeck-based Permutations for Lightweight Sponge Cryptographic Primitives'
+  authors:
+  - Riham AlTawy
+  - Raghvendra Rohit
+  - Morgan He
+  - Kalikinkar Mandal
+  - Gangqiang Yang
+  - Guang Gong
+  year: 2017
+  venue: SAC 2017, LNCS 10719, pp. 129-150
+  publisher: Springer
+  url: https://eprint.iacr.org/2017/747
+  notes: 'Local copy: references/2017-sliscp.pdf.'
+- id: altawy_et_al_2018_sliscp_light
+  kind: paper
+  title: 'sLiSCP-light: Towards Lighter Sponge-specific Cryptographic Permutations'
+  authors:
+  - Riham AlTawy
+  - Raghvendra Rohit
+  - Morgan He
+  - Kalikinkar Mandal
+  - Gangqiang Yang
+  - Guang Gong
+  year: 2018
+  venue: ACM Transactions on Embedded Computing Systems 17(4)
+  url: https://cacr.uwaterloo.ca/techreports/2018/cacr2018-01.pdf
+  notes: 'Local copy: references/2018-sliscp_light.pdf.'
+- id: aumasson_et_al_2016_norx
+  kind: specification
+  title: NORX v3.0
+  authors:
+  - Jean-Philippe Aumasson
+  - Philipp Jovanovic
+  - Samuel Neves
+  year: 2016
+  venue: CAESAR competition submission
+  url: https://competitions.cr.yp.to/round3/norxv30.pdf
+  notes: 'Local copy: references/2016-norx.pdf.'
+- id: dinu_et_al_2016_sparx
+  kind: paper
+  title: 'Design Strategies for ARX with Provable Bounds: SPARX and LAX'
+  authors:
+  - Daniel Dinu
+  - Leo Perrin
+  - Aleksei Udovenko
+  - Vesselin Velichkov
+  - Johann Grossschadl
+  - Alex Biryukov
+  year: 2016
+  venue: ASIACRYPT 2016, LNCS 10031, pp. 484-513
+  publisher: Springer
+  url: https://eprint.iacr.org/2016/984
+  notes: 'Local copy: references/2016-sparx.pdf.'
+- id: nawaz_gong_2005_wg
+  kind: report
+  title: The WG Stream Cipher
+  authors:
+  - Yassir Nawaz
+  - Guang Gong
+  year: 2005
+  venue: ECRYPT Stream Cipher Project Report 2005/033
+  url: https://cr.yp.to/streamciphers/wg/desc.pdf
+  notes: 'Local copy: references/2005-wg.pdf.'
+- id: albrecht_et_al_2015_lowmc
+  kind: paper
+  title: Ciphers for MPC and FHE
+  authors:
+  - Martin R. Albrecht
+  - Christian Rechberger
+  - Thomas Schneider
+  - Tyge Tiessen
+  - Michael Zohner
+  year: 2015
+  venue: EUROCRYPT 2015, LNCS 9056, pp. 430-454
+  publisher: Springer
+  url: https://eprint.iacr.org/2016/687
+  notes: 'Local copy: references/2015-lowmc.pdf.'
+- id: driscoll_2002_beepbeep
+  kind: paper
+  title: 'BeepBeep: Embedded Real-Time Encryption'
+  authors:
+  - Kevin Driscoll
+  year: 2002
+  venue: FSE 2002, LNCS 2365, pp. 164-178
+  publisher: Springer
+  url: https://www.iacr.org/archive/fse2002/23650166/23650166.pdf
+  notes: 'Local copy: references/2002-beepbeep.pdf.'
 - id: bertoni_et_al_2006_radiogatun
   kind: paper
   title: 'RadioGatún, a Belt-and-Mill Hash Function'
