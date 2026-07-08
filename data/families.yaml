@@ -434,7 +434,14 @@ families:
   - koo_et_al_2018_cham
   - cryptopp_cham
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: lea
+    relations:
+    - improvement_of
+    note: CHAM was designed explicitly to improve LEA's suitability for resource-constrained
+      8-bit and 16-bit microcontrollers and hardware while keeping LEA's ARX design
+      philosophy; the designers note the resulting structural similarity between the
+      two ciphers.
   innovative_ideas:
   - id: cham_four_branch_arx
     name: Four-branch ARX generalized Feistel design
@@ -2659,7 +2666,15 @@ families:
     - round_2
     - finalist
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: The Delirium instance of Elephant is built directly on Keccak-f[200], the
+      smallest instance of the NIST SHA-3 standard permutation, reusing its round function
+      and 5x5-lane state representation unmodified inside Elephant's LFSR-masked encrypt-then-MAC
+      construction.
 - id: romulus
   name: Romulus
   notes: Romulus is a nonce-based AEAD family built around the SKINNY-128-256 tweakable block cipher, with modes tuned for
@@ -2785,7 +2800,13 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: tea
+    relations:
+    - same_round_constants
+    note: Gimli's round constant is described by its designers as essentially the golden-ratio
+      constant 0x9e3779b9 used in TEA, adopted specifically to break the permutation's
+      round-slide symmetry.
 - id: subterranean
   name: Subterranean
   notes: The original Subterranean design dates to 1992 and was published in 1993.
@@ -2995,7 +3016,18 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: speck
+    relations:
+    - inspired_by
+    note: SNEIK's design rationale states NSA's SPECK was a strong inspiration when
+      studying lightweight ARX algorithms, informing SNEIK's choice of addition-rotation-XOR
+      as its core mixing strategy.
+  - source_family_id: xxtea
+    relations:
+    - inspired_by
+    note: SNEIK's design rationale credits the corrected Block TEA (XXTEA) algorithm
+      by Wheeler and Needham as a great early influence on SNEIK's overall design.
 - id: sycon
   name: Sycon
   notes: Sycon is a 320-bit permutation-based lightweight suite using 5-bit S-boxes and bit permutations for authenticated
@@ -3051,7 +3083,13 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: simon
+    relations:
+    - variant_of
+    note: The nonlinear layer of Spix's permutation, the Simeck S-box, is described
+      as an unkeyed independently parameterized variant of the Simon round function,
+      directly adapting Simon's AND-rotation-XOR nonlinear function.
 - id: spoc
   name: SpoC
   notes: SpoC is a lightweight sponge-based AEAD family that processes plaintext through a rate smaller than the permutation
@@ -3107,7 +3145,33 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: skinny
+    relations:
+    - variant_of
+    - same_sbox_size
+    note: Clyde-128's 4-bit S-box is explicitly a variant of SKINNY's S-box, obtained
+      by replacing SKINNY's NOR gates with AND gates in the circuit representation
+      while keeping the same 4-bit size.
+  - source_family_id: midori
+    relations:
+    - same_mix_column
+    note: Shadow-512's diffusion layer directly reuses the near-MDS 4x4 binary matrix
+      from Midori as its mixing layer.
+  - source_family_id: fantomas_robin
+    relations:
+    - generalization_of
+    - improvement_of
+    note: Clyde-128 and Shadow-512 are simple extensions of the LS-design framework
+      introduced in the Fantomas/Robin paper, adding resistance to invariant attacks
+      and word-level rather than table-based L-boxes.
+  - source_family_id: scream_tbc
+    relations:
+    - variant_of
+    - same_key_schedule
+    note: Clyde-128 is built from the Tweakable LS-design framework introduced as part
+      of the SCREAM CAESAR candidate and directly reuses SCREAM's lightweight tweakey
+      scheduling algorithm.
 - id: knot
   name: KNOT
   notes: KNOT is a family of bit-sliced permutations and sponge modes for lightweight authenticated encryption and hashing,
@@ -3162,7 +3226,12 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: noekeon
+    relations:
+    - related_to
+    note: Pyjamask's authors state the cipher shares some similarities with NOEKEON,
+      specifically citing it for Pyjamask's general SPN structure.
 - id: qameleon
   name: Qameleon
   notes: Qameleon is a lightweight tweakable SPN designed for authenticated encryption, using 4-bit substitution, bit permutations,
@@ -3190,7 +3259,39 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: qarma
+    relations:
+    - same_sbox
+    - same_mix_column
+    - same_shift_row
+    note: Qameleon's underlying tweakable block cipher is QARMA itself, reusing QARMA's
+      S-box, its involutory MixColumns matrix, and its ShuffleCells cell-permutation
+      layer unmodified.
+  - source_family_id: deoxys
+    relations:
+    - variant_of
+    - inspired_by
+    note: Qameleon's PANORAmA mode of operation is stated to be similar to Deoxys-I,
+      differing mainly in how a fractional last block is padded/authenticated and in
+      nonce handling for longer messages.
+  - source_family_id: prince
+    relations:
+    - inherits_alpha_reflexivity_structure
+    note: QARMA, adopted as Qameleon's tweakable block cipher, possesses a property
+      very similar to PRINCE's alpha-reflection, letting the same circuit serve for
+      both encryption and decryption via a core-key offset.
+  - source_family_id: mantis
+    relations:
+    - variant_of
+    note: QARMA is closely related to MANTIS, essentially inheriting the round structure
+      of MIDORI through its MANTIS heritage, while modifying the S-box and diffusion
+      matrix to resist attacks mounted on reduced-round MANTIS.
+  - source_family_id: midori
+    relations:
+    - same_shift_row
+    note: QARMA's ShuffleCells transformation, reused unmodified in Qameleon, is explicitly
+      the MIDORI cell permutation tau.
 - id: saturnin
   name: Saturnin
   notes: Saturnin is a 256-bit block cipher and permutation-like primitive using a 4-bit S-box and MDS diffusion, designed
@@ -3218,7 +3319,18 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - generalization_of
+    note: Saturnin is explicitly designed to mimic the structure of AES, described
+      by its designers as a 3-dimensional AES that extends AES's SPN/wide-trail structure
+      to a 256-bit cube state.
+  - source_family_id: square
+    relations:
+    - same_shift_row
+    note: Saturnin's transposition step, which replaces AES's ShiftRows, is performed
+      exactly as it was in Square, the predecessor of AES.
 - id: simple
   name: SIMPLE
   notes: SIMPLE is a lightweight permutation-based authenticated-encryption design using a 256-bit Boolean permutation and
@@ -3244,7 +3356,28 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: gift
+    relations:
+    - inspired_by
+    note: Simple128/Simple64 are generic AEAD modes of operation instantiated with
+      GIFT as the primary/recommended underlying block cipher for both 64-bit and 128-bit
+      block variants.
+  - source_family_id: aes
+    relations:
+    - inspired_by
+    note: Simple128 is concretely instantiated using AES-128 as the underlying block
+      cipher.
+  - source_family_id: present
+    relations:
+    - inspired_by
+    note: Simple64 is concretely instantiated using PRESENT as the underlying 64-bit
+      block cipher.
+  - source_family_id: speck
+    relations:
+    - inspired_by
+    note: Both Simple128 and Simple64 offer instantiations using Speck as the underlying
+      block cipher, selected for its software efficiency.
 - id: trifle
   name: TRIFLE
   notes: TRIFLE is a lightweight tweakable block cipher and AEAD design using a 128-bit state, 4-bit S-boxes, and bit-permutation
@@ -3272,7 +3405,24 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: gift
+    relations:
+    - same_key_schedule
+    - same_round_constants
+    note: TRIFLE-BC's key schedule, AddRoundKey and AddRoundConst mechanisms are the
+      same as those used in GIFT-128; its bit-permutation is also constructed using
+      the group-mapping technique from the GIFT paper.
+  - source_family_id: skinny
+    relations:
+    - same_round_constants
+    note: TRIFLE-BC generates its round constants using the same 6-bit affine LFSR
+      employed in SKINNY.
+  - source_family_id: present
+    relations:
+    - similar_bit_based_permutation_layer
+    note: TRIFLE-BC's bit permutation is explicitly constructed to be similar to the
+      one used in PRESENT, as an alternative to directly reusing GIFT's permutation.
 - id: ace
   name: ACE
   construction_ids:
@@ -3301,7 +3451,13 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: simon
+    relations:
+    - variant_of
+    note: ACE's nonlinear layer, the Simeck box, is an unkeyed, independently parameterized
+      variant of the Simon round function, adopted for its hardware-friendly XOR/AND/rotate
+      structure.
   innovative_ideas:
   - id: ace_sb64_nonlinear_layer
     name: SB-64 nonlinear layer
@@ -3489,7 +3645,13 @@ families:
     stage_ids:
     - third_prize
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - generalization_of
+    note: Raindrop's 3-, 5-, 7-, and 9-bit S-boxes are all generated from the same
+      nonlinear Boolean expression used in Keccak's chi mapping, generalized to variable
+      bit-widths for hardware-oriented lightweight design.
   notes: 'Raindrop is a Feistel-family block cipher with SP-style round-function components. The published variants are Raindrop-128/128,
     Raindrop-128/256, and Raindrop-256/256.
 
@@ -3516,7 +3678,19 @@ families:
     stage_ids:
     - third_prize
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: sm4
+    relations:
+    - inspired_by
+    note: SMBA's S1 permutation is constructed via composite-field (tower-field) inversion,
+      explicitly following a published design approach for compact S-box construction
+      for the SM4 block cipher.
+  - source_family_id: kuznyechik
+    relations:
+    - inspired_by
+    note: SMBA's S0 permutation is built from finite-field power maps and permutation
+      matrices, explicitly following the algebraic decomposition technique from the
+      paper reverse-engineering the hidden structure of the Kuznyechik/Streebog S-box.
   notes: 'SMBA is a block-cipher family with 128-bit and 256-bit block variants, specified as SMBA-128/128, SMBA-128/256,
     and SMBA-256/256.
 
@@ -3869,7 +4043,20 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: led
+    relations:
+    - same_round_function
+    - same_mix_column
+    - same_shift_row
+    note: CiliPadi's F-function is an unkeyed 2-round instantiation of the LED block
+      cipher, reusing LED's AddConstants/SubCells/ShiftRows/MixColumnsSerial round
+      structure.
+  - source_family_id: present
+    relations:
+    - same_sbox
+    note: The SubCells operation of CiliPadi's F-function substitutes each nibble using
+      the PRESENT S-box, identical to the one reused inside LED.
   notes: 'Z''aba et al. (CyberSecurity Malaysia) 2019. AEAD based on MonkeyDuplex sponge construction. Primary (CiliPadi-Mild):
     state=256 bits, rate r=64 bits, capacity=192 bits, key=128, nonce=128, tag=64. Permutation P_n: AC (AddConstants) + SC
     (SubCells 4-bit S-box) + SR (ShiftRows) + MCS (MixColumnsSerial). Init/finalization uses a rounds; AD/message uses b rounds.
@@ -4074,7 +4261,22 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - same_round_function
+    note: One COMET instantiation plugs unmodified AES-128/128 into the COMET mode,
+      reusing exactly the published AES specification.
+  - source_family_id: cham
+    relations:
+    - same_round_function
+    note: One COMET hardware-oriented instantiation plugs unmodified CHAM-64/128 into
+      the COMET mode, reusing CHAM's published round function verbatim.
+  - source_family_id: speck
+    relations:
+    - same_round_function
+    note: One COMET software-oriented instantiation plugs unmodified Speck-64/128 into
+      the COMET mode, reusing Speck's published round function verbatim.
   notes: 'Gueron, Jha, Nandi 2019. COunter Mode Encryption with authentication Tag. Two instantiations: COMET-128 (n=128,
     nonce=128, key=128, tag=128, state=256 bits Y=128||Z=128) and COMET-64 (n=64, nonce=120, key=128, tag=64, state=192 bits
     Y=64||Z=128). Block ciphers: AES-128 (primary, 10 rounds), CHAM-128/128 (80 rounds), CHAM-64/128 (80 rounds), Speck-64/128
@@ -4232,7 +4434,30 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - variant_of
+    - same_sbox
+    - same_shift_row
+    - same_mix_column
+    note: TweAES-128, the AES-based instantiation of ESTATE, keeps SubBytes, ShiftRows,
+      MixColumns and AddRoundKey identical to AES-128/128, adding only a tweak-injection
+      step.
+  - source_family_id: gift
+    relations:
+    - variant_of
+    - same_sbox
+    - same_bit_based_permutation_layer
+    - same_round_constants
+    note: TweGIFT-128 is a tweakable variant of GIFT-128, reusing GIFT's 4-bit S-box,
+      bit permutation, AddRoundKey step, and round-constant LFSR unchanged, with only
+      a tweak-injection step added.
+  - source_family_id: skinny
+    relations:
+    - same_round_constants
+    note: TweGIFT-128's round-constant generation uses the same 6-bit affine LFSR construction
+      as SKINNY.
   notes: 'Chakraborti, Datta, Jha, Lopez, Nandi, Sasaki (NTT/ISI) 2019. Energy-efficient single-state tweakable block cipher
     based AEAD (FCBC*-like MAC + OFB encryption). Block n=128, key κ=128, tweak τ=4 bits, tag t=128, state=128 bits. Inverse-free
     design. TweAES-128 (primary): AES-like rounds with 4-bit tweak injection every 2 rounds, 10 rounds. Instantiations: ESTATE_TweAES-128
@@ -4322,7 +4547,14 @@ families:
     stage_ids:
     - second_prize
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: serpent
+    relations:
+    - inspired_by
+    note: FESH's round function follows Serpent's bit-slice SPN style, explicitly described
+      by the authors as similar to Serpent's round function, while replacing Serpent's
+      S-box and mixing layer with a redesigned S-box and a 4-branch Feistel-based mixing
+      layer.
   notes: 'FESH is an SPN-family block cipher with six published variants across 128- and 256-bit block sizes.
 
     '
@@ -4351,7 +4583,12 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - same_sbox
+    note: FlexAEAD's nonlinear transformation applies the AES S-box table (and its
+      inverse) directly to each byte.
   notes: 'Nascimento, Xexéo (Petrobras/IME Brazil) 2019. Parameterized block cipher with integrated authentication. PF_K:
     BlockShuffle + 3 AES 8-bit S-box layers + XOR (Feistel-like structure). Key = 128 × 2^x bits (primary x=0: 128 bits).
     Block = nb bytes (primary nb=16, 128 bits). Rounds r = log2(nb) + 2 (for nb=16: 6 rounds). Four subkeys K1..K4, each 2×nb
@@ -4386,7 +4623,18 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: skinny
+    relations:
+    - variant_of
+    - same_sbox
+    - same_key_schedule
+    - same_shift_row
+    - same_mix_column
+    note: 'ForkSkinny, the core primitive of ForkAE, is a slight modification of the
+      SKINNY family: it reuses SKINNY''s S-boxes without change, its ShiftRows and
+      MixColumns operations, and its tweakey schedule exactly as in SKINNY, differing
+      only in the round-constant LFSR and in forking the state into two branches.'
   notes: 'Andreeva, Lallemand, Purnal, Reyhanitabar, Roy, Vizár 2019. AEAD using ForkSkinny, a forkcipher (maps n-bit input
     to 2n-bit output simultaneously) based on SKINNY. Two AEAD modes: PAEF (parallel, fully parallelizable) and SAEF (sequential,
     online). All instances use key=128. Primary: PAEF-ForkSkinny-128-288 (block=128, tweakey=288, nonce=104, tag=128). ForkSkinny:
@@ -4418,7 +4666,17 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: grain_128
+    relations:
+    - same_round_function
+    note: Fountain's keystream output function combined with its linear masking terms
+      is the same function also used in the Grain-128a stream cipher.
+  - source_family_id: gift
+    relations:
+    - same_sbox
+    note: The 4-bit-to-4-bit S-box used in Fountain's nonlinear feedback path is the
+      GIFT block-cipher S-box, reused unchanged.
   notes: 'Zhang (CAS Beijing) 2019. Stream cipher-based AEAD with variable non-linear feedbacks. Internal state F: 256 bits.
     State update function F; output function f uses 16 state bits to generate 1 keystream bit. Key=128 bits, nonce/IV=96 bits.
     Primary: tag=128 bits; secondary: tag=64 bits. Keystream up to 2^64 bits. Secure in nonce-respecting setting.
@@ -4446,7 +4704,13 @@ families:
   reference_ids:
   - gage_and_ingage_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: ascon
+    relations:
+    - inspired_by
+    note: InGAGE's duplex-based AEAD mode applies the GAGE sponge permutation modeled
+      directly on Ascon's mode, differing chiefly in state sizes, rate, key/nonce injection
+      point, and padding.
   notes: GAGE and InGAGE (Beyne et al., NIST LWC Round 1, 2019) are sponge-based constructions. GAGE is the underlying permutation,
     used by InGAGE for authenticated encryption. The permutation operates on small states (160–384 bits), uses 4-bit S-boxes,
     and targets RFID and IoT devices.
@@ -4537,7 +4801,13 @@ families:
   reference_ids:
   - hern_and_heron_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: zuc
+    relations:
+    - related_to
+    note: The fixed constants used to initialize the HERN/HERON state are generated
+      as keystream output of the stream cipher ZUC under a specific fixed key and IV,
+      rather than derived from an internally designed process.
   notes: HERN and HERON (NIST LWC Round 1, 2019) are lightweight bit-oriented block ciphers. HERN targets 64-bit blocks; HERON
     targets 128-bit blocks. Both use small 4-bit S-boxes and a simple bit-permutation linear layer.
 - id: hight
@@ -4594,7 +4864,13 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: gift
+    relations:
+    - related_to
+    note: HyENA is a hybrid-feedback authenticated-encryption mode instantiated directly
+      over the GIFT-128 block cipher, which supplies the mode's sole non-linear primitive
+      including its S-box, bit permutation and key schedule.
   notes: 'Chakraborti, Datta, Jha, Nandi (NTT/ISI) 2019. Hybrid feedback-based ENcryption with Authentication (HyFB mode)
     using GIFT-128. Block n=128, key κ=128, nonce r=96, tag t=128. HyFB+: left=ciphertext feedback, right=plaintext feedback.
     State overhead ≈ 1.5n = 192 bits. Single-pass, inverse-free; one GIFT-128 call per data block. F_2^64 field mult (poly
@@ -4835,7 +5111,13 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: simon
+    relations:
+    - related_to
+    note: LAEM-Simon instantiates the LAEM authenticated-encryption mode directly over
+      the SIMON 128-bit block cipher family, using SIMON's Feistel round function,
+      round constants and key schedule unmodified.
   notes: 'Sui, Wu, Zhang, Zhang (CAS Beijing) 2019. Lightweight Authentication Encryption Mode using SIMON block cipher as
     the underlying primitive. Primary: LAEM-SIMON 128/128 (block=128, key=128, nonce=128, tag=128). Also SIMON 128/192 and
     128/256. Mode: Segmented-AE with linear mix ρ(x,y)=(2x⊕y, 3x⊕y) over GF(2^n). Online, parallelizable, OAE2 provably secure.
@@ -4986,7 +5268,20 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: deoxys
+    relations:
+    - variant_of
+    note: Lilliput-AE's two AEAD modes are built on ThetaCB3 and on SCT-2, the latter
+      explicitly stated to be the variant of the SCT mode introduced in Deoxys, with
+      both Lilliput modes described as similar to the corresponding pair of modes used
+      in Deoxys.
+  - source_family_id: scream_tbc
+    relations:
+    - inspired_by
+    note: Two of the three inner 4-bit APN sub-functions composing Lilliput-TBC's 8-bit
+      S-box are taken directly from the SCREAM S-box construction with the same function
+      values; only the middle permutation is replaced with a new candidate.
   notes: 'Adomnicai et al. 2019. AEAD scheme based on Lilliput-TBC, a tweakable block cipher derived from the Lilliput block
     cipher using an Extended Generalized Feistel Network (EGFN) structure. Block size n=128, 8-bit S-box. Two modes: Lilliput-I
     (nonce-respecting, ΘCB3) and Lilliput-II (nonce-misuse-resistant, SCT-2). Primary member: Lilliput-II-128 (key k=128,
@@ -5050,7 +5345,20 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: gift
+    relations:
+    - variant_of
+    - same_sbox
+    - same_bit_based_permutation_layer
+    note: LOCUS-AEAD is instantiated with TweGIFT-64, a tweakable variant of GIFT-64-128
+      that employs the same 4-bit S-box and the same bit permutation as GIFT-64-128,
+      with AddRoundKey also identical.
+  - source_family_id: skinny
+    relations:
+    - same_round_constants
+    note: TweGIFT-64's round-constant generation uses the same 6-bit affine LFSR as
+      SKINNY and GIFT-64-128.
   notes: 'Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OCB-like fully parallelizable AEAD using TweGIFT-64 (n=64, tweak τ=4,
     key κ=128, built on GIFT-64-128). Parameters: key κ=128, nonce r=128, tag t=n=64. 64-bit blocks XORed with nonce-derived
     masks (α-multiplication in F_2^128 with poly x^128+x^7+x^2+x+1). Provides RUP integrity.
@@ -5111,7 +5419,20 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: gift
+    relations:
+    - variant_of
+    - same_sbox
+    - same_bit_based_permutation_layer
+    note: LOTUS-AEAD is instantiated with TweGIFT-64, built upon the original GIFT-64-128
+      block cipher and reusing its 4-bit S-box and bit-permutation layer verbatim,
+      adding only a short-tweak injection mechanism.
+  - source_family_id: skinny
+    relations:
+    - same_round_constants
+    note: The round-constant schedule of TweGIFT-64, shared by both LOTUS-AEAD and
+      LOCUS-AEAD, is generated by the same 6-bit affine LFSR as SKINNY and GIFT-64-128.
   notes: 'Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OTR-like AEAD using TweGIFT-64 (n=64, τ=4, κ=128). Primary NIST submission:
     TweGIFT-64_LOTUS-AEAD. Parameters: key κ=128, nonce r=128, tag t=n=64. Processes 2n=128-bit di-blocks with 2-round Feistel
     structure (4 TBC calls per di-block). Intermediate checksums improve integrity under RUP. Field mult in F_2^128.
@@ -5318,7 +5639,16 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - variant_of
+    - same_sbox
+    - same_shift_row
+    - same_mix_column
+    - same_key_schedule
+    note: mixFeed is an AEAD mode based on AES-128/128, using a block cipher identical
+      to standard AES-128 except that MixColumns is also applied in the last round.
   notes: 'Chakraborty and Nandi 2019. Minimally Xored Feedback (mixFeed) AEAD mode. Based on AES''128/128 (AES-128 with MixColumns
     added to the final round). Block size n=128, key κ=128, nonce=120 bits (one byte less than block), tag=128. State = Y(128)
     || K(128) = 256 bits; nonce-dependent key update (K_N) per encryption query. Uses ciphertext feedback to update the evolving
@@ -5575,7 +5905,21 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: photon
+    relations:
+    - same_sbox
+    - same_shift_row
+    - same_mix_column
+    - same_state_layout
+    note: ORANGE's permutation-based constructions use PHOTON256 as their underlying
+      primitive, stated to be exactly the same permutation without changing any part
+      of the definition.
+  - source_family_id: jh
+    relations:
+    - inspired_by
+    note: The hash mode of ORANGISH is described as very close to the JH hash function,
+      adopting JH's higher-rate absorption approach of 128 bits per permutation call.
   notes: 'Chakraborty and Nandi 2019. Optimum RAte spoNGE (ORANGE) using PHOTON256 (256-bit, 12-round permutation) as the
     underlying primitive. ORANGE-Zest (AEAD): key=128, nonce=128, tag=128. State = PHOTON256 permutation state (256) + dynamic
     128-bit mask Y = 3n=384 bits (n=128). Rate = 2n=256 bits per permutation call. ORANGISH (hash): output=256 bits, tag-squeeze
@@ -5608,7 +5952,16 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: simon
+    relations:
+    - variant_of
+    - same_round_function
+    - same_key_schedule
+    - same_round_constants
+    note: Oribatida's underlying SimP permutation family employs the round function
+      and key-update function of Simon-2w-2w, with SimP-192 and SimP-256 built from
+      Simon-96-96 and Simon-128-128 and their unchanged round constants.
   notes: 'Bhattacharjee, List, Mancillas-López, Nandi 2019. Keyed monkey-wrap duplex AEAD using the SimP family of permutations
     (SIMON-based, no S-boxes). Primary: Oribatida-256-64 (SimP-256-4 + SimP-256-2, key=128, nonce=128, tag=128, rate=128,
     capacity=128, mask=64, state=256). Secondary: Oribatida-192-96 (SimP-192-4 + SimP-192-2, key=128, nonce=64, tag=96, state=192).
@@ -6491,7 +6844,15 @@ families:
   reference_ids:
   - speckey_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: speck
+    relations:
+    - variant_of
+    - same_round_function
+    note: SPECKEY is defined as one round of Speck-32's ARX round function (the same
+      rotate-add-XOR operations and rotation amounts), modified only so the round key
+      is added to the entire 32-bit state rather than to just one half as in the original
+      Speck round.
   notes: Speckey is defined as a Speck-32-based keyed permutation round with key addition applied to the full 32-bit state.
 - id: speedy
   name: SPEEDY
@@ -9911,7 +10272,13 @@ families:
     - submissions
     - special_recognition
     status: special_recognition
-  influences: []
+  influences:
+  - source_family_id: salsa20
+    relations:
+    - same_round_function
+    note: yescrypt inherits scrypt's BlockMix construction, whose core mixing primitive
+      is the unmodified Salsa20/8 permutation; even the pwxform-enabled variant's initial
+      SMix1 calls still use solely Salsa20/8, avoiding a chicken-egg problem.
   innovative_ideas: []
   notes: 'yescrypt (PHC 2015) by Alexander Peslyak (Solar Designer / Openwall). scrypt variant with enhanced security features:
     additional work factor tuning, password-specific HMAC derivation, and optional client-independent key update. Uses Salsa20/8
