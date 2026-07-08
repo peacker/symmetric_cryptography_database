@@ -727,20 +727,12 @@ families:
   - bogdanov_2007_present
   process_participations: []
   influences:
-  - source_family_id: des
-    relations:
-    - inspired_by
-    note: PRESENT's authors state they looked back at the pioneering work
-      embodied in DES, drawing on its hardware-efficiency-focused SP/Feistel
-      design tradition and S-box differential/linear design criteria as a
-      starting point for an ultra-lightweight cipher.
   - source_family_id: serpent
     relations:
     - inspired_by
-    note: PRESENT complements the DES-inspired approach with features from the
-      AES finalist Serpent, which demonstrated excellent hardware performance,
-      adopting a bitsliced single small S-box applied in parallel across the
-      state.
+    note: PRESENT complements the DES-inspired approach with features from the AES
+      finalist Serpent, which demonstrated excellent hardware performance, adopting
+      a bitsliced single small S-box applied in parallel across the state.
   innovative_ideas:
   - id: present_4x4_sbox
     name: 4x4 S-box
@@ -1292,23 +1284,6 @@ families:
       cipher that was theoretically broken by a related-key differential attack; Piccolo's
       round-permutation and key-schedule choices are motivated by avoiding this class
       of weakness.
-  - source_family_id: gost_28147_89
-    relations:
-    - related_to
-    note: GOST is cited as a compact Feistel-network cipher that was nevertheless broken
-      by an improved meet-in-the-middle attack, used as a cautionary comparison point
-      for Feistel-type lightweight block-cipher designs.
-  - source_family_id: present
-    relations:
-    - related_to
-    note: PRESENT, an SPN-based lightweight cipher, is used throughout the Piccolo
-      paper as the principal benchmark for gate-count and energy-consumption comparisons
-      against Piccolo's generalized-Feistel design.
-  - source_family_id: aes
-    relations:
-    - related_to
-    note: AES is cited as the representative SPN structure, explicitly contrasted with
-      the generalized-Feistel-network structure chosen for Piccolo.
   - source_family_id: des
     relations:
     - related_to
@@ -1346,12 +1321,6 @@ families:
       Boolean feedback/filter functions is based on Bivium, the two-register variant
       of the stream cipher Trivium, generalized from a stream-cipher keystream generator
       into a block-cipher round function.
-  - source_family_id: present
-    relations:
-    - related_to
-    note: PRESENT is used by the KATAN/KTANTAN designers as the principal hardware-area
-      (gate-equivalent) benchmark against which the new lightweight block-cipher family
-      is compared.
 - id: ktantan
   name: KTANTAN
   notes: KTANTAN specializes KATAN for fixed-key hardware by embedding the 80-bit key into the circuit, trading key agility
@@ -1853,20 +1822,7 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences:
-  - source_family_id: misty1
-    relations:
-    - related_to
-    note: DFC contrasts its combinatorial decorrelation-based approach with the
-      algebraic Nyberg-Knudsen provable-security paradigm used by Matsui in
-      MISTY, noting that paradigm offers less design freedom.
-  - source_family_id: des
-    relations:
-    - related_to
-    note: The paper frames DFC's provable-security goals against the historical
-      backdrop of DES, whose introduction spurred the differential and linear
-      cryptanalysis that DFC's decorrelation technique is designed to provably
-      resist.
+  influences: []
   notes: 'DFC (Decorrelated Fast Cipher) uses decorrelation theory to provide provable security against differential and linear
     cryptanalysis.
 
@@ -2028,14 +1984,7 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences:
-  - source_family_id: des
-    relations:
-    - related_to
-    note: MAGENTA's specification fixes its block size at 64 bits explicitly to
-      match DES, and its differential/linear cryptanalysis sections benchmark
-      MAGENTA's characteristic and approximation probabilities directly against
-      published DES results.
+  influences: []
   notes: 'MAGENTA (Method for Assurance of Generally Networked Technical Architectures) by Deutsche Telekom uses the PE function
     built over GF(2^8).
 
@@ -2075,33 +2024,24 @@ families:
     - round_2
     status: finalist
   influences:
-  - source_family_id: des
-    relations:
-    - related_to
-    note: MARS is positioned as a successor to DES/Triple-DES, targeting better
-      security than Triple-DES with much higher throughput than single DES; its
-      S-box lookup design also follows the DES principle that table look-up
-      operations underlie a cipher's security.
   - source_family_id: rc5
     relations:
     - inspired_by
-    note: MARS makes extensive use of data-dependent rotations, an operation
-      the design document credits to Rivest's RC5 cipher for bringing the
-      technique to prominence, combined with multiplication to avoid RC5's
-      known differential weaknesses.
+    note: MARS makes extensive use of data-dependent rotations, an operation the design
+      document credits to Rivest's RC5 cipher for bringing the technique to prominence,
+      combined with multiplication to avoid RC5's known differential weaknesses.
   - source_family_id: idea
     relations:
     - inspired_by
-    note: MARS adopts modular multiplication as a core nonlinear operation, a
-      technique the design document attributes to IDEA and its variants, though
-      MARS uses multiplication modulo 2^32 rather than IDEA's modulo 2^16+1
-      arithmetic.
+    note: MARS adopts modular multiplication as a core nonlinear operation, a technique
+      the design document attributes to IDEA and its variants, though MARS uses multiplication
+      modulo 2^32 rather than IDEA's modulo 2^16+1 arithmetic.
   - source_family_id: sha1_sha2
     relations:
     - related_to
-    note: The MARS S-box entries were pseudorandomly generated by evaluating
-      SHA-1 on indexed constants and then screening the outputs for good
-      differential and linear properties.
+    note: The MARS S-box entries were pseudorandomly generated by evaluating SHA-1
+      on indexed constants and then screening the outputs for good differential and
+      linear properties.
   notes: 'MARS by IBM uses a heterogeneous structure: unkeyed mixing rounds, forward keying rounds, and backward keying rounds
     with E-function.
 
@@ -2895,6 +2835,37 @@ families:
       the round combines chi nonlinearity, lightweight mixing with a heavy inverse,
       and bit transposition. The 2019 paper identifies these as features later adopted
       by Keccak-p and Xoodoo.
+- id: panama
+  name: PANAMA
+  construction_ids:
+  - permutation_based_hash
+  round_ids:
+  - panama_round
+  target_applications:
+  - hash
+  - stream_cipher
+  - software
+  characteristics:
+    output_size_bits: 256
+    state_size_bits: 544
+    components:
+    - id: xor
+    - id: and
+    - id: word_permutation
+    - id: rotation_fixed
+    - id: lfsr
+  reference_ids:
+  - daemen_clapp_1998_panama
+  process_participations: []
+  influences: []
+  notes: 'PANAMA is a combined stream cipher and hash function by Daemen and Clapp
+    (FSE 1998) built from a 17-word (544-bit) nonlinear "state" updated each round
+    by gamma (nonlinear), pi (bit-transposition), and theta (linear diffusion)
+    transformations, coupled to a 32-stage, 8-word-per-stage linear feedback "buffer"
+    that feeds taps into the state. It produces a 256-bit hash or, run in the
+    other direction, an arbitrary-length keystream. Its gamma/pi/theta round
+    structure and belt-and-mill architecture were carried forward into RadioGatún
+    and, ultimately, Keccak, by the same designer.'
 - id: radiogatun
   name: RadioGatún
   construction_ids:
@@ -2917,12 +2888,13 @@ families:
   - bertoni_et_al_2006_radiogatun
   process_participations: []
   influences:
-  - source_family_id: subterranean
+  - source_family_id: panama
     relations:
-    - related_to
-    note: The Subterranean 2.0 paper compares the original Subterranean input/key
-      buffer to the belt in belt-and-mill designs such as RadioGatún. This records
-      a structural analogy, not descent; RadioGatún itself develops the Panama lineage.
+    - improvement_of
+    - inspired_by
+    note: RadioGatún's own abstract states it 'builds on and improves the one underlying
+      the Panama hash function,' generalizing Panama's belt-and-mill state/buffer architecture
+      to variable word sizes.
   notes: RadioGatún is a variable-word-size belt-and-mill hash and stream-output
     family introduced in 2006, with a 19-word mill coupled to a 13-by-3-word belt.
 - id: gascon
@@ -3808,6 +3780,38 @@ families:
     Processes two 32-bit words per iteration.
 
     '
+- id: siphash
+  name: SipHash
+  construction_ids:
+  - arx_permutation_network
+  round_ids:
+  - siphash_round
+  target_applications:
+  - generic
+  - software
+  - hash_table_dos_protection
+  characteristics:
+    state_size_bits: 256
+    key_size_bits: 128
+    output_size_bits: 64
+    components:
+    - id: add_mod
+    - id: rotation_fixed
+    - id: xor
+  reference_ids:
+  - aumasson_bernstein_2012_siphash
+  process_participations: []
+  influences:
+  - source_family_id: skein
+    relations:
+    - inspired_by
+    note: SipHash's two-input SipRound mixing function was adapted from the MIX
+      operation of the Skein/Threefish family, one of the SHA-3 finalists.
+  notes: SipHash is a keyed ARX pseudorandom function operating on a 4x64-bit
+    state (v0..v3), designed by Aumasson and Bernstein to give fast, short-input
+    message authentication resistant to hash-flooding denial-of-service attacks;
+    SipHash-c-d applies c SipRounds per message block and d SipRounds during
+    finalization, with SipHash-2-4 the recommended default.
 - id: chaskey
   name: Chaskey
   construction_ids:
@@ -3831,18 +3835,12 @@ families:
   - chaskey_ref
   process_participations: []
   influences:
-  - source_family_id: skein
+  - source_family_id: siphash
     relations:
     - inspired_by
-    note: Chaskey's ARX permutation has the same structure as SipHash but with 32-bit
-      words, and SipHash's 2-input MIX operation was itself adapted from Skein, placing
-      Skein's MIX construction in Chaskey's design lineage.
-  - source_family_id: aes
-    relations:
-    - related_to
-    note: AES-128-CMAC is used as the direct performance baseline throughout the Chaskey
-      paper, motivating the design of a lighter permutation-based MAC as an alternative
-      on microcontrollers.
+    - same_round_function
+    note: Chaskey's ARX permutation follows the same structure as SipHash's SipRound,
+      adapted to use 32-bit words instead of SipHash's 64-bit words.
   notes: Chaskey is a 128-bit ARX permutation used inside an efficient MAC construction for 32-bit microcontrollers.
 - id: cilipadi
   name: CiliPadi
@@ -3943,14 +3941,7 @@ families:
     stage_ids:
     - candidate_recommended_block_64bit
     status: candidate_recommended
-  influences:
-  - source_family_id: des
-    relations:
-    - related_to
-    note: CIPHERUNICORN-E's design-principle section explicitly sets its block
-      size at 64 bits to match DES while giving it a longer 128-bit key, and
-      grounds its security evaluation in Matsui's linear cryptanalysis and
-      Biham-Shamir differential cryptanalysis of DES-like cryptosystems.
+  influences: []
   notes: CIPHERUNICORN-E (NEC, 1998) is a 64-bit Feistel block cipher supporting 64 and 128-bit keys with 16 rounds. It was
     submitted as a CRYPTREC candidate for e-government use.
 - id: clae
@@ -4205,7 +4196,12 @@ families:
     stage_ids:
     - candidate_recommended_stream
     status: candidate_recommended
-  influences: []
+  influences:
+  - source_family_id: panama
+    relations:
+    - generalization_of
+    note: Enocoro-128v2's keystream generator is explicitly described as a generalization
+      of the Panama-like keystream generator (PKSG) class of PRNGs.
   notes: Enocoro-128v2 (Hitachi, 2010) is a hardware-oriented stream cipher recommended by CRYPTREC. It uses a 128-bit key
     and 64-bit IV with a shift-register-based state updated via an AES-like S-box, making it efficient in hardware implementations.
 - id: estate
@@ -4477,13 +4473,7 @@ families:
   reference_ids:
   - gost_28147_89_ref
   process_participations: []
-  influences:
-  - source_family_id: des
-    relations:
-    - related_to
-    note: GOST 28147-89 is the Soviet/Russian counterpart to DES, developed as
-      a national standard around the same period and sharing an iterated
-      Feistel design philosophy, though with a wider 256-bit key and 32 rounds.
+  influences: []
   notes: GOST 28147-89 is a 32-round Feistel block cipher with a 256-bit key.
 - id: grand_cru
   name: Grand Cru
@@ -4664,14 +4654,7 @@ families:
   reference_ids:
   - isaac_ref
   process_participations: []
-  influences:
-  - source_family_id: rc4
-    relations:
-    - related_to
-    note: The ISAAC paper states ISAAC is similar in form and function to the
-      alleged RC4, though the generators were developed independently; ISAAC is
-      reported to be about three times faster with less bias and a longer
-      minimum cycle length.
+  influences: []
   notes: ISAAC is a stream generator using indirection, accumulation, and mixing.
 - id: kcipher_2
   name: KCipher-2
@@ -4880,75 +4863,7 @@ families:
   reference_ids:
   - lea_ref
   process_participations: []
-  influences:
-  - source_family_id: aes
-    relations:
-    - related_to
-    note: AES is used as the primary performance and security benchmark throughout
-      the LEA paper; LEA's round count is derived using cryptanalytic techniques matured
-      through AES analysis, with the stated goal of outperforming AES in software.
-  - source_family_id: tea
-    relations:
-    - related_to
-    note: TEA is discussed as an earlier simple ARX Feistel cipher with a comparable
-      design philosophy, contrasted against LEA's larger block size and lower round
-      count.
-  - source_family_id: xtea
-    relations:
-    - related_to
-    note: XTEA is discussed alongside TEA as a simple ARX Feistel predecessor whose
-      64-bit block and 64-round structure the authors contrast with LEA's faster 128-bit
-      ARX design.
-  - source_family_id: rc6
-    relations:
-    - related_to
-    note: RC6 is cited as an AES-competition ARX-like finalist regarded as fast in
-      its era, used as a comparison point to argue LEA better exploits modern CPU parallelism.
-  - source_family_id: hight
-    relations:
-    - related_to
-    note: HIGHT is cited as a lightweight ARX cipher built on 8-bit operations, contrasted
-      with LEA's 32-bit-word ARX design intended for common processors.
-  - source_family_id: present
-    relations:
-    - related_to
-    note: PRESENT is grouped with other lightweight block ciphers with short block
-      size and high round count, used as a comparison point to justify LEA's software-oriented
-      design choices.
-  - source_family_id: led
-    relations:
-    - related_to
-    note: LED is cited among lightweight block ciphers optimized for low-resource hardware
-      rather than software speed, motivating LEA's differing design target.
-  - source_family_id: piccolo
-    relations:
-    - related_to
-    note: Piccolo is cited among lightweight block ciphers with short block size and
-      many rounds, used as a comparison point against LEA's software performance goals.
-  - source_family_id: klein
-    relations:
-    - related_to
-    note: KLEIN is cited as a cipher designed to be faster than AES specifically on
-      8-bit and 16-bit platforms, contrasted with LEA's target of 32-bit and 64-bit
-      processors.
-  - source_family_id: clefia
-    relations:
-    - related_to
-    note: CLEFIA is cited as sharing AES's block and key sizes with software performance
-      close to AES, used as a direct comparison point for LEA's claimed software speed
-      advantage.
-  - source_family_id: prince
-    relations:
-    - related_to
-    note: PRINCE is cited as a low-latency block cipher with a different security goal
-      from general-purpose ciphers, used to contextualize LEA's own general-purpose
-      software-speed design target.
-  - source_family_id: salsa20
-    relations:
-    - related_to
-    note: Salsa20 is cited as an example of an ARX-based stream cipher sharing LEA's
-      operation set, though the authors note block and stream ciphers are not directly
-      comparable in application.
+  influences: []
   notes: LEA (Lightweight Encryption Algorithm; Hong et al., WISA 2013) is a 128-bit ARX block cipher with key sizes of 128,
     192, or 256 bits and 24, 28, or 32 rounds respectively. Its round function applies 32-bit modular additions, XORs, and
     fixed rotations to four 32-bit words — no S-boxes are used. Designed for fast software on general-purpose CPUs.
@@ -5552,16 +5467,7 @@ families:
     stage_ids:
     - submissions_block_64bit
     status: submitted
-  influences:
-  - source_family_id: idea
-    relations:
-    - related_to
-    note: In its impossible-differential analysis, the Nimbus proposal
-      explicitly contrasts itself with IDEA, noting that such attacks exploit
-      IDEA's modular multiplication after block partitioning, and argues Nimbus
-      resists the same attack class because it does not partition the block the
-      way IDEA does; both use modular multiplication as a core nonlinear
-      operation.
+  influences: []
   notes: Nimbus (Boesgaard et al., NESSIE Submission, 2000) is a flexible SPN block cipher family supporting 64, 128, and
     256-bit block sizes with a 128-bit key. Its S-boxes and linear layers are parameterised to allow variable security–performance
     trade-offs.
@@ -6096,15 +6002,7 @@ families:
   reference_ids:
   - safer_ref
   process_participations: []
-  influences:
-  - source_family_id: des
-    relations:
-    - related_to
-    note: The SAFER design rationale explicitly contrasts its
-      substitution/linear-transformation structure with the Feistel structure
-      of DES, arguing Feistel-style diffusion is comparatively slow and using
-      this comparison to motivate SAFER's fast diffusion via its linear
-      transformation matrix.
+  influences: []
   notes: SAFER (Secure And Fast Encryption Routine; Massey, 1993) is a 64-bit byte-oriented SPN block cipher. SAFER K-64 uses
     a 64-bit key and 6 rounds; SAFER K-128 uses a 128-bit key and 10 rounds. Each round applies exponential (e^x mod 257)
     and logarithmic (log base e) S-boxes alternating with 8-bit XOR and modular-addition operations.
@@ -6168,19 +6066,7 @@ families:
     stage_ids:
     - submissions_block_128bit
     status: submitted
-  influences:
-  - source_family_id: rc6
-    relations:
-    - related_to
-    note: The SC2000 design paper benchmarks its Pentium III software
-      performance directly against RC6, reporting SC2000 as second only to the
-      fastest C implementations of RC6.
-  - source_family_id: twofish
-    relations:
-    - related_to
-    note: The SC2000 design paper cites the fastest assembly implementation of
-      Twofish as a performance benchmark that SC2000 software implementations
-      exceed.
+  influences: []
   notes: SC2000 (Fujitsu, NESSIE Submission, 2000) is a 128-bit SPN block cipher supporting 128, 192, and 256-bit keys with
     7, 10, and 11 rounds respectively. It combines three layers of 2-bit and 4-bit S-boxes per round with an MDS-based linear
     diffusion layer, targeting both hardware and software efficiency.
@@ -6324,43 +6210,35 @@ families:
   - shark_ref
   process_participations: []
   influences:
-  - source_family_id: des
-    relations:
-    - related_to
-    note: SHARK's design is motivated by contrast with the DES Feistel
-      structure, whose round transformation leaves one half of the block
-      unchanged each round; SHARK instead transforms the whole block uniformly
-      each round.
   - source_family_id: mmb
     relations:
     - related_to
-    note: SHARK's non-Feistel, full-block substitution-permutation round
-      structure is explicitly noted as also used in MMB, both transforming the
-      entire block rather than one half as in Feistel ciphers.
+    note: SHARK's non-Feistel, full-block substitution-permutation round structure
+      is explicitly noted as also used in MMB, both transforming the entire block rather
+      than one half as in Feistel ciphers.
   - source_family_id: safer
     relations:
     - related_to
-    note: SAFER is cited alongside MMB and 3-Way as an existing cipher using
-      the same uniform, full-block SP round structure that SHARK adopts, and
-      its PHT diffusion layer is discussed as a precedent when designing
-      SHARK's MDS-based diffusion layer.
+    note: SAFER is cited alongside MMB and 3-Way as an existing cipher using the same
+      uniform, full-block SP round structure that SHARK adopts, and its PHT diffusion
+      layer is discussed as a precedent when designing SHARK's MDS-based diffusion
+      layer.
   - source_family_id: threeway
     relations:
     - related_to
-    note: 3-Way is cited as an existing cipher using the same full-block, non-
-      Feistel substitution-permutation round structure adopted by SHARK.
+    note: 3-Way is cited as an existing cipher using the same full-block, non- Feistel
+      substitution-permutation round structure adopted by SHARK.
   - source_family_id: cast128
     relations:
     - inspired_by
-    note: SHARK's subkey-generation approach, hashing the key with a preimage-
-      resistant function, is explicitly modeled on the same technique used in
-      the CAST design procedure.
+    note: SHARK's subkey-generation approach, hashing the key with a preimage- resistant
+      function, is explicitly modeled on the same technique used in the CAST design
+      procedure.
   - source_family_id: blowfish
     relations:
     - inspired_by
-    note: SHARK's subkey-generation approach, hashing the key with a preimage-
-      resistant function, is explicitly modeled on the same technique used in
-      Blowfish.
+    note: SHARK's subkey-generation approach, hashing the key with a preimage- resistant
+      function, is explicitly modeled on the same technique used in Blowfish.
   notes: 'SHARK is an early wide-trail style SPN with byte-oriented substitution and MDS diffusion.
 
     '
@@ -6419,19 +6297,7 @@ families:
     stage_ids:
     - submissions_stream
     status: submitted
-  influences:
-  - source_family_id: seal
-    relations:
-    - related_to
-    note: The SNOW paper lists SEAL among the word-oriented software stream
-      ciphers that predate it, used as a design comparison reference point
-      rather than a structural template.
-  - source_family_id: rc4
-    relations:
-    - related_to
-    note: RC4 is cited alongside SEAL and SOBER as a prior word-oriented stream
-      cipher used for comparison, and its guess-and-determine attack literature
-      is referenced when analyzing SNOW's own resistance to such attacks.
+  influences: []
   notes: 'SNOW is a word-oriented stream cipher with a 16-word LFSR and a compact finite-state machine designed for high software
     performance.
 
@@ -6647,6 +6513,7 @@ families:
   name: Spritz
   construction_ids:
   - stream_state_update_generator
+  - sponge_construction
   round_ids:
   - spritz_round
   target_applications:
@@ -6672,12 +6539,6 @@ families:
     note: Spritz is explicitly presented as an improved, drop-in-replacement variant
       of RC4 that repairs known weak design decisions in the key-scheduling and output
       functions while remaining faithful to RC4's general architecture.
-  - source_family_id: keccak
-    relations:
-    - inspired_by
-    note: Spritz's Absorb/Squeeze interface is explicitly formulated as a sponge-like
-      construction inspired by the sponge function paradigm underlying Keccak/SHA-3,
-      and the paper directly compares Spritz's capacity to Keccak's SHA-3 configurations.
   notes: Spritz is an RC4-style byte-oriented stream-cipher/hash design with a 256-byte permutation state.
 - id: square
   name: SQUARE
@@ -6858,19 +6719,7 @@ families:
   reference_ids:
   - treyfer_ref
   process_participations: []
-  influences:
-  - source_family_id: tea
-    relations:
-    - related_to
-    note: TREYFER's designer explicitly positioned the cipher against TEA, judging
-      TEA gross overdesign for the resource-constrained targets TREYFER addresses,
-      making TEA a deliberate comparison point for TREYFER's minimalism.
-  - source_family_id: safer
-    relations:
-    - related_to
-    note: TREYFER's designer likewise cited SAFER as overdesigned relative to the intended
-      lightweight use case, a comparison baseline TREYFER's extremely compact round
-      function was designed to undercut.
+  influences: []
   notes: TREYFER is a very compact 64-bit lightweight block cipher/MAC design targeting constrained environments.
 - id: triad
   name: Triad
@@ -7152,14 +7001,7 @@ families:
   reference_ids:
   - daemen_1991_threeway
   process_participations: []
-  influences:
-  - source_family_id: des
-    relations:
-    - related_to
-    note: 3-Way's self-reciprocal design rationale explicitly benchmarks it
-      against DES, citing DES's weak/semi-weak key symmetry and comparing
-      round-function diffusion strength, motivating the departure from the
-      classical Feistel structure DES uses.
+  influences: []
   innovative_ideas:
   - id: threeway_self_reciprocal
     name: Self-reciprocal structure
@@ -7281,16 +7123,9 @@ families:
   - source_family_id: rijndael
     relations:
     - same_sbox
-    note: MIR-1's key setup derives its secret 256-byte S-box by iteratively
-      feeding key bytes through the fixed Rijndael S-box, directly reusing the
-      AES S-box as a building block.
-  - source_family_id: snow_2_0
-    relations:
-    - related_to
-    note: SNOW 2.0 is cited as the reference example of an efficient LFSR-based
-      stream cipher and as the speed benchmark MIR-1 compares itself against,
-      motivating MIR-1's decision to use a T-function/S-box design instead of
-      an LFSR.
+    note: MIR-1's key setup derives its secret 256-byte S-box by iteratively feeding
+      key bytes through the fixed Rijndael S-box, directly reusing the AES S-box as
+      a building block.
   innovative_ideas:
   - id: mir_1_t_function_automaton
     name: T-function automaton for guaranteed long period
@@ -7343,25 +7178,7 @@ families:
     - phase_1
     - phase_2
     status: candidate
-  influences:
-  - source_family_id: a5_1
-    relations:
-    - related_to
-    note: Achterbahn's hardware implementation is benchmarked against A5/1 in
-      the paper's comparative table as a reference point for GSM-class stream
-      ciphers, with no shared design structure claimed.
-  - source_family_id: rc4
-    relations:
-    - related_to
-    note: RC4 is included in Achterbahn's hardware comparison table as a widely
-      deployed reference stream cipher, purely for benchmarking
-      area/throughput/efficiency.
-  - source_family_id: aes
-    relations:
-    - related_to
-    note: AES (Rijndael) operated in output feedback mode is used as a
-      benchmark reference in Achterbahn's hardware comparison of throughput and
-      implementation efficiency.
+  influences: []
   innovative_ideas:
   - id: achterbahn_nlfsr_combiner
     name: NLFSR combiner with feedforward output functions
@@ -7458,15 +7275,7 @@ families:
     - phase_3
     - portfolio_hw
     status: portfolio
-  influences:
-  - source_family_id: lili_128
-    relations:
-    - related_to
-    note: MICKEY's design rationale for its mutual irregular clocking
-      explicitly discusses LILI-128's variable-clocking mechanism as a
-      cautionary comparison, noting that guessable clock counts in LILI-128
-      enabled statistical and state-recovery attacks that MICKEY's clocking
-      scheme was designed to avoid.
+  influences: []
   innovative_ideas:
   - id: mickey_mutual_irregular_clocking
     name: Mutual irregular clocking between register pair
@@ -7702,39 +7511,12 @@ families:
   - rogaway_1997_seal
   process_participations: []
   influences:
-  - source_family_id: feal
-    relations:
-    - related_to
-    note: SEAL's related-work discussion identifies FEAL as an earlier
-      software-oriented block cipher, noting that it and its variants have not
-      proven particularly secure or especially fast.
-  - source_family_id: rc4
-    relations:
-    - related_to
-    note: SEAL is positioned against RC4, Rivest's popular software-efficient
-      stream cipher, which the paper notes is fast but slower than SEAL.
-  - source_family_id: rc5
-    relations:
-    - related_to
-    note: RC5, Rivest's software-efficient block cipher, is cited alongside
-      SEAL as part of the same software-oriented cipher design trend of the
-      mid-1990s.
-  - source_family_id: blowfish
-    relations:
-    - related_to
-    note: Blowfish is listed among the other software-efficient ciphers sharing
-      SEAL's design goals in its related-work discussion.
-  - source_family_id: wake
-    relations:
-    - related_to
-    note: WAKE is listed alongside Blowfish as another software-efficient
-      cipher contemporaneous with SEAL's design goals.
   - source_family_id: sha1_sha2
     relations:
     - related_to
-    note: SEAL directly employs the SHA-1 compression function to preprocess
-      its key into internal tables; SEAL 2.0/3.0 specifically adopted SHA-1 in
-      place of the original SHA used in SEAL 1.0 for this table generation.
+    note: SEAL directly employs the SHA-1 compression function to preprocess its key
+      into internal tables; SEAL 2.0/3.0 specifically adopted SHA-1 in place of the
+      original SHA used in SEAL 1.0 for this table generation.
   innovative_ideas:
   - id: seal_prf_stream
     name: Length-increasing pseudorandom function as stream cipher
@@ -9209,37 +8991,7 @@ families:
     - phase_2
     - phase_3
     status: candidate
-  influences:
-  - source_family_id: aes
-    relations:
-    - related_to
-    note: Dragon's design rationale benchmarks the nonlinearity of its virtual 32x32
-      S-boxes against the SBOX/MIXCOL operation of AES, stating its heuristically generated
-      S-boxes were designed to avoid the linear-redundancy weakness intrinsic to finite-field-inversion-based
-      S-boxes used in AES.
-  - source_family_id: camellia
-    relations:
-    - related_to
-    note: Camellia is grouped with AES as an example of an international standard cipher
-      using finite-field-inversion-based S-boxes, a design approach Dragon's authors
-      deliberately avoided when constructing their heuristic S-boxes.
-  - source_family_id: mugi
-    relations:
-    - related_to
-    note: Dragon's design rationale directly compares the nonlinearity of its virtual
-      S-boxes against MUGI's 32x32 cryptographic mapping, positioning Dragon as an
-      improvement on this metric.
-  - source_family_id: rc4
-    relations:
-    - related_to
-    note: RC4 is cited as the small-word extreme of the word-based stream-cipher design
-      spectrum that motivated Dragon's choice of 32-bit words, and as a software-speed
-      comparison point.
-  - source_family_id: snow_2_0
-    relations:
-    - related_to
-    note: SNOW 2.0 is cited as a directly comparable word-based eSTREAM-era stream
-      cipher in Dragon's software performance comparison.
+  influences: []
   innovative_ideas:
   - id: dragon_word_based_nlfsr
     name: Word-based NLFSR with nonlinear filter for high-throughput keystream

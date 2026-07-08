@@ -1527,6 +1527,24 @@ rounds:
   notes: The five steps are chi-style nonlinear cellular-automaton update; complement
     state bit zero; theta mixing s_i XOR s_{i+3} XOR s_{i+8}; inject 256 key/input
     register bits into state positions 1 through 256; and transpose s_i to s_{12i mod 257}.
+- id: panama_round
+  name: PANAMA push/pull round
+  kind: full_round
+  spec:
+    state_model:
+      state_words: 17
+      buffer_stages: 32
+      buffer_words_per_stage: 8
+    component_flow:
+    - component_id: and
+    - component_id: xor
+    - component_id: word_permutation
+    - component_id: rotation_fixed
+    - component_id: lfsr
+  notes: Applies the nonlinear gamma transformation, the pi bit-transposition,
+    and the linear theta diffusion to the 17-word state, XORing in two taps from
+    the 32-stage buffer; the buffer itself advances by a linear feedback shift
+    driven by the state.
 - id: radiogatun_round
   name: RadioGatún belt-and-mill round
   kind: full_round
@@ -1896,6 +1914,20 @@ rounds:
     component_flow:
     - component_id: xor
   notes: Generic placeholder round entry pending full parameter extraction.
+- id: siphash_round
+  name: SipRound
+  kind: quarterround
+  spec:
+    state_model:
+      state_words: 4
+      word_size_bits: 64
+    component_flow:
+    - component_id: add_mod
+    - component_id: rotation_fixed
+    - component_id: xor
+  notes: One SipRound mixes the four 64-bit state words v0..v3 via ARX operations
+    in a fixed pattern; SipHash-c-d applies c SipRounds per message block and d
+    SipRounds during finalization.
 - id: chaskey_round
   name: Chaskey round
   kind: other

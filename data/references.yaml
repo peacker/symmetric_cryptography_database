@@ -634,7 +634,8 @@ references:
   year: 2009
   venue: CHES 2009
   url: https://www.iacr.org/archive/ches2009/57470001/57470001.pdf
-  notes: 'KATAN and KTANTAN share this single specification; local copy references/2009-katan.pdf.'
+  notes: 'KATAN and KTANTAN share this single specification; local copy references/2009-katan_ktantan.pdf.
+    (references/2009-katan.pdf is an unrelated mislabeled AES-GCM paper — do not use.)'
 - id: adams_1997_cast128
   kind: standard
   title: 'RFC 2144: The CAST-128 Encryption Algorithm'
@@ -1265,6 +1266,29 @@ references:
     Defines the original 257-bit Subterranean state update and its Substream
     and Subhash modes. The design dates to 1992; this paper appeared in 1993.
     Local copy supplied by the user: references/1993-subterranean.pdf.
+- id: daemen_clapp_1998_panama
+  kind: paper
+  title: Fast Hashing and Stream Encryption with PANAMA
+  authors:
+  - Joan Daemen
+  - Craig Clapp
+  year: 1998
+  venue: Fast Software Encryption (FSE) 1998, LNCS 1372, pp. 60-74
+  publisher: Springer
+  url: https://doi.org/10.1007/3-540-69710-1_5
+  notes: No local copy available. Introduces the belt-and-mill PANAMA design later
+    refined into RadioGatún and, ultimately, Keccak.
+- id: aumasson_bernstein_2012_siphash
+  kind: paper
+  title: 'SipHash: a Fast Short-Input PRF'
+  authors:
+  - Jean-Philippe Aumasson
+  - Daniel J. Bernstein
+  year: 2012
+  venue: INDOCRYPT 2012, LNCS 7668, pp. 489-508
+  publisher: Springer
+  url: https://eprint.iacr.org/2012/351
+  notes: No local copy available.
 - id: bertoni_et_al_2006_radiogatun
   kind: paper
   title: 'RadioGatún, a Belt-and-Mill Hash Function'
@@ -3235,9 +3259,11 @@ references:
   year: 2008
   venue: New Stream Cipher Designs, LNCS 4986, pp. 20–38
   url: https://link.springer.com/chapter/10.1007/978-3-540-68351-3_3
-  notes: Dragon is a word-based stream cipher using a 1024-bit NLFSR + 64-bit memory
+  notes: 'Dragon is a word-based stream cipher using a 1024-bit NLFSR + 64-bit memory
     (1088-bit state); 128-bit or 256-bit key/IV; outputs 64 bits per clock; eSTREAM
-    Phase 3; local copy references/2008-dragon.pdf.
+    Phase 3. references/2008-dragon.pdf is a 2-page truncated extract; use
+    references/2005-dragon.pdf (the complete original eSTREAM submission "Dragon:
+    A Fast Word Based Stream Cipher") as the local copy instead.'
 - id: wu_2008_hc128
   kind: article
   title: The Stream Cipher HC-128

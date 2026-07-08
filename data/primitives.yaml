@@ -1570,6 +1570,17 @@ primitives:
     output_size_bits: 256
   notes: Original Subterranean hash mode; message words are absorbed through the
     256-bit key/input register before blank updates and 16 output words.
+- id: panama_hash
+  name: PANAMA
+  family_id: panama
+  primitive_type: hash_function
+  reference_ids:
+  - daemen_clapp_1998_panama
+  characteristics:
+    output_size_bits: 256
+    state_size_bits: 544
+  notes: Combined hash/stream-cipher construction; the same state/buffer engine
+    can be run in stream-cipher mode to generate a keystream instead of a digest.
 - id: radiogatun_hash
   name: RadioGatún
   family_id: radiogatun
@@ -2165,6 +2176,19 @@ primitives:
     rounds: 1
     output_size_bits: 128
   notes: Generic baseline instance; update with full paper-specific variants.
+- id: siphash_2_4
+  name: SipHash-2-4
+  family_id: siphash
+  primitive_type: permutation
+  reference_ids:
+  - aumasson_bernstein_2012_siphash
+  characteristics:
+    state_size_bits: 256
+    key_size_bits: 128
+    output_size_bits: 64
+    rounds: 2
+  notes: Recommended default parameterization; 2 SipRounds per message block and
+    4 SipRounds during finalization.
 - id: chaskey_v1
   name: Chaskey-v1
   family_id: chaskey

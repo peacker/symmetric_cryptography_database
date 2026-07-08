@@ -24,12 +24,12 @@ KNOWN_MISSING = {
     "fantomas_robin", "fsb", "fugue", "hamsi", "hpc", "kasumi", "khichidi_1",
     "labyrinth", "lane", "lea_iso", "lesamnta", "luffa", "lux_hash",
     "m3lcrypt", "mcrypton", "mcssha3", "md6", "meshhash", "mibs", "mmb",
-    "msx", "multi2", "nasha", "newdes", "oryx", "pea", "picaro", "pufferfish",
-    "rc4plus", "rsb", "sandstorm", "sarmal", "sgail", "shabal", "shamata",
-    "shavite3", "simd_hash", "spectral_hash", "streamhash", "swifftx",
-    "tangle_hash", "tib3", "twine", "twister_hash", "ulbc", "vmpc",
-    "vortex_hash", "wake", "wamm", "waterfall_hash", "xchacha", "xoodoo",
-    "zuc",
+    "msx", "multi2", "nasha", "newdes", "oryx", "panama", "pea", "picaro",
+    "pufferfish", "rc4plus", "rsb", "sandstorm", "sarmal", "sgail", "shabal",
+    "shamata", "shavite3", "simd_hash", "siphash", "spectral_hash",
+    "streamhash", "swifftx", "tangle_hash", "tib3", "twine", "twister_hash",
+    "ulbc", "vmpc", "vortex_hash", "wake", "wamm", "waterfall_hash",
+    "xchacha", "xoodoo", "zuc",
 }
 
 
