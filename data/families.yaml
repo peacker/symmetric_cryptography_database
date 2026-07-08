@@ -874,7 +874,13 @@ families:
     stage_ids:
     - submissions_block_64bit
     status: submitted
-  influences: []
+  influences:
+  - source_family_id: pes
+    relations:
+    - improvement_of
+    note: IDEA is the revised version of PES (originally called IPES), redesigned after
+      Biham and Shamir's differential cryptanalysis found a weakness in PES's key schedule
+      and one internal operation's placement.
   innovative_ideas:
   - id: idea_lai_massey_lineage
     name: Origin of the Lai–Massey block-cipher structure
@@ -2740,6 +2746,12 @@ families:
       smallest instance of the NIST SHA-3 standard permutation, reusing its round function
       and 5x5-lane state representation unmodified inside Elephant's LFSR-masked encrypt-then-MAC
       construction.
+  - source_family_id: spongent
+    relations:
+    - same_round_function
+    note: The Dumbo and Jumbo instances of Elephant name their permutation directly
+      as Spongent-pi[160] and Spongent-pi[176], reusing the spongent present-type permutation
+      unmodified as the masking function in Elephant's construction.
 - id: romulus
   name: Romulus
   notes: Romulus is a nonce-based AEAD family built around the SKINNY-128-256 tweakable block cipher, with modes tuned for
@@ -3410,7 +3422,17 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: sliscp
+    relations:
+    - inspired_by
+    note: Sycon's MonkeyDuplex mode's key-absorption step is explicitly stated to be
+      inspired from the sLiSCP mode.
+  - source_family_id: norx
+    relations:
+    - inspired_by
+    note: Sycon's domain separation scheme is explicitly stated to be inspired from
+      NORX.
 - id: spix
   name: SPIX
   notes: SPIX is a lightweight duplex AEAD design using a 256-bit permutation with Boolean nonlinear layers and rotations.
@@ -3444,6 +3466,12 @@ families:
     note: The nonlinear layer of Spix's permutation, the Simeck S-box, is described
       as an unkeyed independently parameterized variant of the Simon round function,
       directly adapting Simon's AND-rotation-XOR nonlinear function.
+  - source_family_id: sliscp_light
+    relations:
+    - variant_of
+    - same_round_function
+    note: Spix's permutation is a named sLiSCP-light instance (the P9/P18 sLiSCP-light
+      permutations), reusing sLiSCP-light's partial-SPN round function unmodified.
 - id: spoc
   name: SpoC
   notes: SpoC is a lightweight sponge-based AEAD family that processes plaintext through a rate smaller than the permutation
@@ -3471,7 +3499,13 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: sliscp_light
+    relations:
+    - variant_of
+    - same_round_function
+    note: SpoC-64 is defined directly as the sLiSCP-light-[192] permutation instance,
+      reusing its partial-SPN round function unmodified as SpoC's underlying permutation.
 - id: spook
   name: Spook
   notes: Spook is a lightweight AEAD family combining a tweakable block cipher with a sponge-like mode, with variants aimed
@@ -3555,7 +3589,15 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: rectangle
+    relations:
+    - variant_of
+    - generalization_of
+    - same_sbox_size
+    note: The KNOT permutations are stated to be extensions of the lightweight block
+      cipher RECTANGLE, and KNOT's 4-bit S-box comes from the same equivalence class
+      as RECTANGLE's S-box.
 - id: pyjamask
   name: Pyjamask
   notes: Pyjamask is a 128-bit-key SPN family using bitsliced 3-bit S-boxes and circulant binary-matrix diffusion; it forms
@@ -3812,6 +3854,12 @@ families:
     note: ACE's nonlinear layer, the Simeck box, is an unkeyed, independently parameterized
       variant of the Simon round function, adopted for its hardware-friendly XOR/AND/rotate
       structure.
+  - source_family_id: sliscp
+    relations:
+    - inspired_by
+    note: ACE adopts a variation of the sLiSCP sponge duplex mode (with retuned rate/capacity
+      parameters), while using its own distinct ACE permutation rather than sLiSCP's
+      permutation.
   innovative_ideas:
   - id: ace_sb64_nonlinear_layer
     name: SB-64 nonlinear layer
@@ -4121,7 +4169,13 @@ families:
     stage_ids:
     - second_prize
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: rectangle
+    relations:
+    - related_to
+    note: TANGRAM's authors state it has design similarities with RECTANGLE and reuse
+      RECTANGLE's differential/linear trail-clustering analysis to argue TANGRAM's
+      own resistance to those attacks.
   notes: 'TANGRAM is a bit-sliced SP-network family including TANGRAM-128/128, TANGRAM-128/256, and TANGRAM-256/256.
 
     '
@@ -4301,7 +4355,13 @@ families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: beepbeep
+    relations:
+    - improvement_of
+    note: Bleep64 is stated to be a slight improvement over its predecessor BeepBeep
+      (FSE 2002), retaining its clock-controlled-LFSR-plus-nonlinear-filter architecture
+      for embedded real-time systems.
   notes: 'Driscoll (Honeywell) 2019. Additive stream cipher + autokey product cipher for AEAD. Core: 127-bit LFSR (poly x^127+x^63+1,
     split as L0||L1, two 64-bit halves) + two 32-bit nonlinear state words x, y = 192 bits register storage. Key=128 bits
     (primary), nonce=96 bits, tag=64 bits (primary). Uses ones''-complement multiplication of 32-bit words as nonlinear filter.
@@ -7645,7 +7705,17 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: wg
+    relations:
+    - same_round_function
+    note: WAGE's round function core is the Welch-Gong permutation (WGP) over F_2^7,
+      generalizing the WG stream cipher's nonlinear filter to a 37-stage Galois NLFSR
+      combined with two WGP applications and four new 7-bit S-boxes.
+  - source_family_id: sliscp
+    relations:
+    - inspired_by
+    note: WAGE adopts the sLiSCP sponge mode as its mode of operation.
   notes: 'Aagaard et al. 2019. WAGE is a 259-bit permutation (37 stages × 7 bits over F_2^7) used in a unified duplex sponge
     AEAD mode. Linear layer: LFSR with primitive feedback polynomial l(y) = y^37+y^31+y^30+y^26+y^24+y^19+y^13+y^12+y^8+y^6+ω
     over F_2^7. Nonlinear components: WGP7 (Welch-Gong Permutation, decimation d=13) and SB (7-bit S-box constructed via nonlinear
