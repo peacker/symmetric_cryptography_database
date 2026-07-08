@@ -177,6 +177,20 @@ constructions:
   - id: filtered_lfsr_with_decimation
     name: Filtered LFSR with Decimation
 
+  - id: shrinking_generator
+    name: Shrinking Generator
+    special_case_of: filtered_lfsr_with_decimation
+    notes: Coppersmith, Krawczyk, and Mansour (CRYPTO 1993); a control LFSR
+      irregularly decimates the output of a second, data LFSR — the data bit is
+      kept only when the corresponding control bit is 1.
+
+  - id: self_shrinking_generator
+    name: Self-Shrinking Generator
+    special_case_of: filtered_lfsr_with_decimation
+    notes: Meier and Staffelbach (EUROCRYPT 1994); a single LFSR decimates its own
+      output in pairs, removing the need for a second control register used by
+      the two-register Shrinking Generator.
+
   - id: gufn
     name: Generalized Unbalanced Feistel Network (GUFN)
 

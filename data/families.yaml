@@ -9799,13 +9799,7 @@ families:
     stage_ids:
     - submissions
     status: candidate
-  influences:
-  - source_family_id: keccak
-    relations:
-    - inspired_by
-    note: Tortuga is built as a keyed sponge construction, citing the sponge-functions
-      paper authored by the Keccak team for its absorb/iterate/squeeze structure, although
-      its internal permutation is Matt Blaze's Turtle cipher rather than Keccak-f.
+  influences: []
   innovative_ideas: []
   notes: 'Tortuga (PHC 2014) by Teath Sch. Password hashing function based on the Turtle algorithm, an iterative hash-based
     construction with configurable time cost.
