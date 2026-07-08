@@ -1939,13 +1939,17 @@ references:
   url: https://eprint.iacr.org/2011/576.pdf
   notes: 'Lightweight block cipher targeting RFID. Local copy: references/2011-klein.pdf.'
 - id: kuznyechik_ref
-  kind: paper
-  title: Kuznyechik (Grasshopper) Block Cipher — GOST R 34.12-2015
-  year: 2019
-  venue: eprint.iacr.org / GOST standard analysis
-  url: https://eprint.iacr.org/2019/534.pdf
+  kind: standard
+  title: 'RFC 7801: GOST R 34.12-2015: Block Cipher "Kuznyechik"'
+  authors:
+  - V. Dolmatov
+  year: 2016
+  venue: IETF RFC 7801 (Informational, Independent Submission)
+  url: https://www.rfc-editor.org/rfc/rfc7801
   notes: 'Russian national block cipher standard (GOST R 34.12-2015). 128-bit block,
-    256-bit key, 10-round SPN. Local copy: references/2019-kuznyechik.pdf.'
+    256-bit key, 10-round SPN. Local copy references/2015-kuznyechik.txt.
+    (The file "2019-kuznyechik.pdf" in that directory is an unrelated, mislabeled
+    PUF-hardness-amplification paper — do not use.)'
 - id: laem_ref
   kind: paper
   title: LAEM
