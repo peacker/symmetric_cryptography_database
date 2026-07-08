@@ -91,6 +91,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | BEA-1 | BEA-1 | block_cipher | 2017 | https://arxiv.org/abs/1702.06475 | Full | yes |
 | [x] | battcrypt | battcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/battcrypt-v0.pdf | Full | yes |
 | [x] | BEAR/LION | BEAR/LION | construction | 1996 | https://www.cl.cam.ac.uk/archive/rja14/Papers/bear-lion.pdf | Full | yes |
+| [x] | BeepBeep | BeepBeep | stream_cipher | 2002 | https://www.iacr.org/archive/fse2002/23650166/23650166.pdf | Full | yes |
 | [x] | BelT | BelT | block_cipher | 2012 | https://apmi.bsu.by/assets/files/std/belt-spec27.pdf | Full | yes |
 | [x] | BipBip | BipBip | tweakable_block_cipher | 2023 | https://tches.iacr.org/index.php/TCHES/article/view/9955/9458 | TODO | no |
 | [x] | Bleep64 | Bleep64 | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Bleep64-spec.pdf | Full | yes |
@@ -189,6 +190,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | LILI-128 | LILI-128 | stream_cipher | 2000 | https://www.cosic.esat.kuleuven.be/nessie/ | Full | yes |
 | [x] | Lilliput-AE | Lilliput-AE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Lilliput-AE-spec.pdf | Full | yes |
 | [x] | Limdolen | Limdolen | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Limdolen-spec.pdf | Full | yes |
+| [x] | LowMC | LowMC | block_cipher | 2015 | https://eprint.iacr.org/2016/687 | Full | yes |
 | [x] | LOCUS | LOCUS | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/LOTUS-AEAD-and-LOCUS-AEAD-spec.pdf | Full | yes |
 | [x] | LOKI | LOKI | block_cipher | 1990 | https://link.springer.com/chapter/10.1007/BFb0030348 | Full | no |
 | [x] | LOKI97 | LOKI97 | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
@@ -223,15 +225,18 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Nimbus | Nimbus | block_cipher | 2000 | https://www.cosic.esat.kuleuven.be/nessie/ | Full | yes |
 | [x] | NLSv2 | NLSv2 | stream_cipher | 2004 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_6 | Full | yes |
 | [x] | NOEKEON | NOEKEON | block_cipher | 2000 | https://www.cosic.esat.kuleuven.be/nessie/ | Full | yes |
+| [x] | NORX | NORX | aead | 2016 | https://competitions.cr.yp.to/round3/norxv30.pdf | Full | yes |
 | [x] | NUSH | NUSH | stream_cipher | 2000 | https://www.cosic.esat.kuleuven.be/nessie/ | Full | yes |
 | [x] | Omega Crypt | Omega Crypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/OmegaCrypt-v0.pdf | Full | yes |
 | [x] | ORANGE | ORANGE | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ORANGE-spec.pdf | Full | yes |
 | [x] | Oribatida | Oribatida | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Oribatida-spec.pdf | Full | yes |
 | [x] | ORYX | ORYX | stream_cipher | 1995 | N/A — proprietary | N/A | no |
+| [x] | PANAMA | PANAMA | hash+stream_cipher | 1998 | https://doi.org/10.1007/3-540-69710-1_5 | TODO | no |
 | [x] | Parallel | Parallel | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Parallel-v1.pdf | Full | yes |
 | [x] | Parity-check DES/Triple-DES variants | Parity-check DES/Triple-DES variants | block_cipher | 2013 | https://doi.org/10.55630/sjc.2013.7.257-270 | Full | yes |
 | [x] | Paterson trapdoor cipher | Paterson trapdoor cipher | block_cipher | 1999 | https://doi.org/10.1007/3-540-48519-8_15 | Full | yes |
 | [ ] | PEA | PEA | block_cipher | TODO | TODO | TODO — spec not found | no |
+| [x] | PES | PES | block_cipher | 1990 | https://doi.org/10.1007/3-540-46877-3_35 | Full | yes |
 | [x] | PHOTON | PHOTON | permutation | 2021 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | PHOTON-Beetle | PHOTON | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/PHOTON-Beetle-spec.pdf | Full | yes |
 | [x] | PICARO | PICARO | block_cipher | 2012 | https://link.springer.com/chapter/10.1007/978-3-642-37288-9_5 | Full | no |
@@ -260,6 +265,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | RC4A | RC4A | stream_cipher | 2007 | https://eprint.iacr.org/2007/070 | Full | yes |
 | [x] | RC5 | RC5 | block_cipher | 1996 | https://www.rfc-editor.org/rfc/rfc2040 | TODO | no |
 | [x] | RC6 | RC6 | block_cipher | 1998 | https://www.cerias.purdue.edu/apps/reports_and_papers/view/2029 | TODO | yes |
+| [x] | RECTANGLE | RECTANGLE | block_cipher | 2014 | https://eprint.iacr.org/2014/084 | Full | yes |
 | [x] | REMUS | REMUS | aead | 2019 | https://eprint.iacr.org/2019/992 | Full | yes |
 | [x] | RIG | RIG | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/RIG-v2.pdf | Full | yes |
 | [x] | Rijndael | Rijndael | block_cipher | 1998 | https://csrc.nist.gov/projects/aes | TODO | yes |
@@ -298,11 +304,14 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | SHARK | SHARK | block_cipher | 1996 | https://doi.org/10.1007/3-540-68697-5_11 | Full | yes |
 | [x] | SIMON | SIMON | block_cipher | 2013 | https://eprint.iacr.org/2013/404 | TODO | no |
 | [x] | SIMPLE | SIMPLE | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
+| [x] | SipHash | SipHash | permutation | 2012 | https://eprint.iacr.org/2012/351 | TODO | no |
 | [x] | SIV-Rijndael256 | Rijndael | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SIV-Rijndael256-spec.pdf | Full | yes |
 | [x] | SIV-TEM-PHOTON | PHOTON | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SIV-TEM-PHOTON-spec.pdf | Full | yes |
 | [x] | SKINNY | SKINNY | tweakable_block_cipher | 2016 | https://doi.org/10.1007/978-3-662-53008-5_5 | TODO | no |
 | [x] | SKINNY-AEAD/SKINNY-HASH | SKINNY | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/SKINNY-spec.pdf | Full | yes |
 | [x] | SKIPJACK | SKIPJACK | block_cipher | 1998 | https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub185.pdf | Full | yes |
+| [x] | sLiSCP | sLiSCP | permutation | 2017 | https://eprint.iacr.org/2017/747 | Full | yes |
+| [x] | sLiSCP-light | sLiSCP-light | permutation | 2018 | https://cacr.uwaterloo.ca/techreports/2018/cacr2018-01.pdf | Full | yes |
 | [x] | SM4 | SM4 | block_cipher | 2003 | http://www.gb688.cn/bzgk/gb/newGbInfo?hcno=74B9DD11287E72408C19C4D3A360D1BD | Full history in IETF draft §1.2; algorithm in local 2016 specification | yes |
 | [x] | SMBA | SMBA | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000341 | Full | yes |
 | [x] | SNEIK | SNEIK | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
@@ -313,12 +322,14 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | SOBER-t32 | SOBER-t32 | stream_cipher | 2000 | https://web.archive.org/web/20110812013604/https://www.cosic.esat.kuleuven.be/nessie/workshop/submissions/sober-t32.zip | Full | yes |
 | [x] | SOSEMANUK1 | SOSEMANUK1 | stream_cipher | 2005 | https://web.archive.org/web/20120414020956/http://www.ecrypt.eu.org/stream/sosemanukpf.html | Full | yes |
 | [x] | SPARKLE | SPARKLE | permutation | 2020 | https://sparkle-lwc.github.io/ | TODO | yes |
+| [x] | SPARX | SPARX | block_cipher | 2016 | https://eprint.iacr.org/2016/984 | Full | yes |
 | [x] | SPECK | SPECK | block_cipher | 2013 | https://eprint.iacr.org/2013/404 | Full | yes |
 | [x] | SPECKEY | SPECKEY | block_cipher | 2016 | https://eprint.iacr.org/2016/984 | Full | yes |
 | [x] | SPEEDY | SPEEDY | block_cipher | 2021 | https://doi.org/10.46586/tches.v2021.i4.510-545 | Full | yes |
 | [x] | SPIX | SPIX | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [ ] | Splight | Splight | block_cipher | 2026 | https://ieeexplore.ieee.org/document/11501825 | TODO | yes |
 | [x] | SpoC | SpoC | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | Full | yes |
+| [x] | spongent | spongent | hash | 2011 | https://eprint.iacr.org/2011/697 | Full | yes |
 | [x] | Spook | Spook | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | SPRING | SPRING | prng | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000343 | Full | yes |
 | [x] | Spritz | Spritz | stream_cipher | 2014 | https://people.csail.mit.edu/rivest/pubs/RS14.pdf | Full | yes |
@@ -353,6 +364,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | WAGE | WAGE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/WAGE-spec.pdf | Full | yes |
 | [x] | WAKE | WAKE | stream_cipher | 1994 | https://link.springer.com/chapter/10.1007/3-540-60590-8_26 | Full | no |
 | [x] | WARP | WARP | block_cipher | 2020 | https://eprint.iacr.org/2020/1320 | Full | yes |
+| [x] | WG (Welch-Gong) | WG | stream_cipher | 2005 | https://cr.yp.to/streamciphers/wg/desc.pdf | Full | yes |
 | [x] | Whirlpool | Whirlpool | hash | 2003 | https://www.larc.usp.br/~pbarreto/whirlpool.zip | Full | yes |
 | [x] | XChaCha | ChaCha | stream_cipher | 2018 | https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-xchacha | Full | no |
 | [x] | XEX-based families (XTS lineage) | AES | mode | 2010 | https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38e.pdf | Full | no |
