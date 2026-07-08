@@ -2148,7 +2148,13 @@ families:
   reference_ids:
   - belkheyar_et_al_2023_bipbip
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: mars
+    relations:
+    - inspired_by
+    note: BipBip uses a layered round structure with lightweight shell rounds surrounding
+      a cryptographically stronger core, explicitly modeled on the heterogeneous-round
+      layering used in MARS.
   notes: 'BipBip targets C3 pointer encryption and uses a 24-bit block with a 40-bit tweak.
 
     '
@@ -2235,7 +2241,20 @@ families:
   reference_ids:
   - canale_et_al_2023_scarf
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: misty1
+    relations:
+    - variant_of
+    - inspired_by
+    note: SCARF's two-round datapath structure is a modification of the MISTY structure,
+      combining SPN and Feistel advantages while retaining the property that two S-boxes
+      can be evaluated in parallel.
+  - source_family_id: speedy
+    relations:
+    - inspired_by
+    note: SCARF's S-box search criteria follow the design ideas used for the S-box
+      of SPEEDY, an OAI-gate-based construction composed with an XOR that prioritizes
+      algebraic degree.
   notes: 'SCARF is a dedicated cache-randomization cipher with a very small 10-bit block size and heavy key-dependency over
     few rounds.
 
@@ -2289,7 +2308,20 @@ families:
   reference_ids:
   - wang_et_al_2025_blink
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: midori
+    relations:
+    - variant_of
+    - same_mix_column
+    - inspired_by
+    note: Blink's round function is explicitly built on the structure of Midori, reusing
+      Midori's 4x4 almost-MDS involutory diffusion matrix while replacing the S-boxes
+      with lower-latency involutory alternatives.
+  - source_family_id: prince
+    relations:
+    - same_round_constants
+    note: Blink's round constants are derived from the fractional part of pi, the same
+      methodology PRINCE uses to generate its round constants.
   notes: 'Blink is instantiated with 64-bit and 128-bit blocks, and with tweak lengths of one or two blocks.
 
     '
@@ -2310,7 +2342,23 @@ families:
   reference_ids:
   - belkheyar_et_al_2025_chilow
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - generalization_of
+    note: ChiLow's ChiChi non-linear layer generalizes the odd-sized chi function family
+      (chi_5, used in Keccak) into two intertwined parallel chi functions to obtain
+      a bijective non-linear layer for even state sizes.
+  - source_family_id: subterranean
+    relations:
+    - generalization_of
+    note: ChiChi also generalizes chi_257 as used in Subterranean, extending the chi
+      function construction to even dimensions.
+  - source_family_id: threeway
+    relations:
+    - generalization_of
+    note: ChiChi also generalizes chi_3 as used in 3-Way, extending the chi function
+      construction to even dimensions.
   notes: 'The ChiLow family includes 32-bit and 40-bit tweakable block-cipher variants for embedded code encryption.
 
     '
