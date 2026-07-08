@@ -5708,7 +5708,14 @@ families:
   reference_ids:
   - pride_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: prince
+    relations:
+    - inspired_by
+    - same_key_schedule
+    note: 'PRIDE''s key whitening explicitly reuses PRINCE''s FX construction: a pre-whitening
+      key and a post-whitening key (set equal to it) are derived from one half of the
+      master key, with the other half driving the round-key derivation.'
   notes: PRIDE (Albrecht et al., CRYPTO 2014) is a lightweight 64-bit SPN block cipher with a 128-bit key and 20 rounds. Its
     linear layer decomposes into four independent 16-bit linear maps over F_2^4 — enabling efficient bitsliced implementations.
     The design targets software-bitslice performance.
