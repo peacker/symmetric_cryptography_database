@@ -106,6 +106,33 @@ Contributions that improve the coverage, accuracy, provenance, schemas, tooling,
 2. Run `make setup` to create the virtual environment and install dependencies.
 3. Edit the source YAML in `data/` and update the matching schema in `schema/` when the data model changes.
 4. Cite a reliable primary source in `data/references.yaml` for factual claims. Add influence links only when the relationship is explicitly supported by a source.
+
+   An influence edge (`influences[].source_family_id`) records genuine design lineage, not
+   general co-occurrence in a paper. Only add one when the source states a concretely reused
+   or adapted component (S-box, key schedule, round function, permutation, whitening
+   construction, round constants, etc.), explicit "based on"/"derived from"/"inspired by"/
+   "generalizes"/"extends" language about the design itself, or literal same-team continuation
+   of an earlier design. Do **not** record an influence, even if the source discusses it at
+   length, for:
+   - a pure performance/benchmark comparison ("we compare cycle count to X", "X is a
+     reference point", "faster than X");
+   - "positioned against"/"contrasted with"/"designed to avoid a weakness of X" framing where
+     nothing is adopted;
+   - shared target application or use case ("also lightweight", "also NIST LWC round 1");
+   - a shared abstract paradigm with no concretely borrowed mechanism (e.g. "both ARX", "both
+     Feistel", "both sponge-based") — this applies even when the source self-categorizes this
+     way. For sponge/duplex designs specifically: if only the abstract Absorb/Squeeze paradigm
+     is borrowed (not a concrete permutation), add `sponge_construction` to the family's
+     `construction_ids` instead of inventing an influence edge to whichever cipher popularized
+     sponges;
+   - a related-work listing that merely enumerates several earlier designs sharing a generic
+     technique, without singling one out as the actual adopted basis;
+   - anything the source states was developed independently.
+
+   When a real predecessor has no family entry yet, add it properly (family, round, primitive,
+   and reference entries) rather than pointing the influence at an approximate or unrelated id,
+   or dropping a well-documented lineage claim. When unsure, omit the edge — a missed influence
+   is far cheaper to add later than a fabricated one is to catch.
 5. Keep existing IDs stable. Add new IDs for new entities rather than renaming published IDs.
 6. When a later document standardizes an existing design, preserve the original family
    and add a separate `<name> [authority]` family (for example `LEA [ISO]`) whose only
