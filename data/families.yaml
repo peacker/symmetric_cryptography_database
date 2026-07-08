@@ -2503,7 +2503,24 @@ families:
   reference_ids:
   - photon_beetle_2021
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: present
+    relations:
+    - same_sbox
+    note: The SubCells layer of the PHOTON permutation applies the 4-bit PRESENT S-box
+      unchanged in the P196 and P256 permutation instances.
+  - source_family_id: led
+    relations:
+    - same_round_constants
+    note: PHOTON's round-constant generation uses an LFSR-based shift register explicitly
+      borrowed from the LED block cipher.
+  - source_family_id: aes
+    relations:
+    - same_sbox
+    - inspired_by
+    note: Larger PHOTON permutation variants instantiate SubCells with the 8-bit AES
+      S-box, and PHOTON's active-S-box security argument explicitly follows the AES-like
+      wide-trail design strategy.
 - id: skinny
   name: SKINNY
   notes: SKINNY is a lightweight tweakable SPN family with 64- or 128-bit blocks and a tweakey schedule designed to minimize
@@ -2819,7 +2836,16 @@ families:
     - round_2
     - finalist
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: grain
+    relations:
+    - variant_of
+    - improvement_of
+    note: Grain-128AEADv2 directly continues the nonlinear-filter-generator architecture
+      of the original Grain v1 cipher (an LFSR combined with an NFSR feeding nonlinear
+      feedback and pre-output functions), enlarging the registers to 128 bits and increasing
+      the algebraic degree and resiliency of the feedback and output functions across
+      the Grain-128/128a/128AEAD lineage.
 - id: gimli
   name: Gimli
   notes: Gimli is a 384-bit ARX permutation operating on a 3×4 array of 32-bit words, designed as a compact foundation for
@@ -6955,7 +6981,15 @@ families:
   reference_ids:
   - speedy_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: prince
+    relations:
+    - same_round_constants
+    - similar_mix_column
+    note: SPEEDY generates its round constants the same way as PRINCE, from the binary
+      digits of pi, and merges its cyclic-matrix MixColumns layer with the round-key/round-constant
+      XOR using the same key-addition/linear-layer merging technique pioneered in PRINCE,
+      adapted with a wider cyclic matrix applied every second S-box layer.
   notes: SPEEDY-r-192 is an ultra-low-latency block-cipher family with 6-bit S-boxes and bit-level diffusion.
 - id: spritz
   name: Spritz
@@ -9340,7 +9374,13 @@ families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: gift
+    relations:
+    - inspired_by
+    note: SUNDAE-GIFT instantiates the SUNDAE mode of operation with unmodified GIFT-128
+      as its underlying block cipher, chosen for its lightweight hardware/software
+      performance advantages over PRESENT, SKINNY and SIMON.
   notes: 'Banik et al. 2019. SUNDAE-GIFT uses GIFT-128 (block=128, key=128, 40 rounds) in SUNDAE mode. SUNDAE is a nonce-misuse
     resistant single-pass AEAD mode (binary-tree based MAC + OFB encryption). GIFT-128 SPN: 4-bit SubCells, bit permutation
     PermBits, AddRoundKey, AddRoundConstant. Primary: SUNDAE-GIFT-96 (nonce=96, key=128, tag=128).
@@ -9374,7 +9414,25 @@ families:
     - round_2
     - finalist
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: xoodoo
+    relations:
+    - inspired_by
+    note: Xoodyak is built directly on the Xoodoo permutation, using Xoodoo[12] unmodified
+      as the state-transformation function inside its Cyclist duplex mode.
+  - source_family_id: keccak
+    relations:
+    - inspired_by
+    note: The Xoodoo permutation underlying Xoodyak is explicitly described as inspired
+      by Keccak-p and based on the same principles, sharing similar weak-alignment
+      diffusion behavior though with a narrower 3-bit chi nonlinear layer.
+  - source_family_id: gimli
+    relations:
+    - inspired_by
+    - selection_of_possible_configurations
+    note: The 384-bit state width chosen for the Xoodoo permutation underlying Xoodyak
+      is explicitly stated to be dimensioned like Gimli for efficiency on low-end 32-bit
+      processors.
   notes: 'Daemen et al. 2019. Xoodyak uses XOODOO[12] (384-bit state = 3 planes × 4×32-bit lanes, 12 rounds) in Cyclist mode
     (lightweight duplex). XOODOO round: θ (column parity mixing with 2D lane shifts), ρ_west (plane shift (1,0) and (0,11)),
     ι (XOR round constant C_i), χ (nonlinear: B_y = Ā_{(y+1) mod 3} · A_{(y+2) mod 3}, A_y += B_y), ρ_east (shifts (0,1) and
