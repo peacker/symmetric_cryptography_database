@@ -2507,6 +2507,7 @@ families:
       params:
         field_size: 16
   reference_ids:
+  - guo_peyrin_poschmann_2011_photon
   - photon_beetle_2021
   process_participations: []
   influences:
@@ -2840,6 +2841,7 @@ families:
     - id: xor
     - id: and
   reference_ids:
+  - hell_johansson_maximov_meier_2006_grain128
   - grain_128aead_2019
   process_participations:
   - process_id: lightweight_crypto_nist_2018_2023
@@ -7559,6 +7561,7 @@ families:
     - id: xor
     - id: constant
   reference_ids:
+  - nist_2008_sha3_first_round_candidates
   - threefish_ref
   process_participations: []
   influences:
@@ -8422,6 +8425,7 @@ families:
     - id: xor
     - id: rotation_fixed
   reference_ids:
+  - rogaway_coppersmith_1993_seal
   - rogaway_1997_seal
   process_participations: []
   influences:
@@ -8961,6 +8965,7 @@ families:
     - standardized
     status: winner
   reference_ids:
+  - nist_2001_draft_fips180_2
   - nist_2002_fips180_2
   - nist_2015_fips180_4
   round_ids:

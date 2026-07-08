@@ -37,3 +37,17 @@ def load_all_data(names: list[str] | None = None) -> dict[str, dict]:
     """
     keys = names if names is not None else list(DATA_FILES.keys())
     return {name: load_yaml(DATA_DIR / DATA_FILES[name]) for name in keys}
+
+
+def family_year(family: dict, references_by_id: dict[str, dict]) -> int | None:
+    """Earliest integer year among a family's references, or None if unknown.
+
+    This is the same "family year" shown in the genealogy visualization
+    (see build_db.py), kept here so other scripts agree with what's displayed.
+    """
+    candidates = [
+        references_by_id[ref_id]["year"]
+        for ref_id in family.get("reference_ids", [])
+        if ref_id in references_by_id and isinstance(references_by_id[ref_id].get("year"), int)
+    ]
+    return min(candidates) if candidates else None

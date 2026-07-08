@@ -1164,6 +1164,18 @@ references:
   year: 2020
   venue: NIST LWC Round 2
   url: https://sparkle-lwc.github.io/
+- id: guo_peyrin_poschmann_2011_photon
+  kind: paper
+  title: The PHOTON Family of Lightweight Hash Functions
+  authors:
+  - Jian Guo
+  - Thomas Peyrin
+  - Axel Poschmann
+  year: 2011
+  venue: CRYPTO 2011, LNCS 6841, pp. 222-239
+  publisher: Springer
+  url: https://eprint.iacr.org/2011/609
+  notes: 'Original PHOTON design paper. Local copy: references/2011-photon.pdf.'
 - id: photon_beetle_2021
   kind: article
   title: PHOTON-Beetle Authenticated Encryption and Hashing
@@ -1214,6 +1226,18 @@ references:
   year: 2019
   venue: NIST LWC Round 1 Submission
   url: https://csrc.nist.gov/projects/lightweight-cryptography
+- id: hell_johansson_maximov_meier_2006_grain128
+  kind: paper
+  title: 'A Stream Cipher Proposal: Grain-128'
+  authors:
+  - Martin Hell
+  - Thomas Johansson
+  - Alexander Maximov
+  - Willi Meier
+  year: 2006
+  venue: IEEE International Symposium on Information Theory (ISIT) 2006, pp. 1614-1618
+  url: https://doi.org/10.1109/ISIT.2006.261549
+  notes: Original Grain-128 design paper; no local copy available (IEEE paywalled).
 - id: grain_128aead_2019
   kind: paper
   title: Grain-128AEAD v2
@@ -2882,6 +2906,19 @@ references:
   year: 2005
   venue: ECRYPT Stream Cipher Project (eSTREAM)
   url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/ffcsr.pdf
+- id: rogaway_coppersmith_1993_seal
+  kind: article
+  title: A Software-Optimized Encryption Algorithm
+  authors:
+  - Phillip Rogaway
+  - Don Coppersmith
+  year: 1993
+  venue: Fast Software Encryption (FSE) 1993, LNCS 809, pp. 56-63
+  publisher: Springer
+  url: https://doi.org/10.1007/3-540-58108-1_6
+  notes: Original short conference version, first presenting SEAL; superseded in
+    this database's local copy by the extended journal version (see
+    rogaway_1997_seal), but this is the earlier, citable design date.
 - id: rogaway_1997_seal
   kind: article
   title: A Software-Optimized Encryption Algorithm
@@ -3008,6 +3045,19 @@ references:
   status: superseded
   notes: First revision of the SHA standard; corrected a flaw in the original 1993
     FIPS 180 message schedule.
+- id: nist_2001_draft_fips180_2
+  kind: standard
+  title: 'Announcing Draft Federal Information Processing Standard (FIPS) 180-2,
+    Secure Hash Standard, and Request for Comments'
+  authors:
+  - National Institute of Standards and Technology (NIST)
+  organization: NIST
+  year: 2001
+  venue: Federal Register, May 30, 2001
+  status: draft
+  url: https://www.federalregister.gov/documents/2001/05/30/01-13522/announcing-draft-federal-information-processing-standards-fips-180-2-secure-hash-standard-and
+  notes: First public specification of SHA-256/384/512, a year before the draft
+    was finalized as FIPS 180-2.
 - id: nist_2002_fips180_2
   kind: standard
   title: Secure Hash Standard (SHS), FIPS PUB 180-2

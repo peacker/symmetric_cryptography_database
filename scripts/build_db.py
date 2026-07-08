@@ -6,7 +6,7 @@ import json
 import hashlib
 import sqlite3
 
-from common import BUILD_DIR, DB_PATH, load_all_data
+from common import BUILD_DIR, DB_PATH, family_year, load_all_data
 
 
 def ensure_schema(conn: sqlite3.Connection) -> None:
@@ -348,17 +348,10 @@ def main() -> None:
             c = family["characteristics"]
             innovative_ideas = family.get("innovative_ideas", [])
             ref_ids = family.get("reference_ids", [])
-            family_year_candidates = [
-                references_by_id[ref_id].get("year")
-                for ref_id in ref_ids
-                if ref_id in references_by_id and isinstance(references_by_id[ref_id].get("year"), int)
-            ]
-            family_year = min(family_year_candidates) if family_year_candidates else None
-
             conn.execute(
                 "INSERT INTO families (id, name, year, notes, characteristics_json, innovative_ideas_json)"
                  " VALUES (?, ?, ?, ?, ?, ?)",
-                 (family["id"], family["name"], family_year,
+                 (family["id"], family["name"], family_year(family, references_by_id),
                   family.get("notes"), json.dumps(c, ensure_ascii=True),
                   json.dumps(innovative_ideas, ensure_ascii=True)),
             )
