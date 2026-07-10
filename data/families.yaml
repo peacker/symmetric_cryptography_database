@@ -2439,8 +2439,137 @@ families:
     note: Ascon's paper states that its 5-bit substitution layer is an affine
       equivalent of Keccak's chi mapping. The affine input and output transforms
       raise Ascon's branch number, so the S-boxes are related but not identical.
-  notes: First appeared in the 2016 CAESAR submission. NIST SP 800-232 standardizes the Ascon-p permutation together with
-    Ascon-AEAD128, Ascon-Hash256, Ascon-XOF128, and Ascon-CXOF128.
+  notes: 'Ascon-p is a 320-bit permutation operating on five 64-bit words, combining a 5-bit substitution layer with fixed
+    linear rotations. It first appeared in the 2016 CAESAR submission and was carried forward, as the same mathematical
+    transformation, into the 2021 NIST Lightweight Cryptography submission (both using big-endian bit/byte numbering and the
+    original v1.2 round constants). NIST SP 800-232 standardizes the identical permutation under the name Ascon-p, re-specifying
+    it with little-endian bit/byte numbering and re-encoded round constants; the function computed is equivalent to the v1.2
+    specification up to this bit-ordering convention, not a new design. See ascon_aead, ascon_hash, and ascon_xof for the
+    sponge constructions built on top of this permutation.
+
+    '
+- id: ascon_aead
+  name: Ascon-AEAD
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - ascon_permutation_round
+  target_applications:
+  - iot
+  - software
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 320
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: constant
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+  reference_ids:
+  - ascon_caesar_submission_2016
+  - ascon_nist_lwc_submission_2021
+  - ascon_joc_2021
+  - sp_800_232
+  process_participations: []
+  influences:
+  - source_family_id: ascon
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Ascon-AEAD is a duplex-sponge authenticated encryption construction built directly on the Ascon-p permutation,
+      reusing its state layout and round function unchanged.
+  notes: 'Duplex-sponge AEAD construction family. The 2016/2021 v1.2 submission defines three parameter profiles: Ascon-128
+    (64-bit rate, Ascon-p[12]/Ascon-p[6]), Ascon-128a (128-bit rate, Ascon-p[12]/Ascon-p[8]), and Ascon-80pq (64-bit rate,
+    160-bit quantum-resistant key, Ascon-p[12]/Ascon-p[6]) — all under big-endian bit ordering with the original v1.2 IV
+    constants. NIST SP 800-232 standardizes a single profile, Ascon-AEAD128, which adopts the 128-bit-rate Ascon-p[12]/Ascon-p[8]
+    parameters of Ascon-128a under little-endian bit ordering with revised NIST IV constants; Ascon-128 and Ascon-80pq were
+    not carried forward into the standard.
+
+    '
+- id: ascon_hash
+  name: Ascon-Hash
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - ascon_permutation_round
+  target_applications:
+  - iot
+  - software
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 320
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: constant
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+  reference_ids:
+  - ascon_caesar_submission_2016
+  - ascon_joc_2021
+  - sp_800_232
+  process_participations: []
+  influences:
+  - source_family_id: ascon
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Ascon-Hash is a fixed-output sponge hash built directly on the Ascon-p permutation, calling it with 12 rounds for
+      every permutation call (no short p_b call is used, unlike the AEAD modes).
+  notes: 'Fixed 256-bit-output sponge hash construction family. The v1.2 submission defines Ascon-Hash (64-bit rate, Ascon-p[12]
+    for every call, big-endian bit ordering, original v1.2 IV constants). NIST SP 800-232 standardizes Ascon-Hash256, the
+    same rate and round schedule under little-endian bit ordering with revised NIST IV constants.
+
+    '
+- id: ascon_xof
+  name: Ascon-XOF
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - ascon_permutation_round
+  target_applications:
+  - iot
+  - software
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 320
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: constant
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+  reference_ids:
+  - ascon_caesar_submission_2016
+  - ascon_joc_2021
+  - sp_800_232
+  process_participations: []
+  influences:
+  - source_family_id: ascon
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Ascon-Xof is a variable-output sponge construction built directly on the Ascon-p permutation, sharing Ascon-Hash's
+      Ascon-p[12]-for-every-call round schedule.
+  notes: 'Extendable-output sponge construction family. The v1.2 submission defines Ascon-Xof (64-bit rate, Ascon-p[12] for
+    every call, big-endian bit ordering, original v1.2 IV constants). NIST SP 800-232 standardizes Ascon-XOF128 (same profile,
+    little-endian bit ordering, revised NIST IV constants) and adds Ascon-CXOF128, a customizable XOF variant with no v1.2
+    predecessor that absorbs a domain-separation customization string before the message.
+
+    '
 - id: gaston
   name: Gaston
   construction_ids:

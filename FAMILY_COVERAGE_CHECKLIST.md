@@ -83,10 +83,15 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Argon2 | Argon2 | pbkdf | 2015 | https://www.rfc-editor.org/rfc/rfc9106 | Full | yes |
 | [x] | ARIA | ARIA | block_cipher | 2010 | https://www.rfc-editor.org/rfc/rfc5794 | TODO | no |
 | [x] | Ascon | Ascon-p | permutation | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
+| [x] | Ascon-128 | Ascon-128 | aead | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
+| [x] | Ascon-128a | Ascon-128a | aead | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
+| [x] | Ascon-80pq | Ascon-80pq | aead | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
 | [x] | Ascon-AEAD128 | Ascon-AEAD128 | aead | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
 | [x] | Ascon-CXOF128 | Ascon-CXOF128 | extendable_output_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
+| [x] | Ascon-Hash (v1.2) | Ascon-Hash | hash_function | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
 | [x] | Ascon-Hash256 | Ascon-Hash256 | hash_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
 | [x] | Ascon-XOF128 | Ascon-XOF128 | extendable_output_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
+| [x] | Ascon-Xof (v1.2) | Ascon-Xof | extendable_output_function | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
 | [x] | Ballet | Ballet | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
 | [x] | BEA-1 | BEA-1 | block_cipher | 2017 | https://arxiv.org/abs/1702.06475 | Full | yes |
 | [x] | battcrypt | battcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/battcrypt-v0.pdf | Full | yes |

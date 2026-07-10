@@ -1374,12 +1374,72 @@ primitives:
   characteristics:
     state_size_bits: 320
     rounds: 12
+    rounds_min: 6
+    rounds_max: 12
     block_size_bits: 320
     output_size_bits: 320
-  notes: Official NIST SP 800-232 name for the permutation is Ascon-p.
+  notes: Official NIST SP 800-232 name for the permutation is Ascon-p. The 12-round call (p_a in the literature) is used
+    for initialization/finalization across every Ascon mode; a shorter p_b call processes data blocks — 6 rounds in
+    Ascon-128/Ascon-80pq, 8 rounds in Ascon-128a/Ascon-AEAD128, and 12 rounds in Ascon-Hash/Ascon-Xof/Ascon-Hash256/Ascon-XOF128/Ascon-CXOF128.
+    No NIST-standardized mode uses the 6-round call.
+- id: ascon_128
+  name: Ascon-128
+  family_id: ascon_aead
+  primitive_type: aead
+  reference_ids:
+  - ascon_caesar_submission_2016
+  - ascon_nist_lwc_submission_2021
+  - ascon_joc_2021
+  characteristics:
+    state_size_bits: 320
+    key_size_bits: 128
+    nonce_size_bits: 128
+    tag_size_bits: 128
+    block_size_bits: 64
+    rounds: 12
+  notes: v1.2 CAESAR/NIST LWC submission profile using a 64-bit rate, big-endian bit ordering, and the original v1.2 IV
+    constants; uses Ascon-p[12] for initialization/finalization and Ascon-p[6] while processing associated data and
+    plaintext. Not carried forward into NIST SP 800-232.
+- id: ascon_128a
+  name: Ascon-128a
+  family_id: ascon_aead
+  primitive_type: aead
+  reference_ids:
+  - ascon_caesar_submission_2016
+  - ascon_nist_lwc_submission_2021
+  - ascon_joc_2021
+  characteristics:
+    state_size_bits: 320
+    key_size_bits: 128
+    nonce_size_bits: 128
+    tag_size_bits: 128
+    block_size_bits: 128
+    rounds: 12
+  notes: v1.2 CAESAR/NIST LWC submission profile using a 128-bit rate, big-endian bit ordering, and the original v1.2 IV
+    constants; uses Ascon-p[12] for initialization/finalization and Ascon-p[8] while processing associated data and
+    plaintext. NIST SP 800-232 restandardizes this exact rate/round profile as Ascon-AEAD128 under little-endian bit
+    ordering with revised NIST IV constants (see ascon_aead128).
+- id: ascon_80pq
+  name: Ascon-80pq
+  family_id: ascon_aead
+  primitive_type: aead
+  reference_ids:
+  - ascon_caesar_submission_2016
+  - ascon_nist_lwc_submission_2021
+  - ascon_joc_2021
+  characteristics:
+    state_size_bits: 320
+    key_size_bits: 160
+    nonce_size_bits: 128
+    tag_size_bits: 128
+    block_size_bits: 64
+    rounds: 12
+  notes: v1.2 quantum-resistant-key variant with a 160-bit key and a 64-bit rate, otherwise identical to Ascon-128 (Ascon-p[12]/Ascon-p[6],
+    big-endian bit ordering, original v1.2 IV constants). Not carried forward into NIST SP 800-232; it has no standardized
+    successor.
 - id: ascon_aead128
   name: Ascon-AEAD128
-  family_id: ascon
+  family_id: ascon_aead
   primitive_type: aead
   reference_ids:
   - sp_800_232
@@ -1390,12 +1450,27 @@ primitives:
     tag_size_bits: 128
     block_size_bits: 128
     rounds: 12
-  notes: NIST-standardized authenticated encryption for constrained devices, using
-    Ascon-p[12] for initialization/finalization and Ascon-p[8] while processing associated
-    data and plaintext.
+  notes: NIST-standardized authenticated encryption for constrained devices, using little-endian bit ordering and revised
+    NIST IV constants. It adopts the 128-bit-rate Ascon-p[12]/Ascon-p[8] profile of the v1.2 Ascon-128a (see ascon_128a),
+    while the v1.2 Ascon-128 and Ascon-80pq profiles were not standardized.
+- id: ascon_hash_v1_2
+  name: Ascon-Hash (v1.2)
+  family_id: ascon_hash
+  primitive_type: hash_function
+  reference_ids:
+  - ascon_caesar_submission_2016
+  - ascon_joc_2021
+  characteristics:
+    state_size_bits: 320
+    block_size_bits: 64
+    output_size_bits: 256
+    rounds: 12
+  notes: v1.2 CAESAR/NIST LWC submission profile using big-endian bit ordering and the original v1.2 IV constants; uses
+    Ascon-p[12] for every permutation call (no short p_b call, unlike the AEAD modes). NIST SP 800-232 restandardizes this
+    profile as Ascon-Hash256 (see ascon_hash256).
 - id: ascon_hash256
   name: Ascon-Hash256
-  family_id: ascon
+  family_id: ascon_hash
   primitive_type: hash_function
   reference_ids:
   - sp_800_232
@@ -1404,11 +1479,26 @@ primitives:
     block_size_bits: 64
     output_size_bits: 256
     rounds: 12
-  notes: NIST-standardized 256-bit hash function based on the Ascon-p[12] permutation
-    with a 64-bit rate.
+  notes: NIST-standardized 256-bit hash function using little-endian bit ordering and revised NIST IV constants, otherwise
+    identical to the v1.2 Ascon-Hash profile (see ascon_hash_v1_2) — both call Ascon-p[12] for every permutation call, with
+    no 8-round or 6-round call in either version.
+- id: ascon_xof_v1_2
+  name: Ascon-Xof (v1.2)
+  family_id: ascon_xof
+  primitive_type: extendable_output_function
+  reference_ids:
+  - ascon_caesar_submission_2016
+  - ascon_joc_2021
+  characteristics:
+    state_size_bits: 320
+    block_size_bits: 64
+    rounds: 12
+  notes: v1.2 CAESAR/NIST LWC submission profile using big-endian bit ordering and the original v1.2 IV constants; uses
+    Ascon-p[12] for every permutation call, matching Ascon-Hash's round schedule. NIST SP 800-232 restandardizes this profile
+    as Ascon-XOF128 (see ascon_xof128).
 - id: ascon_xof128
   name: Ascon-XOF128
-  family_id: ascon
+  family_id: ascon_xof
   primitive_type: extendable_output_function
   reference_ids:
   - sp_800_232
@@ -1416,11 +1506,12 @@ primitives:
     state_size_bits: 320
     block_size_bits: 64
     rounds: 12
-  notes: NIST-standardized extendable-output function with 128-bit security, based
-    on Ascon-p[12] with a 64-bit rate.
+  notes: NIST-standardized extendable-output function with 128-bit security, using little-endian bit ordering and revised
+    NIST IV constants, otherwise identical to the v1.2 Ascon-Xof profile (see ascon_xof_v1_2) — both use Ascon-p[12] with a
+    64-bit rate for every permutation call.
 - id: ascon_cxof128
   name: Ascon-CXOF128
-  family_id: ascon
+  family_id: ascon_xof
   primitive_type: extendable_output_function
   reference_ids:
   - sp_800_232
@@ -1428,8 +1519,8 @@ primitives:
     state_size_bits: 320
     block_size_bits: 64
     rounds: 12
-  notes: Customizable NIST-standardized XOF with 128-bit security; it absorbs a customization
-    string before the message.
+  notes: Customizable NIST-standardized XOF with 128-bit security; it absorbs a customization string before the message.
+    Uses little-endian bit ordering and NIST IV constants like Ascon-XOF128; it has no v1.2 predecessor.
 - id: photon_permutation_256
   name: PHOTON Permutation (256-bit)
   family_id: photon
