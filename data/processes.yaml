@@ -680,7 +680,7 @@ processes:
     - family_id: wage
     - family_id: xoodyak
     - family_id: yarara_and_coral
-    - name: GIFT-COFB
+    - family_id: gift_cofb
     - name: Pyjamask-AEAD
     - name: REMUS
     - name: Dumbo/Jumbo (Elephant)
@@ -719,7 +719,7 @@ processes:
     - family_id: wage
     - family_id: xoodyak
     - family_id: skinny_aead
-    - name: GIFT-COFB
+    - family_id: gift_cofb
   - id: finalist
     label: Finalists (10 candidates, 2021)
     kind: outcome
@@ -733,7 +733,7 @@ processes:
     - family_id: sparkle
     - family_id: tinyjambu
     - family_id: xoodyak
-    - name: GIFT-COFB
+    - family_id: gift_cofb
   - id: winner
     label: Winner
     kind: outcome

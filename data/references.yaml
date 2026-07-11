@@ -1641,7 +1641,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography (Round 1) Submission
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ace-spec.pdf
-  notes: ACE specification and parameter set (ACE-AE-128, ACE-H-256, 320-bit permutation).
+  notes: 'ACE specification and parameter set (ACE-AE-128, ACE-H-256, 320-bit permutation). Local copy: references/2019-ace.pdf.'
 - id: alvarez_et_al_1996_akelarre
   kind: paper
   title: 'Akelarre: A New Block Cipher Algorithm'
@@ -3398,6 +3398,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography (Round 1 submission)
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/WAGE-spec.pdf
+  notes: 'Local copy: references/2019-wage.pdf.'
 - id: daemen_2019_xoodyak
   kind: report
   title: Xoodyak, a lightweight cryptographic scheme

@@ -1640,7 +1640,7 @@ primitives:
     key register; each clock emits 16 selected state bits.
 - id: subterranean_substream
   name: Substream
-  family_id: subterranean
+  family_id: subterranean_stream
   primitive_type: stream_cipher
   reference_ids:
   - claesen_daemen_genoe_peeters_1993_subterranean
@@ -1652,7 +1652,7 @@ primitives:
     producing 16 output bits per state update after initialization.
 - id: subterranean_subhash
   name: Subhash
-  family_id: subterranean
+  family_id: subterranean_hash
   primitive_type: hash_function
   reference_ids:
   - claesen_daemen_genoe_peeters_1993_subterranean
@@ -1932,7 +1932,7 @@ primitives:
   notes: Core ACE permutation used by both AEAD and hash modes.
 - id: ace_ae_128
   name: ACE-AE-128
-  family_id: ace
+  family_id: ace_aead
   primitive_type: aead
   reference_ids:
   - aagaard_et_al_2019_ace
@@ -1945,7 +1945,7 @@ primitives:
   notes: AEAD mode with 64-bit rate and 128-bit authentication tag.
 - id: ace_h_256
   name: ACE-H-256
-  family_id: ace
+  family_id: ace_hash
   primitive_type: hash_function
   reference_ids:
   - aagaard_et_al_2019_ace
@@ -4424,7 +4424,7 @@ primitives:
     '
 - id: cilipadi_mild
   name: CiliPadi-Mild
-  family_id: cilipadi
+  family_id: cilipadi_aead
   primitive_type: aead
   reference_ids:
   - zaba_2019_cilipadi
@@ -4440,7 +4440,7 @@ primitives:
     '
 - id: cilipadi_medium
   name: CiliPadi-Medium
-  family_id: cilipadi
+  family_id: cilipadi_aead
   primitive_type: aead
   reference_ids:
   - zaba_2019_cilipadi
@@ -4455,7 +4455,7 @@ primitives:
     '
 - id: cilipadi_hot
   name: CiliPadi-Hot
-  family_id: cilipadi
+  family_id: cilipadi_aead
   primitive_type: aead
   reference_ids:
   - zaba_2019_cilipadi
@@ -4470,7 +4470,7 @@ primitives:
     '
 - id: cilipadi_extrahot
   name: CiliPadi-ExtraHot
-  family_id: cilipadi
+  family_id: cilipadi_aead
   primitive_type: aead
   reference_ids:
   - zaba_2019_cilipadi
@@ -4635,7 +4635,7 @@ primitives:
     '
 - id: gift_cofb_v1
   name: GIFT-COFB v1.0
-  family_id: gift
+  family_id: gift_cofb
   primitive_type: aead
   reference_ids:
   - banik_2019_gift_cofb
@@ -5143,7 +5143,7 @@ primitives:
     '
 - id: wage_ae_128_v1
   name: WAGE-AE-128
-  family_id: wage
+  family_id: wage_aead
   primitive_type: aead
   reference_ids:
   - aagaard_2019_wage

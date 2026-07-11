@@ -786,6 +786,45 @@ families:
     note: 'GIFT explicitly builds on PRESENT''s SPN structure, improving hardware efficiency and key-schedule simplicity.
 
       '
+- id: gift_cofb
+  name: GIFT-COFB
+  construction_ids:
+  - bit_based_spn
+  round_ids:
+  - gift_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: bit_permutation
+    - id: xor
+    - id: constant
+    - id: field_matrix_mul
+      params:
+        field: GF(2^64)
+        polynomial: x^64+x^4+x^3+x+1
+  reference_ids:
+  - banik_2019_gift_cofb
+  process_participations:
+  - process_id: lightweight_crypto_nist_2018_2023
+    stage_ids:
+    - round_1
+    - round_2
+    - finalist
+    status: finalist
+  influences:
+  - source_family_id: gift
+    relations:
+    - same_round_function
+    note: GIFT-COFB is a COFB-mode (COmbined FeedBack) AEAD construction built directly on the unmodified 40-round GIFT-128
+      block cipher, a distinct 2019 paper and author team from the original 2017 GIFT design.
+  notes: NIST LWC finalist authenticated-encryption mode wrapping the unmodified GIFT-128 block cipher in COFB mode; not
+    a modification of GIFT itself.
 - id: des
   name: DES
   notes: DES is a 16-round, 64-bit Feistel cipher with a 56-bit effective key, standardized in FIPS 46 in 1977 and now retained
@@ -3066,6 +3105,66 @@ families:
       the round combines chi nonlinearity, lightweight mixing with a heavy inverse,
       and bit transposition. The 2019 paper identifies these as features later adopted
       by Keccak-p and Xoodoo.
+- id: subterranean_stream
+  name: Substream
+  construction_ids:
+  - stream_state_update_generator
+  round_ids:
+  - subterranean_duplex_round
+  target_applications:
+  - hardware
+  - stream_cipher
+  characteristics:
+    state_size_bits: 257
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: linear_transform
+    - id: bit_permutation
+    - id: constant
+  reference_ids:
+  - claesen_daemen_genoe_peeters_1993_subterranean
+  process_participations: []
+  influences:
+  - source_family_id: subterranean
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Substream is the original Subterranean keyed pseudorandom-stream mode, built directly on the 257-bit Subterranean
+      state machine and reusing its round function unchanged.
+  notes: Original 1993 Subterranean keyed stream-generation mode, producing 16 output bits per state update after
+    initialization.
+- id: subterranean_hash
+  name: Subhash
+  construction_ids:
+  - permutation_based_hash
+  round_ids:
+  - subterranean_duplex_round
+  target_applications:
+  - hardware
+  - hash
+  characteristics:
+    state_size_bits: 257
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: linear_transform
+    - id: bit_permutation
+    - id: constant
+  reference_ids:
+  - claesen_daemen_genoe_peeters_1993_subterranean
+  process_participations: []
+  influences:
+  - source_family_id: subterranean
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Subhash is the original Subterranean unkeyed hash mode, built directly on the 257-bit Subterranean state machine
+      and reusing its round function unchanged.
+  notes: Original 1993 Subterranean hash mode; message words are absorbed through the 256-bit key/input register before
+    blank updates and 16-bit output words are squeezed out.
 - id: panama
   name: PANAMA
   construction_ids:
@@ -4045,6 +4144,70 @@ families:
     16 steps, each using SB-64 boxes (8-round Simeck-based nonlinear operation) on selected words.
 
     '
+- id: ace_aead
+  name: ACE-AE
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - ace_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  - software
+  characteristics:
+    state_size_bits: 320
+    components:
+    - id: and
+    - id: rotation_fixed
+    - id: xor
+    - id: word_permutation
+      params:
+        word_size_bits: 64
+    - id: constant
+  reference_ids:
+  - aagaard_et_al_2019_ace
+  process_participations: []
+  influences:
+  - source_family_id: ace
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: ACE-AE is a duplex-sponge AEAD construction built directly on the ACE permutation, reusing its state layout and
+      round function unchanged.
+  notes: Duplex-sponge AEAD mode built on the ACE permutation, standardized as ACE-AE-128 in the single 2019 NIST LWC
+    submission paper.
+- id: ace_hash
+  name: ACE-H
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - ace_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  - software
+  characteristics:
+    state_size_bits: 320
+    components:
+    - id: and
+    - id: rotation_fixed
+    - id: xor
+    - id: word_permutation
+      params:
+        word_size_bits: 64
+    - id: constant
+  reference_ids:
+  - aagaard_et_al_2019_ace
+  process_participations: []
+  influences:
+  - source_family_id: ace
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: ACE-H is a fixed-output sponge hash built directly on the ACE permutation, reusing its state layout and round
+      function unchanged.
+  notes: Sponge hash mode built on the ACE permutation, standardized as ACE-H-256 in the single 2019 NIST LWC submission
+    paper.
 - id: akelarre
   name: Akelarre
   construction_ids:
@@ -4657,6 +4820,37 @@ families:
     Variants: Mild [256,64,18,16], Medium [384,96,20,18], Hot [384,96,18,16], ExtraHot [384,128,20,18].
 
     '
+- id: cilipadi_aead
+  name: CiliPadi-AEAD
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - cilipadi_permutation_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: word_permutation
+    - id: field_matrix_mul
+    - id: xor
+    - id: constant
+  reference_ids:
+  - zaba_2019_cilipadi
+  process_participations: []
+  influences:
+  - source_family_id: cilipadi
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: The four CiliPadi AEAD variants (Mild, Medium, Hot, ExtraHot) are MonkeyDuplex sponge constructions built directly
+      on the CiliPadi permutation at different state/rate/round parameters, reusing its round function unchanged.
+  notes: MonkeyDuplex sponge AEAD family covering the four parameter profiles (Mild, Medium, Hot, ExtraHot) from the single
+    2019 NIST LWC submission paper.
 - id: cipherunicorn_a
   name: CIPHERUNICORN-A
   construction_ids:
@@ -7862,7 +8056,8 @@ families:
   round_ids:
   - wage_round
   target_applications:
-  - aead
+  - iot
+  - constrained_hardware
   characteristics:
     state_size_bits: 259
     components:
@@ -7903,6 +8098,42 @@ families:
     transformation Q and bit permutation P). Rate=64, capacity=195.
 
     '
+- id: wage_aead
+  name: WAGE-AE
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - wage_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 259
+    components:
+    - id: lfsr
+    - id: sbox
+      params:
+        input_bits: 7
+        output_bits: 7
+        note: WGP (Welch-Gong Permutation) and SB (7-bit S-box)
+    - id: field_matrix_mul
+      params:
+        field: GF(2^7)
+        polynomial: x^7+x^3+x^2+x+1
+    - id: xor
+    - id: constant
+  reference_ids:
+  - aagaard_2019_wage
+  process_participations: []
+  influences:
+  - source_family_id: wage
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: WAGE-AE is a unified duplex-sponge AEAD construction built directly on the WAGE permutation, reusing its state
+      layout and round function unchanged.
+  notes: Unified duplex-sponge AEAD mode built on the WAGE permutation, standardized as WAGE-AE-128 in the single 2019
+    NIST LWC submission paper.
 - id: wake
   name: WAKE
   construction_ids:
