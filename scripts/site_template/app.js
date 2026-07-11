@@ -268,12 +268,12 @@
     };
 
     const defaultColumns = [
-      "primitive.id", "primitive.name", "primitive.type_name", "family.name", "reference.title", "reference.year", "reference.url",
+      "instance.id", "instance.name", "instance.type_name", "family.name", "reference.title", "reference.year", "reference.url",
     ].filter((c) => builder.columns.includes(c));
     const visibleColumns = new Set(defaultColumns.length ? defaultColumns : builder.columns);
 
     function fillFilterOptions() {
-      const primitiveTypes = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["primitive.type_name"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+      const primitiveTypes = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["instance.type_name"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
       const referenceKinds = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["reference.kind"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
       renderFilterChecklist(ui.primitiveType, primitiveTypes);
       renderFilterChecklist(ui.referenceKind, referenceKinds);
@@ -329,7 +329,7 @@
     function buildWhereClauses() {
       const clauses = [];
       const typeValues = selectedChecklistValues(ui.primitiveType);
-      if (typeValues.size) clauses.push(`"primitive.type_name" IN (${Array.from(typeValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
+      if (typeValues.size) clauses.push(`"instance.type_name" IN (${Array.from(typeValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
       const refKindValues = selectedChecklistValues(ui.referenceKind);
       if (refKindValues.size) clauses.push(`"reference.kind" IN (${Array.from(refKindValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
 
@@ -356,7 +356,7 @@
       const referenceTitle = (ui.referenceTitle.value || "").trim().toLowerCase();
 
       return rows.filter((row) => {
-        const typeName = normalizeValue(row["primitive.type_name"]);
+        const typeName = normalizeValue(row["instance.type_name"]);
         if (typeValues.size && !typeValues.has(typeName)) return false;
         const refKind = normalizeValue(row["reference.kind"]);
         if (refKindValues.size && !refKindValues.has(refKind)) return false;
