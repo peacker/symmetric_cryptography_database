@@ -13,9 +13,22 @@ primitives:
     rounds: 12
   notes: Concrete uKNIT ultra-low-latency block cipher with 12 substitution layers,
     11 sparse binary linear layers, and 13 round-key additions.
+- id: sha0_compression
+  name: SHA-0 Compression Function
+  family_id: sha0
+  primitive_type: compression_function
+  reference_ids:
+  - nist_1993_fips180_sha0
+  characteristics:
+    output_size_bits: 160
+    block_size_bits: 512
+    state_size_bits: 160
+    rounds: 80
+  notes: Fixed-length compression step mapping a 512-bit message block and 160-bit chaining value to a new 160-bit
+    chaining value; iterated by the SHA-0 hash function over arbitrary-length input.
 - id: sha0_v1
   name: SHA-0
-  family_id: sha0
+  family_id: sha0_hash
   primitive_type: hash_function
   reference_ids:
   - nist_1993_fips180_sha0
@@ -4056,9 +4069,37 @@ primitives:
     Better dispersion than FNV-1 for short inputs. Non-cryptographic.
 
     '
+- id: haval_3pass_compression
+  name: HAVAL (3-pass) Compression Function
+  family_id: haval
+  primitive_type: compression_function
+  reference_ids:
+  - zheng_1992_haval
+  characteristics:
+    output_size_bits: 256
+    block_size_bits: 1024
+    state_size_bits: 256
+    rounds: 96
+  notes: Fixed-length compression step mapping a 1024-bit message block and 256-bit chaining value to a new 256-bit
+    chaining value via 3 passes of 32 steps (96 steps total). Iterated by the 3-pass HAVAL hash variants (see
+    haval_hash); output is optionally folded to 128, 160, 192, or 224 bits.
+- id: haval_5pass_compression
+  name: HAVAL (5-pass) Compression Function
+  family_id: haval
+  primitive_type: compression_function
+  reference_ids:
+  - zheng_1992_haval
+  characteristics:
+    output_size_bits: 256
+    block_size_bits: 1024
+    state_size_bits: 256
+    rounds: 160
+  notes: Fixed-length compression step mapping a 1024-bit message block and 256-bit chaining value to a new 256-bit
+    chaining value via 5 passes of 32 steps (160 steps total), using Boolean functions f1..f5, one per pass. Iterated
+    by the 5-pass HAVAL hash variants (see haval_hash).
 - id: haval_3p_128
   name: HAVAL-128/3
-  family_id: haval
+  family_id: haval_hash
   primitive_type: hash_function
   reference_ids:
   - zheng_1992_haval
@@ -4075,7 +4116,7 @@ primitives:
     '
 - id: haval_3p_256
   name: HAVAL-256/3
-  family_id: haval
+  family_id: haval_hash
   primitive_type: hash_function
   reference_ids:
   - zheng_1992_haval
@@ -4090,7 +4131,7 @@ primitives:
     '
 - id: haval_5p_256
   name: HAVAL-256/5
-  family_id: haval
+  family_id: haval_hash
   primitive_type: hash_function
   reference_ids:
   - zheng_1992_haval
@@ -4122,9 +4163,22 @@ primitives:
     appended. Output = X[0..15] (first 16 bytes = 128 bits). Deprecated.
 
     '
+- id: md4_compression
+  name: MD4 Compression Function
+  family_id: md4
+  primitive_type: compression_function
+  reference_ids:
+  - rivest_1990_md4
+  characteristics:
+    output_size_bits: 128
+    block_size_bits: 512
+    state_size_bits: 128
+    rounds: 48
+  notes: Fixed-length compression step mapping a 512-bit message block and 128-bit chaining value to a new 128-bit
+    chaining value; iterated by the MD4 hash function over arbitrary-length input.
 - id: md4_v1
   name: MD4
-  family_id: md4
+  family_id: md4_hash
   primitive_type: hash_function
   reference_ids:
   - rivest_1990_md4
@@ -4140,9 +4194,22 @@ primitives:
     sqrt(3)×2^32. Deprecated.
 
     '
+- id: md5_compression
+  name: MD5 Compression Function
+  family_id: md5
+  primitive_type: compression_function
+  reference_ids:
+  - rivest_1992_md5
+  characteristics:
+    output_size_bits: 128
+    block_size_bits: 512
+    state_size_bits: 128
+    rounds: 64
+  notes: Fixed-length compression step mapping a 512-bit message block and 128-bit chaining value to a new 128-bit
+    chaining value; iterated by the MD5 hash function over arbitrary-length input.
 - id: md5_v1
   name: MD5
-  family_id: md5
+  family_id: md5_hash
   primitive_type: hash_function
   reference_ids:
   - rivest_1992_md5
@@ -4158,9 +4225,37 @@ primitives:
     2004).
 
     '
+- id: ripemd_128_compression
+  name: RIPEMD-128 Compression Function
+  family_id: ripemd
+  primitive_type: compression_function
+  reference_ids:
+  - dobbertin_1996_ripemd160
+  characteristics:
+    output_size_bits: 128
+    block_size_bits: 512
+    state_size_bits: 128
+    rounds: 64
+  notes: Fixed-length compression step mapping a 512-bit message block and 128-bit chaining value to a new 128-bit
+    chaining value, using two parallel lines each with 4 rounds x 16 steps (64 operations per line), merged with the
+    incoming chaining variable. Iterated by RIPEMD-128 (see ripemd_hash).
+- id: ripemd_160_compression
+  name: RIPEMD-160 Compression Function
+  family_id: ripemd
+  primitive_type: compression_function
+  reference_ids:
+  - dobbertin_1996_ripemd160
+  characteristics:
+    output_size_bits: 160
+    block_size_bits: 512
+    state_size_bits: 160
+    rounds: 80
+  notes: Fixed-length compression step mapping a 512-bit message block and 160-bit chaining value to a new 160-bit
+    chaining value, using two parallel lines each with 5 rounds x 16 steps (80 operations per line), merged with the
+    incoming chaining variable. Iterated by RIPEMD-160 (see ripemd_hash).
 - id: ripemd_128
   name: RIPEMD-128
-  family_id: ripemd
+  family_id: ripemd_hash
   primitive_type: hash_function
   reference_ids:
   - dobbertin_1996_ripemd160
@@ -4177,7 +4272,7 @@ primitives:
     '
 - id: ripemd_160
   name: RIPEMD-160
-  family_id: ripemd
+  family_id: ripemd_hash
   primitive_type: hash_function
   reference_ids:
   - dobbertin_1996_ripemd160
@@ -4193,9 +4288,22 @@ primitives:
     are used in left and right lines. Outputs of both lines merged with chaining variable.
 
     '
+- id: sha1_compression
+  name: SHA-1 Compression Function
+  family_id: sha1_sha2
+  primitive_type: compression_function
+  reference_ids:
+  - nist_2002_fips180_2
+  characteristics:
+    output_size_bits: 160
+    block_size_bits: 512
+    state_size_bits: 160
+    rounds: 80
+  notes: Fixed-length compression step mapping a 512-bit message block and 160-bit chaining value (H0..H4) to a new
+    160-bit chaining value; iterated by the SHA-1 hash function over arbitrary-length input.
 - id: sha1_v1
   name: SHA-1
-  family_id: sha1_sha2
+  family_id: sha1_hash
   primitive_type: hash_function
   reference_ids:
   - nist_2002_fips180_2
@@ -4211,9 +4319,36 @@ primitives:
     from sqrt of 2,3,5,10. Deprecated for most uses.
 
     '
+- id: sha256_compression
+  name: SHA-256 Compression Function
+  family_id: sha2
+  primitive_type: compression_function
+  reference_ids:
+  - nist_2002_fips180_2
+  characteristics:
+    output_size_bits: 256
+    block_size_bits: 512
+    state_size_bits: 256
+    rounds: 64
+  notes: Fixed-length compression step mapping a 512-bit message block and 256-bit chaining value to a new 256-bit
+    chaining value in 64 rounds. Iterated by SHA-256, and reused with alternate IVs by SHA-224 (see sha2_hash).
+- id: sha512_compression
+  name: SHA-512 Compression Function
+  family_id: sha2
+  primitive_type: compression_function
+  reference_ids:
+  - nist_2002_fips180_2
+  characteristics:
+    output_size_bits: 512
+    block_size_bits: 1024
+    state_size_bits: 512
+    rounds: 80
+  notes: Fixed-length compression step mapping a 1024-bit message block and 512-bit chaining value to a new 512-bit
+    chaining value in 80 rounds. Iterated by SHA-512, and reused with alternate IVs by SHA-384, SHA-512/224, and
+    SHA-512/256 (see sha2_hash).
 - id: sha256_v1
   name: SHA-256
-  family_id: sha2
+  family_id: sha2_hash
   primitive_type: hash_function
   reference_ids:
   - nist_2002_fips180_2
@@ -4231,7 +4366,7 @@ primitives:
     '
 - id: sha384_v1
   name: SHA-384
-  family_id: sha2
+  family_id: sha2_hash
   primitive_type: hash_function
   reference_ids:
   - nist_2002_fips180_2
@@ -4249,7 +4384,7 @@ primitives:
     '
 - id: sha512_v1
   name: SHA-512
-  family_id: sha2
+  family_id: sha2_hash
   primitive_type: hash_function
   reference_ids:
   - nist_2002_fips180_2
@@ -4267,7 +4402,7 @@ primitives:
     '
 - id: sha224_v1
   name: SHA-224
-  family_id: sha2
+  family_id: sha2_hash
   primitive_type: hash_function
   characteristics:
     block_size_bits: 512
@@ -4282,7 +4417,7 @@ primitives:
     truncated to the first seven words (224 bits). Provides 112-bit collision resistance.
 - id: sha512_224_v1
   name: SHA-512/224
-  family_id: sha2
+  family_id: sha2_hash
   primitive_type: hash_function
   characteristics:
     block_size_bits: 1024
@@ -4297,7 +4432,7 @@ primitives:
     128-bit security with 64-bit platform efficiency.
 - id: sha512_256_v1
   name: SHA-512/256
-  family_id: sha2
+  family_id: sha2_hash
   primitive_type: hash_function
   characteristics:
     block_size_bits: 1024
@@ -4342,9 +4477,24 @@ primitives:
     as underlying permutation), then squeezes 256 bits of output.
 
     '
+- id: tiger_compression
+  name: Tiger Compression Function
+  family_id: tiger
+  primitive_type: compression_function
+  reference_ids:
+  - anderson_1995_tiger
+  characteristics:
+    output_size_bits: 192
+    block_size_bits: 512
+    state_size_bits: 192
+    rounds: 24
+  notes: Fixed-length compression step mapping a 512-bit message block (eight 64-bit words) and 192-bit chaining value
+    (three 64-bit words a,b,c) to a new 192-bit chaining value, via 3 passes of 8 rounds (24 rounds total). Iterated by
+    the Tiger hash function; the Tiger/160 and Tiger/128 output sizes are truncations of the same computation (see
+    tiger_hash).
 - id: tiger_192
   name: Tiger/192
-  family_id: tiger
+  family_id: tiger_hash
   primitive_type: hash_function
   reference_ids:
   - anderson_1995_tiger
@@ -4362,7 +4512,7 @@ primitives:
     '
 - id: tiger_160
   name: Tiger/160
-  family_id: tiger
+  family_id: tiger_hash
   primitive_type: hash_function
   reference_ids:
   - anderson_1995_tiger
@@ -4378,7 +4528,7 @@ primitives:
     '
 - id: tiger_128
   name: Tiger/128
-  family_id: tiger
+  family_id: tiger_hash
   primitive_type: hash_function
   reference_ids:
   - anderson_1995_tiger
@@ -4391,9 +4541,23 @@ primitives:
     bits (words a,b). Internal state=192 bits. 3 passes × 8 rounds = 24 rounds.
 
     '
+- id: whirlpool_compression
+  name: Whirlpool Compression Function
+  family_id: whirlpool
+  primitive_type: compression_function
+  reference_ids:
+  - barreto_2003_whirlpool
+  characteristics:
+    output_size_bits: 512
+    block_size_bits: 512
+    state_size_bits: 512
+    rounds: 10
+  notes: Fixed-length Miyaguchi-Preneel compression step (H_i = W[H_{i-1}](m_i) XOR H_{i-1} XOR m_i) mapping a 512-bit
+    message block and 512-bit chaining value to a new 512-bit chaining value, using the dedicated 512-bit internal
+    block cipher W (10 AES-inspired rounds). Iterated by the Whirlpool hash function.
 - id: whirlpool_v1
   name: Whirlpool
-  family_id: whirlpool
+  family_id: whirlpool_hash
   primitive_type: hash_function
   reference_ids:
   - barreto_2003_whirlpool
@@ -5562,9 +5726,35 @@ primitives:
   characteristics:
     state_size_bits: 1600
     rounds: 24
+- id: blake_256_compression
+  name: BLAKE-256 Compression Function
+  family_id: blake
+  primitive_type: compression_function
+  reference_ids:
+  - aumasson_2010_blake
+  characteristics:
+    state_size_bits: 512
+    block_size_bits: 512
+    output_size_bits: 512
+    rounds: 14
+  notes: HAIFA-iterated, ChaCha-derived G-function compression step over a 4x4 matrix of 32-bit words (512-bit state),
+    14 rounds. Iterated by BLAKE-256/BLAKE-224 (see blake_hash).
+- id: blake_512_compression
+  name: BLAKE-512 Compression Function
+  family_id: blake
+  primitive_type: compression_function
+  reference_ids:
+  - aumasson_2010_blake
+  characteristics:
+    state_size_bits: 1024
+    block_size_bits: 1024
+    output_size_bits: 1024
+    rounds: 16
+  notes: HAIFA-iterated, ChaCha-derived G-function compression step over a 4x4 matrix of 64-bit words (1024-bit state),
+    16 rounds. Iterated by BLAKE-512/BLAKE-384 (see blake_hash).
 - id: blake_256
   name: BLAKE-256
-  family_id: blake
+  family_id: blake_hash
   primitive_type: hash_function
   reference_ids:
   - aumasson_2010_blake
@@ -5575,7 +5765,7 @@ primitives:
     rounds: 14
 - id: blake_512
   name: BLAKE-512
-  family_id: blake
+  family_id: blake_hash
   primitive_type: hash_function
   reference_ids:
   - aumasson_2010_blake
@@ -5612,9 +5802,35 @@ primitives:
     output_size_bits_min: 8
     output_size_bits_max: 256
     rounds: 10
+- id: groestl_256_compression
+  name: Grøstl-256 Compression Function
+  family_id: groestl
+  primitive_type: compression_function
+  reference_ids:
+  - gauravaram_2009_groestl
+  characteristics:
+    state_size_bits: 512
+    block_size_bits: 512
+    output_size_bits: 512
+    rounds: 10
+  notes: Wide-pipe compression step using two 512-bit AES-like permutations P and Q (h_i = P(h_{i-1} XOR m_i) XOR
+    Q(m_i) XOR h_{i-1}), 10 rounds. Iterated by Grøstl-256 (see groestl_hash).
+- id: groestl_512_compression
+  name: Grøstl-512 Compression Function
+  family_id: groestl
+  primitive_type: compression_function
+  reference_ids:
+  - gauravaram_2009_groestl
+  characteristics:
+    state_size_bits: 1024
+    block_size_bits: 1024
+    output_size_bits: 1024
+    rounds: 14
+  notes: Wide-pipe compression step using two 1024-bit AES-like permutations P and Q (h_i = P(h_{i-1} XOR m_i) XOR
+    Q(m_i) XOR h_{i-1}), 14 rounds. Iterated by Grøstl-512 (see groestl_hash).
 - id: groestl_256
   name: Grøstl-256
-  family_id: groestl
+  family_id: groestl_hash
   primitive_type: hash_function
   reference_ids:
   - gauravaram_2009_groestl
@@ -5625,7 +5841,7 @@ primitives:
     rounds: 10
 - id: groestl_512
   name: Grøstl-512
-  family_id: groestl
+  family_id: groestl_hash
   primitive_type: hash_function
   reference_ids:
   - gauravaram_2009_groestl
