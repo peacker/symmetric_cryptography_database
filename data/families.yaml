@@ -4708,9 +4708,43 @@ families:
   notes: 'Driscoll (Honeywell) 2019. Additive stream cipher + autokey product cipher for AEAD. Core: 127-bit LFSR (poly x^127+x^63+1,
     split as L0||L1, two 64-bit halves) + two 32-bit nonlinear state words x, y = 192 bits register storage. Key=128 bits
     (primary), nonce=96 bits, tag=64 bits (primary). Uses ones''-complement multiplication of 32-bit words as nonlinear filter.
-    Processes two 32-bit words per iteration.
+    Processes two 32-bit words per iteration. See bleep64_aead for the AEAD mode built on this core.
 
     '
+- id: bleep64_aead
+  name: Bleep64-AEAD
+  construction_ids:
+  - lfsr_nlfsr_register_network
+  round_ids:
+  - bleep64_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 192
+    components:
+    - id: lfsr
+      params:
+        degree: 127
+        poly: x^127 + x^63 + 1
+    - id: mul_mod
+      params:
+        modulus: 4294967296
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: constant
+  reference_ids:
+  - driscoll_2019_bleep64
+  process_participations: []
+  influences:
+  - source_family_id: bleep64
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Bleep64-AEAD is built directly on the Bleep64 core cipher, reusing its state layout and round function unchanged.
+  notes: AEAD mode built on the Bleep64 core cipher, from the single 2019 NIST LWC submission paper.
 - id: siphash
   name: SipHash
   construction_ids:
@@ -4954,9 +4988,45 @@ families:
   notes: 'Liu, Nepal, Pieprzyk, Susilo (CSIRO/UoW) 2019. Configurable byte-oriented AEAD inspired by the LWE problem. Internal
     state: 2 bytes (s0, s1) = 16 bits. Key=128 bits (16 bytes fixed). Core: search(k,b,o) key-indexed byte lookup; vecIV()
     mixes nonce; spill()/spillA() propagate ciphertext/AD into state. Operations: XOR, add mod 256, mul mod 256, bit shifts.
-    Tag and nonce sizes configurable (CRYPTO_ABYTES / CRYPTO_NPUBBYTES per NIST API).
+    Tag and nonce sizes configurable (CRYPTO_ABYTES / CRYPTO_NPUBBYTES per NIST API). See clae_aead for the AEAD construction.
 
     '
+- id: clae_aead
+  name: CLAE-AEAD
+  construction_ids:
+  - key_dependent_table_network
+  round_ids:
+  - clae_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 16
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: add_mod
+      params:
+        modulus: 256
+    - id: mul_mod
+      params:
+        modulus: 256
+    - id: shift_fixed
+    - id: xor
+  reference_ids:
+  - liu_2019_clae
+  process_participations: []
+  influences:
+  - source_family_id: clae
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: CLAE-AEAD is built directly on the CLAE core, reusing its state layout and operations unchanged.
+  notes: 'AEAD construction built on the CLAE core. Byte-oriented processing: each message byte paired with a key-dependent
+    byte from search(); ciphertext output = 2 bytes per byte. Nonce and tag sizes configurable per the NIST LWC API; the
+    128-bit-security primary recommendation is tracked as clae_aead_v1.'
 - id: clx
   name: CLX
   construction_ids:
@@ -5195,7 +5265,7 @@ families:
   notes: Enocoro-128v2 (Hitachi, 2010) is a hardware-oriented stream cipher recommended by CRYPTREC. It uses a 128-bit key
     and 64-bit IV with a shift-register-based state updated via an AES-like S-box, making it efficient in hardware implementations.
 - id: estate
-  name: ESTATE
+  name: TweAES-128 / TweGIFT-128
   construction_ids:
   - tweakable_spn
   round_ids:
@@ -5246,10 +5316,44 @@ families:
     - same_round_constants
     note: TweGIFT-128's round-constant generation uses the same 6-bit affine LFSR construction
       as SKINNY.
-  notes: 'Chakraborti, Datta, Jha, Lopez, Nandi, Sasaki (NTT/ISI) 2019. Energy-efficient single-state tweakable block cipher
-    based AEAD (FCBC*-like MAC + OFB encryption). Block n=128, key κ=128, tweak τ=4 bits, tag t=128, state=128 bits. Inverse-free
-    design. TweAES-128 (primary): AES-like rounds with 4-bit tweak injection every 2 rounds, 10 rounds. Instantiations: ESTATE_TweAES-128
-    (primary), sESTATE_TweAES-128-6, ESTATE_TweGIFT-128.
+  notes: 'Chakraborti, Datta, Jha, Lopez, Nandi, Sasaki (NTT/ISI) 2019. TweAES-128 and TweGIFT-128 are the two tweakable
+    block ciphers underlying the ESTATE AEAD family. Tweak τ=4 bits in both. See estate_aead for the AEAD constructions
+    built on them.
+
+    '
+- id: estate_aead
+  name: ESTATE
+  construction_ids:
+  - tweakable_spn
+  round_ids:
+  - estate_tbc_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: binary_matrix_mul
+    - id: word_permutation
+    - id: xor
+    - id: constant
+  reference_ids:
+  - chakraborti_2019_estate
+  process_participations: []
+  influences:
+  - source_family_id: estate
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: ESTATE's AEAD constructions are built directly on the TweAES-128/TweGIFT-128 tweakable block ciphers, reusing
+      their round function and state layout unchanged.
+  notes: 'Energy-efficient single-state tweakable-block-cipher-based AEAD (FCBC*-like MAC + OFB encryption). Block n=128,
+    key κ=128, tweak τ=4 bits, tag t=128, state=128 bits. Inverse-free design. Instantiations: ESTATE_TweAES-128 (primary),
+    ESTATE_TweGIFT-128.
 
     '
 - id: fantomas_robin
@@ -5377,14 +5481,44 @@ families:
     - same_sbox
     note: FlexAEAD's nonlinear transformation applies the AES S-box table (and its
       inverse) directly to each byte.
-  notes: 'Nascimento, Xexéo (Petrobras/IME Brazil) 2019. Parameterized block cipher with integrated authentication. PF_K:
+  notes: 'Nascimento, Xexéo (Petrobras/IME Brazil) 2019. PF_K is the parameterized keyed permutation underlying FlexAEAD:
     BlockShuffle + 3 AES 8-bit S-box layers + XOR (Feistel-like structure). Key = 128 × 2^x bits (primary x=0: 128 bits).
     Block = nb bytes (primary nb=16, 128 bits). Rounds r = log2(nb) + 2 (for nb=16: 6 rounds). Four subkeys K1..K4, each 2×nb
-    bytes. Supports 64-bit and 128-bit nonce; primary parameters per NIST LWC API.
+    bytes. See flexaead_aead for the AEAD construction built on PF_K.
 
     '
+- id: flexaead_aead
+  name: FlexAEAD-AEAD
+  construction_ids:
+  - feistel
+  round_ids:
+  - flexaead_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: word_permutation
+    - id: xor
+    - id: constant
+  reference_ids:
+  - nascimento_2019_flexaead
+  process_participations: []
+  influences:
+  - source_family_id: flexaead
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: FlexAEAD's AEAD construction is built directly on the PF_K keyed permutation, integrating authentication into
+      the same Feistel-like structure.
+  notes: Block cipher with integrated authentication built on PF_K. Supports 64-bit and 128-bit nonces; primary parameters
+    per the NIST LWC API are tracked as flexaead_128.
 - id: forkae
-  name: ForkAE
+  name: ForkSkinny
   construction_ids:
   - tweakable_spn
   round_ids:
@@ -5423,10 +5557,43 @@ families:
       SKINNY family: it reuses SKINNY''s S-boxes without change, its ShiftRows and
       MixColumns operations, and its tweakey schedule exactly as in SKINNY, differing
       only in the round-constant LFSR and in forking the state into two branches.'
-  notes: 'Andreeva, Lallemand, Purnal, Reyhanitabar, Roy, Vizár 2019. AEAD using ForkSkinny, a forkcipher (maps n-bit input
-    to 2n-bit output simultaneously) based on SKINNY. Two AEAD modes: PAEF (parallel, fully parallelizable) and SAEF (sequential,
-    online). All instances use key=128. Primary: PAEF-ForkSkinny-128-288 (block=128, tweakey=288, nonce=104, tag=128). ForkSkinny:
-    4-bit S-box SPN with LFSR-based tweakey schedule (TWEAKEY approach).
+  notes: 'Andreeva, Lallemand, Purnal, Reyhanitabar, Roy, Vizár 2019. ForkSkinny is the forkcipher (maps n-bit input to
+    2n-bit output simultaneously) underlying the ForkAE AEAD family, based on SKINNY. See forkae_aead for the AEAD
+    constructions built on it.
+
+    '
+- id: forkae_aead
+  name: ForkAE
+  construction_ids:
+  - tweakable_spn
+  round_ids:
+  - forkskinny_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  - short_messages
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: bit_permutation
+    - id: lfsr
+    - id: xor
+    - id: constant
+  reference_ids:
+  - andreeva_2019_forkae
+  process_participations: []
+  influences:
+  - source_family_id: forkae
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: ForkAE's AEAD constructions are built directly on the ForkSkinny forkcipher, reusing its round function and
+      state layout unchanged.
+  notes: 'Two AEAD modes built on ForkSkinny: PAEF (parallel, fully parallelizable) and SAEF (sequential, online). All
+    instances use key=128. Primary: PAEF-ForkSkinny-128-288 (block=128, tweakey=288, nonce=104, tag=128).
 
     '
 - id: fountain
@@ -5465,11 +5632,39 @@ families:
     - same_sbox
     note: The 4-bit-to-4-bit S-box used in Fountain's nonlinear feedback path is the
       GIFT block-cipher S-box, reused unchanged.
-  notes: 'Zhang (CAS Beijing) 2019. Stream cipher-based AEAD with variable non-linear feedbacks. Internal state F: 256 bits.
-    State update function F; output function f uses 16 state bits to generate 1 keystream bit. Key=128 bits, nonce/IV=96 bits.
-    Primary: tag=128 bits; secondary: tag=64 bits. Keystream up to 2^64 bits. Secure in nonce-respecting setting.
+  notes: 'Zhang (CAS Beijing) 2019. Stream cipher core with variable non-linear feedbacks, 256-bit internal state F. See
+    fountain_aead for the AEAD construction built on it.
 
     '
+- id: fountain_aead
+  name: Fountain-AEAD
+  construction_ids:
+  - lfsr_nlfsr_register_network
+  round_ids:
+  - fountain_state_update
+  target_applications:
+  - iot
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: lfsr
+    - id: nlfsr
+    - id: and
+    - id: xor
+    - id: constant
+  reference_ids:
+  - zhang_2019_fountain
+  process_participations: []
+  influences:
+  - source_family_id: fountain
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Fountain-AEAD is built directly on the Fountain core cipher, reusing its state layout and state-update function
+      unchanged.
+  notes: Stream-cipher-based AEAD built on the Fountain core. Key=128 bits, nonce/IV=96 bits. Primary tag=128 bits;
+    secondary tag=64 bits.
 - id: gage_and_ingage
   name: GAGE and InGAGE
   construction_ids:
@@ -5655,7 +5850,7 @@ families:
   influences:
   - source_family_id: gift
     relations:
-    - related_to
+    - same_round_function
     note: HyENA is a hybrid-feedback authenticated-encryption mode instantiated directly
       over the GIFT-128 block cipher, which supplies the mode's sole non-linear primitive
       including its S-box, bit permutation and key schedule.
@@ -5902,7 +6097,9 @@ families:
   influences:
   - source_family_id: simon
     relations:
-    - related_to
+    - same_round_function
+    - same_key_schedule
+    - same_round_constants
     note: LAEM-Simon instantiates the LAEM authenticated-encryption mode directly over
       the SIMON 128-bit block cipher family, using SIMON's Feistel round function,
       round constants and key schedule unmodified.
@@ -6027,7 +6224,7 @@ families:
     IV. Its state consists of two LFSRs: LFSRC (39 bits) controls the clocking of LFSRD (89 bits). A degree-6 nonlinear Boolean
     filter applied to LFSRD produces the keystream. Total internal state is 128 bits.'
 - id: lilliput_ae
-  name: Lilliput-AE
+  name: Lilliput-TBC
   construction_ids:
   - tweakable_spn
   round_ids:
@@ -6057,6 +6254,50 @@ families:
     - round_1
     status: candidate
   influences:
+  - source_family_id: scream_tbc
+    relations:
+    - inspired_by
+    note: Two of the three inner 4-bit APN sub-functions composing Lilliput-TBC's 8-bit
+      S-box are taken directly from the SCREAM S-box construction with the same function
+      values; only the middle permutation is replaced with a new candidate.
+  notes: 'Adomnicai et al. 2019. Lilliput-TBC is a tweakable block cipher derived from the Lilliput block cipher using
+    an Extended Generalized Feistel Network (EGFN) structure. Block size n=128, 8-bit S-box. See lilliput_ae_aead for
+    the AEAD constructions built on it.
+
+    '
+- id: lilliput_ae_aead
+  name: Lilliput-AE
+  construction_ids:
+  - tweakable_spn
+  round_ids:
+  - lilliput_tbc_round
+  target_applications:
+  - lightweight
+  - iot
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: binary_matrix_mul
+    - id: xor
+    - id: constant
+  reference_ids:
+  - adomnicai_2019_lilliput_ae
+  process_participations: []
+  influences:
+  - source_family_id: lilliput_ae
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Lilliput-AE's AEAD constructions are built directly on the Lilliput-TBC tweakable block cipher, reusing its
+      round function and state layout unchanged.
   - source_family_id: deoxys
     relations:
     - variant_of
@@ -6064,16 +6305,8 @@ families:
       explicitly stated to be the variant of the SCT mode introduced in Deoxys, with
       both Lilliput modes described as similar to the corresponding pair of modes used
       in Deoxys.
-  - source_family_id: scream_tbc
-    relations:
-    - inspired_by
-    note: Two of the three inner 4-bit APN sub-functions composing Lilliput-TBC's 8-bit
-      S-box are taken directly from the SCREAM S-box construction with the same function
-      values; only the middle permutation is replaced with a new candidate.
-  notes: 'Adomnicai et al. 2019. AEAD scheme based on Lilliput-TBC, a tweakable block cipher derived from the Lilliput block
-    cipher using an Extended Generalized Feistel Network (EGFN) structure. Block size n=128, 8-bit S-box. Two modes: Lilliput-I
-    (nonce-respecting, ΘCB3) and Lilliput-II (nonce-misuse-resistant, SCT-2). Primary member: Lilliput-II-128 (key k=128,
-    nonce |N|=120, tag τ=128). Tweakey width t=128 (Lilliput-II) or 192 (Lilliput-I).
+  notes: 'Two modes: Lilliput-I (nonce-respecting, ΘCB3) and Lilliput-II (nonce-misuse-resistant, SCT-2). Primary member:
+    Lilliput-II-128 (key k=128, nonce |N|=120, tag τ=128). Tweakey width t=128 (Lilliput-II) or 192 (Lilliput-I).
 
     '
 - id: limdolen
@@ -6100,12 +6333,75 @@ families:
     - round_1
     status: candidate
   influences: []
-  notes: 'Mehner 2019. PMAC SIV-like AEAD using AXR (AND, XOR, Rotation) round function. Two family members: Limdolen-128
-    (key=128, nonce=128, tag=128, 16 rounds) and Limdolen-256 (key=256, nonce=256, tag=256, 16 rounds). Primary: Limdolen-128.
-    Byte-oriented (8-bit max operations) for constrained devices. Pentagonal numbers used as round constants. No S-box; uses
-    AND instead of addition (AXR vs ARX).
+  notes: Mehner 2019. AXR (AND, XOR, Rotation) permutation, in 128-bit and 256-bit state sizes. See limdolen_aead for
+    the PMAC-SIV-like AEAD construction built on it.
+- id: limdolen_aead
+  name: Limdolen-AEAD
+  construction_ids:
+  - arx_permutation_network
+  round_ids:
+  - limdolen_round
+  target_applications:
+  - lightweight
+  - iot
+  characteristics:
+    state_size_bits: 128
+    components:
+    - id: and
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - mehner_2019_limdolen
+  process_participations: []
+  influences:
+  - source_family_id: limdolen
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Limdolen-AEAD is built directly on the Limdolen AXR permutation, reusing its round function and state layout
+      unchanged.
+  notes: 'PMAC SIV-like AEAD using the Limdolen AXR permutation. Two family members: Limdolen-128 (key=128, nonce=128,
+    tag=128, 16 rounds, primary) and Limdolen-256 (key=256, nonce=256, tag=256, 16 rounds).
 
     '
+- id: twegift_64
+  name: TweGIFT-64
+  construction_ids:
+  - tweakable_spn
+  round_ids:
+  - twegifit64_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 64
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: bit_permutation
+    - id: xor
+    - id: constant
+  reference_ids:
+  - chakraborti_2019_lotus_locus
+  process_participations: []
+  influences:
+  - source_family_id: gift
+    relations:
+    - variant_of
+    - same_sbox
+    - same_bit_based_permutation_layer
+    note: TweGIFT-64 is a tweakable variant of GIFT-64-128 that employs the same 4-bit S-box and the same bit permutation
+      as GIFT-64-128, with AddRoundKey also identical.
+  - source_family_id: skinny
+    relations:
+    - same_round_constants
+    note: TweGIFT-64's round-constant generation uses the same 6-bit affine LFSR as
+      SKINNY and GIFT-64-128.
+  notes: Tweakable block cipher (n=64, tweak τ=4, key κ=128) built on GIFT-64-128, shared by both LOCUS-AEAD and LOTUS-AEAD
+    from the single 2019 NIST LWC submission paper.
 - id: locus
   name: LOCUS-AEAD
   construction_ids:
@@ -6134,22 +6430,15 @@ families:
     - round_2
     status: candidate
   influences:
-  - source_family_id: gift
+  - source_family_id: twegift_64
     relations:
-    - variant_of
-    - same_sbox
-    - same_bit_based_permutation_layer
-    note: LOCUS-AEAD is instantiated with TweGIFT-64, a tweakable variant of GIFT-64-128
-      that employs the same 4-bit S-box and the same bit permutation as GIFT-64-128,
-      with AddRoundKey also identical.
-  - source_family_id: skinny
-    relations:
-    - same_round_constants
-    note: TweGIFT-64's round-constant generation uses the same 6-bit affine LFSR as
-      SKINNY and GIFT-64-128.
-  notes: 'Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OCB-like fully parallelizable AEAD using TweGIFT-64 (n=64, tweak τ=4,
-    key κ=128, built on GIFT-64-128). Parameters: key κ=128, nonce r=128, tag t=n=64. 64-bit blocks XORed with nonce-derived
-    masks (α-multiplication in F_2^128 with poly x^128+x^7+x^2+x+1). Provides RUP integrity.
+    - same_round_function
+    - same_state_layout
+    note: LOCUS-AEAD is built directly on the TweGIFT-64 tweakable block cipher, reusing its round function and state
+      layout unchanged.
+  notes: 'Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OCB-like fully parallelizable AEAD using TweGIFT-64. Parameters:
+    key κ=128, nonce r=128, tag t=n=64. 64-bit blocks XORed with nonce-derived masks (α-multiplication in F_2^128 with
+    poly x^128+x^7+x^2+x+1). Provides RUP integrity.
 
     '
 - id: loki
@@ -6208,20 +6497,13 @@ families:
     - round_2
     status: candidate
   influences:
-  - source_family_id: gift
+  - source_family_id: twegift_64
     relations:
-    - variant_of
-    - same_sbox
-    - same_bit_based_permutation_layer
-    note: LOTUS-AEAD is instantiated with TweGIFT-64, built upon the original GIFT-64-128
-      block cipher and reusing its 4-bit S-box and bit-permutation layer verbatim,
-      adding only a short-tweak injection mechanism.
-  - source_family_id: skinny
-    relations:
-    - same_round_constants
-    note: The round-constant schedule of TweGIFT-64, shared by both LOTUS-AEAD and
-      LOCUS-AEAD, is generated by the same 6-bit affine LFSR as SKINNY and GIFT-64-128.
-  notes: 'Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OTR-like AEAD using TweGIFT-64 (n=64, τ=4, κ=128). Primary NIST submission:
+    - same_round_function
+    - same_state_layout
+    note: LOTUS-AEAD is built directly on the TweGIFT-64 tweakable block cipher, reusing its round function and state
+      layout unchanged.
+  notes: 'Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OTR-like AEAD using TweGIFT-64. Primary NIST submission:
     TweGIFT-64_LOTUS-AEAD. Parameters: key κ=128, nonce r=128, tag t=n=64. Processes 2n=128-bit di-blocks with 2-round Feistel
     structure (4 TBC calls per di-block). Intermediate checksums improve integrity under RUP. Field mult in F_2^128.
 
@@ -6398,7 +6680,7 @@ families:
     8 outer rounds (FO). Each FO round contains three FI sub-rounds, which use 7×7 (S7) and 9×9 (S9) S-boxes plus FL/FLinv
     key mixing layers. It is specified by RFC 2994 and ISO/IEC 18033-3:2010.
 - id: mixfeed
-  name: mixFeed
+  name: AES'-128/128
   construction_ids:
   - stream_state_update_generator
   round_ids:
@@ -6435,12 +6717,46 @@ families:
     - same_shift_row
     - same_mix_column
     - same_key_schedule
-    note: mixFeed is an AEAD mode based on AES-128/128, using a block cipher identical
-      to standard AES-128 except that MixColumns is also applied in the last round.
-  notes: 'Chakraborty and Nandi 2019. Minimally Xored Feedback (mixFeed) AEAD mode. Based on AES''128/128 (AES-128 with MixColumns
-    added to the final round). Block size n=128, key κ=128, nonce=120 bits (one byte less than block), tag=128. State = Y(128)
-    || K(128) = 256 bits; nonce-dependent key update (K_N) per encryption query. Uses ciphertext feedback to update the evolving
-    key K. No conventional privacy security under nonce misuse.
+    note: AES'-128/128 is a block cipher identical to standard AES-128 except that MixColumns is also applied in the
+      last round.
+  notes: 'Chakraborty and Nandi 2019. AES''-128/128 (AES-128 with MixColumns added to the final round) is the block cipher
+    underlying the mixFeed AEAD mode. See mixfeed_aead for the AEAD construction.
+
+    '
+- id: mixfeed_aead
+  name: mixFeed
+  construction_ids:
+  - stream_state_update_generator
+  round_ids:
+  - aes_prime_128_round
+  target_applications:
+  - lightweight
+  - iot
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: binary_matrix_mul
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - chakraborty_2019_mixfeed
+  process_participations: []
+  influences:
+  - source_family_id: mixfeed
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: mixFeed is an AEAD mode built directly on the AES'-128/128 block cipher, reusing its round function unchanged.
+  notes: 'Minimally Xored Feedback (mixFeed) AEAD mode. Block size n=128, key κ=128, nonce=120 bits (one byte less than
+    block), tag=128. State = Y(128) || K(128) = 256 bits; nonce-dependent key update (K_N) per encryption query. Uses
+    ciphertext feedback to update the evolving key K. No conventional privacy security under nonce misuse.
 
     '
 - id: mmb
@@ -6696,25 +7012,63 @@ families:
   influences:
   - source_family_id: photon
     relations:
+    - same_round_function
     - same_sbox
     - same_shift_row
     - same_mix_column
     - same_state_layout
-    note: ORANGE's permutation-based constructions use PHOTON256 as their underlying
-      primitive, stated to be exactly the same permutation without changing any part
-      of the definition.
+    note: ORANGE-Zest uses PHOTON256 as its underlying primitive, stated to be exactly the same permutation without changing
+      any part of the definition.
+  notes: 'Chakraborty and Nandi 2019. Optimum RAte spoNGE (ORANGE) AEAD mode using PHOTON256 (256-bit, 12-round permutation)
+    as the underlying primitive, unmodified. ORANGE-Zest: key=128, nonce=128, tag=128. State = PHOTON256 permutation state
+    (256) + dynamic 128-bit mask Y = 3n=384 bits (n=128). Rate = 2n=256 bits per permutation call. See orange_hash for the
+    companion ORANGISH hash mode.
+
+    '
+- id: orange_hash
+  name: ORANGISH
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - photon256_round
+  target_applications:
+  - lightweight
+  - iot
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: word_permutation
+      params:
+        word_size_bits: 4
+    - id: field_matrix_mul
+      params:
+        field: GF(2^4)
+        poly: x^4+x+1
+    - id: xor
+    - id: constant
+  reference_ids:
+  - chakraborty_2019_orange
+  process_participations: []
+  influences:
+  - source_family_id: photon
+    relations:
+    - same_round_function
+    - same_sbox
+    - same_shift_row
+    - same_mix_column
+    - same_state_layout
+    note: ORANGISH uses PHOTON256 as its underlying primitive, unmodified, the same as ORANGE-Zest.
   - source_family_id: jh
     relations:
     - inspired_by
-    note: The hash mode of ORANGISH is described as very close to the JH hash function,
-      adopting JH's higher-rate absorption approach of 128 bits per permutation call.
-  notes: 'Chakraborty and Nandi 2019. Optimum RAte spoNGE (ORANGE) using PHOTON256 (256-bit, 12-round permutation) as the
-    underlying primitive. ORANGE-Zest (AEAD): key=128, nonce=128, tag=128. State = PHOTON256 permutation state (256) + dynamic
-    128-bit mask Y = 3n=384 bits (n=128). Rate = 2n=256 bits per permutation call. ORANGISH (hash): output=256 bits, tag-squeeze
-    rate=128. PHOTON256: 8×8 matrix of 4-bit cells, 4-bit S-box, ShiftRows, MixColumnSerial over GF(2^4) with poly x^4+x+1.
-    Field mult: poly x^128+x^7+x^2+x+1 for α-multiplication on 128-bit state.
-
-    '
+    note: ORANGISH's hash mode is described as very close to the JH hash function, adopting JH's higher-rate absorption
+      approach of 128 bits per permutation call.
+  notes: Sponge hash mode built on the unmodified PHOTON256 permutation, from the same 2019 NIST LWC submission paper as
+    ORANGE-Zest. Output=256 bits, tag-squeeze rate=128 bits.
 - id: oribatida
   name: Oribatida
   construction_ids:
@@ -6750,11 +7104,39 @@ families:
     note: Oribatida's underlying SimP permutation family employs the round function
       and key-update function of Simon-2w-2w, with SimP-192 and SimP-256 built from
       Simon-96-96 and Simon-128-128 and their unchanged round constants.
-  notes: 'Bhattacharjee, List, Mancillas-López, Nandi 2019. Keyed monkey-wrap duplex AEAD using the SimP family of permutations
-    (SIMON-based, no S-boxes). Primary: Oribatida-256-64 (SimP-256-4 + SimP-256-2, key=128, nonce=128, tag=128, rate=128,
-    capacity=128, mask=64, state=256). Secondary: Oribatida-192-96 (SimP-192-4 + SimP-192-2, key=128, nonce=64, tag=96, state=192).
-    Security parameter z=c+s=192. Provides integrity under release of unverified plaintexts (RUP). SimP round: AND, fixed
-    rotations, XOR (SIMON-derived round function).
+  notes: Bhattacharjee, List, Mancillas-López, Nandi 2019. SimP is the SIMON-based (no S-boxes) family of permutations
+    underlying Oribatida. See oribatida_aead for the keyed monkey-wrap duplex AEAD constructions built on them.
+- id: oribatida_aead
+  name: Oribatida-AEAD
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - simp_round
+  target_applications:
+  - lightweight
+  - iot
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: and
+    - id: rotation_fixed
+    - id: xor
+    - id: constant
+  reference_ids:
+  - bhattacharjee_2019_oribatida
+  process_participations: []
+  influences:
+  - source_family_id: oribatida
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Oribatida's AEAD constructions are built directly on the SimP permutations, reusing their round function and
+      state layout unchanged.
+  notes: 'Keyed monkey-wrap duplex AEAD using the SimP family of permutations. Primary: Oribatida-256-64 (SimP-256-4 +
+    SimP-256-2, key=128, nonce=128, tag=128, rate=128, capacity=128, mask=64, state=256). Secondary: Oribatida-192-96
+    (SimP-192-4 + SimP-192-2, key=128, nonce=64, tag=96, state=192). Security parameter z=c+s=192. Provides integrity
+    under release of unverified plaintexts (RUP).
 
     '
 - id: oryx
@@ -6976,13 +7358,40 @@ families:
     note: Quartet's linear diffusion step reuses, in an adapted form, the linear diffusion
       functions from Ascon's permutation to spread differences quickly through the
       state.
-  notes: 'Zhang 2019. Stream cipher-based AEAD with 4 × 64-bit lanes = 256-bit internal state. Key=128, nonce/IV=96, tag=128
-    (primary) or 64. χ function (only non-linear step): x_i ← x_i ⊕ (x_{i+2} ⊕ 1) · x_{i+1} — AND+XOR, analogous to Keccak
-    χ but on 64-bit words. ρ function: splits each 64-bit lane into two 32-bit words, rotates each left. λ function: 64-bit
-    rotation with params r_{i,1} and r_{i,2}. Output ζ: 64-bit keystream word. State-updating function F; output function
-    f. Generates keystream of up to 2^64 bits.
+  notes: 'Zhang 2019. Stream cipher core with 4 × 64-bit lanes = 256-bit internal state. χ function (only non-linear step):
+    x_i ← x_i ⊕ (x_{i+2} ⊕ 1) · x_{i+1} — AND+XOR, analogous to Keccak χ but on 64-bit words. ρ function: splits each
+    64-bit lane into two 32-bit words, rotates each left. λ function: 64-bit rotation with params r_{i,1} and r_{i,2}.
+    See quartet_aead for the AEAD construction built on this core.
 
     '
+- id: quartet_aead
+  name: Quartet-AEAD
+  construction_ids:
+  - stream_state_update_generator
+  round_ids:
+  - quartet_round
+  target_applications:
+  - lightweight
+  - constrained_hardware
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: and
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - zhang_2019_quartet
+  process_participations: []
+  influences:
+  - source_family_id: quartet
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Quartet-AEAD is built directly on the Quartet core cipher, reusing its state layout and state-update function
+      unchanged.
+  notes: AEAD construction built on the Quartet core. Key=128, nonce/IV=96, tag=128 (primary) or 64 (secondary). Output
+    ζ is a 64-bit keystream word; generates keystream up to 2^64 bits.
 - id: rc2
   name: RC2
   construction_ids:
@@ -7360,11 +7769,79 @@ families:
       diffusion layer combines fixed rotations, XOR mixing, and a 5×5 GF(2) matrix to provide full inter-word diffusion.
 
       '
-  notes: 'Note: the checklist entry type says ''hash'' but Shamash itself is an AEAD; Shamashash is the associated 256-bit
-    hash function. Both are derived from the same spec (§1 and §7 of the 2019 paper). Initialization uses 12 rounds; AD/encryption/finalization
-    each use 9 (or 12 for finalization). Shamashash uses Shamash via the BDPV construction.
+  notes: 'Penazzi 2019. 320-bit permutation (five 64-bit words W0..W4) underlying both the Shamash AEAD and the
+    Shamashash hash function; see shamash_and_shamashash_aead and shamash_and_shamashash_hash.
 
     '
+- id: shamash_and_shamashash_aead
+  name: Shamash
+  construction_ids:
+  - spn
+  - sponge_permutation
+  round_ids:
+  - shamash_and_shamashash_round
+  target_applications:
+  - lightweight_aead
+  characteristics:
+    state_size_bits: 320
+    components:
+    - id: xor
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+        num_sboxes: 64
+    - id: rotation_fixed
+    - id: binary_matrix_mul
+      params:
+        matrix: 5x5_GF2
+    - id: constant
+  reference_ids:
+  - penazzi_2019_shamash
+  process_participations: []
+  influences:
+  - source_family_id: shamash_and_shamashash
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Shamash is an AEAD built directly on the Shamash permutation, reusing its state layout and round function
+      unchanged.
+  notes: AEAD with 128-bit key, 128-bit nonce, 128-bit tag, and 320-bit state (minimum tag 64 bits). Initialization uses
+    12 rounds; AD absorption, encryption, and finalization each use 9 rounds per block (finalization totals 9+3=12).
+- id: shamash_and_shamashash_hash
+  name: Shamashash
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - shamash_and_shamashash_round
+  target_applications:
+  - hash
+  characteristics:
+    state_size_bits: 320
+    components:
+    - id: xor
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+        num_sboxes: 64
+    - id: rotation_fixed
+    - id: binary_matrix_mul
+      params:
+        matrix: 5x5_GF2
+    - id: constant
+  reference_ids:
+  - penazzi_2019_shamash
+  process_participations: []
+  influences:
+  - source_family_id: shamash_and_shamashash
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Shamashash is a hash function built directly on the Shamash permutation via the BDPV sponge-to-hash
+      construction, reusing its state layout and round function unchanged.
+  notes: Hash function defined in section 7 of the Shamash spec, built on the Shamash permutation via the BDPV
+    sponge-to-hash construction. Output=256 bits. Rate=64 bits; capacity=256 bits.
 - id: shark
   name: SHARK
   construction_ids:
@@ -8219,8 +8696,8 @@ families:
   round_ids:
   - yarara_and_coral_round
   target_applications:
-  - aead
-  - hash
+  - lightweight
+  - iot
   characteristics:
     state_size_bits: 256
     components:
@@ -8248,12 +8725,65 @@ families:
     - same_sbox
     note: The shared 4-bit S-box used by both Yarará and Coral is affine equivalent
       to Serpent's S-box S3, giving it identical differential/linear properties.
-  notes: 'Montes & Penazzi 2019. Two related lightweight algorithms sharing a 256-bit permutation (four 64-bit words). Round
-    function = LD ∘ S ∘ C: C adds round constant to x_1, S is a substitution layer, LD is a linear diffusion layer. Operations:
-    AND, NOT, XOR, 64-bit rotations. Yarará (AEAD): rate=64, capacity=192, key=128, nonce=128, tag=128. Uses permutations
-    π_I (10 rounds), π_AD/π_AE/π_F (6 rounds each). Coral (hash): rate=32, capacity=224, digest=256 bits.
-
-    '
+  notes: Montes & Penazzi 2019. 256-bit permutation (four 64-bit words) shared by the Yarará AEAD and Coral hash
+    function. See yarara_and_coral_aead and yarara_and_coral_hash for the constructions built on it.
+- id: yarara_and_coral_aead
+  name: Yarará
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - yarara_and_coral_round
+  target_applications:
+  - lightweight
+  - iot
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: and
+    - id: not
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - montes_2019_yarara_and_coral
+  process_participations: []
+  influences:
+  - source_family_id: yarara_and_coral
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Yarará is a duplex-sponge AEAD built directly on the shared permutation, reusing its state layout and round
+      function unchanged.
+  notes: Duplex-sponge AEAD. Rate=64, capacity=192, key=128, nonce=128, tag=128. Uses permutations pi_I (10 rounds) for
+    initialization and pi_AD/pi_AE/pi_F (6 rounds each) for absorption/encryption/finalization.
+- id: yarara_and_coral_hash
+  name: Coral
+  construction_ids:
+  - sponge_permutation
+  round_ids:
+  - yarara_and_coral_round
+  target_applications:
+  - lightweight
+  - iot
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: and
+    - id: not
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - montes_2019_yarara_and_coral
+  process_participations: []
+  influences:
+  - source_family_id: yarara_and_coral
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Coral is a sponge hash function built directly on the shared permutation, reusing its state layout and round
+      function unchanged.
+  notes: Sponge hash function. Rate=32, capacity=224, digest=256 bits.
 - id: threeway
   name: 3-Way
   construction_ids:

@@ -3128,6 +3128,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography (Round 1 submission)
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CLAE-spec.pdf
+  notes: 'Local copy: references/2019-clae.pdf.'
 - id: gueron_2019_comet
   kind: report
   title: 'COMET: COunter Mode Encryption with authentication Tag'
@@ -3276,6 +3277,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography (Round 1 submission)
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ORANGE-spec.pdf
+  notes: 'Local copy: references/2019-orange.pdf.'
 - id: bhattacharjee_2019_oribatida
   kind: report
   title: The Oribatida Family of Lightweight Authenticated Encryption Schemes

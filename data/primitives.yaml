@@ -2381,18 +2381,19 @@ primitives:
     key_size_bits: 256
     output_size_bits: 128
     rounds: 8
-- id: bleep64_v1
-  name: Bleep64-v1
+- id: bleep64_core
+  name: Bleep64 Core Cipher
   family_id: bleep64
-  primitive_type: block_cipher
+  primitive_type: stream_cipher
   reference_ids:
-  - bleep64_ref
+  - driscoll_2019_bleep64
   characteristics:
-    block_size_bits: 128
+    state_size_bits: 192
     key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
+    output_size_bits: 64
+  notes: Additive stream cipher plus autokey product cipher core. 127-bit LFSR (poly x^127+x^63+1, split as two 64-bit
+    halves L0||L1) plus two 32-bit nonlinear state words x, y; total register storage = 192 bits. Processes two 32-bit
+    words (64 bits) per iteration via ones'-complement multiplication as the nonlinear filter.
 - id: siphash_2_4
   name: SipHash-2-4
   family_id: siphash
@@ -2454,18 +2455,18 @@ primitives:
     key_size_bits: 64
     output_size_bits: 64
     rounds: 16
-- id: clae_v1
-  name: CLAE-v1
+- id: clae_core
+  name: CLAE Core
   family_id: clae
-  primitive_type: block_cipher
+  primitive_type: stream_cipher
   reference_ids:
-  - clae_ref
+  - liu_2019_clae
   characteristics:
-    block_size_bits: 128
+    state_size_bits: 16
     key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
+  notes: Configurable byte-oriented core inspired by the LWE problem. Internal state is 2 bytes (s0, s1) = 16 bits; key
+    is 128 bits (16 bytes, fixed). Core operations are search(k,b,o) key-indexed byte lookup, vecIV() nonce mixing, and
+    spill()/spillA() propagation of ciphertext/AD into state.
 - id: clx_128
   name: CLX-128
   family_id: clx
@@ -2555,18 +2556,6 @@ primitives:
     output_size_bits: 8
   notes: Proprietary, broken cipher. No public spec. Key is 64 bits; operates on variable-length
     messages.
-- id: comet_v1
-  name: COMET-v1
-  family_id: comet
-  primitive_type: block_cipher
-  reference_ids:
-  - comet_ref
-  characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
 - id: cs_cipher_v1
   name: CS-Cipher-64
   family_id: cs_cipher
@@ -2616,18 +2605,34 @@ primitives:
     key_size_bits: 128
     iv_size_bits: 64
     state_size_bits: 320
-- id: estate_v1
-  name: ESTATE-v1
+- id: tweaes_128
+  name: TweAES-128
   family_id: estate
-  primitive_type: block_cipher
+  primitive_type: tweakable_block_cipher
   reference_ids:
-  - estate_ref
+  - chakraborti_2019_estate
   characteristics:
     block_size_bits: 128
     key_size_bits: 128
-    rounds: 1
+    tweak_size_bits: 4
+    rounds: 10
     output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
+  notes: AES-like tweakable block cipher (SubBytes, ShiftRows, MixColumns, AddRoundKey) with a 4-bit tweak injected every
+    2 rounds, 10 rounds total. Inverse-free design used as the primary TBC underlying ESTATE.
+- id: twegift_128
+  name: TweGIFT-128
+  family_id: estate
+  primitive_type: tweakable_block_cipher
+  reference_ids:
+  - chakraborti_2019_estate
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 128
+    tweak_size_bits: 4
+    rounds: 40
+    output_size_bits: 128
+  notes: Tweakable variant of GIFT-128 (4-bit S-box SPN, 128-bit bit permutation, 40 rounds) with a 4-bit tweak injection
+    step added, used as the lightweight TBC alternative underlying ESTATE.
 - id: fantomas_robin_v1
   name: Fantomas-128
   family_id: fantomas_robin
@@ -2718,42 +2723,59 @@ primitives:
     key_size_bits: 512
     rounds: 28
     output_size_bits: 256
-- id: flexaead_v1
-  name: FlexAEAD-v1
+- id: flexaead_pfk
+  name: PF_K
   family_id: flexaead
   primitive_type: block_cipher
   reference_ids:
-  - flexaead_ref
+  - nascimento_2019_flexaead
   characteristics:
     block_size_bits: 128
     key_size_bits: 128
-    rounds: 1
+    rounds: 6
     output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
-- id: forkae_v1
-  name: ForkAE-v1
+  notes: 'Parameterized keyed permutation named PF_K in the spec: BlockShuffle plus three AES 8-bit S-box layers plus XOR
+    with four subkeys (Feistel-like structure). Primary parameters nb=16 bytes (128-bit block), x=0 (128-bit key), rounds
+    r = log2(nb)+2 = 6. Block size scales as nb bytes; key size scales as 128 x 2^x bits.'
+- id: forkskinny_128_288
+  name: ForkSkinny-128-288
   family_id: forkae
-  primitive_type: block_cipher
+  primitive_type: tweakable_block_cipher
   reference_ids:
-  - forkae_ref
+  - andreeva_2019_forkae
   characteristics:
     block_size_bits: 128
+    tweakey_size_bits: 288
     key_size_bits: 128
-    rounds: 1
+    output_size_bits: 256
+  notes: A forkcipher, mapping an n-bit input to a 2n-bit output simultaneously (n=128, output=256). 4-bit S-box SPN
+    with an LFSR-based tweakey schedule (TWEAKEY framework), a slight modification of SKINNY differing only in the
+    round-constant LFSR and in forking the state into two branches.
+- id: forkskinny_64_192
+  name: ForkSkinny-64-192
+  family_id: forkae
+  primitive_type: tweakable_block_cipher
+  reference_ids:
+  - andreeva_2019_forkae
+  characteristics:
+    block_size_bits: 64
+    tweakey_size_bits: 192
+    key_size_bits: 128
     output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
-- id: fountain_v1
-  name: Fountain-v1
+  notes: 64-bit-block forkcipher variant of ForkSkinny (n=64, output=128) for ultra-constrained environments, same
+    TWEAKEY-based design as ForkSkinny-128-288.
+- id: fountain_core
+  name: Fountain Core Cipher
   family_id: fountain
-  primitive_type: block_cipher
+  primitive_type: stream_cipher
   reference_ids:
-  - fountain_ref
+  - zhang_2019_fountain
   characteristics:
-    block_size_bits: 128
+    state_size_bits: 256
     key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
+  notes: State-update function F over a 256-bit internal state with variable non-linear feedbacks, and output function
+    f using 16 state bits to generate 1 keystream bit per step. Keystream generation is secure up to 2^64 bits in the
+    nonce-respecting setting.
 - id: gage_and_ingage_v1
   name: GAGE-6 permutation
   family_id: gage_and_ingage
@@ -2812,18 +2834,6 @@ primitives:
     key_size_bits: 128
     output_size_bits: 64
     rounds: 32
-- id: hyena_v1
-  name: HyENA-v1
-  family_id: hyena
-  primitive_type: block_cipher
-  reference_ids:
-  - hyena_ref
-  characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
 - id: ice_v1
   name: ICE-v1
   family_id: ice
@@ -2895,18 +2905,6 @@ primitives:
     key_size_bits: 256
     output_size_bits: 128
     rounds: 10
-- id: laem_v1
-  name: LAEM-v1
-  family_id: laem
-  primitive_type: block_cipher
-  reference_ids:
-  - laem_ref
-  characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
 - id: lea_v1
   name: LEA-128
   family_id: lea
@@ -2999,42 +2997,60 @@ primitives:
     key_size_bits: 128
     iv_size_bits: 128
     state_size_bits: 128
-- id: lilliput_ae_v1
-  name: Lilliput-AE-v1
+- id: lilliput_tbc
+  name: Lilliput-TBC
   family_id: lilliput_ae
-  primitive_type: block_cipher
+  primitive_type: tweakable_block_cipher
   reference_ids:
-  - lilliput_ae_ref
+  - adomnicai_2019_lilliput_ae
   characteristics:
     block_size_bits: 128
     key_size_bits: 128
-    rounds: 1
+    tweak_size_bits: 128
     output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
-- id: limdolen_v1
-  name: Limdolen-v1
+  notes: Tweakable block cipher derived from the Lilliput block cipher using an Extended Generalized Feistel Network
+    (EGFN) structure, with an 8-bit S-box. Tweakey width t=128 (for Lilliput-II mode) or 192 (for Lilliput-I mode).
+- id: limdolen_permutation_128
+  name: Limdolen Permutation (128-bit)
   family_id: limdolen
-  primitive_type: block_cipher
+  primitive_type: permutation
   reference_ids:
-  - limdolen_ref
+  - mehner_2019_limdolen
   characteristics:
+    state_size_bits: 128
+    rounds: 16
     block_size_bits: 128
-    key_size_bits: 128
-    rounds: 1
     output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
-- id: locus_v1
-  name: LOCUS-v1
-  family_id: locus
-  primitive_type: block_cipher
+  notes: AXR (AND, XOR, circle-rotation) round function; byte-oriented (maximum 8-bit operations) for constrained
+    devices; pentagonal numbers used as round constants. Uses AND instead of modular addition (AXR rather than ARX).
+- id: limdolen_permutation_256
+  name: Limdolen Permutation (256-bit)
+  family_id: limdolen
+  primitive_type: permutation
   reference_ids:
-  - locus_ref
+  - mehner_2019_limdolen
   characteristics:
-    block_size_bits: 128
+    state_size_bits: 256
+    rounds: 16
+    block_size_bits: 256
+    output_size_bits: 256
+  notes: Same AXR round function as the 128-bit Limdolen permutation, scaled to a 256-bit state; roughly twice the cost
+    per round.
+- id: twegift_64
+  name: TweGIFT-64
+  family_id: twegift_64
+  primitive_type: tweakable_block_cipher
+  reference_ids:
+  - chakraborti_2019_lotus_locus
+  characteristics:
+    block_size_bits: 64
     key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
+    tweak_size_bits: 4
+    rounds: 28
+    output_size_bits: 64
+  notes: Tweakable variant of GIFT-64-128, employing the same 4-bit S-box and bit-permutation layer as GIFT-64-128 (with
+    AddRoundKey identical), plus a short-tweak injection mechanism. Round-constant generation uses the same 6-bit affine
+    LFSR as SKINNY and GIFT-64-128. Shared by both LOCUS-AEAD and LOTUS-AEAD, from the same 2019 submission paper.
 - id: loki_v1
   name: LOKI91
   family_id: loki
@@ -3048,18 +3064,6 @@ primitives:
     rounds: 16
   notes: LOKI91 (improved version). LOKI89 uses identical parameters but has weak-key
     vulnerabilities.
-- id: lotus_v1
-  name: LOTUS-v1
-  family_id: lotus
-  primitive_type: block_cipher
-  reference_ids:
-  - lotus_ref
-  characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
 - id: mantis_v1
   name: MANTIS-7
   family_id: mantis
@@ -3123,18 +3127,19 @@ primitives:
     output_size_bits: 64
     rounds: 8
   notes: 8 outer FO rounds; each FO uses 3 inner FI sub-rounds.
-- id: mixfeed_v1
-  name: mixFeed-v1
+- id: aes_prime_128_128
+  name: AES'-128/128
   family_id: mixfeed
   primitive_type: block_cipher
   reference_ids:
-  - mixfeed_ref
+  - chakraborty_2019_mixfeed
   characteristics:
     block_size_bits: 128
     key_size_bits: 128
-    rounds: 1
+    rounds: 10
     output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
+  notes: AES-128 with MixColumns also applied in the final round (identical to standard AES-128/128 otherwise). Named
+    AES' in the mixFeed specification.
 - id: mmb_v1
   name: MMB
   family_id: mmb
@@ -3214,30 +3219,34 @@ primitives:
     output_size_bits: 64
     rounds: 8
   notes: 64-bit block variant. 128-bit (16r) and 256-bit (24r) variants also defined.
-- id: orange_v1
-  name: ORANGE-v1
-  family_id: orange
-  primitive_type: block_cipher
-  reference_ids:
-  - orange_ref
-  characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
-- id: oribatida_v1
-  name: Oribatida-v1
+- id: simp_256
+  name: SimP-256
   family_id: oribatida
-  primitive_type: block_cipher
+  primitive_type: permutation
   reference_ids:
-  - oribatida_ref
+  - bhattacharjee_2019_oribatida
   characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
+    state_size_bits: 256
+    rounds: 136
+    block_size_bits: 256
+    output_size_bits: 256
+  notes: SIMON-derived permutation (no S-boxes) built from Simon-128-128's round function, run for theta=4 steps of 34
+    rounds each (136 rounds total). Used as the primary permutation P in Oribatida-256-64; a 2-step (theta=2) variant
+    P' is used for the secondary permutation calls.
+- id: simp_192
+  name: SimP-192
+  family_id: oribatida
+  primitive_type: permutation
+  reference_ids:
+  - bhattacharjee_2019_oribatida
+  characteristics:
+    state_size_bits: 192
+    rounds: 104
+    block_size_bits: 192
+    output_size_bits: 192
+  notes: SIMON-derived permutation (no S-boxes) built from Simon-96-96's round function, run for theta=4 steps of 26
+    rounds each (104 rounds total). Used as the primary permutation P in Oribatida-192-96; a 2-step (theta=2) variant
+    P' is used for the secondary permutation calls.
 - id: oryx_v1
   name: ORYX
   family_id: oryx
@@ -3307,18 +3316,18 @@ primitives:
     rounds: 16
     output_size_bits: 128
   notes: Baseline Q instance from the NESSIE v2.00 proposal.
-- id: quartet_v1
-  name: Quartet-v1
+- id: quartet_core
+  name: Quartet Core Cipher
   family_id: quartet
-  primitive_type: block_cipher
+  primitive_type: stream_cipher
   reference_ids:
-  - quartet_ref
+  - zhang_2019_quartet
   characteristics:
-    block_size_bits: 128
+    state_size_bits: 256
     key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
+  notes: State-updating function F over four 64-bit lanes (256-bit state), organized in Keccak-like lane layout. Applies
+    chi (AND+XOR, Keccak-like nonlinearity), rho (32-bit word rotation), lambda (64-bit rotation), and tau (round
+    constants) each step; output function f squeezes a 64-bit keystream word.
 - id: rc2_v1
   name: RC2-v1
   family_id: rc2
@@ -3367,18 +3376,6 @@ primitives:
     rounds: 1
     output_size_bits: 128
   notes: Baseline REMUS AEAD instance as described in the Romulus/Remus family paper.
-- id: saeaes_v1
-  name: SAEAES-v1
-  family_id: saeaes
-  primitive_type: block_cipher
-  reference_ids:
-  - saeaes_ref
-  characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
 - id: safer_v1
   name: SAFER K-64
   family_id: safer
@@ -3441,18 +3438,22 @@ primitives:
     rounds: 64
     output_size_bits: 256
   notes: Baseline SHACAL-2 profile.
-- id: shamash_and_shamashash_v1
-  name: Shamash & Shamashash-v1
+- id: shamash_permutation
+  name: Shamash Permutation
   family_id: shamash_and_shamashash
-  primitive_type: block_cipher
+  primitive_type: permutation
   reference_ids:
-  - shamash_and_shamashash_ref
+  - penazzi_2019_shamash
   characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
+    state_size_bits: 320
+    rounds: 12
+    rounds_min: 9
+    rounds_max: 12
+    block_size_bits: 320
+    output_size_bits: 320
+  notes: 320-bit permutation-based state of five 64-bit words W0..W4. Substitution layer applies 64 independent 5-bit-to-5-bit
+    S-boxes in parallel across the state; diffusion combines fixed rotations, XOR mixing, and a 5x5 GF(2) matrix.
+    Initialization uses 12 rounds; AD/encryption/finalization calls use 9 (finalization totals 9+3=12).
 - id: shark_v1
   name: SHARK-v1
   family_id: shark
@@ -3783,18 +3784,22 @@ primitives:
     output_size_bits: 128
   notes: Baseline XXTEA instance for n=4 words (128-bit block), using q = 6 + 52/n
     rounds.
-- id: yarara_and_coral_v1
-  name: Yarara and Coral-v1
+- id: yarara_and_coral_permutation
+  name: Yarará/Coral Permutation
   family_id: yarara_and_coral
-  primitive_type: block_cipher
+  primitive_type: permutation
   reference_ids:
-  - yarara_and_coral_ref
+  - montes_2019_yarara_and_coral
   characteristics:
-    block_size_bits: 128
-    key_size_bits: 128
-    rounds: 1
-    output_size_bits: 128
-  notes: Generic baseline instance; update with full paper-specific variants.
+    state_size_bits: 256
+    rounds_min: 6
+    rounds_max: 10
+    block_size_bits: 256
+    output_size_bits: 256
+  notes: 256-bit permutation over four 64-bit words shared by Yarará (AEAD) and Coral (hash). Round function = LD o S
+    o C, C adds a round constant to x_1, S is a substitution layer, LD is a linear diffusion layer (AND, NOT, XOR,
+    64-bit rotations). Called as pi_I (10 rounds) for initialization and pi_AD/pi_AE/pi_F (6 rounds each) for
+    absorption/encryption/finalization.
 - id: threeway_v1
   name: 3-Way
   family_id: threeway
@@ -4307,7 +4312,7 @@ primitives:
     and 256-bit second-preimage resistance.
 - id: shamash_v1
   name: Shamash v1
-  family_id: shamash_and_shamashash
+  family_id: shamash_and_shamashash_aead
   primitive_type: aead
   reference_ids:
   - penazzi_2019_shamash
@@ -4324,7 +4329,7 @@ primitives:
     '
 - id: shamashash_v1
   name: Shamashash v1
-  family_id: shamash_and_shamashash
+  family_id: shamash_and_shamashash_hash
   primitive_type: hash_function
   reference_ids:
   - penazzi_2019_shamash
@@ -4407,7 +4412,7 @@ primitives:
     '
 - id: bleep64_aead_v1
   name: Bleep64 v1
-  family_id: bleep64
+  family_id: bleep64_aead
   primitive_type: aead
   reference_ids:
   - driscoll_2019_bleep64
@@ -4485,7 +4490,7 @@ primitives:
     '
 - id: clae_aead_v1
   name: CLAE v1
-  family_id: clae
+  family_id: clae_aead
   primitive_type: aead
   reference_ids:
   - liu_2019_clae
@@ -4535,7 +4540,7 @@ primitives:
     '
 - id: estate_tweaes_v1
   name: ESTATE_TweAES-128
-  family_id: estate
+  family_id: estate_aead
   primitive_type: aead
   reference_ids:
   - chakraborti_2019_estate
@@ -4552,7 +4557,7 @@ primitives:
     '
 - id: estate_twegiift_v1
   name: ESTATE_TweGIFT-128
-  family_id: estate
+  family_id: estate_aead
   primitive_type: aead
   reference_ids:
   - chakraborti_2019_estate
@@ -4568,7 +4573,7 @@ primitives:
     '
 - id: flexaead_128
   name: FlexAEAD-128
-  family_id: flexaead
+  family_id: flexaead_aead
   primitive_type: aead
   reference_ids:
   - nascimento_2019_flexaead
@@ -4586,7 +4591,7 @@ primitives:
     '
 - id: forkae_paef_fs128_288
   name: PAEF-ForkSkinny-128-288
-  family_id: forkae
+  family_id: forkae_aead
   primitive_type: aead
   reference_ids:
   - andreeva_2019_forkae
@@ -4603,7 +4608,7 @@ primitives:
     '
 - id: forkae_paef_fs64_192
   name: PAEF-ForkSkinny-64-192
-  family_id: forkae
+  family_id: forkae_aead
   primitive_type: aead
   reference_ids:
   - andreeva_2019_forkae
@@ -4618,7 +4623,7 @@ primitives:
     '
 - id: fountain_aead_v1
   name: Fountain v1
-  family_id: fountain
+  family_id: fountain_aead
   primitive_type: aead
   reference_ids:
   - zhang_2019_fountain
@@ -4724,7 +4729,7 @@ primitives:
     '
 - id: lilliput_ii_128_v1
   name: Lilliput-II-128
-  family_id: lilliput_ae
+  family_id: lilliput_ae_aead
   primitive_type: aead
   reference_ids:
   - adomnicai_2019_lilliput_ae
@@ -4742,7 +4747,7 @@ primitives:
     '
 - id: limdolen_128_v1
   name: Limdolen-128
-  family_id: limdolen
+  family_id: limdolen_aead
   primitive_type: aead
   reference_ids:
   - mehner_2019_limdolen
@@ -4759,7 +4764,7 @@ primitives:
     '
 - id: limdolen_256_v1
   name: Limdolen-256
-  family_id: limdolen
+  family_id: limdolen_aead
   primitive_type: aead
   reference_ids:
   - mehner_2019_limdolen
@@ -4775,7 +4780,7 @@ primitives:
     '
 - id: mixfeed_aes128_v1
   name: mixFeed-AES128/128
-  family_id: mixfeed
+  family_id: mixfeed_aead
   primitive_type: aead
   reference_ids:
   - chakraborty_2019_mixfeed
@@ -4810,9 +4815,21 @@ primitives:
     squeeze rate=128). Field mult: x^128+x^7+x^2+x+1.
 
     '
+- id: orangish_v1
+  name: ORANGISH
+  family_id: orange_hash
+  primitive_type: hash_function
+  reference_ids:
+  - chakraborty_2019_orange
+  characteristics:
+    state_size_bits: 256
+    block_size_bits: 128
+    output_size_bits: 256
+  notes: Chakraborty and Nandi 2019. Sponge hash mode using the unmodified PHOTON256 permutation (256-bit, 12 rounds).
+    Output=256 bits, tag-squeeze rate=128 bits per permutation call, close in structure to JH's higher-rate absorption.
 - id: oribatida_256_64_v1
   name: Oribatida-256-64
-  family_id: oribatida
+  family_id: oribatida_aead
   primitive_type: aead
   reference_ids:
   - bhattacharjee_2019_oribatida
@@ -4829,7 +4846,7 @@ primitives:
     '
 - id: oribatida_192_96_v1
   name: Oribatida-192-96
-  family_id: oribatida
+  family_id: oribatida_aead
   primitive_type: aead
   reference_ids:
   - bhattacharjee_2019_oribatida
@@ -4846,7 +4863,7 @@ primitives:
     '
 - id: quartet_aead_v1
   name: Quartet v1
-  family_id: quartet
+  family_id: quartet_aead
   primitive_type: aead
   reference_ids:
   - zhang_2019_quartet
@@ -4864,7 +4881,7 @@ primitives:
     '
 - id: quartet_v1_64t
   name: Quartet v1 (64-bit tag)
-  family_id: quartet
+  family_id: quartet_aead
   primitive_type: aead
   reference_ids:
   - zhang_2019_quartet
@@ -5309,7 +5326,7 @@ primitives:
     '
 - id: yarara_v1
   name: Yarara
-  family_id: yarara_and_coral
+  family_id: yarara_and_coral_aead
   primitive_type: aead
   reference_ids:
   - montes_2019_yarara_and_coral
@@ -5324,6 +5341,18 @@ primitives:
     π_AD/π_AE/π_F (6 rounds each). Security claim: 128 bits (if n > c/2).
 
     '
+- id: coral_v1
+  name: Coral
+  family_id: yarara_and_coral_hash
+  primitive_type: hash_function
+  reference_ids:
+  - montes_2019_yarara_and_coral
+  characteristics:
+    state_size_bits: 256
+    block_size_bits: 32
+    output_size_bits: 256
+  notes: Montes & Penazzi 2019. Sponge hash function sharing the Yarará/Coral 256-bit permutation. Rate=32 bits,
+    capacity=224 bits, digest=256 bits.
 - id: antcrypt
   name: AntCrypt
   family_id: antcrypt
