@@ -9,7 +9,7 @@ Equal years are allowed (contemporaneous designs, e.g. joint standardization).
 """
 from __future__ import annotations
 
-from common import family_year, load_all_data
+from common import all_families, family_year, load_all_data
 
 # (target_family_id, source_family_id) pairs that are chronologically "late"
 # by our year<-earliest-reference proxy but are not data bugs — each is a
@@ -35,8 +35,8 @@ KNOWN_EXCEPTIONS = {
 
 
 def main() -> None:
-    data = load_all_data(["families", "references"])
-    families = data["families"]["families"]
+    data = load_all_data(["primitive_families", "mode_families", "references"])
+    families = all_families(data)
     references_by_id = {r["id"]: r for r in data["references"]["references"]}
 
     families_by_id = {f["id"]: f for f in families}

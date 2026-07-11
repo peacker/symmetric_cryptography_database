@@ -67,12 +67,14 @@ def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     refs_doc = yaml.safe_load((DATA_DIR / "references.yaml").read_text(encoding="utf-8"))
-    fam_doc = yaml.safe_load((DATA_DIR / "families.yaml").read_text(encoding="utf-8"))
+    primitive_fam_doc = yaml.safe_load((DATA_DIR / "primitive_families.yaml").read_text(encoding="utf-8"))
+    mode_fam_doc = yaml.safe_load((DATA_DIR / "mode_families.yaml").read_text(encoding="utf-8"))
+    all_families = primitive_fam_doc.get("primitive_families", []) + mode_fam_doc.get("mode_families", [])
 
     refs = {r["id"]: r for r in refs_doc.get("references", [])}
     jobs: list[tuple[str, str, int, str]] = []
 
-    for family in fam_doc.get("families", []):
+    for family in all_families:
         family_name = family.get("name", "")
         family_slug = slugify(family_name)
         for ref_id in family.get("reference_ids", []):

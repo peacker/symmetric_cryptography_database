@@ -1,0 +1,238 @@
+version: 1
+primitive_constructions:
+- id: spn
+  name: Substitution-Permutation Network (SPN)
+  abbreviation: SPN
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - Serpent
+  - SKINNY
+  notes: 'A round structure combining non-linear substitution layers with permutation or linear diffusion layers.
+
+    '
+- id: aligned_spn
+  name: Aligned Substitution-Permutation Network
+  abbreviation: Aligned SPN
+  special_case_of: spn
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - Rijndael
+  - Anubis
+  notes: 'An SPN whose substitution and diffusion layers operate on aligned words such as nibbles, bytes, or larger machine-oriented
+    units.
+
+    '
+- id: bit_based_spn
+  name: Bit-based Substitution-Permutation Network (bSPN)
+  abbreviation: bSPN
+  special_case_of: spn
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - PRESENT
+  - GIFT
+  notes: 'An SPN whose diffusion layer is primarily expressed as a bit-level permutation, common in lightweight hardware-oriented
+    block ciphers.
+
+    '
+- id: feistel
+  name: Feistel Network
+  abbreviation: FN
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - DES
+  - Camellia
+  notes: 'A structure that updates one half of the state using a round function of the other half and then swaps roles between
+    the halves.
+
+    '
+- id: generalized_feistel
+  name: Generalized Feistel Network
+  abbreviation: GFN
+  special_case_of: feistel
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - CLEFIA
+  - CAST-256
+  notes: 'A Feistel-like structure with more than two branches or a more general branch-update schedule.
+
+    '
+- id: lay_massey
+  name: Lay-Massey Scheme
+  abbreviation: LM
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - IDEA
+  - FOX
+  notes: 'A two-branch structure where the same mixing function perturbs both halves in a symmetric manner.
+
+    '
+- id: even_mansour
+  name: Even-Mansour Construction
+  abbreviation: EM
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  placeholder_family_names:
+  - PRINCE
+  - LED
+  notes: 'A key-alternating construction built around one or more public permutations with key addition before and after permutation
+    calls.
+
+    '
+- id: davies_meyer
+  name: Davies-Meyer Construction
+  abbreviation: DM
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - MDC-2
+  - Whirlpool-compression
+  notes: 'A one-block-length compression-function construction derived from a block cipher by XORing the block-cipher output
+    with the input chaining value.
+
+    '
+- id: matyas_meyer_oseas
+  name: Matyas-Meyer-Oseas Construction
+  abbreviation: MMO
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - Miyaguchi-Preneel-variants
+  - Snefru-style-compression
+  notes: 'A one-block-length compression-function construction derived from a block cipher, closely related to Davies-Meyer
+    but using a different assignment of message and chaining value roles.
+
+    '
+- id: arx_permutation_network
+  name: ARX Permutation Network
+  abbreviation: ARX-PN
+  typical_primitive_types:
+  - permutation
+  - block_cipher
+  - stream_cipher
+  placeholder_family_names:
+  - Salsa
+  - ChaCha
+  - RC5
+  notes: 'A round-based structure built primarily from modular addition, XOR, and fixed or data-dependent rotations.
+
+    '
+- id: stream_state_update_generator
+  name: Stream State-Update Generator
+  abbreviation: SSUG
+  typical_primitive_types:
+  - stream_cipher
+  placeholder_family_names:
+  - RC4
+  notes: 'A keystream design based on repeated state updates and output extraction, typically with separate key scheduling
+    and generation phases.
+
+    '
+- id: lfsr_nlfsr_register_network
+  name: LFSR/NLFSR Register Network
+  abbreviation: LRN
+  typical_primitive_types:
+  - block_cipher
+  - stream_cipher
+  placeholder_family_names:
+  - KATAN
+  - KTANTAN
+  notes: 'A bit-oriented structure driven by linear and nonlinear feedback-shift register style state transitions and boolean
+    mixing.
+
+    '
+- id: key_dependent_table_network
+  name: Key-Dependent Table Network
+  abbreviation: KDTN
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - FROG
+  - HPC
+  notes: 'A construction where round behavior is driven by key-derived tables or key-dependent substitution/permutation components.
+
+    '
+- id: heterogeneous_round_network
+  name: Heterogeneous Round Network
+  abbreviation: HRN
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - MARS
+  notes: 'A mixed-structure block-cipher design combining distinct round phases and multiple transformation styles within
+    one cipher.
+
+    '
+- id: tweakable_spn
+  name: Tweakable Substitution-Permutation Network
+  abbreviation: TSPN
+  special_case_of: spn
+  typical_primitive_types:
+  - tweakable_block_cipher
+  placeholder_family_names:
+  - BipBip
+  - SCARF
+  - Blink
+  - ChiLow
+  notes: 'An SPN-style design with explicit tweak influence in round processing, often optimized for lightweight or memory-encryption
+    settings.
+
+    '
+- id: sponge_permutation
+  name: Sponge Permutation Construction
+  abbreviation: SPC
+  typical_primitive_types:
+  - permutation
+  - update_function
+  placeholder_family_names:
+  - ASCON
+  - Xoodoo
+  - PHOTON
+  notes: 'A permutation-centric construction used as the core of sponge and duplex modes in hashing and authenticated encryption
+    designs.
+
+    '
+- id: coupled_counter_system
+  name: Coupled Counter System
+- id: filtered_fcsr
+  name: Filtered FCSR
+- id: filtered_lfsr
+  name: Filtered LFSR
+- id: filtered_lfsr_with_decimation
+  name: Filtered LFSR with Decimation
+- id: shrinking_generator
+  name: Shrinking Generator
+  special_case_of: filtered_lfsr_with_decimation
+  notes: Coppersmith, Krawczyk, and Mansour (CRYPTO 1993); a control LFSR irregularly decimates the output of a second, data
+    LFSR — the data bit is kept only when the corresponding control bit is 1.
+- id: self_shrinking_generator
+  name: Self-Shrinking Generator
+  special_case_of: filtered_lfsr_with_decimation
+  notes: Meier and Staffelbach (EUROCRYPT 1994); a single LFSR decimates its own output in pairs, removing the need for a
+    second control register used by the two-register Shrinking Generator.
+- id: gufn
+  name: Generalized Unbalanced Feistel Network (GUFN)
+- id: irregular_clock_register_pair
+  name: Irregular Clock Register Pair
+- id: lfsr_over_extension_field_with_memory
+  name: LFSR over Extension Field with Memory
+- id: nlfsr_combiner
+  name: NLFSR Combiner
+- id: nlfsr_lfsr_filter
+  name: NLFSR/LFSR Filter
+- id: self_reciprocal_spn
+  name: Self-Reciprocal SPN
+- id: t_function
+  name: T-Function
+- id: table_driven_prf
+  name: Table-Driven PRF
+- id: table_update_stream
+  name: Table-Update Stream
+- id: nlfsr_filtered
+  name: NLFSR with Nonlinear Filter

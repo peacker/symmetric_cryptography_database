@@ -12,19 +12,19 @@ Rules checked:
 """
 from __future__ import annotations
 
-from common import load_all_data
+from common import all_families, load_all_data
 
 
 def main() -> None:
-    data = load_all_data(["families", "processes"])
-    families_doc = data["families"]
+    data = load_all_data(["primitive_families", "mode_families", "processes"])
+    families = all_families(data)
     processes_doc = data["processes"]
 
-    family_ids = {f["id"] for f in families_doc.get("families", [])}
+    family_ids = {f["id"] for f in families}
 
     # Index: family_id → set of (process_id, frozenset of stage_ids)
     family_participation: dict[str, dict[str, frozenset[str]]] = {}
-    for fam in families_doc.get("families", []):
+    for fam in families:
         fid = fam["id"]
         family_participation[fid] = {}
         for pp in fam.get("process_participations", []):
@@ -65,7 +65,7 @@ def main() -> None:
                     )
 
     # Rule B: stage_ids in family process_participations must exist in that process
-    for fam in families_doc.get("families", []):
+    for fam in families:
         fid = fam["id"]
         for pp in fam.get("process_participations", []):
             proc_id = pp["process_id"]
@@ -81,7 +81,7 @@ def main() -> None:
 
     # Rule C: if a family claims process X, it must appear as a participant
     #          in at least one stage of process X (when stages are defined)
-    for fam in families_doc.get("families", []):
+    for fam in families:
         fid = fam["id"]
         for pp in fam.get("process_participations", []):
             proc_id = pp["process_id"]
@@ -121,7 +121,7 @@ def main() -> None:
             print(f"  {e}")
         raise SystemExit(1)
 
-    print(f"Process alignment OK — checked {len(families_doc['families'])} families"
+    print(f"Process alignment OK — checked {len(families)} families"
           f" and {len(processes_doc['processes'])} processes.")
 
 

@@ -1,11 +1,12 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://example.org/symmetric_primitives/constructions.schema.json",
-    "title": "Cryptographic Construction Catalogue",
+    "$id": "https://example.org/symmetric_primitives/mode_constructions.schema.json",
+    "title": "Variable-Length Mode Construction Catalogue",
+    "description": "Structural patterns for variable-length modes: GCM, sponge, full-state sponge, duplex, Merkle-Damgard, CBC, HMAC, KDFs, etc.",
     "type": "object",
     "required": [
         "version",
-        "constructions"
+        "mode_constructions"
     ],
     "additionalProperties": false,
     "properties": {
@@ -13,7 +14,7 @@
             "type": "integer",
             "minimum": 1
         },
-        "constructions": {
+        "mode_constructions": {
             "type": "array",
             "minItems": 1,
             "items": {

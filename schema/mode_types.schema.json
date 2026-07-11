@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/symmetric_primitives/mode_types.schema.json",
+  "title": "Mode Type Catalogue",
+  "type": "object",
+  "required": ["version", "mode_types"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "mode_types": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/mode_type" }
+    }
+  },
+  "$defs": {
+    "mode_type": {
+      "type": "object",
+      "required": ["id", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

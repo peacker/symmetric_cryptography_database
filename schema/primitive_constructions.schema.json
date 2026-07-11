@@ -1,0 +1,70 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.org/symmetric_primitives/primitive_constructions.schema.json",
+    "title": "Fixed-Length Primitive Construction Catalogue",
+    "description": "Structural patterns for fixed-length primitives: SPN variants, Feistel variants, Even-Mansour, ARX permutation networks, LFSR/NLFSR networks, etc.",
+    "type": "object",
+    "required": [
+        "version",
+        "primitive_constructions"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "version": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "primitive_constructions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "$ref": "#/$defs/construction"
+            }
+        }
+    },
+    "$defs": {
+        "construction": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "abbreviation": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "special_case_of": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "typical_primitive_types": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
+                "placeholder_family_names": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
+                "notes": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
