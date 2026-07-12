@@ -31,6 +31,12 @@ KNOWN_EXCEPTIONS = {
     # submission predates TwoCats, but our only catena reference is its
     # later v5 (2015) spec — the original submission PDF wasn't locatable.
     ("twocats", "catena"),
+    # The hmac_sha256 family's year (1997) is RFC 2104, which introduced HMAC
+    # generically; this family bundles that generic construction with its
+    # specific SHA-256 instantiation, which necessarily postdates SHA-256
+    # (2001). The dependency is real (HMAC-SHA256 wraps SHA-256), just dated
+    # by the generic-construction paper rather than a SHA-256-specific one.
+    ("hmac_sha256", "sha2_hash"),
 }
 
 

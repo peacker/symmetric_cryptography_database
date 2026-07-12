@@ -32,6 +32,12 @@ mode_families:
     - same_round_function
     - same_state_layout
     note: SHA-0 is the Merkle-Damgård iteration of the SHA-0 compression function over arbitrary-length, padded input.
+  - source_family_id: md4_hash
+    relations:
+    - inspired_by
+    - improvement_of
+    note: Mirrors the relationship between the underlying compression functions -- SHA-0 follows the MD4-style Merkle-Damgård
+      lineage while expanding the state and compression function to 160 bits and 80 steps.
   notes: SHA-0 is the retrospective name for the hash function standardized in the original FIPS PUB 180 (1993). SHA-1 changed
     only the message expansion by rotating each newly derived schedule word left by one bit; SHA-0 omits that rotation. SHA-0
     is withdrawn and cryptographically broken.
@@ -2561,6 +2567,24 @@ mode_families:
     - same_round_function
     - same_state_layout
     note: Quartet-AEAD is built directly on the Quartet core cipher, reusing its state layout and state-update function unchanged.
+  - source_family_id: ascon_aead
+    relations:
+    - inspired_by
+    - similar_bit_based_permutation_layer
+    note: Mirrors the relationship between the underlying permutations -- Quartet's linear diffusion step reuses, in an
+      adapted form, the linear diffusion functions from Ascon's permutation to spread differences quickly across the state.
+  - source_family_id: ascon_hash
+    relations:
+    - inspired_by
+    - similar_bit_based_permutation_layer
+    note: Mirrors the relationship between the underlying permutations -- Quartet's linear diffusion step reuses, in an
+      adapted form, the linear diffusion functions from Ascon's permutation to spread differences quickly across the state.
+  - source_family_id: ascon_xof
+    relations:
+    - inspired_by
+    - similar_bit_based_permutation_layer
+    note: Mirrors the relationship between the underlying permutations -- Quartet's linear diffusion step reuses, in an
+      adapted form, the linear diffusion functions from Ascon's permutation to spread differences quickly across the state.
   notes: AEAD construction built on the Quartet core. Key=128, nonce/IV=96, tag=128 (primary) or 64 (secondary). Output ζ
     is a 64-bit keystream word; generates keystream up to 2^64 bits.
   instances:
@@ -3529,6 +3553,21 @@ mode_families:
     - same_state_layout
     note: Yarará is a duplex-sponge AEAD built directly on the shared permutation, reusing its state layout and round function
       unchanged.
+  - source_family_id: ascon_aead
+    relations:
+    - same_bit_based_permutation_layer
+    note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
+      bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
+  - source_family_id: ascon_hash
+    relations:
+    - same_bit_based_permutation_layer
+    note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
+      bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
+  - source_family_id: ascon_xof
+    relations:
+    - same_bit_based_permutation_layer
+    note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
+      bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
   notes: Duplex-sponge AEAD. Rate=64, capacity=192, key=128, nonce=128, tag=128. Uses permutations pi_I (10 rounds) for initialization
     and pi_AD/pi_AE/pi_F (6 rounds each) for absorption/encryption/finalization.
   instances:
@@ -3574,6 +3613,21 @@ mode_families:
     - same_state_layout
     note: Coral is a sponge hash function built directly on the shared permutation, reusing its state layout and round function
       unchanged.
+  - source_family_id: ascon_aead
+    relations:
+    - same_bit_based_permutation_layer
+    note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
+      bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
+  - source_family_id: ascon_hash
+    relations:
+    - same_bit_based_permutation_layer
+    note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
+      bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
+  - source_family_id: ascon_xof
+    relations:
+    - same_bit_based_permutation_layer
+    note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
+      bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
   notes: Sponge hash function. Rate=32, capacity=224, digest=256 bits.
   instances:
   - id: coral_v1
@@ -4410,6 +4464,11 @@ mode_families:
     - same_round_function
     - same_state_layout
     note: HAVAL is the Merkle-Damgård iteration of the HAVAL compression functions over arbitrary-length, padded input.
+  - source_family_id: md5_hash
+    relations:
+    - inspired_by
+    note: Mirrors the relationship between the underlying compression functions -- HAVAL adopts the MD-family Merkle-Damgård
+      structure and 32-bit word orientation.
   notes: 'HAVAL (AUSCRYPT 1992, Zheng/Pieprzyk/Seberry) is a Merkle-Damgård hash with 1024-bit blocks processed in 3, 4, or
     5 passes of 32 word-operations each (96/128/160 total steps). Output reduced to 128, 160, 192, 224, or 256 bits. All 15
     combinations are defined.
@@ -4604,6 +4663,11 @@ mode_families:
     - same_round_function
     - same_state_layout
     note: MD5 is the Merkle-Damgård iteration of the MD5 compression function over arbitrary-length, padded input.
+  - source_family_id: md4_hash
+    relations:
+    - improvement_of
+    note: Mirrors the relationship between the underlying compression functions -- MD5 adds a fourth round (function I),
+      per-step sine-derived constants T[1..64], and changed shift amounts relative to MD4 to improve security.
   notes: 'MD5 was published by Ronald Rivest as RFC 1321 in 1992, replacing MD4 after indications that MD4 was likely too
     fast for adequate security. Collisions found by Wang et al. (2004); deprecated for cryptographic use.
 
@@ -4656,6 +4720,11 @@ mode_families:
     - same_state_layout
     note: RIPEMD-128 and RIPEMD-160 are the Merkle-Damgård iterations of their respective compression functions over arbitrary-length,
       padded input.
+  - source_family_id: md4_hash
+    relations:
+    - improvement_of
+    note: Mirrors the relationship between the underlying compression functions -- RIPEMD extends the MD4 design with two
+      parallel computation lines and five rounds, addressing weaknesses found in MD4 and MD5.
   notes: RIPEMD family developed in the EU RIPE project. The PDF in repo covers RIPEMD-160 (1996 paper, Dobbertin/Bosselaers/Preneel).
   instances:
   - id: ripemd_128
@@ -4722,6 +4791,19 @@ mode_families:
     - same_round_function
     - same_state_layout
     note: SHA-1 is the Merkle-Damgård iteration of the SHA-1 compression function over arbitrary-length, padded input.
+  - source_family_id: sha0_hash
+    relations:
+    - improvement_of
+    - variant_of
+    - related_to
+    note: Mirrors the relationship between the underlying compression functions -- SHA-1 corrects SHA-0's message expansion
+      by applying a one-bit left rotation to every newly derived schedule word while retaining the five-word state and
+      80-step compression structure.
+  - source_family_id: md4_hash
+    relations:
+    - improvement_of
+    note: Mirrors the relationship between the underlying compression functions -- SHA-1 improves on MD4/MD5 with a 160-bit
+      state and a cross-mixing message schedule.
   notes: SHA-1 (FIPS 180-1, 1995) is a 160-bit Merkle-Damgård hash function using Davies-Meyer feedforward. SHA-1 is deprecated
     for collision-sensitive uses (SHAttered attack, 2017). See sha2_hash for the SHA-2 variants.
   instances:
@@ -4767,6 +4849,12 @@ mode_families:
     - same_state_layout
     note: Each SHA-2 hash function is the Merkle-Damgård iteration of one of the two SHA-2 compression functions over arbitrary-length,
       padded input.
+  - source_family_id: sha1_hash
+    relations:
+    - improvement_of
+    note: Mirrors the relationship between the underlying compression functions -- SHA-2 extends the SHA-1 design to 32-
+      and 64-bit word variants with larger state sizes and a sigma-function message schedule instead of a single rotation
+      XOR.
   process_participations: []
   reference_ids:
   - nist_2001_draft_fips180_2
@@ -5007,6 +5095,11 @@ mode_families:
     - same_state_layout
     note: Each BLAKE hash function is the HAIFA iteration of one of the two BLAKE compression functions over arbitrary-length,
       padded input.
+  - source_family_id: chacha_stream
+    relations:
+    - inspired_by
+    note: Mirrors the relationship between the underlying primitives -- BLAKE's specification describes its compression
+      algorithm as a modified version of ChaCha and its G function as inspired by ChaCha's quarter-round.
   notes: 'Output sizes: BLAKE-224 (224 bits), BLAKE-256 (256 bits), BLAKE-384 (384 bits), BLAKE-512 (512 bits). BLAKE2 supersedes
     the original with higher software speed and a simplified interface.
 
@@ -5370,6 +5463,12 @@ mode_families:
     - same_round_function
     - same_state_layout
     note: Tiger is the Merkle-Damgård iteration of the Tiger compression function over arbitrary-length, padded input.
+  - source_family_id: md4_hash
+    relations:
+    - inspired_by
+    note: Mirrors the relationship between the underlying compression functions -- Tiger adopts the Merkle-Damgård outer
+      structure with 512-bit blocks and Davies-Meyer feedforward, but replaces 32-bit with 64-bit words and adds an S-box-based
+      nonlinear layer.
   notes: 'Tiger (Anderson & Biham, 1995) was designed for fast hashing on 64-bit processors. Three output variants: Tiger/192
     (full state), Tiger/160 (first 160 bits), Tiger/128 (first 128 bits).
 
@@ -9045,6 +9144,7 @@ mode_families:
   - generic
   - software
   reference_ids:
+  - bernstein_2008_chacha
   - rfc_7539
   - rfc_8439
   process_participations: []
@@ -9055,12 +9155,14 @@ mode_families:
     - same_state_layout
     note: ChaCha20 is the stream-cipher mode built directly on the ChaCha20 Block Function, reusing its round function and
       state layout unchanged.
-  notes: See chacha_stream for instances; built directly on chacha.
+  notes: ChaCha20 is the IETF-standardized stream cipher built directly on the ChaCha20 Block Function; see chacha for the
+    block-function primitive.
   instances:
   - id: chacha20
     name: ChaCha20
     type: stream_cipher
     reference_ids:
+    - bernstein_2008_chacha
     - rfc_7539
     - rfc_8439
     characteristics:
@@ -9090,7 +9192,8 @@ mode_families:
     - same_round_function
     - same_state_layout
     note: A5/3 and A5/4 are GSM/UMTS keystream-generator modes built directly on the unmodified KASUMI block cipher.
-  notes: See kasumi_stream for instances; built directly on kasumi.
+  notes: A5/3 and A5/4 are GSM/UMTS keystream-generator modes built directly on the KASUMI block cipher; see kasumi for
+    the block-cipher primitive.
   instances:
   - id: a5_3_gsm
     name: A5/3
@@ -9125,7 +9228,12 @@ mode_families:
   reference_ids: &id001
   - bmgl_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - related_to
+    note: BMGL is a synchronous keystream generator that uses the unmodified Rijndael/AES block cipher as its core cryptographic
+      primitive, driving it in an OFB-like feedback mode.
   notes: Synchronous keystream generator based on Rijndael with provable security properties. Uses the block cipher Rijndael
     as the core cryptographic primitive.
   authors:
@@ -9153,7 +9261,12 @@ mode_families:
   reference_ids: &id002
   - gcm_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - related_to
+    note: AES-GCM is the Galois/Counter Mode of operation instantiated with the unmodified AES (Rijndael) block cipher,
+      as standardized in NIST SP 800-38D.
   notes: Authenticated encryption mode suitable for block ciphers. Standard for TLS 1.2/1.3 and widely deployed.
   authors:
   - David A. McGrew
@@ -9185,7 +9298,12 @@ mode_families:
   - rfc_7539
   - rfc_8439
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: chacha_stream
+    relations:
+    - related_to
+    note: ChaCha20-Poly1305 combines the unmodified ChaCha20 stream cipher with the Poly1305 universal hash in an Encrypt-then-MAC
+      AEAD construction, as specified in RFC 8439.
   notes: AEAD combining ChaCha20 stream cipher with Poly1305 universal hash. Commonly used in TLS and modern protocols.
   authors:
   - Yoav Nir
@@ -9212,7 +9330,12 @@ mode_families:
   reference_ids: &id004
   - cbc_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - related_to
+    note: AES-CBC is the Cipher Block Chaining mode of operation instantiated with the unmodified AES (Rijndael) block
+      cipher, as standardized in NIST SP 800-38A.
   notes: Classic mode of operation for block ciphers. Provides semantic security but requires separate authentication (MAC).
   authors:
   - William F. Ehrsam
@@ -9240,7 +9363,12 @@ mode_families:
   reference_ids: &id005
   - ctr_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - related_to
+    note: AES-CTR is the Counter mode of operation instantiated with the unmodified AES (Rijndael) block cipher, as standardized
+      in NIST SP 800-38A.
   notes: Converts block cipher to stream cipher. Allows parallel encryption and random access to ciphertext.
   authors:
   - Whitfield Diffie
@@ -9268,7 +9396,12 @@ mode_families:
   reference_ids: &id006
   - hmac_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: sha2_hash
+    relations:
+    - related_to
+    note: HMAC-SHA256 is the HMAC construction instantiated with the unmodified SHA-256 hash function, as standardized
+      in FIPS 198-1 / RFC 2104.
   notes: Message authentication code based on SHA-256. Universal construction with proven security bounds.
   authors:
   - Mihir Bellare
@@ -9295,7 +9428,12 @@ mode_families:
   reference_ids: &id007
   - pbkdf2_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: hmac_sha256
+    relations:
+    - related_to
+    note: PBKDF2 iterates an HMAC (e.g. HMAC-SHA256) as its pseudorandom function to stretch a password into a derived
+      key, as specified in RFC 8018 (PKCS #5 v2.1).
   notes: Key derivation function for password-based encryption. Implements HMAC-based key derivation with iteration count.
   authors:
   - Burt Kaliski
