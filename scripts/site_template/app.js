@@ -518,42 +518,48 @@
   // Builds the tier + 4-dimension filter panel for one tab (prefix "viz" or
   // "gen"). Both tabs call this with their own DOM ids but identical
   // semantics, per-dimension state, and All/None wiring.
-  function createTierFilterPanel(prefix, dims, familyProcessMap, processList, onChange) {
-    const el = (suffix) => document.getElementById(`${prefix}${suffix}`);
-    const filterPrimitives = el("FilterPrimitives");
-    const filterModes = el("FilterModes");
+  // One tier's worth of filtering: its own "include this tier" checkbox plus
+  // Types / Constructions / Target applications / Processes checklists, each
+  // scoped to families of that tier only (e.g. the primitives section never
+  // shows a mode's AEAD/hash type or its sponge/duplex construction).
+  function createTierSection(prefix, tierKey, dims, familyProcessMap, processList, onChange) {
+    const el = (suffix) => document.getElementById(`${prefix}${tierKey}${suffix}`);
+    const tierCheckbox = document.getElementById(`${prefix}Filter${tierKey}s`);
     const typeSel = new Map();
     const constructionSel = new Map();
     const targetSel = new Map();
     const processSel = new Map();
+    const tierValue = tierKey === "Primitive" ? "primitive" : "mode";
 
-    function eligibleFamilyIds() {
+    function familyIdsOfTier() {
       const out = [];
-      dims.familyTierById.forEach((tier, fid) => {
-        if (tier === "primitive" && filterPrimitives && !filterPrimitives.checked) return;
-        if (tier === "mode" && filterModes && !filterModes.checked) return;
-        out.push(fid);
-      });
+      dims.familyTierById.forEach((tier, fid) => { if (tier === tierValue) out.push(fid); });
       return out;
     }
 
-    function collectValues(map, dimMap) {
+    function collectValues(dimMap) {
       const values = new Set();
-      eligibleFamilyIds().forEach((fid) => {
+      familyIdsOfTier().forEach((fid) => {
         (dimMap.get(fid) || new Set()).forEach((v) => values.add(v));
       });
       return Array.from(values).sort((a, b) => a.localeCompare(b));
     }
 
-    function refreshChecklists() {
-      const typeValues = collectValues(typeSel, dims.familyToTypes);
-      const constructionValues = collectValues(constructionSel, dims.familyToConstructions);
-      const targetValues = collectValues(targetSel, dims.familyToTargets);
+    function refreshChecklist() {
+      const typeValues = collectValues(dims.familyToTypes);
+      const constructionValues = collectValues(dims.familyToConstructions);
+      const targetValues = collectValues(dims.familyToTargets);
       typeValues.forEach((v) => { if (!typeSel.has(v)) typeSel.set(v, true); });
       constructionValues.forEach((v) => { if (!constructionSel.has(v)) constructionSel.set(v, true); });
       targetValues.forEach((v) => { if (!targetSel.has(v)) targetSel.set(v, true); });
+
+      const relevantProcessIds = new Set();
+      familyIdsOfTier().forEach((fid) => {
+        const pid = familyProcessMap[fid];
+        if (pid) relevantProcessIds.add(pid);
+      });
       const processEntries = [
-        ...processList.map((p) => ({ key: String(p.id), label: String(p.name) })),
+        ...processList.filter((p) => relevantProcessIds.has(String(p.id))).map((p) => ({ key: String(p.id), label: String(p.name) })),
         { key: "__none__", label: "No process" },
       ];
       processEntries.forEach(({ key }) => { if (!processSel.has(key)) processSel.set(key, true); });
@@ -567,13 +573,8 @@
       buildChecklistFilter(el("ProcessFilters"), processSel, processEntries, el("ProcessAll"), el("ProcessNone"), onChange);
     }
 
-    if (filterPrimitives) filterPrimitives.addEventListener("change", () => { refreshChecklists(); onChange(); });
-    if (filterModes) filterModes.addEventListener("change", () => { refreshChecklists(); onChange(); });
-
-    function isFamilyVisible(fid) {
-      const tier = dims.familyTierById.get(fid) || "";
-      if (tier === "primitive" && filterPrimitives && !filterPrimitives.checked) return false;
-      if (tier === "mode" && filterModes && !filterModes.checked) return false;
+    function isVisible(fid) {
+      if (tierCheckbox && !tierCheckbox.checked) return false;
       if (!passesDimensionFilter(typeSel, dims.familyToTypes.get(fid))) return false;
       if (!passesDimensionFilter(constructionSel, dims.familyToConstructions.get(fid))) return false;
       if (!passesDimensionFilter(targetSel, dims.familyToTargets.get(fid))) return false;
@@ -585,8 +586,43 @@
       return true;
     }
 
-    refreshChecklists();
-    return { isFamilyVisible, refreshChecklists, typeSel, constructionSel, targetSel, processSel };
+    refreshChecklist();
+    return { isVisible, refreshChecklist, typeSel, constructionSel, targetSel, processSel, tierCheckbox };
+  }
+
+  // Builds the full two-section (Primitives / Modes) filter panel for one tab
+  // (prefix "viz" or "gen"). Both tabs call this with their own DOM ids but
+  // identical semantics, so the two tabs can't drift out of sync.
+  function createTierFilterPanel(prefix, dims, familyProcessMap, processList, onChange) {
+    const primitiveSection = createTierSection(prefix, "Primitive", dims, familyProcessMap, processList, onChange);
+    const modeSection = createTierSection(prefix, "Mode", dims, familyProcessMap, processList, onChange);
+
+    if (primitiveSection.tierCheckbox) primitiveSection.tierCheckbox.addEventListener("change", onChange);
+    if (modeSection.tierCheckbox) modeSection.tierCheckbox.addEventListener("change", onChange);
+
+    function isFamilyVisible(fid) {
+      const tier = dims.familyTierById.get(fid) || "";
+      if (tier === "primitive") return primitiveSection.isVisible(fid);
+      if (tier === "mode") return modeSection.isVisible(fid);
+      return true;
+    }
+
+    // A legend/coloring value (a type name, construction name, or process id)
+    // only ever lives in one tier's own catalogue, so check whichever
+    // section's map actually has that key rather than assuming a tier.
+    function isValueChecked(dimension, key) {
+      const sectionMap = { type: "typeSel", construction: "constructionSel", target: "targetSel", process: "processSel" }[dimension];
+      if (primitiveSection[sectionMap].has(key)) return primitiveSection[sectionMap].get(key) !== false;
+      if (modeSection[sectionMap].has(key)) return modeSection[sectionMap].get(key) !== false;
+      return true;
+    }
+
+    return {
+      isFamilyVisible,
+      isValueChecked,
+      primitive: primitiveSection,
+      mode: modeSection,
+    };
   }
 
   function setupFamilyVisualization() {
@@ -1880,10 +1916,10 @@
       const items = mode === "process"
         ? [...genProcessList.map((p) => ({ color: genProcColorMap.get(String(p.id)), label: String(p.name) })), { color: genProcColorMap.get("__none__"), label: "No process" }]
         : mode === "construction"
-          ? allConstrs.filter((c) => genFilterPanel.constructionSel.get(c) !== false).map((c) => ({ color: constrColorMap.get(c) || "#7a8c8f", label: c }))
+          ? allConstrs.filter((c) => genFilterPanel.isValueChecked("construction", c)).map((c) => ({ color: constrColorMap.get(c) || "#7a8c8f", label: c }))
           : mode === "target"
-            ? allTargets.filter((t) => genFilterPanel.targetSel.get(t) !== false).map((t) => ({ color: targetColorMap.get(t) || "#7a8c8f", label: t }))
-            : allTypes.filter((t) => genFilterPanel.typeSel.get(t) !== false).map((t) => ({ color: typeColorMap.get(t) || "#7a8c8f", label: t }));
+            ? allTargets.filter((t) => genFilterPanel.isValueChecked("target", t)).map((t) => ({ color: targetColorMap.get(t) || "#7a8c8f", label: t }))
+            : allTypes.filter((t) => genFilterPanel.isValueChecked("type", t)).map((t) => ({ color: typeColorMap.get(t) || "#7a8c8f", label: t }));
       const mkItem = (color, label, bold) => {
         const s = document.createElement("span"); s.className = "viz-process-legend-item";
         const d = document.createElement("span"); d.className = "viz-process-legend-dot"; d.style.cssText = `background:${color};${bold ? "border:2px solid #000;box-sizing:border-box" : ""}`;
