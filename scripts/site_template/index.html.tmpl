@@ -32,9 +32,10 @@
         <div class="toolbar viz-toolbar">
           <label class="toolbar-field">Group families by
             <select id="vizGroupBy">
-              <option value="primitive">Primitive type</option>
-              <option value="construction">Construction type</option>
+              <option value="type">Type</option>
+              <option value="construction">Construction</option>
               <option value="target">Target application</option>
+              <option value="process">Process</option>
             </select>
           </label>
           <div class="viz-display-group">
@@ -76,16 +77,52 @@
             <span id="vizYearRangeValue" class="small-note">All years</span>
           </div>
         </div>
-        <details class="collapsible viz-filter-panel" open>
-          <summary>Visible groups</summary>
-          <div class="collapsible-body">
-            <div class="viz-filter-actions">
-              <button id="vizFilterAll" type="button">All</button>
-              <button id="vizFilterNone" type="button">None</button>
+        <div class="tier-toggle-row">
+          <label class="inline-check"><input id="vizFilterPrimitives" type="checkbox" checked /> Fixed-length primitives</label>
+          <label class="inline-check"><input id="vizFilterModes" type="checkbox" checked /> Variable-length modes</label>
+        </div>
+        <div class="gen-filters-row">
+          <details class="collapsible gen-filter-panel">
+            <summary>Types</summary>
+            <div class="collapsible-body">
+              <div class="viz-filter-actions">
+                <button id="vizTypeAll" type="button">All</button>
+                <button id="vizTypeNone" type="button">None</button>
+              </div>
+              <div id="vizTypeFilters" class="filter-checklist viz-filter-checklist"></div>
             </div>
-            <div id="vizGroupFilters" class="filter-checklist viz-filter-checklist"></div>
-          </div>
-        </details>
+          </details>
+          <details class="collapsible gen-filter-panel">
+            <summary>Constructions</summary>
+            <div class="collapsible-body">
+              <div class="viz-filter-actions">
+                <button id="vizConstructionAll" type="button">All</button>
+                <button id="vizConstructionNone" type="button">None</button>
+              </div>
+              <div id="vizConstructionFilters" class="filter-checklist viz-filter-checklist"></div>
+            </div>
+          </details>
+          <details class="collapsible gen-filter-panel">
+            <summary>Target applications</summary>
+            <div class="collapsible-body">
+              <div class="viz-filter-actions">
+                <button id="vizTargetAll" type="button">All</button>
+                <button id="vizTargetNone" type="button">None</button>
+              </div>
+              <div id="vizTargetFilters" class="filter-checklist viz-filter-checklist"></div>
+            </div>
+          </details>
+          <details class="collapsible gen-filter-panel">
+            <summary>Processes</summary>
+            <div class="collapsible-body">
+              <div class="viz-filter-actions">
+                <button id="vizProcessAll" type="button">All</button>
+                <button id="vizProcessNone" type="button">None</button>
+              </div>
+              <div id="vizProcessFilters" class="filter-checklist viz-filter-checklist"></div>
+            </div>
+          </details>
+        </div>
         <div class="viz-frame" id="vizFrame">
           <div id="vizYAxisPane" class="viz-yaxis-pane">
             <div id="vizYAxisTrack" class="viz-axis-track">
@@ -114,8 +151,9 @@
         <div class="toolbar viz-toolbar">
           <label class="toolbar-field">Color nodes by
             <select id="genColorBy">
-              <option value="primitive">Primitive type</option>
-              <option value="construction">Construction type</option>
+              <option value="type">Type</option>
+              <option value="construction">Construction</option>
+              <option value="target">Target application</option>
               <option value="process">Process</option>
             </select>
           </label>
@@ -159,25 +197,39 @@
             <span id="genYearRangeValue" class="small-note">All years</span>
           </div>
         </div>
+        <div class="tier-toggle-row">
+          <label class="inline-check"><input id="genFilterPrimitives" type="checkbox" checked /> Fixed-length primitives</label>
+          <label class="inline-check"><input id="genFilterModes" type="checkbox" checked /> Variable-length modes</label>
+        </div>
         <div class="gen-filters-row">
           <details class="collapsible gen-filter-panel">
-            <summary>Primitive types</summary>
+            <summary>Types</summary>
             <div class="collapsible-body">
               <div class="viz-filter-actions">
-                <button id="genPrimitiveAll" type="button">All</button>
-                <button id="genPrimitiveNone" type="button">None</button>
+                <button id="genTypeAll" type="button">All</button>
+                <button id="genTypeNone" type="button">None</button>
               </div>
-              <div id="genPrimitiveFilters" class="filter-checklist viz-filter-checklist"></div>
+              <div id="genTypeFilters" class="filter-checklist viz-filter-checklist"></div>
             </div>
           </details>
           <details class="collapsible gen-filter-panel">
-            <summary>Construction types</summary>
+            <summary>Constructions</summary>
             <div class="collapsible-body">
               <div class="viz-filter-actions">
                 <button id="genConstructionAll" type="button">All</button>
                 <button id="genConstructionNone" type="button">None</button>
               </div>
               <div id="genConstructionFilters" class="filter-checklist viz-filter-checklist"></div>
+            </div>
+          </details>
+          <details class="collapsible gen-filter-panel">
+            <summary>Target applications</summary>
+            <div class="collapsible-body">
+              <div class="viz-filter-actions">
+                <button id="genTargetAll" type="button">All</button>
+                <button id="genTargetNone" type="button">None</button>
+              </div>
+              <div id="genTargetFilters" class="filter-checklist viz-filter-checklist"></div>
             </div>
           </details>
           <details class="collapsible gen-filter-panel">
@@ -215,7 +267,7 @@
 
       <section class="panel view-panel" data-view="builder">
         <h2>Custom Query Builder</h2>
-        <p class="small-note">Base join: primitives + families + instance references</p>
+        <p class="small-note">Base join: instances (primitive or mode) + families + reference links</p>
         <div class="builder-grid">
           <details class="collapsible" open>
             <summary>Filters</summary>
@@ -267,12 +319,12 @@
       <section class="panel view-panel" data-view="about">
         <h2>About</h2>
         <div class="about-body">
-          <p>The <strong>Symmetric Cryptography Database</strong> is a structured, curated collection of symmetric-key primitive families — block ciphers, stream ciphers, hash functions, MACs, and authenticated-encryption schemes — together with their design lineage, construction types, and participation in standardisation processes.</p>
-          <p>The data is stored in a SQLite database built from hand-curated JSON source files. Families are linked by explicit influence edges (e.g. <em>same S-box</em>, <em>improvement of</em>, <em>variant of</em>) which make up the genealogy graph. The <strong>Timelines</strong> tab places each primitive on a publication-year axis grouped by any chosen dimension; the <strong>Genealogy</strong> tab renders the influence graph as a layered DAG or as a radial tree.</p>
-          <p>Primitive families are annotated with:</p>
+          <p>The <strong>Symmetric Cryptography Database</strong> is a structured, curated collection of symmetric-key designs, split into two tiers: <strong>primitives</strong> — fixed-length constructions with no direct standalone cryptographic use (permutations, block ciphers, tweakable block ciphers, compression/update functions) — and <strong>modes</strong> — variable-length constructions directly usable as a cryptographic algorithm (AEAD, hash, XOF, MAC, KDF, PBKDF, PRNG, key wrap, stream cipher). A mode is typically built on top of one or more primitives (e.g. AES-GCM wraps the AES block cipher in the GCM construction; Ascon-Hash wraps the Ascon-p permutation in a sponge). Each side carries its own design lineage, construction taxonomy, and participation in standardisation processes.</p>
+          <p>The data is stored in a SQLite database built from hand-curated JSON source files. Families are linked by explicit influence edges (e.g. <em>same S-box</em>, <em>improvement of</em>, <em>variant of</em>) which make up the genealogy graph — primitive and mode families share one id space, so an edge can cross tiers (e.g. a mode influenced by the primitive it wraps). The <strong>Timelines</strong> tab places each family on a publication-year axis grouped by any chosen dimension; the <strong>Genealogy</strong> tab renders the influence graph as a layered DAG or as a radial tree. Both tabs share the same filtering: toggle fixed-length primitives and/or variable-length modes, then narrow by type, construction, target application, and standardisation process.</p>
+          <p>Families are annotated with:</p>
           <ul>
-            <li><strong>Construction type</strong> — SPN, Feistel, ARX, sponge, etc.</li>
-            <li><strong>Primitive type</strong> — block cipher, stream cipher, hash, MAC, AEAD, …</li>
+            <li><strong>Construction</strong> — for primitives: SPN, Feistel, ARX, Even-Mansour, etc.; for modes: sponge/duplex, Merkle-Damgard, GCM, HMAC, etc.</li>
+            <li><strong>Type</strong> — for primitives: permutation, block cipher, tweakable block cipher, compression/update function; for modes: AEAD, hash, XOF, MAC, KDF, PBKDF, PRNG, key wrap, stream cipher.</li>
             <li><strong>Standardisation process</strong> — AES, SHA-3, CAESAR, NIST-LWC, …</li>
             <li><strong>Design components</strong> — S-boxes, permutation layers, MixColumns, key schedules.</li>
           </ul>

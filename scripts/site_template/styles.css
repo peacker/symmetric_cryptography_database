@@ -576,9 +576,20 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
 .gen-filters-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0.55rem;
   margin-top: 0.55rem;
+}
+
+.tier-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfaf5;
 }
 
 .gen-frame {
