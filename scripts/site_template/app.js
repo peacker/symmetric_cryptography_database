@@ -255,10 +255,6 @@
     const view = createTableView("builderView");
 
     const ui = {
-      tier: document.getElementById("fTier"),
-      primitiveType: document.getElementById("fPrimitiveType"),
-      primitiveConstruction: document.getElementById("fPrimitiveConstruction"),
-      modeConstruction: document.getElementById("fModeConstruction"),
       referenceKind: document.getElementById("fReferenceKind"),
       referenceYearMin: document.getElementById("fReferenceYearMin"),
       referenceYearMax: document.getElementById("fReferenceYearMax"),
@@ -270,46 +266,23 @@
       sqlPreview: document.getElementById("sqlPreview"),
     };
 
-    const TIER_LABELS = { primitive: "Fixed-length (primitive)", mode: "Variable-length (mode)" };
-
     const defaultColumns = [
       "instance.id", "instance.name", "instance.tier", "instance.type_name", "family.name", "reference.title", "reference.year", "reference.url",
     ].filter((c) => builder.columns.includes(c));
     const visibleColumns = new Set(defaultColumns.length ? defaultColumns : builder.columns);
 
-    // A "*_construction_names" cell is a ", "-joined list (a family can carry
-    // more than one construction tag) rather than one value per row like
-    // instance.type_name, so it needs its own tokenizer instead of a plain
-    // distinct-values scan.
-    function multiValueTokens(columnKey) {
-      const values = new Set();
-      builder.rows.forEach((r) => {
-        normalizeValue(r[columnKey]).split(",").map((v) => v.trim()).filter(Boolean).forEach((v) => values.add(v));
-      });
-      return Array.from(values).sort((a, b) => a.localeCompare(b));
-    }
-
-    function rowHasToken(row, columnKey, selectedSet) {
-      if (!selectedSet.size) return true;
-      const tokens = normalizeValue(row[columnKey]).split(",").map((v) => v.trim()).filter(Boolean);
-      if (!tokens.length) return true;
-      return tokens.some((t) => selectedSet.has(t));
-    }
+    // Same Fixed-length primitives / Variable-length modes filtering as the
+    // Timelines and Genealogy tabs — reused rather than reimplemented so all
+    // three tabs share one definition of "type / construction / target /
+    // process" filtering and can't drift out of sync.
+    const dims = buildDimensionMaps(data.tables);
+    const processData = data.processData || {};
+    const processList = processData.processes || [];
+    const familyProcessMap = processData.familyProcessMap || {};
+    const qbFilterPanel = createTierFilterPanel("qb", dims, familyProcessMap, processList, () => refresh());
 
     function fillFilterOptions() {
-      const tiers = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["instance.tier"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
-      const primitiveTypes = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["instance.type_name"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
       const referenceKinds = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["reference.kind"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
-      // renderFilterChecklist uses the label as both the checkbox value and its
-      // display text, so tier needs its own render pass keeping the raw id as
-      // the value while showing the friendly label.
-      ui.tier.innerHTML = tiers.map((t) => {
-        const label = escapeHtml(TIER_LABELS[t] || t);
-        return `<label><input type="checkbox" data-value="${escapeHtml(t)}" /><span>${label}</span></label>`;
-      }).join("");
-      renderFilterChecklist(ui.primitiveType, primitiveTypes);
-      renderFilterChecklist(ui.primitiveConstruction, multiValueTokens("family.primitive_construction_names"));
-      renderFilterChecklist(ui.modeConstruction, multiValueTokens("family.mode_construction_names"));
       renderFilterChecklist(ui.referenceKind, referenceKinds);
     }
 
@@ -360,30 +333,25 @@
       });
     }
 
-    // A multi-value ", "-joined column can't use IN (...) directly (a cell
-    // like "SPN, Feistel" is one string, not two rows), so each selected
-    // token becomes its own delimiter-padded LIKE clause, OR'd together.
-    function multiValueWhereClause(columnKey, selectedSet) {
-      if (!selectedSet.size) return null;
-      const likes = Array.from(selectedSet).map((v) => {
-        const escaped = v.replace(/'/g, "''").replace(/[%_]/g, "\\$&");
-        return `(', ' || "${columnKey}" || ', ') LIKE '%, ${escaped}, %' ESCAPE '\\'`;
+    // How many checkboxes in the reused tier filter panel currently exclude
+    // something (tier off, or a dimension with at least one box unchecked).
+    // The panel's own state doesn't translate cleanly into flat SQL text (it
+    // spans instances, family_targets and family_processes as well as the two
+    // construction tables), so the SQL preview notes how many such filters
+    // are active rather than re-deriving them as WHERE clauses.
+    function activeTierPanelFilterCount() {
+      let count = 0;
+      [qbFilterPanel.primitive, qbFilterPanel.mode].forEach((section) => {
+        if (section.tierCheckbox && !section.tierCheckbox.checked) count += 1;
+        [section.typeSel, section.constructionSel, section.targetSel, section.processSel].forEach((selMap) => {
+          if (Array.from(selMap.values()).some((v) => !v)) count += 1;
+        });
       });
-      return `(${likes.join(" OR ")})`;
+      return count;
     }
 
     function buildWhereClauses() {
       const clauses = [];
-      const tierValues = selectedChecklistValues(ui.tier);
-      if (tierValues.size) clauses.push(`"instance.tier" IN (${Array.from(tierValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
-      const typeValues = selectedChecklistValues(ui.primitiveType);
-      if (typeValues.size) clauses.push(`"instance.type_name" IN (${Array.from(typeValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
-      const primConstrValues = selectedChecklistValues(ui.primitiveConstruction);
-      const primConstrClause = multiValueWhereClause("family.primitive_construction_names", primConstrValues);
-      if (primConstrClause) clauses.push(primConstrClause);
-      const modeConstrValues = selectedChecklistValues(ui.modeConstruction);
-      const modeConstrClause = multiValueWhereClause("family.mode_construction_names", modeConstrValues);
-      if (modeConstrClause) clauses.push(modeConstrClause);
       const refKindValues = selectedChecklistValues(ui.referenceKind);
       if (refKindValues.size) clauses.push(`"reference.kind" IN (${Array.from(refKindValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
 
@@ -402,10 +370,6 @@
     }
 
     function filterRows(rows) {
-      const tierValues = selectedChecklistValues(ui.tier);
-      const typeValues = selectedChecklistValues(ui.primitiveType);
-      const primConstrValues = selectedChecklistValues(ui.primitiveConstruction);
-      const modeConstrValues = selectedChecklistValues(ui.modeConstruction);
       const refKindValues = selectedChecklistValues(ui.referenceKind);
       const ryMin = parseOptionalNumber(ui.referenceYearMin.value);
       const ryMax = parseOptionalNumber(ui.referenceYearMax.value);
@@ -413,12 +377,7 @@
       const referenceTitle = (ui.referenceTitle.value || "").trim().toLowerCase();
 
       return rows.filter((row) => {
-        const tier = normalizeValue(row["instance.tier"]);
-        if (tierValues.size && !tierValues.has(tier)) return false;
-        const typeName = normalizeValue(row["instance.type_name"]);
-        if (typeValues.size && !typeValues.has(typeName)) return false;
-        if (!rowHasToken(row, "family.primitive_construction_names", primConstrValues)) return false;
-        if (!rowHasToken(row, "family.mode_construction_names", modeConstrValues)) return false;
+        if (!qbFilterPanel.isFamilyVisible(String(row["family.id"] || ""))) return false;
         const refKind = normalizeValue(row["reference.kind"]);
         if (refKindValues.size && !refKindValues.has(refKind)) return false;
 
@@ -440,7 +399,11 @@
       const whereClauses = buildWhereClauses();
       const selectCols = visible.length ? visible.map((c) => `"${c}"`).join(", ") : "*";
       const whereSql = whereClauses.length ? `\nWHERE ${whereClauses.join("\n  AND ")}` : "";
-      ui.sqlPreview.textContent = `SELECT ${selectCols}\nFROM (${builder.baseSql})${whereSql};`;
+      const panelFilterCount = activeTierPanelFilterCount();
+      const panelNote = panelFilterCount
+        ? `\n-- + ${panelFilterCount} Fixed-length/Variable-length filter(s) from the panel above (applied to the table below, not restated as SQL here)`
+        : "";
+      ui.sqlPreview.textContent = `SELECT ${selectCols}\nFROM (${builder.baseSql})${whereSql};${panelNote}`;
     }
 
     [ui.referenceYearMin, ui.referenceYearMax, ui.familyName, ui.referenceTitle, ui.hasReferenceLink].forEach((node) => {
@@ -448,18 +411,14 @@
       node.addEventListener("input", refresh);
     });
 
-    [ui.tier, ui.primitiveType, ui.primitiveConstruction, ui.modeConstruction, ui.referenceKind].forEach((container) => {
-      container.addEventListener("change", (event) => {
-        const target = event.target;
-        if (target && target.matches('input[type="checkbox"][data-value]')) refresh();
-      });
+    ui.referenceKind.addEventListener("change", (event) => {
+      const target = event.target;
+      if (target && target.matches('input[type="checkbox"][data-value]')) refresh();
     });
 
     ui.resetFilters.addEventListener("click", () => {
-      [ui.tier, ui.primitiveType, ui.primitiveConstruction, ui.modeConstruction, ui.referenceKind].forEach((container) => {
-        Array.from(container.querySelectorAll('input[type="checkbox"][data-value]')).forEach((box) => {
-          box.checked = false;
-        });
+      Array.from(ui.referenceKind.querySelectorAll('input[type="checkbox"][data-value]')).forEach((box) => {
+        box.checked = false;
       });
       [ui.referenceYearMin, ui.referenceYearMax, ui.familyName, ui.referenceTitle].forEach((node) => { node.value = ""; });
       ui.hasReferenceLink.checked = false;
@@ -578,6 +537,39 @@
     return Array.from(valueSet).some((v) => selMap.get(v) !== false);
   }
 
+  // Generates the markup for one two-section (Primitives/Modes) filter panel,
+  // parameterized by prefix so the same HTML (and the same element ids that
+  // createTierSection/createTierFilterPanel expect) can be produced for every
+  // tab that offers this filtering, instead of hand-duplicating the block in
+  // index.html.tmpl once per tab.
+  function renderTierFilterPanelMarkup(prefix) {
+    function dimensionPanel(idPrefix, label) {
+      return `
+            <details class="collapsible gen-filter-panel">
+              <summary>${label}</summary>
+              <div class="collapsible-body">
+                <div class="viz-filter-actions">
+                  <button id="${idPrefix}All" type="button">All</button>
+                  <button id="${idPrefix}None" type="button">None</button>
+                </div>
+                <div id="${idPrefix}Filters" class="filter-checklist viz-filter-checklist"></div>
+              </div>
+            </details>`;
+    }
+
+    function tierSection(tierKey, label) {
+      const p = `${prefix}${tierKey}`;
+      return `
+        <div class="tier-section">
+          <label class="inline-check tier-section-toggle"><input id="${prefix}Filter${tierKey}s" type="checkbox" checked /> <strong>${label}</strong></label>
+          <div class="gen-filters-row">${dimensionPanel(`${p}Type`, "Types")}${dimensionPanel(`${p}Construction`, "Constructions")}${dimensionPanel(`${p}Target`, "Target applications")}${dimensionPanel(`${p}Process`, "Processes")}
+          </div>
+        </div>`;
+    }
+
+    return tierSection("Primitive", "Fixed-length primitives") + tierSection("Mode", "Variable-length modes");
+  }
+
   // Builds the tier + 4-dimension filter panel for one tab (prefix "viz" or
   // "gen"). Both tabs call this with their own DOM ids but identical
   // semantics, per-dimension state, and All/None wiring.
@@ -654,9 +646,14 @@
   }
 
   // Builds the full two-section (Primitives / Modes) filter panel for one tab
-  // (prefix "viz" or "gen"). Both tabs call this with their own DOM ids but
-  // identical semantics, so the two tabs can't drift out of sync.
+  // (prefix "viz", "gen", or "qb"). Every tab that wants this filtering calls
+  // this with its own prefix but identical semantics and markup, so they
+  // can't drift out of sync and the HTML never needs hand-duplicating: this
+  // renders into "<prefix>TierFilterPanel" itself before wiring it up.
   function createTierFilterPanel(prefix, dims, familyProcessMap, processList, onChange) {
+    const container = document.getElementById(`${prefix}TierFilterPanel`);
+    if (container) container.innerHTML = renderTierFilterPanelMarkup(prefix);
+
     const primitiveSection = createTierSection(prefix, "Primitive", dims, familyProcessMap, processList, onChange);
     const modeSection = createTierSection(prefix, "Mode", dims, familyProcessMap, processList, onChange);
 

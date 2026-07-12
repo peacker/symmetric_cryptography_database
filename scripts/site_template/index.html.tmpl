@@ -77,96 +77,7 @@
             <span id="vizYearRangeValue" class="small-note">All years</span>
           </div>
         </div>
-        <div class="tier-section">
-          <label class="inline-check tier-section-toggle"><input id="vizFilterPrimitives" type="checkbox" checked /> <strong>Fixed-length primitives</strong></label>
-          <div class="gen-filters-row">
-            <details class="collapsible gen-filter-panel">
-              <summary>Types</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="vizPrimitiveTypeAll" type="button">All</button>
-                  <button id="vizPrimitiveTypeNone" type="button">None</button>
-                </div>
-                <div id="vizPrimitiveTypeFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Constructions</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="vizPrimitiveConstructionAll" type="button">All</button>
-                  <button id="vizPrimitiveConstructionNone" type="button">None</button>
-                </div>
-                <div id="vizPrimitiveConstructionFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Target applications</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="vizPrimitiveTargetAll" type="button">All</button>
-                  <button id="vizPrimitiveTargetNone" type="button">None</button>
-                </div>
-                <div id="vizPrimitiveTargetFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Processes</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="vizPrimitiveProcessAll" type="button">All</button>
-                  <button id="vizPrimitiveProcessNone" type="button">None</button>
-                </div>
-                <div id="vizPrimitiveProcessFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-          </div>
-        </div>
-        <div class="tier-section">
-          <label class="inline-check tier-section-toggle"><input id="vizFilterModes" type="checkbox" checked /> <strong>Variable-length modes</strong></label>
-          <div class="gen-filters-row">
-            <details class="collapsible gen-filter-panel">
-              <summary>Types</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="vizModeTypeAll" type="button">All</button>
-                  <button id="vizModeTypeNone" type="button">None</button>
-                </div>
-                <div id="vizModeTypeFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Constructions</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="vizModeConstructionAll" type="button">All</button>
-                  <button id="vizModeConstructionNone" type="button">None</button>
-                </div>
-                <div id="vizModeConstructionFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Target applications</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="vizModeTargetAll" type="button">All</button>
-                  <button id="vizModeTargetNone" type="button">None</button>
-                </div>
-                <div id="vizModeTargetFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Processes</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="vizModeProcessAll" type="button">All</button>
-                  <button id="vizModeProcessNone" type="button">None</button>
-                </div>
-                <div id="vizModeProcessFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-          </div>
-        </div>
+        <div id="vizTierFilterPanel"></div>
         <div class="viz-frame" id="vizFrame">
           <div id="vizYAxisPane" class="viz-yaxis-pane">
             <div id="vizYAxisTrack" class="viz-axis-track">
@@ -241,96 +152,7 @@
             <span id="genYearRangeValue" class="small-note">All years</span>
           </div>
         </div>
-        <div class="tier-section">
-          <label class="inline-check tier-section-toggle"><input id="genFilterPrimitives" type="checkbox" checked /> <strong>Fixed-length primitives</strong></label>
-          <div class="gen-filters-row">
-            <details class="collapsible gen-filter-panel">
-              <summary>Types</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="genPrimitiveTypeAll" type="button">All</button>
-                  <button id="genPrimitiveTypeNone" type="button">None</button>
-                </div>
-                <div id="genPrimitiveTypeFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Constructions</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="genPrimitiveConstructionAll" type="button">All</button>
-                  <button id="genPrimitiveConstructionNone" type="button">None</button>
-                </div>
-                <div id="genPrimitiveConstructionFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Target applications</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="genPrimitiveTargetAll" type="button">All</button>
-                  <button id="genPrimitiveTargetNone" type="button">None</button>
-                </div>
-                <div id="genPrimitiveTargetFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Processes</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="genPrimitiveProcessAll" type="button">All</button>
-                  <button id="genPrimitiveProcessNone" type="button">None</button>
-                </div>
-                <div id="genPrimitiveProcessFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-          </div>
-        </div>
-        <div class="tier-section">
-          <label class="inline-check tier-section-toggle"><input id="genFilterModes" type="checkbox" checked /> <strong>Variable-length modes</strong></label>
-          <div class="gen-filters-row">
-            <details class="collapsible gen-filter-panel">
-              <summary>Types</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="genModeTypeAll" type="button">All</button>
-                  <button id="genModeTypeNone" type="button">None</button>
-                </div>
-                <div id="genModeTypeFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Constructions</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="genModeConstructionAll" type="button">All</button>
-                  <button id="genModeConstructionNone" type="button">None</button>
-                </div>
-                <div id="genModeConstructionFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Target applications</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="genModeTargetAll" type="button">All</button>
-                  <button id="genModeTargetNone" type="button">None</button>
-                </div>
-                <div id="genModeTargetFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-            <details class="collapsible gen-filter-panel">
-              <summary>Processes</summary>
-              <div class="collapsible-body">
-                <div class="viz-filter-actions">
-                  <button id="genModeProcessAll" type="button">All</button>
-                  <button id="genModeProcessNone" type="button">None</button>
-                </div>
-                <div id="genModeProcessFilters" class="filter-checklist viz-filter-checklist"></div>
-              </div>
-            </details>
-          </div>
-        </div>
+        <div id="genTierFilterPanel"></div>
         <div class="gen-frame" id="genFrame">
           <div id="genPlotScroll" class="gen-plot-scroll">
             <svg id="genPlot" role="img" aria-label="Genealogy influence graph"></svg>
@@ -355,23 +177,12 @@
 
       <section class="panel view-panel" data-view="builder">
         <h2>Custom Query Builder</h2>
-        <p class="small-note">Base join: instances (primitive or mode) + families + reference links. Primitive (fixed-length) and mode (variable-length) constructions are kept in separate columns/filters since they come from separate tables.</p>
+        <p class="small-note">Base join: instances (primitive or mode) + families + reference links. Uses the same Fixed-length primitives / Variable-length modes filtering as the Timelines and Genealogy tabs.</p>
+        <div id="qbTierFilterPanel"></div>
         <div class="builder-grid">
           <details class="collapsible" open>
             <summary>Filters</summary>
             <div class="collapsible-body filters">
-              <label>Tier
-                <div id="fTier" class="filter-checklist"></div>
-              </label>
-              <label>Type
-                <div id="fPrimitiveType" class="filter-checklist"></div>
-              </label>
-              <label>Primitive construction (fixed-length)
-                <div id="fPrimitiveConstruction" class="filter-checklist"></div>
-              </label>
-              <label>Mode construction (variable-length)
-                <div id="fModeConstruction" class="filter-checklist"></div>
-              </label>
               <label>Reference kind
                 <div id="fReferenceKind" class="filter-checklist"></div>
               </label>
