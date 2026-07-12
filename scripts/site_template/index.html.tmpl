@@ -355,13 +355,22 @@
 
       <section class="panel view-panel" data-view="builder">
         <h2>Custom Query Builder</h2>
-        <p class="small-note">Base join: instances (primitive or mode) + families + reference links</p>
+        <p class="small-note">Base join: instances (primitive or mode) + families + reference links. Primitive (fixed-length) and mode (variable-length) constructions are kept in separate columns/filters since they come from separate tables.</p>
         <div class="builder-grid">
           <details class="collapsible" open>
             <summary>Filters</summary>
             <div class="collapsible-body filters">
+              <label>Tier
+                <div id="fTier" class="filter-checklist"></div>
+              </label>
               <label>Type
                 <div id="fPrimitiveType" class="filter-checklist"></div>
+              </label>
+              <label>Primitive construction (fixed-length)
+                <div id="fPrimitiveConstruction" class="filter-checklist"></div>
+              </label>
+              <label>Mode construction (variable-length)
+                <div id="fModeConstruction" class="filter-checklist"></div>
               </label>
               <label>Reference kind
                 <div id="fReferenceKind" class="filter-checklist"></div>

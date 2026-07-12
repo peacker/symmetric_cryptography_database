@@ -120,9 +120,10 @@ def main() -> None:
             LEFT JOIN instances i ON i.family_id = f.id
               LEFT JOIN primitive_types pt ON pt.id = i.type_id
               LEFT JOIN mode_types mt ON mt.id = i.type_id
-              LEFT JOIN family_constructions fc ON fc.family_id = f.id
-              LEFT JOIN primitive_constructions pc ON pc.id = fc.construction_id
-              LEFT JOIN mode_constructions mc ON mc.id = fc.construction_id
+              LEFT JOIN primitive_family_constructions pfc ON pfc.family_id = f.id
+              LEFT JOIN primitive_constructions pc ON pc.id = pfc.construction_id
+              LEFT JOIN mode_family_constructions mfc ON mfc.family_id = f.id
+              LEFT JOIN mode_constructions mc ON mc.id = mfc.construction_id
             GROUP BY f.id
             ORDER BY f.year, f.name
             """,

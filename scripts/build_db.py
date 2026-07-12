@@ -132,14 +132,25 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (component_id) REFERENCES components(id) ON DELETE RESTRICT
         );
 
-        -- construction_id resolves against primitive_constructions or
-        -- mode_constructions depending on families.tier for that row; kept as
-        -- a single table (not two) so cross-tier joins/filters stay simple.
-        CREATE TABLE IF NOT EXISTS family_constructions (
+        -- Split by tier (mirrors primitive_constructions vs mode_constructions)
+        -- so construction_id is FK-checked against the correct catalogue
+        -- instead of being resolved against "whichever one matches" at query
+        -- time. A primitive-tier family's constructions live here...
+        CREATE TABLE IF NOT EXISTS primitive_family_constructions (
             family_id TEXT NOT NULL,
             construction_id TEXT NOT NULL,
             PRIMARY KEY (family_id, construction_id),
-            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
+            FOREIGN KEY (construction_id) REFERENCES primitive_constructions(id) ON DELETE RESTRICT
+        );
+
+        -- ...and a mode-tier family's constructions live here.
+        CREATE TABLE IF NOT EXISTS mode_family_constructions (
+            family_id TEXT NOT NULL,
+            construction_id TEXT NOT NULL,
+            PRIMARY KEY (family_id, construction_id),
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
+            FOREIGN KEY (construction_id) REFERENCES mode_constructions(id) ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS family_rounds (
@@ -231,7 +242,8 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         DELETE FROM family_processes;
         DELETE FROM family_standards;
         DELETE FROM family_references;
-        DELETE FROM family_constructions;
+        DELETE FROM primitive_family_constructions;
+        DELETE FROM mode_family_constructions;
         DELETE FROM family_rounds;
         DELETE FROM family_components;
         DELETE FROM family_targets;
@@ -420,9 +432,12 @@ def main() -> None:
                     "INSERT INTO family_components (family_id, component_id, params_json)"
                     " VALUES (?, ?, ?)",
                     (family["id"], comp_ref["id"], params_json))
+            construction_table = (
+                "primitive_family_constructions" if family["_tier"] == "primitive" else "mode_family_constructions"
+            )
             for construction_id in family.get("construction_ids", []):
                 conn.execute(
-                    "INSERT INTO family_constructions (family_id, construction_id) VALUES (?, ?)",
+                    f"INSERT INTO {construction_table} (family_id, construction_id) VALUES (?, ?)",
                     (family["id"], construction_id),
                 )
             for round_id in family.get("round_ids", []):

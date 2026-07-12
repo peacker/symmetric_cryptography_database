@@ -255,7 +255,10 @@
     const view = createTableView("builderView");
 
     const ui = {
+      tier: document.getElementById("fTier"),
       primitiveType: document.getElementById("fPrimitiveType"),
+      primitiveConstruction: document.getElementById("fPrimitiveConstruction"),
+      modeConstruction: document.getElementById("fModeConstruction"),
       referenceKind: document.getElementById("fReferenceKind"),
       referenceYearMin: document.getElementById("fReferenceYearMin"),
       referenceYearMax: document.getElementById("fReferenceYearMax"),
@@ -267,15 +270,46 @@
       sqlPreview: document.getElementById("sqlPreview"),
     };
 
+    const TIER_LABELS = { primitive: "Fixed-length (primitive)", mode: "Variable-length (mode)" };
+
     const defaultColumns = [
-      "instance.id", "instance.name", "instance.type_name", "family.name", "reference.title", "reference.year", "reference.url",
+      "instance.id", "instance.name", "instance.tier", "instance.type_name", "family.name", "reference.title", "reference.year", "reference.url",
     ].filter((c) => builder.columns.includes(c));
     const visibleColumns = new Set(defaultColumns.length ? defaultColumns : builder.columns);
 
+    // A "*_construction_names" cell is a ", "-joined list (a family can carry
+    // more than one construction tag) rather than one value per row like
+    // instance.type_name, so it needs its own tokenizer instead of a plain
+    // distinct-values scan.
+    function multiValueTokens(columnKey) {
+      const values = new Set();
+      builder.rows.forEach((r) => {
+        normalizeValue(r[columnKey]).split(",").map((v) => v.trim()).filter(Boolean).forEach((v) => values.add(v));
+      });
+      return Array.from(values).sort((a, b) => a.localeCompare(b));
+    }
+
+    function rowHasToken(row, columnKey, selectedSet) {
+      if (!selectedSet.size) return true;
+      const tokens = normalizeValue(row[columnKey]).split(",").map((v) => v.trim()).filter(Boolean);
+      if (!tokens.length) return true;
+      return tokens.some((t) => selectedSet.has(t));
+    }
+
     function fillFilterOptions() {
+      const tiers = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["instance.tier"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
       const primitiveTypes = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["instance.type_name"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
       const referenceKinds = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["reference.kind"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+      // renderFilterChecklist uses the label as both the checkbox value and its
+      // display text, so tier needs its own render pass keeping the raw id as
+      // the value while showing the friendly label.
+      ui.tier.innerHTML = tiers.map((t) => {
+        const label = escapeHtml(TIER_LABELS[t] || t);
+        return `<label><input type="checkbox" data-value="${escapeHtml(t)}" /><span>${label}</span></label>`;
+      }).join("");
       renderFilterChecklist(ui.primitiveType, primitiveTypes);
+      renderFilterChecklist(ui.primitiveConstruction, multiValueTokens("family.primitive_construction_names"));
+      renderFilterChecklist(ui.modeConstruction, multiValueTokens("family.mode_construction_names"));
       renderFilterChecklist(ui.referenceKind, referenceKinds);
     }
 
@@ -326,10 +360,30 @@
       });
     }
 
+    // A multi-value ", "-joined column can't use IN (...) directly (a cell
+    // like "SPN, Feistel" is one string, not two rows), so each selected
+    // token becomes its own delimiter-padded LIKE clause, OR'd together.
+    function multiValueWhereClause(columnKey, selectedSet) {
+      if (!selectedSet.size) return null;
+      const likes = Array.from(selectedSet).map((v) => {
+        const escaped = v.replace(/'/g, "''").replace(/[%_]/g, "\\$&");
+        return `(', ' || "${columnKey}" || ', ') LIKE '%, ${escaped}, %' ESCAPE '\\'`;
+      });
+      return `(${likes.join(" OR ")})`;
+    }
+
     function buildWhereClauses() {
       const clauses = [];
+      const tierValues = selectedChecklistValues(ui.tier);
+      if (tierValues.size) clauses.push(`"instance.tier" IN (${Array.from(tierValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
       const typeValues = selectedChecklistValues(ui.primitiveType);
       if (typeValues.size) clauses.push(`"instance.type_name" IN (${Array.from(typeValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
+      const primConstrValues = selectedChecklistValues(ui.primitiveConstruction);
+      const primConstrClause = multiValueWhereClause("family.primitive_construction_names", primConstrValues);
+      if (primConstrClause) clauses.push(primConstrClause);
+      const modeConstrValues = selectedChecklistValues(ui.modeConstruction);
+      const modeConstrClause = multiValueWhereClause("family.mode_construction_names", modeConstrValues);
+      if (modeConstrClause) clauses.push(modeConstrClause);
       const refKindValues = selectedChecklistValues(ui.referenceKind);
       if (refKindValues.size) clauses.push(`"reference.kind" IN (${Array.from(refKindValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
 
@@ -348,7 +402,10 @@
     }
 
     function filterRows(rows) {
+      const tierValues = selectedChecklistValues(ui.tier);
       const typeValues = selectedChecklistValues(ui.primitiveType);
+      const primConstrValues = selectedChecklistValues(ui.primitiveConstruction);
+      const modeConstrValues = selectedChecklistValues(ui.modeConstruction);
       const refKindValues = selectedChecklistValues(ui.referenceKind);
       const ryMin = parseOptionalNumber(ui.referenceYearMin.value);
       const ryMax = parseOptionalNumber(ui.referenceYearMax.value);
@@ -356,8 +413,12 @@
       const referenceTitle = (ui.referenceTitle.value || "").trim().toLowerCase();
 
       return rows.filter((row) => {
+        const tier = normalizeValue(row["instance.tier"]);
+        if (tierValues.size && !tierValues.has(tier)) return false;
         const typeName = normalizeValue(row["instance.type_name"]);
         if (typeValues.size && !typeValues.has(typeName)) return false;
+        if (!rowHasToken(row, "family.primitive_construction_names", primConstrValues)) return false;
+        if (!rowHasToken(row, "family.mode_construction_names", modeConstrValues)) return false;
         const refKind = normalizeValue(row["reference.kind"]);
         if (refKindValues.size && !refKindValues.has(refKind)) return false;
 
@@ -387,7 +448,7 @@
       node.addEventListener("input", refresh);
     });
 
-    [ui.primitiveType, ui.referenceKind].forEach((container) => {
+    [ui.tier, ui.primitiveType, ui.primitiveConstruction, ui.modeConstruction, ui.referenceKind].forEach((container) => {
       container.addEventListener("change", (event) => {
         const target = event.target;
         if (target && target.matches('input[type="checkbox"][data-value]')) refresh();
@@ -395,7 +456,7 @@
     });
 
     ui.resetFilters.addEventListener("click", () => {
-      [ui.primitiveType, ui.referenceKind].forEach((container) => {
+      [ui.tier, ui.primitiveType, ui.primitiveConstruction, ui.modeConstruction, ui.referenceKind].forEach((container) => {
         Array.from(container.querySelectorAll('input[type="checkbox"][data-value]')).forEach((box) => {
           box.checked = false;
         });
@@ -422,7 +483,9 @@
     const instances = (tables.instances && tables.instances.rows) || [];
     const primitiveTypes = (tables.primitive_types && tables.primitive_types.rows) || [];
     const modeTypes = (tables.mode_types && tables.mode_types.rows) || [];
-    const familyConstructions = (tables.family_constructions && tables.family_constructions.rows) || [];
+    const primitiveFamilyConstructions = (tables.primitive_family_constructions && tables.primitive_family_constructions.rows) || [];
+    const modeFamilyConstructions = (tables.mode_family_constructions && tables.mode_family_constructions.rows) || [];
+    const familyConstructions = [...primitiveFamilyConstructions, ...modeFamilyConstructions];
     const primitiveConstructions = (tables.primitive_constructions && tables.primitive_constructions.rows) || [];
     const modeConstructions = (tables.mode_constructions && tables.mode_constructions.rows) || [];
     const familyTargets = (tables.family_targets && tables.family_targets.rows) || [];
