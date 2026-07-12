@@ -494,6 +494,31 @@
     };
   }
 
+  // Family ids tied to a standard-kind reference, either directly or through
+  // one of their instances. There is no dedicated family_standards/
+  // instance_standards table (see build_db.py): "standard" is just
+  // references.kind, joined against family_references/instance_references
+  // here instead of being pre-split into a second table per level.
+  function computeStandardFamilyIds(tables, instanceFamilyById) {
+    const familyRefs = (tables.family_references && tables.family_references.rows) || [];
+    const instanceRefs = (tables.instance_references && tables.instance_references.rows) || [];
+    const referenceKindById = new Map(
+      ((tables.references && tables.references.rows) || []).map((r) => [String(r.id), String(r.kind || "").toLowerCase()])
+    );
+    const isStandardRef = (refId) => (referenceKindById.get(String(refId)) || "").includes("standard");
+
+    const standardFamilyIds = new Set();
+    familyRefs.forEach((row) => {
+      if (isStandardRef(row.reference_id)) standardFamilyIds.add(String(row.family_id));
+    });
+    instanceRefs.forEach((row) => {
+      if (!isStandardRef(row.reference_id)) return;
+      const familyId = instanceFamilyById.get(String(row.instance_id));
+      if (familyId) standardFamilyIds.add(familyId);
+    });
+    return standardFamilyIds;
+  }
+
   // Generic checklist-with-All/None-buttons wiring, shared by every filter
   // panel (Types / Constructions / Target applications / Processes) in both
   // the Timelines and Genealogy tabs.
@@ -750,17 +775,11 @@
 
     const tables = data.tables || {};
     const influences = (tables.family_influences && tables.family_influences.rows) || [];
-    const familyStandards = (tables.family_standards && tables.family_standards.rows) || [];
-    const instanceStandards = (tables.instance_standards && tables.instance_standards.rows) || [];
 
     const dims = buildDimensionMaps(tables);
     const families = dims.families;
     const familyById = new Map(families.map((row) => [String(row.id), row]));
-    const standardFamilyIds = new Set(familyStandards.map((row) => String(row.family_id)));
-    instanceStandards.forEach((row) => {
-      const familyId = dims.instanceFamilyById.get(String(row.instance_id));
-      if (familyId) standardFamilyIds.add(familyId);
-    });
+    const standardFamilyIds = computeStandardFamilyIds(tables, dims.instanceFamilyById);
     const familyToTypes = dims.familyToTypes;
     const familyToConstructions = dims.familyToConstructions;
     const familyToTargets = dims.familyToTargets;
@@ -1673,8 +1692,6 @@
     // ── Data ─────────────────────────────────────────────────────────
     const tables = data.tables || {};
     const influences = (tables.family_influences && tables.family_influences.rows) || [];
-    const familyStandards = (tables.family_standards && tables.family_standards.rows) || [];
-    const instanceStandards = (tables.instance_standards && tables.instance_standards.rows) || [];
 
     const genProcessData = data.processData || {};
     const genProcessList = genProcessData.processes || [];
@@ -1684,8 +1701,7 @@
     const families = genDims.families;
     const genFamById = new Map(families.map((r) => [String(r.id), r]));
 
-    const stdFamIds = new Set(familyStandards.map((r) => String(r.family_id)));
-    instanceStandards.forEach((r) => { const f = genDims.instanceFamilyById.get(String(r.instance_id)); if (f) stdFamIds.add(f); });
+    const stdFamIds = computeStandardFamilyIds(tables, genDims.instanceFamilyById);
 
     const famToTypes = genDims.familyToTypes;
     const famToConstrs = genDims.familyToConstructions;

@@ -162,20 +162,16 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (round_id) REFERENCES rounds(id) ON DELETE RESTRICT
         );
 
+        -- Holds every reference a family cites, standards included; there is
+        -- no separate family_standards table since "is this a standard" is
+        -- just references.kind, joinable on demand instead of being forked
+        -- into a second, easy-to-forget-to-check junction table.
         CREATE TABLE IF NOT EXISTS family_references (
             family_id TEXT NOT NULL,
             reference_id TEXT NOT NULL,
             PRIMARY KEY (family_id, reference_id),
             FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
             FOREIGN KEY (reference_id) REFERENCES "references"(id) ON DELETE RESTRICT
-        );
-
-        CREATE TABLE IF NOT EXISTS family_standards (
-            family_id TEXT NOT NULL,
-            standard_id TEXT NOT NULL,
-            PRIMARY KEY (family_id, standard_id),
-            FOREIGN KEY (family_id)   REFERENCES families(id)      ON DELETE CASCADE,
-            FOREIGN KEY (standard_id) REFERENCES "references"(id)  ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS family_processes (
@@ -213,14 +209,6 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE RESTRICT
         );
 
-        CREATE TABLE IF NOT EXISTS instance_standards (
-            instance_id TEXT NOT NULL,
-            standard_id TEXT NOT NULL,
-            PRIMARY KEY (instance_id, standard_id),
-            FOREIGN KEY (instance_id) REFERENCES instances(id)   ON DELETE CASCADE,
-            FOREIGN KEY (standard_id)  REFERENCES "references"(id) ON DELETE RESTRICT
-        );
-
         CREATE TABLE IF NOT EXISTS instance_references (
             instance_id TEXT NOT NULL,
             reference_id TEXT NOT NULL,
@@ -236,11 +224,9 @@ def clear_tables(conn: sqlite3.Connection) -> None:
     conn.executescript(
         """
         DELETE FROM instance_references;
-        DELETE FROM instance_standards;
         DELETE FROM instances;
         DELETE FROM family_influences;
         DELETE FROM family_processes;
-        DELETE FROM family_standards;
         DELETE FROM family_references;
         DELETE FROM primitive_family_constructions;
         DELETE FROM mode_family_constructions;
@@ -445,22 +431,12 @@ def main() -> None:
                     "INSERT INTO family_rounds (family_id, round_id, role) VALUES (?, ?, ?)",
                     (family["id"], round_id, "primary"),
                 )
-            std_ids_for_family: set[str] = set()
-            refs_for_family: set[str] = set()
+            refs_for_family: set[str] = set(ref_ids)
             for ref_id in ref_ids:
-                refs_for_family.add(ref_id)
-                ref_kind = str(references_by_id.get(ref_id, {}).get("kind", "")).lower()
-                if "standard" in ref_kind:
-                    conn.execute(
-                        "INSERT INTO family_standards (family_id, standard_id) VALUES (?, ?)",
-                        (family["id"], ref_id),
-                    )
-                    std_ids_for_family.add(ref_id)
-                else:
-                    conn.execute(
-                        "INSERT INTO family_references (family_id, reference_id) VALUES (?, ?)",
-                        (family["id"], ref_id),
-                    )
+                conn.execute(
+                    "INSERT INTO family_references (family_id, reference_id) VALUES (?, ?)",
+                    (family["id"], ref_id),
+                )
             family_reference_ids[family["id"]] = refs_for_family
             for pp in family.get("process_participations", []):
                 proc_id = pp["process_id"]
@@ -507,15 +483,6 @@ def main() -> None:
             for ref_id in sorted(instance_ref_ids):
                 conn.execute(
                     "INSERT INTO instance_references (instance_id, reference_id) VALUES (?, ?)",
-                    (instance["id"], ref_id),
-                )
-
-            for ref_id in sorted(instance_ref_ids):
-                ref_kind = str(references_by_id.get(ref_id, {}).get("kind", "")).lower()
-                if "standard" not in ref_kind:
-                    continue
-                conn.execute(
-                    "INSERT INTO instance_standards (instance_id, standard_id) VALUES (?, ?)",
                     (instance["id"], ref_id),
                 )
 

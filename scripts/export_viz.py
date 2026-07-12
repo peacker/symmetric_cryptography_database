@@ -82,8 +82,9 @@ def main() -> None:
             SELECT i.id AS instance_id, i.name,
                    ref.id AS standard_id, ref.title AS standard_name
             FROM instances i
-            JOIN instance_standards ist ON ist.instance_id = i.id
-            JOIN "references" ref ON ref.id = ist.standard_id
+            JOIN instance_references ir ON ir.instance_id = i.id
+            JOIN "references" ref ON ref.id = ir.reference_id
+            WHERE ref.kind LIKE '%standard%'
             ORDER BY i.name, ref.title
             """,
             VIZ_DIR / "instance_standards.csv",
