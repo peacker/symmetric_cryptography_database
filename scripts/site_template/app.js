@@ -45,6 +45,58 @@
     return /^https?:\/\//i.test(String(text || "").trim());
   }
 
+  // Wraps a text display element so hovering a target shows its tip (desktop
+  // mouse) and clicking/tapping a target pins that tip in place (needed since
+  // touch screens have no hover state at all) until the box itself is
+  // clicked/tapped a second time. Shared by every hover-tip display across
+  // the Timelines and Genealogy tabs so touch support isn't reimplemented
+  // per tab.
+  function createPinnableInfoBox(boxEl, baseText) {
+    let pinned = false;
+    function show(text) {
+      if (!boxEl) return;
+      boxEl.textContent = `${text}  (tap here to dismiss)`;
+      boxEl.classList.add("is-pinned");
+    }
+    function reset() {
+      if (!boxEl) return;
+      boxEl.textContent = baseText;
+      boxEl.classList.remove("is-pinned");
+    }
+    function attach(el, textOrFn) {
+      const getText = typeof textOrFn === "function" ? textOrFn : () => textOrFn;
+      el.addEventListener("mouseenter", () => { if (!pinned && boxEl) boxEl.textContent = getText(); });
+      el.addEventListener("mouseleave", () => { if (!pinned && boxEl) boxEl.textContent = baseText; });
+      el.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        pinned = true;
+        show(getText());
+      });
+    }
+    if (boxEl) {
+      boxEl.addEventListener("click", () => {
+        if (pinned) { pinned = false; reset(); }
+      });
+    }
+    return {
+      attach,
+      reset,
+      setBase: (text) => { baseText = text; if (!pinned) reset(); },
+      isPinned: () => pinned,
+    };
+  }
+
+  // Right-click/long-press a family node to filter to it, instead of having
+  // to type its name into the search box by hand. Shared by the Timelines
+  // dots/labels and both Genealogy layouts.
+  function attachFamilyContextMenu(el, familyName, searchInput, onChange) {
+    el.addEventListener("contextmenu", (ev) => {
+      ev.preventDefault();
+      searchInput.value = familyName;
+      onChange();
+    });
+  }
+
   function setupNavigator() {
     const tabs = Array.from(document.querySelectorAll(".nav-tab[data-view-target]"));
     const views = Array.from(document.querySelectorAll(".view-panel[data-view]"));
@@ -764,7 +816,8 @@
     const STACK_STEP = 0.34;
     const GROUP_GAP_UNITS = 0.42;
     const POINT_RADIUS = 4.25;
-    const BASE_RELATION_TEXT = "Hover a relation arrow to see relation details. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.";
+    const BASE_RELATION_TEXT = "Hover or tap a family dot/label or a relation arrow to see details. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.";
+    const relationTip = createPinnableInfoBox(relationInfoBox, BASE_RELATION_TEXT);
     let fontPx = BASE_FONT;
     let zoomScale = BASE_ZOOM;
     let colSpacingBonus = BASE_COL_BONUS;
@@ -961,8 +1014,8 @@
       clearNode(plotSvg);
       clearNode(xAxisSvg);
       clearNode(yAxisSvg);
-      relationInfoBox.hidden = !showArrows.checked;
-      if (showArrows.checked) relationInfoBox.textContent = BASE_RELATION_TEXT;
+      relationInfoBox.hidden = false;
+      relationTip.reset();
       cornerPane.innerHTML = `<b>${escapeHtml(modeLabel(groupBy.value))}</b><span style="font-weight:400;opacity:0.75">Publication year</span>`;
       plotSvg.setAttribute("viewBox", "0 0 920 260");
       plotSvg.setAttribute("width", "920");
@@ -987,8 +1040,8 @@
       clearNode(plotSvg);
       clearNode(xAxisSvg);
       clearNode(yAxisSvg);
-      relationInfoBox.hidden = !showArrows.checked;
-      if (showArrows.checked) relationInfoBox.textContent = BASE_RELATION_TEXT;
+      relationInfoBox.hidden = false;
+      relationTip.reset();
       const mode = groupBy.value;
       cornerPane.innerHTML = `<b>${escapeHtml(modeLabel(mode))}</b><span style="font-weight:400;opacity:0.75">Publication year</span>`;
       const rawPoints = [];
@@ -1368,6 +1421,8 @@
           const pointTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
           pointTitle.textContent = richTip;
           circle.appendChild(pointTitle);
+          relationTip.attach(circle, richTip);
+          attachFamilyContextMenu(circle, point.name, familySearch, render);
           plotSvg.appendChild(circle);
         }
 
@@ -1398,6 +1453,8 @@
           const fullTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
           fullTitle.textContent = richTip;
           label.appendChild(fullTitle);
+          relationTip.attach(label, richTip);
+          attachFamilyContextMenu(label, point.name, familySearch, render);
           plotSvg.appendChild(label);
           labelBounds.set(point, label.getBBox());
         }
@@ -1445,12 +1502,7 @@
             const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
             title.textContent = hoverText;
             hoverLine.appendChild(title);
-            hoverLine.addEventListener("mouseenter", () => {
-              relationInfoBox.textContent = hoverText;
-            });
-            hoverLine.addEventListener("mouseleave", () => {
-              relationInfoBox.textContent = BASE_RELATION_TEXT;
-            });
+            relationTip.attach(hoverLine, hoverText);
             hoverLines.push(hoverLine);
           });
         });
@@ -1660,6 +1712,7 @@
     const genConnectedOnly = document.getElementById("genConnectedOnly");
     const genStandardsOnly = document.getElementById("genStandardsOnly");
     const genFamilySearch = document.getElementById("genFamilySearch");
+    const genFamilySearchDegree = document.getElementById("genFamilySearchDegree");
     const genYearStart = document.getElementById("genYearStart");
     const genYearEnd = document.getElementById("genYearEnd");
     const genYearReset = document.getElementById("genYearReset");
@@ -1786,7 +1839,8 @@
     const TOP_PAD = 20;
     const SIDE_PAD = 20;
     const NODE_PAD_X = 7;
-    const BASE_EDGE_INFO = "Hover an influence arrow to see relation details.";
+    const BASE_EDGE_INFO = "Hover or tap a family node or an influence arrow to see details. Right-click/long-press a node to filter the graph to it.";
+    const edgeTip = createPinnableInfoBox(genEdgeInfo, BASE_EDGE_INFO);
 
     function nodeH() { return Math.round(genFontPx * 1.85); }
     function rowGap() { return Math.round(genFontPx * 4.5); }
@@ -2125,8 +2179,7 @@
         }
         const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.2 + 5)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
-        hp.addEventListener("mouseenter", () => { if (genEdgeInfo) genEdgeInfo.textContent = hoverTxt; });
-        hp.addEventListener("mouseleave", () => { if (genEdgeInfo) genEdgeInfo.textContent = BASE_EDGE_INFO; });
+        edgeTip.attach(hp, hoverTxt);
         hoverPaths.push(hp);
       });
 
@@ -2143,6 +2196,8 @@
         const tip = [`${name} (${fam.year})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : []), ...(fam.notes ? [fam.notes] : [])].join("\n");
         const rect = svgEl("rect", { x: String(cx - w / 2), y: String(cy), width: String(w), height: String(NH), rx: "4", ry: "4", fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.22)", "stroke-width": isStd ? "2" : "1", opacity: isIso ? "0.58" : "1" });
         const rt = svgEl("title", {}); rt.textContent = tip; rect.appendChild(rt);
+        edgeTip.attach(rect, tip);
+        attachFamilyContextMenu(rect, name, genFamilySearch, render);
         genPlot.appendChild(rect);
         const maxCh = Math.min(genNumChars, Math.max(4, Math.floor((w - NODE_PAD_X * 2) / (genFontPx * 0.56))));
         const lblStyle = `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:#fff;pointer-events:none;font-weight:${isStd ? 700 : 400};opacity:${isIso ? "0.8" : "1"}`;
@@ -2437,8 +2492,7 @@
         }
         const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.1 + 5)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
-        hp.addEventListener("mouseenter", () => { if (genEdgeInfo) genEdgeInfo.textContent = hoverTxt; });
-        hp.addEventListener("mouseleave", () => { if (genEdgeInfo) genEdgeInfo.textContent = BASE_EDGE_INFO; });
+        edgeTip.attach(hp, hoverTxt);
         hoverPaths.push(hp);
       });
 
@@ -2459,11 +2513,14 @@
         const tip = [`${String(fam.name || fid)} (${genLabel})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : [])].join("\n");
         const showBullets = !genShowBullets || genShowBullets.checked;
         const nodeRad = isStd ? 4 : 3;
-        if (showBullets) {
-          const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeRad), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "1.5" : "0.8" });
-          const ct = svgEl("title", {}); ct.textContent = tip; circ.appendChild(ct); genPlot.appendChild(circ);
-        }
         const name = String(fam.name || fid);
+        if (showBullets) {
+          const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeRad), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "1.5" : "0.8", "pointer-events": "all" });
+          const ct = svgEl("title", {}); ct.textContent = tip; circ.appendChild(ct);
+          edgeTip.attach(circ, tip);
+          attachFamilyContextMenu(circ, name, genFamilySearch, render);
+          genPlot.appendChild(circ);
+        }
         const isRight = deg <= 180;
         const rad = (deg - 90) * Math.PI / 180;
         const off = showBullets ? nodeRad + 5 : 3;
@@ -2478,7 +2535,11 @@
         const lbl = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": anchor,
           transform: `rotate(${textRot.toFixed(1)},${lx.toFixed(1)},${ly.toFixed(1)})`, style: radStyle });
         lbl.textContent = disp;
-        if (!showBullets) { const lt = svgEl("title", {}); lt.textContent = tip; lbl.appendChild(lt); }
+        if (!showBullets) {
+          const lt = svgEl("title", {}); lt.textContent = tip; lbl.appendChild(lt);
+          edgeTip.attach(lbl, tip);
+          attachFamilyContextMenu(lbl, name, genFamilySearch, render);
+        }
         genPlot.appendChild(lbl);
       });
       hoverPaths.forEach((hp) => genPlot.appendChild(hp));
@@ -2496,12 +2557,23 @@
       if (needle) {
         const matched = new Set(eligibleIds.filter((fid) =>
           String((genFamById.get(fid) || {}).name || fid).toLowerCase().includes(needle)));
+        const rawDegree = genFamilySearchDegree ? parseInt(genFamilySearchDegree.value, 10) : 1;
+        const degree = Number.isFinite(rawDegree) ? Math.max(0, rawDegree) : 1;
+        // BFS outward from the matched set, one relation "hop" per round, so a
+        // degree of 1 (the default) keeps the original direct-neighbors-only
+        // behavior and a higher degree pulls in more distant relations.
+        let frontier = matched;
         const expanded = new Set(matched);
-        influences.forEach((e) => {
-          const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
-          if (matched.has(src) && eligibleSet.has(tgt)) expanded.add(tgt);
-          if (matched.has(tgt) && eligibleSet.has(src)) expanded.add(src);
-        });
+        for (let hop = 0; hop < degree && frontier.size; hop++) {
+          const next = new Set();
+          influences.forEach((e) => {
+            const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
+            if (frontier.has(src) && eligibleSet.has(tgt) && !expanded.has(tgt)) next.add(tgt);
+            if (frontier.has(tgt) && eligibleSet.has(src) && !expanded.has(src)) next.add(src);
+          });
+          next.forEach((fid) => expanded.add(fid));
+          frontier = next;
+        }
         visIds = eligibleIds.filter((fid) => expanded.has(fid));
       }
       const visSet = new Set(visIds);
@@ -2537,6 +2609,10 @@
     if (genCollapseEdges) genCollapseEdges.addEventListener("change", render);
     genFamilySearch.addEventListener("input", render);
     genFamilySearch.addEventListener("change", render);
+    if (genFamilySearchDegree) {
+      genFamilySearchDegree.addEventListener("input", render);
+      genFamilySearchDegree.addEventListener("change", render);
+    }
     genYearStart.addEventListener("input", render);
     genYearEnd.addEventListener("input", render);
     genYearReset.addEventListener("click", () => {

@@ -96,7 +96,7 @@
           </div>
           <div id="vizCornerPane" class="viz-corner-pane"></div>
         </div>
-        <p id="vizRelationInfo" class="small-note viz-relation-info">Hover a relation arrow to see relation details. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.</p>
+        <p id="vizRelationInfo" class="small-note viz-relation-info">Hover or tap a family dot/label or a relation arrow to see details. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.</p>
         <div id="vizProcessLegend" class="viz-process-legend" hidden></div>
       </section>
 
@@ -139,7 +139,10 @@
         </div>
         <div class="viz-secondary-controls">
           <label class="toolbar-field viz-search-field">Find family
-            <input id="genFamilySearch" type="search" placeholder="Type a family name" autocomplete="off" />
+            <input id="genFamilySearch" type="search" placeholder="Type a family name, or right-click/long-press a node" autocomplete="off" />
+          </label>
+          <label class="toolbar-field" title="How many relation hops from the matched family to also show (0 = only the matched family itself)">Relation degree
+            <input id="genFamilySearchDegree" type="number" min="0" value="1" style="width:4em" />
           </label>
           <div class="viz-year-controls">
             <label class="toolbar-field">From year
@@ -158,7 +161,7 @@
             <svg id="genPlot" role="img" aria-label="Genealogy influence graph"></svg>
           </div>
         </div>
-        <p id="genEdgeInfo" class="small-note gen-edge-info">Hover an influence arrow to see relation details.</p>
+        <p id="genEdgeInfo" class="small-note gen-edge-info">Hover or tap a family node or an influence arrow to see details. Right-click/long-press a node to filter the graph to it.</p>
         <div id="genLegend" class="viz-process-legend" hidden></div>
       </section>
 
