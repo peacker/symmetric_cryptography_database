@@ -15,6 +15,15 @@ mode_constructions:
     '
 - id: duplex_mode
   name: Duplex Mode
+- id: binary_tree_hash
+  name: Binary Tree Hash
+  placeholder_family_names:
+  - BLAKE3
+  notes: 'A hash construction that splits the input into independent leaf blocks and combines them via a binary tree of
+    the same compression function, rather than sequential (Merkle-Damgard) or state-based (sponge/duplex) iteration; unlike
+    those, every subtree can be hashed independently and in parallel.
+
+    '
 - id: permutation_based_hash
   name: Permutation-Based Hash
 - id: permutation_based_stream

@@ -9033,47 +9033,37 @@ mode_families:
     - nist_2009_sha3_round1_report
     characteristics: {}
     notes: Candidate-level record; output variants and technical parameters are not yet modeled.
-- id: blake3
+- id: blake3_hash
   name: BLAKE3
-  construction_ids: []
-  round_ids:
-  - blake3_round
+  construction_ids:
+  - binary_tree_hash
   target_applications:
   - digital_signatures
   - message_authentication
   - key_derivation
   - software
-  characteristics:
-    block_size_bits: 512
-    state_size_bits: 512
-    components:
-    - id: add_mod
-      params:
-        modulus: 4294967296
-    - id: xor
-    - id: rotation_fixed
-    - id: word_permutation
   reference_ids:
   - oconnor_et_al_2020_blake3
   process_participations: []
   influences:
-  - source_family_id: blake2
+  - source_family_id: blake3
     relations:
-    - improvement_of
     - same_round_function
-    note: BLAKE3 derives its compression function from BLAKE2s, reduces it from ten to seven rounds, and replaces the message
-      schedule with repeated application of one permutation.
-  - source_family_id: blake
-    relations:
-    - inspired_by
-    note: BLAKE3 remains in the BLAKE ARX lineage through BLAKE2 and its ChaCha-derived G function.
+    - same_state_layout
+    note: BLAKE3's hash/keyed_hash/derive_key modes are the binary-tree iteration of the BLAKE3 compression function over
+      1024-byte chunks, reusing its round function and state layout unchanged.
   innovative_ideas:
   - id: blake3_binary_tree_mode
     name: Fixed binary tree mode with parallel chunk processing
     note: Independent 1024-byte chunks form leaves; parent compression combines chaining values, enabling SIMD, multithreading,
       incremental verification, and unbounded XOF output.
-  notes: BLAKE3 is a 2020 cryptographic hash, keyed hash, KDF, and XOF. It uses a seven-round BLAKE2s-derived compression
-    function in a fixed binary tree and normally returns a 256-bit digest.
+  notes: 'BLAKE3 (O''Connor, Aumasson, Neves, Wilcox-O''Hearn, 2020) is "one function" with three domain-separated modes
+    -- hash(input), keyed_hash(key, input), and derive_key(context, key_material) -- all built on the same binary-tree
+    iteration of the BLAKE3 compression function (see blake3 for the compression-function primitive). All three modes
+    can produce output of any length (built-in XOF), so BLAKE3 needs no separate SHAKE-style construction the way Keccak/SHA-3
+    does. Unlike BLAKE/BLAKE2, BLAKE3 is a single algorithm with no size/round variants.
+
+    '
   instances:
   - id: blake3_256
     name: BLAKE3-256
@@ -9085,8 +9075,47 @@ mode_families:
       state_size_bits: 512
       output_size_bits: 256
       rounds: 7
-    notes: Default 32-byte BLAKE3 digest; the same construction supports arbitrary-length XOF output, keyed hashing, and key
-      derivation.
+    notes: hash(input) mode truncated to the default 32-byte digest.
+  - id: blake3_xof
+    name: BLAKE3 XOF
+    type: xof
+    reference_ids:
+    - oconnor_et_al_2020_blake3
+    characteristics:
+      block_size_bits: 512
+      state_size_bits: 512
+      output_size_bits_min: 8
+      output_size_bits_max: 147573952589676412920
+      rounds: 7
+    notes: The same hash(input) mode with its built-in extendable output used beyond the default 256 bits; parallelizable
+      and seekable, unlike SHA-3/SHAKE or HKDF.
+  - id: blake3_keyed
+    name: BLAKE3 Keyed Hash
+    type: mac
+    reference_ids:
+    - oconnor_et_al_2020_blake3
+    characteristics:
+      key_size_bits: 256
+      block_size_bits: 512
+      state_size_bits: 512
+      output_size_bits: 256
+      rounds: 7
+    notes: keyed_hash(key, input) mode; the 256-bit key replaces the IV constants as the compression function's key words
+      and the KEYED_HASH domain flag is set on every call, giving zero-cost keyed hashing / PRF and MAC use.
+  - id: blake3_kdf
+    name: BLAKE3 Key Derivation
+    type: kdf
+    reference_ids:
+    - oconnor_et_al_2020_blake3
+    characteristics:
+      output_size_bits_min: 8
+      output_size_bits_max: 147573952589676412920
+      block_size_bits: 512
+      state_size_bits: 512
+      rounds: 7
+    notes: derive_key(context, key_material) mode; first hashes a hardcoded, application-specific context string (with
+      the DERIVE_KEY_CONTEXT flag) to get a context key, then keyed-hashes the key material with it (DERIVE_KEY_MATERIAL
+      flag) to produce derived key output of any length.
 - id: forro
   name: Forró
   construction_ids:

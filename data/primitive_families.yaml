@@ -796,7 +796,7 @@ primitive_families:
       block_size_bits: 128
       output_size_bits: 128
 - id: salsa20
-  name: Salsa20
+  name: Salsa20 Update Function
   notes: 'Bernstein''s 2005 specification formally defines three functions built up from bottom to top: the "Salsa20 hash
     function" (Section 8), a fixed 64-byte-to-64-byte transform Salsa20(x) = x + doubleround^10(x); despite the "hash" name
     this is not a cryptographic hash function -- it takes no variable-length input and offers no collision-resistance claim.
@@ -896,7 +896,7 @@ primitive_families:
     notes: The Salsa20 expansion function arranges constants, key, nonce, and block counter into a 64-byte input and applies
       the (20-round) Salsa20 hash function/core permutation-plus-feedforward.
 - id: chacha
-  name: ChaCha
+  name: ChaCha Update Function
   notes: 'ChaCha is Bernstein''s 2008 ARX stream-cipher family, "a variant of Salsa20": it keeps Salsa20''s operation count
     and matrix-based data flow but reorders the quarter-round to double the diffusion rate per round. The original paper
     defines ChaCha8, ChaCha12, and ChaCha20 (analogous to Salsa20/8, Salsa20/12, Salsa20/20), each usable with a 128- or
@@ -10114,6 +10114,62 @@ primitive_families:
       rounds: 16
     notes: HAIFA-iterated, ChaCha-derived G-function compression step over a 4x4 matrix of 64-bit words (1024-bit state),
       16 rounds. Iterated by BLAKE-512/BLAKE-384 (see blake_hash).
+- id: blake3
+  name: BLAKE3 Compression Function
+  construction_ids:
+  - davies_meyer
+  round_ids:
+  - blake3_round
+  target_applications:
+  - digital_signatures
+  - message_authentication
+  - key_derivation
+  - software
+  characteristics:
+    state_size_bits: 512
+    block_size_bits: 512
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+    - id: word_permutation
+  reference_ids:
+  - oconnor_et_al_2020_blake3
+  process_participations: []
+  influences:
+  - source_family_id: blake2
+    relations:
+    - improvement_of
+    - same_round_function
+    note: BLAKE3 derives its compression function from BLAKE2s, reduces it from ten to seven rounds, and replaces the message
+      schedule with repeated application of one fixed permutation instead of BLAKE2's per-round constant schedule.
+  - source_family_id: blake
+    relations:
+    - inspired_by
+    note: BLAKE3 remains in the BLAKE ARX lineage through BLAKE2 and its ChaCha-derived G function.
+  notes: 'The BLAKE3 (2020) compression function works on 32-bit words: a 7-round keyed permutation (BLAKE2s'' G-function,
+    reduced from 10 to 7 rounds) is applied to a 16-word state seeded from the input chaining value, the IV constants,
+    a 64-bit counter, the input byte count, and domain-separation flags, keyed by the message block. The output feeds
+    the permuted state forward against the original chaining value (h''[8..15] = v''[8..15] XOR h[0..7]), the same feedforward
+    pattern as Davies-Meyer, enabling the full 16-word output to be used for extendable-output/tree-chaining purposes.
+    See blake3_hash for the binary-tree hash/keyed-hash/KDF modes built on this compression function.
+
+    '
+  instances:
+  - id: blake3_compression
+    name: BLAKE3 Compression Function
+    type: compression_function
+    reference_ids:
+    - oconnor_et_al_2020_blake3
+    characteristics:
+      state_size_bits: 512
+      block_size_bits: 512
+      output_size_bits: 512
+      rounds: 7
+    notes: Processes one 1024-byte chunk (in 64-byte blocks) or one parent node per call; output is usually truncated to
+      a 256-bit chaining value but the full 512-bit output is used for extendable-output and un-truncated root chunks.
 - id: groestl
   name: Grøstl Compression Functions
   construction_ids:
