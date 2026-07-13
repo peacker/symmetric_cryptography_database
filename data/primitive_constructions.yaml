@@ -123,6 +123,17 @@ primitive_constructions:
   notes: 'A round-based structure built primarily from modular addition, XOR, and fixed or data-dependent rotations.
 
     '
+- id: and_rx
+  name: AND-RX Permutation Network
+  abbreviation: AND-RX
+  typical_primitive_types:
+  - permutation
+  - block_cipher
+  notes: 'A round-based structure built from bitwise AND (or NAND) as its only nonlinear operation, combined with XOR and
+    fixed rotations -- no modular addition and no table-lookup S-boxes. Common in bit-sliced, hardware-oriented lightweight
+    permutations (e.g. Keccak''s chi step, Ascon''s substitution layer, Simon''s round function).
+
+    '
 - id: stream_state_update_generator
   name: Stream State-Update Generator
   abbreviation: SSUG
@@ -182,20 +193,6 @@ primitive_constructions:
   - ChiLow
   notes: 'An SPN-style design with explicit tweak influence in round processing, often optimized for lightweight or memory-encryption
     settings.
-
-    '
-- id: sponge_permutation
-  name: Sponge Permutation Construction
-  abbreviation: SPC
-  typical_primitive_types:
-  - permutation
-  - update_function
-  placeholder_family_names:
-  - ASCON
-  - Xoodoo
-  - PHOTON
-  notes: 'A permutation-centric construction used as the core of sponge and duplex modes in hashing and authenticated encryption
-    designs.
 
     '
 - id: coupled_counter_system

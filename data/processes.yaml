@@ -636,7 +636,7 @@ processes:
     - family_id: clae
     - family_id: clx
     - family_id: comet
-    - family_id: drygascon
+    - family_id: drygascon_aead
     - family_id: elephant
     - family_id: estate
     - family_id: flexaead
@@ -645,7 +645,7 @@ processes:
     - family_id: gimli
     - family_id: grain_128
     - family_id: hyena
-    - family_id: isap
+    - family_id: isap_aead
     - family_id: knot
     - family_id: laem
     - family_id: lilliput_ae
@@ -691,7 +691,7 @@ processes:
     - family_id: ace
     - family_id: ascon
     - family_id: comet
-    - family_id: drygascon
+    - family_id: drygascon_aead
     - family_id: elephant
     - family_id: estate
     - family_id: forkae
@@ -699,7 +699,7 @@ processes:
     - family_id: gimli
     - family_id: grain_128
     - family_id: hyena
-    - family_id: isap
+    - family_id: isap_aead
     - family_id: knot
     - family_id: locus
     - family_id: lotus
@@ -727,7 +727,7 @@ processes:
     - family_id: ascon
     - family_id: elephant
     - family_id: grain_128
-    - family_id: isap
+    - family_id: isap_aead
     - family_id: photon_beetle
     - family_id: romulus
     - family_id: sparkle

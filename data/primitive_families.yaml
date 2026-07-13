@@ -3533,7 +3533,7 @@ primitive_families:
 - id: ascon
   name: Ascon
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - ascon_permutation_round
   target_applications:
@@ -3606,7 +3606,7 @@ primitive_families:
 - id: gaston
   name: Gaston
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - gaston_permutation_round
   target_applications:
@@ -3659,7 +3659,7 @@ primitive_families:
   notes: PHOTON is a family of lightweight sponge hash functions whose internal permutations use AES-like 4-bit substitution,
     row shifting, and MDS column mixing.
   construction_ids:
-  - sponge_permutation
+  - aligned_spn
   round_ids:
   - photon_permutation_round
   target_applications:
@@ -3878,7 +3878,7 @@ primitive_families:
   notes: Xoodoo is a 384-bit, 12-round permutation arranged as three bit planes of four lanes; it is the permutation underlying
     Xoodyak.
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - xoodoo_permutation_round
   target_applications:
@@ -3933,7 +3933,7 @@ primitive_families:
   notes: Elephant is a lightweight nonce-based AEAD family that masks short permutations such as Spongent-pi, Keccak-p, or
     Ascon-p rather than maintaining a large keyed state.
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - elephant_mode_step
   target_applications:
@@ -4022,48 +4022,6 @@ primitive_families:
       tweak_size_bits: 128
       rounds: 40
       output_size_bits: 128
-- id: isap
-  name: ISAP
-  notes: ISAP is a lightweight AEAD family designed for robust side-channel protection, using re-keying and sponge-like processing
-    over lightweight permutations.
-  construction_ids:
-  - sponge_permutation
-  round_ids:
-  - isap_permutation_step
-  target_applications:
-  - iot
-  - software
-  characteristics:
-    state_size_bits: 320
-    components:
-    - id: xor
-    - id: and
-    - id: not
-    - id: rotation_fixed
-    - id: constant
-  reference_ids:
-  - isap_2019
-  process_participations:
-  - process_id: lightweight_crypto_nist_2018_2023
-    stage_ids:
-    - round_1
-    - round_2
-    - finalist
-    status: finalist
-  influences:
-  - source_family_id: ascon
-    relations:
-    - inspired_by
-    note: ISAP relies on ASCON-like permutation rounds with stronger misuse resistance design.
-  instances:
-  - id: isap_permutation_320
-    name: ISAP Permutation (320-bit)
-    type: permutation
-    characteristics:
-      state_size_bits: 320
-      rounds: 12
-      block_size_bits: 320
-      output_size_bits: 320
 - id: gimli
   name: Gimli
   notes: Gimli is a 384-bit ARX permutation operating on a 3×4 array of 32-bit words, designed as a compact foundation for
@@ -4450,7 +4408,7 @@ primitive_families:
 - id: gascon
   name: GASCON
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - gascon_permutation_round
   target_applications:
@@ -4474,11 +4432,23 @@ primitive_families:
     - generalization_of
     - related_to
     note: The DryGASCON specification defines GASCON as Generalized ASCON, extending the permutation to any odd number of
-      at least five 64-bit words. GASCONC5R12 is closely related to Ascon-p but changes byte order, internal representation,
+      at least five 64-bit words. GASCON-C5 is closely related to Ascon-p but changes byte order, internal representation,
       two rotations, and round-constant scheduling.
   notes: GASCON is the parameterized permutation family underlying DryGASCON. Its state contains an odd number of 64-bit words,
     with five-word and nine-word instances supporting the 128- and 256-bit DryGASCON variants.
   instances:
+  - id: gascon_c5
+    name: GASCON-C5 Permutation (320-bit)
+    type: permutation
+    reference_ids:
+    - drygascon_2019
+    characteristics:
+      state_size_bits: 320
+      rounds: 11
+      block_size_bits: 320
+      output_size_bits: 320
+    notes: Five-word GASCON instance (GASCON_C5) underlying DryGASCON128, the 128-bit-security named member of this submission;
+      DryGASCON128 runs GASCON_C5 with Rounds=7 for AEAD/hash message processing and DRounds=11 for key diversification.
   - id: gascon_c9
     name: GASCON-C9 Permutation (576-bit)
     type: permutation
@@ -4490,54 +4460,7 @@ primitive_families:
       block_size_bits: 576
       output_size_bits: 576
     notes: Nine-word GASCON instance (GASCON_C9) underlying DryGASCON256, the 256-bit-security named member of this submission;
-      DryGASCON256 itself runs GASCON_C9 with Rounds=8 for AEAD/hash message processing and DRounds=12 for key diversification.
-      The five-word GASCON_C5 instance underlying DryGASCON128 is already recorded under the drygascon family as drygascon_permutation_320.
-- id: drygascon
-  name: DryGASCON
-  notes: DryGASCON is a permutation-based AEAD and hashing design derived from the GASCON/Ascon lineage, separating a capacity
-    state from a small input accumulator.
-  construction_ids:
-  - sponge_permutation
-  round_ids:
-  - drygascon_permutation_round
-  target_applications:
-  - iot
-  - software
-  characteristics:
-    state_size_bits: 320
-    components:
-    - id: xor
-    - id: and
-    - id: not
-    - id: rotation_fixed
-    - id: constant
-  reference_ids:
-  - drygascon_2019
-  process_participations:
-  - process_id: lightweight_crypto_nist_2018_2023
-    stage_ids:
-    - round_1
-    - round_2
-    status: candidate
-  influences:
-  - source_family_id: gascon
-    relations:
-    - inspired_by
-    - related_to
-    note: DryGASCON instantiates its DrySponge construction with members of the GASCON permutation family.
-  - source_family_id: ascon
-    relations:
-    - inspired_by
-    note: DryGASCON uses a GASCON-style permutation family closely related to ASCON design choices.
-  instances:
-  - id: drygascon_permutation_320
-    name: DryGASCON Permutation (320-bit)
-    type: permutation
-    characteristics:
-      state_size_bits: 320
-      rounds: 12
-      block_size_bits: 320
-      output_size_bits: 320
+      DryGASCON256 runs GASCON_C9 with Rounds=8 for AEAD/hash message processing and DRounds=12 for key diversification.
 - id: sneik
   name: SNEIK
   notes: SNEIK is a lightweight ARX permutation and sponge suite designed for compact authenticated encryption, hashing, and
@@ -4590,7 +4513,7 @@ primitive_families:
   notes: Sycon is a 320-bit permutation-based lightweight suite using 5-bit S-boxes and bit permutations for authenticated
     encryption, hashing, and related functions.
   construction_ids:
-  - sponge_permutation
+  - bit_based_spn
   round_ids:
   - sycon_permutation_round
   target_applications:
@@ -4635,7 +4558,7 @@ primitive_families:
   name: SPIX
   notes: SPIX is a lightweight duplex AEAD design using a 256-bit permutation with Boolean nonlinear layers and rotations.
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - spix_permutation_round
   target_applications:
@@ -4683,7 +4606,7 @@ primitive_families:
   notes: SpoC is a lightweight sponge-based AEAD family that processes plaintext through a rate smaller than the permutation
     rate to improve privacy bounds.
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - spoc_permutation_round
   target_applications:
@@ -4726,7 +4649,7 @@ primitive_families:
   notes: Spook is a lightweight AEAD family combining a tweakable block cipher with a sponge-like mode, with variants aimed
     at single-user and multi-user security.
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - spook_permutation_round
   target_applications:
@@ -4782,10 +4705,11 @@ primitive_families:
       output_size_bits: 256
 - id: knot
   name: KNOT
-  notes: KNOT is a family of bit-sliced permutations and sponge modes for lightweight authenticated encryption and hashing,
-    using 4-bit S-boxes and lane rotations.
+  notes: KNOT is a family of bit-sliced permutations and sponge modes for lightweight authenticated encryption and hashing.
+    Its SubColumn nonlinear layer is a 4-bit S-box computed directly as a bitsliced AND/OR/NOT/XOR Boolean formula (no
+    lookup table), combined with a bit-level ShiftRow-style rotation for diffusion.
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - knot_permutation_round
   target_applications:
@@ -4798,6 +4722,9 @@ primitive_families:
       params:
         input_bits: 4
         output_bits: 4
+    - id: and
+    - id: or
+    - id: not
     - id: xor
     - id: rotation_fixed
     - id: constant
@@ -4982,7 +4909,7 @@ primitive_families:
   notes: SIMPLE is a lightweight permutation-based authenticated-encryption design using a 256-bit Boolean permutation and
     sponge-style processing.
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - simple_permutation_round
   target_applications:
@@ -5086,7 +5013,7 @@ primitive_families:
 - id: ace
   name: ACE
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - ace_round
   target_applications:
@@ -6134,7 +6061,7 @@ primitive_families:
 - id: cilipadi
   name: CiliPadi
   construction_ids:
-  - sponge_permutation
+  - aligned_spn
   round_ids:
   - cilipadi_permutation_round
   target_applications:
@@ -6932,7 +6859,7 @@ primitive_families:
 - id: gage_and_ingage
   name: GAGE and InGAGE
   construction_ids:
-  - sponge_permutation
+  - bit_based_spn
   round_ids:
   - gage_and_ingage_round
   target_applications:
@@ -8133,7 +8060,7 @@ primitive_families:
 - id: oribatida
   name: Oribatida
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - simp_round
   target_applications:
@@ -8728,7 +8655,7 @@ primitive_families:
   name: Shamash & Shamashash
   construction_ids:
   - spn
-  - sponge_permutation
+  - bit_based_spn
   round_ids:
   - shamash_and_shamashash_round
   target_applications:
@@ -9245,7 +9172,7 @@ primitive_families:
 - id: wage
   name: WAGE
   construction_ids:
-  - sponge_permutation
+  - lfsr_nlfsr_register_network
   round_ids:
   - wage_round
   target_applications:
@@ -9347,7 +9274,7 @@ primitive_families:
 - id: yarara_and_coral
   name: Yarara and Coral
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - yarara_and_coral_round
   target_applications:
@@ -9976,7 +9903,7 @@ primitive_families:
 - id: keccak
   name: Keccak
   construction_ids:
-  - sponge_permutation
+  - and_rx
   round_ids:
   - keccak_round
   target_applications:
@@ -10041,6 +9968,18 @@ primitive_families:
       state_size_bits: 1600
       output_size_bits: 1600
       rounds: 24
+  - id: keccak_p400
+    name: Keccak-p[400]
+    type: permutation
+    reference_ids:
+    - isap_2019
+    characteristics:
+      block_size_bits: 400
+      state_size_bits: 400
+      output_size_bits: 400
+      rounds: 20
+    notes: A smaller, narrower-lane sibling of Keccak-f[1600] (25 16-bit lanes instead of 25 64-bit lanes), standardized
+      alongside it in FIPS 202 and reused unmodified by ISAP-K and by Ketje Sr.
 - id: blake
   name: BLAKE Compression Functions
   construction_ids:

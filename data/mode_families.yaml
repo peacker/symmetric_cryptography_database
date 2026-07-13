@@ -3656,6 +3656,184 @@ mode_families:
       output_size_bits: 256
     notes: Montes & Penazzi 2019. Sponge hash function sharing the Yarará/Coral 256-bit permutation. Rate=32 bits, capacity=224
       bits, digest=256 bits.
+- id: isap_aead
+  name: ISAP
+  construction_ids:
+  - encrypt_then_mac
+  target_applications:
+  - iot
+  - software
+  reference_ids:
+  - isap_2019
+  process_participations:
+  - process_id: lightweight_crypto_nist_2018_2023
+    stage_ids:
+    - round_1
+    - round_2
+    - finalist
+    status: finalist
+  influences:
+  - source_family_id: ascon
+    relations:
+    - inspired_by
+    note: The Isap-A instances instantiate the Isap sponge-based re-keying/encrypt-then-MAC mode with the unmodified 320-bit
+      Ascon-p permutation.
+  - source_family_id: keccak
+    relations:
+    - inspired_by
+    note: The Isap-K instances instantiate the Isap mode with the unmodified 400-bit Keccak-p[400] permutation (a narrower
+      sibling of the Keccak-f[1600] SHA-3 permutation).
+  notes: 'ISAP (Dobraunig, Eichlseder, Mangard, Mendel, Mennink, Primas, Unterluggauer; FSE 2017, NIST LWC submission 2019)
+    is a family of nonce-based AEAD schemes built for inherent robustness against differential power analysis and fault
+    attacks. It is an encrypt-then-MAC design: a sponge-based re-keying function IsapRk derives fresh per-message session
+    keys for a keystream-generating IsapEnc and a separate absorbing IsapMac, so no single permutation call ever processes
+    two blocks under the same secret state. ISAP defines no permutation of its own -- each instance reuses an existing
+    published permutation (Ascon-p or Keccak-p[400]) unmodified, only varying the round counts of the four internal
+    permutation calls (sh, sb, se, sk).
+
+    '
+  instances:
+  - id: isap_k_128a
+    name: ISAP-K-128A
+    type: aead
+    reference_ids:
+    - isap_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 400
+    notes: Primary recommendation using Keccak-p[400] (rate 144, rounds sh=16, sb=1, se=8, sk=8).
+  - id: isap_a_128a
+    name: ISAP-A-128A
+    type: aead
+    reference_ids:
+    - isap_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 320
+    notes: Primary Ascon-p-based recommendation (rate 64, rounds sh=12, sb=1, se=6, sk=12).
+  - id: isap_k_128
+    name: ISAP-K-128
+    type: aead
+    reference_ids:
+    - isap_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 400
+    notes: More conservative Keccak-p[400]-based variant (rate 144, rounds sh=20, sb=12, se=12, sk=12).
+  - id: isap_a_128
+    name: ISAP-A-128
+    type: aead
+    reference_ids:
+    - isap_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 320
+    notes: More conservative Ascon-p-based variant (rate 64, rounds sh=12, sb=12, se=12, sk=12).
+- id: drygascon_aead
+  name: DryGASCON
+  construction_ids:
+  - duplex_mode
+  target_applications:
+  - iot
+  - software
+  reference_ids:
+  - drygascon_2019
+  process_participations:
+  - process_id: lightweight_crypto_nist_2018_2023
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: gascon
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: DryGASCON's AEAD mode is the DrySponge (a Duplex Sponge variant) iteration of a GASCON permutation, reusing its
+      round function and state layout unchanged.
+  notes: DryGASCON (Riou, NIST LWC submission 2019) is an AEAD and hash design built on DrySponge, a Duplex Sponge variant
+    that separates concerns of cryptographic strength (a Core round processing only the sponge's secret capacity bits)
+    from side-channel/fault robustness (dedicated Mix/Accumulate steps merging input and extracting output). DryGASCON128
+    runs the 320-bit GASCON-C5 permutation; DryGASCON256 runs the 576-bit GASCON-C9 permutation. See gascon for the
+    underlying permutation family and drygascon_hash for the hash mode.
+  instances:
+  - id: drygascon128_aead
+    name: DryGASCON128
+    type: aead
+    reference_ids:
+    - drygascon_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 320
+    notes: Primary member of the submission. Key also supports 256-bit ("fast") and 448-bit ("full") side-channel-hardened
+      profiles at the same 128-bit cryptographic security level.
+  - id: drygascon256_aead
+    name: DryGASCON256
+    type: aead
+    reference_ids:
+    - drygascon_2019
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 576
+    notes: Higher-security member. Key also supports 384-bit ("fast") and 704-bit ("full") side-channel-hardened profiles
+      at the same 256-bit cryptographic security level.
+- id: drygascon_hash
+  name: DryGASCON Hash
+  construction_ids:
+  - permutation_based_hash
+  target_applications:
+  - iot
+  - software
+  reference_ids:
+  - drygascon_2019
+  process_participations: []
+  influences:
+  - source_family_id: gascon
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: DryGASCON's hash mode is the DrySponge iteration of a GASCON permutation, reusing its round function and state
+      layout unchanged.
+  - source_family_id: drygascon_aead
+    relations:
+    - related_to
+    note: DryGASCON's hash and AEAD modes share the same DrySponge F/G functions, GASCON permutations, and round counts,
+      differing only in how data is absorbed/squeezed.
+  notes: DryGASCON's hash mode absorbs the message and squeezes an extendable-length digest via the same DrySponge
+    construction and GASCON permutations as its AEAD mode; see drygascon_aead.
+  instances:
+  - id: drygascon128_hash
+    name: DryGASCON128 Hash
+    type: hash
+    reference_ids:
+    - drygascon_2019
+    characteristics:
+      state_size_bits: 320
+      output_size_bits_min: 8
+      output_size_bits_max: 256
+    notes: 128-bit-security hash mode built on GASCON-C5; recommended digest length 256 bits.
+  - id: drygascon256_hash
+    name: DryGASCON256 Hash
+    type: hash
+    reference_ids:
+    - drygascon_2019
+    characteristics:
+      state_size_bits: 576
+      output_size_bits_min: 8
+      output_size_bits_max: 512
+    notes: 256-bit-security hash mode built on GASCON-C9; recommended digest length 512 bits.
 - id: mir_1
   name: MIR-1
   construction_ids:
