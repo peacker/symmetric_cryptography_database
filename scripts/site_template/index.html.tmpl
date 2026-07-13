@@ -142,7 +142,11 @@
             <input id="genFamilySearch" type="search" placeholder="Type a family name, or right-click/long-press a node" autocomplete="off" />
           </label>
           <label class="toolbar-field" title="How many relation hops from the matched family to also show (0 = only the matched family itself)">Relation degree
-            <input id="genFamilySearchDegree" type="number" min="0" value="1" style="width:4em" />
+            <div class="viz-name-mode">
+              <button id="genDegreeMinus" type="button" class="name-mode-btn">-</button>
+              <input id="genFamilySearchDegree" type="number" min="0" value="1" style="width:3em" />
+              <button id="genDegreePlus" type="button" class="name-mode-btn">+</button>
+            </div>
           </label>
           <div class="viz-year-controls">
             <label class="toolbar-field">From year

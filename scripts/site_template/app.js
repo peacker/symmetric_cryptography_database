@@ -88,12 +88,44 @@
 
   // Right-click/long-press a family node to filter to it, instead of having
   // to type its name into the search box by hand. Shared by the Timelines
-  // dots/labels and both Genealogy layouts.
+  // dots/labels and both Genealogy layouts. Touch screens have no
+  // right-click, so a long-press (default ~550ms, cancelled by scrolling)
+  // triggers the same filter; a normal short tap is left alone so it still
+  // pins the hover tip via the separate click handler.
   function attachFamilyContextMenu(el, familyName, searchInput, onChange) {
-    el.addEventListener("contextmenu", (ev) => {
-      ev.preventDefault();
+    function trigger() {
       searchInput.value = familyName;
       onChange();
+    }
+    el.addEventListener("contextmenu", (ev) => {
+      ev.preventDefault();
+      trigger();
+    });
+
+    const LONG_PRESS_MS = 550;
+    const MOVE_TOLERANCE_PX = 10;
+    let timer = null;
+    let longPressed = false;
+    let startX = 0;
+    let startY = 0;
+    el.addEventListener("touchstart", (ev) => {
+      if (!ev.touches || ev.touches.length !== 1) return;
+      longPressed = false;
+      startX = ev.touches[0].clientX;
+      startY = ev.touches[0].clientY;
+      timer = setTimeout(() => { longPressed = true; trigger(); }, LONG_PRESS_MS);
+    }, { passive: true });
+    el.addEventListener("touchmove", (ev) => {
+      if (!timer || !ev.touches || !ev.touches.length) return;
+      const dx = ev.touches[0].clientX - startX;
+      const dy = ev.touches[0].clientY - startY;
+      if (Math.hypot(dx, dy) > MOVE_TOLERANCE_PX) { clearTimeout(timer); timer = null; }
+    }, { passive: true });
+    el.addEventListener("touchend", (ev) => {
+      if (timer) { clearTimeout(timer); timer = null; }
+      // A long-press already triggered the filter above; suppress the
+      // synthetic click that would otherwise follow and pin the tooltip too.
+      if (longPressed) ev.preventDefault();
     });
   }
 
@@ -1713,6 +1745,8 @@
     const genStandardsOnly = document.getElementById("genStandardsOnly");
     const genFamilySearch = document.getElementById("genFamilySearch");
     const genFamilySearchDegree = document.getElementById("genFamilySearchDegree");
+    const genDegreeMinus = document.getElementById("genDegreeMinus");
+    const genDegreePlus = document.getElementById("genDegreePlus");
     const genYearStart = document.getElementById("genYearStart");
     const genYearEnd = document.getElementById("genYearEnd");
     const genYearReset = document.getElementById("genYearReset");
@@ -2613,6 +2647,16 @@
       genFamilySearchDegree.addEventListener("input", render);
       genFamilySearchDegree.addEventListener("change", render);
     }
+    if (genDegreeMinus) genDegreeMinus.addEventListener("click", () => {
+      const cur = parseInt(genFamilySearchDegree.value, 10);
+      genFamilySearchDegree.value = String(Math.max(0, (Number.isFinite(cur) ? cur : 1) - 1));
+      render();
+    });
+    if (genDegreePlus) genDegreePlus.addEventListener("click", () => {
+      const cur = parseInt(genFamilySearchDegree.value, 10);
+      genFamilySearchDegree.value = String((Number.isFinite(cur) ? cur : 1) + 1);
+      render();
+    });
     genYearStart.addEventListener("input", render);
     genYearEnd.addEventListener("input", render);
     genYearReset.addEventListener("click", () => {
