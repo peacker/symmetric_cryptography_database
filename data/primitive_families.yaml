@@ -795,11 +795,117 @@ primitive_families:
       rounds: 14
       block_size_bits: 128
       output_size_bits: 128
+- id: salsa20
+  name: Salsa20
+  notes: 'Bernstein''s 2005 specification formally defines three functions built up from bottom to top: the "Salsa20 hash
+    function" (Section 8), a fixed 64-byte-to-64-byte transform Salsa20(x) = x + doubleround^10(x); despite the "hash" name
+    this is not a cryptographic hash function -- it takes no variable-length input and offers no collision-resistance claim.
+    It is a fixed-length, unkeyed permutation-plus-feedforward update function, structurally similar to a Davies-Meyer compression
+    function (the output of an invertible transform is added back to its own input) though built from a public permutation
+    rather than an externally-keyed block cipher. The "Salsa20 expansion function" (Section 9) invokes that same core with
+    its 64-byte input populated from fixed constants, a 128- or 256-bit key, and a 16-byte nonce/counter block -- this is
+    the actual per-block keystream generator, modeled here as the family''s instances. The variable-length "Salsa20 encryption
+    function" (Section 10), which XORs the expansion function''s output stream with the plaintext, is the directly-usable
+    stream cipher and lives at the mode tier (see salsa20_stream). The family paper (2007/2008) additionally defines the
+    reduced-round Salsa20/8 and Salsa20/12 variants alongside the full Salsa20/20.
+
+    '
+  construction_ids:
+  - arx_permutation_network
+  round_ids:
+  - salsa_quarterround
+  target_applications:
+  - generic
+  - software
+  characteristics:
+    state_size_bits: 512
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - bernstein_2005_salsa20_spec
+  - bernstein_2007_salsa20_family
+  - bernstein_2008_salsa20_family_published
+  process_participations: []
+  influences:
+  - source_family_id: rc5
+    relations:
+    - inspired_by
+    note: Salsa20 belongs to the ARX paradigm popularised by RC5; both use Add-Rotate-XOR as the core primitive.
+  innovative_ideas:
+  - id: salsa_arx_quarterround
+    name: ARX quarterround
+    note: The add-rotate-xor quarterround structure shared across Salsa family variants.
+  - id: salsa_column_diagonal_mixing
+    name: Column/diagonal mixing
+    note: The state reordering that alternates column and diagonal rounds for diffusion.
+  instances:
+  - id: salsa20_8_block_function
+    name: Salsa20/8 Expansion Function
+    type: update_function
+    reference_ids:
+    - bernstein_2005_salsa20_spec
+    - bernstein_2007_salsa20_family
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      block_count_bits: 64
+      state_size_bits: 512
+      rounds: 8
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: The Salsa20 expansion function arranges constants, key, nonce, and block counter into a 64-byte input and applies
+      the (8-round) Salsa20 hash function/core permutation-plus-feedforward.
+  - id: salsa20_12_block_function
+    name: Salsa20/12 Expansion Function
+    type: update_function
+    reference_ids:
+    - bernstein_2005_salsa20_spec
+    - bernstein_2007_salsa20_family
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      block_count_bits: 64
+      state_size_bits: 512
+      rounds: 12
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: The Salsa20 expansion function arranges constants, key, nonce, and block counter into a 64-byte input and applies
+      the (12-round) Salsa20 hash function/core permutation-plus-feedforward.
+  - id: salsa20_20_block_function
+    name: Salsa20/20 Expansion Function
+    type: update_function
+    reference_ids:
+    - bernstein_2005_salsa20_spec
+    - bernstein_2007_salsa20_family
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      block_count_bits: 64
+      state_size_bits: 512
+      rounds: 20
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: The Salsa20 expansion function arranges constants, key, nonce, and block counter into a 64-byte input and applies
+      the (20-round) Salsa20 hash function/core permutation-plus-feedforward.
 - id: chacha
   name: ChaCha
-  notes: ChaCha is Bernstein’s ARX stream-cipher family and a refinement of Salsa20. The IETF ChaCha20 profile uses a 256-bit
-    key, 96-bit nonce, and 32-bit counter. RFC 7539 standardized that profile and its block function in 2015; RFC 8439 replaced
-    it in 2018.
+  notes: 'ChaCha is Bernstein''s 2008 ARX stream-cipher family, "a variant of Salsa20": it keeps Salsa20''s operation count
+    and matrix-based data flow but reorders the quarter-round to double the diffusion rate per round. The original paper
+    defines ChaCha8, ChaCha12, and ChaCha20 (analogous to Salsa20/8, Salsa20/12, Salsa20/20), each usable with a 128- or
+    256-bit key and a 64-bit nonce plus 64-bit block counter, matching Salsa20''s own layout. RFC 7539 (2015, superseded
+    by RFC 8439 in 2018) standardizes only the 256-bit-key, 20-round variant as "ChaCha20", and changes the nonce/counter
+    split to a 96-bit nonce and 32-bit counter -- RFC 7539 itself notes: "The original algorithm also specified 128-bit
+    keys and 8- and 12-round variants, but these are out of scope for this document."
+
+    '
   construction_ids:
   - arx_permutation_network
   round_ids:
@@ -834,6 +940,55 @@ primitive_families:
 
       '
   instances:
+  - id: chacha8_block_function
+    name: ChaCha8 Block Function
+    type: update_function
+    reference_ids:
+    - bernstein_2008_chacha
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      block_count_bits: 64
+      state_size_bits: 512
+      rounds: 8
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: Bernstein's original (2008) 8-round ChaCha block function, with a 64-bit nonce and 64-bit block counter matching
+      Salsa20's layout, usable with a 128- or 256-bit key.
+  - id: chacha12_block_function
+    name: ChaCha12 Block Function
+    type: update_function
+    reference_ids:
+    - bernstein_2008_chacha
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      block_count_bits: 64
+      state_size_bits: 512
+      rounds: 12
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: Bernstein's original (2008) 12-round ChaCha block function, with a 64-bit nonce and 64-bit block counter matching
+      Salsa20's layout, usable with a 128- or 256-bit key.
+  - id: chacha20_block_function_orig
+    name: ChaCha20 Block Function (original)
+    type: update_function
+    reference_ids:
+    - bernstein_2008_chacha
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      block_count_bits: 64
+      state_size_bits: 512
+      rounds: 20
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: Bernstein's original (2008) 20-round ChaCha block function, with a 64-bit nonce and 64-bit block counter matching
+      Salsa20's layout, usable with a 128- or 256-bit key. Superseded in practice by the RFC 7539/8439 profile (chacha20_block_function),
+      which fixes the key to 256 bits and changes the nonce/counter split to 96/32 bits.
   - id: chacha20_block_function
     name: ChaCha20 Block Function
     type: update_function
@@ -849,7 +1004,8 @@ primitive_families:
       block_size_bits: 512
       output_size_bits: 512
     notes: The RFC-defined update function transforms a 512-bit ChaCha state through 20 rounds and adds the initial state
-      to produce one 512-bit keystream block.
+      to produce one 512-bit keystream block. RFC 7539/8439's profile, distinct from Bernstein's original ChaCha20 (see
+      chacha20_block_function_orig), which used a 64-bit nonce and 64-bit block counter.
 - id: present
   name: PRESENT
   notes: PRESENT is a 31-round, 64-bit lightweight SPN using 4-bit S-boxes and a fixed bit permutation; its 80- and 128-bit-key

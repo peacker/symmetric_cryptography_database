@@ -162,24 +162,13 @@ mode_families:
       iv_size_bits: 22
       state_size_bits: 81
     notes: Deliberately weakened GSM export cipher; prohibited by 3GPP after practical key-recovery and downgrade attacks.
-- id: salsa20
+- id: salsa20_stream
   name: Salsa20
   construction_ids:
   - native_keystream_generator
-  round_ids:
-  - salsa_quarterround
   target_applications:
   - generic
   - software
-  characteristics:
-    state_size_bits: 512
-    components:
-    - id: add_mod
-      params:
-        modulus: 4294967296
-    - id: xor
-    - id: rotation_fixed
-    - id: constant
   reference_ids:
   - bernstein_2005_salsa20_spec
   - bernstein_2007_salsa20_family
@@ -194,37 +183,63 @@ mode_families:
     - portfolio_sw
     status: portfolio
   influences:
-  - source_family_id: rc5
+  - source_family_id: salsa20
     relations:
-    - inspired_by
-    note: Salsa20 belongs to the ARX paradigm popularised by RC5; both use Add-Rotate-XOR as the core primitive.
-  innovative_ideas:
-  - id: salsa_arx_quarterround
-    name: ARX quarterround
-    note: The add-rotate-xor quarterround structure shared across Salsa family variants.
-  - id: salsa_column_diagonal_mixing
-    name: Column/diagonal mixing
-    note: The state reordering that alternates column and diagonal rounds for diffusion.
-  notes: 'Salsa20 is a 512-bit ARX stream-cipher family introduced as the Snuffle 2005 encryption function. Salsa20 uses 20
-    rounds; Salsa20/12 and Salsa20/8 are reduced-round variants. XSalsa20 extends Salsa20 from a 64-bit nonce to a 192-bit
-    nonce through HSalsa20 subkey derivation.
+    - same_round_function
+    - same_state_layout
+    note: Salsa20's encryption function (Bernstein 2005 spec, Section 10) is the counter-mode stream-cipher construction
+      built directly on the Salsa20 expansion function, reusing its round function and state layout unchanged.
+  notes: 'Salsa20 is the variable-length stream cipher that Bernstein''s 2005 specification calls the "Salsa20 encryption
+    function": it repeatedly invokes the Salsa20 expansion function (see the primitive-tier salsa20 family) over successive
+    block-counter values and XORs the result with the plaintext, with no chaining between blocks. Salsa20/20 is the recommended
+    variant; Salsa20/12 and Salsa20/8 are reduced-round variants that trade confidence for speed. XSalsa20 extends Salsa20
+    from a 64-bit nonce to a 192-bit nonce through HSalsa20 subkey derivation.
 
     '
   instances:
-  - id: salsa20
-    name: Salsa20
+  - id: salsa20_8
+    name: Salsa20/8
     type: stream_cipher
     reference_ids:
     - bernstein_2005_salsa20_spec
     - bernstein_2007_salsa20_family
     characteristics:
-      key_size_bits: 256
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      rounds: 8
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: 8-round reduced variant, recommended by the designer for applications where speed matters more than confidence.
+  - id: salsa20_12
+    name: Salsa20/12
+    type: stream_cipher
+    reference_ids:
+    - bernstein_2005_salsa20_spec
+    - bernstein_2007_salsa20_family
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      rounds: 12
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: 12-round reduced variant; eSTREAM's final report recommended Salsa20/12 as offering the best balance of speed
+      and security margin.
+  - id: salsa20_20
+    name: Salsa20/20
+    type: stream_cipher
+    reference_ids:
+    - bernstein_2005_salsa20_spec
+    - bernstein_2007_salsa20_family
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
       nonce_size_bits: 64
       rounds: 20
       block_size_bits: 512
       output_size_bits: 512
-    notes: Salsa20 uses a 256-bit key, 64-bit nonce, and 64-bit block counter to generate 512-bit keystream blocks with 20
-      ARX rounds.
+    notes: Full 20-round variant, recommended by the designer for typical cryptographic applications.
   - id: snuffle_2005
     name: Snuffle 2005
     type: stream_cipher
@@ -236,7 +251,7 @@ mode_families:
       rounds: 20
       block_size_bits: 512
       output_size_bits: 512
-    notes: Snuffle 2005 is the original name for the Salsa20 encryption function.
+    notes: Snuffle 2005 is the original eSTREAM-submission name for the Salsa20/20 encryption function.
   - id: xsalsa20
     name: XSalsa20
     type: stream_cipher
@@ -9155,14 +9170,56 @@ mode_families:
     - same_state_layout
     note: ChaCha20 is the stream-cipher mode built directly on the ChaCha20 Block Function, reusing its round function and
       state layout unchanged.
-  notes: ChaCha20 is the IETF-standardized stream cipher built directly on the ChaCha20 Block Function; see chacha for the
-    block-function primitive.
+  notes: 'ChaCha is Bernstein''s 2008 stream-cipher family (a variant of Salsa20), defining ChaCha8/ChaCha12/ChaCha20 with
+    a 64-bit nonce, 64-bit block counter, and a 128- or 256-bit key. RFC 7539/8439 later standardized only ChaCha20 with
+    a 256-bit key and a modified 96-bit nonce / 32-bit counter split; see chacha for the underlying block-function primitives.
+
+    '
   instances:
+  - id: chacha8
+    name: ChaCha8
+    type: stream_cipher
+    reference_ids:
+    - bernstein_2008_chacha
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      rounds: 8
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: Bernstein's original 8-round ChaCha stream cipher, with a 64-bit nonce and 64-bit block counter.
+  - id: chacha12
+    name: ChaCha12
+    type: stream_cipher
+    reference_ids:
+    - bernstein_2008_chacha
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      rounds: 12
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: Bernstein's original 12-round ChaCha stream cipher, with a 64-bit nonce and 64-bit block counter.
+  - id: chacha20_orig
+    name: ChaCha20 (original)
+    type: stream_cipher
+    reference_ids:
+    - bernstein_2008_chacha
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      rounds: 20
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: Bernstein's original 20-round ChaCha stream cipher, with a 64-bit nonce and 64-bit block counter -- distinct
+      from the IETF profile (chacha20), which fixes the key at 256 bits and uses a 96-bit nonce / 32-bit counter.
   - id: chacha20
     name: ChaCha20
     type: stream_cipher
     reference_ids:
-    - bernstein_2008_chacha
     - rfc_7539
     - rfc_8439
     characteristics:
