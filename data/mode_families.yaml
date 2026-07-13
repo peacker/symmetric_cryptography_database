@@ -779,36 +779,25 @@ mode_families:
       state_size_bits: 544
     notes: Combined hash/stream-cipher construction; the same state/buffer engine can be run in stream-cipher mode to generate
       a keystream instead of a digest.
-- id: spongent
+- id: spongent_hash
   name: spongent
   construction_ids:
   - sponge_construction
-  round_ids:
-  - spongent_round
   target_applications:
   - lightweight
   - hardware
-  characteristics:
-    components:
-    - id: sbox
-      params:
-        input_bits: 4
-        output_bits: 4
-    - id: bit_permutation
-    - id: lfsr
   reference_ids:
   - bogdanov_et_al_2011_spongent
   process_participations: []
   influences:
-  - source_family_id: present
+  - source_family_id: spongent
     relations:
-    - same_sbox
-    - similar_bit_based_permutation_layer
-    - generalization_of
-    note: spongent's present-type permutation reuses the PRESENT S-box unchanged and generalizes PRESENT's bit permutation
-      to arbitrary widths, wrapped in a sponge construction to build a lightweight hash function family.
+    - same_round_function
+    - same_state_layout
+    note: spongent's hash mode is the hermetic-sponge iteration of a spongent present-type permutation, reusing its round
+      function and state layout unchanged.
   notes: spongent is a family of lightweight sponge hash functions (88- to 256-bit outputs) instantiated with a present-type
-    permutation, following the hermetic sponge strategy.
+    permutation, following the hermetic sponge strategy. See spongent for the underlying permutation family.
   instances:
   - id: spongent_88
     name: spongent-88
@@ -3834,6 +3823,485 @@ mode_families:
       output_size_bits_min: 8
       output_size_bits_max: 512
     notes: 256-bit-security hash mode built on GASCON-C9; recommended digest length 512 bits.
+- id: elephant_aead
+  name: Elephant
+  construction_ids:
+  - encrypt_then_mac
+  target_applications:
+  - iot
+  - constrained_hardware
+  reference_ids:
+  - elephant_2019
+  process_participations:
+  - process_id: lightweight_crypto_nist_2018_2023
+    stage_ids:
+    - round_1
+    - round_2
+    - finalist
+    status: finalist
+  influences:
+  - source_family_id: keccak
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: The Delirium instance of Elephant is built directly on Keccak-f[200], the smallest instance of the NIST SHA-3
+      standard permutation, reusing its round function and 5x5-lane state representation unmodified.
+  - source_family_id: spongent
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: The Dumbo and Jumbo instances of Elephant are built directly on Spongent-pi[160] and Spongent-pi[176], reusing
+      their round function and state layout unmodified as the masked permutation in Elephant's construction.
+  notes: 'Elephant (Beyne, Chen, Dobraunig, Mennink; NIST LWC submission 2019) is a nonce-based, fully parallelizable
+    encrypt-then-MAC AEAD family: encryption uses counter mode and authentication a Wegman-Carter-Shoup-style MAC, both
+    built from a masked Even-Mansour construction (LFSR-based input/output masking) around an existing published
+    permutation evaluated only in the forward direction. Elephant defines no permutation of its own -- each instance
+    reuses Spongent-pi or Keccak-f unmodified, only varying the permutation width and the paired masking LFSR.
+
+    '
+  instances:
+  - id: elephant_dumbo
+    name: Dumbo
+    type: aead
+    reference_ids:
+    - elephant_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 160
+    notes: Primary member of the submission, built on Spongent-pi[160]; 112-bit security.
+  - id: elephant_jumbo
+    name: Jumbo
+    type: aead
+    reference_ids:
+    - elephant_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 64
+      state_size_bits: 176
+    notes: More conservative member, built on Spongent-pi[176]; 127-bit security.
+  - id: elephant_delirium
+    name: Delirium
+    type: aead
+    reference_ids:
+    - elephant_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 128
+      state_size_bits: 200
+    notes: Software-oriented member, built on Keccak-f[200]; 127-bit security.
+- id: gage_hash
+  name: GAGE
+  construction_ids:
+  - sponge_construction
+  target_applications:
+  - lightweight
+  - hardware
+  - iot
+  reference_ids:
+  - gage_and_ingage_ref
+  process_participations: []
+  influences:
+  - source_family_id: gage
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: GAGE's hash mode is the sponge iteration of the GAGE permutation, reusing its round function and state layout
+      unchanged.
+  notes: GAGE (Gligoroski, Mihajloska, Otte; NIST LWC Round 1, 2019) is a lightweight sponge hash function family with
+    states from 232 to 576 bits and rates from 8 to 64 bits; see gage for the underlying permutation and ingage_aead
+    for the paired AEAD scheme.
+  instances:
+  - id: gage256
+    name: GAGE256
+    type: hash
+    reference_ids:
+    - gage_and_ingage_ref
+    characteristics:
+      state_size_bits: 232
+      output_size_bits: 256
+      rate_bits: 8
+      capacity_bits: 224
+    notes: Primary proposal. Preimage security 223 bits, second-preimage/collision security 112 bits.
+- id: ingage_aead
+  name: InGAGE
+  construction_ids:
+  - duplex_mode
+  target_applications:
+  - lightweight
+  - hardware
+  - iot
+  reference_ids:
+  - gage_and_ingage_ref
+  process_participations:
+  - process_id: lightweight_crypto_nist_2018_2023
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: gage
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: InGAGE's AEAD mode is a MonkeyDuplex-style (Ascon-like) iteration of the GAGE permutation, reusing its round
+      function and state layout unchanged; it differs from Ascon's mode chiefly in state/rate sizes and in initializing
+      the state as nonce-then-key rather than key-then-nonce.
+  - source_family_id: gage_hash
+    relations:
+    - related_to
+    note: InGAGE reuses the same GAGE permutation and sponge machinery as the GAGE hash function, applied via a duplex/AEAD
+      mode instead of a plain sponge.
+  notes: InGAGE (Gligoroski, Mihajloska, Otte; NIST LWC Round 1, 2019) is a sponge-based AEAD family built on the GAGE
+    permutation, with a MonkeyDuplex mode of operation resembling Ascon's. Supports 96- or 128-bit nonces and 128- or
+    256-bit keys across its proposed instances.
+  instances:
+  - id: ingage256
+    name: InGAGE256
+    type: aead
+    reference_ids:
+    - gage_and_ingage_ref
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 256
+    notes: State 256 bits, rate 32 bits, capacity 224 bits; ROUNDS=32 for absorption/squeezing, ROUNDS/2=16 for intermediate
+      plaintext/associated-data blocks (matching GAGE's own round count for the corresponding state size).
+- id: knot_aead
+  name: KNOT-AEAD
+  construction_ids:
+  - duplex_mode
+  target_applications:
+  - iot
+  - constrained_hardware
+  - software
+  reference_ids:
+  - knot_2019
+  process_participations: []
+  influences:
+  - source_family_id: knot
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: KNOT-AEAD is the duplex-sponge iteration of a KNOT permutation, reusing its round function and state layout
+      unchanged.
+  notes: KNOT-AEAD (Zhang, Ding, Yang, Bao, Xiang, Ji, Zhao; NIST LWC Round 1/2, 2019) has four members, all with key,
+    nonce, and tag lengths equal to a security parameter k. See knot for the underlying permutation family and
+    knot_hash for the paired hash family.
+  instances:
+  - id: knot_aead_128_256_64
+    name: KNOT-AEAD(128,256,64)
+    type: aead
+    reference_ids:
+    - knot_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 256
+      rate_bits: 64
+    notes: Primary AEAD member; lowest hardware area/software memory due to its 256-bit state. 125-bit security strength.
+- id: knot_hash
+  name: KNOT-Hash
+  construction_ids:
+  - sponge_construction
+  target_applications:
+  - iot
+  - constrained_hardware
+  - software
+  reference_ids:
+  - knot_2019
+  process_participations: []
+  influences:
+  - source_family_id: knot
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: KNOT-Hash is the sponge iteration of a KNOT permutation, reusing its round function and state layout unchanged.
+  - source_family_id: knot_aead
+    relations:
+    - related_to
+    note: KNOT-Hash and KNOT-AEAD share the same family of KNOT permutations and sponge/duplex machinery, differing only
+      in mode of operation.
+  notes: KNOT-Hash (Zhang, Ding, Yang, Bao, Xiang, Ji, Zhao; NIST LWC Round 1/2, 2019) uses a separate squeezing rate r'
+    > r (per Guo et al.'s generalized sponge) to improve squeezing efficiency at some cost to preimage security. See
+    knot for the underlying permutation family.
+  instances:
+  - id: knot_hash_256_256_32_128
+    name: KNOT-Hash(256,256,32,128)
+    type: hash
+    reference_ids:
+    - knot_2019
+    characteristics:
+      output_size_bits: 256
+      state_size_bits: 256
+      rate_bits: 32
+      capacity_bits: 224
+    notes: Absorbing rate 32 bits, squeezing rate 128 bits, 68 rounds for the main permutation calls.
+- id: simple_aead
+  name: Simple
+  construction_ids: []
+  target_applications:
+  - iot
+  - software
+  reference_ids:
+  - simple_2019
+  process_participations:
+  - process_id: lightweight_crypto_nist_2018_2023
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: gift
+    relations:
+    - related_to
+    note: Simple128 and Simple64 are generic AEAD modes of operation (CBCMAC-IV for nonce-based IV derivation, then CTR/C-ENC
+      encryption) that can be instantiated with any block cipher; GIFT is offered as an underlying block cipher for both
+      the 64-bit and 128-bit block variants.
+  - source_family_id: aes
+    relations:
+    - related_to
+    note: Simple128 is concretely instantiated using unmodified AES-128 as the underlying block cipher.
+  - source_family_id: present
+    relations:
+    - related_to
+    note: Simple64 is concretely instantiated using unmodified PRESENT as the underlying 64-bit block cipher.
+  - source_family_id: speck
+    relations:
+    - related_to
+    note: Both Simple128 and Simple64 offer instantiations using unmodified Speck as the underlying block cipher, selected
+      for its software efficiency.
+  notes: 'Simple (Gueron, Lindell; NIST LWC Round 1, 2019) is a generic AEAD mode of operation, not a bespoke primitive:
+    it derives a nonce-based IV/tag via CBCMAC-IV and encrypts via CTRENC/CENC, and can wrap any block cipher. Simple128
+    (n=128, k=128) is instantiated with GIFT-128, AES-128, or Speck-128/128; Simple64 (n=64, k=128) is instantiated with
+    GIFT-64, PRESENT, or Speck-64/128.
+
+    '
+  instances:
+  - id: simple128_gift
+    name: Simple128-GIFT
+    type: aead
+    reference_ids:
+    - simple_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 120
+      tag_size_bits: 128
+      block_size_bits: 128
+    notes: Primary submission, instantiated with GIFT-128 as the underlying block cipher.
+- id: spix_aead
+  name: Spix
+  construction_ids:
+  - duplex_mode
+  target_applications:
+  - iot
+  - software
+  reference_ids:
+  - spix_2019
+  process_participations:
+  - process_id: lightweight_crypto_nist_2018_2023
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: sliscp_light
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Spix is a monkey-duplex AEAD mode built directly on the sLiSCP-light-256 permutation, reusing its round function
+      and state layout unchanged.
+  notes: Spix (AlTawy, Gong, He, Mandal, Rohit; NIST LWC Round 1/2, 2019) is a monkey-duplex AEAD mode built on the
+    sLiSCP-light-256 permutation; see sliscp_light for the underlying permutation family.
+  instances:
+  - id: spix_v1
+    name: Spix
+    type: aead
+    reference_ids:
+    - spix_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      rate_bits: 64
+      state_size_bits: 256
+    notes: Recommended parameter set; 128-bit security for confidentiality and integrity.
+- id: spoc_aead
+  name: SpoC
+  construction_ids:
+  - sponge_construction
+  target_applications:
+  - iot
+  - software
+  reference_ids:
+  - spoc_2019
+  process_participations:
+  - process_id: lightweight_crypto_nist_2018_2023
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: sliscp_light
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: SpoC is a sponge-based AEAD mode built directly on sLiSCP-light permutations (sLiSCP-light-192 for SpoC-64,
+      sLiSCP-light-256 for SpoC-128), reusing their round function and state layout unchanged, with a smaller processing
+      rate than the permutation rate to improve privacy bounds.
+  notes: SpoC (AlTawy, Gong, He, Jha, Mandal, Nandi, Rohit; NIST LWC Round 1/2, 2019) is a sponge-based AEAD family;
+    see sliscp_light for the underlying permutation family.
+  instances:
+  - id: spoc_64
+    name: SpoC-64
+    type: aead
+    reference_ids:
+    - spoc_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 64
+      rate_bits: 64
+      state_size_bits: 192
+    notes: Built on sLiSCP-light-192 (c=128, b=192).
+  - id: spoc_128
+    name: SpoC-128
+    type: aead
+    reference_ids:
+    - spoc_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      rate_bits: 128
+      state_size_bits: 256
+    notes: Built on sLiSCP-light-256 (c=128, b=256).
+- id: spook_aead
+  name: Spook
+  construction_ids:
+  - duplex_mode
+  target_applications:
+  - iot
+  - software
+  reference_ids:
+  - spook_2019
+  process_participations:
+  - process_id: lightweight_crypto_nist_2018_2023
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: spook
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Spook's S1P mode is a leakage-resilient sponge/duplex construction built directly on the Shadow-512 permutation
+      for absorption/squeezing and the Clyde-128 tweakable block cipher for tag generation, reusing both unmodified.
+  notes: Spook (Bellizia, Berti, Bronchain, Cassiers, Duval, Guo, Leander, Leurent, Levi, Momin, Pereira, Peters, Standaert,
+    Wiemer; NIST LWC Round 1/2, 2019) is a sponge-based, leakage-resilient AEAD combining a re-keying function, a duplex
+    sponge (Shadow-512), and TBC-based tag generation (Clyde-128) for side-channel and low-energy applications; see
+    spook for the two underlying primitives.
+  instances:
+  - id: spook_v1
+    name: Spook
+    type: aead
+    reference_ids:
+    - spook_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 512
+    notes: Primary parameters (n=128, r=256, c=256, tau=128); a public tweak bit distinguishes single-user from multi-user
+      security variants.
+- id: sycon_aead
+  name: Sycon AEAD
+  construction_ids:
+  - duplex_mode
+  target_applications:
+  - iot
+  - constrained_hardware
+  reference_ids:
+  - sycon_2019
+  process_participations:
+  - process_id: lightweight_crypto_nist_2018_2023
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: sycon
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Sycon AEAD is the MonkeyDuplex-sponge iteration of the Sycon permutation, reusing its round function and state
+      layout unchanged.
+  notes: Sycon AEAD (Sarkar, Mandal, Saha; NIST LWC Round 1, 2019) plugs the 320-bit Sycon permutation into the
+    MonkeyDuplex sponge mode; see sycon for the underlying permutation family and sycon_hash for the paired hash family.
+  instances:
+  - id: sycon_aead_128_r64
+    name: SyconAEAD128r64
+    type: aead
+    reference_ids:
+    - sycon_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      rate_bits: 64
+      state_size_bits: 320
+    notes: Primary instance; 14 rounds for initialization/finalization, 7 rounds for AD/encryption-decryption.
+  - id: sycon_aead_128_r96
+    name: SyconAEAD128r96
+    type: aead
+    reference_ids:
+    - sycon_2019
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      rate_bits: 96
+      state_size_bits: 320
+    notes: Higher-throughput instance; 14 rounds for initialization/finalization, 9 rounds for AD/encryption-decryption.
+- id: sycon_hash
+  name: Sycon Hash
+  construction_ids:
+  - sponge_construction
+  target_applications:
+  - iot
+  - constrained_hardware
+  reference_ids:
+  - sycon_2019
+  process_participations: []
+  influences:
+  - source_family_id: sycon
+    relations:
+    - same_round_function
+    - same_state_layout
+    note: Sycon Hash is the sponge iteration of the Sycon permutation, reusing its round function and state layout unchanged.
+  - source_family_id: sycon_aead
+    relations:
+    - related_to
+    note: Sycon Hash and Sycon AEAD share the same 320-bit Sycon permutation and unified-sponge-mode ancestry, differing
+      only in mode of operation.
+  notes: Sycon Hash (Sarkar, Mandal, Saha; NIST LWC Round 1, 2019) plugs the 320-bit Sycon permutation into a unified
+    sponge hash mode; see sycon for the underlying permutation family.
+  instances:
+  - id: sycon_hash_256
+    name: SyconHASH256
+    type: hash
+    reference_ids:
+    - sycon_2019
+    characteristics:
+      output_size_bits: 256
+      rate_bits: 64
+      capacity_bits: 256
+      state_size_bits: 320
+      rounds: 14
+    notes: 192-bit preimage, 128-bit second-preimage/collision resistance.
 - id: mir_1
   name: MIR-1
   construction_ids:

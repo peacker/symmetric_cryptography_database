@@ -1514,6 +1514,7 @@ references:
   year: 2019
   venue: NIST LWC Round 1 Submission
   url: https://csrc.nist.gov/projects/lightweight-cryptography
+  notes: 'Local copy: references/2019-sycon.pdf.'
 - id: spix_2019
   kind: article
   title: SPIX - Submission to NIST Lightweight Cryptography
@@ -1547,8 +1548,17 @@ references:
   - Davide Bellizia
   - Francesco Berti
   - Olivier Bronchain
+  - Gaetan Cassiers
   - Sebastien Duval
+  - Chun Guo
   - Gregor Leander
+  - Gaetan Leurent
+  - Itamar Levi
+  - Charles Momin
+  - Olivier Pereira
+  - Thomas Peters
+  - Francois-Xavier Standaert
+  - Friedrich Wiemer
   year: 2019
   venue: NIST LWC Round 1 Submission
   url: https://csrc.nist.gov/projects/lightweight-cryptography
@@ -1566,6 +1576,7 @@ references:
   year: 2019
   venue: NIST LWC Round 1 Submission
   url: https://csrc.nist.gov/projects/lightweight-cryptography
+  notes: 'Local copy: references/2019-knot.pdf.'
 - id: pyjamask_2019
   kind: article
   title: Pyjamask - Submission to NIST Lightweight Cryptography
@@ -1890,10 +1901,9 @@ references:
   year: 2019
   notes: 'NIST LWC Round 1 submission. Local copy: references/2019-gage_ingaege.pdf.'
   authors:
-  - Tim Beyne
-  - Yu Long Chen
-  - Christoph Dobraunig
-  - Bart Mennink
+  - Danilo Gligoroski
+  - Hristina Mihajloska
+  - Daniel Otte
   venue: NIST Lightweight Cryptography Standardization, Round 1
   url: https://csrc.nist.gov/projects/lightweight-cryptography
 - id: gost_28147_89_ref

@@ -1064,6 +1064,72 @@ primitive_families:
       rounds: 31
       block_size_bits: 64
       output_size_bits: 64
+- id: spongent
+  name: spongent
+  construction_ids:
+  - bit_based_spn
+  round_ids:
+  - spongent_round
+  target_applications:
+  - lightweight
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: bit_permutation
+    - id: lfsr
+    - id: xor
+  reference_ids:
+  - bogdanov_et_al_2011_spongent
+  process_participations: []
+  influences:
+  - source_family_id: present
+    relations:
+    - same_sbox
+    - similar_bit_based_permutation_layer
+    - generalization_of
+    note: spongent's present-type permutation reuses the PRESENT S-box unchanged and generalizes PRESENT's bit permutation
+      to arbitrary widths.
+  notes: spongent (Bogdanov, Knezevic, Leander, Toz, Varici, Verbauwhede; 2011) is a family of present-type permutations
+    of various widths, each an LFSR-counter-driven iteration of the PRESENT S-box and a bit permutation. See spongent_hash
+    for the hermetic-sponge hash functions built on these permutations; Spongent-pi[160] and Spongent-pi[176] are also
+    reused unmodified by Elephant's Dumbo and Jumbo AEAD instances.
+  instances:
+  - id: spongent_pi_88
+    name: spongent-pi[88]
+    type: permutation
+    reference_ids:
+    - bogdanov_et_al_2011_spongent
+    characteristics:
+      state_size_bits: 88
+      rounds: 45
+      block_size_bits: 88
+      output_size_bits: 88
+  - id: spongent_pi_160
+    name: spongent-pi[160]
+    type: permutation
+    reference_ids:
+    - elephant_2019
+    characteristics:
+      state_size_bits: 160
+      rounds: 80
+      block_size_bits: 160
+      output_size_bits: 160
+    notes: Reused unmodified as the masked permutation in Elephant's Dumbo instance.
+  - id: spongent_pi_176
+    name: spongent-pi[176]
+    type: permutation
+    reference_ids:
+    - elephant_2019
+    characteristics:
+      state_size_bits: 176
+      rounds: 90
+      block_size_bits: 176
+      output_size_bits: 176
+    notes: Reused unmodified as the masked permutation in Elephant's Jumbo instance.
 - id: gift
   name: GIFT
   notes: GIFT is a lightweight bit-permutation SPN derived from PRESENT; its 64- and 128-bit block ciphers also underpin authenticated-encryption
@@ -3928,55 +3994,6 @@ primitive_families:
       rounds: 12
       block_size_bits: 384
       output_size_bits: 384
-- id: elephant
-  name: Elephant
-  notes: Elephant is a lightweight nonce-based AEAD family that masks short permutations such as Spongent-pi, Keccak-p, or
-    Ascon-p rather than maintaining a large keyed state.
-  construction_ids:
-  - and_rx
-  round_ids:
-  - elephant_mode_step
-  target_applications:
-  - iot
-  - constrained_hardware
-  characteristics:
-    components:
-    - id: xor
-    - id: and
-    - id: not
-    - id: rotation_fixed
-    - id: constant
-  reference_ids:
-  - elephant_2019
-  process_participations:
-  - process_id: lightweight_crypto_nist_2018_2023
-    stage_ids:
-    - round_1
-    - round_2
-    - finalist
-    status: finalist
-  influences:
-  - source_family_id: keccak
-    relations:
-    - same_round_function
-    - same_state_layout
-    note: The Delirium instance of Elephant is built directly on Keccak-f[200], the smallest instance of the NIST SHA-3 standard
-      permutation, reusing its round function and 5x5-lane state representation unmodified inside Elephant's LFSR-masked encrypt-then-MAC
-      construction.
-  - source_family_id: spongent
-    relations:
-    - same_round_function
-    note: The Dumbo and Jumbo instances of Elephant name their permutation directly as Spongent-pi[160] and Spongent-pi[176],
-      reusing the spongent present-type permutation unmodified as the masking function in Elephant's construction.
-  instances:
-  - id: elephant_permutation_160
-    name: Elephant Permutation (160-bit profile)
-    type: permutation
-    characteristics:
-      state_size_bits: 160
-      rounds: 80
-      block_size_bits: 160
-      output_size_bits: 160
 - id: romulus
   name: Romulus
   notes: Romulus is a nonce-based AEAD family built around the SKINNY-128-256 tweakable block cipher, with modes tuned for
@@ -4234,7 +4251,7 @@ primitive_families:
 - id: sliscp_light
   name: sLiSCP-light
   construction_ids:
-  - generalized_feistel
+  - and_rx
   round_ids:
   - sliscp_light_round
   target_applications:
@@ -4271,6 +4288,18 @@ primitive_families:
     characteristics:
       state_size_bits: 192
     notes: Partial-SPN successor to sLiSCP-192 with roughly 16% smaller hardware area.
+  - id: sliscp_light_256
+    name: sLiSCP-light-256
+    type: permutation
+    reference_ids:
+    - altawy_et_al_2018_sliscp_light
+    characteristics:
+      state_size_bits: 256
+      rounds: 10
+      block_size_bits: 256
+      output_size_bits: 256
+    notes: Reused unmodified as the core permutation of the Spix and SpoC AEAD submissions (each pairs it with its own
+      monkey-duplex-style mode and rate/capacity split).
 - id: sparx
   name: SPARX
   construction_ids:
@@ -4531,11 +4560,7 @@ primitive_families:
     - id: constant
   reference_ids:
   - sycon_2019
-  process_participations:
-  - process_id: lightweight_crypto_nist_2018_2023
-    stage_ids:
-    - round_1
-    status: candidate
+  process_participations: []
   influences:
   - source_family_id: sliscp
     relations:
@@ -4554,100 +4579,16 @@ primitive_families:
       rounds: 14
       block_size_bits: 320
       output_size_bits: 320
-- id: spix
-  name: SPIX
-  notes: SPIX is a lightweight duplex AEAD design using a 256-bit permutation with Boolean nonlinear layers and rotations.
-  construction_ids:
-  - and_rx
-  round_ids:
-  - spix_permutation_round
-  target_applications:
-  - iot
-  - software
-  characteristics:
-    state_size_bits: 256
-    components:
-    - id: xor
-    - id: and
-    - id: not
-    - id: rotation_fixed
-    - id: constant
-  reference_ids:
-  - spix_2019
-  process_participations:
-  - process_id: lightweight_crypto_nist_2018_2023
-    stage_ids:
-    - round_1
-    - round_2
-    status: candidate
-  influences:
-  - source_family_id: simon
-    relations:
-    - variant_of
-    note: The nonlinear layer of Spix's permutation, the Simeck S-box, is described as an unkeyed independently parameterized
-      variant of the Simon round function, directly adapting Simon's AND-rotation-XOR nonlinear function.
-  - source_family_id: sliscp_light
-    relations:
-    - variant_of
-    - same_round_function
-    note: Spix's permutation is a named sLiSCP-light instance (the P9/P18 sLiSCP-light permutations), reusing sLiSCP-light's
-      partial-SPN round function unmodified.
-  instances:
-  - id: spix_permutation_256
-    name: SPIX Permutation (256-bit)
-    type: permutation
-    characteristics:
-      state_size_bits: 256
-      rounds: 10
-      block_size_bits: 256
-      output_size_bits: 256
-- id: spoc
-  name: SpoC
-  notes: SpoC is a lightweight sponge-based AEAD family that processes plaintext through a rate smaller than the permutation
-    rate to improve privacy bounds.
-  construction_ids:
-  - and_rx
-  round_ids:
-  - spoc_permutation_round
-  target_applications:
-  - iot
-  - software
-  characteristics:
-    state_size_bits: 256
-    components:
-    - id: xor
-    - id: and
-    - id: not
-    - id: rotation_fixed
-    - id: constant
-  reference_ids:
-  - spoc_2019
-  process_participations:
-  - process_id: lightweight_crypto_nist_2018_2023
-    stage_ids:
-    - round_1
-    - round_2
-    status: candidate
-  influences:
-  - source_family_id: sliscp_light
-    relations:
-    - variant_of
-    - same_round_function
-    note: SpoC-64 is defined directly as the sLiSCP-light-[192] permutation instance, reusing its partial-SPN round function
-      unmodified as SpoC's underlying permutation.
-  instances:
-  - id: spoc_permutation_256
-    name: SpoC Permutation (256-bit)
-    type: permutation
-    characteristics:
-      state_size_bits: 256
-      rounds: 10
-      block_size_bits: 256
-      output_size_bits: 256
 - id: spook
-  name: Spook
-  notes: Spook is a lightweight AEAD family combining a tweakable block cipher with a sponge-like mode, with variants aimed
-    at single-user and multi-user security.
+  name: Spook (Clyde-128 / Shadow-512)
+  notes: 'Spook''s S1P mode of operation (see spook_aead) is built from two distinct primitives, both modeled as instances
+    here: Clyde-128, a 128-bit tweakable block cipher (an LS-design in the SCREAM/Fantomas/Robin lineage) used for tag
+    generation, and Shadow-512, a 512-bit unkeyed permutation (a "multiple LS-design", mLS-design, mixing four 128-bit
+    LS-design bundles with an added diffusion layer) used as the sponge/duplex permutation. Despite sharing an LS-design
+    heritage, the two are structurally distinct (keyed tweakable cipher vs. unkeyed wide permutation) and are used for
+    different roles in the mode.
+
+    '
   construction_ids:
   - and_rx
   round_ids:
@@ -4656,7 +4597,6 @@ primitive_families:
   - iot
   - software
   characteristics:
-    state_size_bits: 256
     components:
     - id: xor
     - id: and
@@ -4665,12 +4605,7 @@ primitive_families:
     - id: constant
   reference_ids:
   - spook_2019
-  process_participations:
-  - process_id: lightweight_crypto_nist_2018_2023
-    stage_ids:
-    - round_1
-    - round_2
-    status: candidate
+  process_participations: []
   influences:
   - source_family_id: skinny
     relations:
@@ -4695,14 +4630,25 @@ primitive_families:
     note: Clyde-128 is built from the Tweakable LS-design framework introduced as part of the SCREAM CAESAR candidate and
       directly reuses SCREAM's lightweight tweakey scheduling algorithm.
   instances:
-  - id: spook_permutation_256
-    name: Spook Permutation (256-bit)
+  - id: clyde_128
+    name: Clyde-128
+    type: tweakable_block_cipher
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      tweak_size_bits: 128
+      output_size_bits: 128
+    notes: Tweakable block cipher used by Spook's S1P mode for tag generation; an LS-design with a 128-bit block, key,
+      and tweak.
+  - id: shadow_512
+    name: Shadow-512
     type: permutation
     characteristics:
-      state_size_bits: 256
-      rounds: 12
-      block_size_bits: 256
-      output_size_bits: 256
+      state_size_bits: 512
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: The (r+c)-bit sponge/duplex permutation used by Spook's S1P mode, with primary parameters r=256, c=256; a
+      multiple-LS-design (mLS-design) mixing four 128-bit LS-design bundles with an added diffusion layer.
 - id: knot
   name: KNOT
   notes: KNOT is a family of bit-sliced permutations and sponge modes for lightweight authenticated encryption and hashing.
@@ -4903,59 +4849,6 @@ primitive_families:
       block_size_bits: 256
       key_size_bits: 256
       rounds: 16
-      output_size_bits: 256
-- id: simple
-  name: SIMPLE
-  notes: SIMPLE is a lightweight permutation-based authenticated-encryption design using a 256-bit Boolean permutation and
-    sponge-style processing.
-  construction_ids:
-  - and_rx
-  round_ids:
-  - simple_permutation_round
-  target_applications:
-  - iot
-  - software
-  characteristics:
-    components:
-    - id: xor
-    - id: and
-    - id: not
-    - id: rotation_fixed
-    - id: constant
-  reference_ids:
-  - simple_2019
-  process_participations:
-  - process_id: lightweight_crypto_nist_2018_2023
-    stage_ids:
-    - round_1
-    status: candidate
-  influences:
-  - source_family_id: gift
-    relations:
-    - inspired_by
-    note: Simple128/Simple64 are generic AEAD modes of operation instantiated with GIFT as the primary/recommended underlying
-      block cipher for both 64-bit and 128-bit block variants.
-  - source_family_id: aes
-    relations:
-    - inspired_by
-    note: Simple128 is concretely instantiated using AES-128 as the underlying block cipher.
-  - source_family_id: present
-    relations:
-    - inspired_by
-    note: Simple64 is concretely instantiated using PRESENT as the underlying 64-bit block cipher.
-  - source_family_id: speck
-    relations:
-    - inspired_by
-    note: Both Simple128 and Simple64 offer instantiations using Speck as the underlying block cipher, selected for its software
-      efficiency.
-  instances:
-  - id: simple_permutation_256
-    name: SIMPLE Permutation (256-bit)
-    type: permutation
-    characteristics:
-      state_size_bits: 256
-      rounds: 12
-      block_size_bits: 256
       output_size_bits: 256
 - id: trifle
   name: TRIFLE
@@ -6856,8 +6749,8 @@ primitive_families:
     notes: State-update function F over a 256-bit internal state with variable non-linear feedbacks, and output function f
       using 16 state bits to generate 1 keystream bit per step. Keystream generation is secure up to 2^64 bits in the nonce-respecting
       setting.
-- id: gage_and_ingage
-  name: GAGE and InGAGE
+- id: gage
+  name: GAGE
   construction_ids:
   - bit_based_spn
   round_ids:
@@ -6867,38 +6760,33 @@ primitive_families:
   - hardware
   - iot
   characteristics:
-    block_size_bits: 160
     components:
     - id: sbox
       params:
         input_bits: 4
-        output_bits: 4
+        output_bits: 2
     - id: bit_permutation
     - id: xor
   reference_ids:
   - gage_and_ingage_ref
   process_participations: []
-  influences:
-  - source_family_id: ascon
-    relations:
-    - inspired_by
-    note: InGAGE's duplex-based AEAD mode applies the GAGE sponge permutation modeled directly on Ascon's mode, differing
-      chiefly in state sizes, rate, key/nonce injection point, and padding.
-  notes: GAGE and InGAGE (Beyne et al., NIST LWC Round 1, 2019) are sponge-based constructions. GAGE is the underlying permutation,
-    used by InGAGE for authenticated encryption. The permutation operates on small states (160–384 bits), uses 4-bit S-boxes,
-    and targets RFID and IoT devices.
+  influences: []
+  notes: GAGE (Gligoroski, Mihajloska, Otte; NIST LWC Round 1, 2019) is a family of unkeyed sponge permutations with states
+    from 232 to 576 bits, built from a non-bijective 4-to-2-bit S-box applied in an interleaved chain (the "d-transformation")
+    plus a byte-wise bit-shuffling layer. It underlies both the GAGE hash function (see gage_hash) and the InGAGE AEAD
+    scheme (see ingage_aead).
   instances:
-  - id: gage_and_ingage_v1
-    name: GAGE-6 permutation
-    type: block_cipher
+  - id: gage_permutation_232
+    name: GAGE Permutation (232-bit)
+    type: permutation
     reference_ids:
     - gage_and_ingage_ref
     characteristics:
-      block_size_bits: 160
-      key_size_bits: 128
-      output_size_bits: 160
-      rounds: 80
-    notes: GAGE-6 (state 160 bits) used in InGAGE AEAD.
+      state_size_bits: 232
+      rounds: 32
+      block_size_bits: 232
+      output_size_bits: 232
+    notes: Primary recommendation, GAGE256's underlying permutation -- 232-bit state, rate 8 bits, capacity 224 bits.
 - id: gost_28147_89
   name: GOST 28147-89 (Magma)
   construction_ids:
@@ -9980,6 +9868,18 @@ primitive_families:
       rounds: 20
     notes: A smaller, narrower-lane sibling of Keccak-f[1600] (25 16-bit lanes instead of 25 64-bit lanes), standardized
       alongside it in FIPS 202 and reused unmodified by ISAP-K and by Ketje Sr.
+  - id: keccak_f200
+    name: Keccak-f[200]
+    type: permutation
+    reference_ids:
+    - elephant_2019
+    characteristics:
+      block_size_bits: 200
+      state_size_bits: 200
+      output_size_bits: 200
+      rounds: 18
+    notes: The smallest instance of the Keccak-f permutation family (25 8-bit lanes), reused unmodified as the masked
+      permutation in Elephant's Delirium AEAD instance.
 - id: blake
   name: BLAKE Compression Functions
   construction_ids:

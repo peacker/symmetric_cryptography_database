@@ -637,7 +637,7 @@ processes:
     - family_id: clx
     - family_id: comet
     - family_id: drygascon_aead
-    - family_id: elephant
+    - family_id: elephant_aead
     - family_id: estate
     - family_id: flexaead
     - family_id: forkae
@@ -645,6 +645,7 @@ processes:
     - family_id: gimli
     - family_id: grain_128
     - family_id: hyena
+    - family_id: ingage_aead
     - family_id: isap_aead
     - family_id: knot
     - family_id: laem
@@ -663,18 +664,18 @@ processes:
     - family_id: saeaes
     - family_id: saturnin
     - family_id: shamash_and_shamashash
-    - family_id: simple
+    - family_id: simple_aead
     - family_id: siv_rijndael256
     - family_id: siv_tem_photon
     - family_id: skinny_aead
     - family_id: sneik
     - family_id: sparkle
-    - family_id: spix
-    - family_id: spoc
-    - family_id: spook
+    - family_id: spix_aead
+    - family_id: spoc_aead
+    - family_id: spook_aead
     - family_id: subterranean_2_0
     - family_id: sundae_gift
-    - family_id: sycon
+    - family_id: sycon_aead
     - family_id: tinyjambu
     - family_id: trifle
     - family_id: wage
@@ -692,7 +693,7 @@ processes:
     - family_id: ascon
     - family_id: comet
     - family_id: drygascon_aead
-    - family_id: elephant
+    - family_id: elephant_aead
     - family_id: estate
     - family_id: forkae
     - family_id: fountain
@@ -710,9 +711,9 @@ processes:
     - family_id: romulus
     - family_id: saeaes
     - family_id: sparkle
-    - family_id: spix
-    - family_id: spoc
-    - family_id: spook
+    - family_id: spix_aead
+    - family_id: spoc_aead
+    - family_id: spook_aead
     - family_id: subterranean_2_0
     - family_id: sundae_gift
     - family_id: tinyjambu
@@ -725,7 +726,7 @@ processes:
     kind: outcome
     participants:
     - family_id: ascon
-    - family_id: elephant
+    - family_id: elephant_aead
     - family_id: grain_128
     - family_id: isap_aead
     - family_id: photon_beetle
