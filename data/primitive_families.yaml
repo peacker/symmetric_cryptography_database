@@ -413,6 +413,7 @@ primitive_families:
   name: CHAM
   construction_ids:
   - generalized_feistel
+  - arx_permutation_network
   round_ids:
   - cham_round
   target_applications:
@@ -481,6 +482,7 @@ primitive_families:
   name: CHAM Revised
   construction_ids:
   - generalized_feistel
+  - arx_permutation_network
   round_ids:
   - cham_revised_round
   target_applications:
@@ -546,6 +548,7 @@ primitive_families:
   name: SAECHAM
   construction_ids:
   - generalized_feistel
+  - arx_permutation_network
   round_ids:
   - saecham_round
   target_applications:
@@ -1316,6 +1319,7 @@ primitive_families:
     is offset by equivalent-key and related-key weaknesses.
   construction_ids:
   - feistel
+  - arx_permutation_network
   round_ids:
   - tea_round
   target_applications:
@@ -1360,6 +1364,7 @@ primitive_families:
     addition, shift, and XOR operations.
   construction_ids:
   - feistel
+  - arx_permutation_network
   round_ids:
   - xtea_round
   target_applications:
@@ -1399,6 +1404,7 @@ primitive_families:
   name: Raiden
   construction_ids:
   - feistel
+  - arx_permutation_network
   round_ids:
   - raiden_round
   target_applications:
@@ -1654,6 +1660,7 @@ primitive_families:
     AND, and XOR across several block/key-size profiles.
   construction_ids:
   - feistel
+  - and_rx
   round_ids:
   - simon_round
   target_applications:
@@ -1702,6 +1709,7 @@ primitive_families:
     key sizes.
   construction_ids:
   - feistel
+  - arx_permutation_network
   round_ids:
   - speck_round
   target_applications:
@@ -2367,6 +2375,7 @@ primitive_families:
     algorithms. GSM A5/3 maps a 64-bit Kc into its KASUMI-based construction, while A5/4 uses a full 128-bit key.
   construction_ids:
   - feistel
+  - nested_feistel_network
   round_ids:
   - kasumi_round
   target_applications:
@@ -4216,6 +4225,7 @@ primitive_families:
   name: sLiSCP
   construction_ids:
   - generalized_feistel
+  - and_rx
   round_ids:
   - sliscp_round
   target_applications:
@@ -5098,6 +5108,7 @@ primitive_families:
   name: ANT
   construction_ids:
   - feistel
+  - and_rx
   round_ids:
   - ant_round
   target_applications:
@@ -5643,6 +5654,7 @@ primitive_families:
   name: Ballet
   construction_ids:
   - lay_massey
+  - arx_permutation_network
   round_ids:
   - ballet_round
   target_applications:
@@ -6429,6 +6441,7 @@ primitive_families:
   name: FEAL
   construction_ids:
   - feistel
+  - arx_permutation_network
   round_ids:
   - feal_round
   target_applications:
@@ -6920,7 +6933,8 @@ primitive_families:
 - id: hight
   name: HIGHT
   construction_ids:
-  - generalized_feistel
+  - type2_generalized_feistel
+  - arx_permutation_network
   round_ids:
   - hight_round
   target_applications:
@@ -7135,6 +7149,7 @@ primitive_families:
   name: LEA
   construction_ids:
   - generalized_feistel
+  - arx_permutation_network
   round_ids:
   - lea_round
   target_applications:
@@ -7194,6 +7209,7 @@ primitive_families:
   name: LEA [ISO]
   construction_ids:
   - generalized_feistel
+  - arx_permutation_network
   round_ids:
   - lea_round
   target_applications:
@@ -7310,7 +7326,7 @@ primitive_families:
 - id: limdolen
   name: Limdolen
   construction_ids:
-  - arx_permutation_network
+  - and_rx
   round_ids:
   - limdolen_round
   target_applications:
@@ -7632,6 +7648,7 @@ primitive_families:
   name: MISTY1
   construction_ids:
   - feistel
+  - nested_feistel_network
   round_ids:
   - misty1_round
   target_applications:
@@ -7910,6 +7927,7 @@ primitive_families:
   name: NUSH
   construction_ids:
   - spn
+  - arx_permutation_network
   round_ids:
   - nush_round
   target_applications:
@@ -8228,6 +8246,7 @@ primitive_families:
   name: Quartet
   construction_ids:
   - stream_state_update_generator
+  - and_rx
   round_ids:
   - quartet_round
   target_applications:
@@ -9371,6 +9390,7 @@ primitive_families:
   name: HAVAL Compression Functions
   construction_ids:
   - davies_meyer
+  - arx_permutation_network
   round_ids:
   - haval_pass
   target_applications:
@@ -9884,6 +9904,7 @@ primitive_families:
   name: BLAKE Compression Functions
   construction_ids:
   - davies_meyer
+  - arx_permutation_network
   round_ids:
   - blake_round
   target_applications:
@@ -9957,6 +9978,7 @@ primitive_families:
   name: BLAKE3 Compression Function
   construction_ids:
   - davies_meyer
+  - arx_permutation_network
   round_ids:
   - blake3_round
   target_applications:

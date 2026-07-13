@@ -61,6 +61,98 @@ primitive_constructions:
   notes: 'A Feistel-like structure with more than two branches or a more general branch-update schedule.
 
     '
+- id: type1_generalized_feistel
+  name: Type-1 Generalized Feistel Network
+  abbreviation: Type-1 GFN
+  special_case_of: generalized_feistel
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - CAST-256
+  - MacGuffin
+  notes: 'Nyberg''s Type-1 GFN: the state is split into k > 2 sub-blocks arranged in a cycle, and a single round function
+    is applied to one sub-block and XORed into its neighbor before a cyclic shift of the sub-blocks -- only one sub-block
+    is transformed per round, so k rounds are needed for every sub-block to be updated once.
+
+    '
+- id: type2_generalized_feistel
+  name: Type-2 Generalized Feistel Network
+  abbreviation: Type-2 GFN
+  special_case_of: generalized_feistel
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - CLEFIA
+  - RC6
+  - HIGHT
+  notes: 'Nyberg''s Type-2 GFN: the state is split into k > 2 sub-blocks, and k/2 independent Feistel round functions are
+    applied in parallel each round (each covering a pair of sub-blocks), followed by a cyclic shift -- also known as a
+    "source-heavy" or multi-line generalized Feistel, and the basis of Simon''s generalization to larger word counts.
+
+    '
+- id: type3_generalized_feistel
+  name: Type-3 Generalized Feistel Network
+  abbreviation: Type-3 GFN
+  special_case_of: generalized_feistel
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - MARS (core)
+  notes: 'Nyberg''s Type-3 GFN: the state is split into k > 2 sub-blocks, and k-1 (or k) round functions are applied in
+    a single round, each one taking one sub-block as input and XORing its output into a different sub-block, giving faster
+    full diffusion than Type-1 at higher per-round cost than Type-2.
+
+    '
+- id: source_heavy_unbalanced_feistel
+  name: Source-Heavy Unbalanced Feistel Network
+  abbreviation: SUFN
+  special_case_of: feistel
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - Skipjack
+  notes: 'An unbalanced Feistel network (Schneier/Kelsey) whose round function reads from a larger source block than the
+    (smaller) target block it updates, exposing more state to the round function per round at the cost of needing more
+    rounds for full diffusion.
+
+    '
+- id: target_heavy_unbalanced_feistel
+  name: Target-Heavy Unbalanced Feistel Network
+  abbreviation: TUFN
+  special_case_of: feistel
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - MacGuffin
+  notes: 'An unbalanced Feistel network (Schneier/Kelsey) whose round function updates a larger target block from a smaller
+    source block, mixing more state per round than a balanced Feistel network at the cost of a weaker per-round round-function-to-state
+    ratio.
+
+    '
+- id: alternating_feistel_network
+  name: Alternating Feistel Network
+  abbreviation: AFN
+  special_case_of: feistel
+  typical_primitive_types:
+  - block_cipher
+  notes: 'A Feistel variant that alternates between two differently-sized sub-block splits from round to round (e.g. odd
+    rounds split n/3+2n/3, even rounds split 2n/3+n/3), used in some format-preserving-encryption and wide-block designs
+    to balance diffusion speed against per-round cost.
+
+    '
+- id: nested_feistel_network
+  name: Nested (Recursive) Feistel Network
+  abbreviation: NFN
+  special_case_of: feistel
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - MISTY1
+  - KASUMI
+  notes: 'A Feistel network whose own round function is internally a smaller Feistel network (MISTY''s FO/FI functions),
+    giving a provable-security argument via recursive application of Luby-Rackoff-style bounds.
+
+    '
 - id: lay_massey
   name: Lay-Massey Scheme
   abbreviation: LM
@@ -215,6 +307,16 @@ primitive_constructions:
     second control register used by the two-register Shrinking Generator.
 - id: gufn
   name: Generalized Unbalanced Feistel Network (GUFN)
+  abbreviation: GUFN
+  special_case_of: feistel
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - MacGuffin
+  notes: 'A generalized Feistel network (more than two sub-blocks) in which the sub-blocks are not all the same size,
+    combining the multi-branch structure of a GFN with the source/target size asymmetry of an unbalanced Feistel network.
+
+    '
 - id: irregular_clock_register_pair
   name: Irregular Clock Register Pair
 - id: lfsr_over_extension_field_with_memory
