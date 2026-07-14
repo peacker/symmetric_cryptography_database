@@ -40,7 +40,6 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "selection_of_possible_configurations",
                             "same_sbox",
                             "same_sbox_size",
                             "same_key_schedule",

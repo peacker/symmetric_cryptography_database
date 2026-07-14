@@ -1887,9 +1887,8 @@
     //   - design relations: shared/similar components, or an inherited
     //     structural idea (SPN, Feistel, alpha-reflexivity, ...).
     //   - usage relations: one family is a functional building block of
-    //     another (the "usage_core" group, computed from primitive/mode tier
-    //     crossing rather than a stored tag) or is merely named as one
-    //     possible/example instantiation of a generic mode.
+    //     another (the "usage_core" group -- either an explicit used_by tag,
+    //     or computed from primitive/mode tier crossing).
     // "process" covers administrative facts (standardization) that are
     // neither a design nor a usage relation.
     const RELATION_GROUPS = [
@@ -1906,9 +1905,6 @@
         "generalization_of", "improved_diffusion", "inherits_alpha_reflexivity_structure",
       ] },
       { id: "usage_core", label: "Usage: built on (part of the definition)", members: ["__usage_core__", "used_by"], synthetic: true },
-      { id: "usage_example", label: "Usage: named as an example or alternative", members: [
-        "selection_of_possible_configurations",
-      ] },
       { id: "process", label: "Process: standardization", members: [
         "standardization_of",
       ] },
@@ -1920,14 +1916,13 @@
     })();
 
     // A mode/primitive built directly on another (crossing tiers) is always
-    // a usage relation, unless it's merely named as one of several possible
-    // configurations (which gets its own, separate group above).
+    // a usage relation.
     function edgeRelationKeys(edge) {
       const rels = edgeRelations(edge);
       const keys = new Set(rels);
       const srcTier = genDims.familyTierById.get(String(edge.source_family_id || ""));
       const tgtTier = genDims.familyTierById.get(String(edge.target_family_id || ""));
-      if (srcTier && tgtTier && srcTier !== tgtTier && !rels.includes("selection_of_possible_configurations")) {
+      if (srcTier && tgtTier && srcTier !== tgtTier) {
         keys.add("__usage_core__");
       }
       return keys;

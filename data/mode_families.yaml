@@ -5960,7 +5960,7 @@ mode_families:
       implementation), adopting Serpent's bit-slice-friendly SPN structure for efficient software implementation.
   - source_family_id: lucifer
     relations:
-    - selection_of_possible_configurations
+    - inspired_by
     note: JH's S-box application uses round-constant bits to select between two S-boxes at each position, a mechanism the
       specification describes as similar to Lucifer, increasing algebraic complexity versus simple constant XOR.
   - source_family_id: cs_cipher

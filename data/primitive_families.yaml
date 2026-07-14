@@ -754,7 +754,7 @@ primitive_families:
   influences:
   - source_family_id: rijndael
     relations:
-    - selection_of_possible_configurations
+    - standardization_of
     - same_sbox
     - same_mix_column
     - same_shift_row
@@ -777,6 +777,9 @@ primitive_families:
   - id: aes_128
     name: AES-128
     type: block_cipher
+    reference_ids:
+    - fips_197
+    - iso_iec_18033_3_2010
     characteristics:
       key_size_bits: 128
       rounds: 10
@@ -785,6 +788,9 @@ primitive_families:
   - id: aes_192
     name: AES-192
     type: block_cipher
+    reference_ids:
+    - fips_197
+    - iso_iec_18033_3_2010
     characteristics:
       key_size_bits: 192
       rounds: 12
@@ -793,6 +799,9 @@ primitive_families:
   - id: aes_256
     name: AES-256
     type: block_cipher
+    reference_ids:
+    - fips_197
+    - iso_iec_18033_3_2010
     characteristics:
       key_size_bits: 256
       rounds: 14
