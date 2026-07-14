@@ -7660,7 +7660,15 @@ primitive_families:
   reference_ids:
   - mibs_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - inspired_by
+    note: 'Structural deduction: no local copy of the original CANS 2009 paper was available to check for an explicit
+      citation. MIBS is confirmed (via secondary literature) to be a classical 64-bit, 32-round balanced Feistel network,
+      matching DES''s design pattern; its SPN-structured F-function (4-bit S-boxes plus a nibble permutation layer) is
+      in the lightweight-cipher tradition of PRESENT rather than DES specifically, so a PRESENT edge may also be warranted
+      pending primary-source verification.'
   notes: MIBS (Izadi et al., CANS 2009) is a lightweight 64-bit Feistel block cipher with 64 or 80-bit key and 32 rounds,
     targeting RFID. Its F-function uses a 4-bit S-box substitution and a nibble permutation linear layer.
   instances:
@@ -10380,17 +10388,30 @@ primitive_families:
       rounds: 48
 - id: newdes
   name: NewDES
-  notes: NewDES is a 64-bit, 120-bit-key Feistel-like cipher designed as a simpler alternative to DES, using byte-oriented
-    XOR and a fixed substitution table.
+  notes: 'NewDES is a 64-bit, 120-bit-key product cipher designed as a simpler alternative to DES. CORRECTION (this audit):
+    previously misclassified as a classical Feistel network and reusing DES''s own round definition -- per its Wikipedia
+    description, NewDES has no half-block split/swap at all; each of its 17 rounds instead XORs subkey material into each
+    of the block''s eight 1-byte sub-blocks in sequence, feeding each through a fixed S-box whose output is XORed into
+    the next byte. Its own Wikipedia article states explicitly: "Despite its name, it is not derived from DES and has
+    quite a different structure." Retagged as generic spn pending a primary-source reclassification (Robert Scott,
+    Cryptologia 1985, not available locally) and a dedicated round definition (still reusing des_round, which is wrong);
+    deliberately did not add a DES influence edge given the explicit "not derived from DES" statement.
+
+    '
   construction_ids:
-  - feistel
+  - spn
   round_ids:
   - des_round
   target_applications:
   - encryption
   characteristics:
     block_size_bits: 64
-    components: []
+    components:
+    - id: xor
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
   reference_ids:
   - newdes_ref
   process_participations: []
