@@ -70,9 +70,11 @@ primitive_constructions:
   placeholder_family_names:
   - CAST-256
   - MacGuffin
-  notes: 'Nyberg''s Type-1 GFN: the state is split into k > 2 sub-blocks arranged in a cycle, and a single round function
-    is applied to one sub-block and XORed into its neighbor before a cyclic shift of the sub-blocks -- only one sub-block
-    is transformed per round, so k rounds are needed for every sub-block to be updated once.
+  notes: 'Zheng, Matsumoto, and Imai''s Type-1 GFN (CRYPTO ''89), formalized as Feistel1[k, n] by Hoang and Rogaway (''On
+    Generalized Feistel Networks'', CRYPTO 2010): the state is split into k > 2 sub-blocks arranged in a cycle, and a single
+    round function is applied to one sub-block and XORed into its neighbor before a cyclic shift of the sub-blocks -- only
+    one sub-block is transformed per round, so k rounds are needed for every sub-block to be updated once. Hoang and Rogaway
+    name CAST-256 as the running example of a cipher using this structure.
 
     '
 - id: type2_generalized_feistel
@@ -85,9 +87,10 @@ primitive_constructions:
   - CLEFIA
   - RC6
   - HIGHT
-  notes: 'Nyberg''s Type-2 GFN: the state is split into k > 2 sub-blocks, and k/2 independent Feistel round functions are
-    applied in parallel each round (each covering a pair of sub-blocks), followed by a cyclic shift -- also known as a
-    "source-heavy" or multi-line generalized Feistel, and the basis of Simon''s generalization to larger word counts.
+  notes: 'Zheng, Matsumoto, and Imai''s Type-2 GFN (CRYPTO ''89), formalized as Feistel2[k, n] by Hoang and Rogaway (''On
+    Generalized Feistel Networks'', CRYPTO 2010): the state is split into k > 2 sub-blocks, and k/2 independent round functions
+    are applied in parallel each round (each covering a pair of sub-blocks), followed by a cyclic shift. Hoang and Rogaway
+    name RC6 as the running example of a cipher using this structure.
 
     '
 - id: type3_generalized_feistel
@@ -98,35 +101,92 @@ primitive_constructions:
   - block_cipher
   placeholder_family_names:
   - MARS (core)
-  notes: 'Nyberg''s Type-3 GFN: the state is split into k > 2 sub-blocks, and k-1 (or k) round functions are applied in
-    a single round, each one taking one sub-block as input and XORing its output into a different sub-block, giving faster
-    full diffusion than Type-1 at higher per-round cost than Type-2.
+  notes: 'Zheng, Matsumoto, and Imai''s Type-3 GFN (CRYPTO ''89), formalized as Feistel3[k, n] by Hoang and Rogaway (''On
+    Generalized Feistel Networks'', CRYPTO 2010): the state is split into k > 2 sub-blocks, and k-1 round functions are
+    applied in parallel each round, each one taking one sub-block as input and XORing its output into the next sub-block,
+    followed by a cyclic shift. Hoang and Rogaway name MARS''s cryptographic core as the running example of a cipher using
+    this structure.
+
+    '
+- id: type4_generalized_feistel
+  name: Type-4 Generalized Feistel Network
+  abbreviation: Type-4 GFN
+  special_case_of: generalized_feistel
+  typical_primitive_types:
+  - block_cipher
+  notes: 'Introduced by Hoang and Rogaway (''On Generalized Feistel Networks'', CRYPTO 2010, Fig. 6 of the full/revised
+    version) purely as the network whose forward direction has the same NCPA security as the inverse of a Type-1 GFN: a
+    single round function is applied to one sub-block and XORed into its neighbor, exactly as in Type-1, but the cyclic
+    shift of the k sub-blocks runs in the opposite direction/offset. No block cipher is known to use Type-4 GFN directly
+    as its native design structure -- it exists solely as a proof device for characterizing Type-1''s inverse.
+
+    '
+- id: type5_generalized_feistel
+  name: Type-5 Generalized Feistel Network
+  abbreviation: Type-5 GFN
+  special_case_of: generalized_feistel
+  typical_primitive_types:
+  - block_cipher
+  notes: 'Introduced by Hoang and Rogaway (''On Generalized Feistel Networks'', CRYPTO 2010, Fig. 6 of the full/revised
+    version) purely as the network whose forward direction has the same NCPA security as the inverse of a Type-3 GFN: unlike
+    Type-3''s k-1 round functions applied in parallel to the unmodified sub-blocks, Type-5 chains them -- each round function
+    consumes the previous round function''s just-computed output rather than the original sub-block -- before a cyclic
+    shift. No block cipher is known to use Type-5 GFN directly as its native design structure -- it exists solely as a
+    proof device for characterizing Type-3''s inverse.
+
+    '
+- id: unbalanced_feistel
+  name: Unbalanced Feistel Network
+  abbreviation: UFN
+  special_case_of: feistel
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - Skipjack
+  notes: 'A Feistel network whose round function F: {0,1}^n -> {0,1}^m has n != m, so the two halves being combined are
+    of different sizes -- described by Schneier and Kelsey (''Unbalanced Feistel Networks and Block Cipher Design'', FSE
+    1996) and formalized as Feistel[m, n] by Hoang and Rogaway (''On Generalized Feistel Networks'', CRYPTO 2010), who name
+    Skipjack as the running example of a cipher using this structure. The round function is called contracting when n
+    > m and expanding when n <= m.
+
+    '
+- id: unbalanced_numeric_feistel
+  name: Unbalanced Numeric Feistel Network
+  abbreviation: UFN#
+  special_case_of: unbalanced_feistel
+  typical_primitive_types:
+  - block_cipher
+  notes: 'The numeric variant of an unbalanced Feistel network: instead of splitting a bit-string into two halves, it enciphers
+    a number x = aN + b in Z_(MN) using a round function F: Z_N -> Z_M and modular addition in place of xor. Formalized
+    as Feistel#[M, N] by Hoang and Rogaway (''On Generalized Feistel Networks'', CRYPTO 2010); used in format-preserving-encryption
+    modes of operation such as the NIST FFX proposal and the Thorp-shuffle-based card-shuffling technique, rather than
+    in any fixed-width block cipher in this database.
 
     '
 - id: source_heavy_unbalanced_feistel
   name: Source-Heavy Unbalanced Feistel Network
   abbreviation: SUFN
-  special_case_of: feistel
+  special_case_of: unbalanced_feistel
   typical_primitive_types:
   - block_cipher
   placeholder_family_names:
   - Skipjack
   notes: 'An unbalanced Feistel network (Schneier/Kelsey) whose round function reads from a larger source block than the
     (smaller) target block it updates, exposing more state to the round function per round at the cost of needing more
-    rounds for full diffusion.
+    rounds for full diffusion -- equivalent to what Hoang and Rogaway call the contracting case (n > m) of Feistel[m, n].
 
     '
 - id: target_heavy_unbalanced_feistel
   name: Target-Heavy Unbalanced Feistel Network
   abbreviation: TUFN
-  special_case_of: feistel
+  special_case_of: unbalanced_feistel
   typical_primitive_types:
   - block_cipher
   placeholder_family_names:
   - MacGuffin
   notes: 'An unbalanced Feistel network (Schneier/Kelsey) whose round function updates a larger target block from a smaller
     source block, mixing more state per round than a balanced Feistel network at the cost of a weaker per-round round-function-to-state
-    ratio.
+    ratio -- equivalent to what Hoang and Rogaway call the expanding case (n <= m) of Feistel[m, n].
 
     '
 - id: alternating_feistel_network
@@ -135,9 +195,26 @@ primitive_constructions:
   special_case_of: feistel
   typical_primitive_types:
   - block_cipher
-  notes: 'A Feistel variant that alternates between two differently-sized sub-block splits from round to round (e.g. odd
-    rounds split n/3+2n/3, even rounds split 2n/3+n/3), used in some format-preserving-encryption and wide-block designs
-    to balance diffusion speed against per-round cost.
+  placeholder_family_names:
+  - BEAR/LION
+  notes: 'A Feistel network whose rounds alternate between a contracting Feistel(m, n) permutation (odd rounds) and an
+    expanding Feistel(n, m) permutation (even rounds), described by Anderson and Biham (''Two Practical and Provably Secure
+    Block Ciphers: BEAR and LION'', FSE 1996) and by Lucks (''Faster Luby-Rackoff Ciphers'', FSE 1996), and formalized
+    as FeIsTeL[m, n] by Hoang and Rogaway (''On Generalized Feistel Networks'', CRYPTO 2010), who name BEAR/LION as the
+    running example of a cipher using this structure -- there it wraps a hash function (contracting round) and a stream
+    cipher (expanding round) around each other rather than using a small pseudorandom round function.
+
+    '
+- id: alternating_numeric_feistel
+  name: Alternating Numeric Feistel Network
+  abbreviation: AFN#
+  special_case_of: alternating_feistel_network
+  typical_primitive_types:
+  - block_cipher
+  notes: 'The numeric variant of an alternating Feistel network: rounds alternate between numeric Feistel (M, N) and (N,
+    M) permutations over Z_(MN) instead of bit-strings. Formalized as FeIsTeL#[M, N] by Hoang and Rogaway (''On Generalized
+    Feistel Networks'', CRYPTO 2010); used in format-preserving-encryption modes of operation such as the NIST FFX proposal,
+    rather than in any fixed-width block cipher in this database.
 
     '
 - id: nested_feistel_network

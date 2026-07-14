@@ -4070,3 +4070,15 @@ references:
   venue: ASIACRYPT 2022, LNCS 13791, pp. 256-286
   url: https://doi.org/10.1007/978-3-031-22963-3_9
   notes: 'Introduces the Forró ARX stream cipher. Local copy: references/2022-forro.pdf.'
+- id: hoang_rogaway_2010_generalized_feistel
+  kind: paper
+  title: On Generalized Feistel Networks
+  authors: [Viet Tung Hoang, Phillip Rogaway]
+  year: 2010
+  venue: CRYPTO 2010, LNCS 6223, Springer, pp. 613-630; full version Cryptology ePrint Archive report 2010/301 (revised
+    2018-07-09)
+  url: https://eprint.iacr.org/2010/301
+  notes: 'Survey and provable-security unification of generalized Feistel network variants: unbalanced, alternating,
+    type-1/2/3 (attributed to Zheng-Matsumoto-Imai, CRYPTO ''89), and their numeric (format-preserving) counterparts.
+    The 2018-07-09 revision additionally defines Type-4 and Type-5 Feistel networks (its Fig. 6) as proof devices for
+    characterizing the inverses of Type-1 and Type-3 respectively. Local copy: references/2010-generalized_feistel.pdf.'
