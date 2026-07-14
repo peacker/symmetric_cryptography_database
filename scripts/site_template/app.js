@@ -794,6 +794,63 @@
     };
   }
 
+  // Builds the "Relations shown in genealogy" filter panel: one collapsible
+  // section per relation group (design/usage/process, see RELATION_GROUPS in
+  // setupGenealogy), each with its own include-this-group toggle and a
+  // checklist of the individual relation tags inside it, mirroring the
+  // tier-section pattern used for Types/Constructions/Targets/Processes.
+  // groups: [{ id, label, members: [relationKey, ...], synthetic? }]
+  // edgeRelationKeys(edge): Set of relation keys (raw tags plus any synthetic
+  // ones such as "__usage_core__") that apply to that influence edge.
+  function createRelationFilterPanel(groups, edgeRelationKeys, onChange) {
+    const container = document.getElementById("genRelationFilterPanel");
+    const RELATION_LABELS = { __usage_core__: "(implied: mode/primitive built directly on the other)" };
+    const relLabel = (key) => RELATION_LABELS[key] || key.replace(/_/g, " ");
+
+    if (container) {
+      container.innerHTML = groups.map((g, i) => `
+        <div class="tier-section">
+          <label class="inline-check tier-section-toggle"><input id="genRelGroup${i}Toggle" type="checkbox" checked /> <strong>${escapeHtml(g.label)}</strong></label>
+          <div class="viz-filter-actions">
+            <button id="genRelGroup${i}All" type="button">All</button>
+            <button id="genRelGroup${i}None" type="button">None</button>
+          </div>
+          <div id="genRelGroup${i}Filters" class="filter-checklist viz-filter-checklist"></div>
+        </div>`).join("");
+    }
+
+    const relSel = new Map();
+    const groupToggles = new Map();
+    groups.forEach((g, i) => {
+      g.members.forEach((m) => { if (!relSel.has(m)) relSel.set(m, true); });
+      const toggle = document.getElementById(`genRelGroup${i}Toggle`);
+      groupToggles.set(g.id, toggle);
+      if (toggle) toggle.addEventListener("change", onChange);
+      buildChecklistFilter(
+        document.getElementById(`genRelGroup${i}Filters`), relSel,
+        g.members.map((m) => ({ key: m, label: relLabel(m) })),
+        document.getElementById(`genRelGroup${i}All`), document.getElementById(`genRelGroup${i}None`),
+        onChange,
+      );
+    });
+    const memberToGroup = new Map(groups.flatMap((g) => g.members.map((m) => [m, g.id])));
+
+    function isEdgeVisible(edge) {
+      const keys = Array.from(edgeRelationKeys(edge));
+      if (!keys.length) return true;
+      const anyChecked = Array.from(relSel.values()).some((v) => v);
+      if (!anyChecked) return true;
+      return keys.some((k) => {
+        const gid = memberToGroup.get(k);
+        const toggle = gid ? groupToggles.get(gid) : null;
+        if (toggle && !toggle.checked) return false;
+        return relSel.get(k) !== false;
+      });
+    }
+
+    return { isEdgeVisible };
+  }
+
   function setupFamilyVisualization() {
     const plotSvg = document.getElementById("familyVizPlot");
     const xAxisSvg = document.getElementById("familyVizXAxis");
@@ -1822,10 +1879,65 @@
       return rs.length ? rs : (fb ? [fb] : ["related"]);
     }
 
+    // ── Relation-type groups ────────────────────────────────────────────
+    // Groups the raw relation tags into the two broad kinds of relationship
+    // this database records, per the same distinction a reader would draw
+    // between "these two designs share an idea/component" and "one of these
+    // is literally built out of the other" (e.g. Keccak used inside SHA-3):
+    //   - design relations: shared/similar components, or an inherited
+    //     structural idea (SPN, Feistel, alpha-reflexivity, ...).
+    //   - usage relations: one family is a functional building block of
+    //     another (the "usage_core" group, computed from primitive/mode tier
+    //     crossing rather than a stored tag) or is merely named as one
+    //     possible/example instantiation of a generic mode.
+    // "process" covers administrative facts (standardization) that are
+    // neither a design nor a usage relation.
+    const RELATION_GROUPS = [
+      { id: "design_component", label: "Design: shared or similar component", members: [
+        "same_sbox", "same_sbox_size", "same_mix_column", "similar_mix_column",
+        "same_shift_row", "similar_shift_row", "same_round_constants",
+        "same_key_schedule", "same_bit_based_permutation_layer", "similar_bit_based_permutation_layer",
+      ] },
+      { id: "design_structure", label: "Design: shared round function or state layout", members: [
+        "same_round_function", "same_state_layout",
+      ] },
+      { id: "design_idea", label: "Design: inherited architecture or idea", members: [
+        "inspired_by", "related_to", "variant_of", "improvement_of",
+        "generalization_of", "improved_diffusion", "inherits_alpha_reflexivity_structure",
+      ] },
+      { id: "usage_core", label: "Usage: built on (part of the definition)", members: ["__usage_core__"], synthetic: true },
+      { id: "usage_example", label: "Usage: named as an example or alternative", members: [
+        "selection_of_possible_configurations",
+      ] },
+      { id: "process", label: "Process: standardization", members: [
+        "standardization_of",
+      ] },
+    ];
+    (function addCatchAllGroup() {
+      const grouped = new Set(RELATION_GROUPS.flatMap((g) => g.members));
+      const leftover = relationTypes.filter((r) => !grouped.has(r));
+      if (leftover.length) RELATION_GROUPS.push({ id: "other", label: "Other", members: leftover });
+    })();
+
+    // A mode/primitive built directly on another (crossing tiers) is always
+    // a usage relation, unless it's merely named as one of several possible
+    // configurations (which gets its own, separate group above).
+    function edgeRelationKeys(edge) {
+      const rels = edgeRelations(edge);
+      const keys = new Set(rels);
+      const srcTier = genDims.familyTierById.get(String(edge.source_family_id || ""));
+      const tgtTier = genDims.familyTierById.get(String(edge.target_family_id || ""));
+      if (srcTier && tgtTier && srcTier !== tgtTier && !rels.includes("selection_of_possible_configurations")) {
+        keys.add("__usage_core__");
+      }
+      return keys;
+    }
+
     // ── Filter state ──────────────────────────────────────────────────
     let genYrBounds = null;
 
     const genFilterPanel = createTierFilterPanel("gen", genDims, genFamilyProcessMap, genProcessList, () => render());
+    const genRelationFilterPanel = createRelationFilterPanel(RELATION_GROUPS, edgeRelationKeys, () => render());
 
     function initFilters() {
       const yrs = families.map((f) => Number(f.year)).filter(isFinite).sort((a, b) => a - b);
@@ -2586,6 +2698,10 @@
 
       const eligibleIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVis(fid, true));
       const eligibleSet = new Set(eligibleIds);
+      // A relation the user has unchecked is treated as absent for every
+      // purpose below, including the search's relation-degree hop -- hidden
+      // relations shouldn't let the BFS reach through them either.
+      const relVisibleInfluences = influences.filter((e) => genRelationFilterPanel.isEdgeVisible(e));
       const needle = genFamilySearch.value.trim().toLowerCase();
       let visIds = eligibleIds;
       if (needle) {
@@ -2600,7 +2716,7 @@
         const expanded = new Set(matched);
         for (let hop = 0; hop < degree && frontier.size; hop++) {
           const next = new Set();
-          influences.forEach((e) => {
+          relVisibleInfluences.forEach((e) => {
             const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
             if (frontier.has(src) && eligibleSet.has(tgt) && !expanded.has(tgt)) next.add(tgt);
             if (frontier.has(tgt) && eligibleSet.has(src) && !expanded.has(src)) next.add(src);
@@ -2618,7 +2734,7 @@
         genPlot.appendChild(msg); genFrame.style.height = "200px"; if (genLegend) genLegend.hidden = true; return;
       }
 
-      const visEdges = influences.filter((e) => visSet.has(String(e.source_family_id || "")) && visSet.has(String(e.target_family_id || "")));
+      const visEdges = relVisibleInfluences.filter((e) => visSet.has(String(e.source_family_id || "")) && visSet.has(String(e.target_family_id || "")));
 
       const inE = new Map(visIds.map((n) => [n, []])); const outE = new Map(visIds.map((n) => [n, []]));
       visEdges.forEach((e) => { const src = String(e.source_family_id); const tgt = String(e.target_family_id); inE.get(tgt).push(src); outE.get(src).push(tgt); });
