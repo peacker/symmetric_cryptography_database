@@ -6772,12 +6772,6 @@ mode_families:
     - inspired_by
     note: The Xoodoo permutation underlying Xoodyak is explicitly described as inspired by Keccak-p and based on the same
       principles, sharing similar weak-alignment diffusion behavior though with a narrower 3-bit chi nonlinear layer.
-  - source_family_id: gimli
-    relations:
-    - inspired_by
-    - selection_of_possible_configurations
-    note: The 384-bit state width chosen for the Xoodoo permutation underlying Xoodyak is explicitly stated to be dimensioned
-      like Gimli for efficiency on low-end 32-bit processors.
   notes: 'Daemen et al. 2019. Xoodyak uses XOODOO[12] (384-bit state = 3 planes × 4×32-bit lanes, 12 rounds) in Cyclist mode
     (lightweight duplex). XOODOO round: θ (column parity mixing with 2D lane shifts), ρ_west (plane shift (1,0) and (0,11)),
     ι (XOR round constant C_i), χ (nonlinear: B_y = Ā_{(y+1) mod 3} · A_{(y+2) mod 3}, A_y += B_y), ρ_east (shifts (0,1) and

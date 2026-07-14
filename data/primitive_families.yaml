@@ -4001,6 +4001,11 @@ primitive_families:
     - related_to
     note: 3-Way's paper specifies gamma as parallel 3-bit substitution boxes; Xoodoo's paper specifies chi on 3-bit columns.
       This records the shared S-box width, not a claim that their S-boxes are identical or that Xoodoo descends from 3-Way.
+  - source_family_id: gimli
+    relations:
+    - inspired_by
+    note: Xoodoo's 384-bit state width is explicitly stated to be dimensioned like Gimli for efficiency on low-end 32-bit
+      processors.
   instances:
   - id: xoodoo_permutation_384
     name: Xoodoo Permutation (384-bit)
