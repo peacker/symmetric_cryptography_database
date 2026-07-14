@@ -433,6 +433,9 @@ references:
   organization: IETF
   status: informational
   url: https://www.rfc-editor.org/rfc/rfc2994
+  notes: 'Local copy: references/2000-misty1-rfc2994.txt. Note: references/2000-misty1.pdf is a mislabeled 1-page NESSIE
+    submission cover sheet, not this specification -- it fuzzy-matches the "misty1" family name by filename only and
+    should probably be removed or renamed.'
 - id: fleischmann_2009_sha3_classification
   kind: article
   title: Classification of the SHA-3 Candidates
@@ -785,6 +788,7 @@ references:
   venue: 3GPP
   organization: 3GPP
   status: active
+  notes: 'Local copy: references/2001-kasumi-ts35202.pdf.'
   url: https://www.3gpp.org/ftp/Specs/archive/35_series/35.202/
 - id: katagi_moriai_2011_clefia
   kind: standard

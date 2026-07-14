@@ -37,6 +37,12 @@ KNOWN_EXCEPTIONS = {
     # (2001). The dependency is real (HMAC-SHA256 wraps SHA-256), just dated
     # by the generic-construction paper rather than a SHA-256-specific one.
     ("hmac_sha256", "sha2_hash"),
+    # DFC (1998) discusses MISTY/the Nyberg-Knudsen provable-security paradigm
+    # as a prior alternative approach; Matsui's original MISTY1 paper is FSE
+    # 1997, predating DFC, but our only misty1 references are RFC 2994 and
+    # the NESSIE submission document (both 2000) -- the original FSE 1997
+    # paper wasn't locatable as a separate citable reference.
+    ("dfc", "misty1"),
 }
 
 

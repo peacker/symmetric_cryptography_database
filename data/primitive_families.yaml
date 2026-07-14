@@ -2195,7 +2195,13 @@ primitive_families:
   - iso_iec_18033_3_2010
   - lee_et_al_2005_seed
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - inspired_by
+    note: 'Structural deduction, not a stated citation: SEED''s specification (1998-seed.pdf) names no predecessor cipher
+      anywhere, but its top level is a classical balanced Feistel network -- "A 128-bit input is divided into two 64-bit
+      blocks and the right 64-bit block is an input to the round function F" over 16 rounds -- matching DES''s design pattern.'
   instances:
   - id: seed_128
     name: SEED
@@ -2409,7 +2415,14 @@ primitive_families:
   - 3gpp_ts_55_216_a5_3
   - 3gpp_ts_55_226_a5_4
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: misty1
+    relations:
+    - inspired_by
+    - variant_of
+    note: KASUMI is a direct 3GPP/ETSI SAGE modification of MISTY1 (simplified FL function placement/key schedule, fixed
+      S-boxes), a well-documented fact from the public design history of the algorithm; the normative 3GPP TS 35.202 spec
+      itself is a pure algorithm definition with no design-rationale section, so this is not a citation from that document.
   instances:
   - id: kasumi_128
     name: KASUMI
@@ -2663,7 +2676,23 @@ primitive_families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: lucifer
+    relations:
+    - inspired_by
+    note: DFC's own EF sub-function is explicitly described as "a 4-round Feistel scheme (see Feistel [8])", citing H. Feistel's
+      1973 Scientific American paper introducing the Feistel/Lucifer construction.
+  - source_family_id: des
+    relations:
+    - related_to
+    note: DFC's specification frames DES as its historical predecessor and explicit performance/security benchmark, not
+      a structural ancestor, e.g. "The Data Encryption Standard initiated an important open research area" and, in the
+      conclusion, "faster than DES and hopefully more secure than triple-DES."
+  - source_family_id: misty1
+    relations:
+    - related_to
+    note: DFC's specification discusses MISTY (Matsui) and the Nyberg-Knudsen provable-security paradigm as an alternative
+      approach that DFC's own decorrelation theory improves on, not as a design borrowing.
   notes: 'DFC (Decorrelated Fast Cipher) uses decorrelation theory to provide provable security against differential and linear
     cryptanalysis.
 
@@ -2722,7 +2751,13 @@ primitive_families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - inspired_by
+    note: 'Structural deduction, not a stated citation: E2''s specification (1998-e2.pdf) has no bibliography or references
+      section at all, but its data-randomizing part is explicitly "a 12-round Feistel cipher structure with F-Function"
+      -- classical balanced two-branch Feistel (Rr = Lr-1 XOR F(Rr-1); Lr = Rr-1) -- matching DES''s design pattern.'
   notes: 'E2 (Efficient Encryption) by NTT uses a 12-round Feistel with initial and final key mixing transformations (IT/FT).
 
     '
@@ -2950,7 +2985,13 @@ primitive_families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: lucifer
+    relations:
+    - inspired_by
+    note: MAGENTA's specification states "the complete MAGENTA block cipher makes use of the well-known Feistel construction
+      [3]", citing Feistel, Notz & Smith's 1975 IEEE paper on the Feistel/Lucifer construction; DES itself is cited only
+      as a differential/linear-cryptanalysis comparison point, not as a design ancestor.
   notes: 'MAGENTA (Method for Assurance of Generally Networked Technical Architectures) by Deutsche Telekom uses the PE function
     built over GF(2^8).
 
@@ -6118,7 +6159,14 @@ primitive_families:
     stage_ids:
     - candidate_recommended_block_64bit
     status: candidate_recommended
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - related_to
+    note: CIPHERUNICORN-E's specification explicitly frames its parameters against DES -- "Block size is 64 bits, the same
+      as that of the Data Encryption Standard (DES), while secret key length is 128 bits, longer than that of DES" --
+      and cites the Feistel structure's advantages (equal encrypt/decrypt speed, unrestricted round-function design, thorough
+      analysis) as its reason for adopting it, without naming a more specific structural ancestor.
   notes: CIPHERUNICORN-E (NEC, 1998) is a 64-bit Feistel block cipher supporting 64 and 128-bit keys with 16 rounds. It was
     submitted as a CRYPTREC candidate for e-government use.
   instances:
@@ -6846,7 +6894,14 @@ primitive_families:
   reference_ids:
   - gost_28147_89_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - inspired_by
+    note: 'Structural deduction, not a stated citation: this document (RFC 5830''s translation of the Soviet standard)
+      names no predecessor cipher and does not use the word "Feistel" anywhere, but its round structure -- 64-bit block
+      split into two 32-bit halves, round function XORed into one half, halves swapped, for 32 rounds -- is a classical
+      balanced Feistel network matching DES''s design pattern.'
   notes: GOST 28147-89 is a 32-round Feistel block cipher with a 256-bit key.
   instances:
   - id: gost_28147_89_v1
@@ -7703,7 +7758,15 @@ primitive_families:
     stage_ids:
     - candidate_recommended_block_64bit
     status: candidate_recommended
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - inspired_by
+    note: 'Structural deduction, not a stated citation: RFC 2994 explicitly frames MISTY1''s design goal as provable security
+      against differential/linear cryptanalysis (citing Nyberg/Knudsen''s theory) and names no cipher as a design ancestor
+      -- DES appears only as a security-margin comparison ("probabilities of DES are..."). This edge reflects only that
+      MISTY1''s outer structure is still an 8-round classical balanced Feistel network (each FO round splits/swaps 32-bit
+      halves), not a claimed lineage from DES.'
   notes: MISTY1 (Matsui, Mitsubishi Electric; FSE 1997) is a 64-bit recursive Feistel block cipher with a 128-bit key and
     8 outer rounds (FO). Each FO round contains three FI sub-rounds, which use 7×7 (S7) and 9×9 (S9) S-boxes plus FL/FLinv
     key mixing layers. It is specified by RFC 2994 and ISO/IEC 18033-3:2010.
