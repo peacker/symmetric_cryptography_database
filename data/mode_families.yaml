@@ -5637,7 +5637,7 @@ mode_families:
   influences:
   - source_family_id: keccak
     relations:
-    - selection_of_possible_configurations
+    - used_by
     note: SHA-3 selects four fixed-output Keccak sponge instances with domain separation.
   notes: 'SHA-3 is the FIPS 202 family of four fixed-output hash functions: SHA3-224, SHA3-256, SHA3-384, and SHA3-512. Each
     uses Keccak-p[1600,24] with a capacity determined by the requested security strength and a domain-separation suffix distinct
@@ -5703,7 +5703,7 @@ mode_families:
   influences:
   - source_family_id: keccak
     relations:
-    - selection_of_possible_configurations
+    - used_by
     note: SHAKE selects two extendable-output Keccak sponge instances with domain separation.
   notes: SHAKE is the FIPS 202 family of extendable-output functions SHAKE128 and SHAKE256. Unlike fixed-output hashes, a
     SHAKE invocation can produce any requested number of output bits; the numeric suffix denotes its general security strength,

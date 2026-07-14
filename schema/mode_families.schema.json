@@ -60,7 +60,8 @@
                             "standardization_of",
                             "variant_of",
                             "generalization_of",
-                            "related_to"
+                            "related_to",
+                            "used_by"
                         ]
                     }
                 },

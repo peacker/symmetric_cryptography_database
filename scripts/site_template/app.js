@@ -1905,7 +1905,7 @@
         "inspired_by", "related_to", "variant_of", "improvement_of",
         "generalization_of", "improved_diffusion", "inherits_alpha_reflexivity_structure",
       ] },
-      { id: "usage_core", label: "Usage: built on (part of the definition)", members: ["__usage_core__"], synthetic: true },
+      { id: "usage_core", label: "Usage: built on (part of the definition)", members: ["__usage_core__", "used_by"], synthetic: true },
       { id: "usage_example", label: "Usage: named as an example or alternative", members: [
         "selection_of_possible_configurations",
       ] },
