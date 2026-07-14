@@ -1,0 +1,62 @@
+version: 1
+mode_constructions:
+- id: merkle_damgard
+  name: Merkle–Damgård Construction
+  abbreviation: MD
+  typical_primitive_types:
+  - hash_function
+  placeholder_family_names:
+  - MD4
+  - MD5
+  - HAVAL
+  notes: 'An iterated hash construction that applies a fixed-input-length compression function to successive message blocks
+    while carrying a chaining value, with strengthening padding encoding the message length.
+
+    '
+- id: duplex_mode
+  name: Duplex Mode
+- id: binary_tree_hash
+  name: Binary Tree Hash
+  placeholder_family_names:
+  - BLAKE3
+  notes: 'A hash construction that splits the input into independent leaf blocks and combines them via a binary tree of
+    the same compression function, rather than sequential (Merkle-Damgard) or state-based (sponge/duplex) iteration; unlike
+    those, every subtree can be hashed independently and in parallel.
+
+    '
+- id: permutation_based_hash
+  name: Permutation-Based Hash
+- id: permutation_based_stream
+  name: Permutation-Based Stream
+- id: sponge_construction
+  name: Sponge Construction
+- id: block_cipher_based_stream
+  name: Block-Cipher-Based Stream Cipher
+- id: memory_hard_sponge
+  name: Memory-Hard Sponge / PBKDF
+- id: iterated_hash_kdf
+  name: Iterated Hash-Based KDF
+- id: bcrypt_variant
+  name: bcrypt Variant
+- id: scrypt_variant
+  name: scrypt Variant
+- id: modular_squaring_kdf
+  name: Modular Squaring KDF
+- id: gcm
+  name: Galois/Counter Mode (GCM)
+  notes: A block-cipher AEAD mode combining CTR-mode encryption with a GHASH polynomial-evaluation MAC over GF(2^128).
+- id: cbc_construction
+  name: Cipher Block Chaining (CBC)
+  notes: A block-cipher confidentiality mode where each plaintext block is XORed with the previous ciphertext block before
+    encryption.
+- id: hmac_construction
+  name: HMAC
+  notes: A hash-based MAC construction combining a hash function with inner and outer key padding (RFC 2104).
+- id: encrypt_then_mac
+  name: Encrypt-then-MAC Composition
+  notes: A generic AEAD composition that encrypts the plaintext with one primitive and authenticates the result with a separately-keyed
+    MAC/universal hash.
+- id: native_keystream_generator
+  name: Native Keystream Generator
+  notes: A stream cipher whose keystream is produced directly by its own internal state-update generator, with no separable
+    underlying block cipher wrapped by a generic mode of operation.

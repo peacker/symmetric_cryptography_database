@@ -83,10 +83,15 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Argon2 | Argon2 | pbkdf | 2015 | https://www.rfc-editor.org/rfc/rfc9106 | Full | yes |
 | [x] | ARIA | ARIA | block_cipher | 2010 | https://www.rfc-editor.org/rfc/rfc5794 | TODO | no |
 | [x] | Ascon | Ascon-p | permutation | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
+| [x] | Ascon-128 | Ascon-128 | aead | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
+| [x] | Ascon-128a | Ascon-128a | aead | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
+| [x] | Ascon-80pq | Ascon-80pq | aead | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
 | [x] | Ascon-AEAD128 | Ascon-AEAD128 | aead | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
 | [x] | Ascon-CXOF128 | Ascon-CXOF128 | extendable_output_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
+| [x] | Ascon-Hash (v1.2) | Ascon-Hash | hash_function | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
 | [x] | Ascon-Hash256 | Ascon-Hash256 | hash_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
 | [x] | Ascon-XOF128 | Ascon-XOF128 | extendable_output_function | 2025 | https://doi.org/10.6028/NIST.SP.800-232 | Full | yes |
+| [x] | Ascon-Xof (v1.2) | Ascon-Xof | extendable_output_function | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
 | [x] | Ballet | Ballet | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000335 | Full | yes |
 | [x] | BEA-1 | BEA-1 | block_cipher | 2017 | https://arxiv.org/abs/1702.06475 | Full | yes |
 | [x] | battcrypt | battcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/battcrypt-v0.pdf | Full | yes |
@@ -229,7 +234,8 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | NORX | NORX | aead | 2016 | https://competitions.cr.yp.to/round3/norxv30.pdf | Full | yes |
 | [x] | NUSH | NUSH | stream_cipher | 2000 | https://www.cosic.esat.kuleuven.be/nessie/ | Full | yes |
 | [x] | Omega Crypt | Omega Crypt | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/OmegaCrypt-v0.pdf | Full | yes |
-| [x] | ORANGE | ORANGE | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ORANGE-spec.pdf | Full | yes |
+| [x] | ORANGE-Zest | ORANGE-Zest | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ORANGE-spec.pdf | Full | yes |
+| [x] | ORANGISH | ORANGISH | hash_function | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ORANGE-spec.pdf | Full | yes |
 | [x] | Oribatida | Oribatida | permutation | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Oribatida-spec.pdf | Full | yes |
 | [x] | ORYX | ORYX | stream_cipher | 1995 | N/A — proprietary | N/A | no |
 | [x] | PANAMA | PANAMA | hash+stream_cipher | 1998 | https://doi.org/10.1007/3-540-69710-1_5 | TODO | no |
@@ -301,7 +307,8 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Skein (SHA-3 finalist) | Threefish block cipher | hash | 2008 | https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf | Full | yes |
 | [x] | SHACAL | SHACAL | block_cipher | 2000 | https://en.wikipedia.org/wiki/SHACAL | Full | yes |
 | [x] | SHACAL2 | SHACAL2 | block_cipher | 2001 | https://en.wikipedia.org/wiki/SHACAL | Full | yes |
-| [x] | Shamash & Shamashash | Shamash & Shamashash | aead+hash | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ShamashAndShamashash-spec.pdf | Full | yes |
+| [x] | Shamash | Shamash | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ShamashAndShamashash-spec.pdf | Full | yes |
+| [x] | Shamashash | Shamashash | hash_function | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ShamashAndShamashash-spec.pdf | Full | yes |
 | [x] | SHARK | SHARK | block_cipher | 1996 | https://doi.org/10.1007/3-540-68697-5_11 | Full | yes |
 | [x] | SIMON | SIMON | block_cipher | 2013 | https://eprint.iacr.org/2013/404 | TODO | no |
 | [x] | SIMPLE | SIMPLE | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
@@ -375,7 +382,8 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | XXTEA | XXTEA | block_cipher | 1998 | https://www.cix.co.uk/~klockstone/xxtea.pdf | Full | yes |
 | [x] | XXTEA / Corrected Block TEA | XXTEA | block_cipher | 1998 | https://www.cix.co.uk/~klockstone/xxtea.pdf | Full | yes |
 | [x] | YAMB | YAMB | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/yamb.pdf | Full | yes |
-| [x] | Yarara and Coral | Yarara and Coral | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Yarara_and_Coral-spec.pdf | Full | yes |
+| [x] | Yarará | Yarará | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Yarara_and_Coral-spec.pdf | Full | yes |
+| [x] | Coral | Coral | hash_function | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Yarara_and_Coral-spec.pdf | Full | yes |
 | [x] | Yarn | Yarn | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/Yarn-v2.pdf | Full | yes |
 | [x] | yescrypt | yescrypt | pbkdf | 2015 | https://www.password-hashing.net/submissions/specs/yescrypt-v2.pdf | Full | yes |
 | [x] | ZORRO | ZORRO | block_cipher | 2013 | https://doi.org/10.1007/978-3-642-40349-1_22 | Full | yes |

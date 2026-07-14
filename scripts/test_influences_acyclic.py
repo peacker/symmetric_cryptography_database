@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 
-from common import load_all_data
+from common import all_families, load_all_data
 
 
 def find_cycle(adj: dict[str, list[str]]) -> list[str] | None:
@@ -48,8 +48,8 @@ def find_cycle(adj: dict[str, list[str]]) -> list[str] | None:
 
 
 def main() -> None:
-    data = load_all_data(["families"])
-    families = data["families"]["families"]
+    data = load_all_data(["primitive_families", "mode_families"])
+    families = all_families(data)
 
     adj: dict[str, list[str]] = defaultdict(list)
     for f in families:

@@ -1,0 +1,228 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.org/symmetric_primitives/primitive_families.schema.json",
+    "title": "Fixed-Length Primitive Families",
+    "description": "A primitive is a fixed-length construction (permutation, block cipher, tweakable block cipher, compression/update function) with no direct standalone cryptographic use. Each family entry also carries its instances.",
+    "type": "object",
+    "required": [
+        "version",
+        "primitive_families"
+    ],
+    "properties": {
+        "version": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "primitive_families": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/family"
+            }
+        }
+    },
+    "$defs": {
+        "influence": {
+            "type": "object",
+            "required": [
+                "source_family_id",
+                "relations",
+                "note"
+            ],
+            "properties": {
+                "source_family_id": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "relations": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "selection_of_possible_configurations",
+                            "same_sbox",
+                            "same_sbox_size",
+                            "same_key_schedule",
+                            "same_state_layout",
+                            "same_bit_based_permutation_layer",
+                            "similar_bit_based_permutation_layer",
+                            "same_mix_column",
+                            "similar_mix_column",
+                            "same_shift_row",
+                            "similar_shift_row",
+                            "same_round_function",
+                            "same_round_constants",
+                            "improved_diffusion",
+                            "inherits_alpha_reflexivity_structure",
+                            "inspired_by",
+                            "improvement_of",
+                            "standardization_of",
+                            "variant_of",
+                            "generalization_of",
+                            "related_to"
+                        ]
+                    }
+                },
+                "innovative_idea_ids": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": { "type": "string", "minLength": 1 }
+                },
+                "note": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+        },
+        "component_ref": {
+            "type": "object",
+            "required": ["id"],
+            "additionalProperties": false,
+            "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "params": { "type": "object" }
+            }
+        },
+        "construction_id": { "type": "string", "minLength": 1 },
+        "innovative_idea": {
+            "type": "object",
+            "required": ["id", "name"],
+            "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "name": { "type": "string", "minLength": 1 },
+                "note": { "type": "string" }
+            },
+            "additionalProperties": false
+        },
+        "round_id": { "type": "string", "minLength": 1 },
+        "characteristics": {
+            "type": "object",
+            "properties": {
+                "block_size_bits": { "type": "integer", "minimum": 1 },
+                "block_size_bits_min": { "type": "integer", "minimum": 1 },
+                "block_size_bits_max": { "type": "integer", "minimum": 1 },
+                "state_size_bits": { "type": "integer", "minimum": 1 },
+                "state_size_bits_min": { "type": "integer", "minimum": 1 },
+                "state_size_bits_max": { "type": "integer", "minimum": 1 },
+                "key_size_bits": { "type": "integer", "minimum": 1 },
+                "key_size_bits_min": { "type": "integer", "minimum": 1 },
+                "key_size_bits_max": { "type": "integer", "minimum": 1 },
+                "tweak_size_bits": { "type": "integer", "minimum": 1 },
+                "tweak_size_bits_min": { "type": "integer", "minimum": 1 },
+                "tweak_size_bits_max": { "type": "integer", "minimum": 1 },
+                "tweakey_size_bits": {
+                    "oneOf": [
+                        { "type": "integer", "minimum": 1 },
+                        { "type": "string", "pattern": "^[1-9][0-9]*\\s*-\\s*key_size_bits$" }
+                    ]
+                },
+                "tweakey_size_bits_min": { "type": "integer", "minimum": 1 },
+                "tweakey_size_bits_max": { "type": "integer", "minimum": 1 },
+                "rounds": { "type": "integer", "minimum": 1 },
+                "rounds_min": { "type": "integer", "minimum": 1 },
+                "rounds_max": { "type": "integer", "minimum": 1 },
+                "output_size_bits": { "type": "integer", "minimum": 1 },
+                "output_size_bits_min": { "type": "integer", "minimum": 1 },
+                "output_size_bits_max": { "type": "integer", "minimum": 1 },
+                "components": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/component_ref" }
+                }
+            },
+            "additionalProperties": true
+        },
+        "process_participation": {
+            "type": "object",
+            "required": ["process_id"],
+            "properties": {
+                "process_id": { "type": "string", "minLength": 1 },
+                "stage_ids": {
+                    "type": "array",
+                    "items": { "type": "string", "minLength": 1 }
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "candidate", "finalist", "winner", "recommended",
+                        "candidate_recommended", "monitored", "special_recognition",
+                        "portfolio", "submitted"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "instance": {
+            "type": "object",
+            "required": ["id", "name", "type", "characteristics"],
+            "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "name": { "type": "string", "minLength": 1 },
+                "type": { "type": "string", "minLength": 1 },
+                "reference_ids": {
+                    "type": "array",
+                    "items": { "type": "string", "minLength": 1 }
+                },
+                "characteristics": { "$ref": "#/$defs/characteristics" },
+                "notes": { "type": "string" }
+            },
+            "additionalProperties": false
+        },
+        "family": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "construction_ids",
+                "round_ids",
+                "target_applications",
+                "characteristics",
+                "reference_ids",
+                "process_participations",
+                "influences",
+                "notes",
+                "instances"
+            ],
+            "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "name": { "type": "string", "minLength": 1 },
+                "construction_ids": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/construction_id" }
+                },
+                "round_ids": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/round_id" }
+                },
+                "target_applications": {
+                    "type": "array",
+                    "items": { "type": "string", "minLength": 1 }
+                },
+                "characteristics": { "$ref": "#/$defs/characteristics" },
+                "innovative_ideas": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/innovative_idea" }
+                },
+                "reference_ids": {
+                    "type": "array",
+                    "items": { "type": "string", "minLength": 1 }
+                },
+                "process_participations": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/process_participation" }
+                },
+                "influences": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/influence" }
+                },
+                "notes": { "type": "string", "minLength": 1 },
+                "instances": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/instance" }
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

@@ -62,17 +62,26 @@ def load_join_builder_dataset(conn: sqlite3.Connection) -> dict[str, object]:
         conn,
         """
         SELECT
-          p.id AS "primitive.id",
-          p.name AS "primitive.name",
-          p.primitive_type AS "primitive.type_id",
-          pt.name AS "primitive.type_name",
-          p.block_size_bits AS "primitive.fixed_input_bits",
-          p.output_size_bits AS "primitive.fixed_output_bits",
-          p.characteristics_json AS "primitive.characteristics_json",
+          i.id AS "instance.id",
+          i.name AS "instance.name",
+          i.tier AS "instance.tier",
+          i.type_id AS "instance.type_id",
+          COALESCE(pt.name, mt.name) AS "instance.type_name",
+          i.block_size_bits AS "instance.fixed_input_bits",
+          i.output_size_bits AS "instance.fixed_output_bits",
+          i.characteristics_json AS "instance.characteristics_json",
           f.id AS "family.id",
           f.name AS "family.name",
           f.year AS "family.year",
           f.notes AS "family.notes",
+          (SELECT GROUP_CONCAT(pc.name, ', ')
+             FROM primitive_family_constructions pfc
+             JOIN primitive_constructions pc ON pc.id = pfc.construction_id
+            WHERE pfc.family_id = f.id) AS "family.primitive_construction_names",
+          (SELECT GROUP_CONCAT(mc.name, ', ')
+             FROM mode_family_constructions mfc
+             JOIN mode_constructions mc ON mc.id = mfc.construction_id
+            WHERE mfc.family_id = f.id) AS "family.mode_construction_names",
           ref.id AS "reference.id",
           ref.title AS "reference.title",
           ref.kind AS "reference.kind",
@@ -81,34 +90,44 @@ def load_join_builder_dataset(conn: sqlite3.Connection) -> dict[str, object]:
           ref.venue AS "reference.venue",
           ref.organization AS "reference.organization",
           ref.status AS "reference.status"
-        FROM primitives p
-        JOIN families f ON f.id = p.family_id
-        LEFT JOIN primitive_types pt ON pt.id = p.primitive_type
-        LEFT JOIN primitive_references pr ON pr.primitive_id = p.id
-        LEFT JOIN "references" ref ON ref.id = pr.reference_id
-        ORDER BY f.year, p.name, ref.year
+        FROM instances i
+        JOIN families f ON f.id = i.family_id
+        LEFT JOIN primitive_types pt ON pt.id = i.type_id
+        LEFT JOIN mode_types mt ON mt.id = i.type_id
+        LEFT JOIN instance_references ir ON ir.instance_id = i.id
+        LEFT JOIN "references" ref ON ref.id = ir.reference_id
+        ORDER BY f.year, i.name, ref.year
         """,
     )
 
     columns = list(rows[0].keys()) if rows else []
 
     base_sql = (
-        'SELECT p.id AS "primitive.id", p.name AS "primitive.name", '
-        'p.primitive_type AS "primitive.type_id", pt.name AS "primitive.type_name", '
-        'p.block_size_bits AS "primitive.fixed_input_bits", '
-        'p.output_size_bits AS "primitive.fixed_output_bits", '
-        'p.characteristics_json AS "primitive.characteristics_json", '
+        'SELECT i.id AS "instance.id", i.name AS "instance.name", '
+        'i.tier AS "instance.tier", i.type_id AS "instance.type_id", '
+        'COALESCE(pt.name, mt.name) AS "instance.type_name", '
+        'i.block_size_bits AS "instance.fixed_input_bits", '
+        'i.output_size_bits AS "instance.fixed_output_bits", '
+        'i.characteristics_json AS "instance.characteristics_json", '
         'f.id AS "family.id", f.name AS "family.name", f.year AS "family.year", '
-        'f.notes AS "family.notes", ref.id AS "reference.id", '
+        'f.notes AS "family.notes", '
+        '(SELECT GROUP_CONCAT(pc.name, \', \') FROM primitive_family_constructions pfc '
+        'JOIN primitive_constructions pc ON pc.id = pfc.construction_id '
+        'WHERE pfc.family_id = f.id) AS "family.primitive_construction_names", '
+        '(SELECT GROUP_CONCAT(mc.name, \', \') FROM mode_family_constructions mfc '
+        'JOIN mode_constructions mc ON mc.id = mfc.construction_id '
+        'WHERE mfc.family_id = f.id) AS "family.mode_construction_names", '
+        'ref.id AS "reference.id", '
         'ref.title AS "reference.title", ref.kind AS "reference.kind", '
         'ref.year AS "reference.year", ref.url AS "reference.url", '
         'ref.venue AS "reference.venue", ref.organization AS "reference.organization", '
         'ref.status AS "reference.status" '
-        'FROM primitives p '
-        'JOIN families f ON f.id = p.family_id '
-        'LEFT JOIN primitive_types pt ON pt.id = p.primitive_type '
-        'LEFT JOIN primitive_references pr ON pr.primitive_id = p.id '
-        'LEFT JOIN "references" ref ON ref.id = pr.reference_id'
+        'FROM instances i '
+        'JOIN families f ON f.id = i.family_id '
+        'LEFT JOIN primitive_types pt ON pt.id = i.type_id '
+        'LEFT JOIN mode_types mt ON mt.id = i.type_id '
+        'LEFT JOIN instance_references ir ON ir.instance_id = i.id '
+        'LEFT JOIN "references" ref ON ref.id = ir.reference_id'
     )
 
     return {"columns": columns, "rows": rows, "baseSql": base_sql}

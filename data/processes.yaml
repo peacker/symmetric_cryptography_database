@@ -185,7 +185,7 @@ processes:
     - name: SSS
     - name: TRBDK3 YAEA
     - family_id: yamb
-    - family_id: salsa20
+    - family_id: salsa20_stream
     - family_id: achterbahn
     - family_id: decim
     - name: Edon-80
@@ -214,7 +214,7 @@ processes:
     - name: Polar Bear v2
     - name: Py
     - family_id: rabbit
-    - family_id: salsa20
+    - family_id: salsa20_stream
     - name: SOSEMANUK
     - family_id: achterbahn
     - family_id: decim
@@ -241,7 +241,7 @@ processes:
     - family_id: lex
     - family_id: nlsv2
     - family_id: rabbit
-    - family_id: salsa20
+    - family_id: salsa20_stream
     - name: SOSEMANUK
     - family_id: decim
     - name: Edon-80
@@ -257,7 +257,7 @@ processes:
     participants:
     - family_id: hc_128
     - family_id: rabbit
-    - family_id: salsa20
+    - family_id: salsa20_stream
       note: Salsa20/12 was selected for the portfolio.
     - name: SOSEMANUK
   - id: portfolio_hw
@@ -636,8 +636,8 @@ processes:
     - family_id: clae
     - family_id: clx
     - family_id: comet
-    - family_id: drygascon
-    - family_id: elephant
+    - family_id: drygascon_aead
+    - family_id: elephant_aead
     - family_id: estate
     - family_id: flexaead
     - family_id: forkae
@@ -645,7 +645,8 @@ processes:
     - family_id: gimli
     - family_id: grain_128
     - family_id: hyena
-    - family_id: isap
+    - family_id: ingage_aead
+    - family_id: isap_aead
     - family_id: knot
     - family_id: laem
     - family_id: lilliput_ae
@@ -663,24 +664,24 @@ processes:
     - family_id: saeaes
     - family_id: saturnin
     - family_id: shamash_and_shamashash
-    - family_id: simple
+    - family_id: simple_aead
     - family_id: siv_rijndael256
     - family_id: siv_tem_photon
     - family_id: skinny_aead
     - family_id: sneik
     - family_id: sparkle
-    - family_id: spix
-    - family_id: spoc
-    - family_id: spook
+    - family_id: spix_aead
+    - family_id: spoc_aead
+    - family_id: spook_aead
     - family_id: subterranean_2_0
     - family_id: sundae_gift
-    - family_id: sycon
+    - family_id: sycon_aead
     - family_id: tinyjambu
     - family_id: trifle
     - family_id: wage
     - family_id: xoodyak
     - family_id: yarara_and_coral
-    - name: GIFT-COFB
+    - family_id: gift_cofb
     - name: Pyjamask-AEAD
     - name: REMUS
     - name: Dumbo/Jumbo (Elephant)
@@ -691,15 +692,15 @@ processes:
     - family_id: ace
     - family_id: ascon
     - family_id: comet
-    - family_id: drygascon
-    - family_id: elephant
+    - family_id: drygascon_aead
+    - family_id: elephant_aead
     - family_id: estate
     - family_id: forkae
     - family_id: fountain
     - family_id: gimli
     - family_id: grain_128
     - family_id: hyena
-    - family_id: isap
+    - family_id: isap_aead
     - family_id: knot
     - family_id: locus
     - family_id: lotus
@@ -710,30 +711,30 @@ processes:
     - family_id: romulus
     - family_id: saeaes
     - family_id: sparkle
-    - family_id: spix
-    - family_id: spoc
-    - family_id: spook
+    - family_id: spix_aead
+    - family_id: spoc_aead
+    - family_id: spook_aead
     - family_id: subterranean_2_0
     - family_id: sundae_gift
     - family_id: tinyjambu
     - family_id: wage
     - family_id: xoodyak
     - family_id: skinny_aead
-    - name: GIFT-COFB
+    - family_id: gift_cofb
   - id: finalist
     label: Finalists (10 candidates, 2021)
     kind: outcome
     participants:
     - family_id: ascon
-    - family_id: elephant
+    - family_id: elephant_aead
     - family_id: grain_128
-    - family_id: isap
+    - family_id: isap_aead
     - family_id: photon_beetle
     - family_id: romulus
     - family_id: sparkle
     - family_id: tinyjambu
     - family_id: xoodyak
-    - name: GIFT-COFB
+    - family_id: gift_cofb
   - id: winner
     label: Winner
     kind: outcome

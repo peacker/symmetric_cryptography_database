@@ -1,32 +1,12 @@
 version: 1
-
 primitive_types:
-  - id: block_cipher
-    name: Block Cipher
-
-  - id: tweakable_block_cipher
-    name: Tweakable Block Cipher
-
-  - id: permutation
-    name: Permutation
-
-  - id: compression_function
-    name: Compression Function
-
-  - id: update_function
-    name: Update Function
-
-  - id: stream_cipher
-    name: Stream Cipher
-
-  - id: aead
-    name: Authenticated Encryption with Associated Data (AEAD)
-
-  - id: hash_function
-    name: Hash Function
-
-  - id: extendable_output_function
-    name: Extendable-Output Function (XOF)
-
-  - id: pbkdf
-    name: Password-Based Key Derivation Function (PBKDF / Memory-Hard Function)
+- id: block_cipher
+  name: Block Cipher
+- id: tweakable_block_cipher
+  name: Tweakable Block Cipher
+- id: permutation
+  name: Permutation
+- id: compression_function
+  name: Compression Function
+- id: update_function
+  name: Update Function

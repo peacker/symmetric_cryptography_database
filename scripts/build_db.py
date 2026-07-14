@@ -6,7 +6,7 @@ import json
 import hashlib
 import sqlite3
 
-from common import BUILD_DIR, DB_PATH, family_year, load_all_data
+from common import BUILD_DIR, DB_PATH, all_families, all_instances, family_year, load_all_data
 
 
 def ensure_schema(conn: sqlite3.Connection) -> None:
@@ -65,18 +65,33 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (special_case_of) REFERENCES components(id)
         );
 
+        -- Type/construction catalogues, split by tier -----------------------
         CREATE TABLE IF NOT EXISTS primitive_types (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
             notes TEXT
         );
 
-        CREATE TABLE IF NOT EXISTS constructions (
+        CREATE TABLE IF NOT EXISTS mode_types (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            notes TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS primitive_constructions (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
             special_case_of TEXT,
             notes TEXT,
-            FOREIGN KEY (special_case_of) REFERENCES constructions(id)
+            FOREIGN KEY (special_case_of) REFERENCES primitive_constructions(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS mode_constructions (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            special_case_of TEXT,
+            notes TEXT,
+            FOREIGN KEY (special_case_of) REFERENCES mode_constructions(id)
         );
 
         CREATE TABLE IF NOT EXISTS rounds (
@@ -88,12 +103,15 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             notes TEXT
         );
 
-        -- Families ---------------------------------------------------------
+        -- Families (both tiers, discriminated by "tier") --------------------
         CREATE TABLE IF NOT EXISTS families (
             id TEXT PRIMARY KEY,
+            tier TEXT NOT NULL CHECK (tier IN ('primitive', 'mode')),
             name TEXT NOT NULL,
             year INTEGER,
             notes TEXT,
+            authors_json TEXT,
+            underlying_primitive_ids_json TEXT,
             characteristics_json TEXT NOT NULL,
             innovative_ideas_json TEXT NOT NULL
         );
@@ -114,12 +132,25 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (component_id) REFERENCES components(id) ON DELETE RESTRICT
         );
 
-        CREATE TABLE IF NOT EXISTS family_constructions (
+        -- Split by tier (mirrors primitive_constructions vs mode_constructions)
+        -- so construction_id is FK-checked against the correct catalogue
+        -- instead of being resolved against "whichever one matches" at query
+        -- time. A primitive-tier family's constructions live here...
+        CREATE TABLE IF NOT EXISTS primitive_family_constructions (
             family_id TEXT NOT NULL,
             construction_id TEXT NOT NULL,
             PRIMARY KEY (family_id, construction_id),
             FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
-            FOREIGN KEY (construction_id) REFERENCES constructions(id) ON DELETE RESTRICT
+            FOREIGN KEY (construction_id) REFERENCES primitive_constructions(id) ON DELETE RESTRICT
+        );
+
+        -- ...and a mode-tier family's constructions live here.
+        CREATE TABLE IF NOT EXISTS mode_family_constructions (
+            family_id TEXT NOT NULL,
+            construction_id TEXT NOT NULL,
+            PRIMARY KEY (family_id, construction_id),
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
+            FOREIGN KEY (construction_id) REFERENCES mode_constructions(id) ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS family_rounds (
@@ -131,20 +162,16 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (round_id) REFERENCES rounds(id) ON DELETE RESTRICT
         );
 
+        -- Holds every reference a family cites, standards included; there is
+        -- no separate family_standards table since "is this a standard" is
+        -- just references.kind, joinable on demand instead of being forked
+        -- into a second, easy-to-forget-to-check junction table.
         CREATE TABLE IF NOT EXISTS family_references (
             family_id TEXT NOT NULL,
             reference_id TEXT NOT NULL,
             PRIMARY KEY (family_id, reference_id),
             FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE CASCADE,
             FOREIGN KEY (reference_id) REFERENCES "references"(id) ON DELETE RESTRICT
-        );
-
-        CREATE TABLE IF NOT EXISTS family_standards (
-            family_id TEXT NOT NULL,
-            standard_id TEXT NOT NULL,
-            PRIMARY KEY (family_id, standard_id),
-            FOREIGN KEY (family_id)   REFERENCES families(id)      ON DELETE CASCADE,
-            FOREIGN KEY (standard_id) REFERENCES "references"(id)  ON DELETE RESTRICT
         );
 
         CREATE TABLE IF NOT EXISTS family_processes (
@@ -169,32 +196,24 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (target_family_id) REFERENCES families(id) ON DELETE CASCADE
         );
 
-        -- Primitive instances ----------------------------------------------
-        CREATE TABLE IF NOT EXISTS primitives (
+        -- Instances (both tiers, discriminated by "tier") -------------------
+        CREATE TABLE IF NOT EXISTS instances (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
             family_id TEXT NOT NULL,
-            primitive_type TEXT NOT NULL,
+            tier TEXT NOT NULL CHECK (tier IN ('primitive', 'mode')),
+            type_id TEXT NOT NULL,
             block_size_bits INTEGER,
             output_size_bits INTEGER,
             characteristics_json TEXT NOT NULL,
-            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE RESTRICT,
-            FOREIGN KEY (primitive_type) REFERENCES primitive_types(id) ON DELETE RESTRICT
+            FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE RESTRICT
         );
 
-        CREATE TABLE IF NOT EXISTS primitive_standards (
-            primitive_id TEXT NOT NULL,
-            standard_id TEXT NOT NULL,
-            PRIMARY KEY (primitive_id, standard_id),
-            FOREIGN KEY (primitive_id) REFERENCES primitives(id)   ON DELETE CASCADE,
-            FOREIGN KEY (standard_id)  REFERENCES "references"(id) ON DELETE RESTRICT
-        );
-
-        CREATE TABLE IF NOT EXISTS primitive_references (
-            primitive_id TEXT NOT NULL,
+        CREATE TABLE IF NOT EXISTS instance_references (
+            instance_id TEXT NOT NULL,
             reference_id TEXT NOT NULL,
-            PRIMARY KEY (primitive_id, reference_id),
-            FOREIGN KEY (primitive_id) REFERENCES primitives(id)   ON DELETE CASCADE,
+            PRIMARY KEY (instance_id, reference_id),
+            FOREIGN KEY (instance_id) REFERENCES instances(id)   ON DELETE CASCADE,
             FOREIGN KEY (reference_id) REFERENCES "references"(id) ON DELETE RESTRICT
         );
         """
@@ -204,21 +223,22 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
 def clear_tables(conn: sqlite3.Connection) -> None:
     conn.executescript(
         """
-        DELETE FROM primitive_references;
-        DELETE FROM primitive_standards;
-        DELETE FROM primitives;
+        DELETE FROM instance_references;
+        DELETE FROM instances;
         DELETE FROM family_influences;
         DELETE FROM family_processes;
-        DELETE FROM family_standards;
         DELETE FROM family_references;
-        DELETE FROM family_constructions;
+        DELETE FROM primitive_family_constructions;
+        DELETE FROM mode_family_constructions;
         DELETE FROM family_rounds;
         DELETE FROM family_components;
         DELETE FROM family_targets;
         DELETE FROM families;
         DELETE FROM rounds;
-        DELETE FROM constructions;
+        DELETE FROM primitive_constructions;
+        DELETE FROM mode_constructions;
         DELETE FROM primitive_types;
+        DELETE FROM mode_types;
         DELETE FROM components;
         DELETE FROM process_stage_participants;
         DELETE FROM process_stages;
@@ -233,17 +253,21 @@ def main() -> None:
     DB_PATH.unlink(missing_ok=True)  # always rebuild from scratch
 
     data = load_all_data([
-        "families", "primitives", "components", "constructions",
-        "rounds", "primitive_types", "references", "processes",
+        "primitive_families", "mode_families", "components",
+        "primitive_constructions", "mode_constructions",
+        "rounds", "primitive_types", "mode_types", "references", "processes",
     ])
-    families_doc     = data["families"]
-    primitives_doc   = data["primitives"]
     components_doc   = data["components"]
-    constructions_doc = data["constructions"]
+    primitive_constructions_doc = data["primitive_constructions"]
+    mode_constructions_doc      = data["mode_constructions"]
     rounds_doc       = data["rounds"]
     primitive_types_doc = data["primitive_types"]
+    mode_types_doc       = data["mode_types"]
     references_doc = data["references"]
     processes_doc    = data["processes"]
+
+    families = all_families(data)
+    instances = all_instances(families)
 
     conn = sqlite3.connect(DB_PATH)
     try:
@@ -316,9 +340,26 @@ def main() -> None:
                 (primitive_type["id"], primitive_type["name"], primitive_type.get("notes")),
             )
 
-        for construction in constructions_doc.get("constructions", []):
+        for mode_type in mode_types_doc.get("mode_types", []):
             conn.execute(
-                "INSERT INTO constructions (id, name, special_case_of, notes) VALUES (?, ?, ?, ?)",
+                "INSERT INTO mode_types (id, name, notes) VALUES (?, ?, ?)",
+                (mode_type["id"], mode_type["name"], mode_type.get("notes")),
+            )
+
+        for construction in primitive_constructions_doc.get("primitive_constructions", []):
+            conn.execute(
+                "INSERT INTO primitive_constructions (id, name, special_case_of, notes) VALUES (?, ?, ?, ?)",
+                (
+                    construction["id"],
+                    construction["name"],
+                    construction.get("special_case_of"),
+                    construction.get("notes"),
+                ),
+            )
+
+        for construction in mode_constructions_doc.get("mode_constructions", []):
+            conn.execute(
+                "INSERT INTO mode_constructions (id, name, special_case_of, notes) VALUES (?, ?, ?, ?)",
                 (
                     construction["id"],
                     construction["name"],
@@ -344,16 +385,23 @@ def main() -> None:
                 ),
             )
 
-        for family in families_doc.get("families", []):
-            c = family["characteristics"]
+        for family in families:
+            c = family.get("characteristics", {})
             innovative_ideas = family.get("innovative_ideas", [])
             ref_ids = family.get("reference_ids", [])
+            authors = family.get("authors")
+            underlying = family.get("underlying_primitive_ids")
             conn.execute(
-                "INSERT INTO families (id, name, year, notes, characteristics_json, innovative_ideas_json)"
-                 " VALUES (?, ?, ?, ?, ?, ?)",
-                 (family["id"], family["name"], family_year(family, references_by_id),
-                  family.get("notes"), json.dumps(c, ensure_ascii=True),
-                  json.dumps(innovative_ideas, ensure_ascii=True)),
+                "INSERT INTO families"
+                " (id, tier, name, year, notes, authors_json, underlying_primitive_ids_json,"
+                "  characteristics_json, innovative_ideas_json)"
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (family["id"], family["_tier"], family["name"], family_year(family, references_by_id),
+                 family.get("notes"),
+                 json.dumps(authors, ensure_ascii=True) if authors else None,
+                 json.dumps(underlying, ensure_ascii=True) if underlying else None,
+                 json.dumps(c, ensure_ascii=True),
+                 json.dumps(innovative_ideas, ensure_ascii=True)),
             )
             for target in family.get("target_applications", []):
                 conn.execute(
@@ -370,9 +418,12 @@ def main() -> None:
                     "INSERT INTO family_components (family_id, component_id, params_json)"
                     " VALUES (?, ?, ?)",
                     (family["id"], comp_ref["id"], params_json))
+            construction_table = (
+                "primitive_family_constructions" if family["_tier"] == "primitive" else "mode_family_constructions"
+            )
             for construction_id in family.get("construction_ids", []):
                 conn.execute(
-                    "INSERT INTO family_constructions (family_id, construction_id) VALUES (?, ?)",
+                    f"INSERT INTO {construction_table} (family_id, construction_id) VALUES (?, ?)",
                     (family["id"], construction_id),
                 )
             for round_id in family.get("round_ids", []):
@@ -380,22 +431,12 @@ def main() -> None:
                     "INSERT INTO family_rounds (family_id, round_id, role) VALUES (?, ?, ?)",
                     (family["id"], round_id, "primary"),
                 )
-            std_ids_for_family: set[str] = set()
-            refs_for_family: set[str] = set()
+            refs_for_family: set[str] = set(ref_ids)
             for ref_id in ref_ids:
-                refs_for_family.add(ref_id)
-                ref_kind = str(references_by_id.get(ref_id, {}).get("kind", "")).lower()
-                if "standard" in ref_kind:
-                    conn.execute(
-                        "INSERT INTO family_standards (family_id, standard_id) VALUES (?, ?)",
-                        (family["id"], ref_id),
-                    )
-                    std_ids_for_family.add(ref_id)
-                else:
-                    conn.execute(
-                        "INSERT INTO family_references (family_id, reference_id) VALUES (?, ?)",
-                        (family["id"], ref_id),
-                    )
+                conn.execute(
+                    "INSERT INTO family_references (family_id, reference_id) VALUES (?, ?)",
+                    (family["id"], ref_id),
+                )
             family_reference_ids[family["id"]] = refs_for_family
             for pp in family.get("process_participations", []):
                 proc_id = pp["process_id"]
@@ -408,7 +449,7 @@ def main() -> None:
                     (family["id"], proc_id, status,
                      json.dumps(stage_ids, ensure_ascii=True)))
         # Insert influences in a second pass so all families exist before any FK is checked.
-        for family in families_doc.get("families", []):
+        for family in families:
             for edge in family.get("influences", []):
                 relations = edge.get("relations") or ([edge["relation"]] if edge.get("relation") else [])
                 innovative_idea_ids = edge.get("innovative_idea_ids", [])
@@ -423,35 +464,26 @@ def main() -> None:
                      json.dumps(innovative_idea_ids, ensure_ascii=True) if innovative_idea_ids else None,
                      edge["note"]))
 
-        for primitive in primitives_doc.get("primitives", []):
-            c = primitive["characteristics"]
-            primitive_ref_ids = set(primitive.get("reference_ids", []))
-            if not primitive_ref_ids:
-                primitive_ref_ids = set(family_reference_ids.get(primitive["family_id"], set()))
+        for instance in instances:
+            c = instance.get("characteristics", {})
+            instance_ref_ids = set(instance.get("reference_ids", []))
+            if not instance_ref_ids:
+                instance_ref_ids = set(family_reference_ids.get(instance["family_id"], set()))
 
             conn.execute(
-                "INSERT INTO primitives"
-                " (id, name, family_id, primitive_type, block_size_bits, output_size_bits,"
+                "INSERT INTO instances"
+                " (id, name, family_id, tier, type_id, block_size_bits, output_size_bits,"
                 "  characteristics_json)"
-                " VALUES (?, ?, ?, ?, ?, ?, ?)",
-                (primitive["id"], primitive["name"], primitive["family_id"], primitive["primitive_type"],
-                 c.get("block_size_bits"), c.get("output_size_bits"),
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                (instance["id"], instance["name"], instance["family_id"], instance["_tier"],
+                 instance["type"], c.get("block_size_bits"), c.get("output_size_bits"),
                  json.dumps(c, ensure_ascii=True)),
             )
 
-            for ref_id in sorted(primitive_ref_ids):
+            for ref_id in sorted(instance_ref_ids):
                 conn.execute(
-                    "INSERT INTO primitive_references (primitive_id, reference_id) VALUES (?, ?)",
-                    (primitive["id"], ref_id),
-                )
-
-            for ref_id in sorted(primitive_ref_ids):
-                ref_kind = str(references_by_id.get(ref_id, {}).get("kind", "")).lower()
-                if "standard" not in ref_kind:
-                    continue
-                conn.execute(
-                    "INSERT INTO primitive_standards (primitive_id, standard_id) VALUES (?, ?)",
-                    (primitive["id"], ref_id),
+                    "INSERT INTO instance_references (instance_id, reference_id) VALUES (?, ?)",
+                    (instance["id"], ref_id),
                 )
 
         conn.commit()
@@ -462,5 +494,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-

@@ -9,7 +9,7 @@ Equal years are allowed (contemporaneous designs, e.g. joint standardization).
 """
 from __future__ import annotations
 
-from common import family_year, load_all_data
+from common import all_families, family_year, load_all_data
 
 # (target_family_id, source_family_id) pairs that are chronologically "late"
 # by our year<-earliest-reference proxy but are not data bugs — each is a
@@ -31,12 +31,18 @@ KNOWN_EXCEPTIONS = {
     # submission predates TwoCats, but our only catena reference is its
     # later v5 (2015) spec — the original submission PDF wasn't locatable.
     ("twocats", "catena"),
+    # The hmac_sha256 family's year (1997) is RFC 2104, which introduced HMAC
+    # generically; this family bundles that generic construction with its
+    # specific SHA-256 instantiation, which necessarily postdates SHA-256
+    # (2001). The dependency is real (HMAC-SHA256 wraps SHA-256), just dated
+    # by the generic-construction paper rather than a SHA-256-specific one.
+    ("hmac_sha256", "sha2_hash"),
 }
 
 
 def main() -> None:
-    data = load_all_data(["families", "references"])
-    families = data["families"]["families"]
+    data = load_all_data(["primitive_families", "mode_families", "references"])
+    families = all_families(data)
     references_by_id = {r["id"]: r for r in data["references"]["references"]}
 
     families_by_id = {f["id"]: f for f in families}

@@ -8,7 +8,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
-from common import SCHEMA_DIR, load_all_data
+from common import SCHEMA_DIR, all_families, all_instances, load_all_data
 
 TWEAKEY_EXPR_RE = re.compile(r"^([1-9][0-9]*)\s*-\s*key_size_bits$")
 
@@ -71,30 +71,32 @@ def validate_schema(doc: dict, schema_path: Path, label: str) -> bool:
 
 def main() -> None:
     data = load_all_data()
-    families_doc     = data["families"]
-    primitives_doc   = data["primitives"]
-    components_doc   = data["components"]
-    constructions_doc = data["constructions"]
-    rounds_doc       = data["rounds"]
-    primitive_types_doc = data["primitive_types"]
-    references_doc = data["references"]
-    processes_doc    = data["processes"]
-    modes_doc        = data["modes"]
+    primitive_families_doc = data["primitive_families"]
+    mode_families_doc      = data["mode_families"]
+    components_doc         = data["components"]
+    primitive_constructions_doc = data["primitive_constructions"]
+    mode_constructions_doc  = data["mode_constructions"]
+    rounds_doc              = data["rounds"]
+    primitive_types_doc     = data["primitive_types"]
+    mode_types_doc          = data["mode_types"]
+    references_doc          = data["references"]
+    processes_doc           = data["processes"]
 
     ok = True
-    ok &= validate_schema(families_doc,   SCHEMA_DIR / "families.schema.json",   "families")
-    ok &= validate_schema(primitives_doc, SCHEMA_DIR / "primitives.schema.json", "primitives")
-    ok &= validate_schema(components_doc, SCHEMA_DIR / "components.schema.json", "components")
-    ok &= validate_schema(constructions_doc, SCHEMA_DIR / "constructions.schema.json", "constructions")
-    ok &= validate_schema(rounds_doc, SCHEMA_DIR / "rounds.schema.json", "rounds")
-    ok &= validate_schema(primitive_types_doc, SCHEMA_DIR / "primitive_types.schema.json", "primitive_types")
-    ok &= validate_schema(references_doc, SCHEMA_DIR / "references.schema.json", "references")
-    ok &= validate_schema(modes_doc, SCHEMA_DIR / "modes.schema.json", "modes")
-    ok &= validate_schema(processes_doc, SCHEMA_DIR / "processes.schema.json", "processes")
+    ok &= validate_schema(primitive_families_doc, SCHEMA_DIR / "primitive_families.schema.json", "primitive_families")
+    ok &= validate_schema(mode_families_doc,      SCHEMA_DIR / "mode_families.schema.json",      "mode_families")
+    ok &= validate_schema(components_doc,         SCHEMA_DIR / "components.schema.json",         "components")
+    ok &= validate_schema(primitive_constructions_doc, SCHEMA_DIR / "primitive_constructions.schema.json", "primitive_constructions")
+    ok &= validate_schema(mode_constructions_doc,  SCHEMA_DIR / "mode_constructions.schema.json", "mode_constructions")
+    ok &= validate_schema(rounds_doc,              SCHEMA_DIR / "rounds.schema.json",             "rounds")
+    ok &= validate_schema(primitive_types_doc,     SCHEMA_DIR / "primitive_types.schema.json",     "primitive_types")
+    ok &= validate_schema(mode_types_doc,          SCHEMA_DIR / "mode_types.schema.json",          "mode_types")
+    ok &= validate_schema(references_doc,          SCHEMA_DIR / "references.schema.json",          "references")
+    ok &= validate_schema(processes_doc,           SCHEMA_DIR / "processes.schema.json",           "processes")
     if not ok:
         raise SystemExit(1)
 
-    families_schema = load_json(SCHEMA_DIR / "families.schema.json")
+    families_schema = load_json(SCHEMA_DIR / "primitive_families.schema.json")
     known_relations = set(
         families_schema["$defs"]["influence"]["properties"]["relations"]["items"]["enum"]
     )
@@ -106,12 +108,18 @@ def main() -> None:
         if "standard" in str(r.get("kind", "")).lower()
     }
     process_ids     = {p["id"] for p in processes_doc.get("processes", [])}
-    family_ids      = {f["id"] for f in families_doc.get("families", [])}
     component_ids   = {c["id"] for c in components_doc.get("components", [])}
-    construction_ids = {c["id"] for c in constructions_doc.get("constructions", [])}
+    primitive_construction_ids = {c["id"] for c in primitive_constructions_doc.get("primitive_constructions", [])}
+    mode_construction_ids      = {c["id"] for c in mode_constructions_doc.get("mode_constructions", [])}
     round_ids       = {r["id"] for r in rounds_doc.get("rounds", [])}
-    primitive_ids   = {p["id"] for p in primitives_doc.get("primitives", [])}
     primitive_type_ids = {t["id"] for t in primitive_types_doc.get("primitive_types", [])}
+    mode_type_ids       = {t["id"] for t in mode_types_doc.get("mode_types", [])}
+
+    families = all_families(data)
+    family_ids = {f["id"] for f in families}
+    instances = all_instances(families)
+    instance_ids = {i["id"] for i in instances}
+
     family_innovation_ids: dict[str, set[str]] = {}
     standardized_profile_family_ids: set[str] = set()
 
@@ -123,11 +131,19 @@ def main() -> None:
             print(f"REFERENCE ERROR: component '{comp['id']}' has unknown special_case_of '{ref}'")
             errors_found = True
 
-    for construction in constructions_doc.get("constructions", []):
+    for construction in primitive_constructions_doc.get("primitive_constructions", []):
         ref = construction.get("special_case_of")
-        if ref and ref not in construction_ids:
+        if ref and ref not in primitive_construction_ids:
             print(
-                f"REFERENCE ERROR: construction '{construction['id']}' has unknown special_case_of '{ref}'"
+                f"REFERENCE ERROR: primitive construction '{construction['id']}' has unknown special_case_of '{ref}'"
+            )
+            errors_found = True
+
+    for construction in mode_constructions_doc.get("mode_constructions", []):
+        ref = construction.get("special_case_of")
+        if ref and ref not in mode_construction_ids:
+            print(
+                f"REFERENCE ERROR: mode construction '{construction['id']}' has unknown special_case_of '{ref}'"
             )
             errors_found = True
 
@@ -140,8 +156,10 @@ def main() -> None:
                 )
                 errors_found = True
 
-    # Validate families
-    for family in families_doc.get("families", []):
+    # Pass 1: collect each family's innovative_idea ids first, since influence
+    # edges can cite ideas on a family defined later in iteration order (the
+    # tier split means source/target no longer share one file-order list).
+    for family in families:
         fid = family["id"]
         idea_ids: set[str] = set()
         for idea in family.get("innovative_ideas", []):
@@ -151,10 +169,19 @@ def main() -> None:
                 errors_found = True
             idea_ids.add(idea_id)
         family_innovation_ids[fid] = idea_ids
+
+    # Pass 2: validate families (both tiers together)
+    for family in families:
+        fid = family["id"]
+        tier = family["_tier"]
+        construction_ids = primitive_construction_ids if tier == "primitive" else mode_construction_ids
+        construction_label = "primitive" if tier == "primitive" else "mode"
+
         for construction_id in family.get("construction_ids", []):
             if construction_id not in construction_ids:
                 print(
-                    f"REFERENCE ERROR: family '{fid}' references unknown construction '{construction_id}'"
+                    f"REFERENCE ERROR: {tier} family '{fid}' references unknown {construction_label}"
+                    f" construction '{construction_id}'"
                 )
                 errors_found = True
         for round_id in family.get("round_ids", []):
@@ -166,6 +193,10 @@ def main() -> None:
         for ref in family.get("reference_ids", []):
             if ref not in reference_ids:
                 print(f"REFERENCE ERROR: family '{fid}' has unknown reference '{ref}'")
+                errors_found = True
+        for ref in family.get("underlying_primitive_ids", []):
+            if ref not in instance_ids:
+                print(f"REFERENCE ERROR: mode family '{fid}' has unknown underlying_primitive_id '{ref}'")
                 errors_found = True
         for pp in family.get("process_participations", []):
             proc_id = pp["process_id"]
@@ -220,25 +251,25 @@ def main() -> None:
                 print(f"REFERENCE ERROR: family '{fid}' references unknown component '{cid}'")
                 errors_found = True
 
-    # Validate primitive instances
-    for primitive in primitives_doc.get("primitives", []):
-        pid = primitive["id"]
-        characteristics = primitive.get("characteristics", {})
-        if primitive["family_id"] not in family_ids:
-            print(f"REFERENCE ERROR: instance '{pid}' has unknown family_id '{primitive['family_id']}'")
-            errors_found = True
-        if primitive["primitive_type"] not in primitive_type_ids:
+    # Validate instances (both tiers together)
+    for instance in instances:
+        pid = instance["id"]
+        tier = instance["_tier"]
+        type_ids = primitive_type_ids if tier == "primitive" else mode_type_ids
+        type_label = "primitive_type" if tier == "primitive" else "mode_type"
+        characteristics = instance.get("characteristics", {})
+        if instance["type"] not in type_ids:
             print(
-                f"REFERENCE ERROR: instance '{pid}' has unknown primitive_type '{primitive['primitive_type']}'"
+                f"REFERENCE ERROR: instance '{pid}' has unknown {type_label} '{instance['type']}'"
             )
             errors_found = True
-        for ref in primitive.get("reference_ids", []):
+        for ref in instance.get("reference_ids", []):
             if ref not in reference_ids:
                 print(f"REFERENCE ERROR: instance '{pid}' has unknown reference '{ref}'")
                 errors_found = True
-        if primitive["family_id"] in standardized_profile_family_ids:
-            primitive_standard_ids = set(primitive.get("reference_ids", [])) & standard_reference_ids
-            if not primitive_standard_ids:
+        if instance["family_id"] in standardized_profile_family_ids:
+            instance_standard_ids = set(instance.get("reference_ids", [])) & standard_reference_ids
+            if not instance_standard_ids:
                 print(
                     f"REFERENCE ERROR: standardized profile instance '{pid}' has no standard reference"
                 )
@@ -288,33 +319,10 @@ def main() -> None:
             "nonce_size_bits",
             "rounds",
             "output_size_bits",
+            "tag_size_bits",
         ]
         for base_field in range_base_fields:
             for error in validate_range_field(characteristics, base_field, pid):
-                print(error)
-                errors_found = True
-
-    # Validate modes
-    for mode in modes_doc.get("modes", []):
-        mid = mode["id"]
-        for ref in mode.get("reference_ids", []):
-            if ref not in reference_ids:
-                print(f"REFERENCE ERROR: mode '{mid}' has unknown reference '{ref}'")
-                errors_found = True
-        for prim_id in mode.get("underlying_primitive_ids", []):
-            if prim_id not in primitive_ids:
-                print(f"REFERENCE ERROR: mode '{mid}' references unknown primitive '{prim_id}'")
-                errors_found = True
-        characteristics = mode.get("characteristics", {})
-        range_base_fields_mode = [
-            "nonce_size_bits",
-            "tag_size_bits",
-            "output_size_bits",
-            "rate_bits",
-            "capacity_bits",
-        ]
-        for base_field in range_base_fields_mode:
-            for error in validate_range_field(characteristics, base_field, mid):
                 print(error)
                 errors_found = True
 
@@ -335,7 +343,12 @@ def main() -> None:
     if errors_found:
         raise SystemExit(1)
 
-    print("Validation successful.")
+    print(
+        f"Validation successful — {len(family_ids)} families "
+        f"({sum(1 for f in families if f['_tier'] == 'primitive')} primitive, "
+        f"{sum(1 for f in families if f['_tier'] == 'mode')} mode), "
+        f"{len(instance_ids)} instances."
+    )
 
 
 if __name__ == "__main__":

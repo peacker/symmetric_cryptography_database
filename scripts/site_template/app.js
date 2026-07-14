@@ -45,6 +45,90 @@
     return /^https?:\/\//i.test(String(text || "").trim());
   }
 
+  // Wraps a text display element so hovering a target shows its tip (desktop
+  // mouse) and clicking/tapping a target pins that tip in place (needed since
+  // touch screens have no hover state at all) until the box itself is
+  // clicked/tapped a second time. Shared by every hover-tip display across
+  // the Timelines and Genealogy tabs so touch support isn't reimplemented
+  // per tab.
+  function createPinnableInfoBox(boxEl, baseText) {
+    let pinned = false;
+    function show(text) {
+      if (!boxEl) return;
+      boxEl.textContent = `${text}  (tap here to dismiss)`;
+      boxEl.classList.add("is-pinned");
+    }
+    function reset() {
+      if (!boxEl) return;
+      boxEl.textContent = baseText;
+      boxEl.classList.remove("is-pinned");
+    }
+    function attach(el, textOrFn) {
+      const getText = typeof textOrFn === "function" ? textOrFn : () => textOrFn;
+      el.addEventListener("mouseenter", () => { if (!pinned && boxEl) boxEl.textContent = getText(); });
+      el.addEventListener("mouseleave", () => { if (!pinned && boxEl) boxEl.textContent = baseText; });
+      el.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        pinned = true;
+        show(getText());
+      });
+    }
+    if (boxEl) {
+      boxEl.addEventListener("click", () => {
+        if (pinned) { pinned = false; reset(); }
+      });
+    }
+    return {
+      attach,
+      reset,
+      setBase: (text) => { baseText = text; if (!pinned) reset(); },
+      isPinned: () => pinned,
+    };
+  }
+
+  // Right-click/long-press a family node to filter to it, instead of having
+  // to type its name into the search box by hand. Shared by the Timelines
+  // dots/labels and both Genealogy layouts. Touch screens have no
+  // right-click, so a long-press (default ~550ms, cancelled by scrolling)
+  // triggers the same filter; a normal short tap is left alone so it still
+  // pins the hover tip via the separate click handler.
+  function attachFamilyContextMenu(el, familyName, searchInput, onChange) {
+    function trigger() {
+      searchInput.value = familyName;
+      onChange();
+    }
+    el.addEventListener("contextmenu", (ev) => {
+      ev.preventDefault();
+      trigger();
+    });
+
+    const LONG_PRESS_MS = 550;
+    const MOVE_TOLERANCE_PX = 10;
+    let timer = null;
+    let longPressed = false;
+    let startX = 0;
+    let startY = 0;
+    el.addEventListener("touchstart", (ev) => {
+      if (!ev.touches || ev.touches.length !== 1) return;
+      longPressed = false;
+      startX = ev.touches[0].clientX;
+      startY = ev.touches[0].clientY;
+      timer = setTimeout(() => { longPressed = true; trigger(); }, LONG_PRESS_MS);
+    }, { passive: true });
+    el.addEventListener("touchmove", (ev) => {
+      if (!timer || !ev.touches || !ev.touches.length) return;
+      const dx = ev.touches[0].clientX - startX;
+      const dy = ev.touches[0].clientY - startY;
+      if (Math.hypot(dx, dy) > MOVE_TOLERANCE_PX) { clearTimeout(timer); timer = null; }
+    }, { passive: true });
+    el.addEventListener("touchend", (ev) => {
+      if (timer) { clearTimeout(timer); timer = null; }
+      // A long-press already triggered the filter above; suppress the
+      // synthetic click that would otherwise follow and pin the tooltip too.
+      if (longPressed) ev.preventDefault();
+    });
+  }
+
   function setupNavigator() {
     const tabs = Array.from(document.querySelectorAll(".nav-tab[data-view-target]"));
     const views = Array.from(document.querySelectorAll(".view-panel[data-view]"));
@@ -255,7 +339,6 @@
     const view = createTableView("builderView");
 
     const ui = {
-      primitiveType: document.getElementById("fPrimitiveType"),
       referenceKind: document.getElementById("fReferenceKind"),
       referenceYearMin: document.getElementById("fReferenceYearMin"),
       referenceYearMax: document.getElementById("fReferenceYearMax"),
@@ -268,14 +351,22 @@
     };
 
     const defaultColumns = [
-      "primitive.id", "primitive.name", "primitive.type_name", "family.name", "reference.title", "reference.year", "reference.url",
+      "instance.id", "instance.name", "instance.tier", "instance.type_name", "family.name", "reference.title", "reference.year", "reference.url",
     ].filter((c) => builder.columns.includes(c));
     const visibleColumns = new Set(defaultColumns.length ? defaultColumns : builder.columns);
 
+    // Same Fixed-length primitives / Variable-length modes filtering as the
+    // Timelines and Genealogy tabs — reused rather than reimplemented so all
+    // three tabs share one definition of "type / construction / target /
+    // process" filtering and can't drift out of sync.
+    const dims = buildDimensionMaps(data.tables);
+    const processData = data.processData || {};
+    const processList = processData.processes || [];
+    const familyProcessMap = processData.familyProcessMap || {};
+    const qbFilterPanel = createTierFilterPanel("qb", dims, familyProcessMap, processList, () => refresh());
+
     function fillFilterOptions() {
-      const primitiveTypes = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["primitive.type_name"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
       const referenceKinds = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["reference.kind"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
-      renderFilterChecklist(ui.primitiveType, primitiveTypes);
       renderFilterChecklist(ui.referenceKind, referenceKinds);
     }
 
@@ -326,10 +417,25 @@
       });
     }
 
+    // How many checkboxes in the reused tier filter panel currently exclude
+    // something (tier off, or a dimension with at least one box unchecked).
+    // The panel's own state doesn't translate cleanly into flat SQL text (it
+    // spans instances, family_targets and family_processes as well as the two
+    // construction tables), so the SQL preview notes how many such filters
+    // are active rather than re-deriving them as WHERE clauses.
+    function activeTierPanelFilterCount() {
+      let count = 0;
+      [qbFilterPanel.primitive, qbFilterPanel.mode].forEach((section) => {
+        if (section.tierCheckbox && !section.tierCheckbox.checked) count += 1;
+        [section.typeSel, section.constructionSel, section.targetSel, section.processSel].forEach((selMap) => {
+          if (Array.from(selMap.values()).some((v) => !v)) count += 1;
+        });
+      });
+      return count;
+    }
+
     function buildWhereClauses() {
       const clauses = [];
-      const typeValues = selectedChecklistValues(ui.primitiveType);
-      if (typeValues.size) clauses.push(`"primitive.type_name" IN (${Array.from(typeValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
       const refKindValues = selectedChecklistValues(ui.referenceKind);
       if (refKindValues.size) clauses.push(`"reference.kind" IN (${Array.from(refKindValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
 
@@ -348,7 +454,6 @@
     }
 
     function filterRows(rows) {
-      const typeValues = selectedChecklistValues(ui.primitiveType);
       const refKindValues = selectedChecklistValues(ui.referenceKind);
       const ryMin = parseOptionalNumber(ui.referenceYearMin.value);
       const ryMax = parseOptionalNumber(ui.referenceYearMax.value);
@@ -356,8 +461,7 @@
       const referenceTitle = (ui.referenceTitle.value || "").trim().toLowerCase();
 
       return rows.filter((row) => {
-        const typeName = normalizeValue(row["primitive.type_name"]);
-        if (typeValues.size && !typeValues.has(typeName)) return false;
+        if (!qbFilterPanel.isFamilyVisible(String(row["family.id"] || ""))) return false;
         const refKind = normalizeValue(row["reference.kind"]);
         if (refKindValues.size && !refKindValues.has(refKind)) return false;
 
@@ -379,7 +483,11 @@
       const whereClauses = buildWhereClauses();
       const selectCols = visible.length ? visible.map((c) => `"${c}"`).join(", ") : "*";
       const whereSql = whereClauses.length ? `\nWHERE ${whereClauses.join("\n  AND ")}` : "";
-      ui.sqlPreview.textContent = `SELECT ${selectCols}\nFROM (${builder.baseSql})${whereSql};`;
+      const panelFilterCount = activeTierPanelFilterCount();
+      const panelNote = panelFilterCount
+        ? `\n-- + ${panelFilterCount} Fixed-length/Variable-length filter(s) from the panel above (applied to the table below, not restated as SQL here)`
+        : "";
+      ui.sqlPreview.textContent = `SELECT ${selectCols}\nFROM (${builder.baseSql})${whereSql};${panelNote}`;
     }
 
     [ui.referenceYearMin, ui.referenceYearMax, ui.familyName, ui.referenceTitle, ui.hasReferenceLink].forEach((node) => {
@@ -387,18 +495,14 @@
       node.addEventListener("input", refresh);
     });
 
-    [ui.primitiveType, ui.referenceKind].forEach((container) => {
-      container.addEventListener("change", (event) => {
-        const target = event.target;
-        if (target && target.matches('input[type="checkbox"][data-value]')) refresh();
-      });
+    ui.referenceKind.addEventListener("change", (event) => {
+      const target = event.target;
+      if (target && target.matches('input[type="checkbox"][data-value]')) refresh();
     });
 
     ui.resetFilters.addEventListener("click", () => {
-      [ui.primitiveType, ui.referenceKind].forEach((container) => {
-        Array.from(container.querySelectorAll('input[type="checkbox"][data-value]')).forEach((box) => {
-          box.checked = false;
-        });
+      Array.from(ui.referenceKind.querySelectorAll('input[type="checkbox"][data-value]')).forEach((box) => {
+        box.checked = false;
       });
       [ui.referenceYearMin, ui.referenceYearMax, ui.familyName, ui.referenceTitle].forEach((node) => { node.value = ""; });
       ui.hasReferenceLink.checked = false;
@@ -410,104 +514,41 @@
     refresh();
   }
 
-  function setupFamilyVisualization() {
-    const plotSvg = document.getElementById("familyVizPlot");
-    const xAxisSvg = document.getElementById("familyVizXAxis");
-    const yAxisSvg = document.getElementById("familyVizYAxis");
-    const plotScroll = document.getElementById("vizPlotScroll");
-    const xAxisTrack = document.getElementById("vizXAxisTrack");
-    const yAxisTrack = document.getElementById("vizYAxisTrack");
-    const cornerPane = document.getElementById("vizCornerPane");
-    const processLegend = document.getElementById("vizProcessLegend");
-    const groupBy = document.getElementById("vizGroupBy");
-    const showArrows = document.getElementById("vizShowArrows");
-    const hideDots = document.getElementById("vizHideDots");
-    const nameModeOff = document.getElementById("vizNameOff");
-    const nameModeClip = document.getElementById("vizNameClip");
-    const nameModeWrap = document.getElementById("vizNameWrap");
-    const nameModeFull = document.getElementById("vizNameFull");
-    let nameMode = "clip";
-    const colorByProcess = document.getElementById("vizColorByProcess");
-    const groupFilters = document.getElementById("vizGroupFilters");
-    const filterAll = document.getElementById("vizFilterAll");
-    const filterNone = document.getElementById("vizFilterNone");
-    const fontMinus = document.getElementById("vizFontMinus");
-    const fontPlus = document.getElementById("vizFontPlus");
-    const fontReset = document.getElementById("vizFontReset");
-    const fontValue = document.getElementById("vizFontValue");
-    const zoomOut = document.getElementById("vizZoomOut");
-    const zoomIn = document.getElementById("vizZoomIn");
-    const zoomReset = document.getElementById("vizZoomReset");
-    const zoomFit = document.getElementById("vizZoomFit");
-    const zoomValue = document.getElementById("vizZoomValue");
-    const colMinus = document.getElementById("vizColMinus");
-    const colPlus = document.getElementById("vizColPlus");
-    const colReset = document.getElementById("vizColReset");
-    const colSpacingValue = document.getElementById("vizColSpacingValue");
-    const familySearch = document.getElementById("vizFamilySearch");
-    const vizFrame = document.getElementById("vizFrame");
-    const collapseGroups = document.getElementById("vizCollapseGroups");
-    const collapseCount = document.getElementById("vizCollapseCount");
-    const yearStart = document.getElementById("vizYearStart");
-    const yearEnd = document.getElementById("vizYearEnd");
-    const yearReset = document.getElementById("vizYearReset");
-    const yearRangeValue = document.getElementById("vizYearRangeValue");
-    const relationInfoBox = document.getElementById("vizRelationInfo");
-    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !vizFrame || !groupBy || !showArrows || !hideDots || !nameModeOff || !nameModeClip || !nameModeWrap || !nameModeFull || !colorByProcess || !processLegend || !groupFilters || !filterAll || !filterNone || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !colMinus || !colPlus || !colReset || !colSpacingValue || !familySearch || !collapseGroups || !collapseCount || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
-
-    const BASE_FONT = 12;
-    const BASE_ZOOM = 1;
-    const BASE_COL_BONUS = 0;
-    const COL_STEP = 8;
-    const MIN_ZOOM = 0.35;
-    const MAX_ZOOM = 4;
-    const ZOOM_FACTOR = 1.2;
-    const LEFT_AXIS_WIDTH = 100;
-    const AXIS_HEIGHT = 48;
-    const STACK_STEP = 0.34;
-    const GROUP_GAP_UNITS = 0.42;
-    const POINT_RADIUS = 4.25;
-    const BASE_RELATION_TEXT = "Hover a relation arrow to see relation details. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.";
-    const modeSelections = {
-      primitive: new Map(),
-      construction: new Map(),
-      target: new Map(),
-    };
-    let fontPx = BASE_FONT;
-    let zoomScale = BASE_ZOOM;
-    let colSpacingBonus = BASE_COL_BONUS;
-    let hasAutoFit = false;
-    let lastRenderSize = { plotWidth: 920, plotHeight: 640 };
-    let yearsBounds = null;
-    let suppressYearRender = false;
-
-    const tables = data.tables || {};
+  // ── Shared primitive/mode dimension model ──────────────────────────────
+  // Used identically by the Timelines and Genealogy tabs so both offer the
+  // same filtering: a tier toggle (fixed-length primitives / variable-length
+  // modes) plus Types / Constructions / Target applications / Processes
+  // checklists. "Type" and "Construction" resolve against whichever of the
+  // two catalogues (primitive_* or mode_*) matches each family's own tier,
+  // merged into one lookup since the id spaces never collide.
+  function buildDimensionMaps(tables) {
     const families = (tables.families && tables.families.rows) || [];
-    const primitives = (tables.primitives && tables.primitives.rows) || [];
+    const instances = (tables.instances && tables.instances.rows) || [];
     const primitiveTypes = (tables.primitive_types && tables.primitive_types.rows) || [];
-    const familyConstructions = (tables.family_constructions && tables.family_constructions.rows) || [];
-    const constructions = (tables.constructions && tables.constructions.rows) || [];
+    const modeTypes = (tables.mode_types && tables.mode_types.rows) || [];
+    const primitiveFamilyConstructions = (tables.primitive_family_constructions && tables.primitive_family_constructions.rows) || [];
+    const modeFamilyConstructions = (tables.mode_family_constructions && tables.mode_family_constructions.rows) || [];
+    const familyConstructions = [...primitiveFamilyConstructions, ...modeFamilyConstructions];
+    const primitiveConstructions = (tables.primitive_constructions && tables.primitive_constructions.rows) || [];
+    const modeConstructions = (tables.mode_constructions && tables.mode_constructions.rows) || [];
     const familyTargets = (tables.family_targets && tables.family_targets.rows) || [];
-    const influences = (tables.family_influences && tables.family_influences.rows) || [];
-    const familyStandards = (tables.family_standards && tables.family_standards.rows) || [];
-    const primitiveStandards = (tables.primitive_standards && tables.primitive_standards.rows) || [];
 
-    const typeNameById = new Map(primitiveTypes.map((row) => [String(row.id), String(row.name)]));
-    const constructionNameById = new Map(constructions.map((row) => [String(row.id), String(row.name)]));
-    const familyById = new Map(families.map((row) => [String(row.id), row]));
-    const primitiveFamilyById = new Map(primitives.map((row) => [String(row.id), String(row.family_id || "")]));
-    const standardFamilyIds = new Set(familyStandards.map((row) => String(row.family_id)));
-    primitiveStandards.forEach((row) => {
-      const familyId = primitiveFamilyById.get(String(row.primitive_id));
-      if (familyId) standardFamilyIds.add(familyId);
-    });
+    const typeNameById = new Map(
+      [...primitiveTypes, ...modeTypes].map((r) => [String(r.id), String(r.name)])
+    );
+    const constructionNameById = new Map(
+      [...primitiveConstructions, ...modeConstructions].map((r) => [String(r.id), String(r.name)])
+    );
+    const familyTierById = new Map(families.map((r) => [String(r.id), String(r.tier || "")]));
 
     const familyToTypes = new Map();
-    primitives.forEach((row) => {
+    const instanceFamilyById = new Map();
+    instances.forEach((row) => {
       const familyId = String(row.family_id || "");
+      instanceFamilyById.set(String(row.id), familyId);
       if (!familyId) return;
       if (!familyToTypes.has(familyId)) familyToTypes.set(familyId, new Set());
-      const typeId = String(row.primitive_type || "");
+      const typeId = String(row.type_id || "");
       const typeName = typeNameById.get(typeId) || typeId;
       if (typeName) familyToTypes.get(familyId).add(typeName);
     });
@@ -530,6 +571,303 @@
       const target = String(row.target || "").trim();
       if (target) familyToTargets.get(familyId).add(target);
     });
+
+    return {
+      families, instances, typeNameById, constructionNameById, familyTierById,
+      familyToTypes, familyToConstructions, familyToTargets, instanceFamilyById,
+    };
+  }
+
+  // Family ids tied to a standard-kind reference, either directly or through
+  // one of their instances. There is no dedicated family_standards/
+  // instance_standards table (see build_db.py): "standard" is just
+  // references.kind, joined against family_references/instance_references
+  // here instead of being pre-split into a second table per level.
+  function computeStandardFamilyIds(tables, instanceFamilyById) {
+    const familyRefs = (tables.family_references && tables.family_references.rows) || [];
+    const instanceRefs = (tables.instance_references && tables.instance_references.rows) || [];
+    const referenceKindById = new Map(
+      ((tables.references && tables.references.rows) || []).map((r) => [String(r.id), String(r.kind || "").toLowerCase()])
+    );
+    const isStandardRef = (refId) => (referenceKindById.get(String(refId)) || "").includes("standard");
+
+    const standardFamilyIds = new Set();
+    familyRefs.forEach((row) => {
+      if (isStandardRef(row.reference_id)) standardFamilyIds.add(String(row.family_id));
+    });
+    instanceRefs.forEach((row) => {
+      if (!isStandardRef(row.reference_id)) return;
+      const familyId = instanceFamilyById.get(String(row.instance_id));
+      if (familyId) standardFamilyIds.add(familyId);
+    });
+    return standardFamilyIds;
+  }
+
+  // Generic checklist-with-All/None-buttons wiring, shared by every filter
+  // panel (Types / Constructions / Target applications / Processes) in both
+  // the Timelines and Genealogy tabs.
+  function buildChecklistFilter(container, selMap, entries, btnAll, btnNone, onChange) {
+    if (!container) return;
+    const items = entries || Array.from(selMap.keys()).map((k) => ({ key: k, label: k }));
+    container.innerHTML = items.map(({ key, label }) => {
+      const esc = escapeHtml(label);
+      const checked = selMap.get(key) !== false ? " checked" : "";
+      return `<label><input type="checkbox" data-value="${escapeHtml(key)}"${checked}/><span>${esc}</span></label>`;
+    }).join("");
+    container.addEventListener("change", (ev) => {
+      const t = ev.target;
+      if (t && t.type === "checkbox" && t.dataset.value !== undefined) {
+        selMap.set(t.dataset.value, t.checked);
+        onChange();
+      }
+    });
+    if (btnAll) btnAll.addEventListener("click", () => {
+      items.forEach(({ key }) => selMap.set(key, true));
+      Array.from(container.querySelectorAll("input[type=checkbox]")).forEach((c) => { c.checked = true; });
+      onChange();
+    });
+    if (btnNone) btnNone.addEventListener("click", () => {
+      items.forEach(({ key }) => selMap.set(key, false));
+      Array.from(container.querySelectorAll("input[type=checkbox]")).forEach((c) => { c.checked = false; });
+      onChange();
+    });
+  }
+
+  // True if a family's value-set for one dimension clears that dimension's
+  // filter. If nothing at all is checked, the dimension is treated as
+  // disabled (shows everything) rather than hiding everything, matching the
+  // existing genealogy filter behavior this generalizes from. A family with
+  // no tagged value in this dimension always passes (untagged values aren't
+  // forced through a checkbox).
+  function passesDimensionFilter(selMap, valueSet) {
+    const anyChecked = Array.from(selMap.values()).some((v) => v);
+    if (!anyChecked) return true;
+    if (!valueSet || !valueSet.size) return true;
+    return Array.from(valueSet).some((v) => selMap.get(v) !== false);
+  }
+
+  // Generates the markup for one two-section (Primitives/Modes) filter panel,
+  // parameterized by prefix so the same HTML (and the same element ids that
+  // createTierSection/createTierFilterPanel expect) can be produced for every
+  // tab that offers this filtering, instead of hand-duplicating the block in
+  // index.html.tmpl once per tab.
+  function renderTierFilterPanelMarkup(prefix) {
+    function dimensionPanel(idPrefix, label) {
+      return `
+            <details class="collapsible gen-filter-panel">
+              <summary>${label}</summary>
+              <div class="collapsible-body">
+                <div class="viz-filter-actions">
+                  <button id="${idPrefix}All" type="button">All</button>
+                  <button id="${idPrefix}None" type="button">None</button>
+                </div>
+                <div id="${idPrefix}Filters" class="filter-checklist viz-filter-checklist"></div>
+              </div>
+            </details>`;
+    }
+
+    function tierSection(tierKey, label) {
+      const p = `${prefix}${tierKey}`;
+      return `
+        <div class="tier-section">
+          <label class="inline-check tier-section-toggle"><input id="${prefix}Filter${tierKey}s" type="checkbox" checked /> <strong>${label}</strong></label>
+          <div class="gen-filters-row">${dimensionPanel(`${p}Type`, "Types")}${dimensionPanel(`${p}Construction`, "Constructions")}${dimensionPanel(`${p}Target`, "Target applications")}${dimensionPanel(`${p}Process`, "Processes")}
+          </div>
+        </div>`;
+    }
+
+    return tierSection("Primitive", "Fixed-length primitives") + tierSection("Mode", "Variable-length modes");
+  }
+
+  // Builds the tier + 4-dimension filter panel for one tab (prefix "viz" or
+  // "gen"). Both tabs call this with their own DOM ids but identical
+  // semantics, per-dimension state, and All/None wiring.
+  // One tier's worth of filtering: its own "include this tier" checkbox plus
+  // Types / Constructions / Target applications / Processes checklists, each
+  // scoped to families of that tier only (e.g. the primitives section never
+  // shows a mode's AEAD/hash type or its sponge/duplex construction).
+  function createTierSection(prefix, tierKey, dims, familyProcessMap, processList, onChange) {
+    const el = (suffix) => document.getElementById(`${prefix}${tierKey}${suffix}`);
+    const tierCheckbox = document.getElementById(`${prefix}Filter${tierKey}s`);
+    const typeSel = new Map();
+    const constructionSel = new Map();
+    const targetSel = new Map();
+    const processSel = new Map();
+    const tierValue = tierKey === "Primitive" ? "primitive" : "mode";
+
+    function familyIdsOfTier() {
+      const out = [];
+      dims.familyTierById.forEach((tier, fid) => { if (tier === tierValue) out.push(fid); });
+      return out;
+    }
+
+    function collectValues(dimMap) {
+      const values = new Set();
+      familyIdsOfTier().forEach((fid) => {
+        (dimMap.get(fid) || new Set()).forEach((v) => values.add(v));
+      });
+      return Array.from(values).sort((a, b) => a.localeCompare(b));
+    }
+
+    function refreshChecklist() {
+      const typeValues = collectValues(dims.familyToTypes);
+      const constructionValues = collectValues(dims.familyToConstructions);
+      const targetValues = collectValues(dims.familyToTargets);
+      typeValues.forEach((v) => { if (!typeSel.has(v)) typeSel.set(v, true); });
+      constructionValues.forEach((v) => { if (!constructionSel.has(v)) constructionSel.set(v, true); });
+      targetValues.forEach((v) => { if (!targetSel.has(v)) targetSel.set(v, true); });
+
+      const relevantProcessIds = new Set();
+      familyIdsOfTier().forEach((fid) => {
+        const pid = familyProcessMap[fid];
+        if (pid) relevantProcessIds.add(pid);
+      });
+      const processEntries = [
+        ...processList.filter((p) => relevantProcessIds.has(String(p.id))).map((p) => ({ key: String(p.id), label: String(p.name) })),
+        { key: "__none__", label: "No process" },
+      ];
+      processEntries.forEach(({ key }) => { if (!processSel.has(key)) processSel.set(key, true); });
+
+      buildChecklistFilter(el("TypeFilters"), typeSel,
+        typeValues.map((v) => ({ key: v, label: v })), el("TypeAll"), el("TypeNone"), onChange);
+      buildChecklistFilter(el("ConstructionFilters"), constructionSel,
+        constructionValues.map((v) => ({ key: v, label: v })), el("ConstructionAll"), el("ConstructionNone"), onChange);
+      buildChecklistFilter(el("TargetFilters"), targetSel,
+        targetValues.map((v) => ({ key: v, label: v })), el("TargetAll"), el("TargetNone"), onChange);
+      buildChecklistFilter(el("ProcessFilters"), processSel, processEntries, el("ProcessAll"), el("ProcessNone"), onChange);
+    }
+
+    function isVisible(fid) {
+      if (tierCheckbox && !tierCheckbox.checked) return false;
+      if (!passesDimensionFilter(typeSel, dims.familyToTypes.get(fid))) return false;
+      if (!passesDimensionFilter(constructionSel, dims.familyToConstructions.get(fid))) return false;
+      if (!passesDimensionFilter(targetSel, dims.familyToTargets.get(fid))) return false;
+      const anyProc = Array.from(processSel.values()).some((v) => v);
+      if (anyProc) {
+        const pid = familyProcessMap[fid] || "__none__";
+        if (processSel.get(pid) === false) return false;
+      }
+      return true;
+    }
+
+    refreshChecklist();
+    return { isVisible, refreshChecklist, typeSel, constructionSel, targetSel, processSel, tierCheckbox };
+  }
+
+  // Builds the full two-section (Primitives / Modes) filter panel for one tab
+  // (prefix "viz", "gen", or "qb"). Every tab that wants this filtering calls
+  // this with its own prefix but identical semantics and markup, so they
+  // can't drift out of sync and the HTML never needs hand-duplicating: this
+  // renders into "<prefix>TierFilterPanel" itself before wiring it up.
+  function createTierFilterPanel(prefix, dims, familyProcessMap, processList, onChange) {
+    const container = document.getElementById(`${prefix}TierFilterPanel`);
+    if (container) container.innerHTML = renderTierFilterPanelMarkup(prefix);
+
+    const primitiveSection = createTierSection(prefix, "Primitive", dims, familyProcessMap, processList, onChange);
+    const modeSection = createTierSection(prefix, "Mode", dims, familyProcessMap, processList, onChange);
+
+    if (primitiveSection.tierCheckbox) primitiveSection.tierCheckbox.addEventListener("change", onChange);
+    if (modeSection.tierCheckbox) modeSection.tierCheckbox.addEventListener("change", onChange);
+
+    function isFamilyVisible(fid) {
+      const tier = dims.familyTierById.get(fid) || "";
+      if (tier === "primitive") return primitiveSection.isVisible(fid);
+      if (tier === "mode") return modeSection.isVisible(fid);
+      return true;
+    }
+
+    // A legend/coloring value (a type name, construction name, or process id)
+    // only ever lives in one tier's own catalogue, so check whichever
+    // section's map actually has that key rather than assuming a tier.
+    function isValueChecked(dimension, key) {
+      const sectionMap = { type: "typeSel", construction: "constructionSel", target: "targetSel", process: "processSel" }[dimension];
+      if (primitiveSection[sectionMap].has(key)) return primitiveSection[sectionMap].get(key) !== false;
+      if (modeSection[sectionMap].has(key)) return modeSection[sectionMap].get(key) !== false;
+      return true;
+    }
+
+    return {
+      isFamilyVisible,
+      isValueChecked,
+      primitive: primitiveSection,
+      mode: modeSection,
+    };
+  }
+
+  function setupFamilyVisualization() {
+    const plotSvg = document.getElementById("familyVizPlot");
+    const xAxisSvg = document.getElementById("familyVizXAxis");
+    const yAxisSvg = document.getElementById("familyVizYAxis");
+    const plotScroll = document.getElementById("vizPlotScroll");
+    const xAxisTrack = document.getElementById("vizXAxisTrack");
+    const yAxisTrack = document.getElementById("vizYAxisTrack");
+    const cornerPane = document.getElementById("vizCornerPane");
+    const processLegend = document.getElementById("vizProcessLegend");
+    const groupBy = document.getElementById("vizGroupBy");
+    const showArrows = document.getElementById("vizShowArrows");
+    const hideDots = document.getElementById("vizHideDots");
+    const nameModeOff = document.getElementById("vizNameOff");
+    const nameModeClip = document.getElementById("vizNameClip");
+    const nameModeWrap = document.getElementById("vizNameWrap");
+    const nameModeFull = document.getElementById("vizNameFull");
+    let nameMode = "clip";
+    const colorByProcess = document.getElementById("vizColorByProcess");
+    const fontMinus = document.getElementById("vizFontMinus");
+    const fontPlus = document.getElementById("vizFontPlus");
+    const fontReset = document.getElementById("vizFontReset");
+    const fontValue = document.getElementById("vizFontValue");
+    const zoomOut = document.getElementById("vizZoomOut");
+    const zoomIn = document.getElementById("vizZoomIn");
+    const zoomReset = document.getElementById("vizZoomReset");
+    const zoomFit = document.getElementById("vizZoomFit");
+    const zoomValue = document.getElementById("vizZoomValue");
+    const colMinus = document.getElementById("vizColMinus");
+    const colPlus = document.getElementById("vizColPlus");
+    const colReset = document.getElementById("vizColReset");
+    const colSpacingValue = document.getElementById("vizColSpacingValue");
+    const familySearch = document.getElementById("vizFamilySearch");
+    const vizFrame = document.getElementById("vizFrame");
+    const collapseGroups = document.getElementById("vizCollapseGroups");
+    const collapseCount = document.getElementById("vizCollapseCount");
+    const yearStart = document.getElementById("vizYearStart");
+    const yearEnd = document.getElementById("vizYearEnd");
+    const yearReset = document.getElementById("vizYearReset");
+    const yearRangeValue = document.getElementById("vizYearRangeValue");
+    const relationInfoBox = document.getElementById("vizRelationInfo");
+    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !vizFrame || !groupBy || !showArrows || !hideDots || !nameModeOff || !nameModeClip || !nameModeWrap || !nameModeFull || !colorByProcess || !processLegend || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !colMinus || !colPlus || !colReset || !colSpacingValue || !familySearch || !collapseGroups || !collapseCount || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
+
+    const BASE_FONT = 12;
+    const BASE_ZOOM = 1;
+    const BASE_COL_BONUS = 0;
+    const COL_STEP = 8;
+    const MIN_ZOOM = 0.35;
+    const MAX_ZOOM = 4;
+    const ZOOM_FACTOR = 1.2;
+    const LEFT_AXIS_WIDTH = 100;
+    const AXIS_HEIGHT = 48;
+    const STACK_STEP = 0.34;
+    const GROUP_GAP_UNITS = 0.42;
+    const POINT_RADIUS = 4.25;
+    const BASE_RELATION_TEXT = "Hover or tap a family dot/label or a relation arrow to see details. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.";
+    const relationTip = createPinnableInfoBox(relationInfoBox, BASE_RELATION_TEXT);
+    let fontPx = BASE_FONT;
+    let zoomScale = BASE_ZOOM;
+    let colSpacingBonus = BASE_COL_BONUS;
+    let hasAutoFit = false;
+    let lastRenderSize = { plotWidth: 920, plotHeight: 640 };
+    let yearsBounds = null;
+    let suppressYearRender = false;
+
+    const tables = data.tables || {};
+    const influences = (tables.family_influences && tables.family_influences.rows) || [];
+
+    const dims = buildDimensionMaps(tables);
+    const families = dims.families;
+    const familyById = new Map(families.map((row) => [String(row.id), row]));
+    const standardFamilyIds = computeStandardFamilyIds(tables, dims.instanceFamilyById);
+    const familyToTypes = dims.familyToTypes;
+    const familyToConstructions = dims.familyToConstructions;
+    const familyToTargets = dims.familyToTargets;
 
     // Process color palette — saturated, accessible hues
     const processData = (data.processData || {});
@@ -559,18 +897,24 @@
       return proc ? String(proc.name) : pid;
     }
 
+    const filterPanel = createTierFilterPanel("viz", dims, familyProcessMap, processList, () => render());
+
     function clearNode(node) {
       while (node.firstChild) node.removeChild(node.firstChild);
     }
 
     function groupsForFamily(familyId, mode) {
-      if (mode === "primitive") {
+      if (mode === "type") {
         const values = Array.from(familyToTypes.get(familyId) || []);
-        return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["No primitive instances tagged"];
+        return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["No type tagged"];
       }
       if (mode === "construction") {
         const values = Array.from(familyToConstructions.get(familyId) || []);
         return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["No construction tagged"];
+      }
+      if (mode === "process") {
+        const name = processNameForFamily(familyId);
+        return [name || "No process"];
       }
       const values = Array.from(familyToTargets.get(familyId) || []);
       return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["Unspecified target"];
@@ -587,6 +931,7 @@
     function modePalette(mode) {
       if (mode === "construction") return ["rgba(248, 240, 224, 0.92)", "rgba(252, 247, 238, 0.98)"];
       if (mode === "target") return ["rgba(232, 243, 234, 0.92)", "rgba(246, 251, 247, 0.98)"];
+      if (mode === "process") return ["rgba(240, 232, 248, 0.92)", "rgba(249, 246, 252, 0.98)"];
       return ["rgba(231, 244, 248, 0.92)", "rgba(246, 251, 252, 0.98)"];
     }
 
@@ -608,10 +953,6 @@
 
     function charsForWidth(widthPx) {
       return Math.max(7, Math.min(28, Math.floor(widthPx / (Math.max(fontPx, 8) * 0.62))));
-    }
-
-    function selectionMap(mode) {
-      return modeSelections[mode] || modeSelections.primitive;
     }
 
     function syncAxisTracks() {
@@ -646,17 +987,6 @@
       if (!plotScroll.clientWidth || !lastRenderSize.plotWidth) return;
       const fitWidth = Math.max(240, plotScroll.clientWidth - 8);
       setZoom(fitWidth / lastRenderSize.plotWidth);
-    }
-
-    function ensureSelection(mode, labels) {
-      const active = selectionMap(mode);
-      labels.forEach((label) => {
-        if (!active.has(label)) active.set(label, true);
-      });
-      Array.from(active.keys()).forEach((label) => {
-        if (!labels.includes(label)) active.delete(label);
-      });
-      return active;
     }
 
     function initializeYearBounds() {
@@ -712,31 +1042,12 @@
       return { start, end };
     }
 
-    function renderGroupFilterList(mode, labels) {
-      const active = ensureSelection(mode, labels);
-      clearNode(groupFilters);
-      labels.forEach((label) => {
-        const row = document.createElement("label");
-        const box = document.createElement("input");
-        box.type = "checkbox";
-        box.checked = active.get(label) !== false;
-        box.setAttribute("data-group-label", label);
-        const text = document.createElement("span");
-        const shortLabel = shortGroupLabel(label);
-        text.textContent = shortLabel;
-        if (shortLabel !== label) row.title = label;
-        row.appendChild(box);
-        row.appendChild(text);
-        groupFilters.appendChild(row);
-      });
-    }
-
     function renderEmptyState(message) {
       clearNode(plotSvg);
       clearNode(xAxisSvg);
       clearNode(yAxisSvg);
-      relationInfoBox.hidden = !showArrows.checked;
-      if (showArrows.checked) relationInfoBox.textContent = BASE_RELATION_TEXT;
+      relationInfoBox.hidden = false;
+      relationTip.reset();
       cornerPane.innerHTML = `<b>${escapeHtml(modeLabel(groupBy.value))}</b><span style="font-weight:400;opacity:0.75">Publication year</span>`;
       plotSvg.setAttribute("viewBox", "0 0 920 260");
       plotSvg.setAttribute("width", "920");
@@ -761,8 +1072,8 @@
       clearNode(plotSvg);
       clearNode(xAxisSvg);
       clearNode(yAxisSvg);
-      relationInfoBox.hidden = !showArrows.checked;
-      if (showArrows.checked) relationInfoBox.textContent = BASE_RELATION_TEXT;
+      relationInfoBox.hidden = false;
+      relationTip.reset();
       const mode = groupBy.value;
       cornerPane.innerHTML = `<b>${escapeHtml(modeLabel(mode))}</b><span style="font-weight:400;opacity:0.75">Publication year</span>`;
       const rawPoints = [];
@@ -775,6 +1086,7 @@
         if (yearRange && (year < yearRange.start || year > yearRange.end)) return;
         const familyId = String(family.id || "");
         if (!familyId) return;
+        if (!filterPanel.isFamilyVisible(familyId)) return;
         const familyName = String(family.name || familyId);
         if (searchNeedle && !familyName.toLowerCase().includes(searchNeedle)) return;
         groupsForFamily(familyId, mode).forEach((group) => {
@@ -789,23 +1101,14 @@
 
       if (!rawPoints.length) {
         if (searchNeedle) {
-          renderEmptyState("No families match the current name search and year range.");
+          renderEmptyState("No families match the current name search, filters, and year range.");
         } else {
-          renderEmptyState("No family data available for visualization.");
+          renderEmptyState("No families match the current filters. Enable more tiers/types/constructions to see data.");
         }
         return;
       }
 
-      const allGroupLabels = Array.from(new Set(rawPoints.map((point) => point.group))).sort((a, b) => a.localeCompare(b));
-      renderGroupFilterList(mode, allGroupLabels);
-      const activeGroups = ensureSelection(mode, allGroupLabels);
-      const points = rawPoints.filter((point) => activeGroups.get(point.group) !== false);
-
-      if (!points.length) {
-        renderEmptyState("No groups are currently enabled. Re-enable at least one group to render the chart.");
-        return;
-      }
-
+      const points = rawPoints;
       points.sort((a, b) => a.group.localeCompare(b.group) || a.year - b.year || a.name.localeCompare(b.name));
       const groupLabels = Array.from(new Set(points.map((point) => point.group))).sort((a, b) => a.localeCompare(b));
 
@@ -1150,6 +1453,8 @@
           const pointTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
           pointTitle.textContent = richTip;
           circle.appendChild(pointTitle);
+          relationTip.attach(circle, richTip);
+          attachFamilyContextMenu(circle, point.name, familySearch, render);
           plotSvg.appendChild(circle);
         }
 
@@ -1180,6 +1485,8 @@
           const fullTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
           fullTitle.textContent = richTip;
           label.appendChild(fullTitle);
+          relationTip.attach(label, richTip);
+          attachFamilyContextMenu(label, point.name, familySearch, render);
           plotSvg.appendChild(label);
           labelBounds.set(point, label.getBBox());
         }
@@ -1227,12 +1534,7 @@
             const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
             title.textContent = hoverText;
             hoverLine.appendChild(title);
-            hoverLine.addEventListener("mouseenter", () => {
-              relationInfoBox.textContent = hoverText;
-            });
-            hoverLine.addEventListener("mouseleave", () => {
-              relationInfoBox.textContent = BASE_RELATION_TEXT;
-            });
+            relationTip.attach(hoverLine, hoverText);
             hoverLines.push(hoverLine);
           });
         });
@@ -1352,22 +1654,6 @@
     collapseCount.addEventListener("input", render);
     familySearch.addEventListener("input", render);
     familySearch.addEventListener("change", render);
-    groupFilters.addEventListener("change", (event) => {
-      const target = event.target;
-      if (!target || target.type !== "checkbox") return;
-      selectionMap(groupBy.value).set(target.getAttribute("data-group-label") || "", target.checked);
-      render();
-    });
-    filterAll.addEventListener("click", () => {
-      const active = selectionMap(groupBy.value);
-      Array.from(active.keys()).forEach((label) => active.set(label, true));
-      render();
-    });
-    filterNone.addEventListener("click", () => {
-      const active = selectionMap(groupBy.value);
-      Array.from(active.keys()).forEach((label) => active.set(label, false));
-      render();
-    });
     fontMinus.addEventListener("click", () => {
       fontPx = Math.max(8, fontPx - 1);
       render();
@@ -1458,19 +1744,13 @@
     const genConnectedOnly = document.getElementById("genConnectedOnly");
     const genStandardsOnly = document.getElementById("genStandardsOnly");
     const genFamilySearch = document.getElementById("genFamilySearch");
+    const genFamilySearchDegree = document.getElementById("genFamilySearchDegree");
+    const genDegreeMinus = document.getElementById("genDegreeMinus");
+    const genDegreePlus = document.getElementById("genDegreePlus");
     const genYearStart = document.getElementById("genYearStart");
     const genYearEnd = document.getElementById("genYearEnd");
     const genYearReset = document.getElementById("genYearReset");
     const genYearRangeValue = document.getElementById("genYearRangeValue");
-    const genPrimitiveFilters = document.getElementById("genPrimitiveFilters");
-    const genPrimitiveAll = document.getElementById("genPrimitiveAll");
-    const genPrimitiveNone = document.getElementById("genPrimitiveNone");
-    const genConstructionFilters = document.getElementById("genConstructionFilters");
-    const genConstructionAll = document.getElementById("genConstructionAll");
-    const genConstructionNone = document.getElementById("genConstructionNone");
-    const genProcessFilters = document.getElementById("genProcessFilters");
-    const genProcessAll = document.getElementById("genProcessAll");
-    const genProcessNone = document.getElementById("genProcessNone");
     const genEdgeInfo = document.getElementById("genEdgeInfo");
     const genLegend = document.getElementById("genLegend");
     const genFontMinus = document.getElementById("genFontMinus");
@@ -1498,39 +1778,21 @@
 
     // ── Data ─────────────────────────────────────────────────────────
     const tables = data.tables || {};
-    const families = (tables.families && tables.families.rows) || [];
-    const primitives = (tables.primitives && tables.primitives.rows) || [];
-    const primitiveTypes = (tables.primitive_types && tables.primitive_types.rows) || [];
-    const familyConstructions = (tables.family_constructions && tables.family_constructions.rows) || [];
-    const constructions = (tables.constructions && tables.constructions.rows) || [];
     const influences = (tables.family_influences && tables.family_influences.rows) || [];
-    const familyStandards = (tables.family_standards && tables.family_standards.rows) || [];
-    const primitiveStandards = (tables.primitive_standards && tables.primitive_standards.rows) || [];
 
     const genProcessData = data.processData || {};
     const genProcessList = genProcessData.processes || [];
     const genFamilyProcessMap = genProcessData.familyProcessMap || {};
 
-    const typeNameById = new Map(primitiveTypes.map((r) => [String(r.id), String(r.name)]));
-    const constrNameById = new Map(constructions.map((r) => [String(r.id), String(r.name)]));
+    const genDims = buildDimensionMaps(tables);
+    const families = genDims.families;
     const genFamById = new Map(families.map((r) => [String(r.id), r]));
-    const primFamById = new Map(primitives.map((r) => [String(r.id), String(r.family_id || "")]));
 
-    const stdFamIds = new Set(familyStandards.map((r) => String(r.family_id)));
-    primitiveStandards.forEach((r) => { const f = primFamById.get(String(r.primitive_id)); if (f) stdFamIds.add(f); });
+    const stdFamIds = computeStandardFamilyIds(tables, genDims.instanceFamilyById);
 
-    const famToTypes = new Map();
-    primitives.forEach((r) => {
-      const fid = String(r.family_id || ""); if (!fid) return;
-      if (!famToTypes.has(fid)) famToTypes.set(fid, new Set());
-      const tn = typeNameById.get(String(r.primitive_type || "")) || ""; if (tn) famToTypes.get(fid).add(tn);
-    });
-    const famToConstrs = new Map();
-    familyConstructions.forEach((r) => {
-      const fid = String(r.family_id || ""); if (!fid) return;
-      if (!famToConstrs.has(fid)) famToConstrs.set(fid, new Set());
-      const cn = constrNameById.get(String(r.construction_id || "")) || ""; if (cn) famToConstrs.get(fid).add(cn);
-    });
+    const famToTypes = genDims.familyToTypes;
+    const famToConstrs = genDims.familyToConstructions;
+    const famToTargets = genDims.familyToTargets;
 
     const PROC_COLORS = ["#1a73c9","#d4501a","#1e9c5e","#9b42b8","#c9961a","#c91a4e","#1ab8c9","#5e6e1a","#7a1ac9","#1a4ec9","#a85a1a","#1a9b9b"];
     const TYPE_COLORS = ["#1e6fa8","#b85a28","#1a8e5c","#7b30a0","#a07818","#98183c","#169aa8","#4c6218","#601aa0","#1a40a0","#8a4818","#1a8080"];
@@ -1543,6 +1805,9 @@
     const constrColorMap = new Map();
     const allConstrs = Array.from(new Set(Array.from(famToConstrs.values()).flatMap((s) => Array.from(s)))).sort();
     allConstrs.forEach((c, i) => constrColorMap.set(c, TYPE_COLORS[i % TYPE_COLORS.length]));
+    const targetColorMap = new Map();
+    const allTargets = Array.from(new Set(Array.from(famToTargets.values()).flatMap((s) => Array.from(s)))).sort();
+    allTargets.forEach((t, i) => targetColorMap.set(t, TYPE_COLORS[i % TYPE_COLORS.length]));
     const relationTypes = Array.from(new Set(influences.flatMap((e) => {
       const rs = parseJsonArray(e.relations_json);
       const fb = String(e.relation || "").trim();
@@ -1558,23 +1823,11 @@
     }
 
     // ── Filter state ──────────────────────────────────────────────────
-    const primSel = new Map();
-    const constrSel = new Map();
-    const procSel = new Map();
     let genYrBounds = null;
 
+    const genFilterPanel = createTierFilterPanel("gen", genDims, genFamilyProcessMap, genProcessList, () => render());
+
     function initFilters() {
-      allTypes.forEach((t) => { if (!primSel.has(t)) primSel.set(t, true); });
-      allConstrs.forEach((c) => { if (!constrSel.has(c)) constrSel.set(c, true); });
-      genProcessList.forEach((p) => { if (!procSel.has(String(p.id))) procSel.set(String(p.id), true); });
-      procSel.set("__none__", true);
-
-      buildChk(genPrimitiveFilters, primSel, null, genPrimitiveAll, genPrimitiveNone);
-      buildChk(genConstructionFilters, constrSel, null, genConstructionAll, genConstructionNone);
-      buildChk(genProcessFilters, procSel,
-        [...genProcessList.map((p) => ({ key: String(p.id), label: String(p.name) })), { key: "__none__", label: "No process" }],
-        genProcessAll, genProcessNone);
-
       const yrs = families.map((f) => Number(f.year)).filter(isFinite).sort((a, b) => a - b);
       if (yrs.length) {
         genYrBounds = { min: yrs[0], max: yrs[yrs.length - 1] };
@@ -1582,27 +1835,6 @@
         genYearStart.value = String(genYrBounds.min); genYearEnd.value = String(genYrBounds.max);
         updateYrLbl();
       }
-    }
-
-    function buildChk(container, selMap, keyed, btnAll, btnNone) {
-      if (!container) return;
-      const entries = keyed || Array.from(selMap.keys()).map((k) => ({ key: k, label: k }));
-      container.innerHTML = entries.map(({ key, label }) => {
-        const esc = escapeHtml(label);
-        return `<label><input type="checkbox" data-value="${escapeHtml(key)}"${selMap.get(key) !== false ? " checked" : ""}/><span>${esc}</span></label>`;
-      }).join("");
-      container.addEventListener("change", (ev) => {
-        const t = ev.target;
-        if (t && t.type === "checkbox" && t.dataset.value !== undefined) { selMap.set(t.dataset.value, t.checked); render(); }
-      });
-      if (btnAll) btnAll.addEventListener("click", () => {
-        entries.forEach(({ key }) => selMap.set(key, true));
-        Array.from(container.querySelectorAll("input[type=checkbox]")).forEach((c) => { c.checked = true; }); render();
-      });
-      if (btnNone) btnNone.addEventListener("click", () => {
-        entries.forEach(({ key }) => selMap.set(key, false));
-        Array.from(container.querySelectorAll("input[type=checkbox]")).forEach((c) => { c.checked = false; }); render();
-      });
     }
 
     function updateYrLbl() {
@@ -1621,6 +1853,7 @@
       const mode = genColorBy.value;
       if (mode === "process") { const pid = genFamilyProcessMap[fid]; return pid ? (genProcColorMap.get(pid) || "#7a8c8f") : "#7a8c8f"; }
       if (mode === "construction") { const cc = Array.from(famToConstrs.get(fid) || []).sort(); return cc.length ? (constrColorMap.get(cc[0]) || "#5a7a8a") : "#7a8c8f"; }
+      if (mode === "target") { const tt = Array.from(famToTargets.get(fid) || []).sort(); return tt.length ? (targetColorMap.get(tt[0]) || "#5a7a8a") : "#7a8c8f"; }
       const tt = Array.from(famToTypes.get(fid) || []).sort(); return tt.length ? (typeColorMap.get(tt[0]) || "#5a7a8a") : "#7a8c8f";
     }
 
@@ -1631,12 +1864,7 @@
       const needle = ignoreSearch ? "" : genFamilySearch.value.trim().toLowerCase();
       if (needle && !String(fam.name || fid).toLowerCase().includes(needle)) return false;
       if (genStandardsOnly.checked && !stdFamIds.has(fid)) return false;
-      const anyType = Array.from(primSel.values()).some((v) => v);
-      if (anyType) { const ft = famToTypes.get(fid) || new Set(); if (!ft.size ? primSel.get("") === false : !Array.from(ft).some((t) => primSel.get(t) !== false)) return false; }
-      const anyCon = Array.from(constrSel.values()).some((v) => v);
-      if (anyCon) { const fc = famToConstrs.get(fid) || new Set(); if (!fc.size ? constrSel.get("") === false : !Array.from(fc).some((c) => constrSel.get(c) !== false)) return false; }
-      const anyProc = Array.from(procSel.values()).some((v) => v);
-      if (anyProc) { const pid = genFamilyProcessMap[fid] || "__none__"; if (procSel.get(pid) === false) return false; }
+      if (!genFilterPanel.isFamilyVisible(fid)) return false;
       return true;
     }
 
@@ -1645,7 +1873,8 @@
     const TOP_PAD = 20;
     const SIDE_PAD = 20;
     const NODE_PAD_X = 7;
-    const BASE_EDGE_INFO = "Hover an influence arrow to see relation details.";
+    const BASE_EDGE_INFO = "Hover or tap a family node or an influence arrow to see details. Right-click/long-press a node to filter the graph to it.";
+    const edgeTip = createPinnableInfoBox(genEdgeInfo, BASE_EDGE_INFO);
 
     function nodeH() { return Math.round(genFontPx * 1.85); }
     function rowGap() { return Math.round(genFontPx * 4.5); }
@@ -1851,8 +2080,10 @@
       const items = mode === "process"
         ? [...genProcessList.map((p) => ({ color: genProcColorMap.get(String(p.id)), label: String(p.name) })), { color: genProcColorMap.get("__none__"), label: "No process" }]
         : mode === "construction"
-          ? allConstrs.filter((c) => constrSel.get(c) !== false).map((c) => ({ color: constrColorMap.get(c) || "#7a8c8f", label: c }))
-          : allTypes.filter((t) => primSel.get(t) !== false).map((t) => ({ color: typeColorMap.get(t) || "#7a8c8f", label: t }));
+          ? allConstrs.filter((c) => genFilterPanel.isValueChecked("construction", c)).map((c) => ({ color: constrColorMap.get(c) || "#7a8c8f", label: c }))
+          : mode === "target"
+            ? allTargets.filter((t) => genFilterPanel.isValueChecked("target", t)).map((t) => ({ color: targetColorMap.get(t) || "#7a8c8f", label: t }))
+            : allTypes.filter((t) => genFilterPanel.isValueChecked("type", t)).map((t) => ({ color: typeColorMap.get(t) || "#7a8c8f", label: t }));
       const mkItem = (color, label, bold) => {
         const s = document.createElement("span"); s.className = "viz-process-legend-item";
         const d = document.createElement("span"); d.className = "viz-process-legend-dot"; d.style.cssText = `background:${color};${bold ? "border:2px solid #000;box-sizing:border-box" : ""}`;
@@ -1982,8 +2213,7 @@
         }
         const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.2 + 5)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
-        hp.addEventListener("mouseenter", () => { if (genEdgeInfo) genEdgeInfo.textContent = hoverTxt; });
-        hp.addEventListener("mouseleave", () => { if (genEdgeInfo) genEdgeInfo.textContent = BASE_EDGE_INFO; });
+        edgeTip.attach(hp, hoverTxt);
         hoverPaths.push(hp);
       });
 
@@ -2000,6 +2230,8 @@
         const tip = [`${name} (${fam.year})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : []), ...(fam.notes ? [fam.notes] : [])].join("\n");
         const rect = svgEl("rect", { x: String(cx - w / 2), y: String(cy), width: String(w), height: String(NH), rx: "4", ry: "4", fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.22)", "stroke-width": isStd ? "2" : "1", opacity: isIso ? "0.58" : "1" });
         const rt = svgEl("title", {}); rt.textContent = tip; rect.appendChild(rt);
+        edgeTip.attach(rect, tip);
+        attachFamilyContextMenu(rect, name, genFamilySearch, render);
         genPlot.appendChild(rect);
         const maxCh = Math.min(genNumChars, Math.max(4, Math.floor((w - NODE_PAD_X * 2) / (genFontPx * 0.56))));
         const lblStyle = `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:#fff;pointer-events:none;font-weight:${isStd ? 700 : 400};opacity:${isIso ? "0.8" : "1"}`;
@@ -2294,8 +2526,7 @@
         }
         const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.1 + 5)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
-        hp.addEventListener("mouseenter", () => { if (genEdgeInfo) genEdgeInfo.textContent = hoverTxt; });
-        hp.addEventListener("mouseleave", () => { if (genEdgeInfo) genEdgeInfo.textContent = BASE_EDGE_INFO; });
+        edgeTip.attach(hp, hoverTxt);
         hoverPaths.push(hp);
       });
 
@@ -2316,11 +2547,14 @@
         const tip = [`${String(fam.name || fid)} (${genLabel})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : [])].join("\n");
         const showBullets = !genShowBullets || genShowBullets.checked;
         const nodeRad = isStd ? 4 : 3;
-        if (showBullets) {
-          const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeRad), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "1.5" : "0.8" });
-          const ct = svgEl("title", {}); ct.textContent = tip; circ.appendChild(ct); genPlot.appendChild(circ);
-        }
         const name = String(fam.name || fid);
+        if (showBullets) {
+          const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeRad), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "1.5" : "0.8", "pointer-events": "all" });
+          const ct = svgEl("title", {}); ct.textContent = tip; circ.appendChild(ct);
+          edgeTip.attach(circ, tip);
+          attachFamilyContextMenu(circ, name, genFamilySearch, render);
+          genPlot.appendChild(circ);
+        }
         const isRight = deg <= 180;
         const rad = (deg - 90) * Math.PI / 180;
         const off = showBullets ? nodeRad + 5 : 3;
@@ -2335,7 +2569,11 @@
         const lbl = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": anchor,
           transform: `rotate(${textRot.toFixed(1)},${lx.toFixed(1)},${ly.toFixed(1)})`, style: radStyle });
         lbl.textContent = disp;
-        if (!showBullets) { const lt = svgEl("title", {}); lt.textContent = tip; lbl.appendChild(lt); }
+        if (!showBullets) {
+          const lt = svgEl("title", {}); lt.textContent = tip; lbl.appendChild(lt);
+          edgeTip.attach(lbl, tip);
+          attachFamilyContextMenu(lbl, name, genFamilySearch, render);
+        }
         genPlot.appendChild(lbl);
       });
       hoverPaths.forEach((hp) => genPlot.appendChild(hp));
@@ -2353,12 +2591,23 @@
       if (needle) {
         const matched = new Set(eligibleIds.filter((fid) =>
           String((genFamById.get(fid) || {}).name || fid).toLowerCase().includes(needle)));
+        const rawDegree = genFamilySearchDegree ? parseInt(genFamilySearchDegree.value, 10) : 1;
+        const degree = Number.isFinite(rawDegree) ? Math.max(0, rawDegree) : 1;
+        // BFS outward from the matched set, one relation "hop" per round, so a
+        // degree of 1 (the default) keeps the original direct-neighbors-only
+        // behavior and a higher degree pulls in more distant relations.
+        let frontier = matched;
         const expanded = new Set(matched);
-        influences.forEach((e) => {
-          const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
-          if (matched.has(src) && eligibleSet.has(tgt)) expanded.add(tgt);
-          if (matched.has(tgt) && eligibleSet.has(src)) expanded.add(src);
-        });
+        for (let hop = 0; hop < degree && frontier.size; hop++) {
+          const next = new Set();
+          influences.forEach((e) => {
+            const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
+            if (frontier.has(src) && eligibleSet.has(tgt) && !expanded.has(tgt)) next.add(tgt);
+            if (frontier.has(tgt) && eligibleSet.has(src) && !expanded.has(src)) next.add(src);
+          });
+          next.forEach((fid) => expanded.add(fid));
+          frontier = next;
+        }
         visIds = eligibleIds.filter((fid) => expanded.has(fid));
       }
       const visSet = new Set(visIds);
@@ -2394,6 +2643,20 @@
     if (genCollapseEdges) genCollapseEdges.addEventListener("change", render);
     genFamilySearch.addEventListener("input", render);
     genFamilySearch.addEventListener("change", render);
+    if (genFamilySearchDegree) {
+      genFamilySearchDegree.addEventListener("input", render);
+      genFamilySearchDegree.addEventListener("change", render);
+    }
+    if (genDegreeMinus) genDegreeMinus.addEventListener("click", () => {
+      const cur = parseInt(genFamilySearchDegree.value, 10);
+      genFamilySearchDegree.value = String(Math.max(0, (Number.isFinite(cur) ? cur : 1) - 1));
+      render();
+    });
+    if (genDegreePlus) genDegreePlus.addEventListener("click", () => {
+      const cur = parseInt(genFamilySearchDegree.value, 10);
+      genFamilySearchDegree.value = String((Number.isFinite(cur) ? cur : 1) + 1);
+      render();
+    });
     genYearStart.addEventListener("input", render);
     genYearEnd.addEventListener("input", render);
     genYearReset.addEventListener("click", () => {

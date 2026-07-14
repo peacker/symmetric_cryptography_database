@@ -37,12 +37,12 @@ def chart_timeline(rows: list[dict]) -> None:
         print("matplotlib not installed; skipping timeline chart.")
         return
 
-    types = sorted({r["primitive_type"] for r in rows})
+    types = sorted({r["type_name"] for r in rows})
     colour_map = {t: f"C{i}" for i, t in enumerate(types)}
 
     years = [int(r["year"]) for r in rows]
     names = [r["name"] for r in rows]
-    colours = [colour_map[r["primitive_type"]] for r in rows]
+    colours = [colour_map[r["type_name"]] for r in rows]
 
     fig, ax = plt.subplots(figsize=(max(10, len(rows) * 0.9), 5))
     ax.scatter(years, [0] * len(rows), c=colours, s=120, zorder=3)
@@ -106,13 +106,13 @@ def chart_size_scatter(rows: list[dict]) -> None:
         print("matplotlib not installed; skipping size scatter.")
         return
 
-    types = sorted({r["primitive_type"] for r in rows})
+    types = sorted({r["type_name"] for r in rows})
     colour_map = {t: f"C{i}" for i, t in enumerate(types)}
 
     fig, ax = plt.subplots(figsize=(8, 6))
     for r in rows:
         ax.scatter(int(r["block_size_bits"]), int(r["output_size_bits"]),
-                   c=colour_map[r["primitive_type"]], s=100, zorder=3)
+                   c=colour_map[r["type_name"]], s=100, zorder=3)
         ax.annotate(r["name"], (int(r["block_size_bits"]), int(r["output_size_bits"])),
                     textcoords="offset points", xytext=(5, 3), fontsize=8)
 
@@ -130,12 +130,12 @@ def chart_size_scatter(rows: list[dict]) -> None:
 
 
 def main() -> None:
-    primitives = load_csv("timeline_primitives.csv")
+    instances = load_csv("timeline_instances.csv")
     edges = load_csv("influence_edges.csv")
 
-    chart_timeline(primitives)
+    chart_timeline(instances)
     chart_influence_graph(edges)
-    chart_size_scatter(primitives)
+    chart_size_scatter(instances)
 
 
 if __name__ == "__main__":

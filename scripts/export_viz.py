@@ -32,16 +32,17 @@ def main() -> None:
         export_query(
             conn,
             """
-            SELECT p.id AS primitive_id, p.name, f.year,
-                   f.id AS family_id, f.name AS family_name,
-                     pt.name AS primitive_type,
-                   p.block_size_bits, p.output_size_bits
-            FROM primitives p
-            JOIN families f ON f.id = p.family_id
-                 JOIN primitive_types pt ON pt.id = p.primitive_type
-            ORDER BY f.year, p.name
+            SELECT i.id AS instance_id, i.name, f.year,
+                   f.id AS family_id, f.name AS family_name, f.tier,
+                   COALESCE(pt.name, mt.name) AS type_name,
+                   i.block_size_bits, i.output_size_bits
+            FROM instances i
+            JOIN families f ON f.id = i.family_id
+            LEFT JOIN primitive_types pt ON pt.id = i.type_id
+            LEFT JOIN mode_types mt ON mt.id = i.type_id
+            ORDER BY f.year, i.name
             """,
-            VIZ_DIR / "timeline_primitives.csv",
+            VIZ_DIR / "timeline_instances.csv",
         )
 
         # Family-level influence edges
@@ -65,42 +66,43 @@ def main() -> None:
         export_query(
             conn,
             """
-            SELECT p.id AS primitive_id, p.name, t.target
-            FROM primitives p
-            JOIN families f ON f.id = p.family_id
+            SELECT i.id AS instance_id, i.name, t.target
+            FROM instances i
+            JOIN families f ON f.id = i.family_id
             JOIN family_targets t ON t.family_id = f.id
-            ORDER BY p.name, t.target
+            ORDER BY i.name, t.target
             """,
-            VIZ_DIR / "primitive_targets.csv",
+            VIZ_DIR / "instance_targets.csv",
         )
 
         # Instance-level standards
         export_query(
             conn,
             """
-                 SELECT p.id AS primitive_id, p.name,
-                     ref.id AS standard_id, ref.title AS standard_name
-            FROM primitives p
-            JOIN primitive_standards ps ON ps.primitive_id = p.id
-                JOIN "references" ref ON ref.id = ps.standard_id
-                 ORDER BY p.name, ref.title
+            SELECT i.id AS instance_id, i.name,
+                   ref.id AS standard_id, ref.title AS standard_name
+            FROM instances i
+            JOIN instance_references ir ON ir.instance_id = i.id
+            JOIN "references" ref ON ref.id = ir.reference_id
+            WHERE ref.kind LIKE '%standard%'
+            ORDER BY i.name, ref.title
             """,
-            VIZ_DIR / "primitive_standards.csv",
+            VIZ_DIR / "instance_standards.csv",
         )
 
         # Processes per instance (via family)
         export_query(
             conn,
             """
-            SELECT p.id AS primitive_id, p.name,
+            SELECT i.id AS instance_id, i.name,
                    pr.id AS process_id, pr.name AS process_name
-            FROM primitives p
-            JOIN families f ON f.id = p.family_id
+            FROM instances i
+            JOIN families f ON f.id = i.family_id
             JOIN family_processes fp ON fp.family_id = f.id
             JOIN processes pr ON pr.id = fp.process_id
-            ORDER BY p.name, pr.name
+            ORDER BY i.name, pr.name
             """,
-            VIZ_DIR / "primitive_processes.csv",
+            VIZ_DIR / "instance_processes.csv",
         )
 
         # Family summary
@@ -108,18 +110,21 @@ def main() -> None:
             conn,
             """
             SELECT f.id AS family_id, f.name AS family_name,
-                  f.year,
-                  CASE WHEN COUNT(DISTINCT p.primitive_type) = 1
-                      THEN MAX(pt.name)
+                  f.year, f.tier,
+                  CASE WHEN COUNT(DISTINCT i.type_id) = 1
+                      THEN MAX(COALESCE(pt.name, mt.name))
                       ELSE 'Mixed'
-                  END AS primitive_type,
-                 GROUP_CONCAT(DISTINCT c.name) AS constructions,
-                   COUNT(p.id) AS instance_count
+                  END AS type_name,
+                 GROUP_CONCAT(DISTINCT COALESCE(pc.name, mc.name)) AS constructions,
+                   COUNT(i.id) AS instance_count
             FROM families f
-            LEFT JOIN primitives p ON p.family_id = f.id
-              LEFT JOIN primitive_types pt ON pt.id = p.primitive_type
-              LEFT JOIN family_constructions fc ON fc.family_id = f.id
-              LEFT JOIN constructions c ON c.id = fc.construction_id
+            LEFT JOIN instances i ON i.family_id = f.id
+              LEFT JOIN primitive_types pt ON pt.id = i.type_id
+              LEFT JOIN mode_types mt ON mt.id = i.type_id
+              LEFT JOIN primitive_family_constructions pfc ON pfc.family_id = f.id
+              LEFT JOIN primitive_constructions pc ON pc.id = pfc.construction_id
+              LEFT JOIN mode_family_constructions mfc ON mfc.family_id = f.id
+              LEFT JOIN mode_constructions mc ON mc.id = mfc.construction_id
             GROUP BY f.id
             ORDER BY f.year, f.name
             """,

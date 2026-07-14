@@ -15,7 +15,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from common import ROOT, load_all_data
+from common import ROOT, all_families, load_all_data
 
 REFERENCES_DIR = ROOT / "references"
 
@@ -149,8 +149,8 @@ def fuzzy_match(ref: dict, family_names: list[str], files: list[Path]) -> list[P
 
 def build_family_pdf_map() -> dict[str, list[Path]]:
     """Return family_id -> sorted list of resolved local file Paths (may be empty)."""
-    data = load_all_data(["families", "references"])
-    families = data["families"]["families"]
+    data = load_all_data(["primitive_families", "mode_families", "references"])
+    families = all_families(data)
     references = {r["id"]: r for r in data["references"]["references"]}
     files = local_files()
 

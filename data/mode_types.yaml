@@ -1,0 +1,22 @@
+version: 1
+mode_types:
+- id: stream_cipher
+  name: Stream Cipher
+- id: aead
+  name: Authenticated Encryption with Associated Data (AEAD)
+- id: hash
+  name: Hash Function
+- id: xof
+  name: Extendable-Output Function (XOF)
+- id: pbkdf
+  name: Password-Based Key Derivation Function (PBKDF / Memory-Hard Function)
+- id: enc
+  name: Encryption Mode (confidentiality-only)
+- id: mac
+  name: Message Authentication Code (MAC)
+- id: prng
+  name: Pseudorandom Number Generator (PRNG/DRBG)
+- id: kdf
+  name: Key Derivation Function (KDF)
+- id: keywrap
+  name: Key Wrap
