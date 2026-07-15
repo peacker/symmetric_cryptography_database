@@ -1760,7 +1760,14 @@ mode_families:
   reference_ids:
   - isaac_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: rc4
+    relations:
+    - related_to
+    note: 'ISAAC''s own spec states it directly, while explicitly disclaiming derivation: "ISAAC is similar in form and
+      function to the alleged RC4, although the generators were developed independently. ISAAC is three times faster,
+      less biased, and has longer minimum and average cycle lengths," adding that "attacks on the alleged RC4 usually
+      can be applied to IA, and vice versa."'
   notes: ISAAC is a stream generator using indirection, accumulation, and mixing.
   instances:
   - id: isaac_v1
@@ -2317,7 +2324,13 @@ mode_families:
     stage_ids:
     - candidate_recommended_stream
     status: candidate_recommended
-  influences: []
+  influences:
+  - source_family_id: panama
+    relations:
+    - used_by
+    note: 'MULTI-S01''s own spec states directly: "We propose a block-wise encryption algorithm MULTI-S01 that uses the
+      PANAMA pseudorandom number generator (PRNG). Assuming the security of PANAMA, MULTI-S01 achieves high security..."
+      and reproduces PANAMA''s gamma/pi/theta/sigma transforms verbatim as its keystream generator.'
   notes: MULTI-S01 (Fuji-Hara, Mita, Mukaida; FSE 2002) is a software-oriented stream cipher with a 128-bit key. It combines
     multiple shift register outputs with nonlinear S-box operations to generate keystream. The design targets fast software
     implementations.
@@ -7708,7 +7721,13 @@ mode_families:
     stage_ids:
     - submissions
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: pbkdf2
+    relations:
+    - inspired_by
+    note: MCS_PHS's own spec paraphrases RFC 2898/PKCS#5 closely in its introduction ("A general approach to password-based
+      cryptography is to combine a password with a salt to produce a key...") and cites it directly as its structural
+      model; its core KDF function is literally named PBKDF_MCS.
   innovative_ideas: []
   notes: 'MCS_PHS (PHC 2014) by Mikhail Maslennikov. Password hashing scheme using the MCSSHA-8 iterative hash function with
     configurable iteration count and salt.
@@ -7967,7 +7986,17 @@ mode_families:
     stage_ids:
     - submissions
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: tea
+    relations:
+    - related_to
+    note: Tortuga's spec cites TEA (Wheeler & Needham) for its confusion/diffusion rationale of mixing algebraic operations,
+      alongside using the Turtle cipher (Matt Blaze) -- not in this database as its own family -- as its core permutation.
+  - source_family_id: keccak
+    relations:
+    - related_to
+    note: Tortuga's sponge-based design cites Bertoni/Daemen/Peeters/Van Assche's sponge-functions paper for the capacity/security-level
+      concept underlying its construction.
   innovative_ideas: []
   notes: 'Tortuga (PHC 2014) by Teath Sch. Password hashing function based on the Turtle algorithm, an iterative hash-based
     construction with configurable time cost.
