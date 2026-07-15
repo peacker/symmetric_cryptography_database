@@ -1638,6 +1638,21 @@ primitive_families:
     relations:
     - inspired_by
     note: Camellia uses a strengthened Feistel design with modern diffusion layers.
+  - source_family_id: e2
+    relations:
+    - inspired_by
+    note: Per secondary literature (the local spec is a pure technical description
+      with no design-rationale narrative to quote directly), Camellia's designers
+      -- NTT and Mitsubishi Electric, the same organizations behind E2 and MISTY1
+      respectively -- built Camellia to inherit the design philosophy of both prior
+      Feistel ciphers.
+  - source_family_id: misty1
+    relations:
+    - inspired_by
+    note: Per secondary literature (no design-rationale narrative in the local technical
+      spec to quote directly), Camellia inherits MISTY1's design philosophy; Camellia's
+      FL/FL-1 whitening-layer functions are structurally descended from MISTY1's
+      own FL function.
   instances:
   - id: camellia_128
     name: Camellia-128
