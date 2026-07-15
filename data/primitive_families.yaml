@@ -2563,7 +2563,13 @@ primitive_families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: square
+    relations:
+    - inspired_by
+    - variant_of
+    note: CRYPTON is derived from Square (Daemen/Knudsen/Rijmen), reworking its byte-oriented SPN round (substitution,
+      column-wise bit permutation, column-to-row transposition, key addition) into an AES-candidate design.
   instances:
   - id: crypton_128
     name: CRYPTON-128
@@ -7208,7 +7214,14 @@ primitive_families:
   reference_ids:
   - kuznyechik_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - inspired_by
+    note: 'Structural deduction, not a stated citation: RFC 7801 names no predecessor cipher or design tradition anywhere.
+      This edge reflects only that Kuznyechik''s round structure -- byte-wide S-box layer plus a linear diffusion transform
+      over a finite field, XOR key addition, iterated for a fixed round count -- is the same general SPN archetype popularized
+      by Rijndael/AES, not a claimed lineage (Kuznyechik''s S-box and linear layer are both original to GOST R 34.12-2015).'
   notes: Kuznyechik (Grasshopper; GOST R 34.12-2015) is the Russian national 128-bit block cipher standard with a 256-bit
     key and 10 rounds. Its SPN structure applies an 8-bit S-box (π), a bit-permutation (τ), a linear transform (λ) over GF(2)^128
     based on a self-dual [16,8,9] linear code, and XOR key addition.
@@ -7623,7 +7636,14 @@ primitive_families:
   reference_ids:
   - mcrypton_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: crypton
+    relations:
+    - inspired_by
+    - variant_of
+    note: mCrypton is explicitly a lightweight adaptation of CRYPTON, reworking its 128-bit design into a 64-bit, nibble-oriented
+      SPN for RFID/sensor use while keeping the same 4-step round structure (substitution, column-wise bit permutation,
+      column-to-row transposition, key addition).
   notes: 'mCrypton (Lim and Korkishko, WISA 2005) is a lightweight nibble-based SPN block cipher targeting RFID and sensor
     networks. It has three variants: mCrypton-64, mCrypton-96, mCrypton-128 with 64, 96, and 128-bit blocks and matching key
     sizes, all using 12 rounds. The design uses 4-bit S-boxes and a bitwise permutation linear layer.'
@@ -7934,11 +7954,10 @@ primitive_families:
   characteristics:
     block_size_bits: 64
     components:
-    - id: sbox
+    - id: mul_mod
       params:
-        input_bits: 4
-        output_bits: 4
-    - id: binary_matrix_mul
+        modulus: 18446744073709551616
+    - id: bit_permutation
     - id: xor
   reference_ids:
   - nimbus_ref
@@ -7948,9 +7967,16 @@ primitive_families:
     - submissions_block_64bit
     status: submitted
   influences: []
-  notes: Nimbus (Boesgaard et al., NESSIE Submission, 2000) is a flexible SPN block cipher family supporting 64, 128, and
-    256-bit block sizes with a 128-bit key. Its S-boxes and linear layers are parameterised to allow variable security–performance
-    trade-offs.
+  notes: 'CORRECTED (this audit): the previous description here ("S-boxes and linear layers... parameterised") did not
+    match the actual specification and appears to have never been checked against it. Nimbus''s round function has no
+    S-box at all: each of 5 rounds computes y = g(a*x) XOR b (mod 2^64), where g is a fixed 64-bit bit-reversal permutation,
+    over keyed multiplicative/additive constants a, b. The spec states this "was inspired on the linear congruential
+    generator (LCG)" y = a*x + b (mod m), modified by replacing + with XOR, fixing m = 2^64, and adding the bit-reversal
+    for avalanche. The `spn` construction tag is consequently also suspect (there is no substitution layer, only modular
+    multiplication as the nonlinearity) but is left in place pending a better-fitting category, since none of this database''s
+    existing construction types cover a multiplication-based round network.
+
+    '
   instances:
   - id: nimbus_v1
     name: Nimbus-64
@@ -8683,7 +8709,20 @@ primitive_families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: ascon
+    relations:
+    - inspired_by
+    note: 'Shamash''s own spec states it "is based on the sponge and duplex constructions... taking advantage of the recent
+      improvements in security given by [JLM]", explicitly naming Ascon as the precedent for this design route: it credits
+      sponge/duplex as "a design that has been well studied during the last decade... used extensively... by... one of
+      the recently proclaimed member[s] of the portfolio for lightweight cryptography, Ascon." The authors state they
+      considered a block-cipher-based design first before choosing this Ascon-like permutation route instead.'
+  - source_family_id: serpent
+    relations:
+    - inspired_by
+    note: Shamash's spec states its bitsliced approach to the S-box layer ("a single Sbox used in parallel in a bit-wise
+      manner") is "a method popularized by Serpent and other ciphers."
   innovative_ideas:
   - id: shamash_sponge_aead_dual
     name: Dual-purpose design covering both AEAD (Shamash) and hash (Shamashash)

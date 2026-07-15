@@ -1816,7 +1816,9 @@ references:
   year: 1998
   venue: FSE (Fast Software Encryption)
   organization: Ecole Normale Supérieure / CS Communication & Systèmes
-  notes: A 64-bit block cipher with variable key size (40-128 bits).
+  notes: 'A 64-bit block cipher with variable key size (40-128 bits). Data-quality flag (relations audit): references/2000-cs_cipher.pdf,
+    which fuzzy-matches this family, is only a 1-page NESSIE submission cover letter, not this FSE 1998 paper -- it has
+    no algorithm description or citations. The actual paper is needed to check for a design-inspiration edge.'
 - id: deoxys_ref
   kind: paper
   title: Deoxys v1.41
@@ -2182,7 +2184,9 @@ references:
   title: 'NUSH: A Fast Software Block Cipher'
   year: 2000
   venue: NESSIE Submission
-  notes: Software-optimized block cipher for performance.
+  notes: 'Software-optimized block cipher for performance. Data-quality flag (relations audit): references/2000-nush.pdf
+    is only a 1-page design-rationale excerpt (no S-boxes, key schedule, or full round description) -- the complete NESSIE
+    submission is needed to check for a design-inspiration edge.'
 - id: orange_ref
   kind: paper
   title: ORANGE
@@ -2342,7 +2346,10 @@ references:
   title: 'SC2000: A New Block Cipher Candidate'
   year: 2000
   venue: NESSIE Submission
-  notes: Substitution-Permutation network with flexible parameters.
+  notes: 'Substitution-Permutation network with flexible parameters. Data-quality flag (relations audit): references/2000-sc2000.pdf
+    is only a 1-page Fujitsu IP/patent statement, not this paper -- it has no algorithm description or citations. Secondary
+    sources describe SC2000 as combining an unkeyed two-round Feistel network with SPN S-box/key-addition layers, but
+    cite no specific predecessor cipher as inspiration; the actual FSE 2001 paper is needed to check further.'
 - id: shacal_ref
   kind: paper
   title: SHACAL
