@@ -264,7 +264,9 @@ mode_families:
     notes: XSalsa20 uses HSalsa20 to derive a subkey, extending Salsa20 to a 192-bit nonce.
 - id: gift_cofb
   name: GIFT-COFB
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - gift_round
   target_applications:
@@ -1353,7 +1355,9 @@ mode_families:
       state_size_bits: 320
 - id: comet
   name: COMET
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - ctr_mode
   round_ids:
   - comet_block_cipher_round
   target_applications:
@@ -1477,7 +1481,9 @@ mode_families:
       state_size_bits: 320
 - id: estate_aead
   name: ESTATE
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - ofb_mode
   round_ids:
   - estate_tbc_round
   target_applications:
@@ -1584,7 +1590,9 @@ mode_families:
       '
 - id: forkae_aead
   name: ForkAE
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - forkskinny_round
   target_applications:
@@ -1689,7 +1697,9 @@ mode_families:
       '
 - id: hyena
   name: HyENA
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - hyena_hyfb_round
   target_applications:
@@ -1846,7 +1856,9 @@ mode_families:
       state_size_bits: 640
 - id: laem
   name: LAEM
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - laem_simon_round
   target_applications:
@@ -1977,7 +1989,9 @@ mode_families:
       state_size_bits: 128
 - id: lilliput_ae_aead
   name: Lilliput-AE
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - lilliput_tbc_round
   target_applications:
@@ -2091,7 +2105,9 @@ mode_families:
       '
 - id: locus
   name: LOCUS-AEAD
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - twegifit64_round
   target_applications:
@@ -2144,7 +2160,9 @@ mode_families:
       '
 - id: lotus
   name: LOTUS-AEAD
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - twegifit64_round
   target_applications:
@@ -2198,7 +2216,9 @@ mode_families:
       '
 - id: mixfeed_aead
   name: mixFeed
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - aes_prime_128_round
   target_applications:
@@ -2700,7 +2720,9 @@ mode_families:
     notes: Baseline RC4A keystream generator instance with two 256-byte permutations.
 - id: remus
   name: REMUS
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - remus_round
   target_applications:
@@ -2747,7 +2769,9 @@ mode_families:
     notes: Baseline REMUS AEAD instance as described in the Romulus/Remus family paper.
 - id: saeaes
   name: SAEAES
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - aes_round
   target_applications:
@@ -3229,7 +3253,9 @@ mode_families:
     notes: Baseline byte-oriented Spritz keystream generator instance.
 - id: thank_goodness_it_s_friday
   name: Thank Goodness It's Friday (TGIF)
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - thank_goodness_it_s_friday_round
   target_applications:
@@ -4034,7 +4060,9 @@ mode_families:
     notes: Absorbing rate 32 bits, squeezing rate 128 bits, 68 rounds for the main permutation calls.
 - id: simple_aead
   name: Simple
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - ctr_mode
   target_applications:
   - iot
   - software
@@ -6299,7 +6327,9 @@ mode_families:
       '
 - id: siv_rijndael256
   name: SIV-Rijndael256
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - ofb_mode
   round_ids:
   - siv_rijndael256_round
   target_applications:
@@ -6358,7 +6388,9 @@ mode_families:
       '
 - id: siv_tem_photon
   name: SIV-TEM-PHOTON
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - siv_tem_photon_round
   target_applications:
@@ -6427,7 +6459,9 @@ mode_families:
       '
 - id: skinny_aead
   name: SKINNY-AEAD
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
   round_ids:
   - skinny_aead_round
   target_applications:
@@ -6617,7 +6651,9 @@ mode_families:
       '
 - id: sundae_gift
   name: SUNDAE-GIFT
-  construction_ids: []
+  construction_ids:
+  - block_cipher_based
+  - ofb_mode
   round_ids:
   - sundae_gift_round
   target_applications:
