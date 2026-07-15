@@ -120,3 +120,47 @@ it's stuck and what unblocks it.
    (YYYY-cipher-name.ext) and tell me — I'll read it, verify the citation,
    add the edge with a quoted note, update KNOWN_MISSING in
    scripts/test_reference_pdf_coverage.py, run the test suite, and commit.
+
+Full website-vs-source verification pass (2026-07-16)
+======================================================
+
+Read essentially every locally-available reference PDF against its family's
+stored notes/influences/construction tags (~330 of 410 families; the other
+~79 have no local reference at all, see item 6 above, and were sanity-checked
+against general crypto literature instead). Fixed two systematic issues along
+the way (see git log: "Full source audit: fix RC5..." and "...classify 18
+unclassified 2019 NIST-LWC AEAD modes"). One new gap surfaced that needs a
+manual decision or a fetched paper, plus everything already listed above in
+items 1-6 is still open and unchanged:
+
+8. LOKI89/91's REAL PAPER IS MISSING, AND THE AUDIT TOOLING HIDES IT
+   -------------------------------------------------------------------
+   The `loki` family (data/primitive_families.yaml) cites `loki_ref` (Brown,
+   Pieprzyk, Seberry, "LOKI — A Cryptographic Primitive for Authentication
+   and Secrecy Applications," AUSCRYPT 1990) with no local copy — there
+   never was one fetched for this specific paper.
+
+   This wouldn't normally be a problem (it would just show up as
+   KNOWN_MISSING like the other ~79 stubs), except scripts/reference_pdfs.py's
+   fuzzy filename-matcher currently mis-resolves `loki` to
+   references/1998-loki97.pdf — the LOKI97 AES-candidate paper, a much later
+   and structurally unrelated design by the same research lineage. Because of
+   this false-positive match, `scripts/test_reference_pdf_coverage.py`
+   currently believes `loki` already has adequate source coverage and it is
+   NOT in KNOWN_MISSING, so the gap is invisible to CI.
+
+   This is a tooling bug, not a data bug — I did not change loki's own
+   family entry, since its notes (LOKI89 by Brown/Pieprzyk/Seberry, AUSCRYPT
+   1990, GF(2^8)-based S-boxes, 64-bit block/key, 16 rounds, LOKI91 fixing
+   weak keys) match well-established, uncontroversial crypto history and are
+   not in question. Two independent things would resolve this fully:
+     (a) fetch the actual 1990 LOKI89 paper (or the 1991 LOKI91 revision) and
+         add it as references/1990-loki.pdf or similar, or
+     (b) at minimum, tighten reference_pdfs.py's fuzzy-match logic (or add an
+         explicit exclusion) so "loki" no longer silently matches "loki97"'s
+         file, and add `loki` to KNOWN_MISSING in the interim so the gap is
+         at least visible and tracked like the other ~79.
+   I didn't make this tooling change myself since reference_pdfs.py is used
+   by the influence-mining workflow generally, not just this one family, and
+   a change there deserves its own focused look rather than a one-off patch
+   buried in an unrelated audit pass.
