@@ -2235,7 +2235,15 @@ primitive_families:
   reference_ids:
   - lee_et_al_2010_aria
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - inspired_by
+    - same_sbox
+    note: 'Per secondary/survey literature (no local copy of the original 2004 KISA design paper or RFC 5794 was available
+      to quote directly): ARIA reuses Rijndael''s own S-boxes and its overall SPN structure is explicitly based on AES,
+      with the diffusion layer redesigned as an involution (using a 16x16 binary matrix) specifically to give ARIA the
+      encryption/decryption symmetry that Rijndael/AES itself lacks.'
   innovative_ideas:
   - id: aria_bytewise_sbox
     name: Bytewise S-box
