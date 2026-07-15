@@ -13,8 +13,100 @@ mode_constructions:
     while carrying a chaining value, with strengthening padding encoding the message length.
 
     '
+- id: sponge_construction
+  name: Sponge Construction
+  notes: 'A permutation-based mode that absorbs input into part of a fixed-size state (the rate, alongside an untouched
+    capacity) interleaved with calls to a public permutation, then squeezes output the same way. Unidirectional/unkeyed by
+    default (hash and XOF use); see duplex_mode for the keyed, bidirectional sibling construction. Level-1 root; families
+    are tagged with a leaf below.
+
+    '
+- id: standard_sponge
+  name: Standard Sponge
+  special_case_of: sponge_construction
+  typical_primitive_types:
+  - hash_function
+  placeholder_family_names:
+  - SHA-3
+  - SHAKE
+  notes: 'The classical rate/capacity sponge: a constant permutation-round count per call, absorbing into (and squeezing
+    from) only the rate portion of the state, with the capacity portion never directly touched by input/output.
+
+    '
+- id: belt_and_mill_construction
+  name: Belt-and-Mill Construction
+  abbreviation: Belt-and-Mill
+  typical_primitive_types:
+  - hash_function
+  - stream_cipher
+  placeholder_family_names:
+  - PANAMA
+  - RadioGatún
+  notes: 'A permutation-driven mode historically predating the formal sponge/duplex terminology: a small nonlinear "mill"
+    state is updated each round by a fixed sequence of transformations (typically a nonlinear layer, a bit-transposition,
+    and a linear diffusion layer), coupled to a much larger linear-feedback "belt" that both feeds taps into the mill and
+    is fed back from it. PANAMA and RadioGatún (both by Daemen) are the direct architectural precursors to the Keccak sponge
+    construction, but are not themselves rate/capacity sponges. Level-1 root (families are tagged with this id directly;
+    no further leaves defined given how few designs use this exact architecture).
+
+    '
 - id: duplex_mode
   name: Duplex Mode
+  notes: 'A permutation-based mode that interleaves absorb and squeeze in a single call per operation, enabling stateful,
+    session-like keyed processing (as needed for AEAD). Level-1 root; families are tagged with a leaf below.
+
+    '
+- id: standard_duplex
+  name: Standard Duplex
+  special_case_of: duplex_mode
+  typical_primitive_types:
+  - aead
+  placeholder_family_names:
+  - Keyak
+  notes: 'The classical duplex construction (Bertoni, Daemen, Peeters, Van Assche): every duplexing call runs the full permutation
+    for the same, constant number of rounds, whether it is the initialization call or a later data-processing call.
+
+    '
+- id: monkey_duplex
+  name: MonkeyDuplex
+  special_case_of: duplex_mode
+  typical_primitive_types:
+  - aead
+  placeholder_family_names:
+  - Ketje
+  - Ascon
+  notes: 'A duplex variant (Bertoni, Daemen, Peeters, Van Assche, "Keccak and the SHA-3 Standardization"; used first in Ketje/Keyak
+    and subsequently in Ascon and many NIST LWC candidates) that runs a reduced number of permutation rounds for the repeated
+    per-block duplexing calls, reserving the full round count for initialization and finalization only -- trading a proven
+    security margin for significantly better throughput.
+
+    '
+- id: dry_sponge_duplex
+  name: DrySponge
+  special_case_of: duplex_mode
+  typical_primitive_types:
+  - aead
+  placeholder_family_names:
+  - DryGASCON
+  notes: 'A duplex variant introduced by DryGASCON that separates cryptographic-strength concerns from side-channel/fault-robustness
+    concerns: a "Core" round processes only the sponge''s secret capacity bits (the part that must resist cryptanalysis),
+    while dedicated Mix/Accumulate steps -- outside the Core -- merge input into and extract output from the state, so that
+    fault/side-channel countermeasures can be concentrated on the input/output-facing steps without hardening the Core round
+    itself.
+
+    '
+- id: beetle_mode
+  name: Beetle Mode
+  special_case_of: duplex_mode
+  typical_primitive_types:
+  - aead
+  placeholder_family_names:
+  - PHOTON-Beetle
+  notes: 'A duplex variant (Chakraborti, Datta, Nandi, Yasuda, CHES 2018/ToSC) that replaces the standard duplex''s direct
+    rate-XOR ciphertext generation with a rho (shuffle-then-XOR) function, giving better security against nonce misuse and
+    a smaller effective rate exposure than a standard duplex at the same state size.
+
+    '
 - id: binary_tree_hash
   name: Binary Tree Hash
   placeholder_family_names:
@@ -24,16 +116,60 @@ mode_constructions:
     those, every subtree can be hashed independently and in parallel.
 
     '
-- id: permutation_based_hash
-  name: Permutation-Based Hash
-- id: permutation_based_stream
-  name: Permutation-Based Stream
-- id: sponge_construction
-  name: Sponge Construction
+- id: block_cipher_based
+  name: Block-Cipher-Based Mode
+  notes: 'A mode of operation whose confidentiality/authentication mechanism is built directly by invoking an underlying
+    block cipher as a black box, rather than a dedicated permutation. Level-1 root; families are tagged with a leaf below.
+
+    '
+- id: ctr_mode
+  name: Counter Mode (CTR)
+  special_case_of: block_cipher_based
+  typical_primitive_types:
+  - stream_cipher
+  placeholder_family_names:
+  - AES-CTR
+  notes: Converts a block cipher into a stream cipher by encrypting successive counter values and XORing the result with
+    plaintext; allows parallel encryption and random access to ciphertext.
+- id: cbc_mode
+  name: Cipher Block Chaining (CBC)
+  special_case_of: block_cipher_based
+  typical_primitive_types:
+  - block_cipher_mode
+  placeholder_family_names:
+  - AES-CBC
+  notes: A block-cipher confidentiality mode where each plaintext block is XORed with the previous ciphertext block before
+    encryption.
+- id: ofb_mode
+  name: Output Feedback Mode (OFB)
+  special_case_of: block_cipher_based
+  typical_primitive_types:
+  - stream_cipher
+  notes: Converts a block cipher into a synchronous stream cipher by repeatedly re-encrypting the cipher's own previous
+    output (independent of plaintext/ciphertext), then XORing the resulting keystream with plaintext.
+- id: cfb_mode
+  name: Cipher Feedback Mode (CFB)
+  special_case_of: block_cipher_based
+  typical_primitive_types:
+  - stream_cipher
+  notes: Converts a block cipher into a self-synchronizing stream cipher by encrypting the previous ciphertext block to
+    produce keystream, XORed with the next plaintext block.
+- id: gcm_mode
+  name: Galois/Counter Mode (GCM)
+  special_case_of: block_cipher_based
+  typical_primitive_types:
+  - aead
+  placeholder_family_names:
+  - AES-GCM
+  notes: A block-cipher AEAD mode combining CTR-mode encryption with a GHASH polynomial-evaluation MAC over GF(2^128).
 - id: block_cipher_based_stream
-  name: Block-Cipher-Based Stream Cipher
-- id: memory_hard_sponge
-  name: Memory-Hard Sponge / PBKDF
+  name: Block-Cipher-Based Stream Cipher (Other)
+  special_case_of: block_cipher_based
+  notes: 'A residual leaf for block-cipher-driven stream/keystream constructions that do not match a named NIST mode (CTR/CBC/OFB/CFB/GCM)
+    -- e.g. bespoke state-update generators that reuse a block cipher''s internal components (S-box, round function) without
+    invoking it as a black-box CTR/OFB-style oracle.
+
+    '
 - id: iterated_hash_kdf
   name: Iterated Hash-Based KDF
 - id: bcrypt_variant
@@ -42,13 +178,6 @@ mode_constructions:
   name: scrypt Variant
 - id: modular_squaring_kdf
   name: Modular Squaring KDF
-- id: gcm
-  name: Galois/Counter Mode (GCM)
-  notes: A block-cipher AEAD mode combining CTR-mode encryption with a GHASH polynomial-evaluation MAC over GF(2^128).
-- id: cbc_construction
-  name: Cipher Block Chaining (CBC)
-  notes: A block-cipher confidentiality mode where each plaintext block is XORed with the previous ciphertext block before
-    encryption.
 - id: hmac_construction
   name: HMAC
   notes: A hash-based MAC construction combining a hash function with inner and outer key padding (RFC 2104).
