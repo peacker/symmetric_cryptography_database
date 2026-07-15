@@ -3964,7 +3964,21 @@ primitive_families:
     - round_2
     - finalist
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: sparx
+    relations:
+    - inspired_by
+    - variant_of
+    note: 'SPARKLE''s own spec states it directly: "Its name comes from the block cipher Sparx, which Sparkle is closely
+      related to. Sparkle is basically a Sparx instance with a wider block size and a fixed key, hence its name: SPARx,
+      but Key LEss." Also: "Sparkle is a descendent of the block cipher Sparx... co-designed by members of our team."
+      Its linear diffusion layer also "draws heavily from the one used in Sparx-128."'
+  - source_family_id: speck
+    relations:
+    - related_to
+    note: SPARKLE's spec benchmarks its ARX-box rotation constants directly against Speck's differential/linear bounds
+      ("preferably at least as good as those of the round structure of the 64-bit block cipher Speck"), though it does
+      not borrow Speck's structure directly.
   instances:
   - id: sparkle_384
     name: SPARKLE-384
@@ -4273,7 +4287,25 @@ primitive_families:
   reference_ids:
   - zhang_et_al_2014_rectangle
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: present
+    relations:
+    - inspired_by
+    note: 'RECTANGLE''s S-box design criteria are explicitly reactive to PRESENT''s cryptanalysis: "The new criteria are
+      mainly motivated by the existing security analysis of PRESENT, specifically (multiple) differential/linear cryptanalysis
+      on reduced-round PRESENT."'
+  - source_family_id: serpent
+    relations:
+    - related_to
+    note: 'RECTANGLE''s spec credits the bit-slice technique''s lineage through Serpent and directly compares its P-layer
+      to Serpent''s: "The bit-slice technique was introduced for speeding up the software speed of DES, and was used in
+      the design of the Serpent block cipher." / "Compared with the P-layers of Serpent and Noekeon, the P-layer of RECTANGLE
+      is much more friendly in hardware."'
+  - source_family_id: noekeon
+    relations:
+    - related_to
+    note: RECTANGLE's own "Relation to Early Designs" section directly compares its P-layer to Noekeon's, while noting
+      Noekeon's general-purpose (not lightweight) design goal required reconsidering most aspects.
   notes: RECTANGLE is a bit-slice-oriented lightweight SPN block cipher with a 4x16-bit state (64-bit block), 25 rounds, 16
     parallel 4-bit S-boxes per round, and a permutation layer built from three row-wise rotations, chosen to give fast constant-time
     implementations in both hardware and SIMD software.
@@ -5503,7 +5535,15 @@ primitive_families:
     stage_ids:
     - third_prize
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: twine
+    relations:
+    - related_to
+    note: 'NBC''s round function explicitly adopts the same theoretical diffusion-switching technique TWINE is built on:
+      "The round function adopts the improved Type-2 generalized Feistel structure given by Suzaki et al. at FSE 2010,
+      with a newly chosen block permutation for the diffusion layer" -- the same Suzaki & Minematsu, "Improving the Generalized
+      Feistel" (FSE 2010) paper that underlies TWINE''s own design, making these cousin designs sharing a common theoretical
+      ancestor rather than one directly copying the other.'
   notes: 'NBC is a generalized-Feistel block cipher family with variants NBC-128/128, NBC-128/256, and NBC-256/256.
 
     '
@@ -9392,7 +9432,14 @@ primitive_families:
   reference_ids:
   - daemen_1991_threeway
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: des
+    relations:
+    - related_to
+    note: 3-Way's own chapter explicitly frames its whole structure as a deliberate alternative to DES's, not an extension
+      of it -- "We start with describing a new type of self-reciprocal cipher structure that is a widely applicable alternative
+      for the Feistel round structure" -- and repeatedly invokes DES's weak/semi-weak keys and complementation property
+      as the negative case study motivating this design choice.
   innovative_ideas:
   - id: threeway_self_reciprocal
     name: Self-reciprocal structure
