@@ -4513,7 +4513,13 @@ mode_families:
     - phase_3
     - portfolio_hw
     status: portfolio
-  influences: []
+  influences:
+  - source_family_id: lili_128
+    relations:
+    - related_to
+    note: MICKEY's mutual-clocking mechanism is explicitly designed as a reaction to LILI-128's weaknesses, discussed at
+      length as the negative design precedent -- "let us consider the stream cipher LILI-128... Attacks based on guessing
+      a likely number of clocks... may be possible because..." -- rather than a technique borrowed from it.
   innovative_ideas:
   - id: mickey_mutual_irregular_clocking
     name: Mutual irregular clocking between register pair
@@ -9601,7 +9607,13 @@ mode_families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - inspired_by
+    note: 'Vortex''s own submission is explicitly titled "Vortex: A New Family of One Way Hash Functions based on Rijndael
+      Rounds and Carry-less Multiplication" (Kounavis and Gueron, 2008) -- the Rijndael-based design is stated directly
+      in the paper''s own title, per the bibliography of the classification survey already cited on this family.'
   notes: 'Vortex is a cryptographic hash-function proposal accepted as one of the 51 first-round candidates in the NIST SHA-3
     competition. It did not advance to the second round. Construction hint: MDS-and-S-box design with an output transformation.'
   instances:
