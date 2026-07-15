@@ -656,6 +656,18 @@ references:
   year: 1999
   venue: RFC 2612
   url: https://www.rfc-editor.org/rfc/rfc2612
+- id: rivest_1994_rc5
+  kind: paper
+  title: The RC5 Encryption Algorithm
+  authors:
+  - Ronald L. Rivest
+  year: 1994
+  venue: Fast Software Encryption (FSE 1994), LNCS 1008
+  notes: 'Original RC5 design paper, first presented at FSE 1994 (Leuven). Defines
+    the parameterized RC5-w/r/b family, its data-dependent rotations, and the
+    P/Q magic-constant key schedule. Local copy references/1994-rc5.pdf is the
+    author''s revised March 1997 version of the same paper (text and reference
+    implementation unchanged in substance from the 1994 original).'
 - id: baldwin_rivest_1996_rc5
   kind: standard
   title: 'RFC 2040: The RC5, RC5-CBC, RC5-CBC-Pad, and RC5-CTS Algorithms'
