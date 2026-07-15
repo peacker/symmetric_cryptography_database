@@ -82,6 +82,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Argon | Argon | pbkdf | 2015 | https://orbilu.uni.lu/bitstream/10993/19901/1/Argon.pdf | Full | yes |
 | [x] | Argon2 | Argon2 | pbkdf | 2015 | https://www.rfc-editor.org/rfc/rfc9106 | Full | yes |
 | [x] | ARIA | ARIA | block_cipher | 2010 | https://www.rfc-editor.org/rfc/rfc5794 | TODO | no |
+| [x] | Arion | Arion | block_cipher | 2023 | https://arxiv.org/abs/2303.04639 | Full | yes |
 | [x] | Ascon | Ascon-p | permutation | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
 | [x] | Ascon-128 | Ascon-128 | aead | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
 | [x] | Ascon-128a | Ascon-128a | aead | 2016 | https://ascon.isec.tugraz.at/files/asconv12.pdf | Full | yes |
@@ -149,6 +150,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | FEAL-NX | FEAL-NX | block_cipher | 1997 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/fealnx.pdf | Full | yes |
 | [x] | FESH | FESH | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000336 | Full | yes |
 | [x] | FlexAEAD | FlexAEAD | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/FlexAEAD-spec.pdf | Full | yes |
+| [x] | FLIP | FLIP | stream_cipher | 2016 | https://eprint.iacr.org/2016/254 | No local copy (blocked); secondary source | no |
 | [x] | FNV-1 | FNV-1 | hash | 1991 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/fnv1.pdf | Full | yes |
 | [x] | ForkAE | ForkAE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ForkAE-spec.pdf | Full | yes |
 | [x] | Fountain | Fountain | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/Fountain-spec.pdf | Full | yes |
@@ -161,14 +163,17 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | GIFT | GIFT | block_cipher | 2017 | https://iacr.org/archive/ches2017/105290001/105290001.pdf | TODO | no |
 | [x] | GIFT-COFB | GIFT | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/GIFT-COFB-spec.pdf | Full | yes |
 | [x] | Gimli | Gimli | permutation | 2017 | https://gimli.cr.yp.to/ | TODO | yes |
+| [x] | GMiMC | GMiMC | block_cipher | 2019 | https://eprint.iacr.org/2019/397 | No local copy (blocked); secondary source | no |
 | [x] | GOST 28147-89 (Magma) | Magma | block_cipher | 1989 | https://datatracker.ietf.org/doc/html/rfc5830 | Full | yes |
 | [x] | Grain | Grain | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/grain.pdf | Full | yes |
 | [x] | Grain-128 | Grain-128 | stream_cipher | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | no |
 | [x] | Grain-128AEAD | Grain-128 | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | Grand Cru | Grand Cru | block_cipher | 2000 | https://www.cosic.esat.kuleuven.be/nessie/ | Full | yes |
+| [x] | HadesMiMC | HadesMiMC | block_cipher | 2020 | https://doi.org/10.1007/978-3-030-45724-2_23 | No local copy (blocked); secondary source | yes |
 | [x] | HAVAL | HAVAL | hash | 1992 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/haval.pdf | Full | yes |
 | [x] | HC-128 | HC-128 | stream_cipher | 2004 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_4 | Full | yes |
 | [x] | HC-256 | HC-256 | stream_cipher | 2004 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/hc256.pdf | Full | yes |
+| [x] | HERA | HERA | block_cipher | 2021 | https://eprint.iacr.org/2020/1335 | No local copy (blocked); secondary source | no |
 | [x] | HERN & HERON | HERN & HERON | block_cipher | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | Full | yes |
 | [x] | HIGHT | HIGHT | block_cipher | 2006 | https://link.springer.com/chapter/10.1007/11894063_4 | Full | yes |
 | [x] | HPC | HPC | block_cipher | 1998 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | no |
@@ -176,6 +181,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | ICE | ICE | block_cipher | 1997 | https://doi.org/10.1007/BFb0052346 | Full | yes |
 | [x] | IDEA | IDEA | block_cipher | 1991 | https://doi.org/10.1007/3-540-46877-3_35 | TODO | yes |
 | [x] | Joltik-BC | Joltik-BC | tweakable_block_cipher | 2014 | https://competitions.cr.yp.to/round1/joltikv1.pdf | Full | yes |
+| [x] | Jarvis | Jarvis | block_cipher | 2018 | https://eprint.iacr.org/2018/1098 | No local copy (blocked); secondary source | yes |
 | [x] | ISAAC | ISAAC | prng | 1997 | https://link.springer.com/chapter/10.1007/3-540-60865-6_41 | Full | yes |
 | [x] | ISAP | ISAP | aead | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
 | [x] | LEX | LEX | stream_cipher | 2004 | https://link.springer.com/chapter/10.1007/978-3-540-68351-3_5 | Full | yes |
@@ -185,6 +191,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Khazad | Khazad | block_cipher | TODO | TODO | TODO | yes |
 | [x] | KLEIN | KLEIN | block_cipher | 2011 | https://link.springer.com/chapter/10.1007/978-3-642-25286-0_27 | Full | yes |
 | [x] | KNOT | KNOT | permutation | 2019 | https://csrc.nist.gov/projects/lightweight-cryptography | TODO | yes |
+| [x] | Kreyvium | Kreyvium | stream_cipher | 2016 | https://eprint.iacr.org/2015/113 | Full | yes |
 | [x] | KTANTAN | KTANTAN | block_cipher | 2009 | https://www.iacr.org/archive/ches2009/57470001/57470001.pdf | TODO | no |
 | [x] | Kuznyechik | Kuznyechik | block_cipher | 2015 | https://www.tc26.ru/en/standard/gost/GOST_R_34_12_2015_eng.pdf | Full | yes |
 | [x] | LAEM | LAEM | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/LAEM-spec.pdf | Full | yes |
@@ -209,6 +216,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | Makwa | Makwa | pbkdf | 2015 | https://www.password-hashing.net/submissions/specs/Makwa-v1.pdf | Full | yes |
 | [x] | MANTIS | MANTIS | tweakable_block_cipher | 2016 | https://doi.org/10.1007/978-3-662-53008-5_5 | Full | yes |
 | [x] | MARS | MARS | block_cipher | 1999 | https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development | TODO | yes |
+| [x] | Masta | Masta | block_cipher | 2020 | https://ieeexplore.ieee.org/document/9245538 | No local copy; secondary source | no |
 | [x] | MCRYPTON | MCRYPTON | block_cipher | 2005 | https://link.springer.com/chapter/10.1007/11604938_15 | Full | no |
 | [x] | M3lcrypt | M3lcrypt | pbkdf | 2014 | https://www.password-hashing.net/submissions.html | N/A — no spec PDF | no |
 | [x] | MCS_PHS | MCS_PHS | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/MCS_PHS-v2.pdf | Full | yes |
@@ -218,6 +226,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | MIBS | MIBS | block_cipher | 2009 | https://link.springer.com/chapter/10.1007/978-3-642-10433-6_19 | Full | no |
 | [x] | MICKEY | MICKEY | stream_cipher | 2005 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/mickey.pdf | Full | yes |
 | [x] | MIDORI | MIDORI | block_cipher | 2015 | https://link.springer.com/chapter/10.1007/978-3-662-48800-3_6 | Full | yes |
+| [x] | MiMC | MiMC | block_cipher | 2016 | https://eprint.iacr.org/2016/492 | Full | yes |
 | [x] | MIR-1 | MIR-1 | stream_cipher | 2002 | https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/mir1.pdf | Full | yes |
 | [x] | MISTY1 | MISTY1 | block_cipher | 1997 | https://www.rfc-editor.org/rfc/rfc2994 | Full | yes |
 | [x] | mixFeed | mixFeed | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/mixFeed-spec.pdf | Full | yes |
@@ -249,6 +258,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | PICARO | PICARO | block_cipher | 2012 | https://link.springer.com/chapter/10.1007/978-3-642-37288-9_5 | Full | no |
 | [x] | Piccolo | Piccolo | block_cipher | 2011 | https://iacr.org/archive/ches2011/69170343/69170343.pdf | Full | yes |
 | [x] | PolyPassHash | PolyPassHash | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/PolyPassHash-v1.pdf | Full | yes |
+| [x] | Poseidon | HadesMiMC/Poseidon permutation | hash | 2021 | https://www.usenix.org/system/files/sec21-grassi.pdf | Full | yes |
 | [x] | Pufferfish | Pufferfish | pbkdf | 2014 | https://github.com/epixoip/pufferfish | N/A — GitHub only, no spec PDF | no |
 | [x] | POMELO | POMELO | pbkdf | 2015 | https://www.password-hashing.net/submissions/specs/POMELO-v3.pdf | Full | yes |
 | [x] | PRESENT | PRESENT | block_cipher | 2007 | https://iacr.org/archive/ches2007/47270450/47270450.pdf | TODO | yes |
@@ -265,6 +275,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | RadioGatún | RadioGatún | hash+stream_cipher | 2006 | https://radiogatun.noekeon.org/RadioGatun.pdf | Full | yes |
 | [x] | Raiden | Raiden | block_cipher | 2008 | https://doi.org/10.3233/KES-2008-12102 | Full | yes |
 | [x] | Raindrop | Raindrop | block_cipher | 2018 | http://www.jcr.cacrnet.org.cn/EN/10.13868/j.cnki.jcr.000342 | Full | yes |
+| [x] | Rasta | Rasta | block_cipher | 2018 | https://eprint.iacr.org/2018/181 | No local copy (blocked); secondary source | no |
 | [x] | RC2 | RC2 | block_cipher | 1998 | https://datatracker.ietf.org/doc/html/rfc2268 | Full | yes |
 | [x] | RC4 | RC4 | stream_cipher | 1987 | https://en.wikipedia.org/wiki/RC4 | TODO | no |
 | [x] | RC4+ | RC4+ | stream_cipher | 2007 | https://link.springer.com/chapter/10.1007/978-3-540-77026-8_21 | Full | no |
@@ -274,6 +285,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | RC6 | RC6 | block_cipher | 1998 | https://www.cerias.purdue.edu/apps/reports_and_papers/view/2029 | TODO | yes |
 | [x] | RECTANGLE | RECTANGLE | block_cipher | 2014 | https://eprint.iacr.org/2014/084 | Full | yes |
 | [x] | REMUS | REMUS | aead | 2019 | https://eprint.iacr.org/2019/992 | Full | yes |
+| [x] | Rescue | Rescue | block_cipher | 2020 | https://eprint.iacr.org/2019/426 | Full | yes |
 | [x] | RIG | RIG | pbkdf | 2014 | https://www.password-hashing.net/submissions/specs/RIG-v2.pdf | Full | yes |
 | [x] | Rijndael | Rijndael | block_cipher | 1998 | https://csrc.nist.gov/projects/aes | TODO | yes |
 | [x] | RIPEMD | RIPEMD | hash | 1995 | https://homes.esat.kuleuven.be/~bosselae/ripemd160.html | Full | yes |
@@ -368,6 +380,7 @@ All 51 candidates [accepted by NIST in December 2008](https://www.nist.gov/node/
 | [x] | UEA2 / ZUC | ZUC | stream_cipher | 2011 | https://www.3gpp.org/ftp/Specs/archive/35_series/35.221/ | Full | no |
 | [x] | uLBC | uLBC | block_cipher | 2025 | https://cic.iacr.org/p/1/4/25 | TODO | no |
 | [x] | uKNIT-BC | uKNIT-BC | block_cipher | 2026 | https://tosc.iacr.org/index.php/ToSC/article/view/13006/12584 | Full | yes |
+| [x] | Vision | Vision | block_cipher | 2020 | https://eprint.iacr.org/2019/426 | Full | yes |
 | [x] | VMPC | VMPC | stream_cipher | 2004 | https://eprint.iacr.org/2004/379 | Full | no |
 | [x] | WAGE | WAGE | aead | 2019 | https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/WAGE-spec.pdf | Full | yes |
 | [x] | WAKE | WAKE | stream_cipher | 1994 | https://link.springer.com/chapter/10.1007/3-540-60590-8_26 | Full | no |

@@ -185,3 +185,17 @@ mode_constructions:
   name: Native Keystream Generator
   notes: A stream cipher whose keystream is produced directly by its own internal state-update generator, with no separable
     underlying block cipher wrapped by a generic mode of operation.
+- id: filter_permutator
+  name: Filter Permutator
+  abbreviation: FP
+  typical_primitive_types:
+  - stream_cipher
+  placeholder_family_names:
+  - FLIP
+  - FiLIP
+  notes: A Goldreich-PRG-style keystream construction with no register/state update -- each output bit is produced by
+    applying a fixed public random permutation to reorder the secret key bits, then evaluating a fixed non-linear Boolean
+    filtering function on a subset of the permuted bits. A new permutation is drawn (from a public IV-seeded PRNG) for
+    each output bit. Introduced by Meaux, Journault, Standaert, and Carlet ("Towards Stream Ciphers for Efficient FHE
+    with Low-Noise Ciphertexts", EUROCRYPT 2016) specifically to keep the FHE noise growth of the keystream generator
+    additive rather than multiplicative in the circuit depth, unlike classical LFSR/NLFSR-based stream ciphers.

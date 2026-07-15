@@ -10294,3 +10294,129 @@ mode_families:
     characteristics:
       output_size_bits_min: 64
       output_size_bits_max: 4294967295
+- id: poseidon
+  name: Poseidon
+  construction_ids:
+  - sponge_construction
+  - standard_sponge
+  round_ids:
+  - hadesmimc_full_round
+  - hadesmimc_partial_round
+  target_applications:
+  - zero_knowledge
+  - mpc
+  underlying_primitive_ids:
+  - hadesmimc_default
+  characteristics:
+    components:
+    - id: power_map_sbox
+      params: {exponent: 5}
+    - id: cauchy_matrix
+    - id: constant
+  reference_ids:
+  - grassi_et_al_2021_poseidon
+  process_participations: []
+  influences:
+  - source_family_id: hadesmimc
+    relations:
+    - used_by
+    note: Poseidon is the unkeyed sponge-hash instantiation of the same HADES full/partial-round permutation used as
+      the keyed block cipher HadesMiMC, per Grassi, Khovratovich, Rechberger, Roy, and Schofnegger's own split of the
+      original design (originally eprint 2019/458, "Starkad and Poseidon").
+  notes: 'Poseidon is a sponge-construction hash function over GF(p) built on the HADES permutation (alternating full
+    and partial S-box SPN rounds with a power-map non-linearity and Cauchy MDS diffusion), designed to minimize R1CS/Plonk
+    constraint counts for zero-knowledge proof systems. Its binary-extension-field sibling Starkad is documented in
+    the same original design (not separately modeled in this database). Widely deployed in ZK-rollup and blockchain
+    proof systems. Local copy: references/2021-poseidon_usenix.pdf.'
+  instances:
+  - id: poseidon_default
+    name: Poseidon
+    type: hash
+    reference_ids:
+    - grassi_et_al_2021_poseidon
+    characteristics: {}
+    notes: Parameterized over the prime field, state width t (rate + capacity), and the numbers of full/partial rounds
+      chosen per target security level; commonly instantiated over SNARK-friendly curve scalar fields such as
+      BLS12-381 and BN254.
+- id: kreyvium
+  name: Kreyvium
+  construction_ids:
+  - native_keystream_generator
+  round_ids:
+  - kreyvium_round
+  target_applications:
+  - fhe
+  - mpc
+  underlying_primitive_ids:
+  - trivium_v1
+  characteristics:
+    state_size_bits: 544
+    components:
+    - id: lfsr
+    - id: nlfsr
+    - id: and
+    - id: xor
+  reference_ids:
+  - canteaut_et_al_2018_kreyvium
+  process_participations: []
+  influences:
+  - source_family_id: trivium
+    relations:
+    - variant_of
+    note: Kreyvium extends Trivium's three-NLFSR update structure with two additional 128-bit registers carrying the
+      key and IV through the entire keystream generation, raising the security level from Trivium's 80 bits to 128
+      bits with a similar AND-depth and comparable FHE transciphering performance, per Canteaut, Carpov, Fontaine,
+      Lepoint, Naya-Plasencia, Paillier, and Sirdey.
+  notes: 'Kreyvium is a 128-bit-security variant of the eSTREAM finalist stream cipher Trivium, designed for efficient
+    FHE-ciphertext compression (transciphering). It reuses Trivium''s three-NLFSR keystream generator, adding two
+    128-bit registers that continuously re-inject the key and IV so the internal state does not lose all key/IV
+    dependence after the warm-up phase, unlike Trivium at 80-bit security. Local copy:
+    references/2016-kreyvium_stream_ciphers_he_compression.pdf.'
+  instances:
+  - id: kreyvium_v1
+    name: Kreyvium
+    type: stream_cipher
+    reference_ids:
+    - canteaut_et_al_2018_kreyvium
+    characteristics:
+      state_size_bits: 544
+      key_size_bits: 128
+      iv_size_bits: 128
+      rounds: 1152
+      block_size_bits: 1
+      output_size_bits: 1
+    notes: Baseline Kreyvium stream-cipher instance after the standard warm-up phase.
+- id: flip
+  name: FLIP
+  construction_ids:
+  - filter_permutator
+  round_ids:
+  - flip_round
+  target_applications:
+  - fhe
+  characteristics:
+    components:
+    - id: permutation_vector
+    - id: boolean_filter
+  reference_ids:
+  - meaux_et_al_2016_flip
+  process_participations: []
+  influences: []
+  notes: FLIP (Meaux, Journault, Standaert, and Carlet, EUROCRYPT 2016) is a Filter Permutator (FP) stream cipher
+    designed to keep FHE noise growth additive rather than multiplicative in circuit depth -- each keystream bit
+    reorders the secret key bits with a fresh public random permutation and evaluates a fixed non-linear Boolean
+    filtering function on a subset of them, with no internal register state carried between output bits. The original
+    FP construction was later shown vulnerable to a guess-and-determine attack (Duval, Lallemand, and Rotella, CRYPTO
+    2016), motivating the Improved Filter Permutator (IFP) and FiLIP cipher (Meaux, Carlet, Journault, and Standaert,
+    INDOCRYPT 2019, not separately modeled in this database) and the later Elisabeth/Margrethe family targeting a
+    larger plaintext domain. No local copy (eprint blocked, no alternate mirror found); described in detail in
+    references/2025-fhe_friendly_ciphers_sok.pdf.
+  instances:
+  - id: flip_default
+    name: FLIP
+    type: stream_cipher
+    reference_ids:
+    - meaux_et_al_2016_flip
+    characteristics: {}
+    notes: Parameterized over the key size and the arity/structure of the Boolean filtering function (a combination
+      of a linear part, a quadratic part, and a higher-degree "triangular" part in the original design).

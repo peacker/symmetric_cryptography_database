@@ -4129,3 +4129,237 @@ references:
     type-1/2/3 (attributed to Zheng-Matsumoto-Imai, CRYPTO ''89), and their numeric (format-preserving) counterparts.
     The 2018-07-09 revision additionally defines Type-4 and Type-5 Feistel networks (its Fig. 6) as proof devices for
     characterizing the inverses of Type-1 and Type-3 respectively. Local copy: references/2010-generalized_feistel.pdf.'
+
+- id: canteaut_et_al_2020_stark_survey
+  kind: paper
+  title: Report on the Security of STARK-Friendly Hash Functions (Version 2.0)
+  authors:
+  - Anne Canteaut
+  - Tim Beyne
+  - Itai Dinur
+  - Maria Eichlseder
+  - Gregor Leander
+  - Gaetan Leurent
+  - Maria Naya-Plasencia
+  - Leo Perrin
+  - Yu Sasaki
+  - Yosuke Todo
+  - Friedrich Wiemer
+  year: 2020
+  venue: Cryptology ePrint Archive, Report 2020/948
+  url: https://eprint.iacr.org/2020/948
+  notes: 'Secondary source: a detailed technical survey of GMiMC, HadesMiMC/Starkad/Poseidon, and MARVELlous (Jarvis/Friday,
+    Vision/Rescue), used to cross-check and supplement primary-paper details in this database. Local copy:
+    references/2020-stark_friendly_hash_survey.pdf.'
+
+- id: niu_et_al_2025_fhe_sok
+  kind: paper
+  title: 'SoK: FHE-Friendly Symmetric Ciphers and Transciphering'
+  authors:
+  - Chao Niu
+  - Benqiang Wei
+  - Zhicong Huang
+  - Zhaomin Yang
+  - Cheng Hong
+  - Meiqin Wang
+  - Tao Wei
+  year: 2025
+  venue: IACR Transactions on Cryptographic Hardware and Embedded Systems, 2025(3), pp. 583-613
+  publisher: IACR
+  url: https://tches.iacr.org/index.php/TCHES/article/view/12228
+  notes: 'Secondary source: a systematization-of-knowledge survey of FHE-friendly symmetric ciphers (Kreyvium, FLIP/FiLIP,
+    Rasta/Dasta/Agrasta, Masta/Pasta, HERA, Rubato, Chaghri, Elisabeth) and transciphering methods, used to cross-check
+    and supplement primary-paper details in this database. Local copy: references/2025-fhe_friendly_ciphers_sok.pdf.'
+
+- id: albrecht_et_al_2016_mimc
+  kind: paper
+  title: 'MiMC: Efficient Encryption and Cryptographic Hashing with Minimal Multiplicative Complexity'
+  authors:
+  - Martin R. Albrecht
+  - Lorenzo Grassi
+  - Christian Rechberger
+  - Arnab Roy
+  - Tyge Tiessen
+  year: 2016
+  venue: ASIACRYPT 2016, LNCS 10031, pp. 191-219
+  publisher: Springer
+  url: https://eprint.iacr.org/2016/492
+  notes: 'Local copy: references/2016-mimc.pdf.'
+
+- id: albrecht_et_al_2019_gmimc
+  kind: paper
+  title: 'Feistel Structures for MPC, and More'
+  authors:
+  - Martin R. Albrecht
+  - Lorenzo Grassi
+  - Leo Perrin
+  - Sebastian Ramacher
+  - Christian Rechberger
+  - Dragos Rotaru
+  - Arnab Roy
+  - Markus Schofnegger
+  year: 2019
+  venue: ESORICS 2019, LNCS 11736, pp. 151-171
+  publisher: Springer
+  url: https://eprint.iacr.org/2019/397
+  notes: 'No local copy: eprint.iacr.org blocks automated fetching (Cloudflare challenge) and no alternate mirror was
+    found. Its Feistel-MiMC and GMiMC-erf/crf structure, round counts, and cryptanalysis are described in detail in
+    the secondary source references/2020-stark_friendly_hash_survey.pdf (Section on GMiMC).'
+
+- id: grassi_et_al_2020_hades
+  kind: paper
+  title: 'On a Generalization of Substitution-Permutation Networks: The HADES Design Strategy'
+  authors:
+  - Lorenzo Grassi
+  - Reinhard Luftenegger
+  - Christian Rechberger
+  - Dragos Rotaru
+  - Markus Schofnegger
+  year: 2020
+  venue: EUROCRYPT 2020, LNCS 12106, pp. 674-704
+  publisher: Springer
+  url: https://doi.org/10.1007/978-3-030-45724-2_23
+  notes: The general full/partial-round SPN strategy paper; HadesMiMC/Starkad/Poseidon (grassi_et_al_2021_poseidon) is
+    its concrete instantiation. No local copy found (eprint blocked, no alternate mirror located).
+
+- id: grassi_et_al_2021_poseidon
+  kind: paper
+  title: 'Poseidon: A New Hash Function for Zero-Knowledge Proof Systems'
+  authors:
+  - Lorenzo Grassi
+  - Dmitry Khovratovich
+  - Christian Rechberger
+  - Arnab Roy
+  - Markus Schofnegger
+  year: 2021
+  venue: 30th USENIX Security Symposium (USENIX Security 2021), pp. 519-535
+  publisher: USENIX Association
+  url: https://www.usenix.org/system/files/sec21-grassi.pdf
+  notes: 'Final published version of the design originally released as eprint 2019/458, "Starkad and Poseidon: New Hash
+    Functions for Zero Knowledge Proof Systems," which split the design into the block cipher HadesMiMC and the hash
+    functions Poseidon (native GF(p)) and Starkad (GF(2^n) sibling of Poseidon, not separately modeled in this database).
+    Local copy: references/2021-poseidon_usenix.pdf.'
+
+- id: aly_et_al_2020_marvellous
+  kind: paper
+  title: Design of Symmetric-Key Primitives for Advanced Cryptographic Protocols
+  authors:
+  - Abdelrahaman Aly
+  - Tomer Ashur
+  - Eli Ben-Sasson
+  - Siemen Dhooghe
+  - Alan Szepieniec
+  year: 2020
+  venue: IACR Transactions on Symmetric Cryptology, 2020(3), pp. 1-45
+  publisher: IACR
+  url: https://eprint.iacr.org/2019/426
+  notes: 'The MARVELlous design strategy paper introducing Vision (GF(2^n), inversion S-box) and Rescue (GF(p), power-map
+    S-box); also documents the break of the authors'' own earlier Jarvis/Friday design (eprint 2018/1098) by Albrecht,
+    Cid, Grassi, Khovratovich, Luftenegger, Rechberger, and Schofnegger ("Algebraic Cryptanalysis of STARK-Friendly
+    Designs: Application to MARVELlous and MiMC", ASIACRYPT 2019, eprint 2019/419), which motivated Vision/Rescue as
+    their replacement. Local copy: references/2019-vision_rescue_marvellous.pdf.'
+
+- id: roy_et_al_2023_arion
+  kind: paper
+  title: 'Arion: Arithmetization-Oriented Permutation and Hashing from Generalized Triangular Dynamical Systems'
+  authors:
+  - Arnab Roy
+  - Matthias Johann Steiner
+  - Stefano Trevisani
+  year: 2023
+  venue: arXiv:2303.04639
+  url: https://arxiv.org/abs/2303.04639
+  notes: 'Identifies three generations of arithmetization-oriented primitives (Gen I: LowMC, MiMC; Gen II: HADES/Poseidon,
+    GMiMC, Rescue-Prime; Gen III: Reinforced Concrete, Griffin, Anemoi, Arion). Local copy: references/2023-arion.pdf.'
+
+- id: canteaut_et_al_2018_kreyvium
+  kind: paper
+  title: 'Stream Ciphers: A Practical Solution for Efficient Homomorphic-Ciphertext Compression'
+  authors:
+  - Anne Canteaut
+  - Sergiu Carpov
+  - Caroline Fontaine
+  - Tancrede Lepoint
+  - Maria Naya-Plasencia
+  - Pascal Paillier
+  - Renaud Sirdey
+  year: 2018
+  venue: Journal of Cryptology, 31(3), pp. 885-916 (originally FSE 2016, LNCS 9783, pp. 313-333)
+  publisher: Springer
+  url: https://eprint.iacr.org/2015/113
+  notes: 'Introduces Kreyvium, a 128-bit-security variant of the 80-bit-security eSTREAM finalist Trivium, for efficient
+    FHE transciphering. Local copy: references/2016-kreyvium_stream_ciphers_he_compression.pdf.'
+
+- id: dobraunig_et_al_2018_rasta
+  kind: paper
+  title: 'Rasta: A Cipher with Low ANDdepth and Few ANDs per Bit'
+  authors:
+  - Christoph Dobraunig
+  - Maria Eichlseder
+  - Lorenzo Grassi
+  - Virginie Lallemand
+  - Gregor Leander
+  - Eik List
+  - Florian Mendel
+  - Christian Rechberger
+  year: 2018
+  venue: CRYPTO 2018, LNCS 10991, pp. 662-692
+  publisher: Springer
+  url: https://eprint.iacr.org/2018/181
+  notes: 'No local copy: eprint.iacr.org blocks automated fetching and no alternate mirror was found. Parameters, round
+    counts, and the Agrasta aggressive-reduced-round variant are described in detail in the secondary source
+    references/2025-fhe_friendly_ciphers_sok.pdf.'
+
+- id: meaux_et_al_2016_flip
+  kind: paper
+  title: Towards Stream Ciphers for Efficient FHE with Low-Noise Ciphertexts
+  authors:
+  - Pierrick Meaux
+  - Anthony Journault
+  - Francois-Xavier Standaert
+  - Claude Carlet
+  year: 2016
+  venue: EUROCRYPT 2016, LNCS 9665, pp. 311-343
+  publisher: Springer
+  url: https://eprint.iacr.org/2016/254
+  notes: 'No local copy: eprint.iacr.org blocks automated fetching and no alternate mirror was found. Described in detail
+    (including its break by Duval, Lallemand, and Rotella, and the FiLIP/Elisabeth/Margrethe successor lineage) in the
+    secondary source references/2025-fhe_friendly_ciphers_sok.pdf.'
+
+- id: ha_et_al_2020_masta
+  kind: paper
+  title: 'Masta: An HE-Friendly Cipher Using Modular Arithmetic'
+  authors:
+  - Jincheol Ha
+  - Seongkwang Kim
+  - Wonseok Choi
+  - Jooyoung Lee
+  - Dukjae Moon
+  - Hyojin Yoon
+  - Jihoon Cho
+  year: 2020
+  venue: IEEE Access, 8, pp. 194741-194751
+  publisher: IEEE
+  url: https://ieeexplore.ieee.org/document/9245538
+  notes: 'No local copy found. An Fp (modular-arithmetic) variant of the Z2 cipher Rasta. Described in detail in the
+    secondary source references/2025-fhe_friendly_ciphers_sok.pdf.'
+
+- id: cho_et_al_2021_hera
+  kind: paper
+  title: Transciphering Framework for Approximate Homomorphic Encryption
+  authors:
+  - Jihoon Cho
+  - Jincheol Ha
+  - Seongkwang Kim
+  - ByeongHak Lee
+  - Joohee Lee
+  - Jooyoung Lee
+  - Dukjae Moon
+  - Hyojin Yoon
+  year: 2021
+  venue: ASIACRYPT 2021, LNCS 13092, pp. 640-669
+  publisher: Springer
+  url: https://eprint.iacr.org/2020/1335
+  notes: 'No local copy: eprint.iacr.org blocks automated fetching and no alternate mirror was found. Introduces the
+    HERA cipher alongside the RtF (Real-to-Finite-field) transciphering framework. Described in detail in the secondary
+    source references/2025-fhe_friendly_ciphers_sok.pdf.'

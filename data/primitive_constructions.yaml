@@ -55,6 +55,24 @@ primitive_constructions:
     S-box-coverage facet (full_sbox_layer / partial_sbox_layer) and to tweakable_spn.
 
     '
+- id: alternating_full_partial_sbox_layer
+  name: Alternating Full/Partial S-box Layer
+  abbreviation: HADES
+  special_case_of: spn
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  placeholder_family_names:
+  - HadesMiMC
+  - Poseidon
+  notes: 'The HADES strategy (Grassi, Luftenegger, Rechberger, Rotaru, Schofnegger, "On a generalization of substitution-permutation
+    networks: The HADES design strategy", EUROCRYPT 2020): an SPN whose rounds alternate between full S-box layers (applied
+    to the whole state, at the start and end of the permutation, for resistance to statistical attacks analyzable via classical
+    SPN theory) and partial S-box layers (applied to a single word of the state in between, to reduce cost while resisting
+    algebraic attacks). A third S-box-coverage facet leaf, distinct from full_sbox_layer and partial_sbox_layer since it
+    combines both within one design rather than using only one throughout.
+
+    '
 - id: bit_permutation_linear_layer
   name: Bit-Permutation Linear Layer
   abbreviation: Bit-perm
@@ -109,6 +127,24 @@ primitive_constructions:
     applies a single round function F to one half and XORs the result into the other before swapping. Formalized as the
     basic case of Feistel[n] by Hoang and Rogaway (''On Generalized Feistel Networks'', CRYPTO 2010), and distinguished
     here from the generalized/unbalanced/alternating variants, all of which depart from this two-equal-branch structure.
+
+    '
+- id: algebraic_feistel
+  name: Algebraic (Native-Field) Feistel Network
+  abbreviation: Alg-FN
+  special_case_of: feistel
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - GMiMC
+  - MiMC
+  notes: 'A Feistel-like network whose branches are elements of a large prime field GF(p) or binary extension field GF(2^n)
+    (rather than bit-strings) and whose round function is a low-degree algebraic map (see power_map_sbox) such as x^3,
+    designed to minimize multiplicative complexity for MPC/SNARK/STARK/FHE settings rather than gate count. Covers both
+    balanced (Feistel-MiMC) and unbalanced/expanding (GMiMC-erf) instantiations described in a single design paper (Albrecht
+    et al., "Feistel Structures for MPC, and More", ESORICS 2019); kept as one level-2 leaf rather than mirroring the
+    classical balanced/unbalanced split, since the distinguishing feature here is the native-field algebraic round function,
+    not the branch-size symmetry.
 
     '
 - id: generalized_feistel
@@ -474,3 +510,17 @@ primitive_constructions:
   name: Table-Update Stream
 - id: nlfsr_filtered
   name: NLFSR with Nonlinear Filter
+- id: generalized_triangular_dynamical_system
+  name: Generalized Triangular Dynamical System (GTDS)
+  abbreviation: GTDS
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  placeholder_family_names:
+  - Arion
+  notes: A round function over GF(p) combining a triangular system of univariate polynomial permutations (the "SPN part",
+    determining the worst-case differential/linear security bounds) with feedback between branches reminiscent of a Feistel
+    network, so that each branch's output feeds into the evaluation of the next. Introduced by Roy and Steiner ("Generalized
+    Triangular Dynamical System", arXiv 2204.01802) and instantiated as the Arion permutation/block cipher (Roy, Steiner,
+    Trevisani, "Arion", 2023), explicitly positioned by its authors as reducing to neither the Feistel nor the SPN structure,
+    unlike the Gen I/II arithmetization-oriented designs (LowMC/MiMC/HADES/Poseidon/GMiMC/Rescue-Prime) that came before it.

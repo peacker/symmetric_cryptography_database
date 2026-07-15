@@ -4124,3 +4124,166 @@ rounds:
     state_model: {state_bits: 512, word_bits: 32, branches: 16}
     round_variation: {rotation_distances: [10, 27, 8]}
   notes: Four pollinating subrounds serialize dependencies between ARX operations to improve diffusion over Salsa and ChaCha.
+
+- id: mimc_round
+  name: MiMC round
+  kind: full_round
+  spec:
+    state_model: {state_words: 1}
+    component_flow:
+    - component_id: xor
+    - component_id: constant
+    - component_id: power_map_sbox
+      params: {exponent: 3}
+  notes: 'Each round XORs the (repeated) round key and a round constant into the single field-element state, then applies
+    F(x) = x^3 over GF(2^n) with n odd (Albrecht, Grassi, Rechberger, Roy, Tiessen, ASIACRYPT 2016); r = ceil(n/log2(3))
+    rounds. The MiMC-p/p variant over a prime field GF(p) uses add_mod in place of xor for the key/constant addition.
+    The minimal-multiplicative-complexity round function that founded the arithmetization-oriented cipher family.'
+
+- id: gmimc_round
+  name: GMiMC round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+    - component_id: constant
+    - component_id: power_map_sbox
+      params: {exponent: 3}
+    - component_id: add_mod
+  notes: A Feistel-style round function applies MiMC's cube-map round function F(x) = (x + k_i + c_i)^3 to one branch,
+    then adds the result into one or more of the remaining branches before a cyclic branch rotation -- expanding (GMiMC-erf),
+    contracting (GMiMC-crf), or balanced two-branch (Feistel-MiMC), depending on the instance.
+
+- id: hadesmimc_full_round
+  name: HadesMiMC/Poseidon full round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+      params: {exponent: 5}
+    - component_id: cauchy_matrix
+    - component_id: constant
+  notes: A full round of the HADES strategy applies the power-map S-box to every word of the state (unlike a partial
+    round), followed by a Cauchy MDS matrix multiplication and round-constant addition. HadesMiMC/Poseidon place R_f
+    full rounds at the start and end of the permutation.
+
+- id: hadesmimc_partial_round
+  name: HadesMiMC/Poseidon partial round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+      params: {exponent: 5}
+    - component_id: cauchy_matrix
+    - component_id: constant
+  notes: A partial round of the HADES strategy applies the power-map S-box to only a single word of the state (the rest
+    pass through unchanged), followed by the same Cauchy MDS matrix multiplication and round-constant addition as a full
+    round. HadesMiMC/Poseidon place R_p partial rounds in the middle of the permutation, between the leading and trailing
+    full rounds, to reduce the total S-box count while resisting algebraic attacks.
+
+- id: vision_round
+  name: Vision round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: inversion_sbox
+    - component_id: cauchy_matrix
+    - component_id: constant
+  notes: An SPN round over GF(2^n) applying the field-inversion S-box x -> x^(-1) (differential uniformity 2 for n odd)
+    to every word of the state, followed by a Cauchy MDS matrix and round-constant addition.
+
+- id: rescue_round
+  name: Rescue round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+      params: {exponent: 5}
+    - component_id: prime_field_matrix_mul
+    - component_id: constant
+    - component_id: power_map_sbox
+    - component_id: prime_field_matrix_mul
+    - component_id: constant
+  notes: Each Rescue round consists of two half-rounds over GF(p) -- a forward power map x -> x^d followed by an MDS
+    matrix and constant addition, then the inverse power map x -> x^(1/d) followed by another MDS matrix and constant
+    addition -- so that both a low-degree map and its (typically high-degree) inverse are applied every round, unlike
+    MiMC/GMiMC which apply only the forward map.
+
+- id: arion_round
+  name: Arion round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+    - component_id: power_map_sbox
+      params: {exponent: -1}
+    - component_id: prime_field_matrix_mul
+    - component_id: add_mod
+  notes: The Generalized Triangular Dynamical System (GTDS) round applies a low-degree univariate permutation to all
+    but the last branch and a high-degree inverse permutation to the last branch, with feedback from later branches
+    into earlier ones (triangular structure), followed by a circulant MDS matrix (an efficiently-evaluable instance of
+    prime_field_matrix_mul) and round-key addition.
+
+- id: kreyvium_round
+  name: Kreyvium round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: and
+    - component_id: xor
+    - component_id: nlfsr
+  notes: Shares Trivium's three-NLFSR update structure (see trivium_round) with two additional 128-bit registers carrying
+    the key and IV through the full keystream generation to raise the security level from Trivium's 80 bits to 128 bits.
+
+- id: rasta_round
+  name: Rasta round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: and
+    - component_id: xor
+    - component_id: binary_matrix_mul
+    - component_id: xor
+      params: {}
+  notes: A full-state quadratic (chi-like) non-linear layer over GF(2) is followed by a freshly-generated random invertible
+    affine (binary matrix) layer and round-constant XOR, with a new random matrix drawn deterministically per round from
+    the public key/IV -- unlike LowMC, which reuses the same style of random matrices but only in a partial S-box layer.
+
+- id: flip_round
+  name: FLIP filter-permutator step
+  kind: step
+  spec:
+    component_flow:
+    - component_id: permutation_vector
+    - component_id: boolean_filter
+  notes: To produce one keystream bit, a fresh public random permutation (drawn from a PRNG seeded by a public IV) reorders
+    the secret key bits, and a fixed non-linear Boolean filtering function is evaluated on a subset of the permuted bits
+    -- no internal register state is updated between output bits, unlike LFSR/NLFSR-based stream ciphers.
+
+- id: masta_round
+  name: Masta round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+      params: {exponent: 3}
+    - component_id: prime_field_matrix_mul
+    - component_id: add_mod
+  notes: The Fp analogue of Rasta's round -- a full cube-map non-linear layer over GF(p) followed by a freshly-generated
+    random invertible matrix and round-key/constant addition, incurring quadratically many plaintext-ciphertext multiplications
+    per block when evaluated homomorphically due to the random (non-fixed) matrix.
+
+- id: hera_round
+  name: HERA round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+      params: {exponent: 3}
+    - component_id: prime_field_matrix_mul
+    - component_id: mul_mod
+    - component_id: add_mod
+  notes: A cube-map non-linear layer over GF(p) followed by a fixed (not randomly regenerated) MDS matrix; randomness
+    is instead introduced via a component-wise multiplication of the round key with a randomized vector before addition,
+    reducing the homomorphic plaintext-ciphertext multiplication cost from quadratic (Masta/Pasta) to linear in the
+    block size.

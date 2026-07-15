@@ -11405,3 +11405,461 @@ primitive_families:
       key_size_bits: 128
       output_size_bits: 128
       rounds: 41
+- id: mimc
+  name: MiMC
+  construction_ids:
+  - even_mansour
+  round_ids:
+  - mimc_round
+  target_applications:
+  - zero_knowledge
+  - mpc
+  - fhe
+  characteristics:
+    components:
+    - id: xor
+    - id: constant
+    - id: power_map_sbox
+      params: {exponent: 3}
+  reference_ids:
+  - albrecht_et_al_2016_mimc
+  process_participations: []
+  influences: []
+  notes: 'MiMC (Albrecht, Grassi, Rechberger, Roy, Tiessen, ASIACRYPT 2016) is a family of block ciphers, permutations,
+    and a sponge-based hash function (MiMCHash) built by iterating the cube map F(x) = x^3 over a single field element
+    of GF(2^n) (n odd) or GF(p), XORing/adding the (repeated) round key and a round constant before each application.
+    MiMC-n/n uses r = ceil(n/log2(3)) rounds; MiMC-2n/n embeds the same round function in a balanced Feistel network at
+    double the rounds to process larger blocks. Revives and generalizes the 1990s Knudsen-Nyberg cipher (broken by
+    Jakobsen and Knudsen''s interpolation attack), surviving by using a much larger number of rounds. Motivated by
+    settings (SNARKs, MPC, FHE) where the total number of field multiplications, not circuit depth, is the bottleneck.
+    Named as the foundational "Gen I" arithmetization-oriented design alongside LowMC in Roy, Steiner, and Trevisani''s
+    3-generation classification (Arion, 2023).'
+  instances:
+  - id: mimc_129_129
+    name: MiMC-129/129
+    type: block_cipher
+    reference_ids:
+    - albrecht_et_al_2016_mimc
+    characteristics:
+      block_size_bits: 129
+      key_size_bits: 129
+      output_size_bits: 129
+      rounds: 82
+    notes: SPN-mode instance over GF(2^129) with 128-bit security, used as the paper's main size-optimized benchmark
+      instance (82 rounds, 0.64 multiplications/bit).
+  - id: mimc_258_129
+    name: MiMC-258/129 (Feistel)
+    type: block_cipher
+    reference_ids:
+    - albrecht_et_al_2016_mimc
+    characteristics:
+      block_size_bits: 258
+      key_size_bits: 129
+      output_size_bits: 258
+      rounds: 164
+    notes: Balanced two-branch Feistel instantiation of the same cube-map round function, doubling both the block size
+      and the round count (164 = 2x82) relative to MiMC-129/129.
+- id: gmimc
+  name: GMiMC
+  construction_ids:
+  - feistel
+  - algebraic_feistel
+  round_ids:
+  - gmimc_round
+  target_applications:
+  - zero_knowledge
+  - mpc
+  characteristics:
+    components:
+    - id: add_mod
+    - id: constant
+    - id: power_map_sbox
+      params: {exponent: 3}
+  reference_ids:
+  - albrecht_et_al_2019_gmimc
+  process_participations: []
+  influences:
+  - source_family_id: mimc
+    relations:
+    - generalization_of
+    note: GMiMC generalizes MiMC's single-branch cube-map SPN round function into a family of Feistel-network structures
+      operating over a native GF(p)/GF(2^n) state, including a plain balanced two-branch instance (Feistel-MiMC) as well
+      as expanding (GMiMC-erf) and contracting (GMiMC-crf) unbalanced variants, per Albrecht, Grassi, Perrin, Ramacher,
+      Rechberger, Rotaru, Roy, and Schofnegger's own framing ("Feistel Structures for MPC, and More", ESORICS 2019).
+  notes: GMiMC is a family of Feistel-network-based block ciphers/PRPs generalizing MiMC's cube-map round function to
+    a Feistel setting for MPC, ZK-SNARK, and post-quantum ZK-based signature applications, studied in three main
+    structural variants (balanced Feistel-MiMC, expanding GMiMC-erf, contracting GMiMC-crf). No local reference copy
+    (eprint.iacr.org blocked automated fetching); described in detail in references/2020-stark_friendly_hash_survey.pdf.
+  instances:
+  - id: gmimc_erf
+    name: GMiMC-erf
+    type: block_cipher
+    reference_ids:
+    - albrecht_et_al_2019_gmimc
+    characteristics: {}
+    notes: Expanding-round-function (unbalanced Feistel/Type-2-GFN-like) variant, applying the cube-map round function
+      to one branch and adding its output into all remaining branches each round.
+- id: hadesmimc
+  name: HadesMiMC
+  construction_ids:
+  - spn
+  - alternating_full_partial_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - hadesmimc_full_round
+  - hadesmimc_partial_round
+  target_applications:
+  - zero_knowledge
+  - mpc
+  characteristics:
+    components:
+    - id: power_map_sbox
+      params: {exponent: 5}
+    - id: cauchy_matrix
+    - id: constant
+  reference_ids:
+  - grassi_et_al_2020_hades
+  - grassi_et_al_2021_poseidon
+  process_participations: []
+  influences:
+  - source_family_id: mimc
+    relations:
+    - inspired_by
+    note: HadesMiMC adopts MiMC's core idea of a low-degree power-map non-linearity over GF(p)/GF(2^n) but replaces
+      its single-field-element state with a full SPN alternating full and partial S-box layers (the HADES strategy),
+      per Grassi, Luftenegger, Rechberger, Rotaru, and Schofnegger (EUROCRYPT 2020).
+  - source_family_id: gmimc
+    relations:
+    - related_to
+    note: Concurrent "Gen II" arithmetization-oriented block cipher also built on a power-map non-linearity, per Roy,
+      Steiner, and Trevisani's 3-generation AO classification (Arion, 2023).
+  notes: HadesMiMC is the keyed block-cipher instantiation of the HADES design strategy (an SPN alternating full S-box
+    rounds, for resistance to statistical attacks, with partial S-box rounds, for reduced cost) over GF(p), using a
+    power-map S-box (typically x^5) and a Cauchy MDS matrix linear layer. Grassi, Kales, Khovratovich, Roy, Rechberger,
+    and Schofnegger's original eprint 2019/458 combined it with the unkeyed sponge-hash instantiations Poseidon (native
+    GF(p)) and Starkad (GF(2^n) sibling, not separately modeled in this database); this split is documented in the
+    final published Poseidon paper (grassi_et_al_2021_poseidon). No local copy of the HADES strategy paper itself was
+    found (eprint blocked, no alternate mirror located); local copy of the Poseidon paper covering the same strategy
+    is at references/2021-poseidon_usenix.pdf.
+  instances:
+  - id: hadesmimc_default
+    name: HadesMiMC
+    type: block_cipher
+    reference_ids:
+    - grassi_et_al_2021_poseidon
+    characteristics: {}
+    notes: Parameterized over the field size, state width t, and the numbers of full rounds R_f and partial rounds R_p,
+      chosen per target security level and field.
+- id: jarvis
+  name: Jarvis
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - vision_round
+  target_applications:
+  - zero_knowledge
+  - mpc
+  characteristics:
+    components:
+    - id: inversion_sbox
+    - id: cauchy_matrix
+    - id: constant
+  reference_ids:
+  - aly_et_al_2020_marvellous
+  process_participations: []
+  influences: []
+  notes: Jarvis is the original MARVELlous-strategy block cipher (Ashur and Dhooghe, eprint 2018/1098) over GF(2^n),
+    applying the field-inversion S-box across the full state each round with a dense affine (MDS) diffusion layer;
+    Friday is its corresponding sponge-hash mode. Both were broken by a Grobner-basis algebraic attack (Albrecht, Cid,
+    Grassi, Khovratovich, Luftenegger, Rechberger, and Schofnegger, "Algebraic Cryptanalysis of STARK-Friendly Designs -
+    Application to MARVELlous and MiMC", ASIACRYPT 2019, eprint 2019/419), motivating the redesign as Vision/Rescue.
+    Documented as related work (including the break) in the Vision/Rescue paper itself; local copy of that paper at
+    references/2019-vision_rescue_marvellous.pdf. No local copy of Jarvis's own original design paper was found.
+  instances:
+  - id: jarvis_default
+    name: Jarvis
+    type: block_cipher
+    reference_ids:
+    - aly_et_al_2020_marvellous
+    characteristics: {}
+    notes: Broken by Albrecht et al.'s 2019 Grobner-basis attack; superseded by Vision.
+- id: vision
+  name: Vision
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - vision_round
+  target_applications:
+  - zero_knowledge
+  - mpc
+  characteristics:
+    components:
+    - id: inversion_sbox
+    - id: cauchy_matrix
+    - id: constant
+  reference_ids:
+  - aly_et_al_2020_marvellous
+  process_participations: []
+  influences:
+  - source_family_id: jarvis
+    relations:
+    - improvement_of
+    note: Vision replaces the broken Jarvis design (Albrecht et al.'s Grobner-basis break, eprint 2019/419) with the
+      same field-inversion S-box but a redesigned affine/MDS layer and round-constant schedule, per Aly, Ashur,
+      Ben-Sasson, Dhooghe, and Szepieniec's MARVELlous strategy paper (ToSC 2020).
+  notes: 'Vision is a GF(2^n)-native SPN block cipher from the MARVELlous design strategy, applying the field-inversion
+    S-box x -> x^(-1) (differential uniformity 2 for n odd) across the full state each round, followed by a Cauchy MDS
+    matrix and round-constant addition. Targets ZK-STARK, R1CS-based proof systems, and MPC. Local copy:
+    references/2019-vision_rescue_marvellous.pdf.'
+  instances:
+  - id: vision_default
+    name: Vision
+    type: block_cipher
+    reference_ids:
+    - aly_et_al_2020_marvellous
+    characteristics: {}
+    notes: Parameterized over the binary extension field size and state width; instantiated for 128-bit security targets
+      in the original paper.
+- id: rescue
+  name: Rescue
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - rescue_round
+  target_applications:
+  - zero_knowledge
+  - mpc
+  characteristics:
+    components:
+    - id: power_map_sbox
+      params: {exponent: 5}
+    - id: prime_field_matrix_mul
+    - id: constant
+  reference_ids:
+  - aly_et_al_2020_marvellous
+  process_participations: []
+  influences:
+  - source_family_id: jarvis
+    relations:
+    - improvement_of
+    note: Rescue is the GF(p) sibling of Vision, replacing Jarvis's broken design with a round structure that applies
+      both a low-degree power map and its (typically high-degree) inverse every round, per Aly, Ashur, Ben-Sasson,
+      Dhooghe, and Szepieniec's MARVELlous strategy paper (ToSC 2020).
+  notes: 'Rescue is a GF(p)-native SPN block cipher/permutation from the MARVELlous design strategy. Each round applies
+    a forward power map x -> x^d, an MDS matrix, and a constant, then the inverse power map x -> x^(1/d), another MDS
+    matrix, and a constant -- alternating a low-degree map with its (typically high-degree) inverse every round, unlike
+    MiMC/GMiMC/HadesMiMC which apply only the forward direction. Local copy: references/2019-vision_rescue_marvellous.pdf.'
+  instances:
+  - id: rescue_default
+    name: Rescue
+    type: block_cipher
+    reference_ids:
+    - aly_et_al_2020_marvellous
+    characteristics: {}
+    notes: Parameterized over the prime field size and state width; instantiated for 128-bit security targets in the
+      original paper. Later refined into Rescue-Prime (Szepieniec, Ashur, and Dhooghe, 2020, not separately modeled
+      in this database).
+- id: arion
+  name: Arion
+  construction_ids:
+  - generalized_triangular_dynamical_system
+  round_ids:
+  - arion_round
+  target_applications:
+  - zero_knowledge
+  - mpc
+  characteristics:
+    components:
+    - id: power_map_sbox
+    - id: prime_field_matrix_mul
+    - id: add_mod
+  reference_ids:
+  - roy_et_al_2023_arion
+  process_participations: []
+  influences:
+  - source_family_id: mimc
+    relations:
+    - inspired_by
+    note: 'Roy, Steiner, and Trevisani''s own 3-generation classification of arithmetization-oriented primitives places
+      Arion in "Gen III" (alongside Reinforced Concrete, Griffin, Anemoi), building on but explicitly not reducing to
+      the Feistel/SPN structures of "Gen I" (LowMC, MiMC) and "Gen II" (HADES/Poseidon, GMiMC, Rescue-Prime) that came
+      before it.'
+  - source_family_id: gmimc
+    relations:
+    - related_to
+    note: Grouped as "Gen II" in Arion's own classification of prior AO designs (see mimc influence note).
+  - source_family_id: hadesmimc
+    relations:
+    - related_to
+    note: Grouped as "Gen II" (HADES/Poseidon) in Arion's own classification of prior AO designs (see mimc influence
+      note); Arion's own performance benchmarks (Tables 5-7, 21-22) directly compare ArionHash against Poseidon.
+  - source_family_id: rescue
+    relations:
+    - related_to
+    note: Rescue-Prime is grouped as "Gen II" in Arion's own classification of prior AO designs (see mimc influence note).
+  notes: 'Arion is a keyed permutation/block cipher over GF(p) built on the Generalized Triangular Dynamical System
+    (GTDS, Roy and Steiner, arXiv 2204.01802), combining a triangular system of univariate polynomial permutations
+    (a low-degree map p1 in all branches but the last, a high-degree inverse permutation in the last branch) with
+    inter-branch feedback, followed by an efficiently-evaluable circulant MDS matrix and key addition. ArionHash
+    instantiates the unkeyed permutation Arion-pi in sponge mode. Explicitly positioned by its authors as reducing to
+    neither the Feistel nor the SPN structure that characterizes earlier "Gen I/II" AO designs. Local copy:
+    references/2023-arion.pdf.'
+  instances:
+  - id: arion_bls12_bn254
+    name: Arion (BLS12/BN254, 128-bit security)
+    type: block_cipher
+    reference_ids:
+    - roy_et_al_2023_arion
+    characteristics:
+      block_size_bits_min: 750
+      block_size_bits_max: 2000
+      rounds_min: 4
+      rounds_max: 6
+    notes: Parameter sets targeting the ~250-bit BLS12-381 and BN254 SNARK curve scalar fields, with n = 3-8 branches
+      and 4-6 rounds depending on branch count and exponent d1 in {3,5}; the aggressive variant (alpha-Arion) uses one
+      fewer round by relying on a weaker (deterministic-only) Grobner-basis resistance assumption.
+- id: rasta
+  name: Rasta
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
+  round_ids:
+  - rasta_round
+  target_applications:
+  - fhe
+  - mpc
+  characteristics:
+    components:
+    - id: and
+    - id: xor
+    - id: binary_matrix_mul
+  reference_ids:
+  - dobraunig_et_al_2018_rasta
+  process_participations: []
+  influences:
+  - source_family_id: lowmc
+    relations:
+    - related_to
+    note: Both LowMC and Rasta minimize AND-depth for MPC/FHE over GF(2), but Rasta trades LowMC's partial S-box layer
+      (applied to only part of the state) for a full-state quadratic non-linear layer plus a freshly-generated random
+      affine layer every round, per Dobraunig, Eichlseder, Grassi, Lallemand, Leander, List, Mendel, and Rechberger's
+      own comparison (CRYPTO 2018).
+  notes: Rasta is a Z2 block cipher for low-AND-depth FHE/MPC evaluation, applying a full-state quadratic (chi-like)
+    non-linear layer over GF(2) each round, followed by a freshly-generated random invertible affine (binary matrix)
+    layer and round-constant XOR -- a new random matrix is derived deterministically per round from the public key/IV,
+    unlike LowMC's reuse of one style of random matrix in a partial S-box layer. The aggressive round-reduced variant
+    Agrasta is defined in the same paper. No local copy (eprint blocked, no alternate mirror found); described in detail
+    in references/2025-fhe_friendly_ciphers_sok.pdf.
+  instances:
+  - id: rasta_agrasta
+    name: Agrasta
+    type: block_cipher
+    reference_ids:
+    - dobraunig_et_al_2018_rasta
+    characteristics: {}
+    notes: Aggressively round-reduced parameter set from the original Rasta paper, trading security margin for
+      performance; later broken by algebraic attacks using low-degree equations (Liu, Sarkar, Meier, Isobe, 2021).
+- id: masta
+  name: Masta
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
+  round_ids:
+  - masta_round
+  target_applications:
+  - fhe
+  characteristics:
+    components:
+    - id: power_map_sbox
+      params: {exponent: 3}
+    - id: prime_field_matrix_mul
+    - id: add_mod
+  reference_ids:
+  - ha_et_al_2020_masta
+  process_participations: []
+  influences:
+  - source_family_id: rasta
+    relations:
+    - variant_of
+    note: 'Masta is described by Niu et al. ("SoK: FHE-Friendly Symmetric Ciphers and Transciphering", 2025) as "an Fp
+      variant of the Z2 cipher Rasta," replacing Rasta''s bit-based full non-linear layer and binary matrix with a
+      cube-map non-linear layer and a random matrix over a larger prime field.'
+  notes: Masta is an Fp (modular-arithmetic) HE-friendly block cipher, replacing Rasta's GF(2) structure with a cube-map
+    non-linear layer and a freshly-generated random invertible matrix over a prime field, aiming for better arithmetic
+    efficiency under FHE schemes that natively support Fp operations (BGV/BFV). Its random-matrix linear layer incurs
+    quadratically-growing homomorphic plaintext-ciphertext multiplications with block size, a limitation addressed by
+    its successor Pasta (Dobraunig, Grassi, Helminger, Rechberger, Schofnegger, Walch, 2023, not separately modeled in
+    this database). No local copy found; described in detail in references/2025-fhe_friendly_ciphers_sok.pdf.
+  instances:
+  - id: masta_default
+    name: Masta
+    type: block_cipher
+    reference_ids:
+    - ha_et_al_2020_masta
+    characteristics:
+      rounds_min: 4
+      rounds_max: 6
+    notes: 'Benchmarked parameter sets include Masta(4,128,128,33-bit), Masta(5,64,64,33-bit), and Masta(6,32,32,33-bit)
+      (rounds, block size in Fp elements, output size, prime bit-length), per Niu et al.''s SoK survey.'
+- id: hera
+  name: HERA
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - hera_round
+  target_applications:
+  - fhe
+  characteristics:
+    components:
+    - id: power_map_sbox
+      params: {exponent: 3}
+    - id: prime_field_matrix_mul
+    - id: mul_mod
+    - id: add_mod
+    block_size_bits_min: 256
+    block_size_bits_max: 448
+    rounds: 5
+  reference_ids:
+  - cho_et_al_2021_hera
+  process_participations: []
+  influences:
+  - source_family_id: rasta
+    relations:
+    - related_to
+    note: Like Rasta and Masta, HERA is a full-state-nonlinear-layer FHE-friendly cipher over Fp, but replaces their
+      freshly-regenerated random matrix per round with a fixed MDS matrix, per Niu et al.'s SoK classification.
+  - source_family_id: masta
+    relations:
+    - related_to
+    note: HERA introduces randomness via a component-wise multiplication of the round key with a randomized vector in
+      place of Masta's random matrix, reducing homomorphic plaintext-ciphertext multiplication cost from quadratic to
+      linear in the block size, per Niu et al.'s SoK classification.
+  notes: HERA is an Fp HE-friendly block cipher proposed alongside the RtF (Real-to-Finite-field) transciphering
+    framework for approximate (CKKS) homomorphic encryption. Unlike Masta/Pasta, its linear layer is a fixed MDS matrix;
+    randomness is instead introduced by multiplying the round key component-wise with a randomized vector before
+    addition, reducing per-block homomorphic plaintext-ciphertext multiplications from quadratic to linear in the block
+    size. An algebraic attack exploiting round-key collisions (Liu, Kalam, Sarkar, Meier, 2024) breaks its 192/256-bit
+    security claims but leaves the 128-bit claim intact. No local copy (eprint blocked, no alternate mirror found);
+    described in detail in references/2025-fhe_friendly_ciphers_sok.pdf.
+  instances:
+  - id: hera_5_16
+    name: HERA(5,16,16,28-bit)
+    type: block_cipher
+    reference_ids:
+    - cho_et_al_2021_hera
+    characteristics:
+      block_size_bits: 448
+      output_size_bits: 448
+      rounds: 5
+    notes: Benchmarked parameter set (rounds, block size in Fp elements, output size in Fp elements, prime bit-length)
+      from Cho et al.'s original paper and Niu et al.'s SoK survey.
