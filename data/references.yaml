@@ -799,6 +799,7 @@ references:
   year: 2011
   venue: RFC 6114
   url: https://www.rfc-editor.org/rfc/rfc6114
+  notes: 'Local copy: references/2011-clefia-rfc6114.txt.'
 - id: suzaki_et_al_2012_twine
   kind: article
   title: The TWINE Family of Lightweight Block Ciphers

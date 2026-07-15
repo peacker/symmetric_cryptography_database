@@ -2470,7 +2470,15 @@ primitive_families:
     stage_ids:
     - candidate_recommended_block_128bit
     status: candidate_recommended
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - inspired_by
+    note: 'RFC 6114 explicitly states CLEFIA "is compatible with the interface of
+      AES" and that its second S-box "S1 is based on the inverse function over
+      GF(2^8)" -- the same core technique as Rijndael''s S-box (a GF(2^8) inversion
+      composed with an affine transform), though CLEFIA uses its own affine
+      transform and combines it with a separate 4-bit-S-box-based S0.'
   instances:
   - id: clefia_128
     name: CLEFIA-128
