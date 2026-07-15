@@ -49,6 +49,22 @@ primitive_constructions:
     the halves.
 
     '
+- id: balanced_feistel
+  name: Balanced (Classical) Feistel Network
+  abbreviation: Feistel
+  special_case_of: feistel
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - DES
+  - Camellia
+  - Blowfish
+  notes: 'The classical two-branch Feistel network: the state is split into exactly two equal-size halves, and each round
+    applies a single round function F to one half and XORs the result into the other before swapping. Formalized as the
+    basic case of Feistel[n] by Hoang and Rogaway (''On Generalized Feistel Networks'', CRYPTO 2010), and distinguished
+    here from the generalized/unbalanced/alternating variants, all of which depart from this two-equal-branch structure.
+
+    '
 - id: generalized_feistel
   name: Generalized Feistel Network
   abbreviation: GFN
@@ -64,7 +80,7 @@ primitive_constructions:
 - id: type1_generalized_feistel
   name: Type-1 Generalized Feistel Network
   abbreviation: Type-1 GFN
-  special_case_of: generalized_feistel
+  special_case_of: feistel
   typical_primitive_types:
   - block_cipher
   placeholder_family_names:
@@ -80,7 +96,7 @@ primitive_constructions:
 - id: type2_generalized_feistel
   name: Type-2 Generalized Feistel Network
   abbreviation: Type-2 GFN
-  special_case_of: generalized_feistel
+  special_case_of: feistel
   typical_primitive_types:
   - block_cipher
   placeholder_family_names:
@@ -96,7 +112,7 @@ primitive_constructions:
 - id: type3_generalized_feistel
   name: Type-3 Generalized Feistel Network
   abbreviation: Type-3 GFN
-  special_case_of: generalized_feistel
+  special_case_of: feistel
   typical_primitive_types:
   - block_cipher
   placeholder_family_names:
@@ -111,7 +127,7 @@ primitive_constructions:
 - id: type4_generalized_feistel
   name: Type-4 Generalized Feistel Network
   abbreviation: Type-4 GFN
-  special_case_of: generalized_feistel
+  special_case_of: feistel
   typical_primitive_types:
   - block_cipher
   notes: 'Introduced by Hoang and Rogaway (''On Generalized Feistel Networks'', CRYPTO 2010, Fig. 6 of the full/revised
@@ -124,7 +140,7 @@ primitive_constructions:
 - id: type5_generalized_feistel
   name: Type-5 Generalized Feistel Network
   abbreviation: Type-5 GFN
-  special_case_of: generalized_feistel
+  special_case_of: feistel
   typical_primitive_types:
   - block_cipher
   notes: 'Introduced by Hoang and Rogaway (''On Generalized Feistel Networks'', CRYPTO 2010, Fig. 6 of the full/revised
@@ -153,7 +169,7 @@ primitive_constructions:
 - id: unbalanced_numeric_feistel
   name: Unbalanced Numeric Feistel Network
   abbreviation: UFN#
-  special_case_of: unbalanced_feistel
+  special_case_of: feistel
   typical_primitive_types:
   - block_cipher
   notes: 'The numeric variant of an unbalanced Feistel network: instead of splitting a bit-string into two halves, it enciphers
@@ -166,7 +182,7 @@ primitive_constructions:
 - id: source_heavy_unbalanced_feistel
   name: Source-Heavy Unbalanced Feistel Network
   abbreviation: SUFN
-  special_case_of: unbalanced_feistel
+  special_case_of: feistel
   typical_primitive_types:
   - block_cipher
   placeholder_family_names:
@@ -179,7 +195,7 @@ primitive_constructions:
 - id: target_heavy_unbalanced_feistel
   name: Target-Heavy Unbalanced Feistel Network
   abbreviation: TUFN
-  special_case_of: unbalanced_feistel
+  special_case_of: feistel
   typical_primitive_types:
   - block_cipher
   placeholder_family_names:
@@ -208,7 +224,7 @@ primitive_constructions:
 - id: alternating_numeric_feistel
   name: Alternating Numeric Feistel Network
   abbreviation: AFN#
-  special_case_of: alternating_feistel_network
+  special_case_of: feistel
   typical_primitive_types:
   - block_cipher
   notes: 'The numeric variant of an alternating Feistel network: rounds alternate between numeric Feistel (M, N) and (N,

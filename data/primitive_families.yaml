@@ -127,6 +127,7 @@ primitive_families:
   name: tCAST
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - tcast_round
   target_applications:
@@ -186,6 +187,7 @@ primitive_families:
   name: tLOKI
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - tloki_round
   target_applications:
@@ -299,6 +301,7 @@ primitive_families:
   name: Paterson trapdoor cipher
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - paterson_trapdoor_round
   target_applications:
@@ -351,6 +354,7 @@ primitive_families:
   name: Parity-check DES/Triple-DES variants
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - parity_check_des_round
   target_applications:
@@ -1201,6 +1205,7 @@ primitive_families:
     only for historical and legacy analysis.
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - des_round
   target_applications:
@@ -1239,6 +1244,7 @@ primitive_families:
     expensive key setup suits applications with infrequent key changes.
   construction_ids:
   - feistel
+  - balanced_feistel
   - key_dependent_table_network
   round_ids:
   - blowfish_round
@@ -1328,6 +1334,7 @@ primitive_families:
     is offset by equivalent-key and related-key weaknesses.
   construction_ids:
   - feistel
+  - balanced_feistel
   - arx_permutation_network
   round_ids:
   - tea_round
@@ -1373,6 +1380,7 @@ primitive_families:
     addition, shift, and XOR operations.
   construction_ids:
   - feistel
+  - balanced_feistel
   - arx_permutation_network
   round_ids:
   - xtea_round
@@ -1413,6 +1421,7 @@ primitive_families:
   name: Raiden
   construction_ids:
   - feistel
+  - balanced_feistel
   - arx_permutation_network
   round_ids:
   - raiden_round
@@ -1468,6 +1477,7 @@ primitive_families:
     transform, and 128-, 192-, or 256-bit keys.
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - twofish_round
   target_applications:
@@ -1604,6 +1614,7 @@ primitive_families:
     and described in RFC 3713.
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - camellia_round
   target_applications:
@@ -1684,6 +1695,7 @@ primitive_families:
     AND, and XOR across several block/key-size profiles.
   construction_ids:
   - feistel
+  - balanced_feistel
   - and_rx
   round_ids:
   - simon_round
@@ -1733,6 +1745,7 @@ primitive_families:
     key sizes.
   construction_ids:
   - feistel
+  - balanced_feistel
   - arx_permutation_network
   round_ids:
   - speck_round
@@ -2015,6 +2028,7 @@ primitive_families:
     ISO/IEC 18033-3 specify it.
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - cast128_round
   target_applications:
@@ -2186,6 +2200,7 @@ primitive_families:
     by RFC 4269.
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - seed_round
   target_applications:
@@ -2639,6 +2654,7 @@ primitive_families:
     and 256-bit keys.
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - deal_round
   target_applications:
@@ -2694,6 +2710,7 @@ primitive_families:
   name: DFC
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - dfc_round
   target_applications:
@@ -2770,6 +2787,7 @@ primitive_families:
   name: E2
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - e2_round
   target_applications:
@@ -2950,6 +2968,7 @@ primitive_families:
     keys; it was an AES candidate.
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - loki97_round
   target_applications:
@@ -3006,6 +3025,7 @@ primitive_families:
   name: MAGENTA
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - magenta_round
   target_applications:
@@ -5217,6 +5237,7 @@ primitive_families:
   name: CRISP
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - crisp_round
   target_applications:
@@ -5278,6 +5299,7 @@ primitive_families:
   name: ANT
   construction_ids:
   - feistel
+  - balanced_feistel
   - and_rx
   round_ids:
   - ant_round
@@ -5401,6 +5423,7 @@ primitive_families:
   name: Raindrop
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - raindrop_round
   target_applications:
@@ -6205,6 +6228,7 @@ primitive_families:
   name: CIPHERUNICORN-A
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - cipherunicorn_a_round
   target_applications:
@@ -6252,6 +6276,7 @@ primitive_families:
   name: CIPHERUNICORN-E
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - cipherunicorn_e_round
   target_applications:
@@ -6470,6 +6495,7 @@ primitive_families:
   name: DESX
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - desx_round
   target_applications:
@@ -6628,6 +6654,7 @@ primitive_families:
   name: FEAL
   construction_ids:
   - feistel
+  - balanced_feistel
   - arx_permutation_network
   round_ids:
   - feal_round
@@ -6991,6 +7018,7 @@ primitive_families:
   name: GOST 28147-89 (Magma)
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - gost_28147_89_round
   target_applications:
@@ -7166,6 +7194,7 @@ primitive_families:
   name: ICE
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - ice_round
   target_applications:
@@ -7630,6 +7659,7 @@ primitive_families:
   name: LOKI
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - loki_round
   target_applications:
@@ -7773,6 +7803,7 @@ primitive_families:
   name: MIBS
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - mibs_round
   target_applications:
@@ -8019,6 +8050,7 @@ primitive_families:
   name: MULTI2
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - multi2_round
   target_applications:
@@ -9118,6 +9150,7 @@ primitive_families:
   name: Three-key Triple DES
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - three_key_triple_des_round
   target_applications:
@@ -10512,6 +10545,7 @@ primitive_families:
     new encryption in 2016.
   construction_ids:
   - feistel
+  - balanced_feistel
   round_ids:
   - des_round
   target_applications:
@@ -10994,6 +11028,7 @@ primitive_families:
   name: Labyrinth
   construction_ids:
   - feistel
+  - balanced_feistel
   characteristics:
     components:
     - id: sbox

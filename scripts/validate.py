@@ -147,6 +147,29 @@ def main() -> None:
             )
             errors_found = True
 
+    # Enforce a two-level construction taxonomy: every construction is either a
+    # root (no special_case_of) or a direct child of a root (special_case_of
+    # points at a construction that itself has no special_case_of). This keeps
+    # the taxonomy exactly two levels deep so it renders as a simple
+    # parent-header/child-checkbox filter on the site, with no deeper nesting.
+    for label, doc, key in (
+        ("primitive", primitive_constructions_doc, "primitive_constructions"),
+        ("mode", mode_constructions_doc, "mode_constructions"),
+    ):
+        by_id = {c["id"]: c for c in doc.get(key, [])}
+        for construction in doc.get(key, []):
+            parent_id = construction.get("special_case_of")
+            if not parent_id:
+                continue
+            parent = by_id.get(parent_id)
+            if parent is not None and parent.get("special_case_of"):
+                print(
+                    f"TAXONOMY ERROR: {label} construction '{construction['id']}' has special_case_of "
+                    f"'{parent_id}', which itself has special_case_of '{parent['special_case_of']}' -- "
+                    "construction taxonomy must be exactly two levels deep (re-parent to the root instead)"
+                )
+                errors_found = True
+
     for round_def in rounds_doc.get("rounds", []):
         for step in round_def.get("spec", {}).get("component_flow", []):
             component_id = step.get("component_id")
