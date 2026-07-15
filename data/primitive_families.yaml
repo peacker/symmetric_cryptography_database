@@ -3468,7 +3468,22 @@ primitive_families:
   reference_ids:
   - liu_et_al_2025_ulbc
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: skinny
+    relations:
+    - inspired_by
+    note: 'uLBC''s key schedule for its 256-bit-key and 384-bit-tweakey versions explicitly
+      reuses SKINNY''s TWEAKEY construction: "The nibble permutation is employed
+      to extend the TWEAKEY frame of SKINNY[BJK+16] for the 256-bit key configuration,"
+      and uLBC-384t is built "following the TWEAKEY(STK) construction in [JNP14]."'
+  - source_family_id: midori
+    relations:
+    - related_to
+    note: 'uLBC''s chosen round function ("Case I") is explicitly noted to share
+      Midori128''s diffusion computation: "The diffusion layer has the same XOR computation
+      for Midori128 and Case I." Both use a 4-bit-S-box confusion layer, a permutation,
+      and the same 4x4 almost-MDS binary matrix (branch number 4), differing mainly
+      in nibble- vs byte-level permutation.'
   notes: 'this family operates with 128-bit blocks and supports key lengths of either 128 or 256 bits.  Additionally, a tweakable
     variant with a 384-bit tweakey is available.
 
@@ -3662,7 +3677,24 @@ primitive_families:
   reference_ids:
   - minematsu_et_al_2026_msx
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: dfc
+    relations:
+    - inspired_by
+    note: 'MSX''s own Design Rationale states "the basic idea of MSX dates back to
+      Vaudenay [Vau03]. ... Our proposals could be interpreted as ciphers built on
+      a decorrelation module of order 2 [Vau03], also known as Decorrelated Fast
+      Ciphers (DFCs). A specific instantiation of DFC was proposed for the AES competition
+      [PV98] and received attention for its innovative approach." MSX revisits this
+      decorrelation-module approach with a new instantiation based on integer multiplication.'
+  - source_family_id: misty1
+    relations:
+    - related_to
+    note: 'MSX''s paper explicitly considers and rejects MISTY1''s nesting approach:
+      "It is also possible to realize an (A)SU function of large input based on smaller
+      S-boxes by nesting the structure, as employed by Misty1 [Mat97], however it
+      is not quite efficient. Therefore, this small S-box-based approach deviates
+      from our goal of designing highly efficient cipher on microcontrollers."'
   notes: 'MSX includes MSX-64 and MSX-128 families, with key sizes 128 and 256 bits depending on the instance.
 
     '

@@ -994,6 +994,7 @@ references:
   year: 2025
   venue: IACR Communications in Cryptology
   url: https://cic.iacr.org/p/1/4/25
+  notes: 'Local copy: references/2025-ulbc-cic.pdf.'
 - id: wang_et_al_2025_blink
   kind: article
   title: 'THF: Designing Low-Latency Tweakable Block Ciphers'
@@ -1038,6 +1039,7 @@ references:
   year: 2026
   venue: IACR Communications in Cryptology
   url: https://cic.iacr.org/p/2/4/32
+  notes: 'Local copy: references/2026-msx-cic.pdf.'
 - id: rfc_8439
   kind: standard
   title: 'RFC 8439: ChaCha20 and Poly1305 for IETF Protocols'
