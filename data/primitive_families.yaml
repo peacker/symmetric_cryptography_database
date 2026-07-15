@@ -31,7 +31,6 @@ primitive_families:
   influences:
   - source_family_id: mantis
     relations:
-    - same_sbox
     - inspired_by
     note: Each 4-bit uKNIT-BC S-box uses the MANTIS S-box as its nonlinear core, composed with independently selected input
       and output bit transpositions. MANTIS matrices were also used as starting points for the genetic search.
@@ -214,7 +213,6 @@ primitive_families:
     relations:
     - variant_of
     - inspired_by
-    - same_state_layout
     note: tLOKI embeds correlated nonlinear relations across the four expanded LOKI91 S-box inputs while retaining its 64-bit
       Feistel framework.
   innovative_ideas:
@@ -331,7 +329,6 @@ primitive_families:
     relations:
     - variant_of
     - inspired_by
-    - same_state_layout
     note: Paterson retains DES's 64-bit Feistel layout, expansion E, permutation P, and eight 6-to-4-bit S-box positions,
       but substitutes specially designed S-boxes, doubles the rounds to 32, and proposes an 80-bit session key.
   innovative_ideas:
@@ -384,7 +381,6 @@ primitive_families:
     relations:
     - variant_of
     - related_to
-    - same_state_layout
     note: The experiments modify DES and Triple-DES only by replacing each S-box's fourth output coordinate with a parity
       check of the other three; the standard Feistel structure and surrounding permutations remain.
   innovative_ideas:
@@ -513,7 +509,6 @@ primitive_families:
     relations:
     - improvement_of
     - variant_of
-    - same_round_function
     note: The revised specification retains the CHAM ARX round structure while increasing the round counts to strengthen its
       security margins.
   notes: Revised CHAM uses 88 rounds for CHAM-64/128, 112 rounds for CHAM-128/128, and 120 rounds for CHAM-128/256. The family
@@ -636,7 +631,6 @@ primitive_families:
   - source_family_id: square
     relations:
     - improvement_of
-    - same_round_function
     note: Rijndael refines SQUARE's byte-oriented SPN round (SubBytes, ShiftRows, MixColumns) with a new key schedule and
       variable block/key sizes.
   innovative_ideas:
@@ -767,9 +761,6 @@ primitive_families:
   - source_family_id: rijndael
     relations:
     - standardization_of
-    - same_sbox
-    - same_mix_column
-    - same_shift_row
     innovative_idea_ids:
     - rijndael_8x8_sbox
     - rijndael_shift_rows
@@ -955,7 +946,6 @@ primitive_families:
   - source_family_id: salsa20
     relations:
     - improvement_of
-    - same_round_function
     innovative_idea_ids:
     - salsa_arx_quarterround
     - salsa_column_diagonal_mixing
@@ -1116,8 +1106,6 @@ primitive_families:
   influences:
   - source_family_id: present
     relations:
-    - same_sbox
-    - similar_bit_based_permutation_layer
     - generalization_of
     note: spongent's present-type permutation reuses the PRESENT S-box unchanged and generalizes PRESENT's bit permutation
       to arbitrary widths.
@@ -1187,9 +1175,7 @@ primitive_families:
   - source_family_id: present
     relations:
     - inspired_by
-    - same_sbox_size
-    - similar_bit_based_permutation_layer
-    - improved_diffusion
+    - improvement_of
     innovative_idea_ids:
     - present_4x4_sbox
     - present_bit_permutation
@@ -1417,7 +1403,6 @@ primitive_families:
   - source_family_id: tea
     relations:
     - improvement_of
-    - same_round_function
     innovative_idea_ids:
     - tea_arx_feistel
     - tea_delta_constant_mixing
@@ -1595,7 +1580,6 @@ primitive_families:
   influences:
   - source_family_id: des
     relations:
-    - same_sbox
     - inspired_by
     note: Serpent-0, the initial published version, directly reused the DES S-boxes inside a new SP-network structure to inherit
       decades of cryptanalytic study; Serpent-1 later replaced them with new S-boxes designed under the same DES-style criteria.
@@ -1830,8 +1814,6 @@ primitive_families:
   - source_family_id: aes
     relations:
     - inspired_by
-    - similar_mix_column
-    - similar_shift_row
     note: The SKINNY/MANTIS paper states that PRINCE's round function basically follows the AES structure, but uses a MixColumns-like
       mapping with branch number 4 instead of AES's branch number 5 and adds reflection symmetry.
   innovative_ideas:
@@ -1885,9 +1867,6 @@ primitive_families:
   - source_family_id: present
     relations:
     - inspired_by
-    - same_sbox_size
-    - similar_mix_column
-    - similar_shift_row
     note: LED follows a compact nibble-oriented SPN style suited for lightweight hardware.
   instances:
   - id: led_64_64
@@ -2291,7 +2270,6 @@ primitive_families:
   - source_family_id: rijndael
     relations:
     - inspired_by
-    - same_sbox
     note: 'Per secondary/survey literature (no local copy of the original 2004 KISA design paper or RFC 5794 was available
       to quote directly): ARIA reuses Rijndael''s own S-boxes and its overall SPN structure is explicitly based on AES,
       with the diffusion layer redesigned as an involution (using a 16x16 binary matrix) specifically to give ARIA the
@@ -2364,8 +2342,6 @@ primitive_families:
   - source_family_id: rc5
     relations:
     - improvement_of
-    - same_round_function
-    - improved_diffusion
     note: RC6 extends RC5 with four registers and multiplication for faster diffusion.
   instances:
   - id: rc6_32_20_16
@@ -2428,7 +2404,6 @@ primitive_families:
   - source_family_id: aes
     relations:
     - inspired_by
-    - same_sbox_size
     - related_to
     note: 'AES and SM4 both use 8-bit S-boxes built from multiplicative inversion over GF(2^8) and affine transformations.
       They are not the same S-box: SM4 uses a different irreducible polynomial and different affine mappings. The inspiration
@@ -3235,8 +3210,6 @@ primitive_families:
   - source_family_id: safer
     relations:
     - improvement_of
-    - same_sbox
-    - similar_mix_column
     note: SAFER+ is presented by its designers as a direct extension of the SAFER family, reusing the same byte-wise nonlinear
       layer built from the 45^x mod 257 exponentiation/discrete-logarithm functions and extending the PHT-based linear diffusion
       layer from 8 to 16 bytes while keeping the same round template.
@@ -3369,7 +3342,6 @@ primitive_families:
   - source_family_id: prince
     relations:
     - inspired_by
-    - inherits_alpha_reflexivity_structure
     innovative_idea_ids:
     - prince_alpha_reflexivity
     - prince_reflected_round_structure
@@ -3605,13 +3577,12 @@ primitive_families:
   - source_family_id: midori
     relations:
     - variant_of
-    - same_mix_column
     - inspired_by
     note: Blink's round function is explicitly built on the structure of Midori, reusing Midori's 4x4 almost-MDS involutory
       diffusion matrix while replacing the S-boxes with lower-latency involutory alternatives.
   - source_family_id: prince
     relations:
-    - same_round_constants
+    - related_to
     note: Blink's round constants are derived from the fractional part of pi, the same methodology PRINCE uses to generate
       its round constants.
   notes: 'Blink is instantiated with 64-bit and 128-bit blocks, and with tweak lengths of one or two blocks.
@@ -3828,7 +3799,6 @@ primitive_families:
   - source_family_id: keccak
     relations:
     - inspired_by
-    - same_sbox_size
     note: Ascon's paper states that its 5-bit substitution layer is an affine equivalent of Keccak's chi mapping. The affine
       input and output transforms raise Ascon's branch number, so the S-boxes are related but not identical.
   notes: 'Ascon-p is a 320-bit permutation operating on five 64-bit words, combining a 5-bit substitution layer with fixed
@@ -3890,9 +3860,7 @@ primitive_families:
   - source_family_id: ascon
     relations:
     - inspired_by
-    - same_state_layout
-    - same_sbox_size
-    - improved_diffusion
+    - improvement_of
     note: Gaston retains an Ascon-sized 5-by-64-bit state and a column-wise quadratic 5-bit nonlinear layer, but uses a circulant
       twin column-parity mixing layer. Its paper reports much higher weights for the best found three-round differential and
       linear trails than Ascon.
@@ -3947,16 +3915,15 @@ primitive_families:
   influences:
   - source_family_id: present
     relations:
-    - same_sbox
+    - related_to
     note: The SubCells layer of the PHOTON permutation applies the 4-bit PRESENT S-box unchanged in the P196 and P256 permutation
       instances.
   - source_family_id: led
     relations:
-    - same_round_constants
+    - related_to
     note: PHOTON's round-constant generation uses an LFSR-based shift register explicitly borrowed from the LED block cipher.
   - source_family_id: aes
     relations:
-    - same_sbox
     - inspired_by
     note: Larger PHOTON permutation variants instantiate SubCells with the 8-bit AES S-box, and PHOTON's active-S-box security
       argument explicitly follows the AES-like wide-trail design strategy.
@@ -4004,7 +3971,6 @@ primitive_families:
   - source_family_id: piccolo
     relations:
     - inspired_by
-    - same_sbox_size
     note: The SKINNY paper states that S4 is essentially Piccolo's 4-bit S-box with the final NOT gate removed. They are therefore
       closely related but not identical S-boxes.
   - source_family_id: simon
@@ -4015,14 +3981,12 @@ primitive_families:
       function, combining cheap components with SPN-style active-S-box bounds.
   - source_family_id: led
     relations:
-    - same_round_constants
+    - related_to
     note: SKINNY uses the same cheap six-bit affine-LFSR recurrence as LED to generate its round counter, requiring one XNOR
       gate per update.
   - source_family_id: aes
     relations:
-    - same_state_layout
-    - similar_shift_row
-    - similar_mix_column
+    - related_to
     note: SKINNY uses a 4-by-4 cell array and an AES-style ShiftRows step, with rightward rather than AES's leftward rotations.
       Its binary MixColumns is deliberately much sparser and has branch number 2 rather than an MDS layer.
   innovative_ideas:
@@ -4189,7 +4153,6 @@ primitive_families:
       uses similar operations, including the column-parity mixer theta and nonlinear chi mapping.
   - source_family_id: threeway
     relations:
-    - same_sbox_size
     - related_to
     note: 3-Way's paper specifies gamma as parallel 3-bit substitution boxes; Xoodoo's paper specifies chi on 3-bit columns.
       This records the shared S-box width, not a claim that their S-boxes are identical or that Xoodoo descends from 3-Way.
@@ -4283,7 +4246,7 @@ primitive_families:
   influences:
   - source_family_id: tea
     relations:
-    - same_round_constants
+    - related_to
     note: Gimli's round constant is described by its designers as essentially the golden-ratio constant 0x9e3779b9 used in
       TEA, adopted specifically to break the permutation's round-slide symmetry.
   instances:
@@ -4641,13 +4604,12 @@ primitive_families:
   influences:
   - source_family_id: noekeon
     relations:
-    - same_sbox
+    - related_to
     note: CUBE's n=4 instantiation uses the involutive NOEKEON S-box applied to each of the 16 nibbles in parallel as its
       SbLayer, chosen for its optimal differential/linear probabilities and cheap masked implementation.
   - source_family_id: present
     relations:
-    - same_bit_based_permutation_layer
-    - improved_diffusion
+    - improvement_of
     note: The CUBE variant (as opposed to CUBE_AES) explicitly keeps PRESENT's bit permutation, adding a quasi-involutive
       MDS diffusion layer specifically to discard the statistical properties and linear hulls that were exploitable in PRESENT.
   - source_family_id: photon
@@ -4850,12 +4812,11 @@ primitive_families:
   - source_family_id: skinny
     relations:
     - variant_of
-    - same_sbox_size
     note: Clyde-128's 4-bit S-box is explicitly a variant of SKINNY's S-box, obtained by replacing SKINNY's NOR gates with
       AND gates in the circuit representation while keeping the same 4-bit size.
   - source_family_id: midori
     relations:
-    - same_mix_column
+    - related_to
     note: Shadow-512's diffusion layer directly reuses the near-MDS 4x4 binary matrix from Midori as its mixing layer.
   - source_family_id: fantomas_robin
     relations:
@@ -4866,7 +4827,6 @@ primitive_families:
   - source_family_id: scream_tbc
     relations:
     - variant_of
-    - same_key_schedule
     note: Clyde-128 is built from the Tweakable LS-design framework introduced as part of the SCREAM CAESAR candidate and
       directly reuses SCREAM's lightweight tweakey scheduling algorithm.
   instances:
@@ -4927,7 +4887,6 @@ primitive_families:
     relations:
     - variant_of
     - generalization_of
-    - same_sbox_size
     note: The KNOT permutations are stated to be extensions of the lightweight block cipher RECTANGLE, and KNOT's 4-bit S-box
       comes from the same equivalence class as RECTANGLE's S-box.
   instances:
@@ -5010,9 +4969,7 @@ primitive_families:
   influences:
   - source_family_id: qarma
     relations:
-    - same_sbox
-    - same_mix_column
-    - same_shift_row
+    - variant_of
     note: Qameleon's underlying tweakable block cipher is QARMA itself, reusing QARMA's S-box, its involutory MixColumns matrix,
       and its ShuffleCells cell-permutation layer unmodified.
   - source_family_id: deoxys
@@ -5023,7 +4980,7 @@ primitive_families:
       last block is padded/authenticated and in nonce handling for longer messages.
   - source_family_id: prince
     relations:
-    - inherits_alpha_reflexivity_structure
+    - inspired_by
     note: QARMA, adopted as Qameleon's tweakable block cipher, possesses a property very similar to PRINCE's alpha-reflection,
       letting the same circuit serve for both encryption and decryption via a core-key offset.
   - source_family_id: mantis
@@ -5033,7 +4990,7 @@ primitive_families:
       while modifying the S-box and diffusion matrix to resist attacks mounted on reduced-round MANTIS.
   - source_family_id: midori
     relations:
-    - same_shift_row
+    - related_to
     note: QARMA's ShuffleCells transformation, reused unmodified in Qameleon, is explicitly the MIDORI cell permutation tau.
   instances:
   - id: qameleon_128
@@ -5082,7 +5039,7 @@ primitive_families:
       that extends AES's SPN/wide-trail structure to a 256-bit cube state.
   - source_family_id: square
     relations:
-    - same_shift_row
+    - related_to
     note: Saturnin's transposition step, which replaces AES's ShiftRows, is performed exactly as it was in Square, the predecessor
       of AES.
   instances:
@@ -5124,17 +5081,16 @@ primitive_families:
   influences:
   - source_family_id: gift
     relations:
-    - same_key_schedule
-    - same_round_constants
+    - variant_of
     note: TRIFLE-BC's key schedule, AddRoundKey and AddRoundConst mechanisms are the same as those used in GIFT-128; its bit-permutation
       is also constructed using the group-mapping technique from the GIFT paper.
   - source_family_id: skinny
     relations:
-    - same_round_constants
+    - related_to
     note: TRIFLE-BC generates its round constants using the same 6-bit affine LFSR employed in SKINNY.
   - source_family_id: present
     relations:
-    - similar_bit_based_permutation_layer
+    - related_to
     note: TRIFLE-BC's bit permutation is explicitly constructed to be similar to the one used in PRESENT, as an alternative
       to directly reusing GIFT's permutation.
   instances:
@@ -5302,7 +5258,6 @@ primitive_families:
   influences:
   - source_family_id: des
     relations:
-    - same_round_function
     - inspired_by
     note: CRISP's round function follows the same expand-mix-substitute structure as the DES round function, and its self-referential
       key schedule follows a proposal to strengthen DES-like ciphers by using the cipher itself as a PRNG for round-key generation.
@@ -5815,7 +5770,6 @@ primitive_families:
   - source_family_id: rijndael
     relations:
     - inspired_by
-    - same_state_layout
     note: Anubis follows a Rijndael-like byte-oriented wide-trail SPN design.
   innovative_ideas:
   - id: anubis_involutional_round_design
@@ -6199,7 +6153,6 @@ primitive_families:
   - source_family_id: siphash
     relations:
     - inspired_by
-    - same_round_function
     note: Chaskey's ARX permutation follows the same structure as SipHash's SipRound, adapted to use 32-bit words instead
       of SipHash's 64-bit words.
   notes: Chaskey is a 128-bit ARX permutation used inside an efficient MAC construction for 32-bit microcontrollers.
@@ -6248,14 +6201,12 @@ primitive_families:
   influences:
   - source_family_id: led
     relations:
-    - same_round_function
-    - same_mix_column
-    - same_shift_row
+    - variant_of
     note: CiliPadi's F-function is an unkeyed 2-round instantiation of the LED block cipher, reusing LED's AddConstants/SubCells/ShiftRows/MixColumnsSerial
       round structure.
   - source_family_id: present
     relations:
-    - same_sbox
+    - related_to
     note: The SubCells operation of CiliPadi's F-function substitutes each nibble using the PRESENT S-box, identical to the
       one reused inside LED.
   notes: 'Z''aba et al. (CyberSecurity Malaysia) 2019. AEAD based on MonkeyDuplex sponge construction. Primary (CiliPadi-Mild):
@@ -6525,7 +6476,6 @@ primitive_families:
   influences:
   - source_family_id: aes
     relations:
-    - same_sbox
     - inspired_by
     note: Deoxys reuses the AES S-box and MixColumns diffusion layer within its TWEAKEY framework.
   notes: Deoxys (Jean, Nikolić, Peyrin, Seurin; CAESAR finalist, 2016) is a tweakable block cipher family based on the TWEAKEY
@@ -6617,22 +6567,16 @@ primitive_families:
   - source_family_id: aes
     relations:
     - variant_of
-    - same_sbox
-    - same_shift_row
-    - same_mix_column
     note: TweAES-128, the AES-based instantiation of ESTATE, keeps SubBytes, ShiftRows, MixColumns and AddRoundKey identical
       to AES-128/128, adding only a tweak-injection step.
   - source_family_id: gift
     relations:
     - variant_of
-    - same_sbox
-    - same_bit_based_permutation_layer
-    - same_round_constants
     note: TweGIFT-128 is a tweakable variant of GIFT-128, reusing GIFT's 4-bit S-box, bit permutation, AddRoundKey step, and
       round-constant LFSR unchanged, with only a tweak-injection step added.
   - source_family_id: skinny
     relations:
-    - same_round_constants
+    - related_to
     note: TweGIFT-128's round-constant generation uses the same 6-bit affine LFSR construction as SKINNY.
   notes: 'Chakraborti, Datta, Jha, Lopez, Nandi, Sasaki (NTT/ISI) 2019. TweAES-128 and TweGIFT-128 are the two tweakable block
     ciphers underlying the ESTATE AEAD family. Tweak τ=4 bits in both. See estate_aead for the AEAD constructions built on
@@ -6891,7 +6835,7 @@ primitive_families:
   influences:
   - source_family_id: aes
     relations:
-    - same_sbox
+    - related_to
     note: FlexAEAD's nonlinear transformation applies the AES S-box table (and its inverse) directly to each byte.
   notes: 'Nascimento, Xexéo (Petrobras/IME Brazil) 2019. PF_K is the parameterized keyed permutation underlying FlexAEAD:
     BlockShuffle + 3 AES 8-bit S-box layers + XOR (Feistel-like structure). Key = 128 × 2^x bits (primary x=0: 128 bits).
@@ -6945,10 +6889,6 @@ primitive_families:
   - source_family_id: skinny
     relations:
     - variant_of
-    - same_sbox
-    - same_key_schedule
-    - same_shift_row
-    - same_mix_column
     note: 'ForkSkinny, the core primitive of ForkAE, is a slight modification of the SKINNY family: it reuses SKINNY''s S-boxes
       without change, its ShiftRows and MixColumns operations, and its tweakey schedule exactly as in SKINNY, differing only
       in the round-constant LFSR and in forking the state into two branches.'
@@ -7011,12 +6951,12 @@ primitive_families:
   influences:
   - source_family_id: grain_128
     relations:
-    - same_round_function
+    - related_to
     note: Fountain's keystream output function combined with its linear masking terms is the same function also used in the
       Grain-128a stream cipher.
   - source_family_id: gift
     relations:
-    - same_sbox
+    - related_to
     note: The 4-bit-to-4-bit S-box used in Fountain's nonlinear feedback path is the GIFT block-cipher S-box, reused unchanged.
   notes: 'Zhang (CAS Beijing) 2019. Stream cipher core with variable non-linear feedbacks, 256-bit internal state F. See fountain_aead
     for the AEAD construction built on it.
@@ -7155,7 +7095,6 @@ primitive_families:
   - source_family_id: rijndael
     relations:
     - inspired_by
-    - same_sbox
     note: Grand Cru uses an AES-like aligned SPN design with the same S-box structure proposed by Rijmen.
   notes: 'Grand Cru (Rijmen, NESSIE Submission, 2000) is a 128-bit AES-like block cipher with a 128-bit key and 10 rounds.
     Its design closely follows the AES wide-trail strategy: 8-bit S-box, ShiftRows, MixColumns over GF(2^8), and a key schedule.
@@ -7337,7 +7276,7 @@ primitive_families:
       schedule.
   - source_family_id: anubis
     relations:
-    - same_sbox
+    - related_to
     note: Khazad uses the identical S-box as the ANUBIS cipher, generated by the same pseudorandom search method described
       in the ANUBIS NESSIE submission.
   notes: Khazad is a wide-trail SPN block cipher family proposed in the NESSIE era.
@@ -7382,7 +7321,7 @@ primitive_families:
   influences:
   - source_family_id: present
     relations:
-    - same_sbox
+    - related_to
     note: KLEIN reuses the same 4-bit S-box as PRESENT.
   notes: KLEIN (Gong et al., 2011) is a lightweight 64-bit SPN block cipher with 64, 80, or 96-bit key and 12, 16, or 20 rounds
     respectively. It uses the same 4-bit S-box as PRESENT, a byte-rotation as part of its linear layer, and a MixNibbles step
@@ -7700,13 +7639,11 @@ primitive_families:
   - source_family_id: gift
     relations:
     - variant_of
-    - same_sbox
-    - same_bit_based_permutation_layer
     note: TweGIFT-64 is a tweakable variant of GIFT-64-128 that employs the same 4-bit S-box and the same bit permutation
       as GIFT-64-128, with AddRoundKey also identical.
   - source_family_id: skinny
     relations:
-    - same_round_constants
+    - related_to
     note: TweGIFT-64's round-constant generation uses the same 6-bit affine LFSR as SKINNY and GIFT-64-128.
   notes: Tweakable block cipher (n=64, tweak τ=4, key κ=128) built on GIFT-64-128, shared by both LOCUS-AEAD and LOTUS-AEAD
     from the single 2019 NIST LWC submission paper.
@@ -7797,15 +7734,11 @@ primitive_families:
   - source_family_id: prince
     relations:
     - inspired_by
-    - inherits_alpha_reflexivity_structure
     note: MANTIS retains PRINCE's reflected FX construction and alpha-reflection property while replacing its round function
       and adding a tweak schedule.
   - source_family_id: midori
     relations:
     - inspired_by
-    - same_sbox
-    - same_mix_column
-    - same_shift_row
     note: MANTIS starts from a PRINCE-like MIDORI design. It uses MIDORI's Sb0 S-box, cell permutation, and binary MixColumns
       matrix; its round constants follow PRINCE's first-digits-of-pi method.
   notes: 'MANTIS (Beierle et al., CRYPTO 2016; part of the SKINNY paper) is a lightweight tweakable 64-bit block cipher using
@@ -7946,8 +7879,6 @@ primitive_families:
   - source_family_id: aes
     relations:
     - inspired_by
-    - similar_shift_row
-    - similar_mix_column
     note: 'The MIDORI and SKINNY/MANTIS papers describe MIDORI as AES-like: it combines parallel S-boxes, a row-based cell
       permutation, and a 4-by-4 almost-MDS MixColumns layer, optimized for energy rather than AES compatibility.'
   notes: 'Midori (Banik et al., ASIACRYPT 2015) is an energy-efficient SPN block cipher with two variants: Midori64 (64-bit
@@ -8059,10 +7990,6 @@ primitive_families:
   - source_family_id: aes
     relations:
     - variant_of
-    - same_sbox
-    - same_shift_row
-    - same_mix_column
-    - same_key_schedule
     note: AES'-128/128 is a block cipher identical to standard AES-128 except that MixColumns is also applied in the last
       round.
   notes: 'Chakraborty and Nandi 2019. AES''-128/128 (AES-128 with MixColumns added to the final round) is the block cipher
@@ -8330,9 +8257,6 @@ primitive_families:
   - source_family_id: simon
     relations:
     - variant_of
-    - same_round_function
-    - same_key_schedule
-    - same_round_constants
     note: Oribatida's underlying SimP permutation family employs the round function and key-update function of Simon-2w-2w,
       with SimP-192 and SimP-256 built from Simon-96-96 and Simon-128-128 and their unchanged round constants.
   notes: Bhattacharjee, List, Mancillas-López, Nandi 2019. SimP is the SIMON-based (no S-boxes) family of permutations underlying
@@ -8470,7 +8394,6 @@ primitive_families:
   - source_family_id: prince
     relations:
     - inspired_by
-    - same_key_schedule
     note: 'PRIDE''s key whitening explicitly reuses PRINCE''s FX construction: a pre-whitening key and a post-whitening key
       (set equal to it) are derived from one half of the master key, with the other half driving the round-key derivation.'
   notes: PRIDE (Albrecht et al., CRYPTO 2014) is a lightweight 64-bit SPN block cipher with a 128-bit key and 20 rounds. Its
@@ -8562,13 +8485,12 @@ primitive_families:
   influences:
   - source_family_id: rijndael
     relations:
-    - same_sbox
+    - related_to
     note: Q's byte-substitution layer reuses Rijndael's 8-bit S-box unmodified; the design paper states the S-box is taken
       directly from Rijndael, using a known, publicly vetted S-box to increase confidence that no trapdoor was inserted.
   - source_family_id: serpent
     relations:
-    - same_sbox
-    - same_round_constants
+    - related_to
     note: One of Q's two 4-bit bit-slice S-boxes is literally Serpent's S-box 3, and the S-box selection criteria are stated
       to be the same as those used for Serpent; Q's key schedule also reuses the fractional part of the golden ratio (0x9E3779B9)
       as a round constant explicitly because it was used in Serpent.
@@ -8621,7 +8543,6 @@ primitive_families:
   - source_family_id: ascon
     relations:
     - inspired_by
-    - similar_bit_based_permutation_layer
     note: Quartet's linear diffusion step reuses, in an adapted form, the linear diffusion functions from Ascon's permutation
       to spread differences quickly through the state.
   notes: 'Zhang 2019. Stream cipher core with 4 × 64-bit lanes = 256-bit internal state. χ function (only non-linear step):
@@ -8848,7 +8769,6 @@ primitive_families:
   - source_family_id: sha1_sha2
     relations:
     - inspired_by
-    - same_round_function
     note: SHACAL is defined by using the compression function of SHA-1 directly as a keyed block-cipher round function, with
       the 160-bit chaining input as plaintext/ciphertext and the message block as key material.
   notes: 'SHACAL-1 is a block-cipher view of SHA-1 compression with 160-bit block and SHA-style boolean/ARX round operations.
@@ -8890,7 +8810,6 @@ primitive_families:
   - source_family_id: sha2
     relations:
     - inspired_by
-    - same_round_function
     note: SHACAL-2 is defined by using the compression function of SHA-256 directly as a keyed 256-bit block-cipher round
       function, analogous to SHACAL's use of SHA-1.
   notes: 'SHACAL-2 is a block-cipher view of SHA-256 compression with 256-bit block and SHA-256 style ARX/boolean round operations.
@@ -9124,7 +9043,6 @@ primitive_families:
   - source_family_id: speck
     relations:
     - variant_of
-    - same_round_function
     note: SPECKEY is defined as one round of Speck-32's ARX round function (the same rotate-add-XOR operations and rotation
       amounts), modified only so the round key is added to the entire 32-bit state rather than to just one half as in the
       original Speck round.
@@ -9167,8 +9085,7 @@ primitive_families:
   influences:
   - source_family_id: prince
     relations:
-    - same_round_constants
-    - similar_mix_column
+    - related_to
     note: SPEEDY generates its round constants the same way as PRINCE, from the binary digits of pi, and merges its cyclic-matrix
       MixColumns layer with the round-key/round-constant XOR using the same key-addition/linear-layer merging technique pioneered
       in PRINCE, adapted with a wider cyclic matrix applied every second S-box layer.
@@ -9217,7 +9134,6 @@ primitive_families:
   - source_family_id: shark
     relations:
     - inspired_by
-    - similar_mix_column
     note: SQUARE adopts and refines the wide-trail SPN direction from SHARK.
   innovative_ideas:
   - id: square_wide_trail_spn
@@ -9276,7 +9192,6 @@ primitive_families:
   influences:
   - source_family_id: des
     relations:
-    - same_sbox
     - variant_of
     note: 3TDEA applies DES three times in Encrypt-Decrypt-Encrypt order using three independent keys.
   notes: Three-key Triple DES (3TDEA; TDEA keying option 1) applies DES three times (E-D-E) with three independent 56-bit
@@ -9486,7 +9401,7 @@ primitive_families:
   influences:
   - source_family_id: wg
     relations:
-    - same_round_function
+    - related_to
     note: WAGE's round function core is the Welch-Gong permutation (WGP) over F_2^7, generalizing the WG stream cipher's nonlinear
       filter to a 37-stage Galois NLFSR combined with two WGP applications and four new 7-bit S-boxes.
   - source_family_id: sliscp
@@ -9580,12 +9495,12 @@ primitive_families:
   influences:
   - source_family_id: ascon
     relations:
-    - same_bit_based_permutation_layer
+    - related_to
     note: The MixRows step of Yarará/Coral's linear diffusion layer applies bit-rotation functions that use the same constants
       as the first four equivalent functions in Ascon's linear diffusion layer.
   - source_family_id: serpent
     relations:
-    - same_sbox
+    - related_to
     note: The shared 4-bit S-box used by both Yarará and Coral is affine equivalent to Serpent's S-box S3, giving it identical
       differential/linear properties.
   notes: Montes & Penazzi 2019. 256-bit permutation (four 64-bit words) shared by the Yarará AEAD and Coral hash function.
@@ -10387,7 +10302,6 @@ primitive_families:
   - source_family_id: blake2
     relations:
     - improvement_of
-    - same_round_function
     note: BLAKE3 derives its compression function from BLAKE2s, reduces it from ten to seven rounds, and replaces the message
       schedule with repeated application of one fixed permutation instead of BLAKE2's per-round constant schedule.
   - source_family_id: blake
@@ -10453,8 +10367,6 @@ primitive_families:
   influences:
   - source_family_id: rijndael
     relations:
-    - same_sbox
-    - similar_mix_column
     - inspired_by
     note: Grøstl's permutations reuse the Rijndael S-box unchanged and construct their diffusion layers in a manner similar
       to Rijndael's ShiftRows/MixColumns under the wide trail design strategy.
@@ -11001,7 +10913,7 @@ primitive_families:
     note: Shares all four S-boxes and the same key schedule construction principles with Kalyna.
   - source_family_id: rijndael
     relations:
-    - same_mix_column
+    - related_to
     note: Uses Rijndael's 4×4 MDS matrix in the SL-transformation.
   process_participations:
   - process_id: ukrainian_national_cryptographic_competition_2007_2010
@@ -11297,8 +11209,6 @@ primitive_families:
   - source_family_id: aes
     relations:
     - inspired_by
-    - similar_shift_row
-    - similar_mix_column
     note: ZORRO retains a 128-bit AES-like byte state and AES-style linear diffusion while applying only four S-boxes per
       round.
   notes: ZORRO is a 24-round, 128-bit block cipher with a 128-bit key, designed to reduce higher-order masking cost. Its sparse
@@ -11479,7 +11389,7 @@ primitive_families:
       branches.
   - source_family_id: midori
     relations:
-    - same_sbox
+    - related_to
     note: WARP adopts MIDORI's Sb0 4-bit S-box for low area and delay.
   notes: WARP is a 41-round lightweight 128-bit block cipher with a 128-bit key. Its optimized 32-branch Type-2 generalized
     Feistel network targets exceptionally small encryption-only and unified encryption/decryption hardware.

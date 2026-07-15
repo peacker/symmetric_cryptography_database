@@ -29,8 +29,7 @@ mode_families:
   influences:
   - source_family_id: sha0
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: SHA-0 is the Merkle-Damgård iteration of the SHA-0 compression function over arbitrary-length, padded input.
   - source_family_id: md4_hash
     relations:
@@ -185,8 +184,7 @@ mode_families:
   influences:
   - source_family_id: salsa20
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Salsa20's encryption function (Bernstein 2005 spec, Section 10) is the counter-mode stream-cipher construction
       built directly on the Salsa20 expansion function, reusing its round function and state layout unchanged.
   notes: 'Salsa20 is the variable-length stream cipher that Bernstein''s 2005 specification calls the "Salsa20 encryption
@@ -297,7 +295,7 @@ mode_families:
   influences:
   - source_family_id: gift
     relations:
-    - same_round_function
+    - used_by
     note: GIFT-COFB is a COFB-mode (COmbined FeedBack) AEAD construction built directly on the unmodified 40-round GIFT-128
       block cipher, a distinct 2019 paper and author team from the original 2017 GIFT design.
   notes: NIST LWC finalist authenticated-encryption mode wrapping the unmodified GIFT-128 block cipher in COFB mode; not a
@@ -387,8 +385,7 @@ mode_families:
   influences:
   - source_family_id: ascon
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Ascon-AEAD is a duplex-sponge authenticated encryption construction built directly on the Ascon-p permutation, reusing
       its state layout and round function unchanged.
   notes: 'Duplex-sponge AEAD construction family. The 2016/2021 v1.2 submission defines three parameter profiles: Ascon-128
@@ -498,8 +495,7 @@ mode_families:
   influences:
   - source_family_id: ascon
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Ascon-Hash is a fixed-output sponge hash built directly on the Ascon-p permutation, calling it with 12 rounds for
       every permutation call (no short p_b call is used, unlike the AEAD modes).
   notes: 'Fixed 256-bit-output sponge hash construction family. The v1.2 submission defines Ascon-Hash (64-bit rate, Ascon-p[12]
@@ -566,8 +562,7 @@ mode_families:
   influences:
   - source_family_id: ascon
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Ascon-Xof is a variable-output sponge construction built directly on the Ascon-p permutation, sharing Ascon-Hash's
       Ascon-p[12]-for-every-call round schedule.
   notes: 'Extendable-output sponge construction family. The v1.2 submission defines Ascon-Xof (64-bit rate, Ascon-p[12] for
@@ -685,8 +680,7 @@ mode_families:
   influences:
   - source_family_id: subterranean
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Substream is the original Subterranean keyed pseudorandom-stream mode, built directly on the 257-bit Subterranean
       state machine and reusing its round function unchanged.
   notes: Original 1993 Subterranean keyed stream-generation mode, producing 16 output bits per state update after initialization.
@@ -727,8 +721,7 @@ mode_families:
   influences:
   - source_family_id: subterranean
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Subhash is the original Subterranean unkeyed hash mode, built directly on the 257-bit Subterranean state machine
       and reusing its round function unchanged.
   notes: Original 1993 Subterranean hash mode; message words are absorbed through the 256-bit key/input register before blank
@@ -797,8 +790,7 @@ mode_families:
   influences:
   - source_family_id: spongent
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: spongent's hash mode is the hermetic-sponge iteration of a spongent present-type permutation, reusing its round
       function and state layout unchanged.
   notes: spongent is a family of lightweight sponge hash functions (88- to 256-bit outputs) instantiated with a present-type
@@ -839,7 +831,6 @@ mode_families:
   - source_family_id: chacha
     relations:
     - inspired_by
-    - similar_bit_based_permutation_layer
     note: NORX's G function is explicitly inspired by ChaCha's quarter-round function, adapted to a parallel monkeyDuplex-based
       AEAD construction rather than a stream-cipher core.
   notes: NORX is a parallel, sponge/monkeyDuplex-based authenticated encryption family submitted to the CAESAR competition,
@@ -992,8 +983,7 @@ mode_families:
   influences:
   - source_family_id: ace
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: ACE-AE is a duplex-sponge AEAD construction built directly on the ACE permutation, reusing its state layout and
       round function unchanged.
   notes: Duplex-sponge AEAD mode built on the ACE permutation, standardized as ACE-AE-128 in the single 2019 NIST LWC submission
@@ -1038,8 +1028,7 @@ mode_families:
   influences:
   - source_family_id: ace
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: ACE-H is a fixed-output sponge hash built directly on the ACE permutation, reusing its state layout and round function
       unchanged.
   notes: Sponge hash mode built on the ACE permutation, standardized as ACE-H-256 in the single 2019 NIST LWC submission paper.
@@ -1085,8 +1074,7 @@ mode_families:
   influences:
   - source_family_id: bleep64
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Bleep64-AEAD is built directly on the Bleep64 core cipher, reusing its state layout and round function unchanged.
   notes: AEAD mode built on the Bleep64 core cipher, from the single 2019 NIST LWC submission paper.
   instances:
@@ -1131,8 +1119,7 @@ mode_families:
   influences:
   - source_family_id: cilipadi
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: The four CiliPadi AEAD variants (Mild, Medium, Hot, ExtraHot) are MonkeyDuplex sponge constructions built directly
       on the CiliPadi permutation at different state/rate/round parameters, reusing its round function unchanged.
   notes: MonkeyDuplex sponge AEAD family covering the four parameter profiles (Mild, Medium, Hot, ExtraHot) from the single
@@ -1223,8 +1210,7 @@ mode_families:
   influences:
   - source_family_id: clae
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: CLAE-AEAD is built directly on the CLAE core, reusing its state layout and operations unchanged.
   notes: 'AEAD construction built on the CLAE core. Byte-oriented processing: each message byte paired with a key-dependent
     byte from search(); ciphertext output = 2 bytes per byte. Nonce and tag sizes configurable per the NIST LWC API; the 128-bit-security
@@ -1398,16 +1384,16 @@ mode_families:
   influences:
   - source_family_id: aes
     relations:
-    - same_round_function
+    - used_by
     note: One COMET instantiation plugs unmodified AES-128/128 into the COMET mode, reusing exactly the published AES specification.
   - source_family_id: cham
     relations:
-    - same_round_function
+    - used_by
     note: One COMET hardware-oriented instantiation plugs unmodified CHAM-64/128 into the COMET mode, reusing CHAM's published
       round function verbatim.
   - source_family_id: speck
     relations:
-    - same_round_function
+    - used_by
     note: One COMET software-oriented instantiation plugs unmodified Speck-64/128 into the COMET mode, reusing Speck's published
       round function verbatim.
   notes: 'Gueron, Jha, Nandi 2019. COunter Mode Encryption with authentication Tag. Two instantiations: COMET-128 (n=128,
@@ -1514,8 +1500,7 @@ mode_families:
   influences:
   - source_family_id: estate
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: ESTATE's AEAD constructions are built directly on the TweAES-128/TweGIFT-128 tweakable block ciphers, reusing their
       round function and state layout unchanged.
   notes: 'Energy-efficient single-state tweakable-block-cipher-based AEAD (FCBC*-like MAC + OFB encryption). Block n=128,
@@ -1576,8 +1561,7 @@ mode_families:
   influences:
   - source_family_id: flexaead
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: FlexAEAD's AEAD construction is built directly on the PF_K keyed permutation, integrating authentication into the
       same Feistel-like structure.
   notes: Block cipher with integrated authentication built on PF_K. Supports 64-bit and 128-bit nonces; primary parameters
@@ -1623,8 +1607,7 @@ mode_families:
   influences:
   - source_family_id: forkae
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: ForkAE's AEAD constructions are built directly on the ForkSkinny forkcipher, reusing its round function and state
       layout unchanged.
   notes: 'Two AEAD modes built on ForkSkinny: PAEF (parallel, fully parallelizable) and SAEF (sequential, online). All instances
@@ -1683,8 +1666,7 @@ mode_families:
   influences:
   - source_family_id: fountain
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Fountain-AEAD is built directly on the Fountain core cipher, reusing its state layout and state-update function
       unchanged.
   notes: Stream-cipher-based AEAD built on the Fountain core. Key=128 bits, nonce/IV=96 bits. Primary tag=128 bits; secondary
@@ -1735,7 +1717,7 @@ mode_families:
   influences:
   - source_family_id: gift
     relations:
-    - same_round_function
+    - related_to
     note: HyENA is a hybrid-feedback authenticated-encryption mode instantiated directly over the GIFT-128 block cipher, which
       supplies the mode's sole non-linear primitive including its S-box, bit permutation and key schedule.
   notes: 'Chakraborti, Datta, Jha, Nandi (NTT/ISI) 2019. Hybrid feedback-based ENcryption with Authentication (HyFB mode)
@@ -1830,8 +1812,7 @@ mode_families:
   influences:
   - source_family_id: aes
     relations:
-    - same_sbox
-    - same_mix_column
+    - related_to
     note: KCipher-2's nonlinear function's byte substitution is explicitly stated to be identical to the AES S-box, and its
       linear permutation uses the same MDS matrix as the AES MixColumn operation.
   - source_family_id: snow_2_0
@@ -1889,9 +1870,7 @@ mode_families:
   influences:
   - source_family_id: simon
     relations:
-    - same_round_function
-    - same_key_schedule
-    - same_round_constants
+    - used_by
     note: LAEM-Simon instantiates the LAEM authenticated-encryption mode directly over the SIMON 128-bit block cipher family,
       using SIMON's Feistel round function, round constants and key schedule unmodified.
   notes: 'Sui, Wu, Zhang, Zhang (CAS Beijing) 2019. Lightweight Authentication Encryption Mode using SIMON block cipher as
@@ -2024,8 +2003,7 @@ mode_families:
   influences:
   - source_family_id: lilliput_ae
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Lilliput-AE's AEAD constructions are built directly on the Lilliput-TBC tweakable block cipher, reusing its round
       function and state layout unchanged.
   - source_family_id: deoxys
@@ -2075,8 +2053,7 @@ mode_families:
   influences:
   - source_family_id: limdolen
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Limdolen-AEAD is built directly on the Limdolen AXR permutation, reusing its round function and state layout unchanged.
   notes: 'PMAC SIV-like AEAD using the Limdolen AXR permutation. Two family members: Limdolen-128 (key=128, nonce=128, tag=128,
     16 rounds, primary) and Limdolen-256 (key=256, nonce=256, tag=256, 16 rounds).
@@ -2141,8 +2118,7 @@ mode_families:
   influences:
   - source_family_id: twegift_64
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: LOCUS-AEAD is built directly on the TweGIFT-64 tweakable block cipher, reusing its round function and state layout
       unchanged.
   notes: 'Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OCB-like fully parallelizable AEAD using TweGIFT-64. Parameters: key
@@ -2195,8 +2171,7 @@ mode_families:
   influences:
   - source_family_id: twegift_64
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: LOTUS-AEAD is built directly on the TweGIFT-64 tweakable block cipher, reusing its round function and state layout
       unchanged.
   notes: 'Chakraborti et al. (NTT/ISI/CINVESTAV) 2019. OTR-like AEAD using TweGIFT-64. Primary NIST submission: TweGIFT-64_LOTUS-AEAD.
@@ -2248,8 +2223,7 @@ mode_families:
   influences:
   - source_family_id: mixfeed
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: mixFeed is an AEAD mode built directly on the AES'-128/128 block cipher, reusing its round function unchanged.
   notes: 'Minimally Xored Feedback (mixFeed) AEAD mode. Block size n=128, key κ=128, nonce=120 bits (one byte less than block),
     tag=128. State = Y(128) || K(128) = 256 bits; nonce-dependent key update (K_N) per encryption query. Uses ciphertext feedback
@@ -2303,8 +2277,7 @@ mode_families:
   influences:
   - source_family_id: rijndael
     relations:
-    - same_sbox
-    - same_mix_column
+    - related_to
     note: MUGI's F-function reuses the AES/Rijndael S-box and linear diffusion transformation as its non-linear and linear
       building blocks, explicitly chosen for their prior public security evaluation.
   notes: MUGI (Hitachi, 2002) is a stream cipher with a 128-bit key and 128-bit IV. Its state consists of 17 AES-state-sized
@@ -2401,11 +2374,7 @@ mode_families:
   influences:
   - source_family_id: photon
     relations:
-    - same_round_function
-    - same_sbox
-    - same_shift_row
-    - same_mix_column
-    - same_state_layout
+    - related_to
     note: ORANGE-Zest uses PHOTON256 as its underlying primitive, stated to be exactly the same permutation without changing
       any part of the definition.
   notes: 'Chakraborty and Nandi 2019. Optimum RAte spoNGE (ORANGE) AEAD mode using PHOTON256 (256-bit, 12-round permutation)
@@ -2463,11 +2432,7 @@ mode_families:
   influences:
   - source_family_id: photon
     relations:
-    - same_round_function
-    - same_sbox
-    - same_shift_row
-    - same_mix_column
-    - same_state_layout
+    - related_to
     note: ORANGISH uses PHOTON256 as its underlying primitive, unmodified, the same as ORANGE-Zest.
   - source_family_id: jh
     relations:
@@ -2512,8 +2477,7 @@ mode_families:
   influences:
   - source_family_id: oribatida
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Oribatida's AEAD constructions are built directly on the SimP permutations, reusing their round function and state
       layout unchanged.
   notes: 'Keyed monkey-wrap duplex AEAD using the SimP family of permutations. Primary: Oribatida-256-64 (SimP-256-4 + SimP-256-2,
@@ -2604,25 +2568,21 @@ mode_families:
   influences:
   - source_family_id: quartet
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Quartet-AEAD is built directly on the Quartet core cipher, reusing its state layout and state-update function unchanged.
   - source_family_id: ascon_aead
     relations:
     - inspired_by
-    - similar_bit_based_permutation_layer
     note: Mirrors the relationship between the underlying permutations -- Quartet's linear diffusion step reuses, in an
       adapted form, the linear diffusion functions from Ascon's permutation to spread differences quickly across the state.
   - source_family_id: ascon_hash
     relations:
     - inspired_by
-    - similar_bit_based_permutation_layer
     note: Mirrors the relationship between the underlying permutations -- Quartet's linear diffusion step reuses, in an
       adapted form, the linear diffusion functions from Ascon's permutation to spread differences quickly across the state.
   - source_family_id: ascon_xof
     relations:
     - inspired_by
-    - similar_bit_based_permutation_layer
     note: Mirrors the relationship between the underlying permutations -- Quartet's linear diffusion step reuses, in an
       adapted form, the linear diffusion functions from Ascon's permutation to spread differences quickly across the state.
   notes: AEAD construction built on the Quartet core. Key=128, nonce/IV=96, tag=128 (primary) or 64 (secondary). Output ζ
@@ -2817,9 +2777,7 @@ mode_families:
   influences:
   - source_family_id: aes
     relations:
-    - same_sbox
-    - same_key_schedule
-    - same_round_function
+    - related_to
     note: SAEAES instantiates the SAEB lightweight AEAD mode with the unmodified, NIST-standardized AES block cipher, directly
       reusing AES's S-box, key schedule, and round function without structural change.
   notes: 'Naito et al. (Mitsubishi Electric / Univ. Electro-Communications) 2019. AES instantiation of the SAEB (Small, Slim,
@@ -2889,8 +2847,7 @@ mode_families:
   influences:
   - source_family_id: shamash_and_shamashash
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Shamash is an AEAD built directly on the Shamash permutation, reusing its state layout and round function unchanged.
   notes: AEAD with 128-bit key, 128-bit nonce, 128-bit tag, and 320-bit state (minimum tag 64 bits). Initialization uses 12
     rounds; AD absorption, encryption, and finalization each use 9 rounds per block (finalization totals 9+3=12).
@@ -2939,8 +2896,7 @@ mode_families:
   influences:
   - source_family_id: shamash_and_shamashash
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Shamashash is a hash function built directly on the Shamash permutation via the BDPV sponge-to-hash construction,
       reusing its state layout and round function unchanged.
   notes: Hash function defined in section 7 of the Shamash spec, built on the Shamash permutation via the BDPV sponge-to-hash
@@ -3033,7 +2989,7 @@ mode_families:
       weaknesses identified in SNOW 1.0's finite state machine.
   - source_family_id: rijndael
     relations:
-    - same_sbox
+    - related_to
     note: SNOW 2.0 replaced SNOW 1.0's power-mapping S-box in the finite state machine with the AES/Rijndael S-box.
   notes: SNOW 2.0 stream-cipher family with a 16x32-bit LFSR and FSM-based nonlinear output filtering.
   instances:
@@ -3075,7 +3031,7 @@ mode_families:
   influences:
   - source_family_id: rijndael
     relations:
-    - same_sbox
+    - related_to
     note: The FSM's S-Box S1 in SNOW 3G is explicitly stated to be based on the Rijndael round function, reusing the AES byte
       substitution together with a MixColumns-like linear diffusion step over GF(2^8).
   - source_family_id: snow_2_0
@@ -3297,7 +3253,6 @@ mode_families:
   - source_family_id: gift
     relations:
     - improvement_of
-    - same_sbox
     note: 'TGIF-TBC is explicitly designed as an improvement over the 128-bit GIFT cipher: it uses GIFT-64 as an internal
       building block, retaining GIFT''s S-box and the effect of its bit permutation via an equivalent bitslice representation,
       while adding tweak capability.'
@@ -3479,8 +3434,7 @@ mode_families:
   influences:
   - source_family_id: wage
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: WAGE-AE is a unified duplex-sponge AEAD construction built directly on the WAGE permutation, reusing its state layout
       and round function unchanged.
   notes: Unified duplex-sponge AEAD mode built on the WAGE permutation, standardized as WAGE-AE-128 in the single 2019 NIST
@@ -3593,23 +3547,22 @@ mode_families:
   influences:
   - source_family_id: yarara_and_coral
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Yarará is a duplex-sponge AEAD built directly on the shared permutation, reusing its state layout and round function
       unchanged.
   - source_family_id: ascon_aead
     relations:
-    - same_bit_based_permutation_layer
+    - related_to
     note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
       bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
   - source_family_id: ascon_hash
     relations:
-    - same_bit_based_permutation_layer
+    - related_to
     note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
       bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
   - source_family_id: ascon_xof
     relations:
-    - same_bit_based_permutation_layer
+    - related_to
     note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
       bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
   notes: Duplex-sponge AEAD. Rate=64, capacity=192, key=128, nonce=128, tag=128. Uses permutations pi_I (10 rounds) for initialization
@@ -3654,23 +3607,22 @@ mode_families:
   influences:
   - source_family_id: yarara_and_coral
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Coral is a sponge hash function built directly on the shared permutation, reusing its state layout and round function
       unchanged.
   - source_family_id: ascon_aead
     relations:
-    - same_bit_based_permutation_layer
+    - related_to
     note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
       bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
   - source_family_id: ascon_hash
     relations:
-    - same_bit_based_permutation_layer
+    - related_to
     note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
       bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
   - source_family_id: ascon_xof
     relations:
-    - same_bit_based_permutation_layer
+    - related_to
     note: Mirrors the relationship between the underlying permutations -- Yarará/Coral's MixRows diffusion layer applies
       bit-rotation functions that use the same constants as the first four equivalent rotations in Ascon's linear layer.
   notes: Sponge hash function. Rate=32, capacity=224, digest=256 bits.
@@ -3786,8 +3738,7 @@ mode_families:
   influences:
   - source_family_id: gascon
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: DryGASCON's AEAD mode is the DrySponge (a Duplex Sponge variant) iteration of a GASCON permutation, reusing its
       round function and state layout unchanged.
   notes: DryGASCON (Riou, NIST LWC submission 2019) is an AEAD and hash design built on DrySponge, a Duplex Sponge variant
@@ -3834,8 +3785,7 @@ mode_families:
   influences:
   - source_family_id: gascon
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: DryGASCON's hash mode is the DrySponge iteration of a GASCON permutation, reusing its round function and state
       layout unchanged.
   - source_family_id: drygascon_aead
@@ -3885,14 +3835,12 @@ mode_families:
   influences:
   - source_family_id: keccak
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: The Delirium instance of Elephant is built directly on Keccak-f[200], the smallest instance of the NIST SHA-3
       standard permutation, reusing its round function and 5x5-lane state representation unmodified.
   - source_family_id: spongent
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: The Dumbo and Jumbo instances of Elephant are built directly on Spongent-pi[160] and Spongent-pi[176], reusing
       their round function and state layout unmodified as the masked permutation in Elephant's construction.
   notes: 'Elephant (Beyne, Chen, Dobraunig, Mennink; NIST LWC submission 2019) is a nonce-based, fully parallelizable
@@ -3951,8 +3899,7 @@ mode_families:
   influences:
   - source_family_id: gage
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: GAGE's hash mode is the sponge iteration of the GAGE permutation, reusing its round function and state layout
       unchanged.
   notes: GAGE (Gligoroski, Mihajloska, Otte; NIST LWC Round 1, 2019) is a lightweight sponge hash function family with
@@ -3989,8 +3936,7 @@ mode_families:
   influences:
   - source_family_id: gage
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: InGAGE's AEAD mode is a MonkeyDuplex-style (Ascon-like) iteration of the GAGE permutation, reusing its round
       function and state layout unchanged; it differs from Ascon's mode chiefly in state/rate sizes and in initializing
       the state as nonce-then-key rather than key-then-nonce.
@@ -4030,8 +3976,7 @@ mode_families:
   influences:
   - source_family_id: knot
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: KNOT-AEAD is the duplex-sponge iteration of a KNOT permutation, reusing its round function and state layout
       unchanged.
   notes: KNOT-AEAD (Zhang, Ding, Yang, Bao, Xiang, Ji, Zhao; NIST LWC Round 1/2, 2019) has four members, all with key,
@@ -4065,8 +4010,7 @@ mode_families:
   influences:
   - source_family_id: knot
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: KNOT-Hash is the sponge iteration of a KNOT permutation, reusing its round function and state layout unchanged.
   - source_family_id: knot_aead
     relations:
@@ -4158,8 +4102,7 @@ mode_families:
   influences:
   - source_family_id: sliscp_light
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Spix is a monkey-duplex AEAD mode built directly on the sLiSCP-light-256 permutation, reusing its round function
       and state layout unchanged.
   notes: Spix (AlTawy, Gong, He, Mandal, Rohit; NIST LWC Round 1/2, 2019) is a monkey-duplex AEAD mode built on the
@@ -4196,8 +4139,7 @@ mode_families:
   influences:
   - source_family_id: sliscp_light
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: SpoC is a sponge-based AEAD mode built directly on sLiSCP-light permutations (sLiSCP-light-192 for SpoC-64,
       sLiSCP-light-256 for SpoC-128), reusing their round function and state layout unchanged, with a smaller processing
       rate than the permutation rate to improve privacy bounds.
@@ -4247,8 +4189,7 @@ mode_families:
   influences:
   - source_family_id: spook
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Spook's S1P mode is a leakage-resilient sponge/duplex construction built directly on the Shadow-512 permutation
       for absorption/squeezing and the Clyde-128 tweakable block cipher for tag generation, reusing both unmodified.
   notes: Spook (Bellizia, Berti, Bronchain, Cassiers, Duval, Guo, Leander, Leurent, Levi, Momin, Pereira, Peters, Standaert,
@@ -4286,8 +4227,7 @@ mode_families:
   influences:
   - source_family_id: sycon
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Sycon AEAD is the MonkeyDuplex-sponge iteration of the Sycon permutation, reusing its round function and state
       layout unchanged.
   notes: Sycon AEAD (Sarkar, Mandal, Saha; NIST LWC Round 1, 2019) plugs the 320-bit Sycon permutation into the
@@ -4331,8 +4271,7 @@ mode_families:
   influences:
   - source_family_id: sycon
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Sycon Hash is the sponge iteration of the Sycon permutation, reusing its round function and state layout unchanged.
   - source_family_id: sycon_aead
     relations:
@@ -4378,7 +4317,7 @@ mode_families:
   influences:
   - source_family_id: rijndael
     relations:
-    - same_sbox
+    - related_to
     note: MIR-1's key setup derives its secret 256-byte S-box by iteratively feeding key bytes through the fixed Rijndael
       S-box, directly reusing the AES S-box as a building block.
   innovative_ideas:
@@ -4688,7 +4627,7 @@ mode_families:
       parallelism.
   - source_family_id: sha2
     relations:
-    - same_key_schedule
+    - related_to
     note: HC-256's key/IV expansion into internal tables is explicitly described as similar to the SHA-256 message schedule,
       and its two mixing functions are stated to be identical to SHA-256's sigma0 and sigma1 functions.
   innovative_ideas:
@@ -4809,7 +4748,7 @@ mode_families:
   influences:
   - source_family_id: rijndael
     relations:
-    - same_sbox
+    - related_to
     note: The dynamic-filter F-FCSR variants construct their key-dependent filter function using the Rijndael S-box directly,
       masking the FCSR automaton's algebraic structure while reusing an already-implemented byte-oriented nonlinear component.
   innovative_ideas:
@@ -5180,8 +5119,7 @@ mode_families:
   influences:
   - source_family_id: haval
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: HAVAL is the Merkle-Damgård iteration of the HAVAL compression functions over arbitrary-length, padded input.
   - source_family_id: md5_hash
     relations:
@@ -5325,8 +5263,7 @@ mode_families:
   influences:
   - source_family_id: md4
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: MD4 is the Merkle-Damgård iteration of the MD4 compression function over arbitrary-length, padded input.
   notes: 'MD4 was introduced by Ronald Rivest at CRYPTO ''90 as a substantially faster, 32-bit-oriented successor to MD2.
     Weaknesses found by Dobbertin (1995); deprecated.
@@ -5378,8 +5315,7 @@ mode_families:
   influences:
   - source_family_id: md5
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: MD5 is the Merkle-Damgård iteration of the MD5 compression function over arbitrary-length, padded input.
   - source_family_id: md4_hash
     relations:
@@ -5434,8 +5370,7 @@ mode_families:
   influences:
   - source_family_id: ripemd
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: RIPEMD-128 and RIPEMD-160 are the Merkle-Damgård iterations of their respective compression functions over arbitrary-length,
       padded input.
   - source_family_id: md4_hash
@@ -5506,8 +5441,7 @@ mode_families:
   influences:
   - source_family_id: sha1_sha2
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: SHA-1 is the Merkle-Damgård iteration of the SHA-1 compression function over arbitrary-length, padded input.
   - source_family_id: sha0_hash
     relations:
@@ -5563,8 +5497,7 @@ mode_families:
   influences:
   - source_family_id: sha2
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Each SHA-2 hash function is the Merkle-Damgård iteration of one of the two SHA-2 compression functions over arbitrary-length,
       padded input.
   - source_family_id: sha1_hash
@@ -5811,8 +5744,7 @@ mode_families:
   influences:
   - source_family_id: blake
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Each BLAKE hash function is the HAIFA iteration of one of the two BLAKE compression functions over arbitrary-length,
       padded input.
   - source_family_id: chacha_stream
@@ -5868,7 +5800,6 @@ mode_families:
   - source_family_id: blake
     relations:
     - improvement_of
-    - same_round_function
     note: BLAKE2 simplifies and accelerates BLAKE while retaining its ARX G mixing function with revised rotations, round
       counts, and initialization.
   - source_family_id: chacha
@@ -5946,8 +5877,7 @@ mode_families:
   influences:
   - source_family_id: groestl
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Each Grøstl hash function is the iteration of one of the two Grøstl wide-pipe compression functions over arbitrary-length,
       padded input.
   notes: Grøstl-256 and Grøstl-512 are the two output-size variants, each iterating its corresponding wide-pipe compression
@@ -6181,8 +6111,7 @@ mode_families:
   influences:
   - source_family_id: tiger
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Tiger is the Merkle-Damgård iteration of the Tiger compression function over arbitrary-length, padded input.
   - source_family_id: md4_hash
     relations:
@@ -6268,8 +6197,7 @@ mode_families:
   influences:
   - source_family_id: whirlpool
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: Whirlpool is the iteration of the Whirlpool Miyaguchi-Preneel compression function over arbitrary-length, padded
       input.
   notes: Whirlpool (Barreto & Rijmen, revised 2003) is a 512-bit hash function.
@@ -6332,10 +6260,6 @@ mode_families:
   - source_family_id: photon
     relations:
     - variant_of
-    - same_sbox
-    - same_shift_row
-    - same_mix_column
-    - same_round_constants
     note: PHOTON-Beetle uses PHOTON256, the unmodified 256-bit permutation from the PHOTON hash function, as its underlying
       permutation, including its S-box, ShiftRows, MixColumnSerial matrix and round constants.
   notes: 'Bao et al. 2019. PHOTON-Beetle uses PHOTON256 (256-bit, 12 rounds, 8×8 array of 4-bit cells) in Beetle sponge mode.
@@ -6408,9 +6332,6 @@ mode_families:
   - source_family_id: rijndael
     relations:
     - variant_of
-    - same_sbox
-    - same_key_schedule
-    - same_round_function
     note: SIV-Rijndael256 uses Rijndael256, an unmodified member of the Rijndael family with a 256-bit block distinct from
       the three AES-selected parameter sets, directly as its underlying block cipher inside SIV mode.
   notes: 'Bao et al. 2019. Rijndael256 is the Rijndael block cipher with fixed block length 256 bits (Nb=8) and key length
@@ -6472,17 +6393,15 @@ mode_families:
   - source_family_id: photon
     relations:
     - variant_of
-    - same_shift_row
-    - same_mix_column
     note: The TEM-PHOTON tweakable block cipher is built directly on the PHOTON permutation P256, reusing its SubCells, ShiftRows
       and MixColumnSerial layers, extending the round count and modifying the round-constant generator.
   - source_family_id: present
     relations:
-    - same_sbox
+    - related_to
     note: TEM-PHOTON's SubCells nonlinear substitution applies the PRESENT S-box to each cell of the internal state.
   - source_family_id: led
     relations:
-    - same_round_constants
+    - related_to
     note: The LFSR used to generate the extended round constants for TEM-PHOTON's 20-round permutation is explicitly borrowed
       from LED.
   notes: 'Bao et al. 2019. TEM-PHOTON = Tweakable Even-Mansour with PHOTON P256 permutation. Block=256 bits, key=128 bits,
@@ -6542,10 +6461,6 @@ mode_families:
   - source_family_id: skinny
     relations:
     - variant_of
-    - same_sbox
-    - same_key_schedule
-    - same_shift_row
-    - same_mix_column
     note: SKINNY-AEAD and SKINNY-Hash wrap the unmodified SKINNY-128-256/SKINNY-128-384 tweakable block ciphers inside the
       ThetaCB3 AEAD mode and a sponge construction respectively; the designers state they decided not to modify the cipher
       from its original specification.
@@ -6671,7 +6586,6 @@ mode_families:
     relations:
     - improvement_of
     - variant_of
-    - same_round_function
     note: Subterranean 2.0 refurbishes the original Subterranean by retaining its 257-bit chi/theta/pi round, removing the
       key/input buffer, and replacing Subhash and Substream with duplex-based modes.
   - source_family_id: xoodyak
@@ -7241,9 +7155,6 @@ mode_families:
   - source_family_id: aes
     relations:
     - inspired_by
-    - same_sbox
-    - same_mix_column
-    - same_shift_row
     note: Argon's primary specification defines its 128-bit permutation F as five rounds of AES-128 under a fixed public key,
       retaining MixColumns in the fifth round.
   - source_family_id: blake2
@@ -7977,7 +7888,6 @@ mode_families:
   - source_family_id: blake2
     relations:
     - inspired_by
-    - same_round_function
     note: Rig's reference instantiations use BLAKE2b directly as the underlying hash function, and its BlakeCompress function
       is built by reusing the first round of the BLAKE2b compression function.
   innovative_ideas: []
@@ -8138,7 +8048,7 @@ mode_families:
       proof mirrors that of BLAKE2b.
   - source_family_id: aes
     relations:
-    - same_round_function
+    - used_by
     note: Yarn's memory-initialization and main phases rely on a genuine AES round (SubBytes, ShiftRows, MixColumns with round-key
       addition), explicitly defined in the specification via the x86 aesenc instruction.
   innovative_ideas: []
@@ -8177,7 +8087,7 @@ mode_families:
   influences:
   - source_family_id: salsa20
     relations:
-    - same_round_function
+    - used_by
     note: yescrypt inherits scrypt's BlockMix construction, whose core mixing primitive is the unmodified Salsa20/8 permutation;
       even the pwxform-enabled variant's initial SMix1 calls still use solely Salsa20/8, avoiding a chicken-egg problem.
   - source_family_id: scrypt
@@ -9860,8 +9770,7 @@ mode_families:
   influences:
   - source_family_id: blake3
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: BLAKE3's hash/keyed_hash/derive_key modes are the binary-tree iteration of the BLAKE3 compression function over
       1024-byte chunks, reusing its round function and state layout unchanged.
   innovative_ideas:
@@ -10007,8 +9916,7 @@ mode_families:
   influences:
   - source_family_id: chacha
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: ChaCha20 is the stream-cipher mode built directly on the ChaCha20 Block Function, reusing its round function and
       state layout unchanged.
   notes: 'ChaCha is Bernstein''s 2008 stream-cipher family (a variant of Salsa20), defining ChaCha8/ChaCha12/ChaCha20 with
@@ -10088,8 +9996,7 @@ mode_families:
   influences:
   - source_family_id: kasumi
     relations:
-    - same_round_function
-    - same_state_layout
+    - used_by
     note: A5/3 and A5/4 are GSM/UMTS keystream-generator modes built directly on the unmodified KASUMI block cipher.
   notes: A5/3 and A5/4 are GSM/UMTS keystream-generator modes built directly on the KASUMI block cipher; see kasumi for
     the block-cipher primitive.

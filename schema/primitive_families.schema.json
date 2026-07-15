@@ -40,25 +40,12 @@
                     "items": {
                         "type": "string",
                         "enum": [
-                            "same_sbox",
-                            "same_sbox_size",
-                            "same_key_schedule",
-                            "same_state_layout",
-                            "same_bit_based_permutation_layer",
-                            "similar_bit_based_permutation_layer",
-                            "same_mix_column",
-                            "similar_mix_column",
-                            "same_shift_row",
-                            "similar_shift_row",
-                            "same_round_function",
-                            "same_round_constants",
-                            "improved_diffusion",
-                            "inherits_alpha_reflexivity_structure",
                             "inspired_by",
                             "improvement_of",
                             "standardization_of",
                             "variant_of",
                             "generalization_of",
+                            "specializes",
                             "related_to",
                             "used_by"
                         ]

@@ -1880,29 +1880,22 @@
     }
 
     // ── Relation-type groups ────────────────────────────────────────────
-    // Groups the raw relation tags into the two broad kinds of relationship
-    // this database records, per the same distinction a reader would draw
-    // between "these two designs share an idea/component" and "one of these
-    // is literally built out of the other" (e.g. Keccak used inside SHA-3):
-    //   - design relations: shared/similar components, or an inherited
-    //     structural idea (SPN, Feistel, alpha-reflexivity, ...).
+    // Groups the curated relation tags into the kinds of relationship this
+    // database hand-curates from primary sources -- literal component/round/
+    // state sharing is deliberately NOT one of these (it's derivable by
+    // querying characteristics.components/round definitions directly rather
+    // than hand-tagged; see the Custom Query Builder). What remains:
+    //   - design relations: an inherited or related design idea, with no
+    //     claim about which specific component was reused.
     //   - usage relations: one family is a functional building block of
     //     another (the "usage_core" group -- either an explicit used_by tag,
     //     or computed from primitive/mode tier crossing).
     // "process" covers administrative facts (standardization) that are
     // neither a design nor a usage relation.
     const RELATION_GROUPS = [
-      { id: "design_component", label: "Design: shared or similar component", members: [
-        "same_sbox", "same_sbox_size", "same_mix_column", "similar_mix_column",
-        "same_shift_row", "similar_shift_row", "same_round_constants",
-        "same_key_schedule", "same_bit_based_permutation_layer", "similar_bit_based_permutation_layer",
-      ] },
-      { id: "design_structure", label: "Design: shared round function or state layout", members: [
-        "same_round_function", "same_state_layout",
-      ] },
       { id: "design_idea", label: "Design: inherited architecture or idea", members: [
         "inspired_by", "related_to", "variant_of", "improvement_of",
-        "generalization_of", "improved_diffusion", "inherits_alpha_reflexivity_structure",
+        "generalization_of", "specializes",
       ] },
       { id: "usage_core", label: "Usage: built on (part of the definition)", members: ["__usage_core__", "used_by"], synthetic: true },
       { id: "process", label: "Process: standardization", members: [
