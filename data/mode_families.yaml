@@ -1263,7 +1263,14 @@ mode_families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - related_to
+    note: 'CLX''s own spec states its mode-level lineage directly: "CLX authenticated encryption algorithms are based on
+      the Duplex mode, while CLX hash function is based on the sponge mode," citing Bertoni/Daemen/Peeters/Van Assche''s
+      sponge-functions and duplex papers. CLX''s own internal NLFSR permutation is an independent design, not shared with
+      Keccak -- this edge reflects only the shared mode-construction lineage.'
   innovative_ideas:
   - id: clx_duplex_keyed_permutation
     name: Duplex-mode AEAD with keyed permutation
@@ -8262,7 +8269,13 @@ mode_families:
   reference_ids:
   - pufferfish_ref
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: blowfish
+    relations:
+    - inspired_by
+    note: 'Per secondary/survey literature (no local copy of the original Pufferfish spec was available to quote directly):
+      Pufferfish uses a modified version of Blowfish''s own key setup, extending bcrypt/Eksblowfish''s fixed 4KB memory
+      footprint into a tunable one, and inherits bcrypt''s core design lineage from Blowfish more broadly.'
   instances:
   - id: pufferfish_v1
     name: Pufferfish2
