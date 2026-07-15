@@ -3,7 +3,9 @@ primitive_families:
 - id: uknit_bc
   name: uKNIT-BC
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - uknit_bc_round
   target_applications:
@@ -239,7 +241,9 @@ primitive_families:
 - id: bea1
   name: BEA-1
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - bea1_round
   target_applications:
@@ -598,7 +602,9 @@ primitive_families:
 - id: rijndael
   name: Rijndael
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - rijndael_aes_round
   target_applications:
@@ -726,7 +732,9 @@ primitive_families:
   notes: AES is the 128-bit-block subset of Rijndael standardized by FIPS 197, with 128-, 192-, and 256-bit keys and 10, 12,
     or 14 rounds respectively.
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - rijndael_aes_round
   target_applications:
@@ -1027,7 +1035,9 @@ primitive_families:
   notes: PRESENT is a 31-round, 64-bit lightweight SPN using 4-bit S-boxes and a fixed bit permutation; its 80- and 128-bit-key
     variants are standardized in ISO/IEC 29192-2.
   construction_ids:
-  - bit_based_spn
+  - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - present_round
   target_applications:
@@ -1083,7 +1093,9 @@ primitive_families:
 - id: spongent
   name: spongent
   construction_ids:
-  - bit_based_spn
+  - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - spongent_round
   target_applications:
@@ -1151,7 +1163,9 @@ primitive_families:
   notes: GIFT is a lightweight bit-permutation SPN derived from PRESENT; its 64- and 128-bit block ciphers also underpin authenticated-encryption
     designs such as GIFT-COFB.
   construction_ids:
-  - bit_based_spn
+  - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - gift_round
   target_applications:
@@ -1552,7 +1566,9 @@ primitive_families:
   notes: Serpent is a conservative 32-round, 128-bit bitsliced SPN and AES finalist, supporting 128-, 192-, and 256-bit keys
     with eight reused 4-bit S-boxes.
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - serpent_round
   target_applications:
@@ -1789,7 +1805,9 @@ primitive_families:
   notes: PRINCE is a 64-bit, 128-bit-key low-latency block cipher using an α-reflection construction that permits decryption
     with closely related hardware.
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - prince_round
   target_applications:
@@ -1837,7 +1855,9 @@ primitive_families:
   notes: LED is a 64-bit lightweight SPN inspired by AES, using PRESENT’s 4-bit S-box and largely keyless rounds with either
     a 64- or 128-bit key.
   construction_ids:
-  - bit_based_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - led_round
   target_applications:
@@ -2246,7 +2266,9 @@ primitive_families:
   notes: ARIA is a Korean 128-bit involutional SPN with alternating substitution layers and 128-, 192-, or 256-bit keys, standardized
     nationally and described in RFC 5794.
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - aria_round
   target_applications:
@@ -2591,6 +2613,8 @@ primitive_families:
     with keys up to 256 bits.
   construction_ids:
   - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - crypton_round
   target_applications:
@@ -3173,6 +3197,8 @@ primitive_families:
     key-dependent round counts for 128-, 192-, and 256-bit keys.
   construction_ids:
   - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - safer_plus_round
   target_applications:
@@ -3244,7 +3270,9 @@ primitive_families:
   notes: ARADI is a 128-bit, 256-bit-key low-latency SPN designed for efficient bitsliced software and hardware, with 4-bit
     S-boxes and binary linear diffusion.
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - aradi_round
   target_applications:
@@ -3482,7 +3510,9 @@ primitive_families:
 - id: ulbc
   name: uLBC
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - ulbc_round
   target_applications:
@@ -3887,7 +3917,9 @@ primitive_families:
   notes: PHOTON is a family of lightweight sponge hash functions whose internal permutations use AES-like 4-bit substitution,
     row shifting, and MDS column mixing.
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - photon_permutation_round
   target_applications:
@@ -4357,7 +4389,9 @@ primitive_families:
 - id: rectangle
   name: RECTANGLE
   construction_ids:
-  - bit_based_spn
+  - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - rectangle_round
   target_applications:
@@ -4542,7 +4576,9 @@ primitive_families:
 - id: lowmc
   name: LowMC
   construction_ids:
-  - bit_based_spn
+  - spn
+  - partial_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - lowmc_round
   target_applications:
@@ -4579,7 +4615,9 @@ primitive_families:
 - id: cube_cipher
   name: CUBE Cipher
   construction_ids:
-  - bit_based_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - cube_cipher_round
   target_applications:
@@ -4742,7 +4780,9 @@ primitive_families:
   notes: Sycon is a 320-bit permutation-based lightweight suite using 5-bit S-boxes and bit permutations for authenticated
     encryption, hashing, and related functions.
   construction_ids:
-  - bit_based_spn
+  - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - sycon_permutation_round
   target_applications:
@@ -4904,7 +4944,9 @@ primitive_families:
   notes: Pyjamask is a 128-bit-key SPN family using bitsliced 3-bit S-boxes and circulant binary-matrix diffusion; it forms
     the core of Pyjamask AEAD modes.
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - pyjamask_round
   target_applications:
@@ -5008,7 +5050,9 @@ primitive_families:
   notes: Saturnin is a 256-bit block cipher and permutation-like primitive using a 4-bit S-box and MDS diffusion, designed
     to support lightweight AEAD and hashing.
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - saturnin_round
   target_applications:
@@ -5675,6 +5719,8 @@ primitive_families:
   name: TANGRAM
   construction_ids:
   - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - tangram_round
   target_applications:
@@ -5736,7 +5782,9 @@ primitive_families:
 - id: anubis
   name: Anubis
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - anubis_round
   target_applications:
@@ -5991,6 +6039,8 @@ primitive_families:
   name: BelT
   construction_ids:
   - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - belt_round
   target_applications:
@@ -6169,7 +6219,9 @@ primitive_families:
 - id: cilipadi
   name: CiliPadi
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - cilipadi_permutation_round
   target_applications:
@@ -6408,6 +6460,8 @@ primitive_families:
   name: CS-Cipher
   construction_ids:
   - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - cs_cipher_round
   target_applications:
@@ -6616,6 +6670,8 @@ primitive_families:
   name: Fantomas / Robin
   construction_ids:
   - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - fantomas_robin_round
   target_applications:
@@ -6716,6 +6772,8 @@ primitive_families:
   name: FESH
   construction_ids:
   - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - fesh_round
   target_applications:
@@ -6979,7 +7037,9 @@ primitive_families:
 - id: gage
   name: GAGE
   construction_ids:
-  - bit_based_spn
+  - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - gage_and_ingage_round
   target_applications:
@@ -7062,7 +7122,9 @@ primitive_families:
 - id: grand_cru
   name: Grand Cru
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - grand_cru_round
   target_applications:
@@ -7113,6 +7175,8 @@ primitive_families:
   name: HERN & HERON
   construction_ids:
   - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - hern_and_heron_round
   target_applications:
@@ -7240,6 +7304,8 @@ primitive_families:
   name: Khazad
   construction_ids:
   - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - khazad_round
   target_applications:
@@ -7291,6 +7357,8 @@ primitive_families:
   name: KLEIN
   construction_ids:
   - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - klein_round
   target_applications:
@@ -7335,6 +7403,8 @@ primitive_families:
   name: Kuznyechik
   construction_ids:
   - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - kuznyechik_round
   target_applications:
@@ -7759,6 +7829,8 @@ primitive_families:
   name: MCRYPTON
   construction_ids:
   - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - mcrypton_round
   target_applications:
@@ -7848,6 +7920,8 @@ primitive_families:
   name: MIDORI
   construction_ids:
   - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - midori_round
   target_applications:
@@ -8135,6 +8209,8 @@ primitive_families:
   name: NOEKEON
   construction_ids:
   - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - noekeon_round
   target_applications:
@@ -8292,6 +8368,8 @@ primitive_families:
   name: PEA
   construction_ids:
   - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - pea_round
   target_applications:
@@ -8328,6 +8406,8 @@ primitive_families:
   name: PICARO
   construction_ids:
   - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - picaro_round
   target_applications:
@@ -8365,6 +8445,8 @@ primitive_families:
   name: PRIDE
   construction_ids:
   - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - pride_round
   target_applications:
@@ -8450,7 +8532,9 @@ primitive_families:
 - id: q
   name: Q
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - q_round
   target_applications:
@@ -8609,6 +8693,7 @@ primitive_families:
   name: SAFER
   construction_ids:
   - spn
+  - full_sbox_layer
   round_ids:
   - safer_round
   target_applications:
@@ -8648,6 +8733,8 @@ primitive_families:
   name: SAFER++
   construction_ids:
   - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - saferpp_round
   target_applications:
@@ -8691,6 +8778,8 @@ primitive_families:
   name: SC2000
   construction_ids:
   - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - sc2000_round
   target_applications:
@@ -8824,7 +8913,8 @@ primitive_families:
   name: Shamash & Shamashash
   construction_ids:
   - spn
-  - bit_based_spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - shamash_and_shamashash_round
   target_applications:
@@ -8902,7 +8992,9 @@ primitive_families:
 - id: shark
   name: SHARK
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - shark_round
   target_applications:
@@ -9053,6 +9145,8 @@ primitive_families:
   name: SPEEDY
   construction_ids:
   - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - speedy_round
   target_applications:
@@ -9095,6 +9189,8 @@ primitive_families:
   name: SQUARE
   construction_ids:
   - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - square_round
   target_applications:
@@ -9300,6 +9396,8 @@ primitive_families:
   name: uBlock
   construction_ids:
   - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - ublock_round
   target_applications:
@@ -9627,6 +9725,8 @@ primitive_families:
   name: Lucifer
   construction_ids:
   - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - lucifer_round
   target_applications:
@@ -10590,6 +10690,7 @@ primitive_families:
     '
   construction_ids:
   - spn
+  - full_sbox_layer
   round_ids:
   - des_round
   target_applications:
@@ -10620,7 +10721,9 @@ primitive_families:
 - id: kalyna
   name: Kalyna
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   characteristics:
     components:
     - id: sbox
@@ -10752,7 +10855,9 @@ primitive_families:
 - id: kalyna_dstu
   name: Kalyna [DSTU 7624:2014]
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   characteristics:
     components:
     - id: sbox
@@ -10950,7 +11055,9 @@ primitive_families:
 - id: ade
   name: ADE
   construction_ids:
-  - aligned_spn
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   characteristics:
     components:
     - id: sbox
@@ -11115,6 +11222,7 @@ primitive_families:
   name: RSB
   construction_ids:
   - spn
+  - full_sbox_layer
   characteristics:
     components:
     - id: sbox
@@ -11152,6 +11260,8 @@ primitive_families:
   name: ZORRO
   construction_ids:
   - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - zorro_round
   target_applications:

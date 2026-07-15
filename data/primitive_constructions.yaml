@@ -11,30 +11,76 @@ primitive_constructions:
   notes: 'A round structure combining non-linear substitution layers with permutation or linear diffusion layers.
 
     '
-- id: aligned_spn
-  name: Aligned Substitution-Permutation Network
-  abbreviation: Aligned SPN
+- id: full_sbox_layer
+  name: Full-State S-box Layer
+  abbreviation: Full S-box
   special_case_of: spn
   typical_primitive_types:
   - block_cipher
   placeholder_family_names:
   - Rijndael
-  - Anubis
-  notes: 'An SPN whose substitution and diffusion layers operate on aligned words such as nibbles, bytes, or larger machine-oriented
-    units.
+  - Serpent
+  - PRESENT
+  notes: 'An SPN whose substitution layer applies an S-box (or a small set of S-boxes) to every word/nibble/bit of the state
+    each round, in contrast to a partial S-box layer. This is the S-box-coverage facet of the SPN taxonomy, orthogonal to
+    the linear-layer-type facet (mds_linear_layer / bit_permutation_linear_layer / near_mds_arx_linear_layer) and to the
+    tweakable_spn facet -- a family is tagged with one leaf from this facet plus one leaf from the linear-layer facet.
 
     '
-- id: bit_based_spn
-  name: Bit-based Substitution-Permutation Network (bSPN)
-  abbreviation: bSPN
+- id: partial_sbox_layer
+  name: Partial S-box Layer
+  abbreviation: Partial S-box
+  special_case_of: spn
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - LowMC
+  notes: 'An SPN whose substitution layer applies an S-box to only some of the state''s words per round (not the full state),
+    typically to minimize hardware area/gate count or to maximize resistance to algebraic attacks that scale with the total
+    number of S-boxes (e.g. LowMC, designed for low multiplicative complexity in MPC/ZK/FHE settings). Orthogonal facet,
+    see full_sbox_layer.
+
+    '
+- id: mds_linear_layer
+  name: MDS Matrix Linear Layer
+  abbreviation: MDS
+  special_case_of: spn
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - Rijndael
+  - SHARK
+  notes: 'An SPN whose linear/diffusion layer multiplies the state by a Maximum Distance Separable (MDS) matrix over a finite
+    field GF(2^n), guaranteeing an optimal branch number and rapid avalanche. Linear-layer-type facet, orthogonal to the
+    S-box-coverage facet (full_sbox_layer / partial_sbox_layer) and to tweakable_spn.
+
+    '
+- id: bit_permutation_linear_layer
+  name: Bit-Permutation Linear Layer
+  abbreviation: Bit-perm
   special_case_of: spn
   typical_primitive_types:
   - block_cipher
   placeholder_family_names:
   - PRESENT
   - GIFT
-  notes: 'An SPN whose diffusion layer is primarily expressed as a bit-level permutation, common in lightweight hardware-oriented
-    block ciphers.
+  notes: 'An SPN whose linear/diffusion layer simply rewires bits to new positions with no arithmetic mixing. Offers ultra-low
+    latency/gate-count in hardware but requires more rounds to reach a comparable security margin to an MDS-based layer.
+    Linear-layer-type facet (see mds_linear_layer); replaces the earlier flat bit_based_spn tag.
+
+    '
+- id: near_mds_arx_linear_layer
+  name: Near-MDS / ARX-like Linear Layer
+  abbreviation: Near-MDS/ARX
+  special_case_of: spn
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - FOX
+  - IDEA NXT
+  notes: 'An SPN whose linear/diffusion layer uses a lighter-weight matrix (branch number below the MDS optimum) or an XOR/rotation-heavy
+    mixing layer, striking a middle ground between pure bit-permutation and full finite-field MDS arithmetic. Linear-layer-type
+    facet (see mds_linear_layer).
 
     '
 - id: feistel
