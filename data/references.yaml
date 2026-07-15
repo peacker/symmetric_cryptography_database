@@ -3781,6 +3781,25 @@ references:
   url: https://www.password-hashing.net/submissions/specs/yescrypt-v2.pdf
   notes: PHC submission, originally submitted March 31 2014, this revision October
     2015; scrypt variant (Salsa20/8 core); local copy references/phc-yescrypt-v2.pdf.
+- id: provos_mazieres_1999_bcrypt
+  kind: article
+  title: A Future-Adaptable Password Scheme
+  authors:
+  - Niels Provos
+  - David Mazières
+  year: 1999
+  venue: Proceedings of the FREENIX Track, 1999 USENIX Annual Technical Conference
+  url: https://www.usenix.org/legacy/events/usenix99/provos/provos.pdf
+  notes: 'Local copy: references/1999-bcrypt.pdf.'
+- id: percival_2009_scrypt
+  kind: article
+  title: Stronger Key Derivation via Sequential Memory-Hard Functions
+  authors:
+  - Colin Percival
+  year: 2009
+  venue: BSDCan 2009
+  url: http://www.tarsnap.com/scrypt/scrypt.pdf
+  notes: 'Local copy: references/2009-scrypt.pdf.'
 - id: nist_2015_fips180_4
   kind: standard
   title: Secure Hash Standard (SHS), FIPS PUB 180-4

@@ -172,10 +172,6 @@ mode_constructions:
     '
 - id: iterated_hash_kdf
   name: Iterated Hash-Based KDF
-- id: bcrypt_variant
-  name: bcrypt Variant
-- id: scrypt_variant
-  name: scrypt Variant
 - id: modular_squaring_kdf
   name: Modular Squaring KDF
 - id: hmac_construction

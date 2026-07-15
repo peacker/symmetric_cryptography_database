@@ -7422,8 +7422,7 @@ mode_families:
     characteristics: {}
 - id: battcrypt
   name: battcrypt
-  construction_ids:
-  - bcrypt_variant
+  construction_ids: []
   round_ids:
   - battcrypt_step
   target_applications:
@@ -7445,6 +7444,11 @@ mode_families:
     - improvement_of
     note: battcrypt (Blowfish All The Things) is built around the Blowfish block cipher, exploiting Blowfish's CBC-mode key
       expansion and S-box structure to construct a memory-hard password hashing scheme starting from bcrypt.
+  - source_family_id: bcrypt
+    relations:
+    - improvement_of
+    note: battcrypt's own name/tagline is a direct extension of bcrypt ("Blowfish All The Things"), building a memory-hard
+      password hashing scheme starting from bcrypt's Eksblowfish-based approach.
   - source_family_id: sha2
     relations:
     - related_to
@@ -7832,8 +7836,7 @@ mode_families:
     characteristics: {}
 - id: parallel
   name: Parallel
-  construction_ids:
-  - bcrypt_variant
+  construction_ids: []
   round_ids:
   - parallel_step
   target_applications:
@@ -7856,6 +7859,11 @@ mode_families:
     note: Parallel's password-hash and KDF constructions are defined over an abstract hash primitive, but the author's original
       write-up instantiated it with SHA-512, and the design rationale discusses SHA-256's 32-bit word alignment as a factor
       in choosing big-endian counter encoding.
+  - source_family_id: bcrypt
+    relations:
+    - variant_of
+    note: 'Parallel''s own notes describe it as a "bcrypt-based parallel variant designed to use multiple CPU threads,
+      providing both time- hardness and memory-hardness through the bcrypt/Blowfish key setup."'
   innovative_ideas: []
   notes: 'Parallel (PHC 2014) by Steve Thomas (same author as battcrypt). bcrypt-based parallel variant designed to use multiple
     CPU threads, providing both time- hardness and memory-hardness through the bcrypt/Blowfish key setup.
@@ -8149,7 +8157,7 @@ mode_families:
 - id: yescrypt
   name: yescrypt
   construction_ids:
-  - scrypt_variant
+  - iterated_hash_kdf
   round_ids:
   - yescrypt_step
   target_applications:
@@ -8172,6 +8180,11 @@ mode_families:
     - same_round_function
     note: yescrypt inherits scrypt's BlockMix construction, whose core mixing primitive is the unmodified Salsa20/8 permutation;
       even the pwxform-enabled variant's initial SMix1 calls still use solely Salsa20/8, avoiding a chicken-egg problem.
+  - source_family_id: scrypt
+    relations:
+    - variant_of
+    note: 'yescrypt''s own description is "scrypt variant with enhanced security features: additional work factor tuning,
+      password-specific HMAC derivation, and optional client-independent key update."'
   innovative_ideas: []
   notes: 'yescrypt (PHC 2015) by Alexander Peslyak (Solar Designer / Openwall). scrypt variant with enhanced security features:
     additional work factor tuning, password-specific HMAC derivation, and optional client-independent key update. Uses Salsa20/8
@@ -8295,12 +8308,71 @@ mode_families:
     reference_ids:
     - m3lcrypt_ref
     characteristics: {}
+- id: bcrypt
+  name: bcrypt
+  notes: bcrypt (Provos and Mazieres, USENIX 1999) is a password-hashing scheme built around Eksblowfish, a variant of the
+    Blowfish block cipher whose key setup is made expensive and salt/password-dependent and is repeated 2^cost times before
+    the resulting key is used to encrypt a fixed 192-bit string (OrpheanBeholderScryDoubt) 64 times in ECB mode to produce
+    the output hash. Its cost factor is adjustable to track hardware speed increases over time.
+  construction_ids: []
+  round_ids:
+  - blowfish_round
+  target_applications:
+  - password_hashing
+  characteristics:
+    components: []
+  reference_ids:
+  - provos_mazieres_1999_bcrypt
+  process_participations: []
+  influences:
+  - source_family_id: blowfish
+    relations:
+    - variant_of
+    note: bcrypt's core is Eksblowfish, an explicit variant of Blowfish whose key-setup algorithm is modified to fold in
+      a salt and to be repeatable a tunable number of times; encryption itself is unmodified Blowfish.
+  instances:
+  - id: bcrypt_v1
+    name: bcrypt
+    type: pbkdf
+    reference_ids:
+    - provos_mazieres_1999_bcrypt
+    characteristics: {}
+- id: scrypt
+  name: scrypt
+  notes: scrypt (Percival, BSDCan 2009; RFC 7914) is a sequential memory-hard password-based KDF that first derives a buffer
+    via PBKDF2-HMAC-SHA256, expands and mixes it through ROMix (a sequential-memory-hard construction that fills and then
+    randomly reads back a large array using BlockMix, itself built from repeated calls to the unmodified Salsa20/8 core
+    permutation), and finally derives the output key via a second PBKDF2-HMAC-SHA256 pass over the mixed result.
+  construction_ids:
+  - iterated_hash_kdf
+  round_ids: []
+  target_applications:
+  - password_hashing
+  - key_derivation
+  characteristics:
+    components:
+    - id: xor
+  reference_ids:
+  - percival_2009_scrypt
+  process_participations: []
+  influences:
+  - source_family_id: salsa20
+    relations:
+    - used_by
+    note: scrypt's ROMix/BlockMix memory-hard core is built from repeated, unmodified calls to the Salsa20/8 core permutation
+      as its sole mixing primitive.
+  instances:
+  - id: scrypt_v1
+    name: scrypt
+    type: pbkdf
+    reference_ids:
+    - percival_2009_scrypt
+    characteristics: {}
 - id: pufferfish
   name: Pufferfish
   notes: Pufferfish is a bcrypt-derived password-hashing design with tunable memory and time costs, using an enlarged key-dependent
     state to impede parallel cracking hardware.
-  construction_ids:
-  - bcrypt_variant
+  construction_ids: []
   round_ids:
   - blowfish_round
   target_applications:
@@ -8317,6 +8389,11 @@ mode_families:
     note: 'Per secondary/survey literature (no local copy of the original Pufferfish spec was available to quote directly):
       Pufferfish uses a modified version of Blowfish''s own key setup, extending bcrypt/Eksblowfish''s fixed 4KB memory
       footprint into a tunable one, and inherits bcrypt''s core design lineage from Blowfish more broadly.'
+  - source_family_id: bcrypt
+    relations:
+    - variant_of
+    note: Pufferfish's own description is explicitly "a bcrypt-derived password-hashing design," extending bcrypt/Eksblowfish's
+      fixed memory footprint into a tunable one.
   instances:
   - id: pufferfish_v1
     name: Pufferfish2
