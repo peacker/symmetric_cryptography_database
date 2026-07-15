@@ -84,3 +84,53 @@ def family_year(family: dict, references_by_id: dict[str, dict]) -> int | None:
         if ref_id in references_by_id and isinstance(references_by_id[ref_id].get("year"), int)
     ]
     return min(candidates) if candidates else None
+
+
+def construction_leaf_ids(data: dict[str, dict]) -> set[str]:
+    """Ids of every level-2 construction (one with special_case_of set), across
+    both the primitive and mode construction catalogues.
+
+    Only leaves participate in derived construction-sharing edges -- sharing a
+    level-1 root (e.g. two families both merely tagged "spn" with no more
+    specific leaf) is too broad to be a meaningful relation.
+    """
+    leaves: set[str] = set()
+    for key in ("primitive_constructions", "mode_constructions"):
+        for construction in data[key].get(key, []):
+            if construction.get("special_case_of"):
+                leaves.add(construction["id"])
+    return leaves
+
+
+def compute_construction_sharing_edges(
+    families: list[dict],
+    leaf_ids: set[str],
+    references_by_id: dict[str, dict],
+) -> list[tuple[str, str, str]]:
+    """Derive (source_family_id, target_family_id, construction_id) edges from
+    shared level-2 construction tags, direction older -> newer.
+
+    For each construction leaf, every family tagged with it is chronologically
+    ordered by family_year(); each family links only to its nearest earlier
+    neighbor sharing that same leaf, forming a chronological chain per leaf
+    rather than a fully-connected graph (which would be O(n^2) for a popular
+    leaf like balanced_feistel). Families with no resolvable year are skipped
+    since there is no defined direction for them.
+    """
+    by_leaf: dict[str, list[tuple[int, str]]] = {}
+    for family in families:
+        year = family_year(family, references_by_id)
+        if year is None:
+            continue
+        for construction_id in family.get("construction_ids", []) or []:
+            if construction_id in leaf_ids:
+                by_leaf.setdefault(construction_id, []).append((year, family["id"]))
+
+    edges: list[tuple[str, str, str]] = []
+    for construction_id, members in by_leaf.items():
+        members.sort(key=lambda pair: (pair[0], pair[1]))
+        for (_, earlier_id), (_, later_id) in zip(members, members[1:]):
+            if earlier_id == later_id:
+                continue
+            edges.append((earlier_id, later_id, construction_id))
+    return edges

@@ -6,7 +6,16 @@ import json
 import hashlib
 import sqlite3
 
-from common import BUILD_DIR, DB_PATH, all_families, all_instances, family_year, load_all_data
+from common import (
+    BUILD_DIR,
+    DB_PATH,
+    all_families,
+    all_instances,
+    compute_construction_sharing_edges,
+    construction_leaf_ids,
+    family_year,
+    load_all_data,
+)
 
 
 def ensure_schema(conn: sqlite3.Connection) -> None:
@@ -197,6 +206,20 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
         );
 
         -- Instances (both tiers, discriminated by "tier") -------------------
+        -- Derived (not hand-curated) edges: two families tagged with the same
+        -- level-2 construction leaf (e.g. both balanced_feistel), chained
+        -- chronologically older -> newer. Kept separate from family_influences
+        -- since these are computed at build time from construction_ids +
+        -- resolved year, not authored facts backed by a citation.
+        CREATE TABLE IF NOT EXISTS construction_sharing_edges (
+            source_family_id TEXT NOT NULL,
+            target_family_id TEXT NOT NULL,
+            construction_id TEXT NOT NULL,
+            PRIMARY KEY (source_family_id, target_family_id, construction_id),
+            FOREIGN KEY (source_family_id) REFERENCES families(id) ON DELETE CASCADE,
+            FOREIGN KEY (target_family_id) REFERENCES families(id) ON DELETE CASCADE
+        );
+
         CREATE TABLE IF NOT EXISTS instances (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
@@ -225,6 +248,7 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         """
         DELETE FROM instance_references;
         DELETE FROM instances;
+        DELETE FROM construction_sharing_edges;
         DELETE FROM family_influences;
         DELETE FROM family_processes;
         DELETE FROM family_references;
@@ -463,6 +487,16 @@ def main() -> None:
                      json.dumps(relations, ensure_ascii=True),
                      json.dumps(innovative_idea_ids, ensure_ascii=True) if innovative_idea_ids else None,
                      edge["note"]))
+
+        leaf_ids = construction_leaf_ids(data)
+        sharing_edges = compute_construction_sharing_edges(families, leaf_ids, references_by_id)
+        for source_family_id, target_family_id, construction_id in sharing_edges:
+            conn.execute(
+                "INSERT INTO construction_sharing_edges"
+                " (source_family_id, target_family_id, construction_id)"
+                " VALUES (?, ?, ?)",
+                (source_family_id, target_family_id, construction_id),
+            )
 
         for instance in instances:
             c = instance.get("characteristics", {})
