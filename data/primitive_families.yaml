@@ -2522,7 +2522,14 @@ primitive_families:
   reference_ids:
   - suzaki_et_al_2012_twine
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - inspired_by
+    note: 'TWINE''s own spec explicitly follows Rijndael''s S-box design approach: "Following
+      the AES S-box design, we use a Galois field inversion. Specifically our S-box
+      is defined as y = S(x) = f((x XOR b)^-1), where a^-1 denotes the inverse of
+      a in GF(2^4)..." (a 4-bit analogue of Rijndael''s 8-bit GF(2^8) inversion S-box).'
   instances:
   - id: twine_80
     name: TWINE-80

@@ -28,7 +28,7 @@ KNOWN_MISSING = {
     "msx", "multi2", "nasha", "newdes", "oryx", "panama", "pbkdf2", "pea", "picaro",
     "pufferfish", "rc4plus", "sandstorm", "sarmal", "sgail", "shabal",
     "shamata", "shavite3", "simd_hash", "siphash", "spectral_hash",
-    "streamhash", "swifftx", "tangle_hash", "tib3", "twine", "twister_hash",
+    "streamhash", "swifftx", "tangle_hash", "tib3", "twister_hash",
     "ulbc", "vmpc", "vortex_hash", "wake", "wamm", "waterfall_hash",
     "xchacha", "xoodoo", "zuc",
 }

@@ -810,6 +810,8 @@ references:
   year: 2012
   venue: FSE 2012
   url: https://doi.org/10.1007/978-3-642-34047-5_13
+  notes: 'Local copy: references/2012-twine-sac-full.pdf (full version after SAC
+    2012, via web.archive.org mirror of jpn.nec.com).'
 - id: lim_1998_crypton
   kind: article
   title: 'CRYPTON: A New 128-bit Block Cipher'
