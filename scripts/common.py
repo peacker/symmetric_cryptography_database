@@ -86,6 +86,19 @@ def family_year(family: dict, references_by_id: dict[str, dict]) -> int | None:
     return min(candidates) if candidates else None
 
 
+def round_component_flow_signature(round_entry: dict) -> str:
+    """Normalized signature of a round's component sequence, ignoring the
+    per-step params (bit widths, moduli, ...).
+
+    This is a coarser equivalence than the full-spec round_hash computed in
+    build_db.py: two rounds with the same signature use the same sequence of
+    component kinds (e.g. "xor|sbox|binary_matrix_mul") even if a parameter
+    differs, whereas round_hash only matches byte-identical specs.
+    """
+    flow = ((round_entry.get("spec") or {}).get("component_flow")) or []
+    return "|".join(str(step.get("component_id", "")) for step in flow)
+
+
 def construction_leaf_ids(data: dict[str, dict]) -> set[str]:
     """Ids of every level-2 construction (one with special_case_of set), across
     both the primitive and mode construction catalogues.

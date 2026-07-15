@@ -15,6 +15,7 @@ from common import (
     construction_leaf_ids,
     family_year,
     load_all_data,
+    round_component_flow_signature,
 )
 
 
@@ -103,12 +104,24 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (special_case_of) REFERENCES mode_constructions(id)
         );
 
+        -- component_flow_signature and state_model_json are pulled out of
+        -- spec_json into their own columns so the Custom Query Builder can
+        -- filter/compare on them directly instead of parsing JSON client
+        -- side. round_hash (full spec, exact match) and
+        -- component_flow_signature (component-id sequence only, ignoring
+        -- params -- a coarser equivalence) are two different granularities
+        -- of "these rounds share a structure"; state_model_json is kept as
+        -- raw JSON rather than split into columns since its shape varies
+        -- widely across round kinds (bit-sliced permutations, LFSR-based
+        -- stream ciphers, Feistel halves, ... each use different keys).
         CREATE TABLE IF NOT EXISTS rounds (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
             kind TEXT NOT NULL,
             spec_json TEXT NOT NULL,
             round_hash TEXT NOT NULL,
+            component_flow_signature TEXT NOT NULL,
+            state_model_json TEXT,
             notes TEXT
         );
 
@@ -396,15 +409,24 @@ def main() -> None:
             spec = round_def.get("spec", {})
             spec_json = json.dumps(spec, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
             round_hash = hashlib.sha256(spec_json.encode("utf-8")).hexdigest()
+            component_flow_signature = round_component_flow_signature(round_def)
+            state_model = spec.get("state_model")
+            state_model_json = (
+                json.dumps(state_model, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+                if state_model else None
+            )
             conn.execute(
-                "INSERT INTO rounds (id, name, kind, spec_json, round_hash, notes)"
-                " VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO rounds"
+                " (id, name, kind, spec_json, round_hash, component_flow_signature, state_model_json, notes)"
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     round_def["id"],
                     round_def["name"],
                     round_def["kind"],
                     spec_json,
                     round_hash,
+                    component_flow_signature,
+                    state_model_json,
                     round_def.get("notes"),
                 ),
             )

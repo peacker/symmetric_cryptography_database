@@ -82,6 +82,25 @@ def load_join_builder_dataset(conn: sqlite3.Connection) -> dict[str, object]:
              FROM mode_family_constructions mfc
              JOIN mode_constructions mc ON mc.id = mfc.construction_id
             WHERE mfc.family_id = f.id) AS "family.mode_construction_names",
+          (SELECT GROUP_CONCAT(fcomp.component_id, ', ')
+             FROM family_components fcomp
+            WHERE fcomp.family_id = f.id) AS "family.component_ids",
+          (SELECT GROUP_CONCAT(DISTINCT comp.name)
+             FROM family_components fcomp
+             JOIN components comp ON comp.id = fcomp.component_id
+            WHERE fcomp.family_id = f.id) AS "family.component_names",
+          (SELECT GROUP_CONCAT(fr2.round_id, ', ')
+             FROM family_rounds fr2
+            WHERE fr2.family_id = f.id) AS "family.round_ids",
+          (SELECT GROUP_CONCAT(DISTINCT r2.round_hash)
+             FROM family_rounds fr2 JOIN rounds r2 ON r2.id = fr2.round_id
+            WHERE fr2.family_id = f.id) AS "family.round_hashes",
+          (SELECT GROUP_CONCAT(DISTINCT r2.component_flow_signature)
+             FROM family_rounds fr2 JOIN rounds r2 ON r2.id = fr2.round_id
+            WHERE fr2.family_id = f.id) AS "family.round_component_flow_signatures",
+          (SELECT GROUP_CONCAT(DISTINCT r2.state_model_json)
+             FROM family_rounds fr2 JOIN rounds r2 ON r2.id = fr2.round_id
+            WHERE fr2.family_id = f.id) AS "family.round_state_models",
           ref.id AS "reference.id",
           ref.title AS "reference.title",
           ref.kind AS "reference.kind",
@@ -117,6 +136,22 @@ def load_join_builder_dataset(conn: sqlite3.Connection) -> dict[str, object]:
         '(SELECT GROUP_CONCAT(mc.name, \', \') FROM mode_family_constructions mfc '
         'JOIN mode_constructions mc ON mc.id = mfc.construction_id '
         'WHERE mfc.family_id = f.id) AS "family.mode_construction_names", '
+        '(SELECT GROUP_CONCAT(fcomp.component_id, \', \') FROM family_components fcomp '
+        'WHERE fcomp.family_id = f.id) AS "family.component_ids", '
+        '(SELECT GROUP_CONCAT(DISTINCT comp.name) FROM family_components fcomp '
+        'JOIN components comp ON comp.id = fcomp.component_id '
+        'WHERE fcomp.family_id = f.id) AS "family.component_names", '
+        '(SELECT GROUP_CONCAT(fr2.round_id, \', \') FROM family_rounds fr2 '
+        'WHERE fr2.family_id = f.id) AS "family.round_ids", '
+        '(SELECT GROUP_CONCAT(DISTINCT r2.round_hash) FROM family_rounds fr2 '
+        'JOIN rounds r2 ON r2.id = fr2.round_id '
+        'WHERE fr2.family_id = f.id) AS "family.round_hashes", '
+        '(SELECT GROUP_CONCAT(DISTINCT r2.component_flow_signature) FROM family_rounds fr2 '
+        'JOIN rounds r2 ON r2.id = fr2.round_id '
+        'WHERE fr2.family_id = f.id) AS "family.round_component_flow_signatures", '
+        '(SELECT GROUP_CONCAT(DISTINCT r2.state_model_json) FROM family_rounds fr2 '
+        'JOIN rounds r2 ON r2.id = fr2.round_id '
+        'WHERE fr2.family_id = f.id) AS "family.round_state_models", '
         'ref.id AS "reference.id", '
         'ref.title AS "reference.title", ref.kind AS "reference.kind", '
         'ref.year AS "reference.year", ref.url AS "reference.url", '

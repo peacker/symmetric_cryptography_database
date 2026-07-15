@@ -344,6 +344,8 @@
       referenceYearMax: document.getElementById("fReferenceYearMax"),
       familyName: document.getElementById("fFamilyName"),
       referenceTitle: document.getElementById("fReferenceTitle"),
+      componentSearch: document.getElementById("fComponentSearch"),
+      roundFlowSearch: document.getElementById("fRoundFlowSearch"),
       hasReferenceLink: document.getElementById("fHasReferenceLink"),
       resetFilters: document.getElementById("resetFilters"),
       columnPicker: document.getElementById("columnPicker"),
@@ -448,6 +450,13 @@
       if (familyName) clauses.push(`"family.name" LIKE '%${familyName.replace(/'/g, "''")}%'`);
       const referenceTitle = (ui.referenceTitle.value || "").trim();
       if (referenceTitle) clauses.push(`"reference.title" LIKE '%${referenceTitle.replace(/'/g, "''")}%'`);
+      const componentSearch = (ui.componentSearch.value || "").trim();
+      if (componentSearch) {
+        const esc = componentSearch.replace(/'/g, "''");
+        clauses.push(`("family.component_ids" LIKE '%${esc}%' OR "family.component_names" LIKE '%${esc}%')`);
+      }
+      const roundFlowSearch = (ui.roundFlowSearch.value || "").trim();
+      if (roundFlowSearch) clauses.push(`"family.round_component_flow_signatures" LIKE '%${roundFlowSearch.replace(/'/g, "''")}%'`);
       if (ui.hasReferenceLink.checked) clauses.push(`"reference.url" IS NOT NULL AND TRIM("reference.url") <> ''`);
 
       return clauses;
@@ -459,6 +468,8 @@
       const ryMax = parseOptionalNumber(ui.referenceYearMax.value);
       const familyName = (ui.familyName.value || "").trim().toLowerCase();
       const referenceTitle = (ui.referenceTitle.value || "").trim().toLowerCase();
+      const componentSearch = (ui.componentSearch.value || "").trim().toLowerCase();
+      const roundFlowSearch = (ui.roundFlowSearch.value || "").trim().toLowerCase();
 
       return rows.filter((row) => {
         if (!qbFilterPanel.isFamilyVisible(String(row["family.id"] || ""))) return false;
@@ -471,6 +482,10 @@
 
         if (familyName && !normalizeValue(row["family.name"]).toLowerCase().includes(familyName)) return false;
         if (referenceTitle && !normalizeValue(row["reference.title"]).toLowerCase().includes(referenceTitle)) return false;
+        if (componentSearch &&
+            !normalizeValue(row["family.component_ids"]).toLowerCase().includes(componentSearch) &&
+            !normalizeValue(row["family.component_names"]).toLowerCase().includes(componentSearch)) return false;
+        if (roundFlowSearch && !normalizeValue(row["family.round_component_flow_signatures"]).toLowerCase().includes(roundFlowSearch)) return false;
         if (ui.hasReferenceLink.checked && !normalizeValue(row["reference.url"]).trim()) return false;
         return true;
       });
@@ -490,7 +505,7 @@
       ui.sqlPreview.textContent = `SELECT ${selectCols}\nFROM (${builder.baseSql})${whereSql};${panelNote}`;
     }
 
-    [ui.referenceYearMin, ui.referenceYearMax, ui.familyName, ui.referenceTitle, ui.hasReferenceLink].forEach((node) => {
+    [ui.referenceYearMin, ui.referenceYearMax, ui.familyName, ui.referenceTitle, ui.componentSearch, ui.roundFlowSearch, ui.hasReferenceLink].forEach((node) => {
       node.addEventListener("change", refresh);
       node.addEventListener("input", refresh);
     });
@@ -504,7 +519,7 @@
       Array.from(ui.referenceKind.querySelectorAll('input[type="checkbox"][data-value]')).forEach((box) => {
         box.checked = false;
       });
-      [ui.referenceYearMin, ui.referenceYearMax, ui.familyName, ui.referenceTitle].forEach((node) => { node.value = ""; });
+      [ui.referenceYearMin, ui.referenceYearMax, ui.familyName, ui.referenceTitle, ui.componentSearch, ui.roundFlowSearch].forEach((node) => { node.value = ""; });
       ui.hasReferenceLink.checked = false;
       refresh();
     });

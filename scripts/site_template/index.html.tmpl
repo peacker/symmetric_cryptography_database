@@ -185,7 +185,7 @@
 
       <section class="panel view-panel" data-view="builder">
         <h2>Custom Query Builder</h2>
-        <p class="small-note">Base join: instances (primitive or mode) + families + reference links. Uses the same Fixed-length primitives / Variable-length modes filtering as the Timelines and Genealogy tabs.</p>
+        <p class="small-note">Base join: instances (primitive or mode) + families + reference links. Uses the same Fixed-length primitives / Variable-length modes filtering as the Timelines and Genealogy tabs. Component/round columns (family.component_ids, family.round_component_flow_signatures, family.round_state_models, family.round_hashes) let you find families that literally share a component or round structure via a query, instead of a hand-tagged relation — sort or filter on one of these to see which families line up.</p>
         <div id="qbTierFilterPanel"></div>
         <div class="builder-grid">
           <details class="collapsible" open>
@@ -205,6 +205,12 @@
               </label>
               <label>Reference title contains
                 <input id="fReferenceTitle" type="search" autocomplete="off" />
+              </label>
+              <label>Component id/name contains
+                <input id="fComponentSearch" type="search" autocomplete="off" placeholder="e.g. sbox, xor, field_matrix_mul" />
+              </label>
+              <label>Round component-flow signature contains
+                <input id="fRoundFlowSearch" type="search" autocomplete="off" placeholder="e.g. xor|sbox|binary_matrix_mul" />
               </label>
               <label class="inline-check"><input id="fHasReferenceLink" type="checkbox" /> Only rows with reference URL</label>
               <button id="resetFilters" type="button">Reset filters</button>
