@@ -45,6 +45,111 @@ Why this hybrid works:
 - SQL-friendly for dashboards and analysis
 - straightforward export to graph/timeline tools
 
+## Construction taxonomy and relations model
+
+This section documents how constructions and relations are organized, so the reasoning behind
+the current shape of `data/primitive_constructions.yaml`, `data/mode_constructions.yaml`, and
+the `influences[].relations` vocabulary survives beyond the pull request that introduced it.
+
+### Two-level construction taxonomy
+
+Every construction catalogue (primitive-tier and mode-tier) is exactly **two levels deep**: a
+handful of root constructions (e.g. `feistel`, `spn`, `sponge_construction`, `duplex_mode`,
+`block_cipher_based`), each with zero or more level-2 leaves that name a specific variant of
+that root. A family's `construction_ids` is a list, so it can carry a root tag alone (generic/
+unclear case), a root + one specific leaf (typical case), or multiple leaves from *different*
+roots at once (an orthogonal facet — see below).
+
+This is enforced structurally, not with a dedicated schema field: constructions reuse the same
+`special_case_of` pointer already used by `components.yaml`, and `scripts/validate.py` rejects
+any construction whose `special_case_of` parent itself has a `special_case_of` — i.e. a chain
+longer than root → leaf is a validation error. When a new variant doesn't fit any existing leaf,
+add a new leaf under the appropriate root rather than nesting a leaf under a leaf.
+
+Representative trees (see the YAML files for the authoritative, evolving full list):
+
+- **Feistel** (`feistel`) → `balanced_feistel`, `generalized_feistel` (unspecified-type GFN),
+  `type1_generalized_feistel` … `type5_generalized_feistel`, `unbalanced_feistel` and its
+  `unbalanced_numeric_feistel` / `source_heavy_unbalanced_feistel` /
+  `target_heavy_unbalanced_feistel` refinements, `alternating_feistel_network` /
+  `alternating_numeric_feistel`, `nested_feistel_network`, `gufn`.
+- **SPN** (`spn`) → two independent facets rather than one flat list of styles:
+  - S-box coverage: `full_sbox_layer` (S-box applied to the whole state) vs. `partial_sbox_layer`
+    (S-box applied to only some words, e.g. LowMC — smaller hardware area or targeted algebraic
+    hardness).
+  - Linear-layer type: `bit_permutation_linear_layer` (pure wiring, e.g. PRESENT/GIFT),
+    `mds_linear_layer` (true MDS matrix over GF(2^n), e.g. AES/SHARK), `near_mds_arx_linear_layer`
+    (lighter matrix or XOR-heavy mixing, e.g. FOX/IDEA NXT/PRINCE/Midori).
+  - A family tags at most one leaf per facet, and the two facets combine freely (e.g. AES is
+    `full_sbox_layer` + `mds_linear_layer`).
+  - `tweakable_spn` is a third, independent facet: it can co-occur with a leaf from each of the
+    other two facets and simply marks that the primitive takes a tweak.
+- **Sponge** (`sponge_construction`) → `standard_sponge`, plus any absorption/squeeze variant
+  literature review turns up as the catalogue grows.
+- **Duplex** (`duplex_mode`) → `standard_duplex`, `monkey_duplex` (MonkeyDuplex, reduced-rate
+  keyed permutation calls between duplex calls), `dry_sponge_duplex` (DrySponge), `beetle_mode`
+  (Beetle, small-state lightweight duplex).
+- **Belt-and-mill** (`belt_and_mill_construction`) — no leaves yet: a separate root (not a sponge/
+  duplex leaf) for pre-sponge-terminology designs like PANAMA/RadioGatún that use a belt-and-mill
+  structure rather than a single permutation state.
+- **Block-cipher-based mode** (`block_cipher_based`) → `ctr_mode`, `cbc_mode`, `ofb_mode`,
+  `cfb_mode`, `gcm_mode`, and `block_cipher_based_stream` as the residual leaf for anything that
+  doesn't cleanly match a named NIST mode.
+
+Some things that look like constructions are deliberately **not** modeled as one:
+
+- `permutation_based_hash` / `permutation_based_stream` / `memory_hard_sponge` do not exist as
+  construction ids. A permutation-driven hash or stream cipher is tagged with whichever real
+  sponge/duplex root + leaf its actual mechanism uses; "memory-hard" or "PBKDF"-ness is a
+  functional property recorded in `target_applications` / `notes`, not a structural one.
+- bcrypt/scrypt-style designs are not a construction at all — they are ordinary families (see
+  `bcrypt`/`scrypt` in `data/mode_families.yaml`) linked to their real structural predecessor via
+  an `influences` edge (e.g. bcrypt → Blowfish is `variant_of`; scrypt → Salsa20 is `used_by`).
+
+### Curated relations vocabulary
+
+`influences[].relations` is intentionally short — eight tags, each requiring a citation-backed
+`note`: `inspired_by`, `related_to`, `variant_of`, `improvement_of`, `generalization_of`,
+`specializes` (the inverse of `generalization_of` — "this design is a narrower/more specific case
+of the source's", deliberately *not* named `special_case_of` since that name is already the
+construction/component parent-pointer field above and means something unrelated), `used_by`
+(a mode built directly on the primitive/mode it wraps), and `standardization_of` (see the
+`[authority]` family-naming convention in Contributing below).
+
+The bar for adding a curated edge is unchanged from the existing methodology in
+[Contributing](#contributing): a concretely reused/adapted component, explicit "based on"/
+"derived from"/"generalizes" language about the design itself, or literal same-team continuation —
+never a shared abstract paradigm, benchmark comparison, or "positioned against" framing alone.
+
+Two categories of relation were deliberately removed from this vocabulary because they are
+*derivable*, not curated facts, and hand-tagging them invites drift:
+
+- **Literal component/round/state sharing** (formerly `same_sbox`, `same_mix_column`,
+  `same_round_function`, `same_state_layout`, and their `similar_*`/`same_round_constants`/
+  `same_key_schedule` counterparts) is **not tracked as a relation at all** — it is retrieved with
+  a database query instead, as long as components, rounds, and state shape are tracked as
+  properties of the primitive. Concretely: `family_components` links every family to the
+  component ids it uses; `rounds.round_hash` (exact match, whole round spec including params),
+  `rounds.component_flow_signature` (component-id sequence only, ignoring params — a coarser
+  match), and `rounds.state_model_json` (raw state-shape JSON) let two families be compared
+  structurally. The Custom Query Builder tab exposes all of these as columns
+  (`family.component_ids`, `family.component_names`, `family.round_hashes`,
+  `family.round_component_flow_signatures`, `family.round_state_models`) plus dedicated
+  "Component id/name contains" and "Round component-flow signature contains" filters, so "which
+  families share this S-box / this round structure" is answered by filtering or sorting, not by
+  a maintained tag that can silently go stale as components.yaml evolves.
+- **Construction-leaf sharing** (e.g. "both Type-2 GFN") *is* surfaced, but as a **derived
+  relation**, computed at build time rather than hand-curated: for every level-2 construction
+  leaf, `scripts/common.py:compute_construction_sharing_edges` chronologically chains every
+  family tagged with that leaf (each family links only to its nearest earlier neighbor sharing
+  the leaf, not a fully-connected graph, to avoid an O(n²) blowup on popular leaves like
+  `balanced_feistel`), directional older → newer. These live in their own SQLite table,
+  `construction_sharing_edges` — kept separate from `family_influences` so a computed fact is
+  never mistaken for an authored, citation-backed one. On the Genealogy tab these edges are
+  folded into the same graph as curated influences, tagged with a synthetic `shares_construction`
+  relation, and are independently toggleable via their own "Derived: shares a specific
+  construction type" filter group, alongside the curated relation groups.
+
 ## Quick start
 
 1. Create a virtual environment and install dependencies.
