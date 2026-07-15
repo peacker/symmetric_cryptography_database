@@ -1,0 +1,122 @@
+Manual follow-ups from the relations audit (2026-07-15)
+========================================================
+
+These are things I could not do myself — either blocked by tooling/permissions,
+paywalled, or requiring a judgment call only you can make. Each item notes why
+it's stuck and what unblocks it.
+
+1. DELETE / REPLACE MISLABELED REFERENCE PDFs
+   -------------------------------------------
+   My Bash deletion attempts were blocked by the permission system
+   ("Irreversible Local Destruction"). These files are wrong and their correct
+   replacements (where found) already sit alongside them; the wrong ones just
+   need manual removal:
+
+   - references/2000-misty1.pdf
+     -> Actually a 1-page NESSIE submission cover sheet, not RFC 2994.
+     -> Correct replacement already added: references/2000-misty1-rfc2994.txt
+     -> Action: delete 2000-misty1.pdf, remove its stale mention from
+        data/references.yaml (rfc_2994_misty1 entry's notes field already
+        flags this).
+
+   - references/2000-cs_cipher.pdf
+     -> 1-page NESSIE submission cover letter, not the real FSE'98 CS-Cipher
+        design paper.
+     -> No replacement found yet (see item 3 below).
+
+   - references/2000-sc2000.pdf
+     -> 1-page Fujitsu IP statement, not the design paper.
+     -> No replacement found yet (see item 3 below).
+
+   - references/2000-nush.pdf
+     -> 1-page rationale excerpt only, not the full NUSH design paper.
+     -> No replacement found yet (see item 3 below).
+
+   - references/2000-lili_128.pdf
+     -> 1-page NESSIE cover sheet only, not the real LILI-128 design paper.
+     -> No replacement found yet (see item 3 below).
+
+2. PAYWALLED / INACCESSIBLE PRIMARY SOURCES
+   -----------------------------------------
+   These require institutional access (e.g. a university library proxy or a
+   personal Springer/IEEE subscription) that I don't have:
+
+   - MULTI2: Miyaguchi, "MULTI2: An Encryption Algorithm for Satellite
+     Broadcasting," CRYPTO 1988, LNCS 403 (Springer). I could only reach a
+     paywalled abstract page. If you can get the full text, check whether it
+     explicitly cites FEAL (also by Miyaguchi/NTT) as a design influence —
+     right now I only have secondary-source coincidence (same author), which
+     isn't strong enough to add an edge per this project's citation
+     discipline.
+
+   - CS-Cipher, SC2000, NUSH, LILI-128 (see item 1): their real FSE/NESSIE
+     design papers may be reachable via ACM Digital Library, Springer LNCS,
+     or the authors' own institutional pages, none of which I could reach.
+
+3. FAMILIES CITED BY NAME BUT NOT MODELED IN THIS DATABASE
+   ---------------------------------------------------------
+   Several audited ciphers explicitly cite a predecessor that has no family
+   entry of its own here. I deliberately did not invent new families mid-audit
+   (that's a scope decision, not something I couldn't do). If you want these
+   edges to exist, the family needs to be created first, then I can add the
+   edge:
+
+   - LBlock (Wu & Zhang, ACNS 2011) — TWINE's own paper explicitly compares
+     itself to LBlock at length ("proposed independently of ours, quite
+     similar to our proposal... two important differences"). Worth adding as
+     its own primitive family; it's a well-known cipher in its own right.
+
+   - Orthros (Banik, Isobe, Liu, Minematsu, Sakamoto, ToSC 2021) — uLBC's
+     strongest citation ("Revisiting the permutation technique used in
+     Orthros...") has no target family. Orthros is a low-latency PRF, not
+     strictly a block cipher, so you'll need to decide which tier/schema
+     shape fits it.
+
+   - Turtle cipher (Matt Blaze) — Tortuga's actual core permutation; Tortuga
+     itself is already modeled but its true predecessor isn't.
+
+   - scrypt (Percival) — cited by both POMELO and Tortuga as a KDF/memory-hard
+     design influence.
+
+   - Mersenne Twister (Matsumoto & Nishimura) — CryptMT3's PRNG core; already
+     reflected structurally via CryptMT3's own state_size_bits=19937 but has
+     no separate family for a proper cross-family edge.
+
+4. UNVERIFIED CONSTRUCTION-TAG AMBIGUITY
+   ---------------------------------------
+   - LEA (primitive_families.yaml): tagged generalized_feistel, but LEA's own
+     paper never actually calls its own structure "Feistel" — it only uses
+     that word when comparing itself to other ciphers. This is a genuine
+     ambiguity I flagged but did not resolve; it needs someone with the LEA
+     spec at hand to make the call on whether to retag it (e.g. to an
+     ARX-SPN-like category) or leave as-is.
+
+5. KNOWN DATA BUG NOT YET FIXED
+   ------------------------------
+   - NewDES (primitive_families.yaml): construction_ids was already corrected
+     from feistel to spn this session, and its notes/components were fixed.
+     However round_ids still points at des_round, which is wrong (NewDES does
+     not use a DES-style round). It needs its own dedicated round definition
+     in schema/rounds — I didn't want to invent one without your sign-off on
+     the exact structure to encode.
+
+6. LARGE DEFERRED SUB-TASK: ~55 SHA-3-ROUND-1-ONLY STUB ENTRIES
+   ---------------------------------------------------------------
+   Families like abacus, arirang, aurora, ... through waterfall_hash (mode
+   tier) are all zero-influence and were never resolved because the only
+   locally fetchable source (Fleischmann/Forler/Gorski's 2009 SHA-3
+   classification survey) is a pure structural/performance table, not a
+   lineage source. Resolving these properly means fetching each individual
+   (often obscure, several publicly-broken) competition submission one at a
+   time — a project roughly the size of the whole audit just completed. If
+   you want this pursued, it's best done as its own separate, scoped task
+   rather than folded into "batch N+1" of this one; let me know if/when
+   you'd like to start it and I can pick specific candidates to prioritize
+   (e.g. the more famous/still-cited ones first).
+
+7. GENERAL: IF YOU GET ACCESS TO ANY OF THE ABOVE PAPERS
+   ---------------------------------------------------------
+   Just drop the PDF/text into references/ with a sensible filename
+   (YYYY-cipher-name.ext) and tell me — I'll read it, verify the citation,
+   add the edge with a quoted note, update KNOWN_MISSING in
+   scripts/test_reference_pdf_coverage.py, run the test suite, and commit.
