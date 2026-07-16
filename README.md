@@ -148,7 +148,12 @@ Two categories of relation were deliberately removed from this vocabulary becaus
   never mistaken for an authored, citation-backed one. On the Genealogy tab these edges are
   folded into the same graph as curated influences, tagged with a synthetic `shares_construction`
   relation, and are independently toggleable via their own "Derived: shares a specific
-  construction type" filter group, alongside the curated relation groups.
+  construction type" filter group, alongside the curated relation groups. Not every leaf carries
+  equal signal: a few (e.g. `fixed_rotation_arx`, `arx_with_round_constants`) are the *majority*
+  choice within their facet rather than a distinctive one, so sharing them is common enough among
+  otherwise-unrelated designs to be a weaker hint of real lineage than a rare leaf like
+  `data_dependent_rotation_arx` or a named-methodology one like `long_trail_strategy_arx` — this
+  caveat is noted directly in the leaf's own `notes` in `data/primitive_constructions.yaml`.
 
 ## Quick start
 

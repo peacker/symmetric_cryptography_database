@@ -390,6 +390,63 @@ primitive_constructions:
   notes: 'A round-based structure built primarily from modular addition, XOR, and fixed or data-dependent rotations.
 
     '
+- id: data_dependent_rotation_arx
+  name: Data-Dependent Rotation ARX
+  special_case_of: arx_permutation_network
+  typical_primitive_types:
+  - block_cipher
+  notes: 'The rotation amount depends on the data itself rather than being fixed at compile time -- the defining trait
+    RC5 introduced and later designs (Akelarre, Raiden) reused.
+
+    '
+- id: fixed_rotation_arx
+  name: Fixed-Rotation ARX
+  special_case_of: arx_permutation_network
+  typical_primitive_types:
+  - permutation
+  - block_cipher
+  - stream_cipher
+  notes: 'Rotation amounts are compile-time constants, identical on every invocation regardless of the data -- the majority
+    case among ARX designs, and thus a weak lineage signal on its own: treat derived edges on this leaf as lower-confidence
+    than data_dependent_rotation_arx, whose rarity makes shared use a much stronger signal.
+
+    '
+- id: modadd_key_injection_arx
+  name: Modular-Addition Key Injection
+  special_case_of: arx_permutation_network
+  notes: 'The round subkey (or round message word) is mixed into the state via modular addition rather than XOR.
+
+    '
+- id: xor_key_injection_arx
+  name: XOR Key Injection
+  special_case_of: arx_permutation_network
+  notes: 'The round subkey is mixed into the state via XOR rather than modular addition. Designs that deliberately alternate
+    both operators by round or branch (e.g. HIGHT) are left untagged on this facet rather than forced onto one side.
+
+    '
+- id: pure_arx_no_constants
+  name: Constant-Free ARX
+  special_case_of: arx_permutation_network
+  notes: 'The repeated round function injects no round-index-dependent constant; any constant present is confined to
+    one-time key/IV setup rather than the loop body. Constant-free ARX rounds are more exposed to rotational cryptanalysis.
+
+    '
+- id: arx_with_round_constants
+  name: ARX with Round Constants
+  special_case_of: arx_permutation_network
+  notes: 'The repeated round function injects a round-index-dependent constant on every iteration, breaking slide and
+    rotational symmetry. This is now common enough among ARX designs that shared use is a weak lineage signal on its
+    own -- treat derived edges on this leaf as lower-confidence than the other ARX facets.
+
+    '
+- id: long_trail_strategy_arx
+  name: Long Trail Strategy
+  special_case_of: arx_permutation_network
+  notes: 'The ARX analogue of the wide-trail strategy: a keyless, cryptographically strong ARX-box alternated with a
+    linear diffusion layer, with provable bounds on differential/linear trails. Explicitly named and defined in the
+    SPARX design paper; SPARKLE''s own spec explicitly calls itself SPARX''s descendant.
+
+    '
 - id: and_rx
   name: AND-RX Permutation Network
   abbreviation: AND-RX

@@ -418,6 +418,9 @@ primitive_families:
   construction_ids:
   - generalized_feistel
   - arx_permutation_network
+  - fixed_rotation_arx
+  - xor_key_injection_arx
+  - arx_with_round_constants
   round_ids:
   - cham_round
   target_applications:
@@ -487,6 +490,9 @@ primitive_families:
   construction_ids:
   - generalized_feistel
   - arx_permutation_network
+  - fixed_rotation_arx
+  - xor_key_injection_arx
+  - arx_with_round_constants
   round_ids:
   - cham_revised_round
   target_applications:
@@ -552,6 +558,9 @@ primitive_families:
   construction_ids:
   - generalized_feistel
   - arx_permutation_network
+  - fixed_rotation_arx
+  - xor_key_injection_arx
+  - arx_with_round_constants
   round_ids:
   - saecham_round
   target_applications:
@@ -829,6 +838,8 @@ primitive_families:
     '
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - pure_arx_no_constants
   round_ids:
   - salsa_quarterround
   target_applications:
@@ -925,6 +936,8 @@ primitive_families:
     '
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - pure_arx_no_constants
   round_ids:
   - chacha_quarterround
   target_applications:
@@ -1338,6 +1351,8 @@ primitive_families:
   - feistel
   - balanced_feistel
   - arx_permutation_network
+  - modadd_key_injection_arx
+  - arx_with_round_constants
   round_ids:
   - tea_round
   target_applications:
@@ -1384,6 +1399,8 @@ primitive_families:
   - feistel
   - balanced_feistel
   - arx_permutation_network
+  - modadd_key_injection_arx
+  - arx_with_round_constants
   round_ids:
   - xtea_round
   target_applications:
@@ -1424,6 +1441,8 @@ primitive_families:
   - feistel
   - balanced_feistel
   - arx_permutation_network
+  - data_dependent_rotation_arx
+  - pure_arx_no_constants
   round_ids:
   - raiden_round
   target_applications:
@@ -1761,6 +1780,9 @@ primitive_families:
   - feistel
   - balanced_feistel
   - arx_permutation_network
+  - fixed_rotation_arx
+  - xor_key_injection_arx
+  - pure_arx_no_constants
   round_ids:
   - speck_round
   target_applications:
@@ -2168,6 +2190,9 @@ primitive_families:
     and presented at FSE 1994; RFC 2040 (1996) later described common 32-bit-word profiles for use in CBC/CTS modes.
   construction_ids:
   - arx_permutation_network
+  - data_dependent_rotation_arx
+  - modadd_key_injection_arx
+  - pure_arx_no_constants
   round_ids:
   - rc5_round
   target_applications:
@@ -4043,6 +4068,9 @@ primitive_families:
     AEAD and ESCH hash families.
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - arx_with_round_constants
+  - long_trail_strategy_arx
   round_ids:
   - sparkle_permutation_step
   target_applications:
@@ -4236,6 +4264,8 @@ primitive_families:
     hashing, authenticated encryption, and other modes.
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - arx_with_round_constants
   round_ids:
   - gimli_permutation_round
   target_applications:
@@ -4516,6 +4546,10 @@ primitive_families:
   name: SPARX
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - xor_key_injection_arx
+  - pure_arx_no_constants
+  - long_trail_strategy_arx
   round_ids:
   - sparx_round
   target_applications:
@@ -4711,6 +4745,8 @@ primitive_families:
     related symmetric functions.
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - arx_with_round_constants
   round_ids:
   - sneik_permutation_round
   target_applications:
@@ -5184,6 +5220,8 @@ primitive_families:
   name: Akelarre
   construction_ids:
   - arx_permutation_network
+  - data_dependent_rotation_arx
+  - pure_arx_no_constants
   round_ids:
   - akelarre_round
   target_applications:
@@ -5873,6 +5911,8 @@ primitive_families:
   construction_ids:
   - lay_massey
   - arx_permutation_network
+  - fixed_rotation_arx
+  - pure_arx_no_constants
   round_ids:
   - ballet_round
   target_applications:
@@ -6104,6 +6144,8 @@ primitive_families:
   name: SipHash
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - pure_arx_no_constants
   round_ids:
   - siphash_round
   target_applications:
@@ -6146,6 +6188,8 @@ primitive_families:
   name: Chaskey
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - pure_arx_no_constants
   round_ids:
   - chaskey_round
   target_applications:
@@ -6160,7 +6204,6 @@ primitive_families:
         modulus: 4294967296
     - id: xor
     - id: rotation_fixed
-    - id: constant
   reference_ids:
   - chaskey_ref
   process_participations: []
@@ -6671,6 +6714,9 @@ primitive_families:
   - feistel
   - balanced_feistel
   - arx_permutation_network
+  - fixed_rotation_arx
+  - xor_key_injection_arx
+  - pure_arx_no_constants
   round_ids:
   - feal_round
   target_applications:
@@ -7175,6 +7221,8 @@ primitive_families:
   construction_ids:
   - type2_generalized_feistel
   - arx_permutation_network
+  - fixed_rotation_arx
+  - pure_arx_no_constants
   round_ids:
   - hight_round
   target_applications:
@@ -7404,6 +7452,9 @@ primitive_families:
   construction_ids:
   - generalized_feistel
   - arx_permutation_network
+  - fixed_rotation_arx
+  - xor_key_injection_arx
+  - pure_arx_no_constants
   round_ids:
   - lea_round
   target_applications:
@@ -7464,6 +7515,9 @@ primitive_families:
   construction_ids:
   - generalized_feistel
   - arx_permutation_network
+  - fixed_rotation_arx
+  - xor_key_injection_arx
+  - pure_arx_no_constants
   round_ids:
   - lea_round
   target_applications:
@@ -8208,6 +8262,8 @@ primitive_families:
   construction_ids:
   - spn
   - arx_permutation_network
+  - fixed_rotation_arx
+  - pure_arx_no_constants
   round_ids:
   - nush_round
   target_applications:
@@ -8761,6 +8817,9 @@ primitive_families:
   name: SHACAL
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - modadd_key_injection_arx
+  - arx_with_round_constants
   round_ids:
   - shacal_round
   target_applications:
@@ -8806,6 +8865,9 @@ primitive_families:
   name: SHACAL2
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - modadd_key_injection_arx
+  - arx_with_round_constants
   round_ids:
   - shacal2_round
   target_applications:
@@ -9038,6 +9100,8 @@ primitive_families:
   name: SPECKEY
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - xor_key_injection_arx
   round_ids:
   - speckey_round
   target_applications:
@@ -9229,6 +9293,9 @@ primitive_families:
   name: Threefish
   construction_ids:
   - arx_permutation_network
+  - fixed_rotation_arx
+  - modadd_key_injection_arx
+  - pure_arx_no_constants
   round_ids:
   - threefish_round
   target_applications:
@@ -9445,6 +9512,8 @@ primitive_families:
   name: XXTEA
   construction_ids:
   - arx_permutation_network
+  - arx_with_round_constants
+  - source_heavy_unbalanced_feistel
   round_ids:
   - xxtea_round
   target_applications:
@@ -9705,6 +9774,8 @@ primitive_families:
   construction_ids:
   - davies_meyer
   - arx_permutation_network
+  - fixed_rotation_arx
+  - arx_with_round_constants
   round_ids:
   - haval_pass
   target_applications:
@@ -10219,6 +10290,8 @@ primitive_families:
   construction_ids:
   - davies_meyer
   - arx_permutation_network
+  - fixed_rotation_arx
+  - arx_with_round_constants
   round_ids:
   - blake_round
   target_applications:
@@ -10293,6 +10366,8 @@ primitive_families:
   construction_ids:
   - davies_meyer
   - arx_permutation_network
+  - fixed_rotation_arx
+  - pure_arx_no_constants
   round_ids:
   - blake3_round
   target_applications:
