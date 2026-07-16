@@ -260,6 +260,14 @@
       const [a, b] = touches;
       return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
     }
+    // Midpoint between the two fingers, in viewport (client) coordinates --
+    // passed through to applyScale as the zoom anchor so pinching zooms
+    // into the point between your fingers rather than the corner of the
+    // plot.
+    function touchMid(touches) {
+      const [a, b] = touches;
+      return { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 };
+    }
     el.addEventListener("touchstart", (ev) => {
       if (ev.touches.length === 2) {
         startDist = touchDist(ev.touches);
@@ -269,7 +277,8 @@
     el.addEventListener("touchmove", (ev) => {
       if (ev.touches.length !== 2 || !startDist) return;
       ev.preventDefault();
-      applyScale(startScale * (touchDist(ev.touches) / startDist));
+      const mid = touchMid(ev.touches);
+      applyScale(startScale * (touchDist(ev.touches) / startDist), mid.x, mid.y);
     }, { passive: false });
     el.addEventListener("touchend", (ev) => {
       if (ev.touches.length < 2) startDist = 0;
@@ -1290,9 +1299,23 @@
       syncAxisTracks();
     }
 
-    function setZoom(nextZoom) {
+    // Zooms while keeping a chosen anchor point visually fixed on screen
+    // (defaults to the center of the currently visible scroll viewport, so
+    // the +/- buttons zoom "into the middle of what you're looking at"
+    // rather than growing from the top-left corner; pinch and Cmd/Ctrl+wheel
+    // pass their own anchor -- the pinch midpoint / cursor position).
+    function setZoom(nextZoom, anchorClientX, anchorClientY) {
+      const rect = plotScroll.getBoundingClientRect();
+      const ax = anchorClientX ?? (rect.left + rect.width / 2);
+      const ay = anchorClientY ?? (rect.top + rect.height / 2);
+      const oldScale = zoomScale;
+      const contentX = (plotScroll.scrollLeft + (ax - rect.left)) / oldScale;
+      const contentY = (plotScroll.scrollTop + (ay - rect.top)) / oldScale;
       zoomScale = clampZoom(nextZoom);
       applyZoom();
+      plotScroll.scrollLeft = contentX * zoomScale - (ax - rect.left);
+      plotScroll.scrollTop = contentY * zoomScale - (ay - rect.top);
+      syncAxisTracks();
     }
 
     function fitZoom() {
@@ -2021,7 +2044,7 @@
     if (vizFsZoomOut) vizFsZoomOut.addEventListener("click", () => setZoom(zoomScale / ZOOM_FACTOR));
     if (vizFsZoomIn) vizFsZoomIn.addEventListener("click", () => setZoom(zoomScale * ZOOM_FACTOR));
     if (vizFsZoomFit) vizFsZoomFit.addEventListener("click", () => fitZoom());
-    attachPinchZoom(plotScroll, () => zoomScale, (s) => setZoom(s));
+    attachPinchZoom(plotScroll, () => zoomScale, (s, ax, ay) => setZoom(s, ax, ay));
     yearStart.addEventListener("input", () => {
       if (suppressYearRender) return;
       render();
@@ -2044,7 +2067,7 @@
       if (!(event.ctrlKey || event.metaKey)) return;
       event.preventDefault();
       const factor = event.deltaY < 0 ? ZOOM_FACTOR : 1 / ZOOM_FACTOR;
-      setZoom(zoomScale * factor);
+      setZoom(zoomScale * factor, event.clientX, event.clientY);
     }, { passive: false });
     const vizDownloadPng = document.getElementById("vizDownloadPng");
     if (vizDownloadPng) vizDownloadPng.addEventListener("click", () => {
@@ -2148,9 +2171,21 @@
       if (genZoomValue) genZoomValue.textContent = `${Math.round(genZoomScale * 100)}%`;
     }
 
-    function setGenZoom(next) {
+    // Zooms while keeping a chosen anchor point visually fixed on screen --
+    // see setZoom() in setupFamilyVisualization for the full rationale.
+    // Defaults to the center of the visible scroll viewport for the +/-
+    // buttons; pinch and Cmd/Ctrl+wheel pass their own anchor.
+    function setGenZoom(next, anchorClientX, anchorClientY) {
+      const rect = genPlotScroll.getBoundingClientRect();
+      const ax = anchorClientX ?? (rect.left + rect.width / 2);
+      const ay = anchorClientY ?? (rect.top + rect.height / 2);
+      const oldScale = genZoomScale;
+      const contentX = (genPlotScroll.scrollLeft + (ax - rect.left)) / oldScale;
+      const contentY = (genPlotScroll.scrollTop + (ay - rect.top)) / oldScale;
       genZoomScale = clampGenZoom(next);
       applyGenZoom();
+      genPlotScroll.scrollLeft = contentX * genZoomScale - (ax - rect.left);
+      genPlotScroll.scrollTop = contentY * genZoomScale - (ay - rect.top);
     }
 
     function fitGenZoom() {
@@ -3200,12 +3235,12 @@
     if (genFsZoomOut) genFsZoomOut.addEventListener("click", () => setGenZoom(genZoomScale / GEN_ZOOM_FACTOR));
     if (genFsZoomIn) genFsZoomIn.addEventListener("click", () => setGenZoom(genZoomScale * GEN_ZOOM_FACTOR));
     if (genFsZoomFit) genFsZoomFit.addEventListener("click", () => fitGenZoom());
-    attachPinchZoom(genPlotScroll, () => genZoomScale, (s) => setGenZoom(s));
+    attachPinchZoom(genPlotScroll, () => genZoomScale, (s, ax, ay) => setGenZoom(s, ax, ay));
     genPlotScroll.addEventListener("wheel", (event) => {
       if (!(event.ctrlKey || event.metaKey)) return;
       event.preventDefault();
       const factor = event.deltaY < 0 ? GEN_ZOOM_FACTOR : 1 / GEN_ZOOM_FACTOR;
-      setGenZoom(genZoomScale * factor);
+      setGenZoom(genZoomScale * factor, event.clientX, event.clientY);
     }, { passive: false });
 
     const genDownloadPng = document.getElementById("genDownloadPng");
