@@ -37,7 +37,7 @@
             <button type="button" class="view-toggle-btn" data-fullscreen-target="visualizations">Fullscreen</button>
           </div>
         </div>
-        <p class="small-note">X axis = publication year. Y axis grouping is selectable.</p>
+        <p class="small-note view-description">X axis = publication year. Y axis grouping is selectable.</p>
         <div id="vizControlsWrap" class="view-controls-wrap">
         <div class="toolbar viz-toolbar">
           <label class="toolbar-field">Group families by
@@ -106,8 +106,13 @@
             </div>
           </div>
           <div id="vizCornerPane" class="viz-corner-pane"></div>
+          <div class="fullscreen-zoom-controls">
+            <button type="button" id="vizFsZoomOut" aria-label="Zoom out">−</button>
+            <button type="button" id="vizFsZoomFit" aria-label="Fit to screen">Fit</button>
+            <button type="button" id="vizFsZoomIn" aria-label="Zoom in">+</button>
+          </div>
         </div>
-        <p id="vizRelationInfo" class="small-note viz-relation-info">Hover or tap a family dot/label or a relation arrow to see details. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.</p>
+        <p id="vizRelationInfo" class="small-note viz-relation-info">Hover or tap a family dot/label or a relation arrow to see details. Use the zoom controls, pinch, or Cmd/Ctrl + wheel inside the plot to adjust scale.</p>
         <div id="vizProcessLegend" class="viz-process-legend" hidden></div>
       </section>
 
@@ -119,7 +124,7 @@
             <button type="button" class="view-toggle-btn" data-fullscreen-target="genealogy">Fullscreen</button>
           </div>
         </div>
-        <p class="small-note">Design lineage and influence graph. Arrows flow from ancestor (top) to descendant (bottom); generation depth determined by the longest influence path.</p>
+        <p class="small-note view-description">Design lineage and influence graph. Arrows flow from ancestor (top) to descendant (bottom); generation depth determined by the longest influence path.</p>
         <div id="genControlsWrap" class="view-controls-wrap">
         <div class="toolbar viz-toolbar">
           <label class="toolbar-field">Color nodes by
@@ -188,8 +193,13 @@
           <div id="genPlotScroll" class="gen-plot-scroll">
             <svg id="genPlot" role="img" aria-label="Genealogy influence graph"></svg>
           </div>
+          <div class="fullscreen-zoom-controls">
+            <button type="button" id="genFsZoomOut" aria-label="Zoom out">−</button>
+            <button type="button" id="genFsZoomFit" aria-label="Fit to screen">Fit</button>
+            <button type="button" id="genFsZoomIn" aria-label="Zoom in">+</button>
+          </div>
         </div>
-        <p id="genEdgeInfo" class="small-note gen-edge-info">Hover or tap a family node or an influence arrow to see details. Right-click/long-press a node to filter the graph to it. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.</p>
+        <p id="genEdgeInfo" class="small-note gen-edge-info">Hover or tap a family node or an influence arrow to see details. Right-click/long-press a node to filter the graph to it. Use the zoom controls, pinch, or Cmd/Ctrl + wheel inside the plot to adjust scale.</p>
         <div id="genLegend" class="viz-process-legend" hidden></div>
       </section>
 

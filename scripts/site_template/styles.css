@@ -167,18 +167,95 @@ body.spdb-fullscreen .page { width: 100vw; max-width: 100vw; padding: 0; margin:
   overflow: auto;
   height: 100vh;
   background: var(--bg);
+  padding: 0;
 }
 
+/* Only the plot/table itself should be visible in fullscreen -- title,
+   description text, the hover/tap info line, and the color legend are all
+   hidden so the plot gets the entire screen. */
+.view-panel.is-fullscreen h2,
+.view-panel.is-fullscreen .view-description,
+.view-panel.is-fullscreen .viz-relation-info,
+.view-panel.is-fullscreen .gen-edge-info,
+.view-panel.is-fullscreen .viz-process-legend {
+  display: none;
+}
+
+/* The Hide/Show-filters and Fullscreen buttons become a small, semi-transparent
+   floating overlay in the corner instead of a full-width header bar, so they
+   stay reachable without taking up room from the plot beneath them. */
 .view-panel.is-fullscreen .view-header-row {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  background: color-mix(in srgb, var(--panel) 92%, #ffffff 8%);
-  padding: 0.5rem 0.2rem;
-  margin: -0.9rem -0.9rem 0.4rem;
-  padding-left: 0.9rem;
-  padding-right: 0.9rem;
-  border-bottom: 1px solid var(--line);
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  left: auto;
+  z-index: 15;
+  width: auto;
+  justify-content: flex-end;
+}
+
+.view-panel.is-fullscreen .view-header-actions {
+  margin-bottom: 0;
+}
+
+.view-panel.is-fullscreen .view-toggle-btn {
+  background: rgba(234, 246, 248, 0.55);
+  border-color: rgba(184, 216, 222, 0.65);
+  color: #08323d;
+  backdrop-filter: blur(3px);
+}
+
+.view-panel.is-fullscreen .view-toggle-btn:hover {
+  background: rgba(215, 238, 242, 0.85);
+}
+
+/* Floating +/- zoom controls: hidden by default (the normal "Plot zoom"
+   toolbar row covers this outside fullscreen), shown as a semi-transparent
+   overlay only while fullscreen, since fullscreen hides that toolbar. */
+.viz-frame, .gen-frame { position: relative; }
+
+.fullscreen-zoom-controls {
+  display: none;
+  position: absolute;
+  bottom: 0.7rem;
+  right: 0.7rem;
+  z-index: 15;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+.view-panel.is-fullscreen .fullscreen-zoom-controls {
+  display: flex;
+}
+
+.fullscreen-zoom-controls button {
+  all: unset;
+  cursor: pointer;
+  width: 2.1rem;
+  height: 2.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #08323d;
+  background: rgba(234, 246, 248, 0.7);
+  border: 1px solid rgba(184, 216, 222, 0.7);
+  border-radius: 6px;
+}
+
+.fullscreen-zoom-controls button:hover {
+  background: rgba(215, 238, 242, 0.95);
+}
+
+.fullscreen-zoom-controls #vizFsZoomFit,
+.fullscreen-zoom-controls #genFsZoomFit {
+  width: auto;
+  padding: 0 0.5rem;
+  font-size: 0.78rem;
 }
 
 .meta {
@@ -286,11 +363,18 @@ button { cursor: pointer; width: auto; background: var(--accent-soft); }
 
 .filter-checklist label {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.42rem;
   margin: 0;
   color: var(--ink);
   font-size: 0.92rem;
+}
+
+.filter-checklist label input { flex-shrink: 0; margin-top: 0.2rem; }
+
+.filter-checklist label span {
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 
 .filter-checklist input { width: auto; margin: 0; }
@@ -505,6 +589,9 @@ pre {
   grid-row: 1;
   overflow: auto;
   background: #fff;
+  /* Keep native one-finger scrolling but let our own touchmove handler take
+     over the two-finger pinch gesture instead of the browser's page-zoom. */
+  touch-action: pan-x pan-y;
 }
 
 .viz-xaxis-pane {
@@ -567,7 +654,16 @@ pre {
   display: flex;
   align-items: center;
   gap: 0.38rem;
-  white-space: nowrap;
+  /* Some type/construction names are long (e.g. "Password-Based Key
+     Derivation Function (PBKDF)"); wrap them instead of forcing a single
+     unbroken line that overflows the legend box on narrow screens. */
+  max-width: 100%;
+  min-width: 0;
+}
+
+.viz-process-legend-item > span:last-child {
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 
 .viz-process-legend-dot {
@@ -722,6 +818,7 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
   background: #fff;
   width: 100%;
   height: 100%;
+  touch-action: pan-x pan-y;
 }
 
 .gen-edge-info {

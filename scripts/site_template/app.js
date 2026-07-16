@@ -200,6 +200,17 @@
   }
 
   function setupFullscreenAndFilterToggles() {
+    // Entering fullscreen should show only the plot/table -- force the
+    // filters closed (if they weren't already) so the user has to
+    // deliberately reveal them via the (now floating) Show filters button.
+    function forceCollapseFilters(panel) {
+      const wrap = panel.querySelector(".view-controls-wrap");
+      if (!wrap || wrap.classList.contains("is-collapsed")) return;
+      wrap.classList.add("is-collapsed");
+      const filtersBtn = panel.querySelector("[data-toggle-filters]");
+      if (filtersBtn) filtersBtn.textContent = "Show filters";
+    }
+
     document.querySelectorAll("[data-fullscreen-target]").forEach((btn) => {
       const viewName = btn.getAttribute("data-fullscreen-target");
       const panel = document.querySelector(`.view-panel[data-view="${viewName}"]`);
@@ -208,6 +219,7 @@
         const isFullscreen = panel.classList.toggle("is-fullscreen");
         document.body.classList.toggle("spdb-fullscreen", isFullscreen);
         btn.textContent = isFullscreen ? "Exit fullscreen" : "Fullscreen";
+        if (isFullscreen) forceCollapseFilters(panel);
         triggerViewRefresh(viewName, true);
       });
     });
@@ -233,6 +245,36 @@
         btn.textContent = collapsed ? "Show filters" : "Hide filters";
       });
     });
+  }
+
+  // Two-finger pinch support for the plot-scroll containers: maps the
+  // change in distance between the two touch points to a multiplicative
+  // zoom factor, applied via the same setter each plot's +/- buttons use.
+  // preventDefault() on the pinch touchmove stops the browser's own
+  // page-zoom gesture from also firing over the plot area.
+  function attachPinchZoom(el, getScale, applyScale) {
+    if (!el) return;
+    let startDist = 0;
+    let startScale = 1;
+    function touchDist(touches) {
+      const [a, b] = touches;
+      return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    }
+    el.addEventListener("touchstart", (ev) => {
+      if (ev.touches.length === 2) {
+        startDist = touchDist(ev.touches);
+        startScale = getScale();
+      }
+    }, { passive: true });
+    el.addEventListener("touchmove", (ev) => {
+      if (ev.touches.length !== 2 || !startDist) return;
+      ev.preventDefault();
+      applyScale(startScale * (touchDist(ev.touches) / startDist));
+    }, { passive: false });
+    el.addEventListener("touchend", (ev) => {
+      if (ev.touches.length < 2) startDist = 0;
+    });
+    el.addEventListener("touchcancel", () => { startDist = 0; });
   }
 
   function createTableView(tableId) {
@@ -1236,7 +1278,7 @@
     function applyZoom() {
       const scaledH = Math.round(lastRenderSize.plotHeight * zoomScale);
       const isFullscreen = document.body.classList.contains("spdb-fullscreen");
-      const maxFrameH = Math.round(window.innerHeight * (isFullscreen ? 0.88 : 0.68));
+      const maxFrameH = Math.round(window.innerHeight * (isFullscreen ? 0.97 : 0.68));
       vizFrame.style.height = `${Math.max(160, Math.min(scaledH, maxFrameH)) + AXIS_HEIGHT}px`;
       plotSvg.style.width = `${Math.round(lastRenderSize.plotWidth * zoomScale)}px`;
       plotSvg.style.height = `${scaledH}px`;
@@ -1970,6 +2012,16 @@
     zoomIn.addEventListener("click", () => setZoom(zoomScale * ZOOM_FACTOR));
     zoomReset.addEventListener("click", () => setZoom(BASE_ZOOM));
     zoomFit.addEventListener("click", () => fitZoom());
+    // Floating fullscreen-only zoom controls -- same underlying zoom state
+    // and setters as the toolbar buttons above, just reachable when the
+    // toolbar itself is hidden in fullscreen mode.
+    const vizFsZoomOut = document.getElementById("vizFsZoomOut");
+    const vizFsZoomIn = document.getElementById("vizFsZoomIn");
+    const vizFsZoomFit = document.getElementById("vizFsZoomFit");
+    if (vizFsZoomOut) vizFsZoomOut.addEventListener("click", () => setZoom(zoomScale / ZOOM_FACTOR));
+    if (vizFsZoomIn) vizFsZoomIn.addEventListener("click", () => setZoom(zoomScale * ZOOM_FACTOR));
+    if (vizFsZoomFit) vizFsZoomFit.addEventListener("click", () => fitZoom());
+    attachPinchZoom(plotScroll, () => zoomScale, (s) => setZoom(s));
     yearStart.addEventListener("input", () => {
       if (suppressYearRender) return;
       render();
@@ -2569,7 +2621,7 @@
       genPlot.setAttribute("viewBox", `0 0 ${canvasW} ${canvasH}`);
       genPlot.setAttribute("width", String(canvasW));
       genPlot.setAttribute("height", String(canvasH));
-      const sugiyamaHRatio = document.body.classList.contains("spdb-fullscreen") ? 0.90 : 0.70;
+      const sugiyamaHRatio = document.body.classList.contains("spdb-fullscreen") ? 0.97 : 0.70;
       genFrame.style.height = `${Math.max(220, Math.min(Math.round(window.innerHeight * sugiyamaHRatio), canvasH + 8))}px`;
 
       if (dagNodes.length) {
@@ -2905,7 +2957,7 @@
       genPlot.setAttribute("width", String(diam));
       genPlot.setAttribute("height", String(diam));
       genPlot.style.display = "block"; genPlot.style.margin = "0 auto";
-      const radialHRatio = document.body.classList.contains("spdb-fullscreen") ? 0.92 : 0.82;
+      const radialHRatio = document.body.classList.contains("spdb-fullscreen") ? 0.97 : 0.82;
       genFrame.style.height = `${Math.max(320, Math.min(Math.round(window.innerHeight * radialHRatio), diam + 8))}px`;
 
       // Concentric guide rings (per-year + decade in year mode, per-gen in gen mode)
@@ -3141,6 +3193,14 @@
     if (genZoomIn) genZoomIn.addEventListener("click", () => setGenZoom(genZoomScale * GEN_ZOOM_FACTOR));
     if (genZoomReset) genZoomReset.addEventListener("click", () => setGenZoom(GEN_BASE_ZOOM));
     if (genZoomFit) genZoomFit.addEventListener("click", () => fitGenZoom());
+    // Floating fullscreen-only zoom controls, mirroring the Timelines tab.
+    const genFsZoomOut = document.getElementById("genFsZoomOut");
+    const genFsZoomIn = document.getElementById("genFsZoomIn");
+    const genFsZoomFit = document.getElementById("genFsZoomFit");
+    if (genFsZoomOut) genFsZoomOut.addEventListener("click", () => setGenZoom(genZoomScale / GEN_ZOOM_FACTOR));
+    if (genFsZoomIn) genFsZoomIn.addEventListener("click", () => setGenZoom(genZoomScale * GEN_ZOOM_FACTOR));
+    if (genFsZoomFit) genFsZoomFit.addEventListener("click", () => fitGenZoom());
+    attachPinchZoom(genPlotScroll, () => genZoomScale, (s) => setGenZoom(s));
     genPlotScroll.addEventListener("wheel", (event) => {
       if (!(event.ctrlKey || event.metaKey)) return;
       event.preventDefault();

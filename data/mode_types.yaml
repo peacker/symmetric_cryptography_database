@@ -9,7 +9,7 @@ mode_types:
 - id: xof
   name: Extendable-Output Function (XOF)
 - id: pbkdf
-  name: Password-Based Key Derivation Function (PBKDF / Memory-Hard Function)
+  name: Password-Based Key Derivation Function (PBKDF)
 - id: enc
   name: Encryption Mode (confidentiality-only)
 - id: mac
