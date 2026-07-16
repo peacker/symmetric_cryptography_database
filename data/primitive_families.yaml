@@ -761,11 +761,13 @@ primitive_families:
   - source_family_id: rijndael
     relations:
     - standardization_of
+    - specializes
     innovative_idea_ids:
     - rijndael_8x8_sbox
     - rijndael_shift_rows
     - rijndael_mix_columns
-    note: AES fixes Rijndael's block size to 128 bits and standardises three key sizes.
+    note: AES fixes Rijndael's block size to 128 bits and standardises three key sizes -- a special case (narrower parameter
+      subset) of Rijndael's variable 128/192/256-bit block and key sizes, not just its formal standardization.
   innovative_ideas:
   - id: rijndael_8x8_sbox
     name: 8x8 S-box
