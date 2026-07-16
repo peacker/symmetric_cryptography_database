@@ -1938,11 +1938,16 @@
         });
       }
 
-      // Standards and process legend
-      if (standardFamilyIds.size || (useProcessColor && processList.length)) {
+      // Standards and process legend -- "Standard" only appears if at least
+      // one currently-visible (post-filter/year-range/search) family is
+      // actually a standard, so the legend never advertises a category that
+      // isn't represented anywhere in the current view.
+      const visibleFamilyIdSet = new Set(points.map((p) => p.familyId));
+      const anyVisibleStandard = Array.from(visibleFamilyIdSet).some((fid) => standardFamilyIds.has(fid));
+      if (anyVisibleStandard || (useProcessColor && processList.length)) {
         processLegend.hidden = false;
         clearNode(processLegend);
-        if (standardFamilyIds.size) {
+        if (anyVisibleStandard) {
           const standardItem = document.createElement("span");
           standardItem.className = "viz-process-legend-item";
           const standardDot = document.createElement("span");
@@ -1957,7 +1962,11 @@
           processLegend.appendChild(standardItem);
         }
         if (useProcessColor) {
-          processList.forEach((proc) => {
+          // Only legend entries the user hasn't unchecked in the Processes
+          // filter checklist -- matches how the Types/Constructions/Target
+          // applications legends (in Genealogy) already respect their own
+          // checkboxes.
+          processList.filter((proc) => filterPanel.isValueChecked("process", String(proc.id))).forEach((proc) => {
             const color = processColorMap.get(String(proc.id)) || "#7a8c8f";
             const item = document.createElement("span");
             item.className = "viz-process-legend-item";
@@ -1970,16 +1979,18 @@
             item.appendChild(lbl);
             processLegend.appendChild(item);
           });
-          const noneItem = document.createElement("span");
-          noneItem.className = "viz-process-legend-item";
-          const noneDot = document.createElement("span");
-          noneDot.className = "viz-process-legend-dot";
-          noneDot.style.background = processColorMap.get("__none__");
-          const noneLbl = document.createElement("span");
-          noneLbl.textContent = "No process";
-          noneItem.appendChild(noneDot);
-          noneItem.appendChild(noneLbl);
-          processLegend.appendChild(noneItem);
+          if (filterPanel.isValueChecked("process", "__none__")) {
+            const noneItem = document.createElement("span");
+            noneItem.className = "viz-process-legend-item";
+            const noneDot = document.createElement("span");
+            noneDot.className = "viz-process-legend-dot";
+            noneDot.style.background = processColorMap.get("__none__");
+            const noneLbl = document.createElement("span");
+            noneLbl.textContent = "No process";
+            noneItem.appendChild(noneDot);
+            noneItem.appendChild(noneLbl);
+            processLegend.appendChild(noneItem);
+          }
         }
       } else {
         processLegend.hidden = true;
@@ -2579,12 +2590,18 @@
     }
 
     // ── Legend helper (shared by both layouts) ─────────────────────────
-    function drawLegend() {
+    // drawnFamilyIds is exactly the set of nodes actually on screen this
+    // render (post tier/type/construction/target/process/year/search
+    // filters, and post "Only connected families") so the "Standard" item
+    // never claims a category with zero currently-visible members.
+    function drawLegend(drawnFamilyIds) {
       if (!genLegend) return;
       while (genLegend.firstChild) genLegend.removeChild(genLegend.firstChild);
       const mode = genColorBy.value;
+      const anyVisibleStandard = (drawnFamilyIds || []).some((fid) => stdFamIds.has(fid));
       const items = mode === "process"
-        ? [...genProcessList.map((p) => ({ color: genProcColorMap.get(String(p.id)), label: String(p.name) })), { color: genProcColorMap.get("__none__"), label: "No process" }]
+        ? [...genProcessList.filter((p) => genFilterPanel.isValueChecked("process", String(p.id))).map((p) => ({ color: genProcColorMap.get(String(p.id)), label: String(p.name) })),
+           ...(genFilterPanel.isValueChecked("process", "__none__") ? [{ color: genProcColorMap.get("__none__"), label: "No process" }] : [])]
         : mode === "construction"
           ? allConstrs.filter((c) => genFilterPanel.isValueChecked("construction", c)).map((c) => ({ color: constrColorMap.get(c) || "#7a8c8f", label: genDims.constructionNameById.get(c) || c }))
           : mode === "target"
@@ -2596,7 +2613,7 @@
         const l = document.createElement("span"); l.textContent = label; if (bold) l.style.fontWeight = "700";
         s.appendChild(d); s.appendChild(l); return s;
       };
-      genLegend.appendChild(mkItem("#152021", "Standard", true));
+      if (anyVisibleStandard) genLegend.appendChild(mkItem("#152021", "Standard", true));
       items.forEach(({ color, label }) => genLegend.appendChild(mkItem(color || "#7a8c8f", label, false)));
       relationTypes.forEach((relation) => {
         const item = mkItem(relationColorMap.get(relation), relation.replace(/_/g, " "), false);
@@ -3146,7 +3163,7 @@
       } else {
         drawSugiyama(dagNodes, isoNodes, inE, outE, dagSet, visEdges);
       }
-      drawLegend();
+      drawLegend(dagNodes.concat(isoNodes));
       ensureGenFit(false);
     }
 
