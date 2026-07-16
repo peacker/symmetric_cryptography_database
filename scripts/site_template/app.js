@@ -129,10 +129,55 @@
     });
   }
 
+  // Shared registry so a view's plot can be asked to re-fit itself to its
+  // container. Each view's setup function fills in its own entry (a function
+  // taking a `force` boolean) if it has a "fit to container width" concept.
+  // Two callers use this:
+  //  - the navigator, the first time a view becomes the active tab (force
+  //    = false, i.e. only if that view has never successfully fit itself
+  //    yet -- a view's very first render happens while its panel is still
+  //    display:none, so its container has zero width and any fit attempt
+  //    at that point silently no-ops; activating the tab is the first
+  //    chance to measure a real width and retry);
+  //  - the Fullscreen toggle (force = true, i.e. always re-fit, since the
+  //    container size just changed dramatically).
+  const viewRefreshHooks = {};
+  function triggerViewRefresh(viewName, force) {
+    const hook = viewRefreshHooks[viewName];
+    if (typeof hook !== "function") return;
+    // Wait a couple of frames so the browser has applied the display/layout
+    // change before we measure container width/height for re-fitting.
+    requestAnimationFrame(() => requestAnimationFrame(() => hook(!!force)));
+  }
+
   function setupNavigator() {
     const tabs = Array.from(document.querySelectorAll(".nav-tab[data-view-target]"));
     const views = Array.from(document.querySelectorAll(".view-panel[data-view]"));
     if (!tabs.length || !views.length) return;
+
+    const burger = document.getElementById("navBurger");
+    const navigator_ = document.getElementById("navigator");
+
+    function closeMenu() {
+      if (!burger || !navigator_) return;
+      navigator_.classList.remove("is-open");
+      burger.setAttribute("aria-expanded", "false");
+    }
+
+    if (burger && navigator_) {
+      burger.addEventListener("click", () => {
+        const open = navigator_.classList.toggle("is-open");
+        burger.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      document.addEventListener("click", (ev) => {
+        if (!navigator_.classList.contains("is-open")) return;
+        if (navigator_.contains(ev.target) || burger.contains(ev.target)) return;
+        closeMenu();
+      });
+      document.addEventListener("keydown", (ev) => {
+        if (ev.key === "Escape") closeMenu();
+      });
+    }
 
     function activate(viewName) {
       views.forEach((view) => {
@@ -141,15 +186,53 @@
       tabs.forEach((tab) => {
         tab.classList.toggle("is-active", tab.getAttribute("data-view-target") === viewName);
       });
+      triggerViewRefresh(viewName, false);
     }
 
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
         activate(tab.getAttribute("data-view-target") || "visualizations");
+        closeMenu();
       });
     });
 
     activate("visualizations");
+  }
+
+  function setupFullscreenAndFilterToggles() {
+    document.querySelectorAll("[data-fullscreen-target]").forEach((btn) => {
+      const viewName = btn.getAttribute("data-fullscreen-target");
+      const panel = document.querySelector(`.view-panel[data-view="${viewName}"]`);
+      if (!panel) return;
+      btn.addEventListener("click", () => {
+        const isFullscreen = panel.classList.toggle("is-fullscreen");
+        document.body.classList.toggle("spdb-fullscreen", isFullscreen);
+        btn.textContent = isFullscreen ? "Exit fullscreen" : "Fullscreen";
+        triggerViewRefresh(viewName, true);
+      });
+    });
+
+    document.addEventListener("keydown", (ev) => {
+      if (ev.key !== "Escape") return;
+      const openPanel = document.querySelector(".view-panel.is-fullscreen");
+      if (!openPanel) return;
+      const viewName = openPanel.getAttribute("data-view");
+      openPanel.classList.remove("is-fullscreen");
+      document.body.classList.remove("spdb-fullscreen");
+      const btn = document.querySelector(`[data-fullscreen-target="${viewName}"]`);
+      if (btn) btn.textContent = "Fullscreen";
+      triggerViewRefresh(viewName, true);
+    });
+
+    document.querySelectorAll("[data-toggle-filters]").forEach((btn) => {
+      const key = btn.getAttribute("data-toggle-filters");
+      const wrap = document.getElementById(`${key}ControlsWrap`);
+      if (!wrap) return;
+      btn.addEventListener("click", () => {
+        const collapsed = wrap.classList.toggle("is-collapsed");
+        btn.textContent = collapsed ? "Show filters" : "Hide filters";
+      });
+    });
   }
 
   function createTableView(tableId) {
@@ -1023,7 +1106,10 @@
     const BASE_ZOOM = 1;
     const BASE_COL_BONUS = 0;
     const COL_STEP = 8;
-    const MIN_ZOOM = 0.35;
+    // Low enough that "Fit" can always shrink the plot to the container width
+    // on a narrow/mobile screen, even at the cost of unreadable labels -- the
+    // user can always zoom back in afterwards.
+    const MIN_ZOOM = 0.05;
     const MAX_ZOOM = 4;
     const ZOOM_FACTOR = 1.2;
     const LEFT_AXIS_WIDTH = 100;
@@ -1149,7 +1235,8 @@
 
     function applyZoom() {
       const scaledH = Math.round(lastRenderSize.plotHeight * zoomScale);
-      const maxFrameH = Math.round(window.innerHeight * 0.68);
+      const isFullscreen = document.body.classList.contains("spdb-fullscreen");
+      const maxFrameH = Math.round(window.innerHeight * (isFullscreen ? 0.88 : 0.68));
       vizFrame.style.height = `${Math.max(160, Math.min(scaledH, maxFrameH)) + AXIS_HEIGHT}px`;
       plotSvg.style.width = `${Math.round(lastRenderSize.plotWidth * zoomScale)}px`;
       plotSvg.style.height = `${scaledH}px`;
@@ -1167,9 +1254,32 @@
     }
 
     function fitZoom() {
-      if (!plotScroll.clientWidth || !lastRenderSize.plotWidth) return;
+      // Zero-width container means the panel is currently hidden (e.g. the
+      // very first render happens before the user has switched to this
+      // tab) -- there's nothing sensible to fit to yet, so report failure
+      // rather than zooming to (near) zero.
+      if (!plotScroll.clientWidth || !lastRenderSize.plotWidth) return false;
       const fitWidth = Math.max(240, plotScroll.clientWidth - 8);
-      setZoom(fitWidth / lastRenderSize.plotWidth);
+      // Deliberately bypasses clampZoom()/MIN_ZOOM: "Fit" must always be
+      // able to shrink all the way down to the container's actual width,
+      // even for a very wide plot on a narrow screen, so the user can see
+      // the whole thing at once -- labels becoming unreadably small is an
+      // acceptable trade-off they can undo with the +/- buttons.
+      zoomScale = fitWidth / lastRenderSize.plotWidth;
+      applyZoom();
+      return true;
+    }
+
+    // Fits the plot to its container the first time that's actually
+    // possible (container visible with a real width), then leaves the
+    // user's zoom alone on subsequent calls unless force is set (used when
+    // the container just changed size dramatically, e.g. entering/exiting
+    // fullscreen).
+    function ensureFit(force) {
+      if (force || !hasAutoFit) {
+        if (fitZoom()) { hasAutoFit = true; return; }
+      }
+      applyZoom();
     }
 
     function initializeYearBounds() {
@@ -1812,12 +1922,7 @@
 
       fontValue.textContent = `${fontPx}px`;
       colSpacingValue.textContent = `${colSpacingBonus >= 0 ? "+" : ""}${colSpacingBonus}px`;
-      if (!hasAutoFit) {
-        hasAutoFit = true;
-        fitZoom();
-      } else {
-        applyZoom();
-      }
+      ensureFit(false);
     }
 
     groupBy.addEventListener("change", render);
@@ -1917,6 +2022,7 @@
       });
     });
     render();
+    viewRefreshHooks.visualizations = ensureFit;
   }
 
   function setupGenealogy() {
@@ -1951,6 +2057,11 @@
     const genCollapseEdges = document.getElementById("genCollapseEdges");
     const genNameClip = document.getElementById("genNameClip");
     const genNameFull = document.getElementById("genNameFull");
+    const genZoomOut = document.getElementById("genZoomOut");
+    const genZoomIn = document.getElementById("genZoomIn");
+    const genZoomReset = document.getElementById("genZoomReset");
+    const genZoomFit = document.getElementById("genZoomFit");
+    const genZoomValue = document.getElementById("genZoomValue");
     if (!genPlot || !genPlotScroll || !genFrame) return;
 
     const GEN_BASE_FONT = 12;
@@ -1958,6 +2069,62 @@
     let genLayoutMode = "radial";
     let genNumChars = 8;
     let genNameMode = "clip";
+
+    // Plot zoom (mirrors the Timelines "Plot zoom" control): the SVG's
+    // width/height attributes are always set to its natural (100%) size by
+    // the layout functions below, and genZoomScale scales that down/up via
+    // inline style, which the browser stretches uniformly against the fixed
+    // viewBox -- so labels shrink along with everything else, letting the
+    // plot fit a narrow screen even if the text becomes unreadable.
+    const GEN_BASE_ZOOM = 1;
+    const GEN_MIN_ZOOM = 0.05;
+    const GEN_MAX_ZOOM = 4;
+    const GEN_ZOOM_FACTOR = 1.2;
+    let genZoomScale = GEN_BASE_ZOOM;
+    let genHasAutoFit = false;
+
+    function clampGenZoom(next) {
+      return Math.min(GEN_MAX_ZOOM, Math.max(GEN_MIN_ZOOM, next));
+    }
+
+    function applyGenZoom() {
+      const naturalW = Number(genPlot.getAttribute("width")) || 0;
+      const naturalH = Number(genPlot.getAttribute("height")) || 0;
+      if (!naturalW || !naturalH) return;
+      genPlot.style.width = `${Math.round(naturalW * genZoomScale)}px`;
+      genPlot.style.height = `${Math.round(naturalH * genZoomScale)}px`;
+      if (genZoomValue) genZoomValue.textContent = `${Math.round(genZoomScale * 100)}%`;
+    }
+
+    function setGenZoom(next) {
+      genZoomScale = clampGenZoom(next);
+      applyGenZoom();
+    }
+
+    function fitGenZoom() {
+      const naturalW = Number(genPlot.getAttribute("width")) || 0;
+      // Zero-width container means the panel is currently hidden (its very
+      // first render happens before the user has switched to this tab) --
+      // report failure so the caller retries once the tab is actually shown.
+      if (!genPlotScroll.clientWidth || !naturalW) return false;
+      const fitWidth = Math.max(160, genPlotScroll.clientWidth - 8);
+      // Deliberately bypasses clampGenZoom()/GEN_MIN_ZOOM, same reasoning as
+      // fitZoom() in setupFamilyVisualization: "Fit" must always be able to
+      // shrink all the way down to the container's actual width.
+      genZoomScale = fitWidth / naturalW;
+      applyGenZoom();
+      return true;
+    }
+
+    // Mirrors ensureFit() in setupFamilyVisualization: fit once a real
+    // width is measurable, then leave the user's zoom alone unless forced
+    // (entering/exiting fullscreen).
+    function ensureGenFit(force) {
+      if (force || !genHasAutoFit) {
+        if (fitGenZoom()) { genHasAutoFit = true; return; }
+      }
+      applyGenZoom();
+    }
 
     // ── Data ─────────────────────────────────────────────────────────
     const tables = data.tables || {};
@@ -2402,7 +2569,8 @@
       genPlot.setAttribute("viewBox", `0 0 ${canvasW} ${canvasH}`);
       genPlot.setAttribute("width", String(canvasW));
       genPlot.setAttribute("height", String(canvasH));
-      genFrame.style.height = `${Math.max(220, Math.min(Math.round(window.innerHeight * 0.70), canvasH + 8))}px`;
+      const sugiyamaHRatio = document.body.classList.contains("spdb-fullscreen") ? 0.90 : 0.70;
+      genFrame.style.height = `${Math.max(220, Math.min(Math.round(window.innerHeight * sugiyamaHRatio), canvasH + 8))}px`;
 
       if (dagNodes.length) {
         const shift = (canvasW - dagW) / 2 - dagMinX;
@@ -2737,7 +2905,8 @@
       genPlot.setAttribute("width", String(diam));
       genPlot.setAttribute("height", String(diam));
       genPlot.style.display = "block"; genPlot.style.margin = "0 auto";
-      genFrame.style.height = `${Math.max(320, Math.min(Math.round(window.innerHeight * 0.82), diam + 8))}px`;
+      const radialHRatio = document.body.classList.contains("spdb-fullscreen") ? 0.92 : 0.82;
+      genFrame.style.height = `${Math.max(320, Math.min(Math.round(window.innerHeight * radialHRatio), diam + 8))}px`;
 
       // Concentric guide rings (per-year + decade in year mode, per-gen in gen mode)
       ringLabels.forEach(({ r, label, minor }) => {
@@ -2871,7 +3040,9 @@
       if (!visIds.length) {
         genPlot.setAttribute("viewBox", "0 0 620 160"); genPlot.setAttribute("width", "620"); genPlot.setAttribute("height", "160");
         const msg = svgEl("text", { x: "24", y: "42", class: "viz-label" }); msg.textContent = "No families match the current filters.";
-        genPlot.appendChild(msg); genFrame.style.height = "200px"; if (genLegend) genLegend.hidden = true; return;
+        genPlot.appendChild(msg); genFrame.style.height = "200px"; if (genLegend) genLegend.hidden = true;
+        genPlot.style.width = ""; genPlot.style.height = "";
+        return;
       }
 
       const visEdges = relVisibleInfluences.filter((e) => visSet.has(String(e.source_family_id || "")) && visSet.has(String(e.target_family_id || "")));
@@ -2889,6 +3060,7 @@
         drawSugiyama(dagNodes, isoNodes, inE, outE, dagSet, visEdges);
       }
       drawLegend();
+      ensureGenFit(false);
     }
 
     genColorBy.addEventListener("change", render);
@@ -2965,6 +3137,17 @@
       });
     });
 
+    if (genZoomOut) genZoomOut.addEventListener("click", () => setGenZoom(genZoomScale / GEN_ZOOM_FACTOR));
+    if (genZoomIn) genZoomIn.addEventListener("click", () => setGenZoom(genZoomScale * GEN_ZOOM_FACTOR));
+    if (genZoomReset) genZoomReset.addEventListener("click", () => setGenZoom(GEN_BASE_ZOOM));
+    if (genZoomFit) genZoomFit.addEventListener("click", () => fitGenZoom());
+    genPlotScroll.addEventListener("wheel", (event) => {
+      if (!(event.ctrlKey || event.metaKey)) return;
+      event.preventDefault();
+      const factor = event.deltaY < 0 ? GEN_ZOOM_FACTOR : 1 / GEN_ZOOM_FACTOR;
+      setGenZoom(genZoomScale * factor);
+    }, { passive: false });
+
     const genDownloadPng = document.getElementById("genDownloadPng");
     if (genDownloadPng) genDownloadPng.addEventListener("click", () => {
       const w = Number(genPlot.getAttribute("width") || 800);
@@ -2984,6 +3167,7 @@
     });
     initFilters();
     render();
+    viewRefreshHooks.genealogy = ensureGenFit;
 
   }
 
@@ -2992,4 +3176,5 @@
   setupBuilder();
   setupFamilyVisualization();
   setupGenealogy();
+  setupFullscreenAndFilterToggles();
 })();

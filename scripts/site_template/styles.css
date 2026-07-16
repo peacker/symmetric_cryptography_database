@@ -37,10 +37,44 @@ body {
   backdrop-filter: blur(7px);
 }
 
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
 .hero h1 {
   margin: 0;
   font-size: clamp(1.8rem, 3.4vw, 2.8rem);
 }
+
+.nav-burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: auto;
+  height: 2.3rem;
+  aspect-ratio: 1;
+  padding: 0;
+  margin: 0;
+  flex-shrink: 0;
+  border: 1px solid #b8d8de;
+  border-radius: 8px;
+  background: #eaf6f8;
+}
+
+.nav-burger span {
+  display: block;
+  width: 1.2rem;
+  height: 2px;
+  background: #08323d;
+  border-radius: 2px;
+}
+
+.nav-burger:hover { background: #d7eef2; }
 
 .navigator {
   display: flex;
@@ -81,6 +115,71 @@ body {
 }
 
 .panel h2, .panel h3 { margin: 0.2rem 0 0.6rem; }
+
+.view-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.view-header-row h2 { margin: 0.2rem 0 0.6rem; }
+
+.view-header-actions {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.view-toggle-btn {
+  width: auto;
+  margin: 0;
+  border: 1px solid #b8d8de;
+  background: #eaf6f8;
+  color: #08323d;
+  border-radius: 8px;
+  padding: 0.32rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.view-toggle-btn:hover { background: #d7eef2; }
+
+.view-controls-wrap.is-collapsed { display: none; }
+
+/* Fullscreen mode: the active view-panel takes over the whole viewport and
+   the header/other chrome is hidden, so the plot/table gets maximum room on
+   small screens. Implemented as a CSS overlay (not the Fullscreen API) since
+   iOS Safari does not reliably support requestFullscreen() on arbitrary
+   elements. */
+body.spdb-fullscreen .top-header { display: none; }
+body.spdb-fullscreen .page { width: 100vw; max-width: 100vw; padding: 0; margin: 0; }
+
+.view-panel.is-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  overflow: auto;
+  height: 100vh;
+  background: var(--bg);
+}
+
+.view-panel.is-fullscreen .view-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: color-mix(in srgb, var(--panel) 92%, #ffffff 8%);
+  padding: 0.5rem 0.2rem;
+  margin: -0.9rem -0.9rem 0.4rem;
+  padding-left: 0.9rem;
+  padding-right: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
 
 .meta {
   display: grid;
@@ -648,4 +747,34 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
   .viz-frame { grid-template-columns: 80px minmax(0, 1fr); }
   .viz-filter-checklist { grid-template-columns: 1fr; }
   .gen-filters-row { grid-template-columns: 1fr; }
+}
+
+/* Phone-width layout: nav tabs move under a burger menu instead of wrapping
+   into extra rows, and each panel's Fullscreen toggle becomes the primary
+   way to get the plot/table to take over the screen. */
+@media (max-width: 680px) {
+  .page { padding: 0.7rem 0.45rem 1.2rem; }
+  .nav-burger { display: flex; }
+  .navigator {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 0.35rem;
+    flex-direction: column;
+    align-items: stretch;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.5rem;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+    z-index: 20;
+  }
+  .navigator.is-open { display: flex; }
+  .nav-tab { width: 100%; text-align: center; }
+  .view-header-actions { width: 100%; }
+  .view-toggle-btn { flex: 1 1 auto; }
+  .viz-display-group { flex-direction: column; align-items: stretch; }
+  .viz-name-mode { flex-wrap: wrap; }
 }

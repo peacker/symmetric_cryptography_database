@@ -16,8 +16,11 @@
       <header class="top-header panel">
         <section class="hero">
           <h1>Symmetric Cryptography Database</h1>
+          <button type="button" class="nav-burger" id="navBurger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navigator">
+            <span></span><span></span><span></span>
+          </button>
         </section>
-        <nav class="navigator" aria-label="Section navigation">
+        <nav class="navigator" id="navigator" aria-label="Section navigation">
           <button type="button" class="nav-tab is-active" data-view-target="visualizations">Timelines</button>
           <button type="button" class="nav-tab" data-view-target="genealogy">Genealogy</button>
           <button type="button" class="nav-tab" data-view-target="tables">All SQLite Tables</button>
@@ -27,8 +30,15 @@
       </header>
 
       <section class="panel view-panel is-active" data-view="visualizations">
-        <h2>Timelines</h2>
+        <div class="view-header-row">
+          <h2>Timelines</h2>
+          <div class="view-header-actions">
+            <button type="button" class="view-toggle-btn" data-toggle-filters="viz">Hide filters</button>
+            <button type="button" class="view-toggle-btn" data-fullscreen-target="visualizations">Fullscreen</button>
+          </div>
+        </div>
         <p class="small-note">X axis = publication year. Y axis grouping is selectable.</p>
+        <div id="vizControlsWrap" class="view-controls-wrap">
         <div class="toolbar viz-toolbar">
           <label class="toolbar-field">Group families by
             <select id="vizGroupBy">
@@ -78,6 +88,7 @@
           </div>
         </div>
         <div id="vizTierFilterPanel"></div>
+        </div>
         <div class="viz-frame" id="vizFrame">
           <div id="vizYAxisPane" class="viz-yaxis-pane">
             <div id="vizYAxisTrack" class="viz-axis-track">
@@ -101,8 +112,15 @@
       </section>
 
       <section class="panel view-panel" data-view="genealogy">
-        <h2>Genealogy</h2>
+        <div class="view-header-row">
+          <h2>Genealogy</h2>
+          <div class="view-header-actions">
+            <button type="button" class="view-toggle-btn" data-toggle-filters="gen">Hide filters</button>
+            <button type="button" class="view-toggle-btn" data-fullscreen-target="genealogy">Fullscreen</button>
+          </div>
+        </div>
         <p class="small-note">Design lineage and influence graph. Arrows flow from ancestor (top) to descendant (bottom); generation depth determined by the longest influence path.</p>
+        <div id="genControlsWrap" class="view-controls-wrap">
         <div class="toolbar viz-toolbar">
           <label class="toolbar-field">Color nodes by
             <select id="genColorBy">
@@ -128,6 +146,10 @@
             <div class="viz-name-section">
               <span class="viz-name-section-label">Font size</span>
               <div class="viz-name-mode"><button id="genFontMinus" type="button" class="name-mode-btn">A-</button><button id="genFontPlus" type="button" class="name-mode-btn">A+</button><button id="genFontReset" type="button" class="name-mode-btn">Reset</button><span id="genFontValue" class="viz-ctrl-value">12px</span></div>
+            </div>
+            <div class="viz-name-section">
+              <span class="viz-name-section-label">Plot zoom</span>
+              <div class="viz-name-mode"><button id="genZoomOut" type="button" class="name-mode-btn">-</button><button id="genZoomIn" type="button" class="name-mode-btn">+</button><button id="genZoomReset" type="button" class="name-mode-btn">100%</button><button id="genZoomFit" type="button" class="name-mode-btn">Fit</button><span id="genZoomValue" class="viz-ctrl-value">100%</span></div>
             </div>
             <label class="inline-check"><input id="genConnectedOnly" type="checkbox" checked /> Only connected families</label>
             <label class="inline-check"><input id="genStandardsOnly" type="checkbox" /> Standards only</label>
@@ -161,17 +183,25 @@
         </div>
         <div id="genTierFilterPanel"></div>
         <div id="genRelationFilterPanel"></div>
+        </div>
         <div class="gen-frame" id="genFrame">
           <div id="genPlotScroll" class="gen-plot-scroll">
             <svg id="genPlot" role="img" aria-label="Genealogy influence graph"></svg>
           </div>
         </div>
-        <p id="genEdgeInfo" class="small-note gen-edge-info">Hover or tap a family node or an influence arrow to see details. Right-click/long-press a node to filter the graph to it.</p>
+        <p id="genEdgeInfo" class="small-note gen-edge-info">Hover or tap a family node or an influence arrow to see details. Right-click/long-press a node to filter the graph to it. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.</p>
         <div id="genLegend" class="viz-process-legend" hidden></div>
       </section>
 
       <section class="panel view-panel" data-view="tables">
-        <h2>All SQLite Tables</h2>
+        <div class="view-header-row">
+          <h2>All SQLite Tables</h2>
+          <div class="view-header-actions">
+            <button type="button" class="view-toggle-btn" data-toggle-filters="table">Hide filters</button>
+            <button type="button" class="view-toggle-btn" data-fullscreen-target="tables">Fullscreen</button>
+          </div>
+        </div>
+        <div id="tableControlsWrap" class="view-controls-wrap">
         <div class="toolbar">
           <label class="toolbar-field">Table
             <select id="tableSelect"></select>
@@ -179,6 +209,7 @@
           <label class="toolbar-field">Search selected table
             <input id="tableSearch" type="search" placeholder="Search all cells" autocomplete="off" />
           </label>
+        </div>
         </div>
         <div class="table-wrap"><table id="allTablesView"><thead></thead><tbody></tbody></table></div>
       </section>
