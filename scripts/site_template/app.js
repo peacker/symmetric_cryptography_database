@@ -1962,11 +1962,13 @@
           processLegend.appendChild(standardItem);
         }
         if (useProcessColor) {
-          // Only legend entries the user hasn't unchecked in the Processes
-          // filter checklist -- matches how the Types/Constructions/Target
-          // applications legends (in Genealogy) already respect their own
-          // checkboxes.
-          processList.filter((proc) => filterPanel.isValueChecked("process", String(proc.id))).forEach((proc) => {
+          // Only legend entries an actually-visible family has -- computed
+          // from the same points list the plot itself just drew from, so a
+          // disabled tier (e.g. unchecking "Variable-length modes" entirely)
+          // or a year-range/search filter correctly empties the legend too,
+          // not just an individually-unchecked Processes checkbox.
+          const presentProcessIds = new Set(Array.from(visibleFamilyIdSet).map((fid) => familyProcessMap[fid] || "__none__"));
+          processList.filter((proc) => presentProcessIds.has(String(proc.id))).forEach((proc) => {
             const color = processColorMap.get(String(proc.id)) || "#7a8c8f";
             const item = document.createElement("span");
             item.className = "viz-process-legend-item";
@@ -1979,7 +1981,7 @@
             item.appendChild(lbl);
             processLegend.appendChild(item);
           });
-          if (filterPanel.isValueChecked("process", "__none__")) {
+          if (presentProcessIds.has("__none__")) {
             const noneItem = document.createElement("span");
             noneItem.className = "viz-process-legend-item";
             const noneDot = document.createElement("span");
@@ -2591,22 +2593,37 @@
 
     // ── Legend helper (shared by both layouts) ─────────────────────────
     // drawnFamilyIds is exactly the set of nodes actually on screen this
-    // render (post tier/type/construction/target/process/year/search
-    // filters, and post "Only connected families") so the "Standard" item
-    // never claims a category with zero currently-visible members.
+    // render (post tier-enable/type/construction/target/process/year/search
+    // filters, and post "Only connected families"). The legend is built
+    // from what's actually present among those nodes rather than from
+    // per-value checkbox state, so e.g. disabling the whole "Variable-length
+    // modes" tier empties AEAD/XOF/Hash/... from the Type legend too --
+    // checking only each value's own checkbox missed that case, since the
+    // checkboxes inside a disabled tier stay individually checked.
     function drawLegend(drawnFamilyIds) {
       if (!genLegend) return;
       while (genLegend.firstChild) genLegend.removeChild(genLegend.firstChild);
       const mode = genColorBy.value;
-      const anyVisibleStandard = (drawnFamilyIds || []).some((fid) => stdFamIds.has(fid));
+      const ids = drawnFamilyIds || [];
+      const anyVisibleStandard = ids.some((fid) => stdFamIds.has(fid));
+      const present = new Set();
+      if (mode === "process") {
+        ids.forEach((fid) => present.add(genFamilyProcessMap[fid] || "__none__"));
+      } else if (mode === "construction") {
+        ids.forEach((fid) => (famToConstrs.get(fid) || new Set()).forEach((c) => present.add(c)));
+      } else if (mode === "target") {
+        ids.forEach((fid) => (famToTargets.get(fid) || new Set()).forEach((t) => present.add(t)));
+      } else {
+        ids.forEach((fid) => (famToTypes.get(fid) || new Set()).forEach((t) => present.add(t)));
+      }
       const items = mode === "process"
-        ? [...genProcessList.filter((p) => genFilterPanel.isValueChecked("process", String(p.id))).map((p) => ({ color: genProcColorMap.get(String(p.id)), label: String(p.name) })),
-           ...(genFilterPanel.isValueChecked("process", "__none__") ? [{ color: genProcColorMap.get("__none__"), label: "No process" }] : [])]
+        ? [...genProcessList.filter((p) => present.has(String(p.id))).map((p) => ({ color: genProcColorMap.get(String(p.id)), label: String(p.name) })),
+           ...(present.has("__none__") ? [{ color: genProcColorMap.get("__none__"), label: "No process" }] : [])]
         : mode === "construction"
-          ? allConstrs.filter((c) => genFilterPanel.isValueChecked("construction", c)).map((c) => ({ color: constrColorMap.get(c) || "#7a8c8f", label: genDims.constructionNameById.get(c) || c }))
+          ? allConstrs.filter((c) => present.has(c)).map((c) => ({ color: constrColorMap.get(c) || "#7a8c8f", label: genDims.constructionNameById.get(c) || c }))
           : mode === "target"
-            ? allTargets.filter((t) => genFilterPanel.isValueChecked("target", t)).map((t) => ({ color: targetColorMap.get(t) || "#7a8c8f", label: t }))
-            : allTypes.filter((t) => genFilterPanel.isValueChecked("type", t)).map((t) => ({ color: typeColorMap.get(t) || "#7a8c8f", label: t }));
+            ? allTargets.filter((t) => present.has(t)).map((t) => ({ color: targetColorMap.get(t) || "#7a8c8f", label: t }))
+            : allTypes.filter((t) => present.has(t)).map((t) => ({ color: typeColorMap.get(t) || "#7a8c8f", label: t }));
       const mkItem = (color, label, bold) => {
         const s = document.createElement("span"); s.className = "viz-process-legend-item";
         const d = document.createElement("span"); d.className = "viz-process-legend-dot"; d.style.cssText = `background:${color};${bold ? "border:2px solid #000;box-sizing:border-box" : ""}`;
