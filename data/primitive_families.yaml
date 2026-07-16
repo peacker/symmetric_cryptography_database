@@ -1579,18 +1579,7 @@ primitive_families:
     - round_1
     - round_2
     status: finalist
-  influences:
-  - source_family_id: des
-    relations:
-    - inspired_by
-    note: 'Serpent-0''s S-boxes were not the DES S-boxes reused directly -- DES''s are 6-bit-input/4-bit-output and not
-      bijective, whereas Serpent''s are 4-bit invertible permutations (required since decryption applies their inverse).
-      The paper''s own generation method (Sect. 2.1) instead seeded an RC4-inspired shuffle-and-test search with "the 32
-      rows of the DES S-boxes" (each DES S-box row is itself already a bijective 4-to-16 permutation by DES''s own design
-      criteria), swapping entries until 8 new 4-bit permutations met Serpent''s differential/linear criteria -- done "to
-      inspire a high level of public confidence that we had not inserted any trapdoor." Serpent-1 (the final, submitted
-      version) discarded the DES-seeded search and generated entirely fresh S-boxes with the same deterministic algorithm,
-      raising the conjectured security margin from roughly 2^100 to 2^256.'
+  influences: []
   instances:
   - id: serpent_128
     name: Serpent-128
