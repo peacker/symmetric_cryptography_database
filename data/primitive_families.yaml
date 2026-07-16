@@ -1579,7 +1579,24 @@ primitive_families:
     - round_1
     - round_2
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: square
+    relations:
+    - related_to
+    note: 'Same-team continuation, not a structural derivation: Lars Knudsen co-designed SQUARE
+      (1997, with Daemen and Rijmen) the year before co-designing Serpent (1998, with Anderson and
+      Biham). Serpent departs sharply from SQUARE''s (and SHARK''s) byte-oriented, 8-bit-S-box
+      wide-trail approach, instead combining a full SP-network with dedicated bijective 4-bit
+      S-boxes -- a combination not seen in any prior published SPN; 4-bit S-boxes had so far
+      appeared only in Feistel designs (e.g. GOST 28147-89). The paper''s own historical account
+      (Sect. Appendix A.7) says its linear transformation was likewise not adapted from an earlier
+      cipher but arrived at through the authors'' own iterative experimentation (bit-rotations
+      first, found avalanche too slow, then a custom transformation refined with their own
+      differential/linear search tools). The one externally credited idea is Biham''s software
+      bitslicing technique (demonstrated on DES, FSE''97), which shaped Serpent''s goal of an
+      SP-network efficiently bitsliceable for a single block. Serpent is thus best read as an
+      original combination of these elements rather than a direct descendant of any one prior
+      cipher.'
   instances:
   - id: serpent_128
     name: Serpent-128
