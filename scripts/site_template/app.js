@@ -245,6 +245,22 @@
         btn.textContent = collapsed ? "Show filters" : "Hide filters";
       });
     });
+
+    // "Collapse all" / "Expand all" toggle every <details class="filter-section">
+    // within that tab's own controls wrap at once, on top of each section's
+    // own individual <summary> click-to-collapse.
+    function wireCollapseAll(selector, open) {
+      document.querySelectorAll(selector).forEach((btn) => {
+        const key = btn.getAttribute(open ? "data-expand-all" : "data-collapse-all");
+        const wrap = document.getElementById(`${key}ControlsWrap`);
+        if (!wrap) return;
+        btn.addEventListener("click", () => {
+          wrap.querySelectorAll(".filter-section").forEach((details) => { details.open = open; });
+        });
+      });
+    }
+    wireCollapseAll("[data-collapse-all]", false);
+    wireCollapseAll("[data-expand-all]", true);
   }
 
   // Two-finger pinch support for the plot-scroll containers: maps the
@@ -1127,6 +1143,7 @@
     const nameModeClip = document.getElementById("vizNameClip");
     const nameModeWrap = document.getElementById("vizNameWrap");
     const nameModeFull = document.getElementById("vizNameFull");
+    const familyCountBadge = document.getElementById("vizFamilyCount");
     let nameMode = "clip";
     const colorByProcess = document.getElementById("vizColorByProcess");
     const fontMinus = document.getElementById("vizFontMinus");
@@ -1458,6 +1475,7 @@
       });
 
       if (!rawPoints.length) {
+        if (familyCountBadge) familyCountBadge.textContent = "0 families shown";
         if (searchNeedle) {
           renderEmptyState("No families match the current name search, filters, and year range.");
         } else {
@@ -1469,6 +1487,10 @@
       const points = rawPoints;
       points.sort((a, b) => a.group.localeCompare(b.group) || a.year - b.year || a.name.localeCompare(b.name));
       const groupLabels = Array.from(new Set(points.map((point) => point.group))).sort((a, b) => a.localeCompare(b));
+      if (familyCountBadge) {
+        const shownCount = new Set(points.map((p) => p.familyId)).size;
+        familyCountBadge.textContent = `${shownCount} famil${shownCount === 1 ? "y" : "ies"} shown`;
+      }
 
       const collapseOn = collapseGroups.checked;
       const collapseN = Math.max(1, parseInt(collapseCount.value || "3", 10) || 3);
@@ -2121,6 +2143,7 @@
     const genConnectedOnly = document.getElementById("genConnectedOnly");
     const genStandardsOnly = document.getElementById("genStandardsOnly");
     const genFamilySearch = document.getElementById("genFamilySearch");
+    const genFamilyCountBadge = document.getElementById("genFamilyCount");
     const genFamilySearchDegree = document.getElementById("genFamilySearchDegree");
     const genDegreeMinus = document.getElementById("genDegreeMinus");
     const genDegreePlus = document.getElementById("genDegreePlus");
@@ -3159,6 +3182,7 @@
       const visSet = new Set(visIds);
 
       if (!visIds.length) {
+        if (genFamilyCountBadge) genFamilyCountBadge.textContent = "0 families shown";
         genPlot.setAttribute("viewBox", "0 0 620 160"); genPlot.setAttribute("width", "620"); genPlot.setAttribute("height", "160");
         const msg = svgEl("text", { x: "24", y: "42", class: "viz-label" }); msg.textContent = "No families match the current filters.";
         genPlot.appendChild(msg); genFrame.style.height = "200px"; if (genLegend) genLegend.hidden = true;
@@ -3180,7 +3204,11 @@
       } else {
         drawSugiyama(dagNodes, isoNodes, inE, outE, dagSet, visEdges);
       }
-      drawLegend(dagNodes.concat(isoNodes));
+      const shownNodes = dagNodes.concat(isoNodes);
+      if (genFamilyCountBadge) {
+        genFamilyCountBadge.textContent = `${shownNodes.length} famil${shownNodes.length === 1 ? "y" : "ies"} shown`;
+      }
+      drawLegend(shownNodes);
       ensureGenFit(false);
     }
 

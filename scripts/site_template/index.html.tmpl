@@ -31,7 +31,10 @@
 
       <section class="panel view-panel is-active" data-view="visualizations">
         <div class="view-header-row">
-          <h2>Timelines</h2>
+          <div class="view-header-title">
+            <h2>Timelines</h2>
+            <span id="vizFamilyCount" class="viz-count-badge"></span>
+          </div>
           <div class="view-header-actions">
             <button type="button" class="view-toggle-btn" data-toggle-filters="viz">Hide filters</button>
             <button type="button" class="view-toggle-btn" data-fullscreen-target="visualizations">Fullscreen</button>
@@ -39,6 +42,13 @@
         </div>
         <p class="small-note view-description">X axis = publication year. Y axis grouping is selectable.</p>
         <div id="vizControlsWrap" class="view-controls-wrap">
+        <div class="filter-sections-bar">
+          <button type="button" class="view-toggle-btn" data-collapse-all="viz">Collapse all</button>
+          <button type="button" class="view-toggle-btn" data-expand-all="viz">Expand all</button>
+        </div>
+        <details class="collapsible filter-section" open>
+          <summary>Plot controls</summary>
+          <div class="collapsible-body">
         <div class="toolbar viz-toolbar">
           <label class="toolbar-field">Group families by
             <select id="vizGroupBy">
@@ -87,7 +97,14 @@
             <span id="vizYearRangeValue" class="small-note">All years</span>
           </div>
         </div>
+          </div>
+        </details>
+        <details class="collapsible filter-section" open>
+          <summary>Family filters</summary>
+          <div class="collapsible-body">
         <div id="vizTierFilterPanel"></div>
+          </div>
+        </details>
         </div>
         <div class="viz-frame" id="vizFrame">
           <div id="vizYAxisPane" class="viz-yaxis-pane">
@@ -118,7 +135,10 @@
 
       <section class="panel view-panel" data-view="genealogy">
         <div class="view-header-row">
-          <h2>Genealogy</h2>
+          <div class="view-header-title">
+            <h2>Genealogy</h2>
+            <span id="genFamilyCount" class="viz-count-badge"></span>
+          </div>
           <div class="view-header-actions">
             <button type="button" class="view-toggle-btn" data-toggle-filters="gen">Hide filters</button>
             <button type="button" class="view-toggle-btn" data-fullscreen-target="genealogy">Fullscreen</button>
@@ -126,6 +146,13 @@
         </div>
         <p class="small-note view-description">Design lineage and influence graph. Arrows flow from ancestor (top) to descendant (bottom); generation depth determined by the longest influence path.</p>
         <div id="genControlsWrap" class="view-controls-wrap">
+        <div class="filter-sections-bar">
+          <button type="button" class="view-toggle-btn" data-collapse-all="gen">Collapse all</button>
+          <button type="button" class="view-toggle-btn" data-expand-all="gen">Expand all</button>
+        </div>
+        <details class="collapsible filter-section" open>
+          <summary>Plot controls</summary>
+          <div class="collapsible-body">
         <div class="toolbar viz-toolbar">
           <label class="toolbar-field">Color nodes by
             <select id="genColorBy">
@@ -186,8 +213,20 @@
             <span id="genYearRangeValue" class="small-note">All years</span>
           </div>
         </div>
+          </div>
+        </details>
+        <details class="collapsible filter-section" open>
+          <summary>Family filters</summary>
+          <div class="collapsible-body">
         <div id="genTierFilterPanel"></div>
+          </div>
+        </details>
+        <details class="collapsible filter-section" open>
+          <summary>Relation filters</summary>
+          <div class="collapsible-body">
         <div id="genRelationFilterPanel"></div>
+          </div>
+        </details>
         </div>
         <div class="gen-frame" id="genFrame">
           <div id="genPlotScroll" class="gen-plot-scroll">
