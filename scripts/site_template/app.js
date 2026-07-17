@@ -892,12 +892,6 @@
     const processSel = new Map();
     const tierValue = tierKey === "Primitive" ? "primitive" : "mode";
 
-    // Construction-specific group bookkeeping: which level-1 root a given
-    // construction id (root or leaf) belongs to for visibility purposes, and
-    // that root's own include/exclude toggle checkbox.
-    const constructionGroupToggles = new Map();
-    const constructionMemberToGroup = new Map();
-
     function familyIdsOfTier() {
       const out = [];
       dims.familyTierById.forEach((tier, fid) => { if (tier === tierValue) out.push(fid); });
@@ -941,30 +935,31 @@
         .filter((g) => g.members.length);
     }
 
+    // Each level-1 root gets its own nested collapsible (matching the outer
+    // "Types"/"Constructions"/... panels' own collapse-triangle style)
+    // instead of a checkbox: an include/exclude master toggle would just
+    // duplicate what "None" (clear every member below) and "All" (check
+    // every member) already do to the same per-member constructionSel map,
+    // so there's no separate on/off state to track here.
     function refreshConstructionGroups() {
       const groups = buildConstructionGroups();
       const container = el("ConstructionGroups");
       if (container) {
         container.innerHTML = groups.map((g, i) => `
-          <div class="tier-section">
-            <label class="inline-check tier-section-toggle"><input id="${prefix}${tierKey}ConstrGroup${i}Toggle" type="checkbox" checked /> <strong>${escapeHtml(g.label)}</strong></label>
-            <div class="viz-filter-actions">
-              <button id="${prefix}${tierKey}ConstrGroup${i}All" type="button">All</button>
-              <button id="${prefix}${tierKey}ConstrGroup${i}None" type="button">None</button>
+          <details class="collapsible construction-group" open>
+            <summary>${escapeHtml(g.label)}</summary>
+            <div class="collapsible-body">
+              <div class="viz-filter-actions">
+                <button id="${prefix}${tierKey}ConstrGroup${i}All" type="button">All</button>
+                <button id="${prefix}${tierKey}ConstrGroup${i}None" type="button">None</button>
+                <button id="${prefix}${tierKey}ConstrGroup${i}Only" type="button">Only</button>
+              </div>
+              <div id="${prefix}${tierKey}ConstrGroup${i}Filters" class="filter-checklist viz-filter-checklist"></div>
             </div>
-            <div id="${prefix}${tierKey}ConstrGroup${i}Filters" class="filter-checklist viz-filter-checklist"></div>
-          </div>`).join("");
+          </details>`).join("");
       }
-      constructionGroupToggles.clear();
-      constructionMemberToGroup.clear();
       groups.forEach((g, i) => {
-        g.members.forEach((m) => {
-          if (!constructionSel.has(m.key)) constructionSel.set(m.key, true);
-          constructionMemberToGroup.set(m.key, g.id);
-        });
-        const toggle = document.getElementById(`${prefix}${tierKey}ConstrGroup${i}Toggle`);
-        constructionGroupToggles.set(g.id, toggle);
-        if (toggle) toggle.addEventListener("change", onChange);
+        g.members.forEach((m) => { if (!constructionSel.has(m.key)) constructionSel.set(m.key, true); });
         buildChecklistFilter(
           document.getElementById(`${prefix}${tierKey}ConstrGroup${i}Filters`), constructionSel,
           g.members,
@@ -972,6 +967,20 @@
           document.getElementById(`${prefix}${tierKey}ConstrGroup${i}None`),
           onChange,
         );
+        // "Only": select every member of this group and clear every member
+        // of every other group in one click, e.g. isolate ARX-PN alone.
+        const onlyBtn = document.getElementById(`${prefix}${tierKey}ConstrGroup${i}Only`);
+        if (onlyBtn) onlyBtn.addEventListener("click", () => {
+          groups.forEach((g2) => {
+            g2.members.forEach((m2) => constructionSel.set(m2.key, g2.id === g.id));
+          });
+          if (container) {
+            container.querySelectorAll("input[type=checkbox]").forEach((c) => {
+              c.checked = constructionSel.get(c.dataset.value) !== false;
+            });
+          }
+          onChange();
+        });
       });
     }
 
@@ -980,12 +989,7 @@
       if (!idSet || !idSet.size) return true;
       const anyChecked = Array.from(constructionSel.values()).some((v) => v);
       if (!anyChecked) return true;
-      return Array.from(idSet).some((cid) => {
-        const gid = constructionMemberToGroup.get(cid);
-        const toggle = gid ? constructionGroupToggles.get(gid) : null;
-        if (toggle && !toggle.checked) return false;
-        return constructionSel.get(cid) !== false;
-      });
+      return Array.from(idSet).some((cid) => constructionSel.get(cid) !== false);
     }
 
     function refreshChecklist() {
