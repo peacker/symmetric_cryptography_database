@@ -838,21 +838,21 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
    the "Constructions" panel -- a lighter, smaller .collapsible variant so
    four levels of nesting (tier > Constructions > root > checklist) doesn't
    read as four equally-heavy cards. */
-.construction-group {
+.filter-group {
   margin-top: 0.4rem;
   border-color: var(--line);
   background: #fbfaf5;
 }
 
-.construction-group:first-child { margin-top: 0; }
+.filter-group:first-child { margin-top: 0; }
 
-.construction-group summary {
+.filter-group summary {
   padding: 0.35rem 0.55rem;
   font-size: 0.85rem;
   background: #f2efe6;
 }
 
-.construction-group > .collapsible-body {
+.filter-group > .collapsible-body {
   padding: 0.4rem 0.5rem;
 }
 

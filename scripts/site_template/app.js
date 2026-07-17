@@ -946,7 +946,7 @@
       const container = el("ConstructionGroups");
       if (container) {
         container.innerHTML = groups.map((g, i) => `
-          <details class="collapsible construction-group" open>
+          <details class="collapsible filter-group" open>
             <summary>${escapeHtml(g.label)}</summary>
             <div class="collapsible-body">
               <div class="viz-filter-actions">
@@ -1074,11 +1074,13 @@
     };
   }
 
-  // Builds the "Relations shown in genealogy" filter panel: one collapsible
-  // section per relation group (design/usage/process, see RELATION_GROUPS in
-  // setupGenealogy), each with its own include-this-group toggle and a
-  // checklist of the individual relation tags inside it, mirroring the
-  // tier-section pattern used for Types/Constructions/Targets/Processes.
+  // Builds the "Relations shown in genealogy" filter panel: one nested
+  // collapsible per relation group (design/usage/process, see RELATION_GROUPS
+  // in setupGenealogy) with All/None/Only buttons and a checklist of the
+  // individual relation tags inside it, mirroring the filter-group
+  // pattern used for Types/Constructions/Targets/Processes -- no separate
+  // group-level toggle, since "None" already clears every member the toggle
+  // would have gated.
   // groups: [{ id, label, members: [relationKey, ...], synthetic? }]
   // edgeRelationKeys(edge): Set of relation keys (raw tags plus any synthetic
   // ones such as "__usage_core__") that apply to that influence edge.
@@ -1089,43 +1091,50 @@
 
     if (container) {
       container.innerHTML = groups.map((g, i) => `
-        <div class="tier-section">
-          <label class="inline-check tier-section-toggle"><input id="genRelGroup${i}Toggle" type="checkbox" checked /> <strong>${escapeHtml(g.label)}</strong></label>
-          <div class="viz-filter-actions">
-            <button id="genRelGroup${i}All" type="button">All</button>
-            <button id="genRelGroup${i}None" type="button">None</button>
+        <details class="collapsible filter-group" open>
+          <summary>${escapeHtml(g.label)}</summary>
+          <div class="collapsible-body">
+            <div class="viz-filter-actions">
+              <button id="genRelGroup${i}All" type="button">All</button>
+              <button id="genRelGroup${i}None" type="button">None</button>
+              <button id="genRelGroup${i}Only" type="button">Only</button>
+            </div>
+            <div id="genRelGroup${i}Filters" class="filter-checklist viz-filter-checklist"></div>
           </div>
-          <div id="genRelGroup${i}Filters" class="filter-checklist viz-filter-checklist"></div>
-        </div>`).join("");
+        </details>`).join("");
     }
 
     const relSel = new Map();
-    const groupToggles = new Map();
     groups.forEach((g, i) => {
       g.members.forEach((m) => { if (!relSel.has(m)) relSel.set(m, true); });
-      const toggle = document.getElementById(`genRelGroup${i}Toggle`);
-      groupToggles.set(g.id, toggle);
-      if (toggle) toggle.addEventListener("change", onChange);
       buildChecklistFilter(
         document.getElementById(`genRelGroup${i}Filters`), relSel,
         g.members.map((m) => ({ key: m, label: relLabel(m) })),
         document.getElementById(`genRelGroup${i}All`), document.getElementById(`genRelGroup${i}None`),
         onChange,
       );
+      // "Only": select every member of this group and clear every member of
+      // every other group in one click.
+      const onlyBtn = document.getElementById(`genRelGroup${i}Only`);
+      if (onlyBtn) onlyBtn.addEventListener("click", () => {
+        groups.forEach((g2) => {
+          g2.members.forEach((m2) => relSel.set(m2, g2.id === g.id));
+        });
+        if (container) {
+          container.querySelectorAll("input[type=checkbox]").forEach((c) => {
+            c.checked = relSel.get(c.dataset.value) !== false;
+          });
+        }
+        onChange();
+      });
     });
-    const memberToGroup = new Map(groups.flatMap((g) => g.members.map((m) => [m, g.id])));
 
     function isEdgeVisible(edge) {
       const keys = Array.from(edgeRelationKeys(edge));
       if (!keys.length) return true;
       const anyChecked = Array.from(relSel.values()).some((v) => v);
       if (!anyChecked) return true;
-      return keys.some((k) => {
-        const gid = memberToGroup.get(k);
-        const toggle = gid ? groupToggles.get(gid) : null;
-        if (toggle && !toggle.checked) return false;
-        return relSel.get(k) !== false;
-      });
+      return keys.some((k) => relSel.get(k) !== false);
     }
 
     return { isEdgeVisible };
