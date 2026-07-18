@@ -1430,6 +1430,21 @@ references:
   publisher: Springer
   url: https://eprint.iacr.org/2016/984
   notes: 'Local copy: references/2016-sparx.pdf.'
+- id: biryukov_velichkov_lecorre_2016_arx_trails_speck
+  kind: paper
+  title: 'Automatic Search for the Best Trails in ARX: Application to Block Cipher Speck'
+  authors:
+  - Alex Biryukov
+  - Vesselin Velichkov
+  - Yann Le Corre
+  year: 2016
+  venue: FSE 2016, LNCS 9783, pp. 289-310
+  publisher: Springer
+  url: https://eprint.iacr.org/2016/409
+  notes: 'Origin of the MARX-2 and Speckey arx-boxes, per the SPARX/LAX paper''s own Sect. 3.1 citation. No local copy;
+    MARX-2''s specification (rotation amounts {1,2,7,3}, based on Skein''s MIX function) as tracked in this database
+    is sourced from the SPARX/LAX paper''s own description (dinu_et_al_2016_sparx, local copy verified), which cites
+    this paper as the origin.'
 - id: nawaz_gong_2005_wg
   kind: report
   title: The WG Stream Cipher

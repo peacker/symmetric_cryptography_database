@@ -1650,6 +1650,18 @@ rounds:
     - component_id: binary_matrix_mul
   notes: Same ARX-box/Long Trail Strategy layout as sparx_round, but the branch-mixing linear
     layer is generalized from bit rotation to an arbitrary linear permutation.
+- id: marx2_round
+  name: MARX-2 arx-box
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: rotation_fixed
+    - component_id: add_mod
+    - component_id: rotation_fixed
+    - component_id: xor
+  notes: Key XORed over the full 32-bit state, then a Threefish-MIX-style add-rotate-xor
+    step over four 8-bit words with rotation amounts {1, 2, 7, 3}.
 - id: wg_round
   name: WG keystream generation step
   kind: step

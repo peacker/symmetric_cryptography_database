@@ -115,10 +115,10 @@ primitive_constructions:
   - Gimli
   notes: 'A third facet, orthogonal to S-box coverage and linear-layer type: an SPN whose small nonlinear layer (Keccak''s
     5-bit chi step, Ascon''s 5-bit S-box, Xoodoo''s 3-bit S-box, Gimli''s 3-input T-function) is defined directly as a
-    Boolean AND/OR/XOR/NOT circuit rather than a table lookup, so the same round can equivalently be described either
-    as an AND-RX permutation (this database''s and_rx tag, at the operation level) or as an SPN with a bitslice-friendly
-    S-box (this tag, at the structural level) -- both descriptions are the same mechanism, tagged together rather than
-    treated as competing classifications.
+    small Boolean circuit rather than a table lookup. For Keccak/Ascon/Xoodoo (AND/NOT only) this coincides with the
+    and_rx tag at the operation level; Gimli additionally uses OR, so it carries only this facet, not and_rx. Not
+    intended for designs whose S-box merely admits a bitslice *implementation* via a complex derived circuit (e.g.
+    AES''s tower-field S-box, ~100+ gates) -- this facet is for S-boxes natively defined as a handful of gates.
 
     '
 - id: feistel

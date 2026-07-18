@@ -738,7 +738,6 @@ primitive_families:
   - spn
   - full_sbox_layer
   - mds_linear_layer
-  - bitslice_friendly_spn
   round_ids:
   - rijndael_aes_round
   target_applications:
@@ -4263,11 +4262,11 @@ primitive_families:
       output_size_bits: 128
 - id: gimli
   name: Gimli
-  notes: Gimli is a 384-bit permutation operating on a 3x4x32 array of 32-bit words (AND-RX, not ARX -- no modular addition
-    anywhere in its design), designed as a compact cross-platform foundation for hashing, authenticated encryption, and
-    other modes.
+  notes: Gimli is a 384-bit permutation operating on a 3x4x32 array of 32-bit words -- not ARX (no modular addition
+    anywhere), and not and_rx either, since its T-function uses OR alongside AND (unlike Keccak/Ascon/Xoodoo's AND/NOT-only
+    nonlinearity) -- so it is tagged only via the bitslice_friendly_spn facet rather than either operation-set root.
+    Designed as a compact cross-platform foundation for hashing, authenticated encryption, and other modes.
   construction_ids:
-  - and_rx
   - bitslice_friendly_spn
   round_ids:
   - gimli_permutation_round
@@ -6010,6 +6009,14 @@ primitive_families:
     relations:
     - inspired_by
     note: Ballet adopts the Lai-Massey scheme structure introduced by IDEA, combining it with a different round function.
+  - source_family_id: tea
+    relations:
+    - related_to
+    note: 'Not a citation from Ballet''s own paper: its introduction names SPECK/SIMECK/SPARX only as contextual examples
+      of the broader ARX trend it follows, not as a cited ancestor of its own round function. Recorded per this
+      database''s fallback convention for otherwise-uncited ARX block ciphers -- crediting the earliest design in the
+      ARX lineage (TEA, 1994) for the round function''s add/rotate/xor operations, separately from the Lai-Massey
+      topology credited to IDEA above.'
   notes: 'Ballet is a simplified four-branch, almost-symmetric Lay–Massey ARX block-cipher construction. Its three variants
     are Ballet-128/128, Ballet-128/256, and Ballet-256/256.
 
@@ -9372,6 +9379,52 @@ primitive_families:
       output_size_bits: 64
       rounds: 48
     notes: 192-bit keying material (168-bit effective key). Deprecated by NIST after 2023.
+- id: marx2
+  name: MARX-2
+  construction_ids:
+  - arx_permutation_network
+  - fixed_rotation_arx
+  - xor_key_injection_arx
+  - pure_arx_no_constants
+  round_ids:
+  - marx2_round
+  target_applications:
+  - generic
+  characteristics:
+    block_size_bits: 32
+    components:
+    - id: add_mod
+      params:
+        modulus: 256
+    - id: rotation_fixed
+    - id: xor
+  reference_ids:
+  - biryukov_velichkov_lecorre_2016_arx_trails_speck
+  - dinu_et_al_2016_sparx
+  process_participations: []
+  influences:
+  - source_family_id: threefish
+    relations:
+    - inspired_by
+    note: 'The SPARX/LAX paper (Sect. 3.1, citing Biryukov, Velichkov, Le Corre, "Automatic Search for the Best Trails
+      in ARX: Application to Block Cipher Speck", FSE 2016): "A first one is based on the MIX function of Skein and
+      is called Marx-2. The rotation amounts, namely {1, 2, 7, 3}, were chosen so as to minimize the differential and
+      linear probabilities." A 32-bit (four 8-bit-word) reinstantiation of Threefish''s add-rotate-xor MIX building
+      block as a standalone ARX-box, with new rotation constants fixed for this smaller scale.'
+  notes: 'MARX-2 is a 32-bit arx-box (a small, particular type of S-box, not a full block cipher with its own key
+    schedule/modes) built from Threefish''s MIX function, proposed as a candidate nonlinear layer for provable-bound
+    ARX-based SPN designs. SPARX''s own designers considered it and rejected it: "We chose the round function of
+    Speckey/Speck-32 over Marx-2 because of its superior implementation properties" (SPARX/LAX paper, Sect. 4.3) --
+    Speckey needs fewer operations per round.'
+  instances:
+  - id: marx2_v1
+    name: MARX-2
+    type: permutation
+    reference_ids:
+    - dinu_et_al_2016_sparx
+    characteristics:
+      block_size_bits: 32
+    notes: The 32-bit arx-box construction as specified in the SPARX/LAX paper, Fig. 1a.
 - id: threefish
   name: Threefish
   construction_ids:
@@ -10313,8 +10366,7 @@ primitive_families:
     - related_to
     note: Same-team continuation, not a structural derivation -- Joan Daemen co-designed Rijndael/AES (with Vincent Rijmen)
       a decade before co-designing Keccak (with Bertoni, Peeters, Van Assche). Keccak departs from AES's byte-oriented SPN
-      entirely at the structural level (the shared bitslice-friendly-SPN classification is tracked as a derived construction
-      relation, not repeated here).
+      entirely at the structural level (different S-box width, different linear layer, no shared construction facet).
   - source_family_id: subterranean
     relations:
     - inspired_by
