@@ -1492,21 +1492,22 @@ rounds:
 
     '
 - id: gimli_permutation_round
-  name: Gimli Permutation Round
+  name: Gimli Permutation Round (SP-box)
   kind: full_round
   spec:
     state_model:
       state_bits: 384
     component_flow:
-    - component_id: add_mod
-      params:
-        modulus: 4294967296
     - component_id: xor
+    - component_id: and
+    - component_id: or
+    - component_id: shift_fixed
     - component_id: rotation_fixed
     - component_id: constant
     constant_injection: round_constant
-  notes: 'Gimli round abstraction with ARX quarter-round style lane updates, small
-    swaps, and periodic constants.
+  notes: 'Gimli''s SP-box: two rotations, a 3-input AND/OR/XOR/shift T-function (no modular addition anywhere), and a
+    swap, applied per column; every second round adds a Small-Swap/Big-Swap linear layer, every fourth round XORs a
+    round constant.
 
     '
 - id: subterranean_duplex_round
@@ -1618,15 +1619,17 @@ rounds:
   notes: Partial Substitution-Permutation Network step reusing sLiSCP's Simeck-based round
     function with a lighter-hardware linear/diffusion layer.
 - id: norx_round
-  name: NORX G function
+  name: NORX Permutation (G function)
   kind: quarterround
   spec:
     component_flow:
-    - component_id: add_mod
-    - component_id: rotation_fixed
     - component_id: xor
-  notes: ARX G function applied in column and diagonal steps over the 4x4 word state, in the
-    style of ChaCha/BLAKE2, iterated l times per permutation call.
+    - component_id: and
+    - component_id: shift_fixed
+    - component_id: rotation_fixed
+  notes: AND-RX G function (ChaCha's quarterround with integer addition replaced by an AND/XOR/shift
+    approximation) applied in column and diagonal steps -- named "col" and "diag" as in BLAKE2 -- over
+    the 4x4 word state, iterated R times per permutation call F.
 - id: sparx_round
   name: SPARX ARX-box step
   kind: full_round
@@ -1637,6 +1640,16 @@ rounds:
     - component_id: xor
   notes: Speck-like ARX-box applied to each branch, followed by a linear layer (Feistel-style
     mixing of branches) chosen to satisfy the Long Trail Strategy's diffusion requirements.
+- id: lax_round
+  name: LAX ARX-box step
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+    - component_id: xor
+    - component_id: binary_matrix_mul
+  notes: Same ARX-box/Long Trail Strategy layout as sparx_round, but the branch-mixing linear
+    layer is generalized from bit rotation to an arbitrary linear permutation.
 - id: wg_round
   name: WG keystream generation step
   kind: step

@@ -107,6 +107,20 @@ mode_constructions:
     a smaller effective rate exposure than a standard duplex at the same state size.
 
     '
+- id: parallel_duplex_construction
+  name: Parallel Duplex Construction
+  special_case_of: duplex_mode
+  typical_primitive_types:
+  - aead
+  placeholder_family_names:
+  - NORX
+  notes: 'NORX''s own term (Aumasson, Jovanovic, Neves, "NORX: Parallel and Scalable AEAD"): "NORX relies on the monkeyDuplex
+    construction..., enhanced by the capability of parallel payload processing"; Section 4 headers this "The Parallel
+    Duplex Construction" and compares it to sponge tree-hashing. Splits payload processing across D parallel lanes
+    (branching/merging phases around monkeyDuplex-style reduced-round data processing) while header/trailer data stay
+    single-lane -- a specific named enhancement of monkeyDuplex, not an unrelated alternative to it.
+
+    '
 - id: binary_tree_hash
   name: Binary Tree Hash
   placeholder_family_names:

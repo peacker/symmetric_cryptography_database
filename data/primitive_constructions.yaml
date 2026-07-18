@@ -101,6 +101,26 @@ primitive_constructions:
     facet (see mds_linear_layer).
 
     '
+- id: bitslice_friendly_spn
+  name: Bitslice-Friendly SPN
+  abbreviation: Bitslice SPN
+  special_case_of: spn
+  typical_primitive_types:
+  - permutation
+  - block_cipher
+  placeholder_family_names:
+  - Keccak
+  - Ascon
+  - Xoodoo
+  - Gimli
+  notes: 'A third facet, orthogonal to S-box coverage and linear-layer type: an SPN whose small nonlinear layer (Keccak''s
+    5-bit chi step, Ascon''s 5-bit S-box, Xoodoo''s 3-bit S-box, Gimli''s 3-input T-function) is defined directly as a
+    Boolean AND/OR/XOR/NOT circuit rather than a table lookup, so the same round can equivalently be described either
+    as an AND-RX permutation (this database''s and_rx tag, at the operation level) or as an SPN with a bitslice-friendly
+    S-box (this tag, at the structural level) -- both descriptions are the same mechanism, tagged together rather than
+    treated as competing classifications.
+
+    '
 - id: feistel
   name: Feistel Network
   abbreviation: FN
@@ -377,7 +397,7 @@ primitive_constructions:
 
     '
 - id: arx_permutation_network
-  name: ARX Permutation Network
+  name: ARX Network
   abbreviation: ARX-PN
   typical_primitive_types:
   - permutation
@@ -439,8 +459,8 @@ primitive_constructions:
     own -- treat derived edges on this leaf as lower-confidence than the other ARX facets.
 
     '
-- id: long_trail_strategy_arx
-  name: Long Trail Strategy
+- id: arx_based_spn
+  name: ARX-based SPN
   special_case_of: arx_permutation_network
   notes: 'The ARX analogue of the wide-trail strategy: a keyless, cryptographically strong ARX-box alternated with a
     linear diffusion layer, with provable bounds on differential/linear trails. Explicitly named and defined in the
@@ -448,7 +468,7 @@ primitive_constructions:
 
     '
 - id: and_rx
-  name: AND-RX Permutation Network
+  name: AND-RX Network
   abbreviation: AND-RX
   typical_primitive_types:
   - permutation

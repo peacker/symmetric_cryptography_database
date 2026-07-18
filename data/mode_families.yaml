@@ -814,7 +814,7 @@ mode_families:
   name: NORX
   construction_ids:
   - duplex_mode
-  - monkey_duplex
+  - parallel_duplex_construction
   round_ids:
   - norx_round
   target_applications:
@@ -823,9 +823,11 @@ mode_families:
   - hardware
   characteristics:
     components:
-    - id: add_mod
-    - id: rotation_fixed
     - id: xor
+    - id: and
+    - id: rotation_fixed
+    - id: shift_fixed
+    - id: constant
   reference_ids:
   - aumasson_et_al_2016_norx
   process_participations: []
@@ -833,10 +835,17 @@ mode_families:
   - source_family_id: chacha
     relations:
     - inspired_by
-    note: NORX's G function is explicitly inspired by ChaCha's quarter-round function, adapted to a parallel monkeyDuplex-based
-      AEAD construction rather than a stream-cipher core.
-  notes: NORX is a parallel, sponge/monkeyDuplex-based authenticated encryption family submitted to the CAESAR competition,
-    built around an ARX permutation with a tunable parallelism degree and tag size.
+    note: 'NORX''s own paper (Aumasson, Jovanovic, Neves, "NORX: Parallel and Scalable AEAD"): "The function G of NORX
+      is inspired by the quarterround function of the stream cipher ChaCha... NORX adopts this core function almost
+      one-to-one, with the only difference being the replacement of the integer addition by z=(x⊕y)⊕((x∧y)≪1)" -- so
+      NORX is explicitly NOT ARX despite the family resemblance: it replaces ChaCha''s modular addition with an
+      AND/XOR/shift approximation "with the aim to simplify differential cryptanalysis and improve hardware efficiency,"
+      making it AND-RX rather than ARX (the paper''s own abstract: "based on ARX primitives, yet not using modular
+      additions"). The paper also names its column-step/diagonal-step round arrangement "as in BLAKE2" -- a naming-convention
+      borrowing, distinct from the ChaCha-derived arithmetic itself.'
+  notes: 'NORX is a parallel and scalable AEAD family submitted to the CAESAR competition. Its round constants are derived
+    from the digits of pi. Its layout is based on the monkeyDuplex construction enhanced with parallel payload processing,
+    which its own paper (Sect. 4) names "the Parallel Duplex Construction".'
   instances:
   - id: norx32_4_1
     name: NORX32-4-1
