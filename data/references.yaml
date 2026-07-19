@@ -595,6 +595,22 @@ references:
   year: 2013
   venue: ePrint
   url: https://eprint.iacr.org/2013/404
+- id: yang_zhu_suder_aagaard_gong_2015_simeck
+  kind: paper
+  title: The Simeck Family of Lightweight Block Ciphers
+  authors:
+  - Gangqiang Yang
+  - Bo Zhu
+  - Valentin Suder
+  - Mark D. Aagaard
+  - Guang Gong
+  year: 2015
+  venue: CHES 2015, LNCS 9293, pp. 307-329
+  publisher: Springer
+  url: https://eprint.iacr.org/2015/612
+  notes: No local copy; details tracked in this database (round function derived from SIMON's with different rotation
+    amounts 0/5/1 vs SIMON's 1/8/2, key schedule borrowed from SPECK's simpler round-function-based approach) verified
+    via the paper's own CHES 2015 presentation slides (cryptoexperts.com/ches2015/slides/day2/session2/talk3.pdf).
 - id: borghoff_et_al_2012_prince
   kind: article
   title: PRINCE - A Low-Latency Block Cipher for Pervasive Computing Applications
@@ -3948,6 +3964,35 @@ references:
   venue: SHA-3 Competition Round 3 Submission
   url: https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf
   notes: 'Skein/Threefish Round 3 specification. Local copy: references/2010-skein_threefish.pdf.'
+- id: ferguson_et_al_2003_helix
+  kind: paper
+  title: 'Helix: Fast Encryption and Authentication in a Single Cryptographic Primitive'
+  authors:
+  - Niels Ferguson
+  - Doug Whiting
+  - Bruce Schneier
+  - John Kelsey
+  - Stefan Lucks
+  - Tadayoshi Kohno
+  year: 2003
+  venue: FSE 2003, LNCS 2887
+  publisher: Springer
+  notes: 'No local copy. Cited as reference [37] in the Skein/Threefish spec (references/2010-skein_threefish.pdf, Sect.
+    8.3, "MIX function"): "Threefish''s MIX function is derived from Helix and Phelix."'
+- id: whiting_et_al_2005_phelix
+  kind: paper
+  title: 'Phelix: Fast Encryption and Authentication in a Single Cryptographic Primitive'
+  authors:
+  - Doug Whiting
+  - Bruce Schneier
+  - Stefan Lucks
+  - Frederic Muller
+  year: 2005
+  venue: ECRYPT Stream Cipher Project Report 2005/027
+  notes: 'No local copy. Cited as reference [108] in the Skein/Threefish spec (references/2010-skein_threefish.pdf, Sect.
+    8.3, "MIX function"): "Threefish''s MIX function is derived from Helix and Phelix." An improved/faster successor
+    to Helix by an overlapping author team; later shown vulnerable to differential attacks (Wu and Preneel, 2007),
+    which is why it was not selected as an eSTREAM finalist.'
 - id: rc4drop_ref
   kind: paper
   title: 'RC4-drop: Discarding Initial Keystream Bytes to Mitigate Bias'

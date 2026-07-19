@@ -556,6 +556,26 @@ rounds:
   notes: 'SIMON Feistel round using AND/XOR and rotations with round constants.
 
     '
+- id: simeck_round
+  name: Simeck Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits_options:
+      - 32
+      - 48
+      - 64
+    component_flow:
+    - component_id: rotation_fixed
+    - component_id: and
+    - component_id: xor
+    - component_id: constant
+    constant_injection: lfsr_sequence
+  notes: 'Simeck Feistel round, a modified SIMON round with different rotation amounts (0, 5, 1 vs SIMON''s 1, 8, 2)
+    per the Simeck paper (Yang, Zhu, Suder, Aagaard, Gong, CHES 2015); round constants are also LFSR-generated but
+    from a simpler sequence than SIMON''s.
+
+    '
 - id: speck_round
   name: SPECK Round
   kind: full_round

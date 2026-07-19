@@ -3402,6 +3402,73 @@ mode_families:
       block_size_bits: 1
       output_size_bits: 1
     notes: Baseline Trivium stream-cipher instance after standard warm-up phase.
+- id: helix
+  name: Helix
+  construction_ids:
+  - native_keystream_generator
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - ferguson_et_al_2003_helix
+  process_participations: []
+  influences: []
+  notes: Helix (Ferguson, Whiting, Schneier, Kelsey, Lucks, Kohno, FSE 2003) is a 32-bit-word ARX stream cipher that
+    combines encryption and authentication in a single primitive, feeding ciphertext words back into its own internal
+    state alongside a nonce and key. Directly cited by its own overlapping-author successor Threefish/Skein as the
+    origin of Threefish's MIX function.
+  instances:
+  - id: helix_v1
+    name: Helix
+    type: stream_cipher
+    reference_ids:
+    - ferguson_et_al_2003_helix
+    characteristics:
+      key_size_bits: 256
+      output_size_bits: 32
+    notes: Baseline Helix instance (256-bit key, 32-bit nonce, 32-bit words).
+- id: phelix
+  name: Phelix
+  construction_ids:
+  - native_keystream_generator
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - whiting_et_al_2005_phelix
+  process_participations:
+  - process_id: estream_competition_nist_2004_2008
+    stage_ids:
+    - phase_1
+    - phase_2
+    status: candidate
+  influences:
+  - source_family_id: helix
+    relations:
+    - improvement_of
+    note: Phelix is Helix's improved, faster successor by an overlapping author team, submitted to eSTREAM; it was not
+      advanced past Phase 1 after Wu and Preneel (2007) demonstrated differential attacks against it under nonce reuse.
+  notes: Phelix (Whiting, Schneier, Lucks, Muller, eSTREAM submission 2004/2005) is Helix's faster successor, also
+    combining ARX-based encryption and authentication in a single primitive. Directly cited (alongside Helix) by its
+    own overlapping-author successor Threefish/Skein as the origin of Threefish's MIX function.
+  instances:
+  - id: phelix_v1
+    name: Phelix
+    type: stream_cipher
+    reference_ids:
+    - whiting_et_al_2005_phelix
+    characteristics:
+      key_size_bits: 256
+      output_size_bits: 32
+    notes: Baseline Phelix instance (256-bit key, 128-bit nonce, 32-bit words).
 - id: vmpc
   name: VMPC
   construction_ids:

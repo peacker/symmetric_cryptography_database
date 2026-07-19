@@ -1772,6 +1772,72 @@ primitive_families:
       key_size_bits: 128
       rounds: 68
       output_size_bits: 128
+- id: simeck
+  name: Simeck
+  notes: Simeck (Yang, Zhu, Suder, Aagaard, Gong, CHES 2015) is a lightweight AND-RX Feistel family explicitly designed
+    to combine SIMON and SPECK's good design components into an even smaller hardware footprint. Its round function is
+    a modified SIMON round with different rotation amounts (0, 5, 1 vs SIMON's 1, 8, 2); its key schedule reuses the
+    round function itself to generate subkeys, the same simplicity principle SPECK uses instead of SIMON's separate
+    LFSR-based constant sequence.
+  construction_ids:
+  - feistel
+  - balanced_feistel
+  - and_rx
+  round_ids:
+  - simeck_round
+  target_applications:
+  - constrained_hardware
+  - iot
+  characteristics:
+    components:
+    - id: and
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - yang_zhu_suder_aagaard_gong_2015_simeck
+  process_participations: []
+  influences:
+  - source_family_id: simon
+    relations:
+    - improvement_of
+    note: Simeck's round function is a direct modification of SIMON's own AND-RX round function, changing the rotation
+      amounts (0, 5, 1 vs SIMON's 1, 8, 2) for a smaller hardware footprint while keeping the same AND/rotate/XOR
+      operation set and Feistel topology.
+  - source_family_id: speck
+    relations:
+    - inspired_by
+    note: Simeck's key schedule adopts SPECK's simplicity principle of generating subkeys with the cipher's own round
+      function, replacing SIMON's separate LFSR-based round-constant generator -- a design borrowing rather than a
+      modification of SPECK's own round function.
+  instances:
+  - id: simeck_32_64
+    name: Simeck32/64
+    type: block_cipher
+    reference_ids:
+    - yang_zhu_suder_aagaard_gong_2015_simeck
+    characteristics:
+      block_size_bits: 32
+      key_size_bits: 64
+      output_size_bits: 32
+  - id: simeck_48_96
+    name: Simeck48/96
+    type: block_cipher
+    reference_ids:
+    - yang_zhu_suder_aagaard_gong_2015_simeck
+    characteristics:
+      block_size_bits: 48
+      key_size_bits: 96
+      output_size_bits: 48
+  - id: simeck_64_128
+    name: Simeck64/128
+    type: block_cipher
+    reference_ids:
+    - yang_zhu_suder_aagaard_gong_2015_simeck
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      output_size_bits: 64
 - id: speck
   name: SPECK
   notes: SPECK is a software-oriented family of lightweight ARX Feistel ciphers, parameterized for multiple word, block, and
@@ -1799,10 +1865,12 @@ primitive_families:
   - beaulieu_et_al_2013_simon_speck
   process_participations: []
   influences:
-  - source_family_id: tea
+  - source_family_id: feal
     relations:
     - related_to
-    note: SPECK is an ARX-oriented lightweight design in the same broad family as TEA-like software ciphers.
+    note: 'Not a citation from SPECK''s own paper (the NSA''s SIMON/SPECK paper does not discuss ARX design lineage).
+      Recorded per this database''s fallback convention for otherwise-uncited ARX block ciphers -- crediting the
+      earliest design in the ARX lineage (FEAL, 1987) absent a more specific citable predecessor.'
   instances:
   - id: speck_64_128
     name: SPECK-64/128
@@ -6009,14 +6077,30 @@ primitive_families:
     relations:
     - inspired_by
     note: Ballet adopts the Lai-Massey scheme structure introduced by IDEA, combining it with a different round function.
-  - source_family_id: tea
+  - source_family_id: feal
     relations:
     - related_to
-    note: 'Not a citation from Ballet''s own paper: its introduction names SPECK/SIMECK/SPARX only as contextual examples
-      of the broader ARX trend it follows, not as a cited ancestor of its own round function. Recorded per this
-      database''s fallback convention for otherwise-uncited ARX block ciphers -- crediting the earliest design in the
-      ARX lineage (TEA, 1994) for the round function''s add/rotate/xor operations, separately from the Lai-Massey
-      topology credited to IDEA above.'
+    note: 'Not a citation from Ballet''s own paper. Recorded per this database''s fallback convention for otherwise-
+      uncited ARX block ciphers -- crediting the earliest design in the ARX lineage (FEAL, 1987) for the round
+      function''s add/rotate/xor operations, separately from the Lai-Massey topology credited to IDEA above.'
+  - source_family_id: speck
+    relations:
+    - related_to
+    note: 'Ballet''s own paper cites SPECK by reference number in its introduction as an example of the ARX design
+      trend it follows -- a trend-context citation, not "based on" language about a shared mechanism, but an explicit
+      named citation in Ballet''s own reference list.'
+  - source_family_id: sparx
+    relations:
+    - related_to
+    note: 'Ballet''s own paper cites SPARX by reference number in its introduction as an example of the ARX design
+      trend it follows -- a trend-context citation, not "based on" language about a shared mechanism, but an explicit
+      named citation in Ballet''s own reference list.'
+  - source_family_id: simeck
+    relations:
+    - related_to
+    note: 'Ballet''s own paper cites SIMECK by reference number in its introduction as an example of the ARX design
+      trend it follows -- a trend-context citation, not "based on" language about a shared mechanism, but an explicit
+      named citation in Ballet''s own reference list.'
   notes: 'Ballet is a simplified four-branch, almost-symmetric Lay–Massey ARX block-cipher construction. Its three variants
     are Ballet-128/128, Ballet-128/256, and Ballet-256/256.
 
@@ -7555,13 +7639,14 @@ primitive_families:
   - lea_ref
   process_participations: []
   influences:
-  - source_family_id: tea
+  - source_family_id: feal
     relations:
     - related_to
     note: 'Not a citation from LEA''s own paper: LEA''s "Comparison with Other Ciphers" section mentions TEA/XTEA only
       to contrast speed and note attacks against them, never as a design ancestor, and RC5/FEAL are not mentioned at
       all. Recorded per this database''s fallback convention for otherwise-uncited ARX block ciphers -- crediting the
-      earliest design in the ARX lineage (TEA, 1994) absent a more specific citable predecessor.'
+      earliest design in the ARX lineage (FEAL, 1987, the chronologically first published ARX cipher) absent a more
+      specific citable predecessor.'
   notes: LEA (Lightweight Encryption Algorithm; Hong et al., WISA 2013) is a 128-bit ARX block cipher with key sizes of 128,
     192, or 256 bits and 24, 28, or 32 rounds respectively. Its round function applies 32-bit modular additions, XORs, and
     fixed rotations to four 32-bit words — no S-boxes are used. Designed for fast software on general-purpose CPUs.
@@ -9455,6 +9540,17 @@ primitive_families:
   - threefish_ref
   process_participations: []
   influences:
+  - source_family_id: helix
+    relations:
+    - inspired_by
+    note: 'Threefish''s own spec, Sect. 8.3 ("MIX function"): "Threefish''s MIX function is derived from Helix and
+      Phelix." An earlier design by an overlapping author team (Ferguson, Whiting, Schneier, Kelsey, Lucks, Kohno).'
+  - source_family_id: phelix
+    relations:
+    - inspired_by
+    note: 'Threefish''s own spec, Sect. 8.3 ("MIX function"): "Threefish''s MIX function is derived from Helix and
+      Phelix." An earlier design by an overlapping author team (Whiting, Schneier, Lucks, Muller, plus Ferguson/Kelsey/
+      Kohno on Helix).'
   - source_family_id: skipjack
     relations:
     - inspired_by
