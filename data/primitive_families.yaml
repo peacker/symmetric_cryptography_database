@@ -10600,6 +10600,75 @@ primitive_families:
       rounds: 16
     notes: HAIFA-iterated, ChaCha-derived G-function compression step over a 4x4 matrix of 64-bit words (1024-bit state),
       16 rounds. Iterated by BLAKE-512/BLAKE-384 (see blake_hash).
+- id: blake2
+  name: BLAKE2 Compression Functions
+  construction_ids:
+  - davies_meyer
+  - arx_permutation_network
+  - fixed_rotation_arx
+  - pure_arx_no_constants
+  round_ids:
+  - blake2_round
+  target_applications:
+  - digital_signatures
+  - message_authentication
+  - software
+  characteristics:
+    state_size_bits: 512
+    block_size_bits: 1024
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+    - id: word_permutation
+  reference_ids:
+  - aumasson_et_al_2013_blake2
+  - rfc_7693_blake2
+  process_participations: []
+  influences:
+  - source_family_id: blake
+    relations:
+    - improvement_of
+    note: BLAKE2 simplifies and accelerates BLAKE while retaining its ARX G mixing function with revised rotations and
+      round counts; unlike BLAKE, its G function carries no per-round constants at all -- only a per-round SIGMA
+      message-word permutation schedule (modeled as word_permutation), the same simplification BLAKE3 later inherited.
+  - source_family_id: chacha
+    relations:
+    - inspired_by
+    note: The BLAKE2 paper states that BLAKE2 and BLAKE rely on a similar core permutation originally used in ChaCha; BLAKE2
+      inherits that lineage through BLAKE while changing rotations and simplifying the G function.
+  notes: 'BLAKE2b (64-bit words, 128-byte blocks, 12 rounds) and BLAKE2s (32-bit words, 64-byte blocks, 10 rounds)
+    compression functions are the two branches. See blake2_hash for the iterated hash functions (BLAKE2b/BLAKE2s at
+    their variable output lengths, keyed-hashing mode, and parameter-block initialization).
+
+    '
+  instances:
+  - id: blake2b_compression
+    name: BLAKE2b Compression Function
+    type: compression_function
+    reference_ids:
+    - aumasson_et_al_2013_blake2
+    - rfc_7693_blake2
+    characteristics:
+      state_size_bits: 512
+      block_size_bits: 1024
+      output_size_bits: 512
+      rounds: 12
+    notes: ARX G-function compression step over eight 64-bit words (512-bit state), 12 rounds, no per-round constants.
+  - id: blake2s_compression
+    name: BLAKE2s Compression Function
+    type: compression_function
+    reference_ids:
+    - aumasson_et_al_2013_blake2
+    - rfc_7693_blake2
+    characteristics:
+      state_size_bits: 256
+      block_size_bits: 512
+      output_size_bits: 256
+      rounds: 10
+    notes: ARX G-function compression step over eight 32-bit words (256-bit state), 10 rounds, no per-round constants.
 - id: blake3
   name: BLAKE3 Compression Function
   construction_ids:
