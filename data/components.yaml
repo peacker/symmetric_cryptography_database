@@ -22,10 +22,24 @@ components:
   - id: and
     name: Bitwise AND
     category: logical
+    notes: >
+      Two-input Boolean AND: outputs 1 only when both input bits are 1.
+      Algebraic degree 2 as a function of its two inputs, making it the
+      simplest available source of nonlinearity over GF(2) -- the "AND" in
+      AND-RX/Boolean-operator-network designs (e.g. Simon, Keccak's chi
+      step), used the way modular addition supplies nonlinearity in ARX.
 
   - id: or
     name: Bitwise OR
     category: logical
+    notes: >
+      Two-input Boolean OR: outputs 0 only when both input bits are 0.
+      Nonlinear over GF(2) like AND, and related to it by De Morgan's law
+      (a OR b = NOT((NOT a) AND (NOT b))), so a design mixing OR with
+      AND/XOR/NOT (e.g. Gimli's T-function, KNOT's S-box) is still
+      expressible with AND as the only "primitive" nonlinear gate -- OR is
+      a modeling convenience, not a fundamentally different nonlinearity
+      source.
 
   - id: xor
     name: Bitwise XOR
@@ -37,6 +51,12 @@ components:
   - id: not
     name: Bitwise NOT
     category: logical
+    notes: >
+      Logical complement of a bit (flips 0 <-> 1). Affine (degree 1) over
+      GF(2) -- equivalent to XOR with an all-ones constant -- so on its own
+      it contributes no nonlinearity; used alongside AND/OR to build a
+      small nonlinear layer (e.g. Keccak/Ascon/Xoodoo's chi step is
+      XOR + AND + NOT) or to break fixed points/round-slide symmetry.
 
   # ── Feedback Shift Registers ─────────────────────────────────────────────
 
@@ -244,66 +264,192 @@ components:
   - id: absg_decimation
     name: ABSG Decimation
     category: logical
+    notes: >
+      Alternating-step-style irregular decimation: a control register (or a
+      Boolean function of one) decides, cycle by cycle, whether the current
+      output bit of a data register is kept or discarded, so the effective
+      output rate varies with the control sequence rather than being fixed
+      one-bit-per-clock. Used by LILI-128 and DECIM as their irregular
+      decimation rule, distinct from -- but in the same family as -- the
+      two-register Shrinking Generator's decimation (see
+      filtered_lfsr_with_decimation).
 
   - id: boolean_combiner
     name: Boolean Combiner
     category: logical
+    notes: >
+      A single nonlinear Boolean function taking one input bit from each of
+      several independently-clocked LFSRs/NLFSRs and combining them into one
+      output bit per cycle -- the classical "combination generator" model
+      (as opposed to a filter generator, which reads several taps from a
+      single register). Used by Achterbahn, whose output is the XOR of two
+      such nonlinear combiner functions over its constituent NLFSRs.
 
   - id: boolean_filter
     name: Boolean Filter
     category: logical
+    notes: >
+      A single nonlinear Boolean function reading several tap positions of
+      one register (as opposed to a boolean_combiner, which reads one tap
+      from each of several registers) to produce the output bit -- the
+      classical "filter generator" model. Used by Grain (filtering both its
+      LFSR and NLFSR taps) and, alongside absg_decimation, by LILI-128 and
+      DECIM.
 
   - id: counter
     name: Counter
     category: arithmetic
+    notes: >
+      A register that increments (typically modular addition by 1, or a
+      similar deterministic update) once per cycle, used either directly as
+      part of the keystream state (Rabbit's counter system supplies
+      non-clock-driven diffusion between its inner state functions) or as a
+      domain-separation / uniqueness input to a keyed permutation or
+      compression function (Leviathan's whitening counter).
 
   - id: fcsr
     name: Feedback with Carry Shift Register (FCSR)
     category: register
+    parameters:
+      - name: length
+        description: "Register length in bits"
+        type: integer
+    notes: >
+      A shift register whose feedback is computed with carry propagation
+      over the 2-adic numbers (arithmetic mod 2^n with carries), rather than
+      the pure XOR feedback of an LFSR. Produces sequences with large
+      2-adic span/complexity, giving resistance to the algebraic (Berlekamp
+      -Massey-style) attacks that break plain LFSR-based generators. F-FCSR
+      is the canonical example (filtered_fcsr).
 
   - id: inversion_sbox
     name: Inversion S-box
     category: substitution
+    parameters:
+      - name: field_size
+        description: "Size of the finite field GF(2^n) the inversion is computed over"
+        type: integer
+    notes: >
+      The specific S-box x -> x^(-1) (with 0 mapped to 0) over GF(2^n) --
+      the multiplicative-inverse map, chosen for its provably low
+      differential uniformity and linearity (AES's S-box is this map
+      composed with an affine transform; Jarvis, Vision, and SFINKS use the
+      inverse map directly, without AES's extra affine layer, as an
+      arithmetization-oriented or algebraically simple nonlinear layer).
 
   - id: linear_filter
     name: Linear Filter
     category: linear_layer
+    notes: >
+      A linear (XOR-only, no genuine nonlinearity) function reading several
+      state positions to produce a feedback or output value -- e.g. F-FCSR's
+      linear output filter applied on top of its FCSR state, distinct from
+      a boolean_filter (which is explicitly nonlinear).
 
   - id: linear_transform
     name: Linear Transform
     category: linear_layer
+    notes: >
+      A generic linear (GF(2)-affine, XOR-only) diffusion layer that isn't
+      more specifically a byte/word matrix multiplication
+      (field_matrix_mul/binary_matrix_mul) or a pure wiring permutation
+      (bit_permutation/word_permutation) -- e.g. 3-Way's theta function,
+      Kuznyechik's/SC2000's/ZUC's dedicated linear layers, or Subterranean's
+      state-mixing step, each defined by its own family-specific formula
+      rather than a named matrix or fixed rewiring.
 
   - id: lookup_table
     name: Lookup Table
     category: substitution
+    notes: >
+      A precomputed table (larger than a conventional fixed S-box, and
+      sometimes itself key- or state-dependent, as in RC4-family designs)
+      indexed by part of the running state to produce nonlinear output --
+      e.g. WAKE's and SEAL's large keyed/derived lookup tables, HC-128/
+      HC-256's state arrays used as their own nonlinear lookup source, and
+      CMEA's/Oryx's fixed substitution tables.
 
   - id: permutation
     name: Permutation
     category: permutation
+    notes: >
+      A generic bijective rearrangement of the state used as a component
+      reference when no more specific permutation type
+      (bit_permutation/word_permutation/bit_reversal) or size parameter
+      applies -- e.g. a reference to "the permutation step" of a design
+      whose exact wiring is family-specific (Lucifer, MacGuffin, CLX,
+      RC4-family designs).
 
   - id: permutation_vector
     name: Permutation Vector
     category: permutation
+    notes: >
+      A permutation drawn from a keyed or public pseudorandom source and
+      applied to reorder secret bits before a Boolean filter reads them --
+      the defining mechanism of a Filter Permutator construction (FLIP,
+      FiLIP): a fresh permutation vector is generated per output bit
+      (typically from a public IV-seeded PRNG) instead of maintaining an
+      updated register state.
 
   - id: shift_register
     name: Shift Register
     category: register
+    notes: >
+      A generic register that shifts its contents by one position per
+      cycle, used as a component reference when the feedback rule is not
+      specifically linear (lfsr) or nonlinear (nlfsr) -- e.g. YAMB's
+      shift-register-based state alongside its lookup table.
 
   - id: t_function
     name: T-Function
     category: arithmetic
+    notes: >
+      An operation (in the sense of Klimov and Shamir, "A New Class of
+      Invertible Mappings," CHES 2002) in which output bit i depends only
+      on input bits 0..i -- a "triangular" dependency that guarantees the
+      whole map is a bijection on n-bit words by construction, regardless
+      of which arithmetic/logical operations (addition, multiplication,
+      AND, OR, XOR) are combined to build it, without needing a separate
+      S-box or explicit permutation step to prove invertibility. VMPC uses
+      one directly as a component; see the construction-tier `t_function`
+      leaf in primitive_constructions.yaml for designs built entirely
+      around this property.
 
   - id: nonlinear_filter
     name: Nonlinear Filter
     category: substitution
+    notes: >
+      A nonlinear Boolean (or word-oriented) function reading several state
+      positions to produce an output or feedback value, used as a component
+      reference when the underlying register is a general LFSR/state array
+      rather than specifically a boolean_filter over a bit-level LFSR tap
+      set -- e.g. WG's Welch-Gong nonlinear filter over GF(2^29), Dragon's
+      and NLSv2's word-oriented nonlinear feedback functions, and
+      CryptMT3's nonlinear filter over its Mersenne Twister state.
 
   - id: mix_columns
     name: MixColumns
     category: linear_layer
+    notes: >
+      The specific MDS diffusion layer introduced by Rijndael/AES: a
+      binary_matrix_mul / field_matrix_mul instance that multiplies each
+      column of the byte-state by a fixed 4x4 MDS matrix over GF(2^8).
+      Recorded as its own component id (rather than a generic
+      field_matrix_mul reference) when a design reuses AES's MixColumns
+      matrix verbatim or near-verbatim (e.g. LEX, Cube Cipher), so that
+      reuse is queryable directly rather than only inferable from matching
+      parameters.
 
   - id: compression_function
     name: Compression Function
     category: logical
+    notes: >
+      A generic reference to "some externally-defined compression function"
+      as a component of a larger construction, used when a design's
+      internal memory-hardening or mixing step is explicitly built by
+      invoking a hash compression function as a black box (e.g. Argon/
+      Argon2's memory-filling permutation is built around BLAKE2b's
+      compression function) rather than a bespoke permutation of its own.
 
   - id: power_map_sbox
     name: Power-Map S-box

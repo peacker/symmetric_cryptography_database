@@ -571,12 +571,48 @@ primitive_constructions:
     '
 - id: coupled_counter_system
   name: Coupled Counter System
+  typical_primitive_types:
+  - stream_cipher
+  notes: >
+    A keystream generator whose registers are counters that update or clock
+    each other (rather than being independently clocked and only combined
+    at the output), so the coupling itself is part of the source of
+    non-linearity, distinct from a plain filtered or combined register.
+    No family in this database is currently tagged with this leaf.
 - id: filtered_fcsr
   name: Filtered FCSR
+  typical_primitive_types:
+  - stream_cipher
+  notes: >
+    A single fcsr (Feedback with Carry Shift Register) whose output is
+    passed through a nonlinear or linear filtering function of several
+    cells, analogous to filtered_lfsr but using carry-propagating (2-adic)
+    feedback instead of pure XOR feedback -- providing resistance to the
+    Berlekamp-Massey-style algebraic attacks that break a plain filtered
+    LFSR. F-FCSR (f_fcsr) is the family currently modeled with this
+    mechanism, tagged via its fcsr and linear_filter components.
 - id: filtered_lfsr
   name: Filtered LFSR
+  typical_primitive_types:
+  - stream_cipher
+  notes: >
+    The classical LFSR-based keystream generator: a single (typically
+    maximum-length) LFSR whose state is passed through a fixed nonlinear
+    Boolean filtering function of several tap positions to produce each
+    output bit, hiding the register's otherwise fully linear/predictable
+    sequence. No family in this database is currently tagged with this
+    root directly (see filtered_lfsr_with_decimation and its children for
+    the decimating variants that are).
 - id: filtered_lfsr_with_decimation
   name: Filtered LFSR with Decimation
+  typical_primitive_types:
+  - stream_cipher
+  notes: >
+    A filtered-LFSR variant that additionally decimates -- irregularly
+    selects, discards, or re-clocks -- its output or a second register's
+    output, rather than applying only a static Boolean filter every cycle.
+    See shrinking_generator and self_shrinking_generator below for the two
+    canonical instances of this idea.
 - id: shrinking_generator
   name: Shrinking Generator
   special_case_of: filtered_lfsr_with_decimation
@@ -601,22 +637,119 @@ primitive_constructions:
     '
 - id: irregular_clock_register_pair
   name: Irregular Clock Register Pair
+  typical_primitive_types:
+  - stream_cipher
+  notes: >
+    A keystream generator built from two or more LFSRs/registers where one
+    register's state (or a majority/threshold function of several
+    registers) irregularly controls whether/how the others are clocked,
+    producing a nonlinear, variable-rate combination -- the class
+    containing designs like the Alternating Step Generator and A5/1's
+    majority-clocked registers. No family in this database is currently
+    tagged with this leaf.
 - id: lfsr_over_extension_field_with_memory
   name: LFSR over Extension Field with Memory
+  typical_primitive_types:
+  - stream_cipher
+  notes: >
+    An LFSR defined over a finite extension field GF(2^n) (word-based
+    rather than bit-based linear feedback) augmented with extra internal
+    memory/state beyond the shift register itself, whose nonlinear update
+    is what breaks the LFSR's own linearity -- the class containing
+    word-oriented designs like SNOW and Sosemanuk. No family in this
+    database is currently tagged with this leaf.
 - id: nlfsr_combiner
   name: NLFSR Combiner
+  typical_primitive_types:
+  - stream_cipher
+  notes: >
+    A keystream generator combining the outputs of two or more distinct
+    NLFSRs (nonlinear feedback shift registers) via a further nonlinear
+    Boolean function, rather than filtering taps from a single register
+    (see nlfsr_filtered) or combining LFSR and NLFSR taps together (see
+    nlfsr_lfsr_filter). No family in this database is currently tagged
+    with this leaf.
 - id: nlfsr_lfsr_filter
   name: NLFSR/LFSR Filter
+  typical_primitive_types:
+  - stream_cipher
+  notes: >
+    A keystream generator combining at least one NLFSR and at least one
+    LFSR, filtered through a joint nonlinear Boolean function of taps from
+    both -- a hybrid of the pure filtered_lfsr and nlfsr_combiner patterns.
+    No family in this database is currently tagged with this leaf.
 - id: self_reciprocal_spn
   name: Self-Reciprocal SPN
+  typical_primitive_types:
+  - block_cipher
+  - tweakable_block_cipher
+  placeholder_family_names:
+  - MANTIS
+  - PRINCEv2
+  - 3-Way
+  notes: >
+    An SPN whose overall structure is an involution (or made one via a
+    "reflection" construction): decryption reuses the same circuit/round
+    sequence as encryption, either because the cipher is genuinely
+    self-inverse (3-Way's near-involutive round structure, per Daemen's own
+    design rationale) or because it mirrors its rounds around a central
+    reflection layer so that decrypting under key k equals encrypting under
+    a related key (the PRINCE/MANTIS/PRINCEv2 "reflection cipher" family,
+    Borghoff et al., "PRINCE," ASIACRYPT 2012). Halves the implementation
+    cost of supporting both encryption and decryption in hardware.
 - id: t_function
   name: T-Function
+  typical_primitive_types:
+  - stream_cipher
+  - permutation
+  placeholder_family_names:
+  - VMPC
+  notes: >
+    A design built around a "triangular function" in the sense of Klimov
+    and Shamir ("A New Class of Invertible Mappings," CHES 2002): output
+    bit i depends only on input bits 0..i, which guarantees the whole
+    n-bit-word map is a bijection by construction regardless of which
+    arithmetic/logical operations (addition, multiplication, AND, OR, XOR)
+    are combined to build it, without a separate S-box or explicit
+    permutation step. Distinct from (but the namesake of) the
+    characteristics-tier `t_function` component, which records a single
+    such operation used within a round rather than classifying the whole
+    design.
 - id: table_driven_prf
   name: Table-Driven PRF
+  typical_primitive_types:
+  - stream_cipher
+  notes: >
+    A pseudorandom function/generator whose nonlinearity comes from one or
+    more large lookup tables built or keyed at setup time and indexed by
+    the running state, rather than a small fixed S-box evaluated every
+    round -- e.g. RC4-family designs, whose internal permutation state
+    array is itself the "table". No family in this database is currently
+    tagged with this specific leaf (see lookup_table in components.yaml for
+    the corresponding component-level tag already applied to several
+    families).
 - id: table_update_stream
   name: Table-Update Stream
+  typical_primitive_types:
+  - stream_cipher
+  notes: >
+    A stream cipher whose state is itself a large table/array that is
+    continuously permuted/updated as keystream is produced (as in RC4's
+    internal S array), rather than a fixed-size register that is filtered
+    or combined by a separate function. No family in this database is
+    currently tagged with this specific leaf.
 - id: nlfsr_filtered
   name: NLFSR with Nonlinear Filter
+  typical_primitive_types:
+  - stream_cipher
+  notes: >
+    An NLFSR (nonlinear feedback shift register) whose output is
+    additionally passed through a further nonlinear Boolean filtering
+    function of several taps, rather than reading a single cell directly --
+    stacking the register's own nonlinear feedback with a separate output
+    filter. No family in this database is currently tagged with this leaf
+    (Grain filters both an LFSR and an NLFSR jointly, which is why it is
+    tagged via the boolean_filter component rather than this leaf).
 - id: generalized_triangular_dynamical_system
   name: Generalized Triangular Dynamical System (GTDS)
   abbreviation: GTDS

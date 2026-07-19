@@ -2,11 +2,46 @@ version: 1
 primitive_types:
 - id: block_cipher
   name: Block Cipher
+  notes: >
+    A keyed, invertible transform on fixed-size blocks: E_k is a permutation
+    of {0,1}^n for each key k, with a corresponding decryption D_k = E_k^-1.
+    Fixed-length by definition -- variable-length encryption is built on top
+    of one via a mode of operation (see the primitive/mode split above).
 - id: tweakable_block_cipher
   name: Tweakable Block Cipher
+  notes: >
+    A block cipher taking a second, public "tweak" input T alongside the key:
+    E_k(T, x) is a permutation of {0,1}^n for each (k, T) pair (Liskov,
+    Rivest, Wagner, "Tweakable Block Ciphers," CRYPTO 2002). The tweak lets a
+    single key produce many independent permutations cheaply (no per-tweak
+    rekeying), used for disk-sector encryption, wide-block modes, and as the
+    permutation inside dedicated AEAD/MAC constructions.
 - id: permutation
   name: Permutation
+  notes: >
+    An unkeyed (or public-parameter-keyed), fixed-size invertible transform
+    used as a building block for a mode rather than as a standalone
+    cryptographic algorithm -- e.g. Keccak-f, Ascon-p, ChaCha's core
+    permutation. Distinguished from a block_cipher by having no secret key
+    of its own: the surrounding mode (sponge, duplex, Even-Mansour, ARX
+    stream construction, ...) is what supplies the key or provides security,
+    not the permutation in isolation.
 - id: compression_function
   name: Compression Function
+  notes: >
+    A fixed-input-length, fixed-output-length transform combining a chaining
+    value with a message block, e.g. h: {0,1}^n x {0,1}^b -> {0,1}^n --
+    the fixed-size building block iterated by a hash mode (Merkle-Damgard,
+    HAIFA, binary tree) to hash arbitrary-length input. Often built as a
+    block cipher or permutation used in a feedforward mode (Davies-Meyer and
+    its variants) rather than designed from scratch.
 - id: update_function
   name: Update Function
+  notes: >
+    A fixed-size state-to-state transform that is neither a keyed
+    block-cipher permutation nor an unkeyed public permutation in the usual
+    sense, but a named intermediate step in a family's own specification --
+    e.g. Salsa20's core update function, which a surrounding expansion/
+    encryption function (mode tier) turns into a keystream generator. Used
+    when a family's own paper names and specifies this fixed-size step
+    separately from the variable-length algorithm built on top of it.

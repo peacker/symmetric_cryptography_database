@@ -4,6 +4,8 @@ A structured, version-controlled database for fixed-input/output-size symmetric 
 
 **Website:** <https://peacker.github.io/symmetric_cryptography_database/>
 
+**Glossary:** see [GLOSSARY.md](GLOSSARY.md) for precise definitions of every tier, type, construction, component, round field, target application, process, and relation used across the data and the site.
+
 ## Scope
 
 This repository tracks symmetric primitives:

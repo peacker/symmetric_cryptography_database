@@ -2,21 +2,90 @@ version: 1
 mode_types:
 - id: stream_cipher
   name: Stream Cipher
+  notes: >
+    A variable-length symmetric encryption algorithm that generates a
+    keystream (from a key and nonce/IV) and combines it with plaintext, most
+    commonly by XOR, one bit/byte/word at a time rather than in fixed
+    blocks. Built either directly on a native state-update generator (LFSR/
+    NLFSR-based designs, RC4-style table generators) or as a mode wrapping a
+    block cipher or permutation (CTR mode, ARX permutation-based generators
+    like Salsa20/ChaCha).
 - id: aead
   name: Authenticated Encryption with Associated Data (AEAD)
+  notes: >
+    A variable-length mode providing both confidentiality (encryption) and
+    integrity/authenticity (a MAC tag) in one algorithm, and additionally
+    binding unencrypted "associated data" (headers, sequence numbers) into
+    that tag without encrypting it (Rogaway, "Authenticated-Encryption with
+    Associated-Data," CCS 2002). Built by combining a block cipher/
+    permutation with a mode such as GCM, OCB, a duplex construction (Ascon,
+    NORX), or a native combined design (Helix/Phelix).
 - id: hash
   name: Hash Function
+  notes: >
+    A variable-length-input, fixed-length-output unkeyed function providing
+    (pre-image, second-preimage, and collision) one-wayness, built by
+    iterating a fixed-size compression function or permutation over the
+    padded input via a mode such as Merkle-Damgard, HAIFA, a sponge, or a
+    binary tree (BLAKE3).
 - id: xof
   name: Extendable-Output Function (XOF)
+  notes: >
+    A hash-like function whose output length is a caller-chosen parameter
+    rather than fixed, so it can be squeezed for as many bits as needed
+    (SHAKE128/256 from a Keccak sponge; BLAKE3's XOF mode). Distinguished
+    from a stream cipher by having no secret key requirement of its own --
+    typically used unkeyed as a general-purpose randomness-expansion
+    primitive, though nothing prevents keying the input.
 - id: pbkdf
   name: Password-Based Key Derivation Function (PBKDF)
+  notes: >
+    A key derivation function specifically designed to be deliberately slow
+    and/or memory-hard when deriving a key from a low-entropy password, so
+    that offline brute-force/dictionary attacks over the password space are
+    expensive (PBKDF2, bcrypt, scrypt, Argon2, and the many Password Hashing
+    Competition submissions). Distinguished from a general-purpose kdf by
+    this deliberate cost, tuned via explicit work-factor/memory parameters.
 - id: enc
   name: Encryption Mode (confidentiality-only)
+  notes: >
+    A block-cipher mode of operation providing confidentiality alone, with
+    no built-in integrity/authenticity mechanism (CBC, CFB, OFB, plain CTR
+    without a separate MAC) -- as opposed to aead, which bundles
+    authentication in. Modern guidance generally prefers an aead mode
+    unless integrity is provided by a separate composed mechanism
+    (encrypt-then-MAC).
 - id: mac
   name: Message Authentication Code (MAC)
+  notes: >
+    A keyed function producing a fixed-size tag over a variable-length
+    message, letting a verifier holding the same key check the message was
+    not altered and originated from someone holding the key. Built from a
+    block cipher (CBC-MAC and variants), a hash function (HMAC), or a
+    universal hash (Poly1305, GHASH) -- and often bundled directly into an
+    aead construction rather than used standalone.
 - id: prng
   name: Pseudorandom Number Generator (PRNG/DRBG)
+  notes: >
+    A keyed or seeded algorithm producing an unbounded stream of output
+    computationally indistinguishable from random, used for generating
+    keys, nonces, and other randomness rather than for encrypting a specific
+    message (the same underlying construction as a stream cipher's
+    keystream generator, but used and specified as a general-purpose
+    randomness source, e.g. a NIST SP 800-90A DRBG).
 - id: kdf
   name: Key Derivation Function (KDF)
+  notes: >
+    A function that derives one or more cryptographic keys from a source of
+    initial keying material (a shared secret, a master key) plus context
+    information, without the deliberate password-cracking-resistance cost
+    of a pbkdf -- e.g. HKDF, or a KDF built directly from a hash function's
+    iterated-hash-based construction.
 - id: keywrap
   name: Key Wrap
+  notes: >
+    A mode specifically for encrypting (and authenticating) cryptographic
+    key material for storage or transport, typically operating on whole
+    blocks of key data without requiring a nonce (some key-wrap modes are
+    deterministic by design, e.g. NIST SP 800-38F/AES-KW), distinct from a
+    general-purpose aead mode meant for arbitrary plaintext.

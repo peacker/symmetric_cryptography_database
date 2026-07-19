@@ -186,8 +186,31 @@ mode_constructions:
     '
 - id: iterated_hash_kdf
   name: Iterated Hash-Based KDF
+  typical_primitive_types:
+  - pbkdf
+  - kdf
+  notes: >
+    A key/password-derivation mode built by repeatedly invoking a hash
+    function (directly, or as the compression step of a memory-hard
+    scratchpad-filling loop) rather than a dedicated block-cipher- or
+    permutation-based mode -- covering both plain iterated-hash PBKDFs
+    (PBKDF2's repeated HMAC) and the many memory-hard Password Hashing
+    Competition designs (Argon2, Catena, Lyra2, yescrypt, and similar) whose
+    memory-filling step is itself built around a hash compression function.
 - id: modular_squaring_kdf
   name: Modular Squaring KDF
+  typical_primitive_types:
+  - pbkdf
+  placeholder_family_names:
+  - Makwa
+  notes: >
+    A password-hashing mode whose sequential-cost mechanism is repeated
+    modular squaring x -> x^2 mod N for a composite RSA-style modulus
+    N = p*q, rather than a hash-iteration or memory-hard scratchpad. Makwa
+    (Pornin, PHC candidate) is the canonical example: the squaring chain is
+    inherently sequential (each step depends on the previous one) and, with
+    the factorization of N as a trapdoor, can optionally be escrowed for
+    faster verification by a party holding p and q.
 - id: hmac_construction
   name: HMAC
   notes: A hash-based MAC construction combining a hash function with inner and outer key padding (RFC 2104).
