@@ -810,8 +810,8 @@ mode_families:
       capacity_bits: 80
       rounds: 45
     notes: Smallest variant, offering preimage resistance only (not collision resistance).
-- id: norx
-  name: NORX
+- id: norx_aead
+  name: NORX AEAD
   construction_ids:
   - duplex_mode
   - parallel_duplex_construction
@@ -832,20 +832,14 @@ mode_families:
   - aumasson_et_al_2016_norx
   process_participations: []
   influences:
-  - source_family_id: chacha
+  - source_family_id: norx
     relations:
-    - inspired_by
-    note: 'NORX''s own paper (Aumasson, Jovanovic, Neves, "NORX: Parallel and Scalable AEAD"): "The function G of NORX
-      is inspired by the quarterround function of the stream cipher ChaCha... NORX adopts this core function almost
-      one-to-one, with the only difference being the replacement of the integer addition by z=(x⊕y)⊕((x∧y)≪1)" -- so
-      NORX is explicitly NOT ARX despite the family resemblance: it replaces ChaCha''s modular addition with an
-      AND/XOR/shift approximation "with the aim to simplify differential cryptanalysis and improve hardware efficiency,"
-      making it AND-RX rather than ARX (the paper''s own abstract: "based on ARX primitives, yet not using modular
-      additions"). The paper also names its column-step/diagonal-step round arrangement "as in BLAKE2" -- a naming-convention
-      borrowing, distinct from the ChaCha-derived arithmetic itself.'
+    - used_by
+    note: NORX AEAD is the Parallel Duplex Construction built directly on the NORX G permutation, reusing its state
+      layout and round function unchanged.
   notes: 'NORX is a parallel and scalable AEAD family submitted to the CAESAR competition. Its round constants are derived
     from the digits of pi. Its layout is based on the monkeyDuplex construction enhanced with parallel payload processing,
-    which its own paper (Sect. 4) names "the Parallel Duplex Construction".'
+    which its own paper (Sect. 4) names "the Parallel Duplex Construction". See norx for the underlying G permutation.'
   instances:
   - id: norx32_4_1
     name: NORX32-4-1
@@ -3416,7 +3410,16 @@ mode_families:
   reference_ids:
   - ferguson_et_al_2003_helix
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: feal
+    relations:
+    - related_to
+    note: 'Not a citation from Helix''s own paper: its full reference list cites only cryptanalysis-technique papers
+      (differential properties of addition, RC2 design/security) and competing authenticated-encryption-mode proposals
+      (Golic 2000, Jutla 2001, OCB, CCM) -- no earlier ARX cipher is cited as a design predecessor; the introduction
+      instead frames Helix as a synthesis of general lessons learned from the AES competition process. Recorded per
+      this database''s fallback convention for otherwise-uncited ARX ciphers -- crediting the earliest design in the
+      ARX lineage (FEAL, 1987).'
   notes: Helix (Ferguson, Whiting, Schneier, Kelsey, Lucks, Kohno, FSE 2003) is a 32-bit-word ARX stream cipher that
     combines encryption and authentication in a single primitive, feeding ciphertext words back into its own internal
     state alongside a nonce and key. Directly cited by its own overlapping-author successor Threefish/Skein as the

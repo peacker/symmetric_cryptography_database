@@ -115,10 +115,12 @@ primitive_constructions:
   - Gimli
   notes: 'A third facet, orthogonal to S-box coverage and linear-layer type: an SPN whose small nonlinear layer (Keccak''s
     5-bit chi step, Ascon''s 5-bit S-box, Xoodoo''s 3-bit S-box, Gimli''s 3-input T-function) is defined directly as a
-    small Boolean circuit rather than a table lookup. For Keccak/Ascon/Xoodoo (AND/NOT only) this coincides with the
-    and_rx tag at the operation level; Gimli additionally uses OR, so it carries only this facet, not and_rx. Not
-    intended for designs whose S-box merely admits a bitslice *implementation* via a complex derived circuit (e.g.
-    AES''s tower-field S-box, ~100+ gates) -- this facet is for S-boxes natively defined as a handful of gates.
+    small Boolean circuit rather than a table lookup. For Keccak/Ascon/Xoodoo/Gimli this coincides with the
+    boolean_operator_network tag at the operation level (all four also carry that tag, or its pure_and_rx child where
+    strictly AND-only) -- the same few-gate circuit described from two angles, S-box-shaped here and operation-shaped
+    there, not competing classifications. Not intended for designs whose S-box merely admits a bitslice
+    *implementation* via a complex derived circuit (e.g. AES''s tower-field S-box, ~100+ gates) -- this facet is for
+    S-boxes natively defined as a handful of gates.
 
     '
 - id: feistel
@@ -467,15 +469,43 @@ primitive_constructions:
     SPARX design paper; SPARKLE''s own spec explicitly calls itself SPARX''s descendant.
 
     '
-- id: and_rx
-  name: AND-RX Network
-  abbreviation: AND-RX
+- id: boolean_operator_network
+  name: Boolean-Operator Network
+  abbreviation: Bool-Op
   typical_primitive_types:
   - permutation
   - block_cipher
-  notes: 'A round-based structure built from bitwise AND (or NAND) as its only nonlinear operation, combined with XOR and
-    fixed rotations -- no modular addition and no table-lookup S-boxes. Common in bit-sliced, hardware-oriented lightweight
-    permutations (e.g. Keccak''s chi step, Ascon''s substitution layer, Simon''s round function).
+  - aead
+  placeholder_family_names:
+  - Keccak
+  - Ascon
+  - Xoodoo
+  - NORX
+  notes: 'Level-1 root: a round-based structure whose nonlinearity and diffusion are built entirely from elementary
+    bitwise Boolean operations (AND/NAND, OR/NOR, XOR, NOT) combined with fixed or data-dependent rotations, plain
+    shifts, or bit permutations -- no modular addition (which would make it ARX instead) and no table-lookup S-box
+    whose circuit isn''t itself just a handful of these same gates. Deliberately broader than the and_rx/AND-RX
+    naming this replaces: several well-known members mix in operations beyond a strict AND+XOR+rotation reading of
+    "AND-RX" -- Keccak/Ascon/Xoodoo''s chi step also uses NOT, Gimli''s T-function also uses OR, and NORX''s G
+    function uses a fixed shift (not a rotation) in place of ChaCha''s modular addition. See pure_and_rx below for
+    the strict subset that really is just AND+XOR+fixed-rotation. Families whose nonlinear layer is also expressible
+    as a small S-box (Keccak/Ascon/Xoodoo/Gimli) legitimately carry both this tag and spn''s bitslice_friendly_spn
+    facet at once -- the two describe the same few-gate circuit from two different angles (operation-level vs.
+    S-box-coverage/linear-layer-type), not competing classifications.
+
+    '
+- id: pure_and_rx
+  name: Pure AND-RX
+  abbreviation: AND-RX
+  special_case_of: boolean_operator_network
+  typical_primitive_types:
+  - permutation
+  - block_cipher
+  notes: 'A round-based structure built from bitwise AND (or NAND) as its only nonlinear operation, combined with XOR
+    and fixed rotations only -- no OR, no NOT beyond incidental linear use, no plain (non-rotating) shifts, no modular
+    addition, and no table-lookup S-boxes. The narrow case this database originally called "AND-RX" (e.g. Simon''s
+    and Simeck''s round functions); families that add OR, NOT-as-a-listed-operation, or shifts instead of rotation
+    (Keccak, Ascon, Xoodoo, NORX, ...) belong at the broader boolean_operator_network root instead.
 
     '
 - id: stream_state_update_generator

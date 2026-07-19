@@ -1729,7 +1729,7 @@ primitive_families:
   construction_ids:
   - feistel
   - balanced_feistel
-  - and_rx
+  - pure_and_rx
   round_ids:
   - simon_round
   target_applications:
@@ -1782,7 +1782,7 @@ primitive_families:
   construction_ids:
   - feistel
   - balanced_feistel
-  - and_rx
+  - pure_and_rx
   round_ids:
   - simeck_round
   target_applications:
@@ -3870,7 +3870,7 @@ primitive_families:
 - id: ascon
   name: Ascon
   construction_ids:
-  - and_rx
+  - boolean_operator_network
   - bitslice_friendly_spn
   round_ids:
   - ascon_permutation_round
@@ -3943,7 +3943,7 @@ primitive_families:
 - id: gaston
   name: Gaston
   construction_ids:
-  - and_rx
+  - boolean_operator_network
   round_ids:
   - gaston_permutation_round
   target_applications:
@@ -4228,7 +4228,7 @@ primitive_families:
   notes: Xoodoo is a 384-bit, 12-round permutation arranged as three bit planes of four lanes; it is the permutation underlying
     Xoodyak.
   construction_ids:
-  - and_rx
+  - boolean_operator_network
   - bitslice_friendly_spn
   round_ids:
   - xoodoo_permutation_round
@@ -4331,11 +4331,13 @@ primitive_families:
 - id: gimli
   name: Gimli
   notes: Gimli is a 384-bit permutation operating on a 3x4x32 array of 32-bit words -- not ARX (no modular addition
-    anywhere), and not and_rx either, since its T-function uses OR alongside AND (unlike Keccak/Ascon/Xoodoo's AND/NOT-only
-    nonlinearity) -- so it is tagged only via the bitslice_friendly_spn facet rather than either operation-set root.
-    Designed as a compact cross-platform foundation for hashing, authenticated encryption, and other modes.
+    anywhere), and not pure_and_rx either, since its T-function uses OR alongside AND (unlike Keccak/Ascon/Xoodoo's
+    AND/NOT-only nonlinearity) -- so it carries the broader boolean_operator_network root plus the bitslice_friendly_spn
+    facet, rather than the strict pure_and_rx child. Designed as a compact cross-platform foundation for hashing,
+    authenticated encryption, and other modes.
   construction_ids:
   - bitslice_friendly_spn
+  - boolean_operator_network
   round_ids:
   - gimli_permutation_round
   target_applications:
@@ -4391,6 +4393,59 @@ primitive_families:
       rounds: 24
       block_size_bits: 384
       output_size_bits: 384
+- id: norx
+  name: NORX Permutation
+  notes: 'NORX''s G permutation operates on a 4x4 matrix of 32-bit (NORX32) or 64-bit (NORX64) words in column/diagonal
+    steps named "as in BLAKE2". Not ARX despite the family resemblance to ChaCha''s quarterround: NORX''s own paper
+    (Aumasson, Jovanovic, Neves, "NORX: Parallel and Scalable AEAD") states "The function G of NORX is inspired by the
+    quarterround function of the stream cipher ChaCha... NORX adopts this core function almost one-to-one, with the
+    only difference being the replacement of the integer addition by z=(x⊕y)⊕((x∧y)≪1)" -- replacing ChaCha''s modular
+    addition with an AND/XOR/shift approximation "with the aim to simplify differential cryptanalysis and improve
+    hardware efficiency" (the paper''s own abstract: "based on ARX primitives, yet not using modular additions"). Uses
+    a plain 1-bit shift rather than a rotation in that AND/XOR term, alongside separate fixed rotations elsewhere in G,
+    so it carries the broader boolean_operator_network root rather than the strict pure_and_rx child. See norx_aead
+    for the Parallel Duplex Construction built on top of this permutation.
+
+    '
+  construction_ids:
+  - boolean_operator_network
+  round_ids:
+  - norx_round
+  target_applications:
+  - generic
+  - software
+  - hardware
+  characteristics:
+    state_size_bits: 512
+    components:
+    - id: xor
+    - id: and
+    - id: rotation_fixed
+    - id: shift_fixed
+    - id: constant
+  reference_ids:
+  - aumasson_et_al_2016_norx
+  process_participations: []
+  influences:
+  - source_family_id: chacha
+    relations:
+    - inspired_by
+    note: 'NORX''s own paper: "The function G of NORX is inspired by the quarterround function of the stream cipher
+      ChaCha... NORX adopts this core function almost one-to-one, with the only difference being the replacement of
+      the integer addition by z=(x⊕y)⊕((x∧y)≪1)." The paper also names its column-step/diagonal-step round
+      arrangement "as in BLAKE2" -- a naming-convention borrowing, distinct from the ChaCha-derived arithmetic itself.'
+  instances:
+  - id: norx_permutation_512
+    name: NORX32 Permutation (512-bit)
+    type: permutation
+    reference_ids:
+    - aumasson_et_al_2016_norx
+    characteristics:
+      state_size_bits: 512
+      rounds: 4
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: 32-bit-word instance; the NORX reference default rounds per call (R=4).
 - id: subterranean
   name: Subterranean
   notes: The original Subterranean design dates to 1992 and was published in 1993. Its 257-bit keyed state machine supports
@@ -4545,7 +4600,7 @@ primitive_families:
   name: sLiSCP
   construction_ids:
   - type2_generalized_feistel
-  - and_rx
+  - pure_and_rx
   round_ids:
   - sliscp_round
   target_applications:
@@ -4581,7 +4636,7 @@ primitive_families:
 - id: sliscp_light
   name: sLiSCP-light
   construction_ids:
-  - and_rx
+  - pure_and_rx
   round_ids:
   - sliscp_light_round
   target_applications:
@@ -4822,7 +4877,7 @@ primitive_families:
 - id: gascon
   name: GASCON
   construction_ids:
-  - and_rx
+  - boolean_operator_network
   round_ids:
   - gascon_permutation_round
   target_applications:
@@ -4961,10 +5016,11 @@ primitive_families:
     relations:
     - inspired_by
     note: Sycon's MonkeyDuplex mode's key-absorption step is explicitly stated to be inspired from the sLiSCP mode.
-  - source_family_id: norx
+  - source_family_id: norx_aead
     relations:
     - inspired_by
-    note: Sycon's domain separation scheme is explicitly stated to be inspired from NORX.
+    note: Sycon's domain separation scheme is explicitly stated to be inspired from NORX -- a mode-level (duplex
+      domain-separation) borrowing, not a permutation-level one.
   instances:
   - id: sycon_permutation_320
     name: Sycon Permutation (320-bit)
@@ -4985,7 +5041,7 @@ primitive_families:
 
     '
   construction_ids:
-  - and_rx
+  - boolean_operator_network
   round_ids:
   - spook_permutation_round
   target_applications:
@@ -5048,7 +5104,7 @@ primitive_families:
     Its SubColumn nonlinear layer is a 4-bit S-box computed directly as a bitsliced AND/OR/NOT/XOR Boolean formula (no
     lookup table), combined with a bit-level ShiftRow-style rotation for diffusion.
   construction_ids:
-  - and_rx
+  - boolean_operator_network
   round_ids:
   - knot_permutation_round
   target_applications:
@@ -5299,7 +5355,7 @@ primitive_families:
 - id: ace
   name: ACE
   construction_ids:
-  - and_rx
+  - pure_and_rx
   round_ids:
   - ace_round
   target_applications:
@@ -5494,7 +5550,7 @@ primitive_families:
   construction_ids:
   - feistel
   - balanced_feistel
-  - and_rx
+  - pure_and_rx
   round_ids:
   - ant_round
   target_applications:
@@ -7808,7 +7864,7 @@ primitive_families:
 - id: limdolen
   name: Limdolen
   construction_ids:
-  - and_rx
+  - pure_and_rx
   round_ids:
   - limdolen_round
   target_applications:
@@ -8477,7 +8533,7 @@ primitive_families:
 - id: oribatida
   name: Oribatida
   construction_ids:
-  - and_rx
+  - pure_and_rx
   round_ids:
   - simp_round
   target_applications:
@@ -8760,7 +8816,7 @@ primitive_families:
   name: Quartet
   construction_ids:
   - stream_state_update_generator
-  - and_rx
+  - pure_and_rx
   round_ids:
   - quartet_round
   target_applications:
@@ -9787,7 +9843,7 @@ primitive_families:
 - id: yarara_and_coral
   name: Yarara and Coral
   construction_ids:
-  - and_rx
+  - boolean_operator_network
   round_ids:
   - yarara_and_coral_round
   target_applications:
@@ -10428,7 +10484,7 @@ primitive_families:
 - id: keccak
   name: Keccak
   construction_ids:
-  - and_rx
+  - boolean_operator_network
   - bitslice_friendly_spn
   round_ids:
   - keccak_round
