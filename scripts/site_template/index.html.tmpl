@@ -25,6 +25,7 @@
           <button type="button" class="nav-tab" data-view-target="genealogy">Genealogy</button>
           <button type="button" class="nav-tab" data-view-target="tables">All SQLite Tables</button>
           <button type="button" class="nav-tab" data-view-target="builder">Custom Query Builder</button>
+          <button type="button" class="nav-tab" data-view-target="glossary">Glossary</button>
           <button type="button" class="nav-tab" data-view-target="about">About</button>
         </nav>
       </header>
@@ -318,6 +319,13 @@
         <div class="table-wrap"><table id="builderView"><thead></thead><tbody></tbody></table></div>
       </section>
 
+      <section class="panel view-panel" data-view="glossary">
+        <h2>Glossary</h2>
+        <div class="glossary-body">
+__GLOSSARY_CONTENT__
+        </div>
+      </section>
+
       <section class="panel view-panel" data-view="about">
         <h2>About</h2>
         <div class="about-body">
@@ -331,7 +339,7 @@
             <li><strong>Design components</strong> — S-boxes, permutation layers, MixColumns, key schedules.</li>
           </ul>
           <p class="small-note">Data is updated manually. The site is generated from source by a Python build pipeline and contains no server-side logic.</p>
-          <p class="small-note">For precise definitions of every tier, type, construction, component, target application, process, and relation used here, see the <a href="https://github.com/peacker/symmetric_cryptography_database/blob/main/GLOSSARY.md" target="_blank" rel="noopener">Glossary</a>.</p>
+          <p class="small-note">For precise definitions of every tier, type, construction, component, target application, process, and relation used here, see the <strong>Glossary</strong> tab above (or its <a href="https://github.com/peacker/symmetric_cryptography_database/blob/main/GLOSSARY.md" target="_blank" rel="noopener">Markdown source</a> on GitHub).</p>
         </div>
       </section>
     </main>

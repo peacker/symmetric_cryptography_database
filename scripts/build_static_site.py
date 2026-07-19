@@ -20,7 +20,12 @@ def write_text(path: Path, content: str) -> None:
 
 def render_index_html(cache_token: str) -> str:
     template = (TEMPLATE_DIR / "index.html.tmpl").read_text(encoding="utf-8")
-    return template.replace("__CACHE_TOKEN__", cache_token)
+    glossary_html = (TEMPLATE_DIR / "glossary_content.html").read_text(encoding="utf-8")
+    return (
+        template
+        .replace("__CACHE_TOKEN__", cache_token)
+        .replace("__GLOSSARY_CONTENT__", glossary_html)
+    )
 
 
 def fetch_rows(conn: sqlite3.Connection, query: str) -> list[dict[str, object]]:

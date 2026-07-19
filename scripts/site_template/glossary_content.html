@@ -1,0 +1,208 @@
+<p>Precise definitions for every category, taxonomy, and vocabulary term used across this database: tiers, types, constructions, components, rounds, target applications, standardization processes, and the curated relations vocabulary. This tab is a curated, organized read of definitions that live as data in the repository (<code>data/*.yaml</code>) &mdash; see the <a href="https://github.com/peacker/symmetric_cryptography_database/blob/main/GLOSSARY.md" target="_blank" rel="noopener">repository copy</a> for the Markdown source.</p>
+
+<nav class="glossary-toc" aria-label="Glossary sections">
+  <a href="#gl-tiers">Tiers: primitive vs. mode</a>
+  <a href="#gl-family-instance">Family vs. instance</a>
+  <a href="#gl-types">Types</a>
+  <a href="#gl-constructions">Constructions</a>
+  <a href="#gl-components">Components</a>
+  <a href="#gl-rounds">Rounds and the network model</a>
+  <a href="#gl-applications">Target applications</a>
+  <a href="#gl-processes">Standardization processes</a>
+  <a href="#gl-relations">Relations (influence vocabulary)</a>
+</nav>
+
+<h3 id="gl-tiers">Tiers: primitive vs. mode</h3>
+<p>Every family in this database is either a <strong>primitive</strong> or a <strong>mode</strong>. This is the most fundamental split in the data model, mirrored throughout the site (separate filter panels, separate construction/type catalogues, a dedicated toggle on the Timelines and Genealogy tabs):</p>
+<ul>
+  <li><strong>Primitive &mdash; fixed-length, not directly usable on its own.</strong> A permutation, block cipher, tweakable block cipher, compression function, or update function: something that transforms a <em>fixed</em>-size input to a <em>fixed</em>-size output (or state), with no standalone notion of &ldquo;encrypt this arbitrary-length message&rdquo; or &ldquo;hash this file.&rdquo; Keccak-<em>f</em>, AES, and Salsa20's core update function are primitives.</li>
+  <li><strong>Mode &mdash; variable-length, directly usable as an algorithm.</strong> An AEAD scheme, hash function, XOF, MAC, KDF, PBKDF, PRNG, key wrap, or stream cipher: something a caller can hand an arbitrary-length input to (or ask for arbitrary-length output from) and get a complete, usable cryptographic result. AES-GCM, SHA-3, and Argon2 are modes.</li>
+</ul>
+<p>A mode is typically <em>built on top of</em> one or more primitives &mdash; AES-GCM wraps the AES block cipher in GCM; SHA3-256 wraps the Keccak-<em>f</em> permutation in a sponge &mdash; and that relationship is recorded as a <code>used_by</code> influence edge from the mode to the primitive it wraps (see <a href="#gl-relations">Relations</a>). Primitive and mode families share one id space, so an influence edge can freely cross tiers in either direction, but <strong>construction ids cannot</strong>: the primitive-tier and mode-tier construction catalogues are separate lists, and the validator rejects a family that references a construction id from the wrong tier's catalogue. This has bitten real entries twice in this database's history &mdash; BLAKE2 and NORX were both once modeled only as a single mode-tier family, which meant their underlying ARX/Boolean-operator permutation had structurally nowhere to be tagged, since that construction leaf only exists in the primitive-tier catalogue. Both were fixed by splitting into a primitive-tier permutation/compression-function entry plus a mode-tier entry linked by <code>used_by</code>, mirroring how Ascon (<code>ascon</code> + <code>ascon_aead</code>/<code>ascon_hash</code>/<code>ascon_xof</code>) and BLAKE (<code>blake</code> + <code>blake_hash</code>) were already modeled. <strong>If a family's underlying permutation/round function needs a construction tag but the family itself is mode-tier, it needs this same split</strong>, not an exception to the tier rule.</p>
+
+<h3 id="gl-family-instance">Family vs. instance</h3>
+<p>Within either tier, a <strong>family</strong> is the design as published (SIMON, AES, Ascon) &mdash; it carries the construction tags, components, round definition, references, and influence edges. An <strong>instance</strong> is one concrete parameterization of that family with fixed sizes (SIMON-64/128, AES-128, Ascon-128a) &mdash; it carries the actual block/key/state/output sizes and round count. A family always has at least one instance; most families with multiple published size/security variants (SPECK's many block/key-size combinations, BLAKE2b vs. BLAKE2s) list one instance per variant rather than forcing an artificial &ldquo;default&rdquo; choice.</p>
+<p>An <strong>innovative idea</strong> records a specific novel technique the family introduced (e.g. BLAKE2's parameter-block initialization), separately from the family's influence edges, which record what it took <em>from</em> earlier designs rather than what it contributed itself.</p>
+
+<h3 id="gl-types">Types</h3>
+<p>Every family has exactly one <strong>type</strong>, drawn from a dedicated catalogue &mdash; separate lists for primitive-tier and mode-tier families &mdash; rather than a bare enum, specifically so each type carries its own citable definition.</p>
+<p><strong>Primitive types:</strong></p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Type</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td>Block Cipher</td><td>A keyed, invertible transform on fixed-size blocks: <code>E_k</code> is a permutation of <code>{0,1}^n</code> for each key <code>k</code>, with a corresponding <code>D_k = E_k^-1</code>.</td></tr>
+<tr><td>Tweakable Block Cipher</td><td>A block cipher with a second, public &ldquo;tweak&rdquo; input: <code>E_k(T, x)</code> is a permutation of <code>{0,1}^n</code> for each <code>(k, T)</code> pair (Liskov, Rivest, Wagner, CRYPTO 2002). One key cheaply yields many independent permutations without rekeying.</td></tr>
+<tr><td>Permutation</td><td>An unkeyed (or public-parameter-keyed) fixed-size invertible transform used as a building block for a mode, not as a standalone algorithm &mdash; e.g. Keccak-<em>f</em>, Ascon-<em>p</em>. The surrounding mode supplies the key/security, not the permutation alone.</td></tr>
+<tr><td>Compression Function</td><td>A fixed-input, fixed-output transform combining a chaining value with a message block, <code>h: {0,1}^n x {0,1}^b -&gt; {0,1}^n</code>, iterated by a hash mode to process arbitrary-length input.</td></tr>
+<tr><td>Update Function</td><td>A fixed-size state-to-state transform named and specified separately from the variable-length algorithm built on top of it &mdash; e.g. Salsa20's core update function, turned into a keystream generator by a mode-tier expansion function.</td></tr>
+</tbody>
+</table></div>
+<p><strong>Mode types:</strong></p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Type</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td>Stream Cipher</td><td>Generates a keystream from a key/nonce and combines it with plaintext (usually by XOR), one bit/byte/word at a time rather than in fixed blocks.</td></tr>
+<tr><td>AEAD</td><td>Authenticated Encryption with Associated Data: confidentiality plus an integrity/authenticity tag in one algorithm, additionally binding unencrypted associated data into that tag (Rogaway, CCS 2002).</td></tr>
+<tr><td>Hash Function</td><td>Variable-length input, fixed-length output, unkeyed, one-way (pre-image/second-preimage/collision resistant); built by iterating a compression function or permutation.</td></tr>
+<tr><td>XOF (Extendable-Output Function)</td><td>Hash-like, but the output length is a caller-chosen parameter rather than fixed (SHAKE128/256, BLAKE3's XOF mode).</td></tr>
+<tr><td>PBKDF</td><td>A key derivation function deliberately made slow and/or memory-hard for deriving a key from a low-entropy password, resisting offline brute-force (PBKDF2, bcrypt, scrypt, Argon2).</td></tr>
+<tr><td>Encryption Mode (confidentiality-only)</td><td>A block-cipher mode providing confidentiality alone with no built-in integrity mechanism (CBC, CFB, OFB) &mdash; contrast AEAD.</td></tr>
+<tr><td>MAC</td><td>A keyed function producing a fixed-size tag over a variable-length message for integrity/authenticity verification (HMAC, CBC-MAC, Poly1305, GHASH).</td></tr>
+<tr><td>PRNG / DRBG</td><td>A keyed/seeded algorithm producing output computationally indistinguishable from random, specified as a general-purpose randomness source rather than for encrypting a specific message.</td></tr>
+<tr><td>KDF</td><td>Derives cryptographic keys from initial keying material plus context, without a PBKDF's deliberate cracking-resistance cost (HKDF).</td></tr>
+<tr><td>Key Wrap</td><td>A mode specifically for encrypting/authenticating key material for storage or transport, sometimes deterministic by design (NIST SP 800-38F).</td></tr>
+</tbody>
+</table></div>
+
+<h3 id="gl-constructions">Constructions</h3>
+<p>Every construction catalogue (primitive-tier and mode-tier, in separate lists per the tier rule above) is exactly <strong>two levels deep</strong>: a handful of <strong>root</strong> constructions, each with zero or more <strong>leaf</strong> constructions naming a specific variant. A family's construction tags are a list, so it can carry a root alone (generic case), a root + one specific leaf (typical case), or leaves from multiple <em>different</em> roots at once &mdash; an orthogonal facet, not a contradiction (see the SPN facets and the Boolean-Operator Network / Bitslice-Friendly SPN intersection below).</p>
+
+<h4>Primitive-tier roots</h4>
+<p><strong>Feistel</strong> &mdash; a structure that updates one half of the state using a round function of the other half, then swaps the halves' roles.</p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Leaf</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td>Balanced (Classical) Feistel</td><td>The textbook two-equal-branch Feistel network (DES).</td></tr>
+<tr><td>Algebraic (Native-Field) Feistel</td><td>A Feistel network whose branches are native field elements (GF(p) or GF(2^n)) rather than bit strings, typical of arithmetization-oriented designs.</td></tr>
+<tr><td>Generalized Feistel Network (GFN)</td><td>More than two sub-blocks, unspecified sub-type.</td></tr>
+<tr><td>Type-1 / Type-2 / Type-3 / Type-4 / Type-5 GFN</td><td>The named GFN sub-block permutation patterns from the generalized-Feistel literature (differing in how many branches are updated per round and how the cyclic shift between rounds is arranged).</td></tr>
+<tr><td>Unbalanced Feistel</td><td>Sub-blocks of unequal size, unspecified direction.</td></tr>
+<tr><td>Unbalanced Numeric / Source-Heavy / Target-Heavy Feistel</td><td>Specific unbalanced-Feistel refinements by which side is larger and by how the round function's input/output sizes relate.</td></tr>
+<tr><td>Alternating Feistel Network / Alternating Numeric Feistel</td><td>Successive rounds alternate which sub-block serves as the round-function input vs. the updated side.</td></tr>
+<tr><td>Nested (Recursive) Feistel Network</td><td>A Feistel network whose round function is itself built from a smaller Feistel network.</td></tr>
+<tr><td>Generalized Unbalanced Feistel Network (GUFN)</td><td>Combines GFN's multi-branch structure with unbalanced Feistel's branch-size asymmetry (MacGuffin).</td></tr>
+</tbody>
+</table></div>
+
+<p><strong>SPN</strong> &mdash; a round structure combining non-linear substitution layers with permutation or linear diffusion layers. Two independent facets apply on top of the bare root, and a family tags at most one leaf per facet (the facets combine freely, e.g. AES is Full-State S-box + MDS Linear Layer):</p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Facet</th><th>Leaves</th></tr></thead>
+<tbody>
+<tr><td>S-box coverage</td><td><strong>Full-State S-box Layer</strong> (S-box applied to the whole state) vs. <strong>Partial S-box Layer</strong> (only some words, e.g. LowMC) vs. <strong>Alternating Full/Partial S-box Layer</strong>.</td></tr>
+<tr><td>Linear-layer type</td><td><strong>Bit-Permutation Linear Layer</strong> (pure wiring, e.g. PRESENT/GIFT) vs. <strong>MDS Matrix Linear Layer</strong> (true MDS matrix over GF(2^n), e.g. AES/SHARK) vs. <strong>Near-MDS / ARX-like Linear Layer</strong> (lighter/XOR-heavy mixing, e.g. FOX/IDEA NXT).</td></tr>
+</tbody>
+</table></div>
+<p>Two further, independent SPN facets:</p>
+<ul>
+  <li><strong>Tweakable SPN</strong> &mdash; an SPN with explicit tweak influence in round processing (BipBip, SCARF).</li>
+  <li><strong>Bitslice-Friendly SPN</strong> &mdash; an SPN whose small nonlinear layer is defined directly as a small Boolean circuit (a handful of AND/OR/XOR/NOT gates) rather than a table lookup &mdash; Keccak's chi step, Ascon's/Xoodoo's S-boxes, Gimli's T-function. <strong>Not</strong> for designs whose S-box merely <em>admits</em> a bitslice implementation via a large derived circuit (AES's tower-field S-box needs ~100+ gates and does not qualify). This is the leaf that legitimately intersects with the Boolean-Operator Network root below: the same few-gate circuit can be &mdash; and for Keccak/Ascon/Xoodoo/Gimli, is &mdash; tagged from both the S-box-shape angle (here) and the operation-level angle (Boolean-Operator Network), because a cipher can in principle be <em>designed</em> starting from either framing even though these four happen to be describable both ways at once.</li>
+  <li><strong>Self-Reciprocal SPN</strong> &mdash; an SPN whose overall structure is an involution, or made one via a &ldquo;reflection&rdquo; construction mirroring rounds around a central layer so decryption reuses the encryption circuit (PRINCE/MANTIS/PRINCEv2's reflection-cipher family; 3-Way's near-involutive round structure).</li>
+</ul>
+
+<p><strong>ARX Network</strong> &mdash; a round-based structure built primarily from modular addition, XOR, and fixed or data-dependent rotations. This is the family the &ldquo;pure ARX&rdquo; distinction is about: <strong>ARX = Add + Rotate + XOR</strong>, and this root is deliberately broad (it covers designs using <em>any</em> mix of those three), while its leaves narrow down exactly which combination:</p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Leaf</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td>Fixed-Rotation ARX</td><td>Rotation amounts are fixed at design time (Salsa20, ChaCha, Speck).</td></tr>
+<tr><td>Data-Dependent Rotation ARX</td><td>Rotation amount is itself a function of the data (RC5, RC6) &mdash; the &ldquo;pure ARX&rdquo; reading some literature reserves for genuinely data-dependent designs, as opposed to fixed-rotation ones.</td></tr>
+<tr><td>XOR Key Injection / Modular-Addition Key Injection</td><td>Whether the round key is mixed in via XOR or via modular addition.</td></tr>
+<tr><td>Constant-Free ARX</td><td>No per-round constants at all (BLAKE3, BLAKE2).</td></tr>
+<tr><td>ARX with Round Constants</td><td>Per-round constants are present (BLAKE, Threefish).</td></tr>
+<tr><td>ARX-based SPN</td><td>The Long Trail Strategy: a large, cryptographically strong ARX-box alternated with a linear diffusion layer, with provable differential/linear trail bounds &mdash; introduced and named by the SPARX design paper (Dinu, Perrin, Udovenko, Velichkov, Gro&szlig;sch&auml;dl, Biryukov, ASIACRYPT 2016).</td></tr>
+</tbody>
+</table></div>
+
+<p><strong>Boolean-Operator Network</strong> &mdash; a round-based structure whose nonlinearity and diffusion are built entirely from elementary bitwise Boolean operations (AND/NAND, OR/NOR, XOR, NOT) combined with fixed/data-dependent rotations, plain shifts, or bit permutations &mdash; no modular addition (that would make it ARX instead) and no table-lookup S-box whose circuit isn't itself just a handful of these gates. This root replaced a narrower &ldquo;AND-RX&rdquo; category that didn't fit several of its own members: Keccak/Ascon/Xoodoo's chi step also uses NOT, Gimli's T-function also uses OR, and NORX's G function uses a fixed <em>shift</em> (not a rotation) in place of ChaCha's modular addition.</p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Leaf</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td>Pure AND-RX</td><td>The strict subset: AND is the <em>only</em> nonlinear operation, combined with XOR and fixed rotations only &mdash; no OR, no NOT beyond incidental linear use, no plain shifts. Simon's and Simeck's round functions are the canonical members.</td></tr>
+</tbody>
+</table></div>
+<p>Any cipher <em>could</em> in principle be designed as a Boolean-operator network (or an ARX network, or an SPN) &mdash; these are descriptions of what a given design's authors actually chose to build from, not an inherent property forced by the algorithm's function. A handful of families (Keccak, Ascon, Xoodoo, Gimli) are legitimately tagged with both Boolean-Operator Network <em>and</em> Bitslice-Friendly SPN because their few-gate nonlinear circuit really is describable both ways; that overlap is intentional, not a modeling inconsistency.</p>
+
+<p><strong>Other primitive-tier roots</strong>, each a single-level category (no leaves currently defined, either because too few designs use the exact architecture to warrant splitting, or because no family in this database is tagged with the leaf-worthy variant yet):</p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Root</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td>Lai&ndash;Massey Scheme</td><td>A two-branch structure where the same mixing function perturbs both halves symmetrically (IDEA).</td></tr>
+<tr><td>Even&ndash;Mansour Construction</td><td>A key-alternating construction built around one or more public permutations with key addition before and after each call.</td></tr>
+<tr><td>Davies&ndash;Meyer Construction</td><td>A compression function derived from a block cipher by XORing the block-cipher output with the input chaining value.</td></tr>
+<tr><td>Matyas&ndash;Meyer&ndash;Oseas Construction</td><td>Closely related to Davies-Meyer, with a different assignment of message and chaining-value roles to the block cipher's key/plaintext inputs.</td></tr>
+<tr><td>Stream State-Update Generator</td><td>A keystream design based on repeated state updates and output extraction, typically with separate key-scheduling and generation phases.</td></tr>
+<tr><td>LFSR/NLFSR Register Network</td><td>A bit-oriented structure driven by linear/nonlinear feedback-shift-register state transitions and Boolean mixing.</td></tr>
+<tr><td>Key-Dependent Table Network</td><td>Round behavior driven by key-derived tables or key-dependent substitution/permutation components.</td></tr>
+<tr><td>Heterogeneous Round Network</td><td>A block cipher combining distinct round phases and multiple transformation styles within one design.</td></tr>
+<tr><td>Generalized Triangular Dynamical System (GTDS)</td><td>A round function over GF(p) combining a triangular system of univariate polynomial permutations with Feistel-like branch feedback (Roy &amp; Steiner; Arion).</td></tr>
+</tbody>
+</table></div>
+<p>A cluster of classical LFSR/FCSR/NLFSR stream-cipher generator patterns is also catalogued for completeness even though most currently have <strong>no family tagged with them yet</strong> (they exist so a future addition &mdash; e.g. SNOW, A5/1, the Alternating Step Generator &mdash; has a ready-made, correctly-defined home): Coupled Counter System, Filtered FCSR, Filtered LFSR, Filtered LFSR with Decimation (whose two real children, <strong>Shrinking Generator</strong> and <strong>Self-Shrinking Generator</strong>, are already populated), Irregular Clock Register Pair, LFSR over Extension Field with Memory, NLFSR Combiner, NLFSR/LFSR Filter, NLFSR with Nonlinear Filter, Table-Driven PRF, and Table-Update Stream. One exception with a real member: <strong>T-Function</strong> (VMPC) &mdash; a design built around a Klimov&ndash;Shamir triangular function, where output bit <em>i</em> depends only on input bits <code>0..i</code>, guaranteeing invertibility by construction regardless of which arithmetic/logical operations are combined.</p>
+
+<h4>Mode-tier roots</h4>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Root</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td>Merkle&ndash;Damg&aring;rd Construction</td><td>Iterated hashing: a fixed-input compression function applied to successive message blocks while carrying a chaining value, with length-encoding strengthening padding.</td></tr>
+<tr><td>Sponge Construction &rarr; <strong>Standard Sponge</strong></td><td>Absorbs input into part of a fixed-size state (the rate, alongside an untouched capacity) interleaved with permutation calls, then squeezes output the same way; unkeyed/unidirectional by default.</td></tr>
+<tr><td>Duplex Mode &rarr; Standard Duplex, MonkeyDuplex, DrySponge, Beetle Mode, Parallel Duplex Construction</td><td>Interleaves absorb and squeeze in a single call per operation, enabling stateful keyed processing (AEAD). MonkeyDuplex runs a reduced round count for repeated data-processing calls; DrySponge separates fault-hardening concerns from cryptographic-strength concerns; Beetle replaces direct rate-XOR output with a shuffle-then-XOR step; the Parallel Duplex Construction (NORX) splits payload processing across parallel lanes.</td></tr>
+<tr><td>Belt-and-Mill Construction</td><td>Pre-sponge-terminology construction: a small nonlinear &ldquo;mill&rdquo; state updated each round, coupled to a much larger linear-feedback &ldquo;belt&rdquo; (PANAMA, RadioGat&uacute;n &mdash; the direct architectural precursors to the Keccak sponge).</td></tr>
+<tr><td>Binary Tree Hash</td><td>Splits input into independent leaf blocks combined via a binary tree of the same compression function (BLAKE3), enabling independent, parallel subtree hashing unlike sequential/state-based iteration.</td></tr>
+<tr><td>Block-Cipher-Based Mode &rarr; CTR, CBC, OFB, CFB, GCM, Block-Cipher-Based Stream Cipher (Other)</td><td>A mode whose mechanism is built by invoking a block cipher as a black box. The &ldquo;(Other)&rdquo; leaf is a residual for bespoke stream/keystream generators that reuse a block cipher's internal components without the generic black-box CTR/OFB pattern.</td></tr>
+<tr><td>Iterated Hash-Based KDF</td><td>Password/key derivation built by repeatedly invoking a hash function, directly or as the compression step of a memory-hard scratchpad-filling loop (PBKDF2, Argon2, Catena, Lyra2, yescrypt).</td></tr>
+<tr><td>Modular Squaring KDF</td><td>Sequential-cost password hashing via repeated <code>x -&gt; x^2 mod N</code> for an RSA-style composite modulus (Makwa).</td></tr>
+<tr><td>HMAC</td><td>A hash-based MAC combining a hash function with inner and outer key padding (RFC 2104).</td></tr>
+<tr><td>Encrypt-then-MAC Composition</td><td>A generic AEAD composition: encrypt with one primitive, authenticate the result with a separately-keyed MAC/universal hash.</td></tr>
+<tr><td>Native Keystream Generator</td><td>A stream cipher whose keystream comes directly from its own state-update generator, with no separable underlying block cipher wrapped by a generic mode.</td></tr>
+<tr><td>Filter Permutator</td><td>A Goldreich-PRG-style construction with no register/state update: each output bit reorders secret key bits with a fresh public random permutation, then evaluates a fixed Boolean filter on a subset of them (FLIP, FiLIP &mdash; designed to keep FHE noise growth additive rather than multiplicative).</td></tr>
+</tbody>
+</table></div>
+<p>Deliberately <strong>not</strong> modeled as constructions: permutation-based hash/stream and &ldquo;memory-hard sponge&rdquo; do not exist as ids (a permutation-driven hash or stream cipher is tagged with whichever real sponge/duplex leaf its mechanism actually uses; &ldquo;memory-hard&rdquo; is a target-application/notes fact, not a structural one), and bcrypt/scrypt-style designs are ordinary families linked to their real predecessor via an influence edge rather than a construction tag.</p>
+
+<h3 id="gl-components">Components</h3>
+<p>The components catalogue lists the individual operations a round is built from, grouped into eight categories:</p>
+<ul>
+  <li><strong>Logical</strong> &mdash; <code>and</code>, <code>or</code>, <code>xor</code>, <code>not</code>: the elementary bitwise gates. AND and OR are the two available nonlinear gates over GF(2) (related by De Morgan's law); XOR and NOT are linear/affine and supply no nonlinearity on their own, only mixing and symmetry-breaking. Also in this category: <code>absg_decimation</code> (LILI-128/DECIM's irregular-decimation rule), <code>boolean_combiner</code> (Achterbahn-style: one function combining one tap from each of several registers), <code>boolean_filter</code> (Grain-style: one function reading several taps of one register), and <code>compression_function</code> (a reference to an externally-defined hash compression function used as a component, e.g. Argon2's memory-filling permutation being built around BLAKE2b's).</li>
+  <li><strong>Register</strong> &mdash; <code>lfsr</code> (linear feedback shift register &mdash; maximum-length when the feedback polynomial is primitive), <code>nlfsr</code> (nonlinear feedback, higher algebraic complexity &mdash; Grain, Trivium), <code>fcsr</code> (feedback with carry over the 2-adics, resisting Berlekamp-Massey-style algebraic attacks &mdash; F-FCSR), <code>shift_register</code> (generic, feedback rule unspecified).</li>
+  <li><strong>Substitution</strong> &mdash; <code>sbox</code> (a non-linear lookup table, tabulated or algebraic, e.g. AES's inverse-in-GF(2^8)-plus-affine-map), <code>inversion_sbox</code> (the specific <code>x -&gt; x^-1</code> map without AES's extra affine layer &mdash; Jarvis, Vision, SFINKS), <code>power_map_sbox</code> (the arithmetization-oriented monomial map <code>x -&gt; x^d</code> over a large field &mdash; MiMC, Rescue, Poseidon), <code>lookup_table</code> (a larger, sometimes key/state-dependent table &mdash; RC4-family designs, WAKE, SEAL), <code>nonlinear_filter</code> (a nonlinear function reading several state positions of a general register/array &mdash; WG, Dragon, CryptMT3).</li>
+  <li><strong>Permutation</strong> &mdash; <code>word_permutation</code> (fixed word rearrangement, e.g. AES's ShiftRows), <code>bit_permutation</code> (fixed bit rearrangement, e.g. PRESENT's P-layer), <code>bit_reversal</code> (the specific reversal permutation), <code>permutation</code> (generic reference when no more specific type applies), <code>permutation_vector</code> (a keyed/public pseudorandom permutation drawn fresh per output bit &mdash; FLIP/FiLIP's Filter Permutator mechanism).</li>
+  <li><strong>Linear layer</strong> &mdash; <code>field_matrix_mul</code> / <code>binary_matrix_mul</code> (matrix multiplication over GF(2^n) / GF(2), giving MDS diffusion when the matrix is MDS &mdash; AES's MixColumns is the binary/field case), <code>prime_field_matrix_mul</code> / <code>cauchy_matrix</code> (the analogous large-prime-field case for arithmetization-oriented designs), <code>mix_columns</code> (AES's specific MDS matrix, tagged directly when reused verbatim elsewhere &mdash; LEX, Cube Cipher), <code>linear_filter</code> (a linear function reading several state positions, distinct from a nonlinear <code>boolean_filter</code> &mdash; F-FCSR), <code>linear_transform</code> (a generic named linear diffusion step that isn't more specifically a matrix multiplication or fixed wiring &mdash; 3-Way's theta, Kuznyechik's/ZUC's linear layers).</li>
+  <li><strong>Shift/rotation</strong> &mdash; <code>rotation_fixed</code> / <code>rotation_variable</code> (cyclic rotation by a constant / data-dependent amount &mdash; the &ldquo;R&rdquo; in ARX), <code>shift_fixed</code> / <code>shift_variable</code> (zero-filling logical shift, constant / data-dependent amount).</li>
+  <li><strong>Arithmetic</strong> &mdash; <code>add_mod</code> (modular addition &mdash; the &ldquo;A&rdquo; in ARX), <code>sub_mod</code>, <code>mul_mod</code> (IDEA's multiplication mod 2^16+1), <code>counter</code> (an incrementing register &mdash; Rabbit's counter system, Leviathan's whitening counter), <code>t_function</code> (a Klimov-Shamir triangular function, guaranteeing bijectivity by construction &mdash; VMPC).</li>
+  <li><strong>Constant</strong> &mdash; <code>constant</code>: injection of fixed design-time values (round constants, IV/domain constants, e.g. Salsa20's &ldquo;expand 32-byte k&rdquo;) to prevent slide attacks and distinguish otherwise-identical rounds.</li>
+</ul>
+<p>A narrower component can point to a broader one the same way constructions do (e.g. <code>bit_permutation</code> is a special case of <code>word_permutation</code>; <code>binary_matrix_mul</code> is a special case of <code>field_matrix_mul</code>), so the same two-level parent/child reading applies.</p>
+
+<h3 id="gl-rounds">Rounds and the network model</h3>
+<p>Each round entry defines the actual step-by-step shape of a family's round:</p>
+<ul>
+  <li><strong>kind</strong> &mdash; one of <code>full_round</code>, <code>half_round</code>, <code>quarterround</code>, <code>step</code>, or <code>other</code>: how much of the overall network one round entry represents (a ChaCha quarterround updates 4 of 16 words; a full_round updates the whole state once).</li>
+  <li><strong>component_flow</strong> &mdash; the ordered sequence of component ids that make up one execution of the round, e.g. Simon's round is <code>rotation_fixed -&gt; and -&gt; xor -&gt; constant</code>.</li>
+  <li><strong>state_model</strong> &mdash; the shape of the state the round operates on (bit width, word layout, or a small set of supported sizes across a family's instances).</li>
+  <li><strong>constant_injection</strong> &mdash; how round constants enter (e.g. <code>z_sequence</code> for SIMON's LFSR-derived constant sequence), when the round uses a <code>constant</code> component.</li>
+</ul>
+<p>Two families sharing an identical component_flow (ignoring parameters) or an identical full round hash (including parameters) is a <strong>queryable fact</strong>, exposed in the Custom Query Builder tab, rather than a hand-curated relation &mdash; literal component/round/state sharing was deliberately removed from the influence-edge vocabulary in favor of being retrievable by query (see <a href="#gl-relations">Relations</a>).</p>
+
+<h3 id="gl-applications">Target applications</h3>
+<p>Target application is a free-text list, not a fixed enum (deliberately &mdash; new applications keep appearing faster than a controlled vocabulary could track them), but the ~57 distinct values currently in use cluster into a few recognizable groups:</p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Group</th><th>Values</th></tr></thead>
+<tbody>
+<tr><td>Constrained/embedded hardware</td><td>constrained_hardware, embedded, iot, lightweight, lightweight_aead, microcontrollers, resource_constrained_devices, rfid, bitslice, circuit_depth_constrained, ultra_low_latency</td></tr>
+<tr><td>General platform</td><td>generic, general_purpose, software, hardware, mobile, real_time</td></tr>
+<tr><td>Cryptographic function/use-case</td><td>aead, authenticated_encryption, encryption, digital_signatures, message_authentication, keyed_hashing, hash, key_derivation, password_hashing, random_number_generation, stream_cipher, checksums</td></tr>
+<tr><td>Networking/protocol context</td><td>tls, gsm, mobile_networks, wireless, telecommunications, network, messaging, broadcast</td></tr>
+<tr><td>Specialized computation settings</td><td>fhe, mpc, zero_knowledge, side_channel_resistant, proof_of_work</td></tr>
+<tr><td>Storage/lookup structures</td><td>storage, memory_encryption, content_addressable_storage, data_lookup, hash_tables, hash_table_dos_protection</td></tr>
+<tr><td>Sector/domain</td><td>banking, government, export_control</td></tr>
+<tr><td>Historical/meta</td><td>historical, legacy, research, cryptanalysis, backdoor_research, short_messages</td></tr>
+</tbody>
+</table></div>
+
+<h3 id="gl-processes">Standardization processes</h3>
+<p>The processes catalogue lists the 12 standardization bodies/competitions a family can participate in (AES, NESSIE, CRYPTREC, eSTREAM, SHA-3, CAESAR, the Password Hashing Competition, the CACR national competition, NIST Lightweight Crypto, NIST SHA-1/SHA-2 standardization, the EU RIPE project, and the Ukrainian national competition), each with a start/end year, organizer, and URL. A process is broken into <strong>stages</strong>, each carrying a <strong>kind</strong>:</p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Stage kind</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>phase</td><td>A numbered phase of a multi-round competition (eSTREAM Phase 1/2/3).</td></tr>
+<tr><td>round</td><td>A numbered elimination round (SHA-3/AES/NIST-LWC Round 1/2/3).</td></tr>
+<tr><td>list</td><td>An unordered inclusion list rather than a ranked elimination stage.</td></tr>
+<tr><td>category</td><td>A named track distinguishing candidates by target profile (e.g. hardware vs. software).</td></tr>
+<tr><td>portfolio</td><td>The final selected set (eSTREAM's software/hardware portfolios).</td></tr>
+<tr><td>outcome</td><td>A terminal result stage (winner, standardized).</td></tr>
+<tr><td>other</td><td>Anything not fitting the above.</td></tr>
+</tbody>
+</table></div>
+<p>A family's process participation records which stage ids it reached and an overall <strong>status</strong>: <code>candidate</code> (submitted and still under evaluation, or eliminated without a more specific outcome), <code>finalist</code>, <code>winner</code>, <code>recommended</code>, <code>candidate_recommended</code>, <code>monitored</code> (cryptanalysis flagged, not eliminated), <code>special_recognition</code>, <code>portfolio</code> (selected for a competition's final portfolio without an outright &ldquo;winner&rdquo; framing, as in eSTREAM), or <code>submitted</code> (entered but with no further tracked outcome).</p>
+
+<h3 id="gl-relations">Relations (influence vocabulary)</h3>
+<p>Influence edges record genuine, citation-backed design lineage between families &mdash; eight tags: <code>inspired_by</code>, <code>related_to</code>, <code>variant_of</code>, <code>improvement_of</code>, <code>generalization_of</code>, <code>specializes</code>, <code>used_by</code>, <code>standardization_of</code>. The bar for adding one, what's deliberately excluded (benchmark comparisons, &ldquo;positioned against&rdquo; framing, shared abstract paradigms like &ldquo;both ARX&rdquo; with no concretely reused mechanism), and why two categories of relation (literal component/round/state sharing, and construction-leaf sharing) were replaced by queryable/derived facts instead of hand-curated tags, are documented in full in the repository's <a href="https://github.com/peacker/symmetric_cryptography_database/blob/main/README.md#construction-taxonomy-and-relations-model" target="_blank" rel="noopener">README</a> &mdash; not repeated here to avoid the two documents drifting out of sync.</p>
