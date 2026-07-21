@@ -688,6 +688,8 @@ primitive_constructions:
   - MANTIS
   - PRINCEv2
   - 3-Way
+  - Anubis
+  - Khazad
   notes: >
     An SPN whose overall structure is an involution (or made one via a
     "reflection" construction): decryption reuses the same circuit/round
@@ -699,7 +701,14 @@ primitive_constructions:
     that decrypting under key k equals encrypting under
     a related key (the PRINCE/MANTIS/PRINCEv2 "reflection cipher" family,
     Borghoff et al., "PRINCE," ASIACRYPT 2012). Halves the implementation
-    cost of supporting both encryption and decryption in hardware.
+    cost of supporting both encryption and decryption in hardware. A second,
+    earlier lineage reaches the same property by building every round
+    component itself as an involution rather than reflecting the whole
+    cipher around a central layer -- the Wide Trail "involutional cipher"
+    tradition (Square, Anubis, Khazad, BKSQ's involutional successor
+    Curupira-1, ARIA), where this database's own construction/innovative-
+    idea notes for each family already use "involutional"/"self-reciprocal"
+    interchangeably with this leaf's own name.
 - id: t_function
   name: T-Function
   typical_primitive_types:

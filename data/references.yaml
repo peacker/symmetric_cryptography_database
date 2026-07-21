@@ -2577,6 +2577,65 @@ references:
   url: https://link.springer.com/chapter/10.1007/BFb0052343
   publisher: Springer
   notes: Derived from symmetric_cryptography_database/references/1997-square.pdf.
+- id: daemen_rijmen_2000_bksq
+  kind: paper
+  title: The Block Cipher BKSQ
+  authors:
+  - Joan Daemen
+  - Vincent Rijmen
+  year: 2000
+  venue: Smart Card Research and Applications (CARDIS 1998), LNCS 1820
+  publisher: Springer
+  notes: 'Local copy: references/2000-bksq.pdf (font-encoded PDF; text extracted via pypdf and cross-checked word-by-word
+    against known English words to recover a reliable substitution mapping). Confirmed direct quotes: "We present a
+    new 96-bit block cipher called BKSQ... The structure of the cipher is a generalisation of the Square cipher
+    structure [3]... BKSQ is especially suited to be implemented on a smart card." Key length 96, 144, or 192 bits.'
+- id: leander_paar_poschmann_schramm_2007_desl
+  kind: paper
+  title: New Lightweight DES Variants
+  authors:
+  - Gregor Leander
+  - Christof Paar
+  - Axel Poschmann
+  - Kai Schramm
+  year: 2007
+  venue: Fast Software Encryption (FSE 2007), LNCS 4593
+  publisher: Springer
+  notes: 'No local copy of the camera-ready paper; facts verified via the authors'' own conference presentation slides
+    (local copy: references/2007-desl_desxl_slides.pdf, iacr.org/workshops/fse2007/slides/desl.pdf), which state DESL
+    replaces DES''s eight distinct S-boxes with a single redesigned S-box (S1...S8 -> S) satisfying Kim et al.''s
+    linear/differential/Davies-Murphy design criteria, and report DESL-56 at 1848 GE and DESXL-118 at 2168 GE (both
+    144 clock cycles).'
+- id: barreto_simplicio_2007_curupira
+  kind: paper
+  title: 'Curupira, a block cipher for constrained platforms'
+  authors:
+  - Paulo S. L. M. Barreto
+  - Marcos A. Simplício Jr.
+  year: 2007
+  venue: 25º Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos (SBRC 2007)
+  notes: 'No local copy of the original paper. Curupira-1''s specification (96-bit block as a 3x4 byte matrix, 96/144/
+    192-bit keys, variable rounds, involutional round structure) is independently verified via the Curupira-2 paper''s
+    own faithful reproduction of the Curupira-1 spec (simplicio_barreto_carvalho_margi_naslund_2008_curupira2, local
+    copy held), which cites this paper as reference [6].'
+- id: simplicio_barreto_carvalho_margi_naslund_2008_curupira2
+  kind: paper
+  title: 'The CURUPIRA-2 Block Cipher for Constrained Platforms: Specification and Benchmarking'
+  authors:
+  - Marcos A. Simplício Jr.
+  - Paulo S. L. M. Barreto
+  - Tereza C. M. B. Carvalho
+  - Cintia B. Margi
+  - Mats Näslund
+  year: 2008
+  venue: 'CEUR Workshop Proceedings, Vol-397 -- 1st Workshop on Privacy in Location-Based Applications (PiLBA), co-located
+    with ESORICS 2008'
+  url: https://ceur-ws.org/Vol-397/paper8.pdf
+  notes: 'Local copy: references/2008-curupira2.pdf. Section 3 ("Overview of the Curupira-1 structure") reproduces the
+    original Curupira-1 specification in detail, including its four self-inverse round transforms (nonlinear layer
+    using an S-box "identical to that used in Anubis and Khazad", MDS linear diffusion layer, byte permutation layer,
+    key addition layer) and its cyclical key schedule; also states "the cipher round structure is similar to the one
+    in BKSQ [12], with the advantage of being involutional."'
 - id: thank_goodness_it_s_friday_ref
   kind: paper
   title: Thank Goodness It's Friday (TGIF) v1.0

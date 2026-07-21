@@ -351,6 +351,39 @@ rounds:
   notes: 'DES Feistel round with expansion, subkey XOR, S-box substitution, and P-permutation.
 
     '
+- id: desl_round
+  name: DESL Feistel Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+    component_flow:
+    - component_id: bit_permutation
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 6
+        output_bits: 4
+    - component_id: bit_permutation
+    constant_injection: none
+  notes: 'Identical round shape to DES''s Feistel round (expansion, subkey XOR, S-box, P-permutation), but with a
+    single redesigned 6-to-4 S-box used in place of all eight of DES''s distinct S-boxes S1..S8, per Leander, Paar,
+    Poschmann, Schramm, "New Lightweight DES Variants" (FSE 2007) -- chosen to satisfy Kim et al.''s design criteria
+    for resistance to linear/differential cryptanalysis and the Davies-Murphy attack despite the reduced S-box
+    diversity.
+
+    '
+- id: desxl_round
+  name: DESXL whitening
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+  notes: 'The DESX-style pre-/post-whitening XOR that DESXL adds around the DESL core (see desl_round for DESL''s
+    own Feistel round), mirroring how desx_round represents only DESX''s whitening addition around DES.
+
+    '
 - id: blowfish_round
   name: Blowfish Feistel Round
   kind: full_round
@@ -3171,6 +3204,57 @@ rounds:
     constant_injection: round_constant
   notes: 'SQUARE round abstraction with byte substitution, diffusion, transposition,
     and round-key mixing over a 128-bit 4x4-byte state.
+
+    '
+- id: bksq_round
+  name: BKSQ round
+  kind: full_round
+  spec:
+    state_model:
+      layout: variable_byte_matrix
+      state_bits_options:
+      - 96
+      - 144
+      - 192
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: linear_transform
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: xor
+    constant_injection: none
+  notes: 'BKSQ''s own paper (Daemen, Rijmen, CARDIS 1998/LNCS 1820): "the round transformation is composed of four
+    uniform invertible transformations", generalizing SQUARE''s round structure to variable block lengths of 8nm
+    bits (SQUARE itself is fixed at 8n^2) "by changing the linear layer in the round transformation" -- modeled here
+    as a generic linear_transform rather than SQUARE''s specific GF(2^8) field_matrix_mul, since the paper''s point is
+    precisely that this layer is no longer the same fixed matrix.
+
+    '
+- id: curupira_round
+  name: Curupira round
+  kind: full_round
+  spec:
+    state_model:
+      layout: 3x4_bytes
+      state_bits: 96
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: binary_matrix_mul
+    - component_id: bit_permutation
+    - component_id: xor
+    constant_injection: none
+  notes: 'Curupira-1''s own spec (per the Curupira-2 paper''s Sect. 3 reproduction): four self-inverse transforms --
+    nonlinear layer gamma (an S-box "identical to that used in Anubis and Khazad"), linear diffusion layer theta
+    (left-multiplication by the MDS matrix D), permutation layer pi (byte permutation restricted to rows 2 and 3 of
+    the 3x4 state), and key addition layer sigma (XOR). Every transform is deliberately self-inverse, giving Curupira
+    its involutional structure.
 
     '
 - id: thank_goodness_it_s_friday_round
