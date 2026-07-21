@@ -1873,8 +1873,9 @@ references:
     Security") and url (.../3-540-69710-1_3, which is a different FSE''98 paper) were wrong, inherited from the old
     FAMILY_COVERAGE_CHECKLIST.md. Corrected against the actual paper, now available locally as
     references/1998-cs-cipher.pdf (16 pages: full specification, design rationale, and implementation figures).
-    references/2000-cs_cipher.pdf is a separate, older, 1-page NESSIE submission cover letter for the same cipher
-    with no algorithm description; it is not used as a source here.'
+    references/2000-cs_cipher.pdf was a separate, older, 1-page NESSIE submission cover letter for the same cipher
+    with no algorithm description, previously used as this family''s only source; it has since been removed from
+    the references/ folder and is not used here.'
 - id: deoxys_ref
   kind: paper
   title: Deoxys v1.41
@@ -2599,25 +2600,30 @@ references:
   - Axel Poschmann
   - Kai Schramm
   year: 2007
-  venue: Fast Software Encryption (FSE 2007), LNCS 4593
+  venue: Fast Software Encryption (FSE 2007), LNCS 4593, pp. 196-210
   publisher: Springer
-  notes: 'No local copy of the camera-ready paper; facts verified via the authors'' own conference presentation slides
-    (local copy: references/2007-desl_desxl_slides.pdf, iacr.org/workshops/fse2007/slides/desl.pdf), which state DESL
-    replaces DES''s eight distinct S-boxes with a single redesigned S-box (S1...S8 -> S) satisfying Kim et al.''s
-    linear/differential/Davies-Murphy design criteria, and report DESL-56 at 1848 GE and DESXL-118 at 2168 GE (both
-    144 clock cycles).'
+  url: https://link.springer.com/chapter/10.1007/978-3-540-74619-5_13
+  notes: 'Local copy: references/2007-desl,desxl.pdf (the FSE 2007 camera-ready paper; previously only the authors''
+    conference slides were available, references/2007-desl_desxl_slides.pdf, iacr.org/workshops/fse2007/slides/desl.pdf,
+    now kept only as a supplementary source). The paper confirms DESL replaces DES''s eight distinct S-boxes with a
+    single redesigned S-box (Table 2) satisfying Kim et al.''s linear/differential/Davies-Murphy design criteria, and
+    also omits DES''s Initial Permutation IP and its inverse IP^-1 entirely (they cost wiring but add no cryptographic
+    strength); DESL-56 synthesizes to 1848 GE and DESXL to 2168 GE (both 144 clock cycles/block, Table 3). An earlier
+    version of this work was presented at RFIDSec ''06 (non-proceedings workshop).'
 - id: barreto_simplicio_2007_curupira
   kind: paper
-  title: 'Curupira, a block cipher for constrained platforms'
+  title: 'CURUPIRA-1, a block cipher for constrained platforms - extended version'
   authors:
   - Paulo S. L. M. Barreto
   - Marcos A. Simplício Jr.
   year: 2007
   venue: 25º Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos (SBRC 2007)
-  notes: 'No local copy of the original paper. Curupira-1''s specification (96-bit block as a 3x4 byte matrix, 96/144/
-    192-bit keys, variable rounds, involutional round structure) is independently verified via the Curupira-2 paper''s
-    own faithful reproduction of the Curupira-1 spec (simplicio_barreto_carvalho_margi_naslund_2008_curupira2, local
-    copy held), which cites this paper as reference [6].'
+  url: https://web.archive.org/web/20120113150243/https://www.larc.usp.br/~mjunior/files/en/Curupira1-extended.pdf
+  notes: 'Local copy: references/2007-curupira1.pdf (recovered via the Wayback Machine; the paper''s own original
+    host, larc.usp.br, is offline). This is the extended version with full proofs and analysis, superseding the
+    earlier reliance in this database on the Curupira-2 paper''s secondary reproduction of the Curupira-1 spec
+    (simplicio_barreto_carvalho_margi_naslund_2008_curupira2, still held locally and still a valid cross-check, since
+    it independently confirms the same S-box/diffusion-matrix/permutation/key-schedule facts).'
 - id: simplicio_barreto_carvalho_margi_naslund_2008_curupira2
   kind: paper
   title: 'The CURUPIRA-2 Block Cipher for Constrained Platforms: Specification and Benchmarking'

@@ -3246,17 +3246,58 @@ rounds:
       params:
         input_bits: 8
         output_bits: 8
-    - component_id: binary_matrix_mul
-    - component_id: bit_permutation
+      notes: 'gamma: parallel application of the nonlinear S-box (the same one used in Anubis and Khazad) to every
+        byte of the state'
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+      notes: 'pi: byte permutation restricted to rows 2 and 3 of the 3x4 state (row 1 is fixed; row i''s bytes are
+        indexed by column j XOR i)'
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+      notes: 'theta: left-multiplication of each column by the 3x3 GF(2^8) MDS matrix D = I + 2A + 4B (omitted in
+        the last round -- see notes)'
     - component_id: xor
-    constant_injection: none
-  notes: 'Curupira-1''s own spec (per the Curupira-2 paper''s Sect. 3 reproduction): four self-inverse transforms --
-    nonlinear layer gamma (an S-box "identical to that used in Anubis and Khazad"), linear diffusion layer theta
-    (left-multiplication by the MDS matrix D), permutation layer pi (byte permutation restricted to rows 2 and 3 of
-    the 3x4 state), and key addition layer sigma (XOR). Every transform is deliberately self-inverse, giving Curupira
-    its involutional structure.
-
-    '
+      notes: 'sigma[k]: XOR with the round key'
+    constant_injection: round_key
+  notes: 'Curupira-1''s round function rho[k] = sigma[k] o theta o pi o gamma (per the paper''s own eq. in sect. 3.9);
+    every one of its four transforms is individually self-inverse (gamma via its involutional S-box, pi and theta by
+    construction, sigma trivially), so encryption and decryption differ only in the key schedule (Curupira is an
+    involutional cipher). The very last round omits theta (last-round function rho''[k] = sigma[k] o pi o gamma), the
+    same "drop the diffusion layer in the final round" pattern used by other Wide Trail ciphers such as Rijndael/AES.
+    See curupira_key_round for the key schedule that produces each round key k.'
+- id: curupira_key_round
+  name: Curupira key evolution
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+      notes: 'sigma[q^(s)]: XOR the key stage with the schedule constant q^(s) (itself taken from S-box table
+        entries, so no extra storage is needed)'
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+      notes: 'xi: cyclic row shift of the key matrix -- row 0 fixed, row 1 shifted one column left, row 2 shifted
+        one column right'
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+      notes: 'mu: multiplication by the GF(2^8) matrix E = I + cC (c a primitive cube root of unity), applied to
+        every column'
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+      notes: 'key selection function phi_r (a separate step from the xor/xi/mu evolution above): substitutes only
+        row 0 of the current key stage through the same S-box used in gamma, producing the effective round key
+        kappa^(r) from key stage K^(r) and adding the schedule''s only nonlinearity'
+    constant_injection: round_constant
+  notes: 'Key evolution psi_s = omega o sigma[q^(s)], omega = mu o xi, iterates the key matrix K through key stages
+    K^(0)..K^(m-1) (m = 6t for a 48t-bit key); an extra application of omega plus the accumulated constant recovers
+    the original key exactly, so the schedule is cyclic and every stage can be computed on-the-fly in any order with
+    no subkey storage. Decryption reuses the same stages in reverse (kappa-bar^(r) = theta(kappa^(R-r))), which is
+    why only the key schedule -- not the round function -- differs between encryption and decryption.'
 - id: thank_goodness_it_s_friday_round
   name: Thank Goodness It's Friday (TGIF) round
   kind: other

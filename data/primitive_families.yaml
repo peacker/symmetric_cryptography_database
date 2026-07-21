@@ -1255,13 +1255,16 @@ primitive_families:
       output_size_bits: 64
 - id: desl
   name: DESL
-  notes: DESL (DES Lightweight; Leander, Paar, Poschmann, Schramm, FSE 2007) is DES's Feistel structure, permutation
-    network, and key schedule left unchanged, with its only design change being the replacement of DES's eight
-    distinct 6-to-4 S-boxes with a single redesigned S-box reused in all eight positions -- chosen to satisfy Kim et
-    al.'s design criteria for resistance to differential/linear cryptanalysis and the Davies-Murphy attack despite
-    losing S-box diversity. The single-S-box design saves roughly 20% chip area relative to a naive single-S-box DES,
-    and DESL-56 as a whole synthesizes to 1848 GE (144 clock cycles per block), the smallest known secure block
-    cipher at publication time.
+  notes: 'DESL (DES Lightweight; Leander, Paar, Poschmann, Schramm, FSE 2007, LNCS 4593 pp. 196-210) keeps DES''s
+    Feistel round shape, key schedule, and internal per-round P-permutation unchanged. It makes two changes: (1)
+    DES''s eight distinct 6-to-4 S-boxes are replaced by a single redesigned S-box (Table 2 of the paper) reused in
+    all eight positions -- chosen to satisfy Kim et al.''s design criteria for resistance to differential/linear
+    cryptanalysis and the Davies-Murphy attack despite losing S-box diversity; and (2) DES''s outer Initial
+    Permutation IP and its inverse IP^-1 are dropped entirely, since the paper states they "do not provide additional
+    cryptographic strength, but at the same time require area for wiring" -- "the design of our DESL algorithm is
+    exactly the same as for the DES algorithm, except for the (IP) and (IP^-1) wiring and the sbox module." DESL-56
+    synthesizes to 1848 GE at 144 clock cycles per block (Table 3 of the paper), 20% less area and 25% less current
+    than the paper''s own DES baseline implementation.'
   construction_ids:
   - feistel
   - balanced_feistel
@@ -1286,9 +1289,20 @@ primitive_families:
   - source_family_id: des
     relations:
     - variant_of
-    note: DESL keeps DES's Feistel round shape, permutation network, and key schedule entirely unchanged; its sole
-      difference is a hardware-area optimization (one shared S-box instead of eight distinct ones), not a fix to a
-      security weakness, so this is a variant rather than an improvement/successor relationship.
+    note: DESL keeps DES's Feistel round shape, internal P-permutation, and key schedule entirely unchanged; its two
+      differences (one shared S-box instead of eight distinct ones, and dropping the outer IP/IP^-1 wiring) are
+      hardware-area optimizations, not fixes to a security weakness, so this is a variant rather than an
+      improvement/successor relationship.
+  innovative_ideas:
+  - id: desl_single_shared_sbox
+    name: Single shared S-box
+    note: One redesigned 6-to-4 S-box (satisfying strengthened versions of Kim et al.'s criteria) replaces all eight
+      of DES's distinct S-boxes, cutting the S-box hardware area at the cost of S-box diversity.
+  - id: desl_dropped_initial_permutation
+    name: Dropped Initial Permutation (IP/IP^-1)
+    note: DES's outer Initial Permutation and its inverse contribute no cryptographic strength (a known fact about
+      DES, included purely for 1970s-era hardware wiring convenience); DESL omits both entirely to save the wiring
+      area they cost, leaving the internal per-round P-permutation untouched.
   instances:
   - id: desl_56
     name: DESL-56
@@ -9692,17 +9706,21 @@ primitive_families:
       configuration.
 - id: curupira
   name: CURUPIRA-1
-  notes: 'CURUPIRA-1 (Barreto, Simplicio, SBRC 2007) is a 96-bit block cipher, organized as a 3x4 byte matrix, with
-    96-, 144-, or 192-bit keys and a variable round count, tailored for constrained platforms such as sensor networks
-    and smart cards. Per the Curupira-2 paper''s own reproduction of the Curupira-1 spec: "the cipher round structure
-    is similar to the one in BKSQ, with the advantage of being involutional, resulting in a more compact cipher."
-    Every round transform is deliberately self-inverse (nonlinear S-box layer, MDS linear diffusion, byte permutation,
-    key XOR), so encryption and decryption differ only in key schedule -- and the key schedule itself is cyclical,
-    so the original key is recovered after a fixed number of rounds without needing to store intermediate subkeys.
-    Curupira-2 (not modeled separately here) later replaced only the key-schedule algorithm with a faster one,
-    keeping the same round structure.
-
-    '
+  notes: 'CURUPIRA-1 (Barreto, Simplício, SBRC 2007) is a 96-bit block cipher, organized as a 3x4 byte matrix, with
+    a 48t-bit key (t in {2,3,4}, i.e. 96/144/192 bits) and a variable round count (Table 2 of the paper: 10-11 rounds
+    for a 96-bit key, 14-17 for 144-bit, 18-23 for 192-bit), tailored for constrained platforms such as sensor
+    networks and smart cards. The paper''s own abstract: "CURUPIRA-1 is an instance of the Wide Trail family of
+    algorithms which includes the AES cipher, and displays both involutional structure, in the sense that the
+    encryption and decryption modes differ only in the key schedule, and cyclic key schedule, whereby the round
+    subkeys can be computed in-place in any order." Its round function rho[k] = sigma[k] o theta o pi o gamma applies
+    four transforms per round -- nonlinear S-box layer gamma, byte permutation pi, GF(2^8) MDS diffusion theta, and
+    key-xor sigma -- every one of which is individually self-inverse, so only the key schedule (not the round
+    function) needs reversing for decryption; the very last round omits theta. The cyclic key schedule iterates a
+    linear key-evolution function (row-cyclic-shift then GF(2^8) matrix multiplication, plus a schedule-constant
+    xor) until it returns to the original key, so subkeys can be derived on the fly in any order with no storage,
+    and a separate key-selection step substitutes only row 0 of each key stage through the same S-box to add
+    nonlinearity to the schedule. CURUPIRA-2 (not modeled separately here) later replaced only the key-schedule
+    algorithm with a faster one, keeping the same round structure.'
   construction_ids:
   - spn
   - full_sbox_layer
@@ -9710,6 +9728,7 @@ primitive_families:
   - self_reciprocal_spn
   round_ids:
   - curupira_round
+  - curupira_key_round
   target_applications:
   - constrained_hardware
   - iot
@@ -9721,9 +9740,14 @@ primitive_families:
       params:
         input_bits: 8
         output_bits: 8
-    - id: binary_matrix_mul
-    - id: bit_permutation
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
     - id: xor
+    - id: constant
   reference_ids:
   - barreto_simplicio_2007_curupira
   - simplicio_barreto_carvalho_margi_naslund_2008_curupira2
@@ -9732,21 +9756,24 @@ primitive_families:
   - source_family_id: bksq
     relations:
     - related_to
-    note: 'Curupira-2''s own reproduction of the Curupira-1 spec: "the cipher round structure is similar to the one
-      in BKSQ, with the advantage of being involutional, resulting in a more compact cipher" -- a structural
-      similarity in round shape and target platform, made involutional rather than copied verbatim.'
+    note: 'The paper''s own words: "CURUPIRA-1 is closely related to BKSQ (another member of the Wide Trail family),
+      designed with smart cards in mind but lacking involutional structure," and later, "the minimum number of
+      rounds was chosen to match the security level of BKSQ." This is an explicit comparison/security-level target,
+      not adopted structure -- Curupira-1''s own novel diffusion-matrix and key-schedule design is presented
+      specifically as what BKSQ lacks (see section 3.2 of the paper).'
   - source_family_id: anubis
     relations:
-    - related_to
-    note: Curupira's nonlinear layer uses "an S-box identical to that used in Anubis and Khazad" block ciphers, per
-      the Curupira-2 paper's own description of the Curupira-1 spec -- a literal shared component, not merely a
-      shared design philosophy.
+    - inspired_by
+    note: 'The paper states directly: "The Curupira-1 S-box is the same one defined for the Anubis and Khazad
+      ciphers [Barreto and Rijmen 2000a, Barreto and Rijmen 2000b]." A literal, primary-source-confirmed shared
+      component (not a secondary reconstruction): the identical S-box, chosen for the same differential/linear/
+      interpolation-resistance properties (delta=2^-5, lambda=2^-2, nu=7) and involutional by construction.'
   - source_family_id: khazad
     relations:
-    - related_to
-    note: Curupira's nonlinear layer uses "an S-box identical to that used in Anubis and Khazad" block ciphers, per
-      the Curupira-2 paper's own description of the Curupira-1 spec -- a literal shared component, not merely a
-      shared design philosophy.
+    - inspired_by
+    note: 'Same primary-source statement as the Anubis edge on this family: "The Curupira-1 S-box is the same one
+      defined for the Anubis and Khazad ciphers." Barreto co-designed both Anubis and Khazad, so this is a direct,
+      first-party reuse of the earlier S-box, not an independent rediscovery.'
   instances:
   - id: curupira1_96_96
     name: CURUPIRA-1-96/96
@@ -9757,7 +9784,35 @@ primitive_families:
       block_size_bits: 96
       key_size_bits: 96
       output_size_bits: 96
-    notes: Baseline Curupira-1 profile with a 96-bit key.
+      rounds_min: 10
+      rounds_max: 11
+    notes: 'Baseline Curupira-1 profile with a 96-bit key. The full cyclic-key-schedule property (subkeys derivable
+      on the fly with no storage) is only available at the maximum round count (11); fewer rounds (down to 10) can
+      still be used but subkeys must then be computed sequentially.'
+  - id: curupira1_144_144
+    name: CURUPIRA-1-144/144
+    type: block_cipher
+    reference_ids:
+    - barreto_simplicio_2007_curupira
+    characteristics:
+      block_size_bits: 96
+      key_size_bits: 144
+      output_size_bits: 96
+      rounds_min: 14
+      rounds_max: 17
+    notes: 144-bit-key Curupira-1 profile (Table 2 of the paper).
+  - id: curupira1_192_192
+    name: CURUPIRA-1-192/192
+    type: block_cipher
+    reference_ids:
+    - barreto_simplicio_2007_curupira
+    characteristics:
+      block_size_bits: 96
+      key_size_bits: 192
+      output_size_bits: 96
+      rounds_min: 18
+      rounds_max: 23
+    notes: 192-bit-key Curupira-1 profile (Table 2 of the paper).
 - id: three_key_triple_des
   name: Three-key Triple DES
   construction_ids:
