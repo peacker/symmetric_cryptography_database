@@ -2211,17 +2211,82 @@ rounds:
   name: CS-Cipher round
   kind: full_round
   spec:
-    component_flow:
-    - component_id: sbox
-      params:
-        input_bits: 4
-        output_bits: 4
-    - component_id: linear_transform
-    - component_id: xor
-    constant_injection: subkey
     state_model:
       state_bits: 64
-  notes: 'CS-Cipher SPN round (3 sub-steps: substitution, linear layer, key add).'
+    component_flow:
+    - component_id: xor
+      notes: xor the 64-bit state with the round subkey k^i
+    - component_id: sbox
+      params:
+        input_bits: 16
+        output_bits: 16
+      notes: 4 parallel applications of the 16-to-16-bit multipermutation M (each M internally uses the 8-bit
+        permutation P plus an AND-based nonlinear map and a fixed rotation -- see notes) to the four 16-bit words
+        of the state
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+      notes: split the 64-bit state into eight bytes and reorder them
+    - component_id: xor
+      notes: xor the state with the fixed constant c (from the binary expansion of e)
+    - component_id: sbox
+      params:
+        input_bits: 16
+        output_bits: 16
+      notes: second application of the M-mixing sub-layer (4 parallel M's)
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+      notes: second byte-reordering sub-layer
+    - component_id: xor
+      notes: xor the state with the second fixed constant c' (also from the binary expansion of e)
+    - component_id: sbox
+      params:
+        input_bits: 16
+        output_bits: 16
+      notes: third application of the M-mixing sub-layer (4 parallel M's)
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+      notes: third byte-reordering sub-layer
+    constant_injection: subkey_and_round_constant
+  notes: 'One round-encryption function E iterates the same [xor constant, 4 parallel 16-bit M-mixings, byte reorder]
+    scheme three times with three different constants in turn: the round subkey k^i, then a fixed constant c, then
+    a second fixed constant c'' (c||c'' are the first 128 bits of the binary expansion of e = 2.718...). M(x_l||x_r)
+    = P(phi(x_l) xor x_r) || P(R_l(x_l) xor x_r), where phi(x_l) = (R_l(x_l) AND 0x55) xor x_l is a small AND-based
+    nonlinear map, R_l is a 1-bit left rotation, and P is an 8-bit permutation reused from -- and identical to -- the
+    key schedule''s P^8 layer (see cs_cipher_key_round). M is a "multipermutation" (Schnorr/Vaudenay): fixing either
+    8-bit input arbitrarily still makes both outputs permutations of the remaining free input, which the paper cites
+    as the property giving E good diffusion after only two applications of the underlying FFT-butterfly graph. This
+    graph structure (and the two-applications-suffice diffusion claim) is explicitly credited to prior FFT-based
+    designs: Schnorr''s FFT-Hashing and FFT Hash II, Schnorr/Vaudenay''s Parallel FFT-Hashing, and Massey''s SAFER.
+    Encryption applies this round 8 times (i = 0..7, each xor-ing subkey k^i first), with one further whitening xor
+    of k^8 after the 8th round; k^0..k^8 (9 subkeys total) come from the key schedule (see cs_cipher_key_round).'
+- id: cs_cipher_key_round
+  name: CS-Cipher key round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+      notes: xor the 64-bit key-schedule state with the round constant c^i (one of nine 64-bit constants, themselves
+        the first bytes of the table of the permutation P)
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+      notes: P^8, the parallel byte-wise application of the same 8-bit permutation P used in the main encryption
+        round's M function
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+      notes: T, a fixed 8x8 bit-matrix transposition (splits the 64-bit string into eight bytes, writes them as an
+        8x8 bit matrix, and transposes it)
+    constant_injection: round_constant
+  notes: 'Key schedule: the 128-bit master key is split into two 64-bit halves k^{-2}, k^{-1}; a Feistel scheme
+    k^i = k^{i-2} xor F_{c^i}(k^{i-1}) for i = 0..8 produces the nine 64-bit subkeys k^0..k^8 used by cs_cipher_round,
+    where F_{c^i}(x) = T(P^8(x xor c^i)). The 8-bit permutation P itself is built from a small 3-round Feistel network
+    on two 4-bit halves using a linear function f(x) = NOT(x) AND R_l(x) and a nonlinear table-only function g (no
+    simple algebraic form).'
 - id: deoxys_round
   name: Deoxys round
   kind: full_round

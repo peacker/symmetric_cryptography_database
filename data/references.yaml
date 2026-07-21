@@ -1860,17 +1860,21 @@ references:
   notes: Placeholder reference for checklist coverage ingestion.
 - id: cs_cipher_ref
   kind: paper
-  title: 'CS-Cipher: A Flexible Stream Cipher with Provable Security'
+  title: CS-Cipher
   authors:
   - Jacques Stern
   - Serge Vaudenay
   year: 1998
-  venue: FSE (Fast Software Encryption)
-  organization: Ecole Normale Supérieure / CS Communication & Systèmes
-  url: https://link.springer.com/chapter/10.1007/3-540-69710-1_3
-  notes: 'A 64-bit block cipher with variable key size (40-128 bits). Data-quality flag (relations audit): references/2000-cs_cipher.pdf,
-    which fuzzy-matches this family, is only a 1-page NESSIE submission cover letter, not this FSE 1998 paper -- it has
-    no algorithm description or citations. The actual paper is needed to check for a design-inspiration edge.'
+  venue: FSE 1998, LNCS 1372, pp. 189-204
+  organization: École Normale Supérieure — CNRS
+  url: https://link.springer.com/chapter/10.1007/3-540-69710-1_13
+  notes: 'CS-Cipher is a 64-bit block cipher (not a stream cipher -- the paper''s own abstract opens with "This paper
+    presents a new block cipher"); the previous title here ("CS-Cipher: A Flexible Stream Cipher with Provable
+    Security") and url (.../3-540-69710-1_3, which is a different FSE''98 paper) were wrong, inherited from the old
+    FAMILY_COVERAGE_CHECKLIST.md. Corrected against the actual paper, now available locally as
+    references/1998-cs-cipher.pdf (16 pages: full specification, design rationale, and implementation figures).
+    references/2000-cs_cipher.pdf is a separate, older, 1-page NESSIE submission cover letter for the same cipher
+    with no algorithm description; it is not used as a source here.'
 - id: deoxys_ref
   kind: paper
   title: Deoxys v1.41
