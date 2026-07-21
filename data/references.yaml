@@ -4427,3 +4427,51 @@ references:
   notes: 'No local copy: eprint.iacr.org blocks automated fetching and no alternate mirror was found. Introduces the
     HERA cipher alongside the RtF (Real-to-Finite-field) transciphering framework. Described in detail in the secondary
     source references/2025-fhe_friendly_ciphers_sok.pdf.'
+- id: yuval_1997_treyfer
+  kind: paper
+  title: 'Reinventing the Travois: Encryption/MAC in 30 ROM Bytes'
+  authors:
+  - Gideon Yuval
+  year: 1997
+  venue: FSE 1997, LNCS 1267, pp. 205-209
+  publisher: Springer
+  organization: Microsoft Research
+  notes: 'Original TREYFER design paper (the family was previously only referenced via a secondary 2009 related-key-attack
+    paper). Local copy: references/1997-treyfer.pdf.'
+- id: knudsen_et_al_2010_printcipher
+  kind: paper
+  title: 'PRINTcipher: A Block Cipher for IC-Printing'
+  authors:
+  - Lars Knudsen
+  - Gregor Leander
+  - Axel Poschmann
+  - Matthew J.B. Robshaw
+  year: 2010
+  venue: CHES 2010, LNCS 6225, pp. 16-32
+  publisher: Springer
+  notes: 'Local copy: references/2010-printcipher.pdf.'
+- id: standaert_et_al_2005_sea
+  kind: paper
+  title: 'SEA: a Scalable Encryption Algorithm for Small Embedded Applications'
+  authors:
+  - François-Xavier Standaert
+  - Gilles Piret
+  - Neil Gershenfeld
+  - Jean-Jacques Quisquater
+  year: 2006
+  venue: CARDIS 2006, LNCS 3928, pp. 222-236
+  publisher: Springer
+  notes: 'Local copy is dated references/2005-sea.pdf (earlier draft/workshop dating); the canonical citation (per
+    PRINTcipher''s own bibliography, cross-checked in this database) is CARDIS 2006.'
+- id: robshaw_2006_cgen
+  kind: paper
+  title: 'Searching for Compact Algorithms: cgen'
+  authors:
+  - M.J.B. Robshaw
+  year: 2006
+  venue: VIETCRYPT 2006, LNCS 4341, pp. 37-49
+  publisher: Springer
+  organization: France Telecom Research and Development
+  notes: 'Data-quality flag: the local copy (references/2006-cgen.pdf) contains only pp. 37-38 (abstract and start of
+    the introduction); Sections 2-5 with the actual algorithm specification, the mCrypton comparison of Sections 2.2/3.2,
+    and test vectors are not present locally. The cgen mode_families.yaml entry is therefore necessarily partial.'
