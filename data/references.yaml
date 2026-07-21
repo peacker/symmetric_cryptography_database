@@ -4508,3 +4508,18 @@ references:
     area. The block ciphers ANUBIS, KHAZAD and NOEKEON are early examples of this strategy. [...] At ASIACRYPT 2012,
     Borghoff et al. introduced the block cipher PRINCE as an alternative approach to minimizing the overhead of
     supporting both efficient encryption and decryption."'
+- id: zhou_et_al_2026_splight
+  kind: article
+  title: 'Splight: A Lightweight Block Cipher for Resource-Constrained Embedded Devices'
+  authors:
+  - Qian Zhou
+  - Qing Ye
+  - Chengzhe Lai
+  - Yong Yu
+  - Min Zhang
+  - Xiaobing Liu
+  year: 2026
+  venue: IEEE Transactions on Computers (early access)
+  publisher: IEEE
+  url: https://ieeexplore.ieee.org/document/11501825
+  notes: 'DOI 10.1109/TC.2026.3689069. Local copy: references/2026-splight.pdf.'

@@ -4478,3 +4478,70 @@ rounds:
     R/2 round constants C=0 (shift left) and the rest C=1 (shift right) makes the round-key sequence a palindrome
     (K^0, K^1, ..., K^7, K^8, K^7, ..., K^0 for R=16), which is what lets ICEBERG derive round keys "on the fly" in
     both encryption and decryption with no round-key storage.'
+
+- id: splight_round
+  name: Splight round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branches: 2
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+      notes: first S-layer, 8 parallel copies of the same 4-bit S-box applied to the left branch's 8 nibbles
+    - component_id: field_matrix_mul
+      params:
+        field_size: 16
+      notes: linear layer L, the same 4x4 GF(2)-structured nibble-mixing matrix M applied in parallel to each of the
+        two 4-nibble halves of the left branch (entries are restricted to identity/zero so mixing needs only nibble
+        XORs, no true GF(2^4) multiplication)
+    - component_id: xor
+      notes: XOR with the 32-bit round key K_{i-1}
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+      notes: second S-layer, completing the "S-P-S" sandwich that doubles the number of active S-boxes per round
+        compared to a traditional single-S-layer SP round
+    - component_id: xor
+      notes: XOR the S-P-S round function's output with the right-branch state
+    - component_id: rotation_fixed
+      params:
+        amount_bits: 8
+      notes: 'SHI^2: an 8-bit (2 half-byte) left cyclic shift of the XORed value, which becomes the new left branch;
+        the old left branch becomes the new right branch (standard Feistel swap)'
+    constant_injection: round_key
+  notes: 'Splight''s round function f(X^l,K) = S(L(S(X^l)) xor K) is an S-P-S sandwich (S-box, linear layer, S-box)
+    rather than the traditional Feistel SP round, explicitly to double the number of active S-boxes per round. The
+    left branch passes through f, is XORed with the right branch, and is left-rotated by 8 bits before becoming the
+    next round''s left branch (with the old left branch becoming the next right branch), giving full-state iteration
+    every round rather than updating only half the state. 32 rounds total; full diffusion is reached within 6 rounds
+    per the paper''s own MILP-based analysis.'
+
+- id: splight_key_round
+  name: Splight key round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+      notes: two parallel 4-bit S-boxes (the same S-box used in encryption) applied to only 2 of the 4 nibbles of
+        the first 32-bit key branch k0 -- a partial S-box layer, deliberately different from encryption's full
+        8-nibble S-layer
+    - component_id: rotation_fixed
+      params:
+        amount_bits: 4
+      notes: 'SHI^1: a 4-bit (1 half-byte) left cyclic shift'
+    - component_id: xor
+      notes: the shifted/substituted branch is XORed with key branch k1 and with the 5-bit round constant C_{i-1}=i
+    constant_injection: round_constant
+  notes: 'Splight''s key expansion is a 4-branch generalized-Feistel structure over the 128-bit master key (four
+    32-bit branches k0..k3), producing round key K_{i-1}=k0^i each round via k0^i = f''(k0^{i-1}) xor k1^{i-1} xor
+    (0^27||C_{i-1}), then rotating branches (k1^i=k2^{i-1}, k2^i=k3^{i-1}, k3^i=k0^{i-1}). The round constant is a
+    plain counter (C_{i-1}=i, no LFSR). The paper states this structure was deliberately chosen to maximize the
+    structural difference from the encryption round function.'

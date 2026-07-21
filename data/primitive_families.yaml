@@ -12560,3 +12560,69 @@ primitive_families:
       rounds: 16
       output_size_bits: 64
     notes: Sole parameter set specified in the paper (64-bit block, 128-bit key, 16 rounds).
+- id: splight
+  name: Splight
+  construction_ids:
+  - feistel
+  - balanced_feistel
+  round_ids:
+  - splight_round
+  - splight_key_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  - lightweight
+  - embedded
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: field_matrix_mul
+      params:
+        field_size: 16
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - zhou_et_al_2026_splight
+  process_participations: []
+  influences:
+  - source_family_id: piccolo
+    relations:
+    - inspired_by
+    note: 'The paper reuses Piccolo''s own S-box generation/hardware-construction method rather than just comparing
+      gate counts: "The similar 4-branch GFN structure is used to iterate for 4 rounds, and 2 gates are selected per
+      round to construct the lightweight 4-bit S-box. [...] Fig. 4(a) shows the S-box of Piccolo algorithm hardware
+      circuitry." Splight generates its own candidate S-boxes with the identical 4-branch-GFN, 4-round, 2-gates-per-round
+      structure, only substituting different 2-input gate types (NAND/XOR/NOR/XNOR) into Piccolo''s a/b/c/d slots.'
+  - source_family_id: ublock
+    relations:
+    - inspired_by
+    note: 'Same S-box-generation reuse as the Piccolo edge on this family (see that note for the shared quote):
+      the paper''s Fig. 4(b) shows "the S-box of uBlock algorithm hardware circuitry" as the other template Splight''s
+      candidate-S-box search directly reuses, alongside Piccolo''s.'
+  notes: 'Splight (Zhou, Ye, Lai, Yu, Zhang, Liu; IEEE Transactions on Computers, 2026) is a 64-bit, 128-bit-key
+    lightweight block cipher for resource-constrained IoT/embedded devices. It uses a balanced Feistel structure (two
+    32-bit branches) but replaces the traditional single-S-layer SP round function with an "S-P-S" sandwich (S-box,
+    linear layer, S-box), explicitly to double the number of active S-boxes per round versus a conventional Feistel-SP
+    round, while also achieving full-state iteration every round (addressing the traditional Feistel weakness of only
+    updating half the state per round). The key schedule is a separate 4-branch generalized-Feistel structure over the
+    128-bit key, deliberately designed to differ maximally in structure from the encryption round. Security was
+    evaluated with a custom half-byte-granularity MILP model (solved with Gurobi) for differential/linear/impossible-differential/zero-correlation/integral
+    analysis and avalanche testing against SIMON, SPECK, and LBLOCK, where Splight reached full avalanche in the
+    fewest rounds (6) with the lowest uncertainty of those compared. 32 rounds total.'
+  instances:
+  - id: splight_v1
+    name: Splight
+    type: block_cipher
+    reference_ids:
+    - zhou_et_al_2026_splight
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 32
+      output_size_bits: 64
+    notes: Sole parameter set specified in the paper.
