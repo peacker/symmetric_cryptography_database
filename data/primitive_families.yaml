@@ -12466,3 +12466,63 @@ primitive_families:
       key_size_bits: 128
       output_size_bits: 128
     notes: 32-bit-processor instance benchmarked against AES/Rijndael on ARM (RISC-32) in the original paper.
+- id: iceberg
+  name: ICEBERG
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
+  round_ids:
+  - iceberg_round
+  - iceberg_key_round
+  target_applications:
+  - hardware
+  - side_channel_resistant
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: bit_permutation
+    - id: field_matrix_mul
+      params:
+        field_size: 16
+    - id: xor
+    - id: shift_variable
+  reference_ids:
+  - standaert_et_al_2004_iceberg
+  process_participations: []
+  influences:
+  - source_family_id: khazad
+    relations:
+    - inspired_by
+    - improvement_of
+    note: 'The paper states explicitly: "ICEBERG is also based on an involutional structure but allows to derive the
+      keys more efficiently than Khazad," having just noted that "although Khazad is not a Feistel network, its
+      structure is designed so that by choosing all components to be involutions, the inverse operation of the
+      cipher differs from the forward operation in the key scheduling only." ICEBERG adopts this same all-involutional
+      SPN strategy (identical round function for encryption/decryption, difference confined to key selection) but
+      redesigns the key schedule so round keys can be derived on-the-fly with no storage, at roughly a third of
+      Khazad''s hardware cost (256+384 LUTs for ICEBERG''s round+key-round vs. 576+768 for Khazad''s, per the paper''s
+      own comparison table).'
+  notes: 'ICEBERG (Standaert, Piret, Rouvroy, Quisquater, Legat, FSE 2004) is a 64-bit, 128-bit-key involutional SPN
+    block cipher optimised for reconfigurable hardware (FPGA/ASIC): every component (S-boxes, bit permutations, the
+    diffusion matrix) is its own inverse, so encryption and decryption reuse an identical round function and differ
+    only in which round key the key schedule selects. All components are designed to fit 4-input LUTs. The key
+    schedule derives round keys "on the fly" in both directions with no round-key storage, and the key can be
+    changed every clock cycle at no performance cost -- a deliberate side-channel-resistance feature, since frequent
+    re-keying limits the traces available to power/EM analysis. Standard round count is R=16.'
+  instances:
+  - id: iceberg_v1
+    name: ICEBERG
+    type: block_cipher
+    reference_ids:
+    - standaert_et_al_2004_iceberg
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 16
+      output_size_bits: 64
+    notes: Sole parameter set specified in the paper (64-bit block, 128-bit key, 16 rounds).

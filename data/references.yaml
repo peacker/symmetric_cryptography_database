@@ -4475,3 +4475,17 @@ references:
   notes: 'Data-quality flag: the local copy (references/2006-cgen.pdf) contains only pp. 37-38 (abstract and start of
     the introduction); Sections 2-5 with the actual algorithm specification, the mCrypton comparison of Sections 2.2/3.2,
     and test vectors are not present locally. The cgen mode_families.yaml entry is therefore necessarily partial.'
+- id: standaert_et_al_2004_iceberg
+  kind: paper
+  title: 'ICEBERG: An Involutional Cipher Efficient for Block Encryption in Reconfigurable Hardware'
+  authors:
+  - François-Xavier Standaert
+  - Gilles Piret
+  - Gaël Rouvroy
+  - Jean-Jacques Quisquater
+  - Jean-Didier Legat
+  year: 2004
+  venue: FSE 2004, LNCS 3017, pp. 279-299
+  publisher: Springer
+  organization: UCL Crypto Group, Université Catholique de Louvain
+  notes: 'Local copy: references/2004-iceberg.pdf.'

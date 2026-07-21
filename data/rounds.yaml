@@ -4420,3 +4420,61 @@ rounds:
     letting encryption and decryption reuse the same key-expansion code. The number of rounds n_r is parametric,
     is required to be odd, and is chosen from linear/differential security bounds (>= 3n/4) plus enough rounds for
     full diffusion (n_b + floor(b/2)).'
+
+- id: iceberg_round
+  name: ICEBERG round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+      notes: 'non-linear layer gamma = S0 o P8 o S1 o P8 o S0: two layers of 16 parallel 4-bit involutions (S0, S1),
+        separated by an 8-bit wire-crossing P8, equivalently viewable as 8 identical 8x8 involutions'
+    - component_id: bit_permutation
+      notes: p8, the 8-bit wire-crossing sitting between the S0 and S1 layers inside gamma
+    - component_id: bit_permutation
+      notes: P64, the opening bit permutation of the linear layer epsilon_K, chosen to disturb byte alignment
+    - component_id: field_matrix_mul
+      params:
+        field_size: 16
+      notes: diffusion boxes D, parallel multiplication by the 4x4 involutional binary matrix V over GF(2); byte
+        branch number 4 (a deliberately sub-optimal, hardware-cheap choice, not MDS)
+    - component_id: xor
+      notes: affine round-key addition sigma_K
+    - component_id: bit_permutation
+      notes: P4, a closing 4-bit permutation added purely so the encryption and decryption round functions differ
+        only in the key schedule (not in the data path)
+    constant_injection: round_key
+  notes: 'ICEBERG''s round rho_K = epsilon_K o gamma operates on a 64-bit state and is fully involutional: every
+    component (S-boxes, bit permutations, matrix M) is its own inverse, so encryption and decryption use the identical
+    round function and differ only in which round key is selected. The standard number of rounds is R = 16.'
+
+- id: iceberg_key_round
+  name: ICEBERG key round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: shift_variable
+      notes: 'shift layer tau_C: cyclic byte shift of the 128-bit key register, left if round constant C=1, right if
+        C=0'
+    - component_id: bit_permutation
+      notes: P128, a 128-bit wire-crossing
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+      notes: substitution layer S prime, parallel application of the s0 4-bit involution only (not s1)
+    - component_id: bit_permutation
+      notes: second application of P128
+    constant_injection: round_constant
+  notes: 'Key expansion round beta_C driving K^(i+1) = beta_C(K^i) over the 128-bit key register (tau_C, P128, S'',
+    P128). After expansion, a compression function E selects 64 of the 128 bits (odd-indexed key bytes), and a
+    keyed selection layer phi_sel (built from 4-bit multiplexer-like selection functions X_sel) derives the 64-bit
+    round key RK, with sel=1 for the first half of the rounds and sel=0 for the second half. Choosing the first
+    R/2 round constants C=0 (shift left) and the rest C=1 (shift right) makes the round-key sequence a palindrome
+    (K^0, K^1, ..., K^7, K^8, K^7, ..., K^0 for R=16), which is what lets ICEBERG derive round keys "on the fly" in
+    both encryption and decryption with no round-key storage.'
