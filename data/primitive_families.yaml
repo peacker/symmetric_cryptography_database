@@ -9683,7 +9683,7 @@ primitive_families:
         word_size_bits: 8
     - id: xor
   reference_ids:
-  - daemen_rijmen_2000_bksq
+  - daemen_rijmen_1998_bksq
   process_participations: []
   influences:
   - source_family_id: square
@@ -9697,7 +9697,7 @@ primitive_families:
     name: BKSQ-96/96
     type: block_cipher
     reference_ids:
-    - daemen_rijmen_2000_bksq
+    - daemen_rijmen_1998_bksq
     characteristics:
       block_size_bits: 96
       key_size_bits: 96

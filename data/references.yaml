@@ -2578,19 +2578,22 @@ references:
   url: https://link.springer.com/chapter/10.1007/BFb0052343
   publisher: Springer
   notes: Derived from symmetric_cryptography_database/references/1997-square.pdf.
-- id: daemen_rijmen_2000_bksq
+- id: daemen_rijmen_1998_bksq
   kind: paper
   title: The Block Cipher BKSQ
   authors:
   - Joan Daemen
   - Vincent Rijmen
-  year: 2000
-  venue: Smart Card Research and Applications (CARDIS 1998), LNCS 1820
+  year: 1998
+  venue: Smart Card Research and Applications (CARDIS 1998), LNCS 1820, pp. 236-245
   publisher: Springer
-  notes: 'Local copy: references/2000-bksq.pdf, byte-identical to references/1998-bksq.pdf (a later duplicate added
-    directly from cs.ru.nl/~joan/papers/JDA_VRI_BKSQ_2000.pdf; only one copy is needed). Confirmed direct quotes: "We present a
-    new 96-bit block cipher called BKSQ... The structure of the cipher is a generalisation of the Square cipher
-    structure [3]... BKSQ is especially suited to be implemented on a smart card." Key length 96, 144, or 192 bits.'
+  url: https://cs.ru.nl/~joan/papers/JDA_VRI_BKSQ_2000.pdf
+  notes: 'DBLP records this as CARDIS 1998 (key DaemenR98); the LNCS 1820 proceedings volume itself was not printed
+    until 2000, which is why some tertiary sources (and the filename of the pre-existing local copy) date it 2000 --
+    1998 is used here as the conference/DBLP year. Local copy: references/1998-bksq.pdf (byte-identical duplicate
+    references/2000-bksq.pdf removed). Confirmed direct quotes: "We present a new 96-bit block cipher called
+    BKSQ... The structure of the cipher is a generalisation of the Square cipher structure [3]... BKSQ is especially
+    suited to be implemented on a smart card." Key length 96, 144, or 192 bits.'
 - id: leander_paar_poschmann_schramm_2007_desl
   kind: paper
   title: New Lightweight DES Variants
