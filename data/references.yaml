@@ -4489,3 +4489,22 @@ references:
   publisher: Springer
   organization: UCL Crypto Group, Université Catholique de Louvain
   notes: 'Local copy: references/2004-iceberg.pdf.'
+- id: beyne_chen_2022_reflection_ciphers
+  kind: paper
+  title: Provably Secure Reflection Ciphers
+  authors:
+  - Tim Beyne
+  - Yu Long Chen
+  year: 2022
+  venue: CRYPTO 2022
+  organization: imec-COSIC, KU Leuven
+  url: https://eprint.iacr.org/2022/818
+  notes: 'No local copy. Used as a secondary source for PRINCE''s relationship to involution-based ciphers (Anubis,
+    Khazad, Noekeon) because PRINCE''s own primary sources block automated fetching (https://eprint.iacr.org/2012/529
+    -> 403; https://www.iacr.org/archive/asiacrypt2012/76580403/76580403.pdf -> 404; ResearchGate mirror -> 403).
+    This paper''s own introduction (fetched via https://lirias.kuleuven.be/retrieve/b6f77c14-66ea-4820-a581-90901edbcb86)
+    states: "Many traditional key-alternating ciphers also use involutions, i.e. self-inverse functions, as their
+    components in order to keep the hardware implementation costs for encryption and decryption similar and to save
+    area. The block ciphers ANUBIS, KHAZAD and NOEKEON are early examples of this strategy. [...] At ASIACRYPT 2012,
+    Borghoff et al. introduced the block cipher PRINCE as an alternative approach to minimizing the overhead of
+    supporting both efficient encryption and decryption."'

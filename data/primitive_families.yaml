@@ -1896,6 +1896,7 @@ primitive_families:
   - spn
   - full_sbox_layer
   - near_mds_arx_linear_layer
+  - self_reciprocal_spn
   round_ids:
   - prince_round
   target_applications:
@@ -1920,6 +1921,33 @@ primitive_families:
     - inspired_by
     note: The SKINNY/MANTIS paper states that PRINCE's round function basically follows the AES structure, but uses a MixColumns-like
       mapping with branch number 4 instead of AES's branch number 5 and adds reflection symmetry.
+  - source_family_id: khazad
+    relations:
+    - related_to
+    note: 'PRINCE''s own primary sources (eprint.iacr.org/2012/529, the ASIACRYPT 2012 proceedings PDF, and a ResearchGate
+      mirror) all blocked automated fetching, so this is sourced from a reliable secondary characterization (Beyne
+      and Chen, "Provably Secure Reflection Ciphers," CRYPTO 2022): "Many traditional key-alternating ciphers also
+      use involutions, i.e. self-inverse functions, as their components in order to keep the hardware implementation
+      costs for encryption and decryption similar and to save area. The block ciphers ANUBIS, KHAZAD and NOEKEON are
+      early examples of this strategy. [...] At ASIACRYPT 2012, Borghoff et al. introduced the block cipher PRINCE
+      as an alternative approach to minimizing the overhead of supporting both efficient encryption and decryption."
+      PRINCE pursues the identical goal (cheap encryption/decryption duality) via a reflection construction around
+      related keys rather than making every round component individually self-inverse; no concrete mechanism is
+      adopted from Khazad, hence related_to rather than inspired_by.'
+  - source_family_id: anubis
+    relations:
+    - related_to
+    note: 'Same relationship as the Khazad edge on this family (see that note for the full quote and sourcing caveat):
+      PRINCE''s related-work framing groups Anubis with Khazad and Noekeon as the earlier "make every component an
+      involution" strategy that PRINCE''s reflection construction offers an alternative to, not a design PRINCE builds
+      on.'
+  - source_family_id: noekeon
+    relations:
+    - related_to
+    note: 'Same relationship as the Khazad edge on this family (see that note for the full quote and sourcing caveat):
+      PRINCE''s related-work framing groups NOEKEON with Anubis and Khazad as the earlier "make every component an
+      involution" strategy that PRINCE''s reflection construction offers an alternative to, not a design PRINCE builds
+      on.'
   innovative_ideas:
   - id: prince_alpha_reflexivity
     name: Alpha-reflexivity
@@ -3429,6 +3457,7 @@ primitive_families:
     primarily for memory encryption.
   construction_ids:
   - even_mansour
+  - self_reciprocal_spn
   round_ids:
   - qarma_round
   target_applications:
@@ -3477,6 +3506,7 @@ primitive_families:
   name: QARMAv2
   construction_ids:
   - even_mansour
+  - self_reciprocal_spn
   round_ids:
   - qarmav2_round
   target_applications:
@@ -5991,6 +6021,7 @@ primitive_families:
   - spn
   - full_sbox_layer
   - mds_linear_layer
+  - self_reciprocal_spn
   round_ids:
   - anubis_round
   target_applications:
@@ -7530,6 +7561,7 @@ primitive_families:
   - spn
   - full_sbox_layer
   - mds_linear_layer
+  - self_reciprocal_spn
   round_ids:
   - khazad_round
   target_applications:
@@ -8438,6 +8470,7 @@ primitive_families:
   - full_sbox_layer
   - near_mds_arx_linear_layer
   - lay_massey
+  - self_reciprocal_spn
   round_ids:
   - noekeon_round
   target_applications:
@@ -12472,6 +12505,7 @@ primitive_families:
   - spn
   - full_sbox_layer
   - bit_permutation_linear_layer
+  - self_reciprocal_spn
   round_ids:
   - iceberg_round
   - iceberg_key_round
