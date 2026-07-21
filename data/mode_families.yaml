@@ -10497,3 +10497,53 @@ mode_families:
     characteristics: {}
     notes: Parameterized over the key size and the arity/structure of the Boolean filtering function (a combination
       of a linear part, a quadratic part, and a higher-degree "triangular" part in the original design).
+- id: quad
+  name: QUAD
+  construction_ids:
+  - native_keystream_generator
+  round_ids:
+  - quad_round
+  - quad_key_iv_setup
+  target_applications:
+  - software
+  - research
+  - encryption
+  characteristics:
+    state_size_bits: 160
+    components:
+    - id: nonlinear_filter
+  reference_ids:
+  - berbain_gilbert_patarin_2006_quad
+  process_participations: []
+  influences: []
+  notes: 'QUAD (Berbain, Gilbert, Patarin, EUROCRYPT 2006) is a synchronous stream cipher whose keystream generation
+    is provably reducible to the conjectured hardness of the MQ problem (solving a random multivariate quadratic
+    system of equations over GF(q)) -- the paper proves this via a three-theorem chain (keystream distinguisher ->
+    random-quadratic-system-output distinguisher -> linear-bit predictor -> state preimage finder, a tight
+    Goldreich-Levin-style reduction). The state x (n elements of GF(q)) is updated each iteration by evaluating a
+    single fixed, public multivariate quadratic system S of kn equations in n unknowns: the first n outputs become
+    the next state and the remaining (k-1)n are released as keystream. Key/IV setup instead drives the state through
+    two further fixed quadratic systems S0/S1, selected per IV bit, followed by a further |IV|-iteration runup with
+    no output. The paper explicitly contrasts this with Håstad and Näslund''s BMGL, whose security "relies only on
+    the security of the AES and not on a simple and well-studied mathematical problem" -- QUAD adopts no mechanism
+    from BMGL (or from any other prior stream cipher), so no influence edge is recorded for that comparison; nothing
+    else in the paper''s related work is presented as an adopted design either (the other cited constructions --
+    Blum-Micali, Blum-Blum-Shub, Impagliazzo-Naor, Fisher-Stern -- are generic hard-problem-based PRNG theory, not
+    symmetric-cipher designs tracked in this database). Recommended parameters: q=2, n=160, k=2 (kn=320 equations,
+    160 keystream bits/iteration), an 80-bit key (periodically extended to fill the 160-bit state) and an 80-bit IV,
+    with a maximum keystream length of 2^40 bits per (key, IV) pair. Reference software speed: 4.6 Mbit/s (Pentium
+    IV, 2.5GHz); larger fields (GF(16), GF(256)) implement faster.'
+  instances:
+  - id: quad_gf2_160_2
+    name: QUAD (recommended GF(2), n=160, k=2)
+    type: stream_cipher
+    reference_ids:
+    - berbain_gilbert_patarin_2006_quad
+    characteristics:
+      state_size_bits: 160
+      key_size_bits: 80
+      iv_size_bits: 80
+      output_size_bits: 160
+    notes: The paper's recommended practical parameter set, targeting an ~80-bit security level; key_size_bits
+      reflects the shorter, periodically-extended 80-bit key option the paper suggests over the full 160-bit
+      state-length key otherwise assumed for simplicity of the security proof.

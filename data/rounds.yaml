@@ -4735,3 +4735,35 @@ rounds:
     (0^27||C_{i-1}), then rotating branches (k1^i=k2^{i-1}, k2^i=k3^{i-1}, k3^i=k0^{i-1}). The round constant is a
     plain counter (C_{i-1}=i, no LFSR). The paper states this structure was deliberately chosen to maximize the
     structural difference from the encryption round function.'
+
+- id: quad_round
+  name: QUAD keystream-generation step
+  kind: other
+  spec:
+    component_flow:
+    - component_id: nonlinear_filter
+      notes: evaluate the fixed, public multivariate quadratic system S = (Q_1,...,Q_kn) (kn quadratic forms in the
+        n GF(q)-element state) on the current state x
+    constant_injection: none
+  notes: 'Each iteration evaluates S(x) = (Q_1(x),...,Q_kn(x)) on the n-element state x, then splits the kn outputs
+    into the first n, S_it(x) = (Q_1(x),...,Q_n(x)), which becomes the next state, and the remaining (k-1)n,
+    S_out(x) = (Q_{n+1}(x),...,Q_kn(x)), which are released as keystream (added with the plaintext over GF(q) for
+    encryption). S, along with the two systems S0/S1 used only during key/IV setup (see quad_key_iv_setup), are
+    fixed, public, and (for the security proof) modeled as randomly chosen; the entire construction has no other
+    moving part -- there is no separate permutation, rotation, or key-xor layer, since all of the state update''s
+    diffusion and nonlinearity come from evaluating the quadratic system itself. Recommended parameters: q=2 (GF(2)),
+    n=160, k=2 (so kn=320 equations, 160 keystream bits per iteration).'
+- id: quad_key_iv_setup
+  name: QUAD key/IV setup
+  kind: other
+  spec:
+    component_flow:
+    - component_id: nonlinear_filter
+      notes: for each IV bit, evaluate S0 (if the bit is 0) or S1 (if the bit is 1) -- two further fixed, public,
+        n-equation-in-n-unknowns quadratic systems, independent of S -- on the current state
+    constant_injection: none
+  notes: 'The state x is initialised to the n-element key K (zero/periodically extended if the key is shorter than
+    n, e.g. the recommended 80-bit key repeated to fill a 160-bit GF(2) state), then updated once per IV bit by
+    applying S0 or S1 according to that bit''s value. After all |IV| bits are consumed, the cipher is clocked a
+    further |IV| times using the ordinary keystream-generation step (quad_round) but without releasing any output,
+    as an additional security-margin runup before encryption begins.'

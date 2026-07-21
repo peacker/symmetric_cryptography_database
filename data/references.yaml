@@ -2587,8 +2587,8 @@ references:
   year: 2000
   venue: Smart Card Research and Applications (CARDIS 1998), LNCS 1820
   publisher: Springer
-  notes: 'Local copy: references/2000-bksq.pdf (font-encoded PDF; text extracted via pypdf and cross-checked word-by-word
-    against known English words to recover a reliable substitution mapping). Confirmed direct quotes: "We present a
+  notes: 'Local copy: references/2000-bksq.pdf, byte-identical to references/1998-bksq.pdf (a later duplicate added
+    directly from cs.ru.nl/~joan/papers/JDA_VRI_BKSQ_2000.pdf; only one copy is needed). Confirmed direct quotes: "We present a
     new 96-bit block cipher called BKSQ... The structure of the cipher is a generalisation of the Square cipher
     structure [3]... BKSQ is especially suited to be implemented on a smart card." Key length 96, 144, or 192 bits.'
 - id: leander_paar_poschmann_schramm_2007_desl
@@ -4592,3 +4592,15 @@ references:
   publisher: IEEE
   url: https://ieeexplore.ieee.org/document/11501825
   notes: 'DOI 10.1109/TC.2026.3689069. Local copy: references/2026-splight.pdf.'
+- id: berbain_gilbert_patarin_2006_quad
+  kind: paper
+  title: 'QUAD: a Practical Stream Cipher with Provable Security'
+  authors:
+  - Côme Berbain
+  - Henri Gilbert
+  - Jacques Patarin
+  year: 2006
+  venue: EUROCRYPT 2006, LNCS 4004, pp. 109-128
+  publisher: Springer
+  url: https://crypto.orange-labs.fr/papers/eurocrypt2006-109.pdf
+  notes: 'Local copy: references/2006-quad.pdf.'
