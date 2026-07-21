@@ -1716,7 +1716,8 @@ references:
   year: 1996
   venue: Selected Areas in Cryptography (SAC 1996)
   organization: SAC
-  notes: Derived from symmetric_cryptography_database/references/1996-akelarre.pdf.
+  url: https://sacworkshop.org/proc/SAC_96_002.pdf
+  notes: 'PDF page 3-16. Derived from symmetric_cryptography_database/references/1996-akelarre.pdf.'
 - id: leech_1996_crisp
   kind: paper
   title: 'CRISP: A Feistel Cipher with Hardened Key-Scheduling'
@@ -1725,7 +1726,8 @@ references:
   year: 1996
   venue: Selected Areas in Cryptography (SAC 1996)
   organization: SAC
-  notes: Derived from symmetric_cryptography_database/references/1996-crisp.pdf.
+  url: https://sacworkshop.org/proc/SAC_96_002.pdf
+  notes: 'PDF page 17-31. Derived from symmetric_cryptography_database/references/1996-crisp.pdf.'
 - id: ant_ref
   kind: paper
   title: ANT系列分组密码算法
@@ -1797,6 +1799,7 @@ references:
   year: 2000
   venue: NESSIE Submission
   organization: Royal Institute of Technology / Ericsson Research
+  url: https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.37.8270&rep=rep1&type=pdf
   notes: Stream cipher based on Rijndael with theoretical security guarantees.
 - id: chaskey_ref
   kind: paper
@@ -1864,6 +1867,7 @@ references:
   year: 1998
   venue: FSE (Fast Software Encryption)
   organization: Ecole Normale Supérieure / CS Communication & Systèmes
+  url: https://link.springer.com/chapter/10.1007/3-540-69710-1_3
   notes: 'A 64-bit block cipher with variable key size (40-128 bits). Data-quality flag (relations audit): references/2000-cs_cipher.pdf,
     which fuzzy-matches this family, is only a 1-page NESSIE submission cover letter, not this FSE 1998 paper -- it has
     no algorithm description or citations. The actual paper is needed to check for a design-inspiration edge.'
