@@ -1716,7 +1716,8 @@ references:
   year: 1996
   venue: Selected Areas in Cryptography (SAC 1996)
   organization: SAC
-  notes: Derived from symmetric_cryptography_database/references/1996-akelarre.pdf.
+  url: https://sacworkshop.org/proc/SAC_96_002.pdf
+  notes: 'PDF page 3-16. Derived from symmetric_cryptography_database/references/1996-akelarre.pdf.'
 - id: leech_1996_crisp
   kind: paper
   title: 'CRISP: A Feistel Cipher with Hardened Key-Scheduling'
@@ -1725,7 +1726,8 @@ references:
   year: 1996
   venue: Selected Areas in Cryptography (SAC 1996)
   organization: SAC
-  notes: Derived from symmetric_cryptography_database/references/1996-crisp.pdf.
+  url: https://sacworkshop.org/proc/SAC_96_002.pdf
+  notes: 'PDF page 17-31. Derived from symmetric_cryptography_database/references/1996-crisp.pdf.'
 - id: ant_ref
   kind: paper
   title: ANT系列分组密码算法
@@ -1797,6 +1799,7 @@ references:
   year: 2000
   venue: NESSIE Submission
   organization: Royal Institute of Technology / Ericsson Research
+  url: https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.37.8270&rep=rep1&type=pdf
   notes: Stream cipher based on Rijndael with theoretical security guarantees.
 - id: chaskey_ref
   kind: paper
@@ -1864,6 +1867,7 @@ references:
   year: 1998
   venue: FSE (Fast Software Encryption)
   organization: Ecole Normale Supérieure / CS Communication & Systèmes
+  url: https://link.springer.com/chapter/10.1007/3-540-69710-1_3
   notes: 'A 64-bit block cipher with variable key size (40-128 bits). Data-quality flag (relations audit): references/2000-cs_cipher.pdf,
     which fuzzy-matches this family, is only a 1-page NESSIE submission cover letter, not this FSE 1998 paper -- it has
     no algorithm description or citations. The actual paper is needed to check for a design-inspiration edge.'
@@ -4482,3 +4486,99 @@ references:
   notes: 'No local copy: eprint.iacr.org blocks automated fetching and no alternate mirror was found. Introduces the
     HERA cipher alongside the RtF (Real-to-Finite-field) transciphering framework. Described in detail in the secondary
     source references/2025-fhe_friendly_ciphers_sok.pdf.'
+- id: yuval_1997_treyfer
+  kind: paper
+  title: 'Reinventing the Travois: Encryption/MAC in 30 ROM Bytes'
+  authors:
+  - Gideon Yuval
+  year: 1997
+  venue: FSE 1997, LNCS 1267, pp. 205-209
+  publisher: Springer
+  organization: Microsoft Research
+  notes: 'Original TREYFER design paper (the family was previously only referenced via a secondary 2009 related-key-attack
+    paper). Local copy: references/1997-treyfer.pdf.'
+- id: knudsen_et_al_2010_printcipher
+  kind: paper
+  title: 'PRINTcipher: A Block Cipher for IC-Printing'
+  authors:
+  - Lars Knudsen
+  - Gregor Leander
+  - Axel Poschmann
+  - Matthew J.B. Robshaw
+  year: 2010
+  venue: CHES 2010, LNCS 6225, pp. 16-32
+  publisher: Springer
+  notes: 'Local copy: references/2010-printcipher.pdf.'
+- id: standaert_et_al_2005_sea
+  kind: paper
+  title: 'SEA: a Scalable Encryption Algorithm for Small Embedded Applications'
+  authors:
+  - François-Xavier Standaert
+  - Gilles Piret
+  - Neil Gershenfeld
+  - Jean-Jacques Quisquater
+  year: 2006
+  venue: CARDIS 2006, LNCS 3928, pp. 222-236
+  publisher: Springer
+  notes: 'Local copy is dated references/2005-sea.pdf (earlier draft/workshop dating); the canonical citation (per
+    PRINTcipher''s own bibliography, cross-checked in this database) is CARDIS 2006.'
+- id: robshaw_2006_cgen
+  kind: paper
+  title: 'Searching for Compact Algorithms: cgen'
+  authors:
+  - M.J.B. Robshaw
+  year: 2006
+  venue: VIETCRYPT 2006, LNCS 4341, pp. 37-49
+  publisher: Springer
+  organization: France Telecom Research and Development
+  notes: 'Data-quality flag: the local copy (references/2006-cgen.pdf) contains only pp. 37-38 (abstract and start of
+    the introduction); Sections 2-5 with the actual algorithm specification, the mCrypton comparison of Sections 2.2/3.2,
+    and test vectors are not present locally. The cgen mode_families.yaml entry is therefore necessarily partial.'
+- id: standaert_et_al_2004_iceberg
+  kind: paper
+  title: 'ICEBERG: An Involutional Cipher Efficient for Block Encryption in Reconfigurable Hardware'
+  authors:
+  - François-Xavier Standaert
+  - Gilles Piret
+  - Gaël Rouvroy
+  - Jean-Jacques Quisquater
+  - Jean-Didier Legat
+  year: 2004
+  venue: FSE 2004, LNCS 3017, pp. 279-299
+  publisher: Springer
+  organization: UCL Crypto Group, Université Catholique de Louvain
+  notes: 'Local copy: references/2004-iceberg.pdf.'
+- id: beyne_chen_2022_reflection_ciphers
+  kind: paper
+  title: Provably Secure Reflection Ciphers
+  authors:
+  - Tim Beyne
+  - Yu Long Chen
+  year: 2022
+  venue: CRYPTO 2022
+  organization: imec-COSIC, KU Leuven
+  url: https://eprint.iacr.org/2022/818
+  notes: 'No local copy. Used as a secondary source for PRINCE''s relationship to involution-based ciphers (Anubis,
+    Khazad, Noekeon) because PRINCE''s own primary sources block automated fetching (https://eprint.iacr.org/2012/529
+    -> 403; https://www.iacr.org/archive/asiacrypt2012/76580403/76580403.pdf -> 404; ResearchGate mirror -> 403).
+    This paper''s own introduction (fetched via https://lirias.kuleuven.be/retrieve/b6f77c14-66ea-4820-a581-90901edbcb86)
+    states: "Many traditional key-alternating ciphers also use involutions, i.e. self-inverse functions, as their
+    components in order to keep the hardware implementation costs for encryption and decryption similar and to save
+    area. The block ciphers ANUBIS, KHAZAD and NOEKEON are early examples of this strategy. [...] At ASIACRYPT 2012,
+    Borghoff et al. introduced the block cipher PRINCE as an alternative approach to minimizing the overhead of
+    supporting both efficient encryption and decryption."'
+- id: zhou_et_al_2026_splight
+  kind: article
+  title: 'Splight: A Lightweight Block Cipher for Resource-Constrained Embedded Devices'
+  authors:
+  - Qian Zhou
+  - Qing Ye
+  - Chengzhe Lai
+  - Yong Yu
+  - Min Zhang
+  - Xiaobing Liu
+  year: 2026
+  venue: IEEE Transactions on Computers (early access)
+  publisher: IEEE
+  url: https://ieeexplore.ieee.org/document/11501825
+  notes: 'DOI 10.1109/TC.2026.3689069. Local copy: references/2026-splight.pdf.'

@@ -1995,6 +1995,7 @@ primitive_families:
   - spn
   - full_sbox_layer
   - near_mds_arx_linear_layer
+  - self_reciprocal_spn
   round_ids:
   - prince_round
   target_applications:
@@ -2019,6 +2020,33 @@ primitive_families:
     - inspired_by
     note: The SKINNY/MANTIS paper states that PRINCE's round function basically follows the AES structure, but uses a MixColumns-like
       mapping with branch number 4 instead of AES's branch number 5 and adds reflection symmetry.
+  - source_family_id: khazad
+    relations:
+    - related_to
+    note: 'PRINCE''s own primary sources (eprint.iacr.org/2012/529, the ASIACRYPT 2012 proceedings PDF, and a ResearchGate
+      mirror) all blocked automated fetching, so this is sourced from a reliable secondary characterization (Beyne
+      and Chen, "Provably Secure Reflection Ciphers," CRYPTO 2022): "Many traditional key-alternating ciphers also
+      use involutions, i.e. self-inverse functions, as their components in order to keep the hardware implementation
+      costs for encryption and decryption similar and to save area. The block ciphers ANUBIS, KHAZAD and NOEKEON are
+      early examples of this strategy. [...] At ASIACRYPT 2012, Borghoff et al. introduced the block cipher PRINCE
+      as an alternative approach to minimizing the overhead of supporting both efficient encryption and decryption."
+      PRINCE pursues the identical goal (cheap encryption/decryption duality) via a reflection construction around
+      related keys rather than making every round component individually self-inverse; no concrete mechanism is
+      adopted from Khazad, hence related_to rather than inspired_by.'
+  - source_family_id: anubis
+    relations:
+    - related_to
+    note: 'Same relationship as the Khazad edge on this family (see that note for the full quote and sourcing caveat):
+      PRINCE''s related-work framing groups Anubis with Khazad and Noekeon as the earlier "make every component an
+      involution" strategy that PRINCE''s reflection construction offers an alternative to, not a design PRINCE builds
+      on.'
+  - source_family_id: noekeon
+    relations:
+    - related_to
+    note: 'Same relationship as the Khazad edge on this family (see that note for the full quote and sourcing caveat):
+      PRINCE''s related-work framing groups NOEKEON with Anubis and Khazad as the earlier "make every component an
+      involution" strategy that PRINCE''s reflection construction offers an alternative to, not a design PRINCE builds
+      on.'
   innovative_ideas:
   - id: prince_alpha_reflexivity
     name: Alpha-reflexivity
@@ -3529,6 +3557,7 @@ primitive_families:
     primarily for memory encryption.
   construction_ids:
   - even_mansour
+  - self_reciprocal_spn
   round_ids:
   - qarma_round
   target_applications:
@@ -3577,6 +3606,7 @@ primitive_families:
   name: QARMAv2
   construction_ids:
   - even_mansour
+  - self_reciprocal_spn
   round_ids:
   - qarmav2_round
   target_applications:
@@ -8543,6 +8573,7 @@ primitive_families:
   - full_sbox_layer
   - near_mds_arx_linear_layer
   - lay_massey
+  - self_reciprocal_spn
   round_ids:
   - noekeon_round
   target_applications:
@@ -9885,18 +9916,27 @@ primitive_families:
       params:
         modulus: 256
     - id: rotation_fixed
+      params:
+        amount_bits: 1
     - id: xor
-    - id: constant
   reference_ids:
+  - yuval_1997_treyfer
   - treyfer_ref
   process_participations: []
   influences: []
-  notes: TREYFER is a very compact 64-bit lightweight block cipher/MAC design targeting constrained environments.
+  notes: 'TREYFER (Yuval, FSE 1997) is a very compact 64-bit lightweight block cipher/MAC design targeting 8-bit
+    microcontrollers with as little as 1KB ROM/64 bytes RAM (e.g. home-control RF tags). Its 8-bit S-box is deliberately
+    not a principled design: the reference implementation reuses whatever byte values happen to sit in adjacent
+    non-cryptographic ROM ("stealing" an S-box), falling back to the first 256 primes mod 256 if none is available.
+    The cipher positions itself as a cheaper alternative to SAFER-SK (too much ROM for its two S-boxes) and TEA (its
+    32-bit operations are awkward on an 8-bit core), but adopts no concrete mechanism from either -- no influence edge
+    is recorded for that reason.'
   instances:
   - id: treyfer_v1
     name: TREYFER-v1
     type: block_cipher
     reference_ids:
+    - yuval_1997_treyfer
     - treyfer_ref
     characteristics:
       block_size_bits: 64
@@ -12544,3 +12584,270 @@ primitive_families:
       rounds: 5
     notes: Benchmarked parameter set (rounds, block size in Fp elements, output size in Fp elements, prime bit-length)
       from Cho et al.'s original paper and Niu et al.'s SoK survey.
+- id: printcipher
+  name: PRINTcipher
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
+  round_ids:
+  - printcipher_round
+  target_applications:
+  - constrained_hardware
+  - lightweight
+  - rfid
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 3
+        output_bits: 3
+    - id: bit_permutation
+    - id: xor
+    - id: constant
+  reference_ids:
+  - knudsen_et_al_2010_printcipher
+  process_participations: []
+  influences:
+  - source_family_id: present
+    relations:
+    - inspired_by
+    - generalization_of
+    note: 'The paper states explicitly: "our starting point for the work in this paper will be the block cipher PRESENT
+      which appears to offer a range of design/implementation trade-offs. However we will re-examine the structure
+      of PRESENT in the particular context of IC-printing." PRINTcipher keeps PRESENT''s SPN skeleton (fixed bit
+      permutation feeding parallel small S-boxes) but generalizes the permutation formula for arbitrary S-box arity
+      s: "the bit permutation -- or rather its inverse -- used for the block cipher PRESENT is a special case of
+      this general result," and replaces PRESENT''s per-round subkey schedule with a single round-invariant subkey
+      plus a key-dependent S-box-input permutation, exploiting that IC-printing can bake a unique key straight into
+      the printed circuit.'
+  innovative_ideas:
+  - id: printcipher_key_dependent_permutation
+    name: Key-dependent S-box input permutation
+    note: In place of a per-round key schedule, part of the key selects -- independently for each S-box, from one of
+      four fixed permutations -- how that S-box's 3 input bits are wired, so the effective per-key S-box varies while
+      every round reuses the identical fixed subkey and fixed S-box table. This buys back the security a round-invariant
+      subkey would otherwise cost, at zero hardware cost for a printed (rather than lithographed) circuit.
+  - id: printcipher_lfsr_round_counter
+    name: LFSR-based round-constant counter
+    note: Round constants are generated by an affine LFSR-driven shift-register counter (t = 1 + x_{n-1} + x_{n-2})
+      rather than a binary up-counter, saving gates versus an arithmetic counter -- the same trick the paper credits
+      to KATAN/KTANTAN.
+  notes: 'PRINTcipher (Knudsen, Leander, Poschmann, Robshaw, CHES 2010) is a family of two lightweight SPN block
+    ciphers, PRINTcipher-48 and PRINTcipher-96, designed for IC-printing (silicon-ink-printed circuits) rather than
+    conventional lithography. Because a printer can bake a unique key directly into each printed circuit at zero
+    marginal cost, the design deliberately foregoes a key schedule: encryption uses a single subkey unchanged in
+    every round, with the remaining 2/3 of the key spent on choosing, per S-box, one of four fixed input permutations.
+    Each round is xor round-invariant-subkey / PRESENT-style fixed bit permutation / xor LFSR-counter round constant
+    / key-dependent 3-bit S-box-input permutation / layer of parallel 3-to-3-bit S-boxes. The number of rounds equals
+    the block size (48 or 96).'
+  instances:
+  - id: printcipher_48
+    name: PRINTcipher-48
+    type: block_cipher
+    reference_ids:
+    - knudsen_et_al_2010_printcipher
+    characteristics:
+      block_size_bits: 48
+      key_size_bits: 80
+      rounds: 48
+      output_size_bits: 48
+    notes: 80-bit key = 48-bit round-invariant subkey sk1 + 32 key-dependent-permutation bits sk2 (5/3 x 48).
+  - id: printcipher_96
+    name: PRINTcipher-96
+    type: block_cipher
+    reference_ids:
+    - knudsen_et_al_2010_printcipher
+    characteristics:
+      block_size_bits: 96
+      key_size_bits: 160
+      rounds: 96
+      output_size_bits: 96
+    notes: 160-bit key = 96-bit round-invariant subkey sk1 + 64 key-dependent-permutation bits sk2 (5/3 x 96).
+- id: sea
+  name: SEA
+  construction_ids:
+  - feistel
+  - balanced_feistel
+  round_ids:
+  - sea_round
+  target_applications:
+  - embedded
+  - constrained_hardware
+  - microcontrollers
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 3
+        output_bits: 3
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: word_permutation
+  reference_ids:
+  - standaert_et_al_2005_sea
+  process_participations: []
+  influences: []
+  notes: 'SEA_n,b (Standaert, Piret, Gershenfeld, Quisquater, CARDIS 2006) is a Scalable Encryption Algorithm: a
+    parametric Feistel block cipher, scalable in plaintext/key size n and processor word size b (n must be a multiple
+    of 6b), targeted at 8-/16-/32-bit microcontrollers with minimal RAM, code size and instruction-set requirements.
+    Its round function combines a word rotation, xor and modular (2^b) addition of the subkey, a small recursively-defined
+    3-bit S-box, and a bit rotation tuned to the S-box''s bitslice layout. The key schedule reuses the same round
+    function (parameterised by a round counter instead of a subkey) run half-forward/half-backward so encryption and
+    decryption share identical key-expansion code. The paper motivates SEA by naming TEA and Yuval''s TREYFER as the
+    only prior lightweight-cipher examples, but only to note that neither offers provable resistance to linear/differential
+    cryptanalysis -- SEA''s own design (Feistel + a from-scratch 3-bit S-box exhaustively searched for optimal
+    lambda/delta bias) adopts no concrete mechanism from either, so no influence edge is recorded. Likewise, the
+    paper''s remark that its round-key sequence "is the same as the one of ICEBERG" appears only in the security-analysis
+    section (to reuse ICEBERG''s existing slide-attack proof), with no accompanying adoption language, so that
+    similarity is also left unrecorded per this database''s influence standard.'
+  instances:
+  - id: sea_96_8
+    name: SEA_96,8
+    type: block_cipher
+    reference_ids:
+    - standaert_et_al_2005_sea
+    characteristics:
+      block_size_bits: 96
+      key_size_bits: 96
+      output_size_bits: 96
+    notes: 8-bit-processor instance benchmarked on Atmel AVR ATtiny in the original paper (n=96, b=8, n_b=6 words/branch).
+  - id: sea_128_32
+    name: SEA_128,32
+    type: block_cipher
+    reference_ids:
+    - standaert_et_al_2005_sea
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      output_size_bits: 128
+    notes: 32-bit-processor instance benchmarked against AES/Rijndael on ARM (RISC-32) in the original paper.
+- id: iceberg
+  name: ICEBERG
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - bit_permutation_linear_layer
+  - self_reciprocal_spn
+  round_ids:
+  - iceberg_round
+  - iceberg_key_round
+  target_applications:
+  - hardware
+  - side_channel_resistant
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: bit_permutation
+    - id: field_matrix_mul
+      params:
+        field_size: 16
+    - id: xor
+    - id: shift_variable
+  reference_ids:
+  - standaert_et_al_2004_iceberg
+  process_participations: []
+  influences:
+  - source_family_id: khazad
+    relations:
+    - inspired_by
+    - improvement_of
+    note: 'The paper states explicitly: "ICEBERG is also based on an involutional structure but allows to derive the
+      keys more efficiently than Khazad," having just noted that "although Khazad is not a Feistel network, its
+      structure is designed so that by choosing all components to be involutions, the inverse operation of the
+      cipher differs from the forward operation in the key scheduling only." ICEBERG adopts this same all-involutional
+      SPN strategy (identical round function for encryption/decryption, difference confined to key selection) but
+      redesigns the key schedule so round keys can be derived on-the-fly with no storage, at roughly a third of
+      Khazad''s hardware cost (256+384 LUTs for ICEBERG''s round+key-round vs. 576+768 for Khazad''s, per the paper''s
+      own comparison table).'
+  notes: 'ICEBERG (Standaert, Piret, Rouvroy, Quisquater, Legat, FSE 2004) is a 64-bit, 128-bit-key involutional SPN
+    block cipher optimised for reconfigurable hardware (FPGA/ASIC): every component (S-boxes, bit permutations, the
+    diffusion matrix) is its own inverse, so encryption and decryption reuse an identical round function and differ
+    only in which round key the key schedule selects. All components are designed to fit 4-input LUTs. The key
+    schedule derives round keys "on the fly" in both directions with no round-key storage, and the key can be
+    changed every clock cycle at no performance cost -- a deliberate side-channel-resistance feature, since frequent
+    re-keying limits the traces available to power/EM analysis. Standard round count is R=16.'
+  instances:
+  - id: iceberg_v1
+    name: ICEBERG
+    type: block_cipher
+    reference_ids:
+    - standaert_et_al_2004_iceberg
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 16
+      output_size_bits: 64
+    notes: Sole parameter set specified in the paper (64-bit block, 128-bit key, 16 rounds).
+- id: splight
+  name: Splight
+  construction_ids:
+  - feistel
+  - balanced_feistel
+  round_ids:
+  - splight_round
+  - splight_key_round
+  target_applications:
+  - iot
+  - constrained_hardware
+  - lightweight
+  - embedded
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: field_matrix_mul
+      params:
+        field_size: 16
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - zhou_et_al_2026_splight
+  process_participations: []
+  influences:
+  - source_family_id: piccolo
+    relations:
+    - inspired_by
+    note: 'The paper reuses Piccolo''s own S-box generation/hardware-construction method rather than just comparing
+      gate counts: "The similar 4-branch GFN structure is used to iterate for 4 rounds, and 2 gates are selected per
+      round to construct the lightweight 4-bit S-box. [...] Fig. 4(a) shows the S-box of Piccolo algorithm hardware
+      circuitry." Splight generates its own candidate S-boxes with the identical 4-branch-GFN, 4-round, 2-gates-per-round
+      structure, only substituting different 2-input gate types (NAND/XOR/NOR/XNOR) into Piccolo''s a/b/c/d slots.'
+  - source_family_id: ublock
+    relations:
+    - inspired_by
+    note: 'Same S-box-generation reuse as the Piccolo edge on this family (see that note for the shared quote):
+      the paper''s Fig. 4(b) shows "the S-box of uBlock algorithm hardware circuitry" as the other template Splight''s
+      candidate-S-box search directly reuses, alongside Piccolo''s.'
+  notes: 'Splight (Zhou, Ye, Lai, Yu, Zhang, Liu; IEEE Transactions on Computers, 2026) is a 64-bit, 128-bit-key
+    lightweight block cipher for resource-constrained IoT/embedded devices. It uses a balanced Feistel structure (two
+    32-bit branches) but replaces the traditional single-S-layer SP round function with an "S-P-S" sandwich (S-box,
+    linear layer, S-box), explicitly to double the number of active S-boxes per round versus a conventional Feistel-SP
+    round, while also achieving full-state iteration every round (addressing the traditional Feistel weakness of only
+    updating half the state per round). The key schedule is a separate 4-branch generalized-Feistel structure over the
+    128-bit key, deliberately designed to differ maximally in structure from the encryption round. Security was
+    evaluated with a custom half-byte-granularity MILP model (solved with Gurobi) for differential/linear/impossible-differential/zero-correlation/integral
+    analysis and avalanche testing against SIMON, SPECK, and LBLOCK, where Splight reached full avalanche in the
+    fewest rounds (6) with the lowest uncertainty of those compared. 32 rounds total.'
+  instances:
+  - id: splight_v1
+    name: Splight
+    type: block_cipher
+    reference_ids:
+    - zhou_et_al_2026_splight
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 32
+      output_size_bits: 64
+    notes: Sole parameter set specified in the paper.

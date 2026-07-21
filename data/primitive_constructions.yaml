@@ -693,10 +693,12 @@ primitive_constructions:
   notes: >
     An SPN whose overall structure is an involution (or made one via a
     "reflection" construction): decryption reuses the same circuit/round
-    sequence as encryption, either because the cipher is genuinely
-    self-inverse (3-Way's near-involutive round structure, per Daemen's own
-    design rationale) or because it mirrors its rounds around a central
-    reflection layer so that decrypting under key k equals encrypting under
+    sequence as encryption, either because every round component is
+    individually self-inverse (3-Way's near-involutive round structure per
+    Daemen's own design rationale, and the same "make every component an
+    involution" strategy in Anubis, Khazad, NOEKEON, and ICEBERG) or because
+    the whole cipher mirrors its rounds around a central reflection layer so
+    that decrypting under key k equals encrypting under
     a related key (the PRINCE/MANTIS/PRINCEv2 "reflection cipher" family,
     Borghoff et al., "PRINCE," ASIACRYPT 2012). Halves the implementation
     cost of supporting both encryption and decryption in hardware. A second,
