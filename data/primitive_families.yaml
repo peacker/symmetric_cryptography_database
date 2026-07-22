@@ -2395,9 +2395,18 @@ primitive_families:
       output_size_bits: 128
 - id: rc5
   name: RC5
-  notes: RC5 is a parameterized ARX block cipher distinguished by data-dependent rotations, originally designed by Ron Rivest
-    and presented at FSE 1994; RFC 2040 (1996) later described common 32-bit-word profiles for use in CBC/CTS modes.
+  notes: 'RC5 is a parameterized ARX block cipher distinguished by data-dependent rotations, originally designed by Ron Rivest
+    and presented at FSE 1994; RFC 2040 (1996) later described common 32-bit-word profiles for use in CBC/CTS modes. Each
+    round updates the two w-bit halves A, B in turn: A = ((A XOR B) <<< B) + S[2i], then B = ((B XOR A) <<< A) + S[2i+1]
+    -- i.e. each half is transformed by an ARX round function keyed on the other half, a modified/non-classical Feistel
+    structure (tagged here as plain ''feistel'', not ''balanced_feistel'', since both halves are updated per round rather
+    than one half via a single F folded into the other and swapped). Rivest''s original paper never uses the word "Feistel"
+    and frames the design purely around data-dependent rotations, so this structural classification is a curator judgment,
+    not a cited claim.
+
+    '
   construction_ids:
+  - feistel
   - arx_permutation_network
   - data_dependent_rotation_arx
   - modadd_key_injection_arx
@@ -10365,9 +10374,8 @@ primitive_families:
 - id: lucifer
   name: Lucifer
   construction_ids:
-  - spn
-  - full_sbox_layer
-  - bit_permutation_linear_layer
+  - feistel
+  - balanced_feistel
   round_ids:
   - lucifer_round
   target_applications:
@@ -10396,8 +10404,10 @@ primitive_families:
 
       '
   notes: 'Lucifer was an early IBM cipher (circa 1971-1973), the precursor to DES. The Sorkin (1983) description specifies
-    a 128-bit block with 128-bit key and 16 rounds. The key controls which of two 4-bit S-boxes (S₀ or S₁) is applied at each
-    position per round. DES was derived from a later, weakened variant of Lucifer with a smaller block (64 bits).
+    a 128-bit block with 128-bit key and 16 rounds, structured as a balanced Feistel network: each round''s F-function is
+    itself an SPN (key-controlled S-box layer, from S₀/S₁, followed by a permutation) applied to one 64-bit half of the
+    state, XORed into the other half before the halves swap. DES was derived from a later, weakened variant of Lucifer
+    with a smaller block (64 bits).
 
     '
   instances:
