@@ -10169,11 +10169,97 @@ mode_families:
     reference_ids: *id001
     characteristics:
       output_size_bits: 128
+- id: ghash
+  name: GHASH
+  construction_ids:
+  - polynomial_universal_hash
+  round_ids:
+  - ghash_round
+  target_applications:
+  - generic
+  - software
+  - hardware
+  - tls
+  characteristics:
+    block_size_bits: 128
+    components:
+    - id: nonlinear_filter
+    - id: xor
+  reference_ids:
+  - gcm_ref
+  process_participations: []
+  influences: []
+  notes: 'GHASH (McGrew and Viega; standardized as NIST SP 800-38D Sec. 6.4) is the universal hash underlying GCM: it
+    compresses an encoding of the additional authenticated data and the ciphertext into one 128-bit block by
+    evaluating them, as coefficients of a polynomial, at a secret point H = CIPH_K(0^128) in the binary Galois field
+    GF(2^128) (reduction polynomial u^128+u^7+u^2+u+1). GHASH is keyed and bounded-collision-probability but not,
+    on its own, a secure MAC or a cryptographic hash function -- NIST''s own standard notes it "is a keyed hash
+    function but not, on its own, a cryptographic hash function," approved only for use inside GCM, where its raw
+    output is masked (XORed with a GCTR/CTR-mode-encrypted block) before release, per the Carter-Wegman pattern (see
+    the carter_wegman mode construction on the aes_gcm family). Not itself modeled as reusing any other tracked
+    cipher''s S-box/round structure -- its only touchpoint with the underlying block cipher is generating H by
+    encrypting the all-zero block once.'
+  instances:
+  - id: ghash_v1
+    name: GHASH
+    type: universal_hash
+    reference_ids:
+    - gcm_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      output_size_bits: 128
+    notes: Sole parameter set; block size fixed at 128 bits to match GCM's 128-bit-block-cipher requirement.
+- id: poly1305
+  name: Poly1305
+  construction_ids:
+  - polynomial_universal_hash
+  - carter_wegman
+  round_ids:
+  - poly1305_round
+  target_applications:
+  - generic
+  - software
+  - tls
+  - messaging
+  characteristics:
+    components:
+    - id: mul_mod
+      params:
+        modulus: 1361129467683753853853498429727072845819
+    - id: xor
+  reference_ids:
+  - bernstein_2005_poly1305
+  - rfc_8439
+  process_participations: []
+  influences: []
+  notes: 'Poly1305 (Bernstein, FSE 2005) is a one-time-key universal-hash-based MAC: it evaluates the message, split
+    into 16-byte blocks, as coefficients of a polynomial at a secret point r in the prime field GF(2^130-5), via
+    Horner''s rule (Acc = ((Acc+block)*r) mod p), then adds a second secret value s (never multiplied, only added at
+    the end) to mask the raw polynomial-hash output -- baking the Carter-Wegman "hash-then-mask" combination directly
+    into its own definition, unlike GHASH (see ghash), where the masking step happens one level up in GCM. r and s
+    (together the 256-bit one-time key) must be unique and unpredictable per message; Bernstein''s original paper
+    derived them by AES-encrypting a nonce, but explicitly generalizes this: "There is nothing special about AES
+    here. One can replace AES with an arbitrary keyed function from an arbitrary set of nonces to 16-byte strings" --
+    the basis for RFC 8439''s key derivation via a ChaCha20 block instead.'
+  instances:
+  - id: poly1305_v1
+    name: Poly1305
+    type: universal_hash
+    reference_ids:
+    - bernstein_2005_poly1305
+    - rfc_8439
+    characteristics:
+      key_size_bits: 256
+      output_size_bits: 128
+    notes: Sole parameter set (32-byte one-time key r||s, 16-byte tag); r and s are typically derived per-message
+      from a separate PRF/block-cipher output rather than reused directly as a static key.
 - id: aes_gcm
   name: AES-GCM
   construction_ids:
   - block_cipher_based
   - gcm_mode
+  - carter_wegman
   target_applications:
   - generic
   - software
@@ -10188,13 +10274,16 @@ mode_families:
     - related_to
     note: AES-GCM is the Galois/Counter Mode of operation instantiated with the unmodified AES (Rijndael) block cipher,
       as standardized in NIST SP 800-38D.
-  notes: Authenticated encryption mode suitable for block ciphers. Standard for TLS 1.2/1.3 and widely deployed.
+  notes: Authenticated encryption mode suitable for block ciphers. Standard for TLS 1.2/1.3 and widely deployed. Combines
+    CTR-mode (GCTR) encryption with the GHASH universal hash (see ghash), masking GHASH's raw output with a
+    GCTR-encrypted block per the Carter-Wegman construction to form the authentication tag.
   authors:
   - David A. McGrew
   - John Viega
   year: 2005
   underlying_primitive_ids:
   - rijndael_128_128
+  - ghash_v1
   instances:
   - id: gcm_v1
     name: GCM (Galois/Counter Mode)
@@ -10225,13 +10314,16 @@ mode_families:
     - related_to
     note: ChaCha20-Poly1305 combines the unmodified ChaCha20 stream cipher with the Poly1305 universal hash in an Encrypt-then-MAC
       AEAD construction, as specified in RFC 8439.
-  notes: AEAD combining ChaCha20 stream cipher with Poly1305 universal hash. Commonly used in TLS and modern protocols.
+  notes: AEAD combining ChaCha20 stream cipher with Poly1305 universal hash (see poly1305; Poly1305's own definition
+    already includes the Carter-Wegman masking step, so only encrypt_then_mac is tagged at this AEAD level). Commonly
+    used in TLS and modern protocols.
   authors:
   - Yoav Nir
   - Adam Langley
   year: 2015
   underlying_primitive_ids:
   - chacha20
+  - poly1305_v1
   instances:
   - id: chacha20_poly1305_v1
     name: ChaCha20-Poly1305

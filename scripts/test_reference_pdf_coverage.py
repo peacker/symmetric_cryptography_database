@@ -17,7 +17,7 @@ from __future__ import annotations
 from reference_pdfs import build_family_pdf_map
 
 KNOWN_MISSING = {
-    "abacus", "aes", "aes_cbc", "aes_ctr", "aes_gcm", "aria", "arirang", "aurora", "blender",
+    "abacus", "aes", "aes_cbc", "aes_ctr", "aria", "arirang", "aurora", "blender",
     "blue_midnight_wish", "boole", "catfish", "cheetah", "chi_hash",
     "cmea", "crunch", "crypton", "cubehash", "dch", "deal", "dynamic_sha",
     "dynamic_sha2", "echo_hash", "ecoh", "edon_r", "enrupt", "essence",

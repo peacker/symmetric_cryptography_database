@@ -4767,3 +4767,43 @@ rounds:
     applying S0 or S1 according to that bit''s value. After all |IV| bits are consumed, the cipher is clocked a
     further |IV| times using the ordinary keystream-generation step (quad_round) but without releasing any output,
     as an additional security-margin runup before encryption begins.'
+
+- id: ghash_round
+  name: GHASH block step
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+      notes: XOR the running output Y_{i-1} (Y_0 = the all-zero block) with the current 128-bit input block X_i
+    - component_id: nonlinear_filter
+      notes: 'multiply the XORed value by the hash subkey H in GF(2^128) (Algorithm 1: a 128-step add-and-reduce
+        loop using the fixed reduction constant R = 11100001 || 0^120, i.e. modulus u^128+u^7+u^2+u+1), replacing
+        the running value with this product'
+    constant_injection: none
+  notes: 'GHASH_H(X_1 || ... || X_m) computes Y_i = (Y_{i-1} xor X_i) . H for i=1..m and returns Y_m -- a Horner''s-rule
+    evaluation of the input blocks as polynomial coefficients at the secret point H, equivalent to X_1.H^m xor
+    X_2.H^(m-1) xor ... xor X_m.H. H = CIPH_K(0^128), the block cipher applied to the all-zero block; this is
+    GHASH''s only use of the underlying block cipher; it does not otherwise reuse the S-box/round structure of
+    whichever block cipher provides its key schedule.'
+- id: poly1305_round
+  name: Poly1305 block step
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+      notes: read the next 16-byte message block as a little-endian number and add a single 1 bit above its top
+        byte (equivalent to adding 2^128 for a full 16-byte block, or a smaller power of two for a shorter final
+        block), then add this value to the running accumulator
+    - component_id: mul_mod
+      params:
+        modulus: 1361129467683753853853498429727072845819
+      notes: 'multiply the updated accumulator by the clamped key half r and reduce modulo p = 2^130-5: Acc =
+        ((Acc+block)*r) mod p'
+    constant_injection: none
+  notes: 'poly1305_mac(msg, key) splits the 256-bit one-time key into r (the first 128 bits, clamped: r[3],r[7],
+    r[11],r[15] have their top 4 bits forced to 0, r[4],r[8],r[12] have their bottom 2 bits forced to 0) and s (the
+    last 128 bits, added at the end, never multiplied); the message is split into 16-byte blocks and folded into the
+    accumulator one at a time via Acc = ((Acc+block)*r) mod p, p = 2^130-5; the tag is (Acc+s) mod 2^128 serialized
+    little-endian. r and s together must be unpredictable per invocation -- RFC 8439 Sec. 2.6 derives them from a
+    ChaCha20 block keyed with the session key and nonce, generalising Bernstein''s original AES-based derivation
+    ("There is nothing special about AES here").'

@@ -28,6 +28,24 @@ mode_types:
     iterating a fixed-size compression function or permutation over the
     padded input via a mode such as Merkle-Damgard, HAIFA, a sponge, or a
     binary tree (BLAKE3).
+- id: universal_hash
+  name: Universal Hash Function (UHF)
+  notes: >
+    A keyed function family (Carter and Wegman, "Universal Classes of Hash
+    Functions," STOC 1977/JCSS 1979) offering only a bounded collision
+    probability over the random choice of key, rather than the one-wayness
+    a hash function provides -- weaker on its own, and not by itself
+    unpredictable or a secure MAC, since seeing one message/output pair
+    under a reused key can let an attacker forge others. Almost never
+    deployed standalone: it is normally combined with a single fresh
+    unpredictable value (traditionally a one-time pad, in practice a
+    PRF/block-cipher output keyed and indexed separately) via the
+    Wegman-Carter/Carter-Wegman construction to produce a full MAC, or
+    folded directly into an AEAD's tag computation (GHASH inside GCM,
+    Poly1305 inside ChaCha20-Poly1305). Typically built by evaluating the
+    message, viewed as coefficients of a polynomial, at a secret point in
+    a finite field (GHASH over GF(2^128), Poly1305 over GF(2^130-5)), or
+    by a word-wise multiply-add tree (UMAC/VMAC's NH).
 - id: xof
   name: Extendable-Output Function (XOF)
   notes: >

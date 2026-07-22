@@ -2871,14 +2871,20 @@ references:
   notes: 'SPRING block cipher paper (DOI: 10.13868/j.cnki.jcr.000343).'
 - id: gcm_ref
   kind: standard
-  title: The Galois/Counter Mode of Operation (GCM)
+  title: 'NIST Special Publication 800-38D: Recommendation for Block Cipher Modes of Operation: Galois/Counter Mode
+    (GCM) and GMAC'
   authors:
-  - David A. McGrew
-  - John Viega
-  year: 2005
+  - Morris Dworkin
+  year: 2007
   venue: NIST Special Publication 800-38D
+  organization: NIST
   url: https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38d.pdf
-  notes: Authenticated encryption mode for block ciphers. NIST standard.
+  notes: 'Data-quality fix: this entry previously listed McGrew and Viega (GCM''s actual designers, credited in this
+    standard''s own acknowledgments and introduction, "They submitted GCM to NIST... and they discuss in detail its
+    security and performance") as the authors of this specific document, with year 2005 -- but the standard itself
+    (the document this url/local copy actually is) is authored solely by Morris Dworkin and dated November 2007.
+    Authenticated encryption mode for block ciphers; defines the GHASH universal hash (Sec. 6.4) and GCTR (CTR-mode
+    variant, Sec. 6.5) that together form GCM. Local copy: references/2007-nist-sp800-38d-gcm.pdf.'
 - id: cbc_ref
   kind: standard
   title: Recommendation for Block Cipher Modes of Operation
@@ -4607,3 +4613,18 @@ references:
   publisher: Springer
   url: https://crypto.orange-labs.fr/papers/eurocrypt2006-109.pdf
   notes: 'Local copy: references/2006-quad.pdf.'
+- id: bernstein_2005_poly1305
+  kind: paper
+  title: The Poly1305-AES Message-Authentication Code
+  authors:
+  - Daniel J. Bernstein
+  year: 2005
+  venue: FSE 2005, LNCS 3557, pp. 32-49
+  publisher: Springer
+  url: https://iacr.org/archive/fse2005/35570033/35570033.pdf
+  notes: 'No local copy. Poly1305''s original design paper; the algorithm itself is fully and precisely specified
+    (with worked test vectors) in RFC 8439 Sec. 2.5, which is used as the primary source for this database''s
+    poly1305 entry via the local copy references/2018-chacha20-rfc8439.pdf. Bernstein''s own words on genericizing
+    the original AES-keyed nonce encryption: "There is nothing special about AES here. One can replace AES with an
+    arbitrary keyed function from an arbitrary set of nonces to 16-byte strings" -- the basis for Poly1305 being
+    reused with ChaCha20 (RFC 8439) rather than only AES.'

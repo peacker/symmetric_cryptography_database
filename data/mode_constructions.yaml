@@ -218,6 +218,80 @@ mode_constructions:
   name: Encrypt-then-MAC Composition
   notes: A generic AEAD composition that encrypts the plaintext with one primitive and authenticates the result with a separately-keyed
     MAC/universal hash.
+- id: carter_wegman
+  name: Carter-Wegman Construction
+  abbreviation: CW-MAC
+  typical_primitive_types:
+  - mac
+  placeholder_family_names:
+  - Poly1305
+  - AES-GCM
+  notes: >
+    Combines a universal hash function (keyed with its own hash key,
+    bounded collision probability) with a single-use unpredictable value
+    -- classically a one-time pad, in practice almost always a PRF/block
+    cipher output keyed separately and indexed by a nonce -- to get a full
+    MAC: tag = UHF_k1(m) + F_k2(nonce) (Wegman and Carter, "New Hash
+    Functions and Their Use in Authentication and Set Equality," JCSS
+    1981, building on Carter and Wegman, "Universal Classes of Hash
+    Functions," STOC 1977/JCSS 1979). Poly1305 bakes this masking step
+    into its own definition (the "+s" after the polynomial evaluation, s
+    coming from an external PRF); GCM instead applies it one level up, at
+    the GCM construction itself, XOR-masking GHASH's raw polynomial-hash
+    output with a GCTR/CTR-mode-encrypted block.
+- id: universal_hash
+  name: Universal Hash Function Family
+  typical_primitive_types:
+  - mac
+  - aead
+  placeholder_family_names:
+  - GHASH
+  - Poly1305
+  notes: >
+    Root category for keyed function families with a provably bounded
+    collision probability over the random choice of key (epsilon-almost-
+    universal or epsilon-almost-XOR-universal), rather than full
+    one-wayness -- see the universal_hash mode_type for the security
+    property itself and how it is combined with a mask (carter_wegman) to
+    form a MAC. This entry covers the *mechanism* used to build the hash;
+    see polynomial_universal_hash and multiply_add_universal_hash for the
+    two mechanisms tracked in this database.
+- id: polynomial_universal_hash
+  name: Polynomial Evaluation Universal Hash
+  special_case_of: universal_hash
+  typical_primitive_types:
+  - mac
+  - aead
+  placeholder_family_names:
+  - GHASH
+  - Poly1305
+  notes: >
+    Treats the message, split into fixed-size blocks, as the coefficients
+    of a polynomial and evaluates that polynomial at a secret point via
+    Horner's rule (accumulator = accumulator*point + next_block, repeated
+    over the blocks, reduced modulo a fixed modulus after every step) over
+    a finite field -- a binary (characteristic-2) Galois field for GHASH
+    (GF(2^128), reduction polynomial u^128+u^7+u^2+u+1, NIST SP 800-38D)
+    or a large prime field for Poly1305 (GF(2^130-5), Bernstein, FSE
+    2005). Collision probability is bounded by (message length in
+    blocks)/(field size), the classical Horner-rule polynomial-hash
+    security bound.
+- id: multiply_add_universal_hash
+  name: Multiply-Add Tree Universal Hash
+  special_case_of: universal_hash
+  typical_primitive_types:
+  - mac
+  placeholder_family_names:
+  - UMAC
+  - VMAC
+  notes: >
+    Builds the universal hash from a tree/chain of word-wise multiply-add
+    operations over key material and message words (e.g. UMAC's NH
+    function) rather than a single large-field polynomial evaluation,
+    trading a larger hash key for cheaper per-word arithmetic on
+    general-purpose CPUs. No family in this database is currently tagged
+    with this leaf -- UMAC appears only as a NESSIE MAC-submission
+    participant name in processes.yaml pending a primary source.
 - id: native_keystream_generator
   name: Native Keystream Generator
   notes: A stream cipher whose keystream is produced directly by its own internal state-update generator, with no separable
