@@ -98,7 +98,7 @@ processes:
     kind: category
     participants:
     - name: Two-Track-MAC
-    - name: UMAC
+    - family_id: umac
   - id: submissions_hash
     label: Hash function submissions
     kind: category

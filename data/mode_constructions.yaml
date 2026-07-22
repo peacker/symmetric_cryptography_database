@@ -286,12 +286,11 @@ mode_constructions:
   - VMAC
   notes: >
     Builds the universal hash from a tree/chain of word-wise multiply-add
-    operations over key material and message words (e.g. UMAC's NH
-    function) rather than a single large-field polynomial evaluation,
-    trading a larger hash key for cheaper per-word arithmetic on
-    general-purpose CPUs. No family in this database is currently tagged
-    with this leaf -- UMAC appears only as a NESSIE MAC-submission
-    participant name in processes.yaml pending a primary source.
+    operations over key material and message words (UMAC's NH function,
+    RFC 4418) rather than a single large-field polynomial evaluation,
+    trading a larger (reused, not one-time) hash key for cheaper per-word
+    arithmetic on general-purpose CPUs. VMAC (Krovetz and Dai) is a
+    related NH-based design not yet modeled separately in this database.
 - id: native_keystream_generator
   name: Native Keystream Generator
   notes: A stream cipher whose keystream is produced directly by its own internal state-update generator, with no separable

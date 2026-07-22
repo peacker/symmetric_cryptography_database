@@ -26,9 +26,9 @@ KNOWN_MISSING = {
     "labyrinth", "lane", "lea_iso", "lesamnta", "luffa", "lux_hash",
     "m3lcrypt", "mcrypton", "mcssha3", "md6", "meshhash", "mibs", "mmb",
     "multi2", "nasha", "newdes", "oryx", "panama", "pbkdf2", "pea", "picaro",
-    "pufferfish", "rc4plus", "sandstorm", "sarmal", "sgail", "shabal",
+    "polyval", "pufferfish", "rc4plus", "sandstorm", "sarmal", "sgail", "shabal",
     "shamata", "shavite3", "simd_hash", "simeck", "siphash", "spectral_hash",
-    "streamhash", "swifftx", "tangle_hash", "tib3", "twister_hash",
+    "streamhash", "swifftx", "tangle_hash", "tib3", "twister_hash", "umac",
     "vmpc", "vortex_hash", "wake", "wamm", "waterfall_hash",
     "xchacha", "xoodoo", "zuc",
 }

@@ -4628,3 +4628,31 @@ references:
     the original AES-keyed nonce encryption: "There is nothing special about AES here. One can replace AES with an
     arbitrary keyed function from an arbitrary set of nonces to 16-byte strings" -- the basis for Poly1305 being
     reused with ChaCha20 (RFC 8439) rather than only AES.'
+- id: rfc_8452
+  kind: standard
+  title: 'RFC 8452: AES-GCM-SIV: Nonce Misuse-Resistant Authenticated Encryption'
+  authors:
+  - Shay Gueron
+  - Adam Langley
+  - Yehuda Lindell
+  year: 2019
+  venue: IETF RFC 8452
+  organization: IETF
+  url: https://www.rfc-editor.org/rfc/rfc8452
+  notes: 'No local copy (fetched via WebFetch of the rfc-editor.org HTML). Defines POLYVAL, the universal hash used
+    by AES-GCM-SIV, and its exact relationship to GHASH: "POLYVAL(H, X_1, X_2, ...) is equal to
+    ByteReverse(GHASH(ByteReverse(H) * x, ByteReverse(X_1), ByteReverse(X_2), ...))" -- i.e. POLYVAL is GHASH with
+    reversed bit/byte ordering (avoiding the bit-reflection GHASH needs for efficient carryless-multiply instructions
+    in software) plus an extra multiplication by x worked into the hash subkey.'
+- id: rfc_4418
+  kind: standard
+  title: 'RFC 4418: UMAC: Message Authentication Code using Universal Hashing'
+  authors:
+  - T. Krovetz
+  year: 2006
+  venue: IETF RFC 4418
+  organization: IETF
+  url: https://www.rfc-editor.org/rfc/rfc4418
+  notes: No local copy (fetched via WebFetch of the rfc-editor.org HTML). Original authors of the UMAC construction
+    are Black, Halevi, Krawczyk, Krovetz, and Rogaway (CRYPTO 1999); this RFC is Krovetz's own IETF specification of
+    the algorithm, used here as the primary source for its exact layered-hash definition.

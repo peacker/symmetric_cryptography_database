@@ -10210,6 +10210,54 @@ mode_families:
       key_size_bits: 128
       output_size_bits: 128
     notes: Sole parameter set; block size fixed at 128 bits to match GCM's 128-bit-block-cipher requirement.
+- id: polyval
+  name: POLYVAL
+  construction_ids:
+  - polynomial_universal_hash
+  round_ids:
+  - polyval_round
+  target_applications:
+  - generic
+  - software
+  - tls
+  characteristics:
+    block_size_bits: 128
+    components:
+    - id: nonlinear_filter
+    - id: xor
+  reference_ids:
+  - rfc_8452
+  process_participations: []
+  influences:
+  - source_family_id: ghash
+    relations:
+    - variant_of
+    note: 'RFC 8452 defines POLYVAL directly in terms of GHASH: "POLYVAL(H, X_1, X_2, ...) is equal to
+      ByteReverse(GHASH(ByteReverse(H) * x, ByteReverse(X_1), ByteReverse(X_2), ...))." Same GF(2^128) polynomial-
+      evaluation mechanism and (up to the byte-reversal and the extra multiplication by x folded into the "dot"
+      operator) the same reduction field, re-oriented purely so software carryless-multiply instructions can be
+      used without GHASH''s bit-reflection step -- an explicit, primary-source-confirmed variant relationship, not
+      just a shared paradigm.'
+  notes: 'POLYVAL (Gueron, Langley, Lindell; RFC 8452) is the universal hash used by AES-GCM-SIV''s authentication
+    mechanism, a byte/bit-reversed variant of GHASH designed to avoid the reflection step GHASH needs for efficient
+    use of hardware carryless-multiply instructions. It operates in GF(2^128) with reduction polynomial
+    x^128+x^127+x^126+x^121+1 (different from GHASH''s x^128+x^7+x^2+x+1, since the field element ordering itself
+    differs) and defines dot(a,b) = a*b*x^-128 as its multiplication operator. Used inside AES-GCM-SIV (not itself
+    modeled as a separate mode_families entry here) as part of a synthetic-IV (SIV) construction: POLYVAL''s output
+    over the AAD/plaintext/length block is XORed with the nonce, has its top bit cleared, and is then encrypted
+    (not merely masked) with AES to produce the tag, which doubles as the deterministic CTR-mode starting counter --
+    a more involved combination than GCM''s Carter-Wegman masking, so carter_wegman is not tagged on this family.'
+  instances:
+  - id: polyval_v1
+    name: POLYVAL
+    type: universal_hash
+    reference_ids:
+    - rfc_8452
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      output_size_bits: 128
+    notes: Sole parameter set specified in RFC 8452.
 - id: poly1305
   name: Poly1305
   construction_ids:
@@ -10254,6 +10302,57 @@ mode_families:
       output_size_bits: 128
     notes: Sole parameter set (32-byte one-time key r||s, 16-byte tag); r and s are typically derived per-message
       from a separate PRF/block-cipher output rather than reused directly as a static key.
+- id: umac
+  name: UMAC
+  construction_ids:
+  - multiply_add_universal_hash
+  - carter_wegman
+  round_ids:
+  - umac_nh_round
+  - umac_hash_layers_round
+  target_applications:
+  - generic
+  - software
+  characteristics:
+    components:
+    - id: add_mod
+    - id: mul_mod
+    - id: xor
+  reference_ids:
+  - rfc_4418
+  process_participations:
+  - process_id: nessie_competition_european_commission_2000_2003
+    stage_ids:
+    - submissions_mac
+    status: submitted
+  influences: []
+  notes: 'UMAC (Black, Halevi, Krawczyk, Krovetz, Rogaway, CRYPTO 1999; specified for IETF use in RFC 4418, Krovetz)
+    authenticates a message by chaining three hash layers: L1-HASH applies NH -- a multiply-add tree, Y = sum_i
+    ((M_i+K_i mod 2^32)*(M_{i+4}+K_{i+4} mod 2^32) mod 2^64) -- to each 1024-byte chunk of the message, producing an
+    8-byte digest per chunk; L2-HASH Horner-evaluates those digests as a polynomial mod a 64- or 128-bit prime (the
+    same mechanism as GHASH/Poly1305/POLYVAL, just applied one layer up); L3-HASH is a small inner-product hash mod
+    prime(36) that compresses L2''s output to the final tag length. The tag is this hash XORed with a pad derived
+    from the nonce via a separately-keyed PRF -- textbook Carter-Wegman masking. UMAC trades polynomial evaluation''s
+    large-field single multiply per block (GHASH/Poly1305/POLYVAL) for many parallel word-sized multiply-adds
+    (NH), aiming for very high software speed on ordinary CPUs (as low as ~1 cycle/byte per the RFC) at the cost of
+    a much larger (reused, not one-time) hash key. Submitted to NESSIE as a MAC candidate.'
+  authors:
+  - John Black
+  - Shai Halevi
+  - Hugo Krawczyk
+  - Ted Krovetz
+  - Phillip Rogaway
+  year: 1999
+  instances:
+  - id: umac_default
+    name: UMAC
+    type: universal_hash
+    reference_ids:
+    - rfc_4418
+    characteristics:
+      output_size_bits: 64
+    notes: Tag length is a caller-chosen parameter (typically 32, 64, 96, or 128 bits); longer tags run the L1/L2/L3
+      chain multiple times in parallel with independent keys/pads.
 - id: aes_gcm
   name: AES-GCM
   construction_ids:

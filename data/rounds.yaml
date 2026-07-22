@@ -4807,3 +4807,72 @@ rounds:
     little-endian. r and s together must be unpredictable per invocation -- RFC 8439 Sec. 2.6 derives them from a
     ChaCha20 block keyed with the session key and nonce, generalising Bernstein''s original AES-based derivation
     ("There is nothing special about AES here").'
+
+- id: polyval_round
+  name: POLYVAL block step
+  kind: other
+  spec:
+    component_flow:
+    - component_id: xor
+      notes: XOR the running state S_{j-1} (S_0 = 0) with the current 128-bit input block X_j
+    - component_id: nonlinear_filter
+      notes: 'apply dot(a, H) = a * H * x^-128 to the XORed value in GF(2^128) (standard binary polynomial
+        multiplication by the hash subkey H, then by the fixed constant x^-128 = x^127+x^124+x^121+x^114+1, then
+        reduced modulo x^128+x^127+x^126+x^121+1), replacing the running state with the result'
+    constant_injection: none
+  notes: 'POLYVAL(H, X_1,...,X_s) computes S_j = dot(S_{j-1} + X_j, H) for j=1..s and returns S_s -- the same
+    Horner''s-rule polynomial-evaluation structure as GHASH (see ghash_round), but over a different field element
+    ordering: POLYVAL treats bit/byte strings as little-endian polynomial coefficients (LSB of the first byte =
+    coefficient of x^0) where GHASH treats them as big-endian, and folds an extra multiplication by x into the "dot"
+    operator rather than plain field multiplication. RFC 8452 states the exact relationship: "POLYVAL(H, X_1, X_2,
+    ...) is equal to ByteReverse(GHASH(ByteReverse(H) * x, ByteReverse(X_1), ByteReverse(X_2), ...))" -- this
+    reordering exists purely so that software carryless-multiply instructions (e.g. x86 PCLMULQDQ) can be used
+    without the extra bit-reflection GHASH needs, not for any security reason.'
+
+- id: umac_nh_round
+  name: UMAC NH (L1-HASH) step
+  kind: other
+  spec:
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+      notes: pairwise-add each of 4 message-word/key-word pairs (M_i+K_i mod 2^32, M_{i+4}+K_{i+4} mod 2^32, offset
+        by 8 words per step)
+    - component_id: mul_mod
+      params:
+        modulus: 18446744073709551616
+      notes: multiply each of the 4 pairs' sums together mod 2^64
+    - component_id: add_mod
+      params:
+        modulus: 18446744073709551616
+      notes: accumulate all 4 products into the running 64-bit sum Y
+    constant_injection: none
+  notes: 'NH is UMAC''s namesake nonlinear hash: over a 1024-byte (256-word) message chunk and an equally long key,
+    Y = sum_i ((M_i+K_i mod 2^32) * (M_{i+4}+K_{i+4} mod 2^32) mod 2^64), summed mod 2^64 -- a multiply-add tree
+    rather than a large-field polynomial evaluation (contrast ghash_round/poly1305_round/polyval_round), trading a
+    much larger hash key (reused, unlike Poly1305''s one-time key) for arithmetic that maps directly onto ordinary
+    32x32->64-bit integer multiply-add instructions. L1-HASH applies NH to each 1024-byte chunk of the (possibly
+    much longer) message, producing one 8-byte output per chunk.'
+
+- id: umac_hash_layers_round
+  name: UMAC L2/L3 finishing layers
+  kind: other
+  spec:
+    component_flow:
+    - component_id: mul_mod
+      notes: 'L2-HASH: Horner-rule polynomial evaluation of L1''s 8-byte-per-chunk outputs, y = (k*y+m) mod p, over
+        prime(64) or prime(128) depending on message length -- the same polynomial-hash mechanism as GHASH/Poly1305/
+        POLYVAL, just applied one layer up, compressing NH''s outputs rather than the raw message'
+    - component_id: mul_mod
+      notes: 'L3-HASH: an inner-product hash over prime(36) -- L2''s 16-byte output is split into 2-byte chunks,
+        each multiplied by a corresponding 8-byte key word and summed mod prime(36), then masked with a 4-byte
+        pseudorandom value to produce the final short hash'
+    - component_id: xor
+      notes: XOR the L3 output with a pad (a PRF/block-cipher output keyed and indexed by the nonce) to form the tag
+    constant_injection: none
+  notes: 'UHASH (the composite hash inside UMAC) chains NH (umac_nh_round/L1) into a polynomial layer (L2) and then
+    a small inner-product layer (L3) to compress the message down to as few bytes as the desired tag length needs;
+    Tag = Pad xor UHASH(message), the Carter-Wegman masking step, with Pad derived from the nonce via a separately
+    keyed PRF (a block cipher in the original design). Longer tags run L1/L2/L3 multiple times in parallel with
+    independent keys/pads.'
