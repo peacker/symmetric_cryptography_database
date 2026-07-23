@@ -1,0 +1,95 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.org/symmetric_primitives/family_common.schema.json",
+    "title": "Shared Family Definitions",
+    "description": "Definitions shared byte-for-byte between primitive_families.schema.json and mode_families.schema.json, factored out here so they are defined once. Anything that transitively depends on a family's tier-specific 'characteristics' shape (e.g. 'instance') stays local to each of those two schemas instead of living here.",
+    "$defs": {
+        "influence": {
+            "type": "object",
+            "description": "Records genuine design lineage from source_family_id to this family, not general co-occurrence in a paper. Only add one when the cited source states a concretely reused or adapted component (S-box, key schedule, round function, permutation, whitening construction, round constants, etc.), explicit 'based on'/'derived from'/'inspired by'/'generalizes'/'extends' language about the design itself, or literal same-team continuation of an earlier design. Do NOT record an influence, even if the source discusses it at length, for: a pure performance/benchmark comparison ('we compare cycle count to X', 'faster than X'); 'positioned against'/'contrasted with'/'designed to avoid a weakness of X' framing where nothing is adopted; a shared target application or use case ('also lightweight'); a shared abstract paradigm with no concretely borrowed mechanism ('both ARX', 'both Feistel', 'both sponge-based') -- this applies even when the source self-categorizes this way; a related-work listing that merely enumerates several earlier designs sharing a generic technique without singling one out as the actual adopted basis; or anything the source states was developed independently. When unsure, omit the edge -- a missed influence is far cheaper to add later than a fabricated one is to catch. See the 'Contributing' section of README.md for the full rule and worked examples.",
+            "required": [
+                "source_family_id",
+                "relations",
+                "note"
+            ],
+            "properties": {
+                "source_family_id": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "relations": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "inspired_by",
+                            "improvement_of",
+                            "standardization_of",
+                            "variant_of",
+                            "generalization_of",
+                            "specializes",
+                            "related_to",
+                            "used_by"
+                        ]
+                    }
+                },
+                "innovative_idea_ids": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": { "type": "string", "minLength": 1 }
+                },
+                "note": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+        },
+        "component_ref": {
+            "type": "object",
+            "required": ["id"],
+            "additionalProperties": false,
+            "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "params": { "type": "object" }
+            }
+        },
+        "construction_id": { "type": "string", "minLength": 1 },
+        "round_id": { "type": "string", "minLength": 1 },
+        "innovative_idea": {
+            "type": "object",
+            "required": ["id", "name"],
+            "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "name": { "type": "string", "minLength": 1 },
+                "note": { "type": "string" }
+            },
+            "additionalProperties": false
+        },
+        "process_participation": {
+            "type": "object",
+            "required": ["process_id"],
+            "properties": {
+                "process_id": { "type": "string", "minLength": 1 },
+                "stage_ids": {
+                    "type": "array",
+                    "items": { "type": "string", "minLength": 1 }
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "candidate",
+                        "finalist",
+                        "winner",
+                        "recommended",
+                        "candidate_recommended",
+                        "monitored",
+                        "special_recognition",
+                        "portfolio",
+                        "submitted"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        }
+    }
+}

@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
+from referencing import Registry, Resource
 
 from common import SCHEMA_DIR, all_families, all_instances, load_all_data
 
@@ -57,9 +58,23 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def validate_schema(doc: dict, schema_path: Path, label: str) -> bool:
+def build_schema_registry() -> Registry:
+    """Registers every schema/*.schema.json file by its own $id, so a $ref like
+    'family_common.schema.json#/$defs/influence' (used by primitive_families
+    and mode_families to share definitions instead of duplicating them, e.g.
+    the influence-edge rule) resolves locally instead of jsonschema trying --
+    and failing -- to fetch the https://example.org/... $id over the network.
+    """
+    resources = []
+    for path in sorted(SCHEMA_DIR.glob("*.schema.json")):
+        contents = json.loads(path.read_text(encoding="utf-8"))
+        resources.append((contents["$id"], Resource.from_contents(contents)))
+    return Registry().with_resources(resources)
+
+
+def validate_schema(doc: dict, schema_path: Path, label: str, registry: Registry) -> bool:
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
-    validator = Draft202012Validator(schema)
+    validator = Draft202012Validator(schema, registry=registry)
     errors = sorted(validator.iter_errors(doc), key=lambda e: e.path)
     if errors:
         for error in errors:
@@ -82,23 +97,24 @@ def main() -> None:
     references_doc          = data["references"]
     processes_doc           = data["processes"]
 
+    registry = build_schema_registry()
     ok = True
-    ok &= validate_schema(primitive_families_doc, SCHEMA_DIR / "primitive_families.schema.json", "primitive_families")
-    ok &= validate_schema(mode_families_doc,      SCHEMA_DIR / "mode_families.schema.json",      "mode_families")
-    ok &= validate_schema(components_doc,         SCHEMA_DIR / "components.schema.json",         "components")
-    ok &= validate_schema(primitive_constructions_doc, SCHEMA_DIR / "primitive_constructions.schema.json", "primitive_constructions")
-    ok &= validate_schema(mode_constructions_doc,  SCHEMA_DIR / "mode_constructions.schema.json", "mode_constructions")
-    ok &= validate_schema(rounds_doc,              SCHEMA_DIR / "rounds.schema.json",             "rounds")
-    ok &= validate_schema(primitive_types_doc,     SCHEMA_DIR / "primitive_types.schema.json",     "primitive_types")
-    ok &= validate_schema(mode_types_doc,          SCHEMA_DIR / "mode_types.schema.json",          "mode_types")
-    ok &= validate_schema(references_doc,          SCHEMA_DIR / "references.schema.json",          "references")
-    ok &= validate_schema(processes_doc,           SCHEMA_DIR / "processes.schema.json",           "processes")
+    ok &= validate_schema(primitive_families_doc, SCHEMA_DIR / "primitive_families.schema.json", "primitive_families", registry)
+    ok &= validate_schema(mode_families_doc,      SCHEMA_DIR / "mode_families.schema.json",      "mode_families", registry)
+    ok &= validate_schema(components_doc,         SCHEMA_DIR / "components.schema.json",         "components", registry)
+    ok &= validate_schema(primitive_constructions_doc, SCHEMA_DIR / "primitive_constructions.schema.json", "primitive_constructions", registry)
+    ok &= validate_schema(mode_constructions_doc,  SCHEMA_DIR / "mode_constructions.schema.json", "mode_constructions", registry)
+    ok &= validate_schema(rounds_doc,              SCHEMA_DIR / "rounds.schema.json",             "rounds", registry)
+    ok &= validate_schema(primitive_types_doc,     SCHEMA_DIR / "primitive_types.schema.json",     "primitive_types", registry)
+    ok &= validate_schema(mode_types_doc,          SCHEMA_DIR / "mode_types.schema.json",          "mode_types", registry)
+    ok &= validate_schema(references_doc,          SCHEMA_DIR / "references.schema.json",          "references", registry)
+    ok &= validate_schema(processes_doc,           SCHEMA_DIR / "processes.schema.json",           "processes", registry)
     if not ok:
         raise SystemExit(1)
 
-    families_schema = load_json(SCHEMA_DIR / "primitive_families.schema.json")
+    family_common_schema = load_json(SCHEMA_DIR / "family_common.schema.json")
     known_relations = set(
-        families_schema["$defs"]["influence"]["properties"]["relations"]["items"]["enum"]
+        family_common_schema["$defs"]["influence"]["properties"]["relations"]["items"]["enum"]
     )
 
     reference_ids = {r["id"] for r in references_doc.get("references", [])}

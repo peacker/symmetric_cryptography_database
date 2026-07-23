@@ -21,66 +21,6 @@
         }
     },
     "$defs": {
-        "influence": {
-            "type": "object",
-            "required": [
-                "source_family_id",
-                "relations",
-                "note"
-            ],
-            "properties": {
-                "source_family_id": {
-                    "type": "string",
-                    "minLength": 1
-                },
-                "relations": {
-                    "type": "array",
-                    "minItems": 1,
-                    "uniqueItems": true,
-                    "items": {
-                        "type": "string",
-                        "enum": [
-                            "inspired_by",
-                            "improvement_of",
-                            "standardization_of",
-                            "variant_of",
-                            "generalization_of",
-                            "specializes",
-                            "related_to",
-                            "used_by"
-                        ]
-                    }
-                },
-                "innovative_idea_ids": {
-                    "type": "array",
-                    "uniqueItems": true,
-                    "items": { "type": "string", "minLength": 1 }
-                },
-                "note": { "type": "string", "minLength": 1 }
-            },
-            "additionalProperties": false
-        },
-        "component_ref": {
-            "type": "object",
-            "required": ["id"],
-            "additionalProperties": false,
-            "properties": {
-                "id": { "type": "string", "minLength": 1 },
-                "params": { "type": "object" }
-            }
-        },
-        "construction_id": { "type": "string", "minLength": 1 },
-        "innovative_idea": {
-            "type": "object",
-            "required": ["id", "name"],
-            "properties": {
-                "id": { "type": "string", "minLength": 1 },
-                "name": { "type": "string", "minLength": 1 },
-                "note": { "type": "string" }
-            },
-            "additionalProperties": false
-        },
-        "round_id": { "type": "string", "minLength": 1 },
         "characteristics": {
             "type": "object",
             "properties": {
@@ -105,30 +45,10 @@
                 "personalization": { "type": "boolean" },
                 "components": {
                     "type": "array",
-                    "items": { "$ref": "#/$defs/component_ref" }
+                    "items": { "$ref": "family_common.schema.json#/$defs/component_ref" }
                 }
             },
             "additionalProperties": true
-        },
-        "process_participation": {
-            "type": "object",
-            "required": ["process_id"],
-            "properties": {
-                "process_id": { "type": "string", "minLength": 1 },
-                "stage_ids": {
-                    "type": "array",
-                    "items": { "type": "string", "minLength": 1 }
-                },
-                "status": {
-                    "type": "string",
-                    "enum": [
-                        "candidate", "finalist", "winner", "recommended",
-                        "candidate_recommended", "monitored", "special_recognition",
-                        "portfolio", "submitted"
-                    ]
-                }
-            },
-            "additionalProperties": false
         },
         "instance": {
             "type": "object",
@@ -164,11 +84,11 @@
                 "name": { "type": "string", "minLength": 1 },
                 "construction_ids": {
                     "type": "array",
-                    "items": { "$ref": "#/$defs/construction_id" }
+                    "items": { "$ref": "family_common.schema.json#/$defs/construction_id" }
                 },
                 "round_ids": {
                     "type": "array",
-                    "items": { "$ref": "#/$defs/round_id" }
+                    "items": { "$ref": "family_common.schema.json#/$defs/round_id" }
                 },
                 "target_applications": {
                     "type": "array",
@@ -177,7 +97,7 @@
                 "characteristics": { "$ref": "#/$defs/characteristics" },
                 "innovative_ideas": {
                     "type": "array",
-                    "items": { "$ref": "#/$defs/innovative_idea" }
+                    "items": { "$ref": "family_common.schema.json#/$defs/innovative_idea" }
                 },
                 "reference_ids": {
                     "type": "array",
@@ -185,11 +105,11 @@
                 },
                 "process_participations": {
                     "type": "array",
-                    "items": { "$ref": "#/$defs/process_participation" }
+                    "items": { "$ref": "family_common.schema.json#/$defs/process_participation" }
                 },
                 "influences": {
                     "type": "array",
-                    "items": { "$ref": "#/$defs/influence" }
+                    "items": { "$ref": "family_common.schema.json#/$defs/influence" }
                 },
                 "notes": { "type": "string", "minLength": 1 },
                 "authors": {
