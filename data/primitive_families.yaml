@@ -3001,17 +3001,6 @@ primitive_families:
     - inspired_by
     note: DFC's own EF sub-function is explicitly described as "a 4-round Feistel scheme (see Feistel [8])", citing H. Feistel's
       1973 Scientific American paper introducing the Feistel/Lucifer construction.
-  - source_family_id: des
-    relations:
-    - related_to
-    note: DFC's specification frames DES as its historical predecessor and explicit performance/security benchmark, not
-      a structural ancestor, e.g. "The Data Encryption Standard initiated an important open research area" and, in the
-      conclusion, "faster than DES and hopefully more secure than triple-DES."
-  - source_family_id: misty1
-    relations:
-    - related_to
-    note: DFC's specification discusses MISTY (Matsui) and the Nyberg-Knudsen provable-security paradigm as an alternative
-      approach that DFC's own decorrelation theory improves on, not as a design borrowing.
   notes: 'DFC (Decorrelated Fast Cipher) uses decorrelation theory to provide provable security against differential and linear
     cryptanalysis.
 
@@ -8448,7 +8437,9 @@ primitive_families:
 - id: mixfeed
   name: AES'-128/128
   construction_ids:
-  - stream_state_update_generator
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - aes_prime_128_round
   target_applications:
@@ -8627,7 +8618,6 @@ primitive_families:
   - spn
   - full_sbox_layer
   - near_mds_arx_linear_layer
-  - lay_massey
   - self_reciprocal_spn
   round_ids:
   - noekeon_round
@@ -9762,14 +9752,6 @@ primitive_families:
   - simplicio_barreto_carvalho_margi_naslund_2008_curupira2
   process_participations: []
   influences:
-  - source_family_id: bksq
-    relations:
-    - related_to
-    note: 'The paper''s own words: "CURUPIRA-1 is closely related to BKSQ (another member of the Wide Trail family),
-      designed with smart cards in mind but lacking involutional structure," and later, "the minimum number of
-      rounds was chosen to match the security level of BKSQ." This is an explicit comparison/security-level target,
-      not adopted structure -- Curupira-1''s own novel diffusion-matrix and key-schedule design is presented
-      specifically as what BKSQ lacks (see section 3.2 of the paper).'
   - source_family_id: anubis
     relations:
     - inspired_by
