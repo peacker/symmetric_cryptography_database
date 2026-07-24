@@ -2496,6 +2496,39 @@ rounds:
       word_bits: 8
       branches: 8
   notes: 'HIGHT GFN round: XOR, rotation, and 8-bit modular addition with subkeys.'
+- id: helix_round
+  name: Helix round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 160
+      word_bits: 32
+      branches: 5
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: xor
+    - component_id: rotation_fixed
+    rotation_constants:
+    - 9
+    - 10
+    - 15
+    - 17
+    - 20
+    - 25
+    - 30
+    - 11
+    - 5
+    - 13
+    constant_injection: none
+  notes: 'One round adds (or, at the two key-mixing/MAC points in each block, XORs) one active state word into
+    the next in a helical pattern across the five 32-bit words, then rotates the just-updated word by a fixed
+    amount. Twenty such rounds make up one block (Fig. 2 of the Helix and Phelix papers), during which two words
+    of key material and one word of plaintext/ciphertext are also injected via XOR/addition at fixed points. The
+    Helix and Phelix block functions are identical (Phelix''s own paper, Sect. 2: "the block functions of the two
+    ciphers are identical, except for the keystream output function"), so this round definition is shared by both
+    families'' primitive-tier entries rather than duplicated.'
 - id: hyena_round
   name: HyENA round
   kind: other

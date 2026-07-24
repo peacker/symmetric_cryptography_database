@@ -178,7 +178,7 @@ processes:
     - family_id: lex
     - name: MAG
     - family_id: nlsv2
-    - family_id: phelix
+    - family_id: phelix_aead
     - name: Polar Bear
     - name: POMARANCH
     - family_id: rabbit
@@ -210,7 +210,7 @@ processes:
     - family_id: hc_256
     - family_id: lex
     - family_id: nlsv2
-    - family_id: phelix
+    - family_id: phelix_aead
     - name: Polar Bear v2
     - name: Py
     - family_id: rabbit

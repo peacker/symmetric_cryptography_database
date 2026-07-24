@@ -3396,8 +3396,8 @@ mode_families:
       block_size_bits: 1
       output_size_bits: 1
     notes: Baseline Trivium stream-cipher instance after standard warm-up phase.
-- id: helix
-  name: Helix
+- id: helix_aead
+  name: Helix (AEAD)
   construction_ids:
   - native_keystream_generator
   target_applications:
@@ -3411,31 +3411,30 @@ mode_families:
   - ferguson_et_al_2003_helix
   process_participations: []
   influences:
-  - source_family_id: feal
+  - source_family_id: helix
     relations:
-    - related_to
-    note: 'Not a citation from Helix''s own paper: its full reference list cites only cryptanalysis-technique papers
-      (differential properties of addition, RC2 design/security) and competing authenticated-encryption-mode proposals
-      (Golic 2000, Jutla 2001, OCB, CCM) -- no earlier ARX cipher is cited as a design predecessor; the introduction
-      instead frames Helix as a synthesis of general lessons learned from the AES competition process. Recorded per
-      this database''s fallback convention for otherwise-uncited ARX ciphers -- crediting the earliest design in the
-      ARX lineage (FEAL, 1987).'
-  notes: Helix (Ferguson, Whiting, Schneier, Kelsey, Lucks, Kohno, FSE 2003) is a 32-bit-word ARX stream cipher that
-    combines encryption and authentication in a single primitive, feeding ciphertext words back into its own internal
-    state alongside a nonce and key. Directly cited by its own overlapping-author successor Threefish/Skein as the
-    origin of Threefish's MIX function.
+    - used_by
+    note: Helix's combined encryption+authentication construction (Sect. 2-3 of Ferguson et al. 2003) is built
+      directly on the fixed-size Helix block function, XORing the block function's per-block output word with the
+      plaintext to form the keystream and, after post-mixing, deriving a 128-bit MAC tag the same way. The paper's
+      own alternate configurations -- pure stream cipher/PRNG (Sect. 6.2) and pure MAC (Sect. 6.3) -- are the same
+      construction with the MAC or keystream output respectively discarded, not separate primitives.
+  notes: Helix (Ferguson, Whiting, Schneier, Kelsey, Lucks, Kohno, FSE 2003) combines encryption and authentication
+    in a single AEAD construction, feeding ciphertext words back into the underlying block function's internal
+    state alongside a nonce and key (see the helix primitive-tier family for the fixed-size block function itself).
+    Directly cited by its own overlapping-author successor Threefish/Skein as the origin of Threefish's MIX function.
   instances:
   - id: helix_v1
     name: Helix
-    type: stream_cipher
+    type: aead
     reference_ids:
     - ferguson_et_al_2003_helix
     characteristics:
       key_size_bits: 256
       output_size_bits: 32
     notes: Baseline Helix instance (256-bit key, 32-bit nonce, 32-bit words).
-- id: phelix
-  name: Phelix
+- id: phelix_aead
+  name: Phelix (AEAD)
   construction_ids:
   - native_keystream_generator
   target_applications:
@@ -3454,18 +3453,28 @@ mode_families:
     - phase_2
     status: candidate
   influences:
-  - source_family_id: helix
+  - source_family_id: phelix
+    relations:
+    - used_by
+    note: Phelix's AEAD construction is built directly on the Phelix block function, reading the four extra "old"
+      state words (alongside the block function's normal five-word output) to form the keystream -- the specific
+      change from Helix's simpler S_i := Z0^(i) extraction to Phelix's S_i := Y4 + Z4^(i-4).
+  - source_family_id: helix_aead
     relations:
     - improvement_of
     note: Phelix is Helix's improved, faster successor by an overlapping author team, submitted to eSTREAM; it was not
       advanced past Phase 1 after Wu and Preneel (2007) demonstrated differential attacks against it under nonce reuse.
-  notes: Phelix (Whiting, Schneier, Lucks, Muller, eSTREAM submission 2004/2005) is Helix's faster successor, also
-    combining ARX-based encryption and authentication in a single primitive. Directly cited (alongside Helix) by its
-    own overlapping-author successor Threefish/Skein as the origin of Threefish's MIX function.
+      This improvement is specifically at the keystream-extraction/AEAD level -- the underlying block function is
+      unchanged (see the phelix primitive-tier family's own variant_of edge to helix).
+  notes: Phelix (Whiting, Schneier, Lucks, Muller, eSTREAM submission 2004/2005) is Helix's faster successor,
+    also combining ARX-based encryption and authentication in a single AEAD construction (see the phelix
+    primitive-tier family for the underlying block function, which the paper states is identical to Helix's).
+    Directly cited (alongside Helix) by its own overlapping-author successor Threefish/Skein as the origin of
+    Threefish's MIX function.
   instances:
   - id: phelix_v1
     name: Phelix
-    type: stream_cipher
+    type: aead
     reference_ids:
     - whiting_et_al_2005_phelix
     characteristics:

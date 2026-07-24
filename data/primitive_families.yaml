@@ -7658,6 +7658,111 @@ primitive_families:
       key_size_bits: 128
       output_size_bits: 64
       rounds: 32
+- id: helix
+  name: Helix Block Function
+  construction_ids:
+  - arx_permutation_network
+  - fixed_rotation_arx
+  - pure_arx_no_constants
+  round_ids:
+  - helix_round
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    state_size_bits: 160
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - ferguson_et_al_2003_helix
+  process_participations: []
+  influences:
+  - source_family_id: twofish
+    relations:
+    - related_to
+    note: 'Overlapping authorship, not a stated citation: four of Helix''s six authors (Ferguson, Whiting, Schneier,
+      Kelsey) co-designed Twofish (1998) five years earlier; Helix''s own reference list cites no earlier cipher
+      as a design predecessor (only cryptanalysis-technique papers and competing AEAD-mode proposals). The team''s
+      design drifted away from Twofish''s key-dependent S-boxes and MDS matrix entirely, keeping only the
+      addition/rotation/XOR operations Twofish also used in its whitening (pseudo-Hadamard transform) -- the same
+      overlapping-author, largely-structural-drift basis as the existing keccak<-aes edge.'
+  notes: 'Ferguson, Whiting, Schneier, Kelsey, Lucks, and Kohno''s 2003 FSE paper formally defines a single fixed-size
+    "Helix block function" operating on a 160-bit (five 32-bit word) state (Fig. 1-2): each round adds or XORs one
+    active word into the next and rotates it by a fixed amount, with two words of key material and one word of
+    plaintext/ciphertext injected per block (20 rounds). The paper then builds several directly-usable constructions
+    on top of that fixed-size primitive -- combined encryption+authentication (its default/eponymous use, Sect. 2),
+    a pure stream cipher/PRNG (Sect. 6.2, ignoring the MAC), and a pure MAC (Sect. 6.3) -- all variable-length modes
+    that live at the mode tier (see helix_aead). This mirrors the Salsa20/salsa20_stream split already used in this
+    database.
+    '
+  instances:
+  - id: helix_block_function_v1
+    name: Helix Block Function
+    type: update_function
+    reference_ids:
+    - ferguson_et_al_2003_helix
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 128
+      state_size_bits: 160
+      rounds: 20
+      output_size_bits: 160
+    notes: 'One block of the Helix state update (Fig. 2): 20 rounds processing the 160-bit active state, with two
+      key words and one plaintext word injected per block.'
+- id: phelix
+  name: Phelix Block Function
+  construction_ids:
+  - arx_permutation_network
+  - fixed_rotation_arx
+  - pure_arx_no_constants
+  round_ids:
+  - helix_round
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    state_size_bits: 288
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - whiting_et_al_2005_phelix
+  process_participations: []
+  influences:
+  - source_family_id: helix
+    relations:
+    - variant_of
+    note: 'Phelix''s own paper states this directly (Sect. 2): "The structure of Phelix is very similar to that of
+      Helix. In fact, the block functions of the two ciphers are identical, except for the keystream output
+      function." Phelix carries four extra 32-bit "old" state words (nine words/288 bits total) alongside the same
+      five "active" words the identical round function operates on; the old words are read only by the downstream
+      keystream-extraction step, which is a mode-tier (AEAD) concern -- see phelix_aead''s own improvement_of edge
+      to helix_aead for that part of the redesign.'
+  notes: Whiting, Schneier, Lucks, and Muller's 2004/2005 eSTREAM submission reuses Helix's block function unchanged
+    (round_ids point at the same helix_round definition) but carries an enlarged nine-word (288-bit) state -- five
+    "active" words the round function touches, plus four "old" words read only by the keystream-output step. See
+    phelix_aead for the variable-length AEAD construction built on this primitive.
+  instances:
+  - id: phelix_block_function_v1
+    name: Phelix Block Function
+    type: update_function
+    reference_ids:
+    - whiting_et_al_2005_phelix
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 128
+      state_size_bits: 288
+      rounds: 20
+      output_size_bits: 288
+    notes: One block of the Phelix state update -- the same 20-round active-state processing as Helix's block
+      function, carrying four additional "old" state words for the mode-tier keystream-extraction step.
 - id: ice
   name: ICE
   construction_ids:
