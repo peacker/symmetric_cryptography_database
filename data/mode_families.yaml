@@ -5719,6 +5719,66 @@ mode_families:
     notes: FIPS 180-4 (2015). Block=1024 bits. Uses the SHA-512 compression function (80 rounds, 64-bit words) with distinct
       IVs (from the IV generation function). State=512 bits; output truncated to 256 bits. Offers 128-bit collision resistance
       and 256-bit second-preimage resistance.
+- id: streebog_hash
+  name: Streebog
+  construction_ids:
+  - merkle_damgard
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: binary_matrix_mul
+    - id: xor
+    - id: constant
+  target_applications:
+  - digital_signatures
+  - message_authentication
+  influences:
+  - source_family_id: streebog
+    relations:
+    - used_by
+    note: Each Streebog hash length is the Merkle-Damgard-strengthened iteration of the Streebog compression function
+      g_N over arbitrary-length, padded input, additionally accumulating a running checksum Sigma (a mod-2^512 sum
+      of every message block) that is XORed into the final chaining value alongside the standard block-count field
+      -- a stronger finalization than plain MD-strengthening alone.
+  process_participations: []
+  reference_ids:
+  - streebog_ref
+  round_ids:
+  - streebog_round
+  notes: GOST R 34.11-2012 ("Streebog"/"Stribog", RFC 6986) is the Russian national standard hash function, offering
+    256- and 512-bit output variants that differ only in IV and truncation (both otherwise run the full 512-bit
+    compression function). It replaced the earlier GOST R 34.11-94 hash (RFC 5831) after cryptanalytic weaknesses
+    were found in that design.
+  instances:
+  - id: streebog_256_v1
+    name: Streebog-256
+    type: hash
+    reference_ids:
+    - streebog_ref
+    characteristics:
+      output_size_bits: 256
+      block_size_bits: 512
+      state_size_bits: 512
+      rounds: 12
+    notes: RFC 6986 Sect. 8. Uses a distinct IV (0x01 repeated) from Streebog-512 and truncates the 512-bit chaining
+      value to 256 bits.
+  - id: streebog_512_v1
+    name: Streebog-512
+    type: hash
+    reference_ids:
+    - streebog_ref
+    characteristics:
+      output_size_bits: 512
+      block_size_bits: 512
+      state_size_bits: 512
+      rounds: 12
+    notes: RFC 6986 Sect. 8. Uses an all-zero IV; full 512-bit chaining value is output directly.
 - id: sha3
   name: SHA-3
   construction_ids:

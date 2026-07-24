@@ -3744,6 +3744,31 @@ rounds:
     words. Σ0 = ROTR-28 ⊕ ROTR-34 ⊕ ROTR-39; Σ1 = ROTR-14 ⊕ ROTR-18 ⊕ ROTR-41. 80
     rounds. SHA-384 and the /224 /256 variants share this compression function with
     distinct IVs and truncated output.'
+- id: streebog_round
+  name: Streebog LPS round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 512
+      word_bits: 8
+      branches: 64
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: binary_matrix_mul
+    constant_injection: subkey
+  notes: 'One LPS round of Streebog''s internal cipher E (RFC 6986 Sect. 4.3-4.5): XOR a 512-bit round key (X),
+    apply the nonlinear substitution Pi to each of the 64 bytes in parallel (S), apply a fixed byte transposition
+    (P), then a GF(2^8) linear diffusion layer (L). Twelve LPS rounds plus a final round-key XOR (13 round keys
+    total) make up one application of E; the same LPS-round structure, with fixed constants instead of the message
+    key, also generates the round keys. The nonlinear substitution Pi is byte-for-byte identical to Kuznyechik''s
+    own S-box (RFC 6986 Sect. 6.2 vs. RFC 7801 Sect. 4.1).'
 - id: simp_round
   name: SIMP Round
   kind: full_round

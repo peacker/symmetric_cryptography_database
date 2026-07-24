@@ -7937,16 +7937,36 @@ primitive_families:
   - kuznyechik_ref
   process_participations: []
   influences:
-  - source_family_id: rijndael
+  - source_family_id: streebog
     relations:
     - inspired_by
-    note: 'Structural deduction, not a stated citation: RFC 7801 names no predecessor cipher or design tradition anywhere.
-      This edge reflects only that Kuznyechik''s round structure -- byte-wide S-box layer plus a linear diffusion transform
-      over a finite field, XOR key addition, iterated for a fixed round count -- is the same general SPN archetype popularized
-      by Rijndael/AES, not a claimed lineage (Kuznyechik''s S-box and linear layer are both original to GOST R 34.12-2015).'
-  notes: Kuznyechik (Grasshopper; GOST R 34.12-2015) is the Russian national 128-bit block cipher standard with a 256-bit
+    note: 'Concrete component reuse, not a stated citation (RFC 7801 names no predecessor anywhere): Kuznyechik''s
+      8-bit substitution π is byte-for-byte identical to the Pi substitution in Streebog (GOST R 34.11-2012, RFC
+      6986), the sibling Russian hash standard approved three years earlier by the same design effort -- confirmed
+      directly against both RFCs'' own published S-box tables (both begin 252, 238, 221, 17, 207, 110, 49, 22, 251,
+      196, 250, 218, ...), and independently documented by Biryukov, Perrin, and Udovenko ("Reverse-Engineering the
+      S-Box of Streebog, Kuznyechik and STRIBOBr1", EUROCRYPT 2016), who reverse-engineered the shared S-box''s
+      undisclosed internal structure (a 2-round Feistel-like construction over GF(2^4)).'
+  - source_family_id: khazad
+    relations:
+    - related_to
+    note: 'Vidali, Nikolic, and Pieprzyk ("Are the XTEA and Kuznyechik ciphers vulnerable to the differential
+      equivalence attack?", 2015, eprint.iacr.org/2015/096) note: "It is interesting to note that Kuznyechik bares
+      a lot of resemblance with one of the AES predecessors, Khazad. In particular, both ciphers employ an iterative
+      SPN structure for updating the input block state, where the adopted linear transformation has an optimal
+      diffusion properties. Also, they both use Fiestel network for the round keys generation. While in Kuznyechik,
+      two round keys are generated after eight rounds of execution, only one round of execution separates
+      consecutive round keys in Khazad. They also differ in that Khazad employs involution Sboxes and linear
+      transformation, and it does not use a linear transformation in the last round." This is a documented,
+      specific side-by-side structural comparison (not a bare "both are SPN" claim), but the paper stops short of
+      claiming Kuznyechik was actually derived from Khazad -- recorded as related_to rather than inspired_by.'
+  notes: 'Kuznyechik (Grasshopper; GOST R 34.12-2015) is the Russian national 128-bit block cipher standard with a 256-bit
     key and 10 rounds. Its SPN structure applies an 8-bit S-box (π), a bit-permutation (τ), a linear transform (λ) over GF(2)^128
-    based on a self-dual [16,8,9] linear code, and XOR key addition.
+    based on a self-dual [16,8,9] linear code, and XOR key addition. An earlier edge crediting Rijndael/AES for this
+    (on the basis that both are byte-oriented wide-trail SPNs) was removed as an unsupported "shared abstract
+    paradigm" claim -- RFC 7801 cites no predecessor, and Biryukov/Perrin/Udovenko''s reverse-engineering of π found
+    a hidden Feistel-like construction unrelated to how AES''s S-box is built (inversion in GF(2^8) plus an affine
+    map), which argues against AES-specific lineage rather than for it.'
   instances:
   - id: kuznyechik_v1
     name: Kuznyechik
@@ -10951,6 +10971,56 @@ primitive_families:
     notes: Fixed-length compression step mapping a 1024-bit message block and 512-bit chaining value to a new 512-bit chaining
       value in 80 rounds. Iterated by SHA-512, and reused with alternate IVs by SHA-384, SHA-512/224, and SHA-512/256 (see
       sha2_hash).
+- id: streebog
+  name: Streebog Compression Function
+  construction_ids:
+  - matyas_meyer_oseas
+  round_ids:
+  - streebog_round
+  target_applications:
+  - digital_signatures
+  - message_authentication
+  characteristics:
+    block_size_bits: 512
+    state_size_bits: 512
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: binary_matrix_mul
+    - id: xor
+    - id: constant
+  reference_ids:
+  - streebog_ref
+  process_participations: []
+  influences: []
+  notes: 'GOST R 34.11-2012 ("Streebog"/"Stribog", RFC 6986) defines a compression function g_N(h, m) = E(LPS(h XOR
+    N), m) XOR h XOR m over a 512-bit chaining value and 512-bit message block -- a Miyaguchi-Preneel-style
+    feedforward (the transformed chaining value keys an internal cipher E applied to the message block, with both
+    the old chaining value and the message XORed back in). E itself is a 12-round byte-oriented SPN, X[K13] LPS
+    X[K12] ... LPS X[K1](m): each round applies the nonlinear substitution Pi to all 64 bytes of the state (S), a
+    fixed byte transposition (P), and a GF(2^8) linear diffusion layer (L), with a 512-bit round key XORed in (X).
+    The key schedule reuses the same LPS-round structure with fixed round constants C_1..C_12. Two hash-code
+    lengths are defined (256 and 512 bits, differing only in IV and truncation); see streebog_hash for the
+    variable-length Merkle-Damgard-strengthened iteration (which also accumulates a running checksum Sigma mod
+    2^512 of every message block, XORed in at finalization) built on this primitive.'
+  instances:
+  - id: streebog_compression_v1
+    name: Streebog Compression Function
+    type: compression_function
+    reference_ids:
+    - streebog_ref
+    characteristics:
+      block_size_bits: 512
+      state_size_bits: 512
+      output_size_bits: 512
+      rounds: 12
+    notes: One application of g_N -- 12 rounds of the internal LPS-based cipher E, keyed by the (N-perturbed)
+      chaining value, applied to one 512-bit message block.
 - id: keccak
   name: Keccak
   construction_ids:
