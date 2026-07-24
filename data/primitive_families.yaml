@@ -1978,12 +1978,23 @@ primitive_families:
   - beaulieu_et_al_2013_simon_speck
   process_participations: []
   influences:
-  - source_family_id: feal
+  - source_family_id: threefish
     relations:
-    - related_to
-    note: 'Not a citation from SPECK''s own paper (the NSA''s SIMON/SPECK paper does not discuss ARX design lineage).
-      Recorded per this database''s fallback convention for otherwise-uncited ARX block ciphers -- crediting the
-      earliest design in the ARX lineage (FEAL, 1987) absent a more specific citable predecessor.'
+    - inspired_by
+    note: 'Directly stated in SPECK''s own paper (Sect. 4.1, p.14): "The SPECK round functions are similar to the
+      mixing functions found in the THREEFISH [FLS+10] block cipher," with a footnote detailing the differences:
+      "SPECK differs from Threefish in various ways, e.g., it uses fixed vs. round-dependent rotation amounts, employs
+      two rotations per round vs. one for the mixing functions, adds key using XOR and does not use word permutations.
+      These and other important differences make SPECK significantly lighter and faster than Threefish in both
+      hardware and software." (Threefish''s own MIX(x0,x1) = (x0+x1, ROTL(x1,R) XOR (x0+x1)) predates SPECK by five
+      years.) The paper otherwise gives no rationale for SPECK''s remaining design choices (SPARX/LAX, Dinu et al.,
+      ASIACRYPT 2016, fn. 2: "For SPECK, we can only guess [the rationale] as the designers have not published [it]").
+      A similar add-rotate-XOR pairing recurs in ChaCha''s quarterround (a += b; d ^= a; d = ROTL(d, 16); ...) and
+      Salsa20''s (b ^= ROTL(a + d, 7); ...), and RC5 established the general "highly flexible, scalable ARX" approach
+      earlier still -- noted here as the same broader lineage but too generic on their own to record as separate
+      edges. SPECK''s key schedule explicitly reuses its own round function to generate round keys (Sect. 4.2), a
+      trait Blowfish''s key schedule had already explored (deriving subkeys by running the cipher itself), though
+      SPECK''s paper does not cite Blowfish.'
   instances:
   - id: speck_64_128
     name: SPECK-64/128
@@ -6276,12 +6287,6 @@ primitive_families:
     relations:
     - inspired_by
     note: Ballet adopts the Lai-Massey scheme structure introduced by IDEA, combining it with a different round function.
-  - source_family_id: feal
-    relations:
-    - related_to
-    note: 'Not a citation from Ballet''s own paper. Recorded per this database''s fallback convention for otherwise-
-      uncited ARX block ciphers -- crediting the earliest design in the ARX lineage (FEAL, 1987) for the round
-      function''s add/rotate/xor operations, separately from the Lai-Massey topology credited to IDEA above.'
   - source_family_id: speck
     relations:
     - related_to
@@ -7874,14 +7879,24 @@ primitive_families:
   - lea_ref
   process_participations: []
   influences:
-  - source_family_id: feal
+  - source_family_id: hight
     relations:
     - related_to
-    note: 'Not a citation from LEA''s own paper: LEA''s "Comparison with Other Ciphers" section mentions TEA/XTEA only
-      to contrast speed and note attacks against them, never as a design ancestor, and RC5/FEAL are not mentioned at
-      all. Recorded per this database''s fallback convention for otherwise-uncited ARX block ciphers -- crediting the
-      earliest design in the ARX lineage (FEAL, 1987, the chronologically first published ARX cipher) absent a more
-      specific citable predecessor.'
+    note: 'Overlapping authorship, not a stated citation: Deukjo Hong is the first author of both HIGHT (2006, CHES)
+      and LEA (2013, WISA) -- LEA''s "Comparison with Other Ciphers" section discusses HIGHT only to contrast it as
+      unsuitable for 32-bit-CPU fast encryption (8-bit ARX operations), not as a design ancestor, so this is recorded
+      on the same same-designer basis as the existing keccak<-aes edge rather than a textual citation. LEA departs
+      from HIGHT structurally too (32-bit vs. 8-bit words, 4-branch parallel round vs. HIGHT''s serial Type-2 GFN).'
+  - source_family_id: salsa20
+    relations:
+    - related_to
+    note: LEA''s round splits a 4-word state into three adjacent-word pairs, each XORed with a round key, added, and
+      rotated by its own fixed amount (9, 5, 3) to produce the next round''s first three words, with the fourth
+      simply carried over -- structurally reminiscent of Salsa20''s quarterround (also a 4-word ARX network with
+      per-step fixed rotations), but the three LEA computations are independent/parallel within a round (feeding
+      only from the previous round''s words) where Salsa20''s four quarterround steps are a strict cascade (each
+      depends on the previous step''s just-computed output). Not a stated citation -- LEA''s own paper does not
+      mention Salsa20 -- and no closer specific predecessor for this parallel-branch shape was found.
   notes: LEA (Lightweight Encryption Algorithm; Hong et al., WISA 2013) is a 128-bit ARX block cipher with key sizes of 128,
     192, or 256 bits and 24, 28, or 32 rounds respectively. Its round function applies 32-bit modular additions, XORs, and
     fixed rotations to four 32-bit words — no S-boxes are used. Designed for fast software on general-purpose CPUs.
@@ -8401,6 +8416,7 @@ primitive_families:
   - iso_iec_18033_3_2010
   - rfc_2994_misty1
   - misty1_ref
+  - nyberg_knudsen_1995_provable_security
   process_participations:
   - process_id: nessie_competition_european_commission_2000_2003
     stage_ids:
@@ -8410,18 +8426,21 @@ primitive_families:
     stage_ids:
     - candidate_recommended_block_64bit
     status: candidate_recommended
-  influences:
-  - source_family_id: des
-    relations:
-    - inspired_by
-    note: 'Structural deduction, not a stated citation: RFC 2994 explicitly frames MISTY1''s design goal as provable security
-      against differential/linear cryptanalysis (citing Nyberg/Knudsen''s theory) and names no cipher as a design ancestor
-      -- DES appears only as a security-margin comparison ("probabilities of DES are..."). This edge reflects only that
-      MISTY1''s outer structure is still an 8-round classical balanced Feistel network (each FO round splits/swaps 32-bit
-      halves), not a claimed lineage from DES.'
-  notes: MISTY1 (Matsui, Mitsubishi Electric; FSE 1997) is a 64-bit recursive Feistel block cipher with a 128-bit key and
+  influences: []
+  notes: 'MISTY1 (Matsui, Mitsubishi Electric; FSE 1997) is a 64-bit recursive Feistel block cipher with a 128-bit key and
     8 outer rounds (FO). Each FO round contains three FI sub-rounds, which use 7×7 (S7) and 9×9 (S9) S-boxes plus FL/FLinv
     key mixing layers. It is specified by RFC 2994 and ISO/IEC 18033-3:2010.
+
+
+    MISTY1''s actual design origin is not another cipher but a theoretical paper: RFC 2994 frames MISTY1''s design goal
+    as provable security against differential/linear cryptanalysis, citing Nyberg and Knudsen''s "Provable Security
+    Against a Differential Attack" (Nyberg, Knudsen, CRYPTO 1992 / Journal of Cryptology 8(1), 1995, see
+    nyberg_knudsen_1995_provable_security in references.yaml) -- the FI sub-round''s recursive structure follows that
+    paper''s provably-secure round-function construction. No influence edge is recorded here because this database''s
+    influences only connect cipher families, and the Nyberg-Knudsen paper is a theory paper, not a cipher with its own
+    family entry; a previously-recorded edge crediting DES for this (on the weaker basis that MISTY1''s outer structure
+    is also a balanced Feistel network) was removed as an unsupported "shared abstract paradigm" claim -- DES is not
+    cited anywhere in MISTY1''s own documentation.'
   instances:
   - id: misty1_v1
     name: MISTY1

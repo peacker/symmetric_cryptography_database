@@ -2178,6 +2178,17 @@ references:
   year: 2000
   venue: NESSIE Submission / Mitsubishi Electric
   notes: Feistel network with 64-bit block and variable key size.
+- id: nyberg_knudsen_1995_provable_security
+  kind: paper
+  title: Provable Security Against a Differential Attack
+  authors:
+  - Kaisa Nyberg
+  - Lars R. Knudsen
+  year: 1995
+  venue: Journal of Cryptology 8(1) (originally presented as "Provable Security Against Differential Cryptanalysis", CRYPTO 1992)
+  notes: Not a cipher -- a provable-security theory paper. Cited here because MISTY1's own design goal and FI sub-round
+    structure are built on this paper's round-function construction (see the misty1 family's notes); no cipher family
+    entry exists to point an influences[] edge at, since influences only connect cipher families.
 - id: mixfeed_ref
   kind: paper
   title: mixFeed
