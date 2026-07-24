@@ -38,10 +38,12 @@
           </div>
           <div class="view-header-actions">
             <button type="button" class="view-toggle-btn" data-toggle-filters="viz">Hide filters</button>
+            <button type="button" class="view-toggle-btn" data-toggle-layout="viz" aria-pressed="false">Filters on left</button>
             <button type="button" class="view-toggle-btn" data-fullscreen-target="visualizations">Fullscreen</button>
           </div>
         </div>
         <p class="small-note view-description">X axis = publication year. Y axis grouping is selectable.</p>
+        <div class="view-body" id="vizViewBody">
         <div id="vizControlsWrap" class="view-controls-wrap">
         <div class="filter-sections-bar">
           <button type="button" class="view-toggle-btn" data-collapse-all="viz">Collapse all</button>
@@ -130,6 +132,7 @@
             <button type="button" id="vizFsZoomIn" aria-label="Zoom in">+</button>
           </div>
         </div>
+        </div>
         <p id="vizRelationInfo" class="small-note viz-relation-info">Hover or tap a family dot/label or a relation arrow to see details. Use the zoom controls, pinch, or Cmd/Ctrl + wheel inside the plot to adjust scale.</p>
         <div id="vizProcessLegend" class="viz-process-legend" hidden></div>
       </section>
@@ -142,10 +145,12 @@
           </div>
           <div class="view-header-actions">
             <button type="button" class="view-toggle-btn" data-toggle-filters="gen">Hide filters</button>
+            <button type="button" class="view-toggle-btn" data-toggle-layout="gen" aria-pressed="false">Filters on left</button>
             <button type="button" class="view-toggle-btn" data-fullscreen-target="genealogy">Fullscreen</button>
           </div>
         </div>
         <p class="small-note view-description">Design lineage and influence graph. Arrows flow from ancestor (top) to descendant (bottom); generation depth determined by the longest influence path.</p>
+        <div class="view-body" id="genViewBody">
         <div id="genControlsWrap" class="view-controls-wrap">
         <div class="filter-sections-bar">
           <button type="button" class="view-toggle-btn" data-collapse-all="gen">Collapse all</button>
@@ -238,6 +243,7 @@
             <button type="button" id="genFsZoomFit" aria-label="Fit to screen">Fit</button>
             <button type="button" id="genFsZoomIn" aria-label="Zoom in">+</button>
           </div>
+        </div>
         </div>
         <p id="genEdgeInfo" class="small-note gen-edge-info">Hover or tap a family node or an influence arrow to see details. Right-click/long-press a node to filter the graph to it. Use the zoom controls, pinch, or Cmd/Ctrl + wheel inside the plot to adjust scale.</p>
         <div id="genLegend" class="viz-process-legend" hidden></div>

@@ -246,6 +246,26 @@
       });
     });
 
+    // "Filters on left" puts the filter sections in a side column next to
+    // the plot/graph frame instead of stacked above it -- handy on a
+    // landscape screen where width is more available than height. Only
+    // wired up for the two tabs that have a plot/graph frame beside their
+    // filters (viz, gen); the short key here matches the "{key}ControlsWrap"
+    // id convention used above, not the full data-view name.
+    const SIDE_LAYOUT_VIEW_NAMES = { viz: "visualizations", gen: "genealogy" };
+    document.querySelectorAll("[data-toggle-layout]").forEach((btn) => {
+      const key = btn.getAttribute("data-toggle-layout");
+      const wrap = document.getElementById(`${key}ControlsWrap`);
+      const panel = wrap ? wrap.closest(".view-panel") : null;
+      if (!panel) return;
+      btn.addEventListener("click", () => {
+        const isSide = panel.classList.toggle("is-side-layout");
+        btn.textContent = isSide ? "Filters on top" : "Filters on left";
+        btn.setAttribute("aria-pressed", String(isSide));
+        triggerViewRefresh(SIDE_LAYOUT_VIEW_NAMES[key] || key, true);
+      });
+    });
+
     // "Collapse all" / "Expand all" toggle every <details class="filter-section">
     // within that tab's own controls wrap at once, on top of each section's
     // own individual <summary> click-to-collapse.
@@ -2793,6 +2813,10 @@
         edgeTip.attach(hp, hoverTxt);
         hoverPaths.push(hp);
       });
+      // Append edge hit-areas before nodes/labels so nodes/labels paint (and
+      // hit-test) on top -- otherwise a fat invisible edge hover-path lying
+      // under a label intercepts clicks meant for that label.
+      hoverPaths.forEach((hp) => genPlot.appendChild(hp));
 
       [...dagNodes, ...isoNodes].forEach((fid) => {
         const fam = genFamById.get(fid); if (!fam) return;
@@ -2819,8 +2843,6 @@
         lbl.textContent = disp;
         genPlot.appendChild(lbl);
       });
-
-      hoverPaths.forEach((hp) => genPlot.appendChild(hp));
     }
 
     // ── Radial (Lepage-Bandet style): year → radius, angle from tree ──
@@ -3107,6 +3129,10 @@
         edgeTip.attach(hp, hoverTxt);
         hoverPaths.push(hp);
       });
+      // Append edge hit-areas before nodes/labels so nodes/labels paint (and
+      // hit-test) on top -- otherwise a fat invisible edge hover-path lying
+      // under a label intercepts clicks meant for that label.
+      hoverPaths.forEach((hp) => genPlot.appendChild(hp));
 
       // Draw nodes and radial labels
       dagNodes.forEach((fid) => {
@@ -3154,7 +3180,6 @@
         }
         genPlot.appendChild(lbl);
       });
-      hoverPaths.forEach((hp) => genPlot.appendChild(hp));
     }
 
     // ── Render dispatcher ─────────────────────────────────────────────

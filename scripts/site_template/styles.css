@@ -168,6 +168,46 @@ body {
 
 .view-controls-wrap.is-collapsed { display: none; }
 
+/* "Filters on left" layout: puts the filter sections in a scrollable side
+   column next to the plot/graph frame instead of stacked above it, so a
+   landscape screen can use its width instead of losing height to the
+   filters before ever reaching the plot. */
+.view-body { display: block; }
+
+.view-panel.is-side-layout .view-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.view-panel.is-side-layout .view-controls-wrap {
+  flex: 0 0 320px;
+  max-width: 320px;
+  max-height: 78vh;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.view-panel.is-side-layout .viz-frame,
+.view-panel.is-side-layout .gen-frame {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-top: 0;
+}
+
+@media (max-width: 980px) {
+  .view-panel.is-side-layout .view-body { flex-direction: column; }
+  .view-panel.is-side-layout .view-controls-wrap {
+    flex: 1 1 auto;
+    max-width: none;
+    max-height: none;
+  }
+  .view-panel.is-side-layout .viz-frame,
+  .view-panel.is-side-layout .gen-frame {
+    margin-top: 0.7rem;
+  }
+}
+
 /* The three filter sections (Plot controls / Family filters / Relation
    filters) all reuse .collapsible for a consistent look, plus this modifier
    for spacing between them and a more compact body than the Query Builder's

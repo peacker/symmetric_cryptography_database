@@ -130,7 +130,44 @@ def compute_construction_sharing_edges(
     rather than a fully-connected graph (which would be O(n^2) for a popular
     leaf like balanced_feistel). Families with no resolvable year are skipped
     since there is no defined direction for them.
+
+    Same-year families break the sort tie alphabetically by id, which has no
+    grounding in actual design chronology -- e.g. SPARX and LAX come from the
+    same 2016 paper, where LAX is explicitly the generalization built on top
+    of SPARX, but "lax" < "sparx" alphabetically, so an unguarded chain would
+    derive lax -> sparx: the opposite of the sparx -> lax influence edge
+    that's hand-curated from the paper itself. This isn't always a direct
+    contradiction on the same pair either -- subterranean_2_0, sycon_aead,
+    and xoodyak all resolve to the same year (2019), so their alphabetical
+    chain derives subterranean_2_0 -> sycon_aead -> xoodyak, which closes a
+    cycle three hops later through the curated xoodyak -> subterranean_2_0
+    edge, without subterranean_2_0/xoodyak ever sharing a direct derived
+    edge. So instead of only checking the immediate pair, each candidate
+    edge is tested against a running graph seeded with every curated
+    influences edge: if the target can already reach the source (through
+    curated or previously-accepted derived edges), adding source -> target
+    would close a cycle, and the edge is dropped. Genealogy's tree-building
+    assumes the combined (curated + derived) edge set is acyclic, so this
+    matters more than the derived edges merely being self-consistent.
     """
+    graph: dict[str, set[str]] = {}
+    for family in families:
+        for edge in family.get("influences", []) or []:
+            graph.setdefault(edge["source_family_id"], set()).add(family["id"])
+
+    def reachable(start: str, goal: str) -> bool:
+        seen = {start}
+        stack = [start]
+        while stack:
+            node = stack.pop()
+            if node == goal:
+                return True
+            for nxt in graph.get(node, ()):
+                if nxt not in seen:
+                    seen.add(nxt)
+                    stack.append(nxt)
+        return False
+
     by_leaf: dict[str, list[tuple[int, str]]] = {}
     for family in families:
         year = family_year(family, references_by_id)
@@ -146,5 +183,8 @@ def compute_construction_sharing_edges(
         for (_, earlier_id), (_, later_id) in zip(members, members[1:]):
             if earlier_id == later_id:
                 continue
+            if reachable(later_id, earlier_id):
+                continue
+            graph.setdefault(earlier_id, set()).add(later_id)
             edges.append((earlier_id, later_id, construction_id))
     return edges
