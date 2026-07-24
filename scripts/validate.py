@@ -96,6 +96,7 @@ def main() -> None:
     mode_types_doc          = data["mode_types"]
     references_doc          = data["references"]
     processes_doc           = data["processes"]
+    timeline_doc            = data["timeline"]
 
     registry = build_schema_registry()
     ok = True
@@ -109,6 +110,7 @@ def main() -> None:
     ok &= validate_schema(mode_types_doc,          SCHEMA_DIR / "mode_types.schema.json",          "mode_types", registry)
     ok &= validate_schema(references_doc,          SCHEMA_DIR / "references.schema.json",          "references", registry)
     ok &= validate_schema(processes_doc,           SCHEMA_DIR / "processes.schema.json",           "processes", registry)
+    ok &= validate_schema(timeline_doc,            SCHEMA_DIR / "timeline.schema.json",            "timeline", registry)
     if not ok:
         raise SystemExit(1)
 

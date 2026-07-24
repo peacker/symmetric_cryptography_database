@@ -572,7 +572,7 @@
     // How many checkboxes in the reused tier filter panel currently exclude
     // something (tier off, or a dimension with at least one box unchecked).
     // The panel's own state doesn't translate cleanly into flat SQL text (it
-    // spans instances, family_targets and family_processes as well as the two
+    // spans instances, family_targets and family_process_outcomes as well as the two
     // construction tables), so the SQL preview notes how many such filters
     // are active rather than re-deriving them as WHERE clauses.
     function activeTierPanelFilterCount() {

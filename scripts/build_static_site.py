@@ -187,7 +187,7 @@ def load_process_data(conn: sqlite3.Connection) -> dict[str, object]:
     }
     participations = fetch_rows(
         conn,
-        "SELECT family_id, process_id, status FROM family_processes ORDER BY family_id",
+        "SELECT family_id, process_id, status FROM family_process_outcomes ORDER BY family_id",
     )
     family_process_map: dict[str, str] = {}
     family_process_rank: dict[str, int] = {}

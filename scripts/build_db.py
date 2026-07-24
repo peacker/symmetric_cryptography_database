@@ -56,6 +56,23 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (process_id) REFERENCES processes(id) ON DELETE CASCADE
         );
 
+        -- Timeline (data/timeline.yaml) -------------------------------------
+        CREATE TABLE IF NOT EXISTS timeline_eras (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            start_year INTEGER NOT NULL,
+            end_year INTEGER NOT NULL,
+            notes TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS timeline_events (
+            id TEXT PRIMARY KEY,
+            date TEXT NOT NULL,
+            short_name TEXT NOT NULL,
+            title TEXT NOT NULL,
+            url TEXT
+        );
+
         CREATE TABLE IF NOT EXISTS process_stage_participants (
             process_id TEXT NOT NULL,
             stage_id   TEXT NOT NULL,
@@ -196,11 +213,18 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (reference_id) REFERENCES "references"(id) ON DELETE RESTRICT
         );
 
-        CREATE TABLE IF NOT EXISTS family_processes (
+        -- One row per (family, process): the curated overall outcome
+        -- (status). The full set of stages reached is not duplicated here --
+        -- it's already in process_stage_participants (query/GROUP_CONCAT
+        -- from there), and scripts/test_process_alignment.py enforces the
+        -- two stay consistent. status itself is not always derivable from
+        -- "which stage did it reach" (e.g. two PHC entries can share the
+        -- same lone "submissions" stage but differ as submitted vs.
+        -- candidate), so it remains its own authored fact.
+        CREATE TABLE IF NOT EXISTS family_process_outcomes (
             family_id  TEXT NOT NULL,
             process_id TEXT NOT NULL,
             status     TEXT,
-            stage_ids_json TEXT NOT NULL DEFAULT '[]',
             PRIMARY KEY (family_id, process_id),
             FOREIGN KEY (family_id)  REFERENCES families(id)  ON DELETE CASCADE,
             FOREIGN KEY (process_id) REFERENCES processes(id) ON DELETE RESTRICT
@@ -263,7 +287,7 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         DELETE FROM instances;
         DELETE FROM construction_sharing_edges;
         DELETE FROM family_influences;
-        DELETE FROM family_processes;
+        DELETE FROM family_process_outcomes;
         DELETE FROM family_references;
         DELETE FROM primitive_family_constructions;
         DELETE FROM mode_family_constructions;
@@ -281,6 +305,8 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         DELETE FROM process_stages;
         DELETE FROM processes;
         DELETE FROM "references";
+        DELETE FROM timeline_eras;
+        DELETE FROM timeline_events;
         """
     )
 
@@ -293,6 +319,7 @@ def main() -> None:
         "primitive_families", "mode_families", "components",
         "primitive_constructions", "mode_constructions",
         "rounds", "primitive_types", "mode_types", "references", "processes",
+        "timeline",
     ])
     components_doc   = data["components"]
     primitive_constructions_doc = data["primitive_constructions"]
@@ -302,6 +329,7 @@ def main() -> None:
     mode_types_doc       = data["mode_types"]
     references_doc = data["references"]
     processes_doc    = data["processes"]
+    timeline_doc     = data["timeline"]
 
     families = all_families(data)
     instances = all_instances(families)
@@ -329,6 +357,20 @@ def main() -> None:
                     ref.get("organization") or ref.get("publisher") or ref.get("institution"),
                     ref.get("status"),
                 ),
+            )
+
+        for era in timeline_doc.get("eras", []):
+            conn.execute(
+                "INSERT INTO timeline_eras (id, name, start_year, end_year, notes)"
+                " VALUES (?, ?, ?, ?, ?)",
+                (era["id"], era["name"], era["start_year"], era["end_year"], era.get("notes")),
+            )
+
+        for event in timeline_doc.get("events", []):
+            conn.execute(
+                "INSERT INTO timeline_events (id, date, short_name, title, url)"
+                " VALUES (?, ?, ?, ?, ?)",
+                (event["id"], str(event["date"]), event["short_name"], event["title"], event.get("url")),
             )
 
         family_reference_ids: dict[str, set[str]] = {}
@@ -486,14 +528,11 @@ def main() -> None:
             family_reference_ids[family["id"]] = refs_for_family
             for pp in family.get("process_participations", []):
                 proc_id = pp["process_id"]
-                stage_ids = pp.get("stage_ids", [])
                 status = pp.get("status")
                 conn.execute(
-                    "INSERT INTO family_processes"
-                    " (family_id, process_id, status, stage_ids_json)"
-                    " VALUES (?, ?, ?, ?)",
-                    (family["id"], proc_id, status,
-                     json.dumps(stage_ids, ensure_ascii=True)))
+                    "INSERT INTO family_process_outcomes (family_id, process_id, status)"
+                    " VALUES (?, ?, ?)",
+                    (family["id"], proc_id, status))
         # Insert influences in a second pass so all families exist before any FK is checked.
         for family in families:
             for edge in family.get("influences", []):

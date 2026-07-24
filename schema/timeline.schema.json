@@ -1,0 +1,77 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.org/symmetric_primitives/timeline.schema.json",
+    "title": "Timeline (Eras and Events)",
+    "type": "object",
+    "required": ["version", "eras", "events"],
+    "properties": {
+        "version": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "eras": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/era"
+            }
+        },
+        "events": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/event"
+            }
+        }
+    },
+    "$defs": {
+        "era": {
+            "type": "object",
+            "required": ["id", "name", "start_year", "end_year"],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "start_year": {
+                    "type": "integer"
+                },
+                "end_year": {
+                    "type": "integer"
+                },
+                "notes": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "event": {
+            "type": "object",
+            "required": ["id", "date", "short_name", "title"],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "date": {
+                    "type": ["string", "integer"]
+                },
+                "short_name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "title": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "url": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

@@ -23,6 +23,7 @@ DATA_FILES = {
     "mode_types": "mode_types.yaml",
     "references": "references.yaml",
     "processes": "processes.yaml",
+    "timeline": "timeline.yaml",
 }
 
 
