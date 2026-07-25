@@ -195,7 +195,23 @@ body {
   margin-top: 0;
 }
 
-@media (max-width: 980px) {
+/* Shrink the side column on narrower windows/tablets so the plot still
+   gets most of the width, before giving up on side-by-side entirely below. */
+@media (max-width: 900px) {
+  .view-panel.is-side-layout .view-controls-wrap {
+    flex-basis: 240px;
+    max-width: 240px;
+  }
+}
+
+/* Below this, even a landscape phone can't fit a side column and a usable
+   plot at once -- e.g. an iPhone in portrait is ~390px wide, vs. ~660-930px
+   in landscape, so 560px falls between virtually every phone's portrait and
+   landscape widths and lets "Filters on left" actually do something on a
+   landscape phone instead of silently no-op'ing the way a naive one-size
+   "mobile" breakpoint (980px, matching the desktop-oriented breakpoint
+   below) would -- that breakpoint caught landscape phones too. */
+@media (max-width: 560px) {
   .view-panel.is-side-layout .view-body { flex-direction: column; }
   .view-panel.is-side-layout .view-controls-wrap {
     flex: 1 1 auto;
