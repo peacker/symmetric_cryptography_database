@@ -2206,6 +2206,28 @@
     const genZoomReset = document.getElementById("genZoomReset");
     const genZoomFit = document.getElementById("genZoomFit");
     const genZoomValue = document.getElementById("genZoomValue");
+    const genParamsToggle = document.getElementById("genParamsToggle");
+    const genParamsPanel = document.getElementById("genParamsPanel");
+    const genParamsClose = document.getElementById("genParamsClose");
+    const genParamsRadialGroup = document.getElementById("genParamsRadial");
+    const genParamsLayeredGroup = document.getElementById("genParamsLayered");
+    const genParamLabelPitch = document.getElementById("genParamLabelPitch");
+    const genParamLabelPitchValue = document.getElementById("genParamLabelPitchValue");
+    const genParamAlphaMax = document.getElementById("genParamAlphaMax");
+    const genParamAlphaMaxValue = document.getElementById("genParamAlphaMaxValue");
+    const genParamRowGap = document.getElementById("genParamRowGap");
+    const genParamRowGapValue = document.getElementById("genParamRowGapValue");
+    const genParamNodeH = document.getElementById("genParamNodeH");
+    const genParamNodeHValue = document.getElementById("genParamNodeHValue");
+    const genParamColGap = document.getElementById("genParamColGap");
+    const genParamColGapValue = document.getElementById("genParamColGapValue");
+    const genParamIsoW = document.getElementById("genParamIsoW");
+    const genParamIsoWValue = document.getElementById("genParamIsoWValue");
+    const genParamsReset = document.getElementById("genParamsReset");
+    const genParamsExport = document.getElementById("genParamsExport");
+    const genParamsImportBtn = document.getElementById("genParamsImportBtn");
+    const genParamsImportFile = document.getElementById("genParamsImportFile");
+    const genParamsStatus = document.getElementById("genParamsStatus");
     if (!genPlot || !genPlotScroll || !genFrame) return;
 
     const GEN_BASE_FONT = 12;
@@ -2213,6 +2235,37 @@
     let genLayoutMode = "radial";
     let genNumChars = 8;
     let genNameMode = "clip";
+
+    // ── Layout tuning parameters (user-adjustable, persisted) ───────────
+    // Exposed via the floating "Tune layout" panel so a user hitting
+    // crowding/empty-space problems (radial: labels overlapping on one ring
+    // while another ring's arc sits empty; layered: rows/columns too tight or
+    // too loose) can retune the layout live, have it stick across reloads,
+    // and export the result as JSON to hand to a developer as new defaults.
+    const GEN_LAYOUT_PARAMS_KEY = "spdb_genealogy_layout_params_v1";
+    const DEFAULT_LAYOUT_PARAMS = {
+      radialLabelPitchMult: 1.25, // radial: min arc (× font size) reserved per label
+      radialAlphaMax: 0.8,        // radial: max strength of the even-spacing relaxation (0-1)
+      layeredRowGapMult: 4.5,     // layered: vertical gap between generations (× font size)
+      layeredNodeHMult: 1.85,     // layered: node box height (× font size)
+      layeredColGap: 10,          // layered: horizontal gap between sibling nodes (px)
+      layeredIsoWMult: 7.5,       // layered: width of isolated-node columns (× font size)
+    };
+    function loadLayoutParams() {
+      const out = { ...DEFAULT_LAYOUT_PARAMS };
+      try {
+        const raw = JSON.parse(localStorage.getItem(GEN_LAYOUT_PARAMS_KEY) || "{}");
+        Object.keys(DEFAULT_LAYOUT_PARAMS).forEach((k) => {
+          const v = Number(raw[k]);
+          if (Number.isFinite(v)) out[k] = v;
+        });
+      } catch { /* corrupt/unavailable storage falls back to defaults */ }
+      return out;
+    }
+    let layoutParams = loadLayoutParams();
+    function saveLayoutParams() {
+      try { localStorage.setItem(GEN_LAYOUT_PARAMS_KEY, JSON.stringify(layoutParams)); } catch { /* storage unavailable (e.g. private mode) -- tuning still works, just doesn't persist */ }
+    }
 
     // Plot zoom (mirrors the Timelines "Plot zoom" control): the SVG's
     // width/height attributes are always set to its natural (100%) size by
@@ -2444,16 +2497,16 @@
     }
 
     // ── Layout constants (some are dynamic on genFontPx) ─────────────
-    const COL_GAP = 10;
+    let COL_GAP = 10; // reassigned from layoutParams.layeredColGap at the top of drawSugiyama
     const TOP_PAD = 20;
     const SIDE_PAD = 20;
     const NODE_PAD_X = 7;
     const BASE_EDGE_INFO = "Hover or tap a family node or an influence arrow to see details. Right-click/long-press a node to filter the graph to it.";
     const edgeTip = createPinnableInfoBox(genEdgeInfo, BASE_EDGE_INFO);
 
-    function nodeH() { return Math.round(genFontPx * 1.85); }
-    function rowGap() { return Math.round(genFontPx * 4.5); }
-    function isoW() { return Math.round(genFontPx * 7.5); }
+    function nodeH() { return Math.round(genFontPx * layoutParams.layeredNodeHMult); }
+    function rowGap() { return Math.round(genFontPx * layoutParams.layeredRowGapMult); }
+    function isoW() { return Math.round(genFontPx * layoutParams.layeredIsoWMult); }
     function nw(name) { const n = genNameMode === "full" ? String(name).length : Math.min(String(name).length, genNumChars); const raw = Math.ceil(n * genFontPx * 0.58) + NODE_PAD_X * 2; return Math.max(Math.round(genFontPx * 4.5), genNameMode === "full" ? raw : Math.min(Math.round(genFontPx * 12.5), raw)); }
 
     const SVG_NS = "http://www.w3.org/2000/svg";
@@ -2699,6 +2752,7 @@
     // ── Sugiyama layered layout ────────────────────────────────────────
     function drawSugiyama(dagNodes, isoNodes, inE, outE, dagSet, visEdges) {
       genPlot.style.display = ""; genPlot.style.margin = "";
+      COL_GAP = layoutParams.layeredColGap;
       const NH = nodeH(); const RG = rowGap(); const IW = isoW();
       const useGen = !!(genByGeneration && genByGeneration.checked);
 
@@ -3061,6 +3115,46 @@
         }
       }
 
+      // ── Even label spacing: relax angular crowding ring by ring ─────────
+      // The barycenter/transpose passes above only minimise edge stress, so nodes
+      // stay packed at their subtree barycenters: inner rings (especially gen 0)
+      // collide while big subtrees leave whole arcs empty. Here each ring's nodes
+      // are nudged toward an even comb, but only as far as that ring is actually
+      // crowded — strength α = (nodes × label pitch) ÷ ring circumference, which is
+      // ~1 for tight inner rings and ~0 for roomy outer ones, so well-separated
+      // outer nodes keep their clean near-radial edges. Circular order is preserved
+      // (the comb is aligned to the ring's mean angle), so edges never re-cross.
+      const LABEL_PITCH = genFontPx * layoutParams.radialLabelPitchMult; // px of arc each label needs clear of its neighbour
+      const ALPHA_MAX = layoutParams.radialAlphaMax;                    // never fully abandon the barycenter placement
+      const ringGroups = new Map();
+      angleOf.forEach((deg, id) => {
+        const key = useGen ? String(layerOf.get(id) || 0) : String(Math.round(nodeR(id)));
+        if (!ringGroups.has(key)) ringGroups.set(key, []);
+        ringGroups.get(key).push(id);
+      });
+      ringGroups.forEach((ids) => {
+        const m = ids.length;
+        if (m < 2) return;
+        const circ = 2 * Math.PI * Math.max(nodeR(ids[0]), 1);
+        const alpha = Math.min(ALPHA_MAX, (m * LABEL_PITCH) / circ);
+        if (alpha <= 0.02) return;
+        ids.sort((a, b) => angleOf.get(a) - angleOf.get(b));
+        const step = 360 / m;
+        // Rotation of the even comb that best matches the ring's current angles,
+        // so nodes move as little as possible (circular mean of angle − i·step).
+        let sx = 0, sy = 0;
+        ids.forEach((id, i) => {
+          const d = (angleOf.get(id) - i * step) * Math.PI / 180;
+          sx += Math.cos(d); sy += Math.sin(d);
+        });
+        const phi = Math.atan2(sy, sx) * 180 / Math.PI;
+        ids.forEach((id, i) => {
+          const target = phi + i * step;
+          const delta = ((target - angleOf.get(id)) % 360 + 540) % 360 - 180;
+          angleOf.set(id, angleOf.get(id) + alpha * delta);
+        });
+      });
+
       const diam = Math.max(400, 2 * Math.ceil(maxR + genNumChars * charW + 20));
       const rcx = diam / 2; const rcy = diam / 2;
 
@@ -3302,18 +3396,111 @@
       genNumChars = 8;
       if (genRadiusValue) genRadiusValue.textContent = "8ch"; render();
     });
+    // Shows only the tuning-panel group relevant to the active layout, so the
+    // radial and layered sliders never appear (or get confused for one
+    // another) at the same time.
+    function syncParamsGroupVisibility() {
+      if (genParamsRadialGroup) genParamsRadialGroup.hidden = genLayoutMode !== "radial";
+      if (genParamsLayeredGroup) genParamsLayeredGroup.hidden = genLayoutMode !== "layered";
+    }
     if (genLayoutLayered) genLayoutLayered.addEventListener("click", () => {
       genLayoutMode = "layered";
       if (genLayoutLayered) genLayoutLayered.classList.add("is-active");
       if (genLayoutRadial) genLayoutRadial.classList.remove("is-active");
+      syncParamsGroupVisibility();
       render();
     });
     if (genLayoutRadial) genLayoutRadial.addEventListener("click", () => {
       genLayoutMode = "radial";
       if (genLayoutRadial) genLayoutRadial.classList.add("is-active");
       if (genLayoutLayered) genLayoutLayered.classList.remove("is-active");
+      syncParamsGroupVisibility();
       render();
     });
+    syncParamsGroupVisibility();
+
+    // ── Layout tuning panel: floats over the plot, toggled on demand ────
+    if (genParamsToggle && genParamsPanel) {
+      genParamsToggle.addEventListener("click", () => {
+        const open = genParamsPanel.hidden;
+        genParamsPanel.hidden = !open;
+        genParamsToggle.setAttribute("aria-expanded", String(open));
+      });
+    }
+    if (genParamsClose && genParamsPanel && genParamsToggle) {
+      genParamsClose.addEventListener("click", () => {
+        genParamsPanel.hidden = true;
+        genParamsToggle.setAttribute("aria-expanded", "false");
+      });
+    }
+    const LAYOUT_PARAM_SLIDERS = [
+      { key: "radialLabelPitchMult", input: genParamLabelPitch, out: genParamLabelPitchValue, scale: 100, fmt: (v) => `${Math.round(v * 100)}%` },
+      { key: "radialAlphaMax", input: genParamAlphaMax, out: genParamAlphaMaxValue, scale: 100, fmt: (v) => `${Math.round(v * 100)}%` },
+      { key: "layeredRowGapMult", input: genParamRowGap, out: genParamRowGapValue, scale: 100, fmt: (v) => `${Math.round(v * 100)}%` },
+      { key: "layeredNodeHMult", input: genParamNodeH, out: genParamNodeHValue, scale: 100, fmt: (v) => `${Math.round(v * 100)}%` },
+      { key: "layeredColGap", input: genParamColGap, out: genParamColGapValue, scale: 1, fmt: (v) => `${Math.round(v)}px` },
+      { key: "layeredIsoWMult", input: genParamIsoW, out: genParamIsoWValue, scale: 100, fmt: (v) => `${Math.round(v * 100)}%` },
+    ];
+    function syncLayoutParamSliders() {
+      LAYOUT_PARAM_SLIDERS.forEach(({ key, input, out, scale, fmt }) => {
+        if (input) input.value = String(Math.round(layoutParams[key] * scale));
+        if (out) out.textContent = fmt(layoutParams[key]);
+      });
+    }
+    syncLayoutParamSliders();
+    LAYOUT_PARAM_SLIDERS.forEach(({ key, input, out, scale, fmt }) => {
+      if (!input) return;
+      input.addEventListener("input", () => {
+        layoutParams[key] = Number(input.value) / scale;
+        if (out) out.textContent = fmt(layoutParams[key]);
+        saveLayoutParams();
+        render();
+      });
+    });
+    if (genParamsReset) genParamsReset.addEventListener("click", () => {
+      layoutParams = { ...DEFAULT_LAYOUT_PARAMS };
+      syncLayoutParamSliders();
+      saveLayoutParams();
+      if (genParamsStatus) genParamsStatus.textContent = "Spacing reset to defaults.";
+      render();
+    });
+    if (genParamsExport) genParamsExport.addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(layoutParams, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "genealogy-layout-params.json";
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      if (genParamsStatus) genParamsStatus.textContent = "Exported genealogy-layout-params.json";
+    });
+    if (genParamsImportBtn && genParamsImportFile) {
+      genParamsImportBtn.addEventListener("click", () => genParamsImportFile.click());
+      genParamsImportFile.addEventListener("change", () => {
+        const file = genParamsImportFile.files && genParamsImportFile.files[0];
+        genParamsImportFile.value = "";
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const raw = JSON.parse(String(reader.result || "{}"));
+            const next = { ...DEFAULT_LAYOUT_PARAMS };
+            let count = 0;
+            Object.keys(DEFAULT_LAYOUT_PARAMS).forEach((k) => {
+              const v = Number(raw[k]);
+              if (Number.isFinite(v)) { next[k] = v; count++; }
+            });
+            layoutParams = next;
+            syncLayoutParamSliders();
+            saveLayoutParams();
+            if (genParamsStatus) genParamsStatus.textContent = `Imported ${count} parameter(s) from ${file.name}.`;
+            render();
+          } catch (err) {
+            if (genParamsStatus) genParamsStatus.textContent = `Import failed: ${err.message}`;
+          }
+        };
+        reader.readAsText(file);
+      });
+    }
     [[genNameClip, "clip"], [genNameFull, "full"]].forEach(([btn, mode]) => {
       if (!btn) return;
       btn.addEventListener("click", () => {

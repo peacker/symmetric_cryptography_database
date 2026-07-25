@@ -160,40 +160,14 @@
           <summary>Plot controls</summary>
           <div class="collapsible-body">
         <div class="toolbar viz-toolbar">
-          <label class="toolbar-field">Color nodes by
-            <select id="genColorBy">
-              <option value="type">Type</option>
-              <option value="construction">Construction</option>
-              <option value="target">Target application</option>
-              <option value="process">Process</option>
-            </select>
-          </label>
           <div class="viz-display-group">
             <div class="viz-name-section">
               <span class="viz-name-section-label">Layout</span>
               <div class="viz-name-mode"><button id="genLayoutLayered" type="button" class="name-mode-btn">Layered</button><button id="genLayoutRadial" type="button" class="name-mode-btn is-active">Radial</button></div>
             </div>
-            <div class="viz-name-section">
-              <span class="viz-name-section-label">Names</span>
-              <div class="viz-name-mode" role="group"><button id="genNameClip" type="button" class="name-mode-btn is-active">Clip</button><button id="genNameFull" type="button" class="name-mode-btn">Full</button></div>
-            </div>
-            <div class="viz-name-section">
-              <span class="viz-name-section-label">Number of Chars</span>
-              <div class="viz-name-mode"><button id="genRadiusMinus" type="button" class="name-mode-btn">−</button><button id="genRadiusPlus" type="button" class="name-mode-btn">+</button><button id="genRadiusReset" type="button" class="name-mode-btn">Reset</button><span id="genRadiusValue" class="viz-ctrl-value">8ch</span></div>
-            </div>
-            <div class="viz-name-section">
-              <span class="viz-name-section-label">Font size</span>
-              <div class="viz-name-mode"><button id="genFontMinus" type="button" class="name-mode-btn">A-</button><button id="genFontPlus" type="button" class="name-mode-btn">A+</button><button id="genFontReset" type="button" class="name-mode-btn">Reset</button><span id="genFontValue" class="viz-ctrl-value">12px</span></div>
-            </div>
-            <div class="viz-name-section">
-              <span class="viz-name-section-label">Plot zoom</span>
-              <div class="viz-name-mode"><button id="genZoomOut" type="button" class="name-mode-btn">-</button><button id="genZoomIn" type="button" class="name-mode-btn">+</button><button id="genZoomReset" type="button" class="name-mode-btn">100%</button><button id="genZoomFit" type="button" class="name-mode-btn">Fit</button><span id="genZoomValue" class="viz-ctrl-value">100%</span></div>
-            </div>
             <label class="inline-check"><input id="genConnectedOnly" type="checkbox" checked /> Only connected families</label>
             <label class="inline-check"><input id="genStandardsOnly" type="checkbox" /> Standards only</label>
             <label class="inline-check"><input id="genByGeneration" type="checkbox" checked /> By generation</label>
-            <label class="inline-check"><input id="genShowBullets" type="checkbox" /> Show bullets</label>
-            <label class="inline-check"><input id="genCollapseEdges" type="checkbox" /> Collapse edges</label>
             <button id="genDownloadPng" type="button" class="name-mode-btn">Download PNG</button>
           </div>
         </div>
@@ -242,6 +216,83 @@
             <button type="button" id="genFsZoomOut" aria-label="Zoom out">−</button>
             <button type="button" id="genFsZoomFit" aria-label="Fit to screen">Fit</button>
             <button type="button" id="genFsZoomIn" aria-label="Zoom in">+</button>
+          </div>
+          <button type="button" id="genParamsToggle" class="gen-params-toggle" aria-expanded="false" aria-controls="genParamsPanel">Tune layout</button>
+          <div id="genParamsPanel" class="gen-params-panel" hidden>
+            <div class="gen-params-panel-head">
+              <strong>Layout tuning</strong>
+              <button type="button" id="genParamsClose" class="gen-params-close" aria-label="Close">×</button>
+            </div>
+            <div id="genParamsCommon" class="gen-params-group gen-params-common">
+              <label class="toolbar-field">Color nodes by
+                <select id="genColorBy">
+                  <option value="type">Type</option>
+                  <option value="construction">Construction</option>
+                  <option value="target">Target application</option>
+                  <option value="process">Process</option>
+                </select>
+              </label>
+              <div class="viz-name-section">
+                <span class="viz-name-section-label">Names</span>
+                <div class="viz-name-mode" role="group"><button id="genNameClip" type="button" class="name-mode-btn is-active">Clip</button><button id="genNameFull" type="button" class="name-mode-btn">Full</button></div>
+              </div>
+              <div class="viz-name-section">
+                <span class="viz-name-section-label">Number of Chars</span>
+                <div class="viz-name-mode"><button id="genRadiusMinus" type="button" class="name-mode-btn">−</button><button id="genRadiusPlus" type="button" class="name-mode-btn">+</button><button id="genRadiusReset" type="button" class="name-mode-btn">Reset</button><span id="genRadiusValue" class="viz-ctrl-value">8ch</span></div>
+              </div>
+              <div class="viz-name-section">
+                <span class="viz-name-section-label">Font size</span>
+                <div class="viz-name-mode"><button id="genFontMinus" type="button" class="name-mode-btn">A-</button><button id="genFontPlus" type="button" class="name-mode-btn">A+</button><button id="genFontReset" type="button" class="name-mode-btn">Reset</button><span id="genFontValue" class="viz-ctrl-value">12px</span></div>
+              </div>
+              <div class="viz-name-section">
+                <span class="viz-name-section-label">Plot zoom</span>
+                <div class="viz-name-mode"><button id="genZoomOut" type="button" class="name-mode-btn">-</button><button id="genZoomIn" type="button" class="name-mode-btn">+</button><button id="genZoomReset" type="button" class="name-mode-btn">100%</button><button id="genZoomFit" type="button" class="name-mode-btn">Fit</button><span id="genZoomValue" class="viz-ctrl-value">100%</span></div>
+              </div>
+              <label class="inline-check"><input id="genShowBullets" type="checkbox" /> Show bullets</label>
+              <label class="inline-check"><input id="genCollapseEdges" type="checkbox" /> Collapse edges</label>
+            </div>
+            <hr class="gen-params-sep" />
+            <div id="genParamsRadial" class="gen-params-group">
+              <div class="gen-params-row">
+                <span class="gen-params-label" title="Minimum arc a label needs before its ring counts as crowded">Label spacing</span>
+                <input id="genParamLabelPitch" type="range" min="50" max="300" step="5" />
+                <span id="genParamLabelPitchValue" class="viz-ctrl-value">125%</span>
+              </div>
+              <div class="gen-params-row">
+                <span class="gen-params-label" title="How strongly a crowded ring is pulled toward even spacing (0 = off, 100 = fully even)">Even-spacing strength</span>
+                <input id="genParamAlphaMax" type="range" min="0" max="100" step="5" />
+                <span id="genParamAlphaMaxValue" class="viz-ctrl-value">80%</span>
+              </div>
+            </div>
+            <div id="genParamsLayered" class="gen-params-group" hidden>
+              <div class="gen-params-row">
+                <span class="gen-params-label">Row gap</span>
+                <input id="genParamRowGap" type="range" min="150" max="800" step="10" />
+                <span id="genParamRowGapValue" class="viz-ctrl-value">450%</span>
+              </div>
+              <div class="gen-params-row">
+                <span class="gen-params-label">Node height</span>
+                <input id="genParamNodeH" type="range" min="100" max="400" step="5" />
+                <span id="genParamNodeHValue" class="viz-ctrl-value">185%</span>
+              </div>
+              <div class="gen-params-row">
+                <span class="gen-params-label">Column gap</span>
+                <input id="genParamColGap" type="range" min="0" max="60" step="1" />
+                <span id="genParamColGapValue" class="viz-ctrl-value">10px</span>
+              </div>
+              <div class="gen-params-row">
+                <span class="gen-params-label">Isolated column width</span>
+                <input id="genParamIsoW" type="range" min="300" max="1500" step="10" />
+                <span id="genParamIsoWValue" class="viz-ctrl-value">750%</span>
+              </div>
+            </div>
+            <div class="gen-params-actions">
+              <button type="button" id="genParamsReset" class="name-mode-btn">Reset spacing</button>
+              <button type="button" id="genParamsExport" class="name-mode-btn">Export</button>
+              <button type="button" id="genParamsImportBtn" class="name-mode-btn">Import</button>
+              <input id="genParamsImportFile" type="file" accept="application/json" hidden />
+            </div>
+            <p id="genParamsStatus" class="small-note gen-params-status"></p>
           </div>
         </div>
         </div>

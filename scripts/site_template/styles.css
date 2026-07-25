@@ -348,6 +348,100 @@ body.spdb-fullscreen .page { width: 100vw; max-width: 100vw; padding: 0; margin:
   font-size: 0.78rem;
 }
 
+/* Layout-tuning panel: floats over the plot's top-right corner (mirroring the
+   zoom controls' bottom-right float) so the sliders live with the plot they
+   affect, stay out of the way until opened, and can show only the group of
+   parameters relevant to whichever layout (radial/layered) is active. */
+.gen-params-toggle {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  z-index: 16;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #08323d;
+  background: rgba(234, 246, 248, 0.7);
+  border: 1px solid rgba(184, 216, 222, 0.7);
+  border-radius: 6px;
+  backdrop-filter: blur(3px);
+}
+
+.gen-params-toggle:hover { background: rgba(215, 238, 242, 0.95); }
+
+.gen-params-panel {
+  position: absolute;
+  top: 2.6rem;
+  right: 0.7rem;
+  z-index: 16;
+  width: 19rem;
+  max-width: calc(100% - 1.4rem);
+  max-height: calc(100% - 3.4rem);
+  overflow-y: auto;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(184, 216, 222, 0.7);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  font-size: 0.82rem;
+}
+
+/* The "common" group reuses the top toolbar's .viz-name-section/.viz-name-mode
+   pattern (Names, Number of Chars, Font size, Plot zoom) -- force it to wrap
+   here since the panel is much narrower than the toolbar it was moved from. */
+.gen-params-common { display: flex; flex-direction: column; gap: 0.5rem; }
+.gen-params-common .viz-name-mode { flex-wrap: wrap; row-gap: 0.3rem; }
+.gen-params-common .toolbar-field { margin: 0; }
+
+.gen-params-sep { border: none; border-top: 1px solid rgba(184, 216, 222, 0.6); margin: 0.6rem 0; }
+
+.gen-params-panel[hidden] { display: none; }
+
+.gen-params-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.gen-params-close {
+  all: unset;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.1rem 0.4rem;
+  color: #08323d;
+}
+
+.gen-params-group[hidden] { display: none; }
+
+.gen-params-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.45rem;
+}
+
+.gen-params-label { flex: 1 1 auto; color: var(--muted); font-size: 0.78rem; }
+
+.gen-params-row input[type="range"] {
+  flex: 1 1 7rem;
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.gen-params-row .viz-ctrl-value { flex: 0 0 auto; width: 3.2rem; text-align: right; margin: 0; }
+
+.gen-params-actions { display: flex; gap: 0.35rem; margin-top: 0.4rem; }
+
+.gen-params-actions button { flex: 1 1 auto; padding: 0.3rem 0.4rem; font-size: 0.76rem; margin: 0; }
+
+.gen-params-status { margin: 0.4rem 0 0; font-size: 0.74rem; min-height: 1em; }
+
 .meta {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
