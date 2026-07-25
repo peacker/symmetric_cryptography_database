@@ -1,6 +1,6 @@
 # Symmetric Cryptography Database
 
-A structured, version-controlled database for fixed-input/output-size symmetric primitives and their ecosystem metadata.
+A structured, version-controlled database of symmetric-cryptography designs — fixed-size primitives and the variable-size modes built on them — and their ecosystem metadata.
 
 **Website:** <https://peacker.github.io/symmetric_cryptography_database/>
 
@@ -8,33 +8,27 @@ A structured, version-controlled database for fixed-input/output-size symmetric 
 
 ## Scope
 
-This repository tracks symmetric primitives:
+Every entry is either a **primitive** (fixed-size building block: block cipher, tweakable
+block cipher, permutation, compression function, update function) or a **mode** (variable-size
+algorithm built on primitives: stream cipher, AEAD, hash, MAC, KDF, PBKDF, XOF, PRNG, key wrap,
+...). See [GLOSSARY.md § Tiers](GLOSSARY.md#tiers-primitive-vs-mode) for the full split and
+[§ Family vs. instance](GLOSSARY.md#family-vs-instance) for how a design (e.g. AES) relates to
+its concrete parameterizations (e.g. AES-128).
 
-- block ciphers
-- tweakable block ciphers
-- permutations
-- compression functions
-- update functions
-- stream ciphers
-- authenticated encryption with associated data (AEAD)
-- hash functions
-
-Each primitive can store:
-
-- year of publication
-- references (papers, standards)
-- standardization processes/competitions
-- target applications (IoT, memory encryption, generic, etc.)
-- primitive type
-- core characteristics (input/output size, key/tweak size, rounds, operations/components)
-- influence links to previous designs (historical/design lineage)
+Each family can store publication year and references, standardization processes/competitions,
+target applications, construction/component tags, round definitions, per-instance sizes, and
+influence links to earlier designs (see [Construction taxonomy and relations
+model](#construction-taxonomy-and-relations-model) below). [GLOSSARY.md](GLOSSARY.md) is the
+canonical reference for the full vocabulary.
 
 ## Repository layout
 
 - `data/`: source-of-truth YAML datasets
 - `schema/`: JSON schema for validation
+- `references/`: local copies of cited papers/standards (see `scripts/reference_pdfs.py`)
 - `scripts/`: validation, SQLite build, and visualization exports
 - `build/`: generated artifacts (`db`, static site, CSV and PNG exports)
+- `GLOSSARY.md`: canonical vocabulary reference (types, constructions, components, relations)
 
 ## Data model strategy
 
@@ -68,35 +62,9 @@ any construction whose `special_case_of` parent itself has a `special_case_of` �
 longer than root → leaf is a validation error. When a new variant doesn't fit any existing leaf,
 add a new leaf under the appropriate root rather than nesting a leaf under a leaf.
 
-Representative trees (see the YAML files for the authoritative, evolving full list):
-
-- **Feistel** (`feistel`) → `balanced_feistel`, `generalized_feistel` (unspecified-type GFN),
-  `type1_generalized_feistel` … `type5_generalized_feistel`, `unbalanced_feistel` and its
-  `unbalanced_numeric_feistel` / `source_heavy_unbalanced_feistel` /
-  `target_heavy_unbalanced_feistel` refinements, `alternating_feistel_network` /
-  `alternating_numeric_feistel`, `nested_feistel_network`, `gufn`.
-- **SPN** (`spn`) → two independent facets rather than one flat list of styles:
-  - S-box coverage: `full_sbox_layer` (S-box applied to the whole state) vs. `partial_sbox_layer`
-    (S-box applied to only some words, e.g. LowMC — smaller hardware area or targeted algebraic
-    hardness).
-  - Linear-layer type: `bit_permutation_linear_layer` (pure wiring, e.g. PRESENT/GIFT),
-    `mds_linear_layer` (true MDS matrix over GF(2^n), e.g. AES/SHARK), `near_mds_arx_linear_layer`
-    (lighter matrix or XOR-heavy mixing, e.g. FOX/IDEA NXT/PRINCE/Midori).
-  - A family tags at most one leaf per facet, and the two facets combine freely (e.g. AES is
-    `full_sbox_layer` + `mds_linear_layer`).
-  - `tweakable_spn` is a third, independent facet: it can co-occur with a leaf from each of the
-    other two facets and simply marks that the primitive takes a tweak.
-- **Sponge** (`sponge_construction`) → `standard_sponge`, plus any absorption/squeeze variant
-  literature review turns up as the catalogue grows.
-- **Duplex** (`duplex_mode`) → `standard_duplex`, `monkey_duplex` (MonkeyDuplex, reduced-rate
-  keyed permutation calls between duplex calls), `dry_sponge_duplex` (DrySponge), `beetle_mode`
-  (Beetle, small-state lightweight duplex).
-- **Belt-and-mill** (`belt_and_mill_construction`) — no leaves yet: a separate root (not a sponge/
-  duplex leaf) for pre-sponge-terminology designs like PANAMA/RadioGatún that use a belt-and-mill
-  structure rather than a single permutation state.
-- **Block-cipher-based mode** (`block_cipher_based`) → `ctr_mode`, `cbc_mode`, `ofb_mode`,
-  `cfb_mode`, `gcm_mode`, and `block_cipher_based_stream` as the residual leaf for anything that
-  doesn't cleanly match a named NIST mode.
+See [GLOSSARY.md § Constructions](GLOSSARY.md#constructions) for the full, evolving root/leaf
+dictionary (Feistel, SPN, ARX, sponge, duplex, and the rest) — it is the authoritative per-term
+list; this section only covers the *why* behind the taxonomy's shape.
 
 Some things that look like constructions are deliberately **not** modeled as one:
 
@@ -261,36 +229,12 @@ Generated files under `build/` are ignored and should not be committed. Before s
 | `make all` | Run validate + build-db + export-viz + visualize + build-site |
 | `make clean` | Delete the `build/` directory |
 
-## Governance and maintenance
+## Visualizations
 
-Recommended process:
-
-1. One primitive change per pull request when possible.
-2. Require `make validate` and `make build-db` in CI.
-3. Enforce stable IDs (never rename IDs, only deprecate).
-4. Track provenance in `references.yaml` for every factual claim.
-5. Add explicit influence links only when a credible citation exists.
-
-### Suggested review checklist
-
-- Is each new primitive mapped to at least one publication?
-- Are sizes/round counts explicit and unit-consistent?
-- Is the primitive type selected from the allowed enum?
-- Are influence claims backed by notes/citations?
-- Does `make validate` pass?
-
-## Visualization ideas
-
-Generated CSV files in `build/viz/` can feed:
-
-- timeline plot: primitives by publication year and type
-- sankey/flow plot: process -> primitive -> standard
-- network graph: influence edges between primitives
-- bubble chart: block size vs key size colored by type
-
-## Next-stage extension
-
-When you move to variable-size modes, add a `mode` entity and a relation table `mode_uses_primitive`, while keeping primitive records independent.
+`make export-viz` writes CSV files to `build/viz/`; `make visualize` renders them into PNG
+charts in the same directory: a publication timeline by type, an influence network graph, and
+a block/key-size scatter plot. `make build-site` builds the same data into the interactive
+static site (timeline, genealogy graph, and query builder views).
 
 ## Similar projects
 
