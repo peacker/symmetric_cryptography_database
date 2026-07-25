@@ -78,10 +78,7 @@ primitive_families:
   - davies_meyer
   round_ids:
   - sha0_round
-  target_applications:
-  - historical
-  - digital_signatures
-  - cryptanalysis
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 160
@@ -131,10 +128,7 @@ primitive_families:
   - balanced_feistel
   round_ids:
   - tcast_round
-  target_applications:
-  - research
-  - cryptanalysis
-  - backdoor_research
+  target_applications: []
   characteristics:
     components:
     - id: sbox
@@ -191,10 +185,7 @@ primitive_families:
   - balanced_feistel
   round_ids:
   - tloki_round
-  target_applications:
-  - research
-  - cryptanalysis
-  - backdoor_research
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -244,10 +235,7 @@ primitive_families:
   - near_mds_arx_linear_layer
   round_ids:
   - bea1_round
-  target_applications:
-  - research
-  - cryptanalysis
-  - backdoor_research
+  target_applications: []
   characteristics:
     block_size_bits: 80
     components:
@@ -306,10 +294,7 @@ primitive_families:
   - balanced_feistel
   round_ids:
   - paterson_trapdoor_round
-  target_applications:
-  - research
-  - cryptanalysis
-  - backdoor_research
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -358,10 +343,7 @@ primitive_families:
   - balanced_feistel
   round_ids:
   - parity_check_des_round
-  target_applications:
-  - research
-  - cryptanalysis
-  - backdoor_research
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -424,7 +406,6 @@ primitive_families:
   round_ids:
   - cham_round
   target_applications:
-  - lightweight
   - embedded
   - iot
   - resource_constrained_devices
@@ -496,7 +477,6 @@ primitive_families:
   round_ids:
   - cham_revised_round
   target_applications:
-  - lightweight
   - embedded
   - iot
   - resource_constrained_devices
@@ -564,7 +544,6 @@ primitive_families:
   round_ids:
   - saecham_round
   target_applications:
-  - lightweight
   - embedded
   - iot
   - resource_constrained_devices
@@ -611,8 +590,7 @@ primitive_families:
   - mds_linear_layer
   round_ids:
   - rijndael_aes_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     components:
     - id: sbox
@@ -741,7 +719,6 @@ primitive_families:
   round_ids:
   - rijndael_aes_round
   target_applications:
-  - generic
   - storage
   characteristics:
     block_size_bits: 128
@@ -843,7 +820,6 @@ primitive_families:
   round_ids:
   - salsa_quarterround
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 512
@@ -941,7 +917,6 @@ primitive_families:
   round_ids:
   - chacha_quarterround
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 512
@@ -1104,7 +1079,6 @@ primitive_families:
   round_ids:
   - spongent_round
   target_applications:
-  - lightweight
   - hardware
   characteristics:
     components:
@@ -1223,9 +1197,7 @@ primitive_families:
   - balanced_feistel
   round_ids:
   - des_round
-  target_applications:
-  - legacy
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -1378,7 +1350,6 @@ primitive_families:
   - blowfish_round
   target_applications:
   - software
-  - generic
   characteristics:
     block_size_bits: 64
     components:
@@ -1416,7 +1387,6 @@ primitive_families:
   round_ids:
   - idea_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 64
@@ -1615,7 +1585,6 @@ primitive_families:
   - twofish_round
   target_applications:
   - software
-  - generic
   characteristics:
     block_size_bits: 128
     components:
@@ -1691,7 +1660,6 @@ primitive_families:
   round_ids:
   - serpent_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -1764,7 +1732,6 @@ primitive_families:
   round_ids:
   - camellia_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -2287,7 +2254,6 @@ primitive_families:
   round_ids:
   - cast128_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 64
@@ -2349,7 +2315,6 @@ primitive_families:
   round_ids:
   - cast256_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -2425,7 +2390,6 @@ primitive_families:
   round_ids:
   - rc5_round
   target_applications:
-  - generic
   - software
   characteristics:
     components:
@@ -2472,7 +2436,6 @@ primitive_families:
   round_ids:
   - seed_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -2521,7 +2484,6 @@ primitive_families:
   round_ids:
   - aria_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -2582,7 +2544,6 @@ primitive_families:
   round_ids:
   - rc6_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -2648,7 +2609,6 @@ primitive_families:
   round_ids:
   - sm4_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -2702,7 +2662,7 @@ primitive_families:
   round_ids:
   - kasumi_round
   target_applications:
-  - mobile_networks
+  - mobile
   - hardware
   characteristics:
     block_size_bits: 64
@@ -2748,7 +2708,6 @@ primitive_families:
   - clefia_round
   target_applications:
   - constrained_hardware
-  - generic
   - iot
   characteristics:
     block_size_bits: 128
@@ -2863,7 +2822,6 @@ primitive_families:
   round_ids:
   - crypton_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -2927,7 +2885,6 @@ primitive_families:
   round_ids:
   - deal_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -2983,7 +2940,6 @@ primitive_families:
   round_ids:
   - dfc_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -3049,7 +3005,6 @@ primitive_families:
   round_ids:
   - e2_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -3113,7 +3068,6 @@ primitive_families:
   round_ids:
   - frog_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -3169,7 +3123,6 @@ primitive_families:
   round_ids:
   - hpc_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -3230,7 +3183,6 @@ primitive_families:
   round_ids:
   - loki97_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -3287,7 +3239,6 @@ primitive_families:
   round_ids:
   - magenta_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -3351,7 +3302,6 @@ primitive_families:
   round_ids:
   - mars_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -3436,7 +3386,6 @@ primitive_families:
   round_ids:
   - safer_plus_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -4100,9 +4049,7 @@ primitive_families:
   round_ids:
   - gaston_permutation_round
   target_applications:
-  - lightweight
   - constrained_hardware
-  - keyed_hashing
   characteristics:
     state_size_bits: 320
     components:
@@ -4209,7 +4156,6 @@ primitive_families:
   target_applications:
   - iot
   - constrained_hardware
-  - generic
   characteristics:
     components:
     - id: sbox
@@ -4565,7 +4511,6 @@ primitive_families:
   round_ids:
   - norx_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -4609,8 +4554,6 @@ primitive_families:
   - subterranean_duplex_round
   target_applications:
   - hardware
-  - stream_cipher
-  - hash
   characteristics:
     state_size_bits: 257
     components:
@@ -4657,9 +4600,7 @@ primitive_families:
   - lay_massey
   round_ids:
   - pes_round
-  target_applications:
-  - generic
-  - historical
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -4699,7 +4640,6 @@ primitive_families:
   round_ids:
   - rectangle_round
   target_applications:
-  - lightweight
   - hardware
   - software
   characteristics:
@@ -4757,7 +4697,6 @@ primitive_families:
   round_ids:
   - sliscp_round
   target_applications:
-  - lightweight
   - hardware
   characteristics:
     state_size_bits: 256
@@ -4793,7 +4732,6 @@ primitive_families:
   round_ids:
   - sliscp_light_round
   target_applications:
-  - lightweight
   - hardware
   characteristics:
     components:
@@ -4849,7 +4787,6 @@ primitive_families:
   round_ids:
   - sparx_round
   target_applications:
-  - lightweight
   - software
   - hardware
   characteristics:
@@ -4899,7 +4836,6 @@ primitive_families:
   round_ids:
   - lax_round
   target_applications:
-  - lightweight
   - software
   - hardware
   characteristics:
@@ -4977,7 +4913,6 @@ primitive_families:
   round_ids:
   - cube_cipher_round
   target_applications:
-  - lightweight
   - hardware
   - side_channel_resistant
   characteristics:
@@ -5036,7 +4971,6 @@ primitive_families:
   target_applications:
   - iot
   - software
-  - generic
   characteristics:
     components:
     - id: xor
@@ -5576,7 +5510,6 @@ primitive_families:
   round_ids:
   - akelarre_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -5645,7 +5578,6 @@ primitive_families:
   round_ids:
   - crisp_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -5708,7 +5640,6 @@ primitive_families:
   - ant_round
   target_applications:
   - constrained_hardware
-  - lightweight
   - software
   characteristics:
     components:
@@ -5772,7 +5703,6 @@ primitive_families:
   - spring_round
   target_applications:
   - constrained_hardware
-  - lightweight
   - software
   characteristics:
     components:
@@ -5831,7 +5761,6 @@ primitive_families:
   - raindrop_round
   target_applications:
   - constrained_hardware
-  - lightweight
   - software
   characteristics:
     components:
@@ -5893,7 +5822,6 @@ primitive_families:
   round_ids:
   - smba_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -5962,7 +5890,6 @@ primitive_families:
   - fbc_round
   target_applications:
   - constrained_hardware
-  - lightweight
   characteristics:
     components:
     - id: sbox
@@ -6017,7 +5944,6 @@ primitive_families:
   round_ids:
   - nbc_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -6148,7 +6074,6 @@ primitive_families:
   round_ids:
   - anubis_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -6269,7 +6194,6 @@ primitive_families:
   - ballet_round
   target_applications:
   - software
-  - lightweight
   characteristics:
     components:
     - id: add_mod
@@ -6347,7 +6271,6 @@ primitive_families:
   round_ids:
   - bear_lion_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -6519,7 +6442,6 @@ primitive_families:
   round_ids:
   - siphash_round
   target_applications:
-  - generic
   - software
   - hash_table_dos_protection
   characteristics:
@@ -6563,7 +6485,6 @@ primitive_families:
   round_ids:
   - chaskey_round
   target_applications:
-  - generic
   - software
   - embedded
   characteristics:
@@ -6846,7 +6767,6 @@ primitive_families:
   target_applications:
   - software
   - hardware
-  - generic
   characteristics:
     block_size_bits: 64
     components:
@@ -6917,7 +6837,6 @@ primitive_families:
   target_applications:
   - hardware
   - software
-  - generic
   characteristics:
     block_size_bits: 128
     components:
@@ -6962,8 +6881,7 @@ primitive_families:
   - balanced_feistel
   round_ids:
   - desx_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -7079,7 +6997,6 @@ primitive_families:
   round_ids:
   - fantomas_robin_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 128
@@ -7122,7 +7039,6 @@ primitive_families:
   round_ids:
   - feal_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 64
@@ -7184,7 +7100,6 @@ primitive_families:
   round_ids:
   - fesh_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -7446,7 +7361,6 @@ primitive_families:
   round_ids:
   - gage_and_ingage_round
   target_applications:
-  - lightweight
   - hardware
   - iot
   characteristics:
@@ -7484,8 +7398,7 @@ primitive_families:
   - balanced_feistel
   round_ids:
   - gost_28147_89_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -7582,7 +7495,6 @@ primitive_families:
   round_ids:
   - hern_and_heron_round
   target_applications:
-  - lightweight
   - hardware
   - iot
   characteristics:
@@ -7770,8 +7682,7 @@ primitive_families:
   - balanced_feistel
   round_ids:
   - ice_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -7818,8 +7729,7 @@ primitive_families:
   - self_reciprocal_spn
   round_ids:
   - khazad_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 128
     components:
@@ -8133,7 +8043,6 @@ primitive_families:
   round_ids:
   - lilliput_tbc_round
   target_applications:
-  - lightweight
   - iot
   - constrained_hardware
   characteristics:
@@ -8187,7 +8096,6 @@ primitive_families:
   round_ids:
   - limdolen_round
   target_applications:
-  - lightweight
   - iot
   characteristics:
     state_size_bits: 128
@@ -8287,8 +8195,7 @@ primitive_families:
   - balanced_feistel
   round_ids:
   - loki_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -8587,7 +8494,6 @@ primitive_families:
   round_ids:
   - aes_prime_128_round
   target_applications:
-  - lightweight
   - iot
   characteristics:
     state_size_bits: 256
@@ -8717,7 +8623,6 @@ primitive_families:
   - nimbus_round
   target_applications:
   - embedded
-  - generic
   characteristics:
     block_size_bits: 64
     components:
@@ -8862,7 +8767,6 @@ primitive_families:
   round_ids:
   - simp_round
   target_applications:
-  - lightweight
   - iot
   - constrained_hardware
   characteristics:
@@ -8923,8 +8827,7 @@ primitive_families:
   - bit_permutation_linear_layer
   round_ids:
   - pea_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -8963,7 +8866,6 @@ primitive_families:
   - picaro_round
   target_applications:
   - software
-  - generic
   characteristics:
     block_size_bits: 128
     components:
@@ -9087,8 +8989,7 @@ primitive_families:
   - mds_linear_layer
   round_ids:
   - q_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 128
     components:
@@ -9145,7 +9046,6 @@ primitive_families:
   round_ids:
   - quartet_round
   target_applications:
-  - lightweight
   - constrained_hardware
   characteristics:
     state_size_bits: 256
@@ -9197,7 +9097,6 @@ primitive_families:
   round_ids:
   - rc2_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 64
@@ -9378,8 +9277,7 @@ primitive_families:
   - arx_with_round_constants
   round_ids:
   - shacal_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 160
     components:
@@ -9426,8 +9324,7 @@ primitive_families:
   - arx_with_round_constants
   round_ids:
   - shacal2_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 256
     components:
@@ -9469,9 +9366,7 @@ primitive_families:
   - near_mds_arx_linear_layer
   round_ids:
   - shamash_and_shamashash_round
-  target_applications:
-  - lightweight_aead
-  - hash
+  target_applications: []
   characteristics:
     state_size_bits: 320
     components:
@@ -9550,7 +9445,6 @@ primitive_families:
   round_ids:
   - shark_round
   target_applications:
-  - generic
   - software
   characteristics:
     block_size_bits: 64
@@ -9616,7 +9510,6 @@ primitive_families:
   round_ids:
   - skipjack_round
   target_applications:
-  - generic
   - hardware
   characteristics:
     block_size_bits: 64
@@ -9660,8 +9553,7 @@ primitive_families:
   - xor_key_injection_arx
   round_ids:
   - speckey_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 32
     components:
@@ -9702,8 +9594,7 @@ primitive_families:
   - bit_permutation_linear_layer
   round_ids:
   - speedy_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 192
     components:
@@ -9746,8 +9637,7 @@ primitive_families:
   - self_reciprocal_spn
   round_ids:
   - square_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 128
     components:
@@ -9956,10 +9846,8 @@ primitive_families:
   round_ids:
   - three_key_triple_des_round
   target_applications:
-  - legacy
   - government
   - banking
-  - encryption
   characteristics:
     block_size_bits: 64
     components:
@@ -10009,8 +9897,7 @@ primitive_families:
   - pure_arx_no_constants
   round_ids:
   - marx2_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 32
     components:
@@ -10056,7 +9943,6 @@ primitive_families:
   round_ids:
   - threefish_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -10125,7 +10011,6 @@ primitive_families:
   round_ids:
   - treyfer_round
   target_applications:
-  - generic
   - constrained_hardware
   characteristics:
     block_size_bits: 64
@@ -10175,7 +10060,6 @@ primitive_families:
   round_ids:
   - ublock_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -10293,8 +10177,7 @@ primitive_families:
   - source_heavy_unbalanced_feistel
   round_ids:
   - xxtea_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 128
     components:
@@ -10336,7 +10219,6 @@ primitive_families:
   round_ids:
   - yarara_and_coral_round
   target_applications:
-  - lightweight
   - iot
   characteristics:
     state_size_bits: 256
@@ -10387,8 +10269,7 @@ primitive_families:
   - self_reciprocal_spn
   round_ids:
   - threeway_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 96
     components:
@@ -10451,8 +10332,7 @@ primitive_families:
   - gufn
   round_ids:
   - macguffin_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -10504,8 +10384,7 @@ primitive_families:
   - balanced_feistel
   round_ids:
   - lucifer_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     block_size_bits: 128
     components:
@@ -10556,10 +10435,7 @@ primitive_families:
   - arx_with_round_constants
   round_ids:
   - haval_pass
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - checksums
+  target_applications: []
   characteristics:
     block_size_bits: 1024
     state_size_bits: 256
@@ -10630,9 +10506,7 @@ primitive_families:
   - davies_meyer
   round_ids:
   - md4_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 128
@@ -10681,10 +10555,7 @@ primitive_families:
   - davies_meyer
   round_ids:
   - md5_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - checksums
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 128
@@ -10739,9 +10610,7 @@ primitive_families:
   - davies_meyer
   round_ids:
   - ripemd_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 160
@@ -10815,11 +10684,7 @@ primitive_families:
   - davies_meyer
   round_ids:
   - sha1_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - key_derivation
-  - random_number_generation
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 160
@@ -10903,11 +10768,7 @@ primitive_families:
     - id: or
     - id: not
     - id: constant
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - key_derivation
-  - random_number_generation
+  target_applications: []
   influences:
   - source_family_id: sha1_sha2
     relations:
@@ -10977,9 +10838,7 @@ primitive_families:
   - matyas_meyer_oseas
   round_ids:
   - streebog_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 512
@@ -11028,11 +10887,7 @@ primitive_families:
   - bitslice_friendly_spn
   round_ids:
   - keccak_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - key_derivation
-  - random_number_generation
+  target_applications: []
   characteristics:
     state_size_bits: 1600
     components:
@@ -11130,8 +10985,6 @@ primitive_families:
   round_ids:
   - blake_round
   target_applications:
-  - digital_signatures
-  - message_authentication
   - software
   characteristics:
     state_size_bits: 512
@@ -11206,8 +11059,6 @@ primitive_families:
   round_ids:
   - blake2_round
   target_applications:
-  - digital_signatures
-  - message_authentication
   - software
   characteristics:
     state_size_bits: 512
@@ -11275,9 +11126,6 @@ primitive_families:
   round_ids:
   - blake3_round
   target_applications:
-  - digital_signatures
-  - message_authentication
-  - key_derivation
   - software
   characteristics:
     state_size_bits: 512
@@ -11330,9 +11178,7 @@ primitive_families:
   - davies_meyer
   round_ids:
   - groestl_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     state_size_bits: 512
     block_size_bits: 512
@@ -11410,8 +11256,6 @@ primitive_families:
   round_ids:
   - tiger_pass
   target_applications:
-  - digital_signatures
-  - message_authentication
   - content_addressable_storage
   characteristics:
     block_size_bits: 512
@@ -11484,10 +11328,7 @@ primitive_families:
   - matyas_meyer_oseas
   round_ids:
   - whirlpool_cipher_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - key_derivation
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 512
@@ -11555,8 +11396,7 @@ primitive_families:
   - balanced_feistel
   round_ids:
   - des_round
-  target_applications:
-  - encryption
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components: []
@@ -11600,8 +11440,7 @@ primitive_families:
   - full_sbox_layer
   round_ids:
   - des_round
-  target_applications:
-  - encryption
+  target_applications: []
   characteristics:
     block_size_bits: 64
     components:
@@ -11655,9 +11494,6 @@ primitive_families:
         modulus: 18446744073709551616
     - id: constant
   target_applications:
-  - general_purpose
-  - digital_signatures
-  - encryption
   - hardware
   - software
   influences:
@@ -11789,9 +11625,6 @@ primitive_families:
         modulus: 18446744073709551616
     - id: constant
   target_applications:
-  - general_purpose
-  - digital_signatures
-  - encryption
   - hardware
   - software
   influences:
@@ -11899,7 +11732,6 @@ primitive_families:
         modulus: 4294967296
     - id: xor
   target_applications:
-  - general_purpose
   - software
   influences:
   - source_family_id: kalyna
@@ -11981,8 +11813,7 @@ primitive_families:
         field_size: 256
         note: Key-dependent MDS matrix parameterised by round-key byte s
     - id: xor
-  target_applications:
-  - general_purpose
+  target_applications: []
   influences:
   - source_family_id: rijndael
     relations:
@@ -12134,8 +11965,7 @@ primitive_families:
     components:
     - id: sbox
     - id: xor
-  target_applications:
-  - general_purpose
+  target_applications: []
   influences: []
   process_participations:
   - process_id: ukrainian_national_cryptographic_competition_2007_2010
@@ -12228,8 +12058,6 @@ primitive_families:
   round_ids:
   - joltik_bc_round
   target_applications:
-  - authenticated_encryption
-  - lightweight
   - hardware
   characteristics:
     block_size_bits: 64
@@ -12289,7 +12117,6 @@ primitive_families:
   round_ids:
   - scream_tbc_round
   target_applications:
-  - authenticated_encryption
   - software
   - hardware
   characteristics:
@@ -12359,7 +12186,6 @@ primitive_families:
   round_ids:
   - warp_round
   target_applications:
-  - lightweight
   - hardware
   - embedded
   characteristics:
@@ -12867,7 +12693,6 @@ primitive_families:
   - printcipher_round
   target_applications:
   - constrained_hardware
-  - lightweight
   - rfid
   - hardware
   characteristics:
@@ -13069,7 +12894,6 @@ primitive_families:
   target_applications:
   - iot
   - constrained_hardware
-  - lightweight
   - embedded
   characteristics:
     block_size_bits: 64

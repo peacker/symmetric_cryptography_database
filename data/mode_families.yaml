@@ -6,10 +6,7 @@ mode_families:
   - merkle_damgard
   round_ids:
   - sha0_round
-  target_applications:
-  - historical
-  - digital_signatures
-  - cryptanalysis
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 160
@@ -59,9 +56,8 @@ mode_families:
   round_ids:
   - a5_1_clock_step
   target_applications:
-  - mobile_networks
+  - mobile
   - gsm
-  - historical
   characteristics:
     state_size_bits: 64
     components:
@@ -111,10 +107,8 @@ mode_families:
   round_ids:
   - a5_2_clock_step
   target_applications:
-  - mobile_networks
+  - mobile
   - gsm
-  - historical
-  - export_control
   characteristics:
     state_size_bits: 81
     components:
@@ -166,7 +160,6 @@ mode_families:
   construction_ids:
   - native_keystream_generator
   target_applications:
-  - generic
   - software
   reference_ids:
   - bernstein_2005_salsa20_spec
@@ -327,7 +320,6 @@ mode_families:
   - rc4_ksa
   - rc4_prga
   target_applications:
-  - generic
   - software
   - tls
   - wireless
@@ -666,7 +658,6 @@ mode_families:
   - subterranean_duplex_round
   target_applications:
   - hardware
-  - stream_cipher
   characteristics:
     state_size_bits: 257
     components:
@@ -707,7 +698,6 @@ mode_families:
   - subterranean_duplex_round
   target_applications:
   - hardware
-  - hash
   characteristics:
     state_size_bits: 257
     components:
@@ -746,8 +736,6 @@ mode_families:
   round_ids:
   - panama_round
   target_applications:
-  - hash
-  - stream_cipher
   - software
   characteristics:
     output_size_bits: 256
@@ -784,7 +772,6 @@ mode_families:
   - sponge_construction
   - standard_sponge
   target_applications:
-  - lightweight
   - hardware
   reference_ids:
   - bogdanov_et_al_2011_spongent
@@ -818,7 +805,6 @@ mode_families:
   round_ids:
   - norx_round
   target_applications:
-  - generic
   - software
   - hardware
   characteristics:
@@ -861,7 +847,6 @@ mode_families:
   - wg_round
   target_applications:
   - hardware
-  - generic
   characteristics:
     state_size_bits: 319
     components:
@@ -928,8 +913,6 @@ mode_families:
   round_ids:
   - radiogatun_round
   target_applications:
-  - hash
-  - stream_cipher
   - software
   - hardware
   characteristics:
@@ -1247,7 +1230,6 @@ mode_families:
   round_ids:
   - clx_permutation_round
   target_applications:
-  - generic
   - iot
   - constrained_hardware
   characteristics:
@@ -1366,7 +1348,6 @@ mode_families:
   target_applications:
   - iot
   - constrained_hardware
-  - generic
   characteristics:
     components:
     - id: sbox
@@ -1761,8 +1742,7 @@ mode_families:
   - native_keystream_generator
   round_ids:
   - isaac_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     state_size_bits: 8192
     components:
@@ -1998,7 +1978,6 @@ mode_families:
   round_ids:
   - lilliput_tbc_round
   target_applications:
-  - lightweight
   - iot
   - constrained_hardware
   characteristics:
@@ -2055,7 +2034,6 @@ mode_families:
   round_ids:
   - limdolen_round
   target_applications:
-  - lightweight
   - iot
   characteristics:
     state_size_bits: 128
@@ -2225,7 +2203,6 @@ mode_families:
   round_ids:
   - aes_prime_128_round
   target_applications:
-  - lightweight
   - iot
   characteristics:
     state_size_bits: 256
@@ -2368,7 +2345,6 @@ mode_families:
   round_ids:
   - photon256_round
   target_applications:
-  - lightweight
   - iot
   characteristics:
     state_size_bits: 384
@@ -2431,7 +2407,6 @@ mode_families:
   round_ids:
   - photon256_round
   target_applications:
-  - lightweight
   - iot
   characteristics:
     state_size_bits: 256
@@ -2484,7 +2459,6 @@ mode_families:
   round_ids:
   - simp_round
   target_applications:
-  - lightweight
   - iot
   - constrained_hardware
   characteristics:
@@ -2576,7 +2550,6 @@ mode_families:
   round_ids:
   - quartet_round
   target_applications:
-  - lightweight
   - constrained_hardware
   characteristics:
     state_size_bits: 256
@@ -2684,7 +2657,6 @@ mode_families:
   round_ids:
   - rc4a_round
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 4096
@@ -2729,8 +2701,6 @@ mode_families:
   round_ids:
   - remus_round
   target_applications:
-  - generic
-  - lightweight
   - iot
   characteristics:
     block_size_bits: 128
@@ -2778,7 +2748,6 @@ mode_families:
   round_ids:
   - aes_round
   target_applications:
-  - lightweight
   - iot
   characteristics:
     state_size_bits: 128
@@ -2852,8 +2821,7 @@ mode_families:
   - monkey_duplex
   round_ids:
   - shamash_and_shamashash_round
-  target_applications:
-  - lightweight_aead
+  target_applications: []
   characteristics:
     state_size_bits: 320
     components:
@@ -2901,8 +2869,7 @@ mode_families:
   - standard_sponge
   round_ids:
   - shamash_and_shamashash_round
-  target_applications:
-  - hash
+  target_applications: []
   characteristics:
     state_size_bits: 320
     components:
@@ -2948,8 +2915,7 @@ mode_families:
   - native_keystream_generator
   round_ids:
   - snow_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     state_size_bits: 576
     components:
@@ -2992,8 +2958,7 @@ mode_families:
   - native_keystream_generator
   round_ids:
   - snow_2_0_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     state_size_bits: 576
     components:
@@ -3039,8 +3004,7 @@ mode_families:
   - native_keystream_generator
   round_ids:
   - snow_3g_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     state_size_bits: 608
     components:
@@ -3088,8 +3052,7 @@ mode_families:
   - native_keystream_generator
   round_ids:
   - sober_t16_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     state_size_bits: 272
     components:
@@ -3127,8 +3090,7 @@ mode_families:
   - native_keystream_generator
   round_ids:
   - sober_t32_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     state_size_bits: 544
     components:
@@ -3166,8 +3128,7 @@ mode_families:
   - native_keystream_generator
   round_ids:
   - sosemanuk1_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     state_size_bits: 384
     components:
@@ -3217,8 +3178,7 @@ mode_families:
   - standard_sponge
   round_ids:
   - spritz_round
-  target_applications:
-  - generic
+  target_applications: []
   characteristics:
     state_size_bits: 2048
     components:
@@ -3262,8 +3222,6 @@ mode_families:
   round_ids:
   - thank_goodness_it_s_friday_round
   target_applications:
-  - generic
-  - lightweight
   - iot
   characteristics:
     block_size_bits: 128
@@ -3314,8 +3272,6 @@ mode_families:
   round_ids:
   - triad_round
   target_applications:
-  - generic
-  - lightweight
   - iot
   characteristics:
     state_size_bits: 256
@@ -3358,7 +3314,6 @@ mode_families:
   round_ids:
   - trivium_round
   target_applications:
-  - generic
   - hardware
   characteristics:
     state_size_bits: 288
@@ -3605,7 +3560,6 @@ mode_families:
   - xchacha_round
   target_applications:
   - software
-  - network
   characteristics:
     components:
     - id: add_mod
@@ -3645,7 +3599,6 @@ mode_families:
   round_ids:
   - yarara_and_coral_round
   target_applications:
-  - lightweight
   - iot
   characteristics:
     state_size_bits: 256
@@ -3705,7 +3658,6 @@ mode_families:
   round_ids:
   - yarara_and_coral_round
   target_applications:
-  - lightweight
   - iot
   characteristics:
     state_size_bits: 256
@@ -4004,7 +3956,6 @@ mode_families:
   - sponge_construction
   - standard_sponge
   target_applications:
-  - lightweight
   - hardware
   - iot
   reference_ids:
@@ -4037,7 +3988,6 @@ mode_families:
   - duplex_mode
   - monkey_duplex
   target_applications:
-  - lightweight
   - hardware
   - iot
   reference_ids:
@@ -4416,7 +4366,6 @@ mode_families:
   round_ids:
   - mir_1_step
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 384
@@ -4710,7 +4659,6 @@ mode_families:
   round_ids:
   - hc256_step
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 65547
@@ -4780,7 +4728,6 @@ mode_families:
   round_ids:
   - rabbit_iteration
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 513
@@ -4839,7 +4786,6 @@ mode_families:
   round_ids:
   - f_fcsr_step
   target_applications:
-  - generic
   - hardware
   characteristics:
     state_size_bits: 196
@@ -4901,7 +4847,6 @@ mode_families:
   round_ids:
   - seal_inner_iteration
   target_applications:
-  - generic
   - software
   characteristics:
     components:
@@ -4961,7 +4906,6 @@ mode_families:
   round_ids:
   - sapphire_byte_step
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 2104
@@ -5081,7 +5025,6 @@ mode_families:
   round_ids:
   - yamb_step
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 3040
@@ -5146,8 +5089,6 @@ mode_families:
   - fnv1_byte_step
   target_applications:
   - hash_tables
-  - checksums
-  - data_lookup
   characteristics:
     state_size_bits: 64
     components:
@@ -5215,10 +5156,7 @@ mode_families:
   - merkle_damgard
   round_ids:
   - haval_pass
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - checksums
+  target_applications: []
   characteristics:
     block_size_bits: 1024
     state_size_bits: 256
@@ -5296,9 +5234,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - md2_compression_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     block_size_bits: 128
     state_size_bits: 384
@@ -5358,9 +5294,7 @@ mode_families:
   - merkle_damgard
   round_ids:
   - md4_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 128
@@ -5408,10 +5342,7 @@ mode_families:
   - merkle_damgard
   round_ids:
   - md5_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - checksums
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 128
@@ -5465,9 +5396,7 @@ mode_families:
   - merkle_damgard
   round_ids:
   - ripemd_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 160
@@ -5533,11 +5462,7 @@ mode_families:
   - merkle_damgard
   round_ids:
   - sha1_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - key_derivation
-  - random_number_generation
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 160
@@ -5605,11 +5530,7 @@ mode_families:
     - id: or
     - id: not
     - id: constant
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - key_derivation
-  - random_number_generation
+  target_applications: []
   influences:
   - source_family_id: sha2
     relations:
@@ -5735,9 +5656,7 @@ mode_families:
     - id: binary_matrix_mul
     - id: xor
     - id: constant
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   influences:
   - source_family_id: streebog
     relations:
@@ -5786,10 +5705,7 @@ mode_families:
   - standard_sponge
   round_ids:
   - keccak_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - key_derivation
+  target_applications: []
   characteristics:
     state_size_bits: 1600
     components:
@@ -5855,10 +5771,7 @@ mode_families:
   - standard_sponge
   round_ids:
   - keccak_round
-  target_applications:
-  - key_derivation
-  - random_number_generation
-  - generic
+  target_applications: []
   characteristics:
     state_size_bits: 1600
     components:
@@ -5904,8 +5817,6 @@ mode_families:
   round_ids:
   - blake_round
   target_applications:
-  - digital_signatures
-  - message_authentication
   - software
   characteristics:
     state_size_bits: 512
@@ -5962,8 +5873,6 @@ mode_families:
   construction_ids:
   - merkle_damgard
   target_applications:
-  - digital_signatures
-  - message_authentication
   - software
   reference_ids:
   - aumasson_et_al_2013_blake2
@@ -6025,9 +5934,7 @@ mode_families:
   - merkle_damgard
   round_ids:
   - groestl_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     state_size_bits: 512
     block_size_bits: 512
@@ -6084,9 +5991,7 @@ mode_families:
   - standard_sponge
   round_ids:
   - jh_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     state_size_bits: 1024
     block_size_bits: 512
@@ -6171,9 +6076,6 @@ mode_families:
   round_ids:
   - skein_round
   target_applications:
-  - digital_signatures
-  - message_authentication
-  - key_derivation
   - software
   characteristics:
     state_size_bits: 512
@@ -6256,8 +6158,6 @@ mode_families:
   round_ids:
   - tiger_pass
   target_applications:
-  - digital_signatures
-  - message_authentication
   - content_addressable_storage
   characteristics:
     block_size_bits: 512
@@ -6347,10 +6247,7 @@ mode_families:
   - merkle_damgard
   round_ids:
   - whirlpool_cipher_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
-  - key_derivation
+  target_applications: []
   characteristics:
     block_size_bits: 512
     state_size_bits: 512
@@ -6400,9 +6297,7 @@ mode_families:
   - beetle_mode
   round_ids:
   - photon_beetle_round
-  target_applications:
-  - aead
-  - hash
+  target_applications: []
   characteristics:
     state_size_bits: 256
     components:
@@ -6478,9 +6373,7 @@ mode_families:
   - ofb_mode
   round_ids:
   - siv_rijndael256_round
-  target_applications:
-  - aead
-  - hash
+  target_applications: []
   characteristics:
     state_size_bits: 256
     components:
@@ -6539,9 +6432,7 @@ mode_families:
   - block_cipher_based_stream
   round_ids:
   - siv_tem_photon_round
-  target_applications:
-  - aead
-  - hash
+  target_applications: []
   characteristics:
     state_size_bits: 256
     components:
@@ -6610,9 +6501,7 @@ mode_families:
   - block_cipher_based_stream
   round_ids:
   - skinny_aead_round
-  target_applications:
-  - aead
-  - hash
+  target_applications: []
   characteristics:
     state_size_bits: 384
     components:
@@ -6740,10 +6629,7 @@ mode_families:
   - monkey_duplex
   round_ids:
   - subterranean_2_0_round
-  target_applications:
-  - aead
-  - hash
-  - stream_cipher
+  target_applications: []
   characteristics:
     state_size_bits: 257
     components:
@@ -6802,8 +6688,7 @@ mode_families:
   - ofb_mode
   round_ids:
   - sundae_gift_round
-  target_applications:
-  - aead
+  target_applications: []
   characteristics:
     state_size_bits: 128
     components:
@@ -6898,9 +6783,7 @@ mode_families:
   - monkey_duplex
   round_ids:
   - xoodyak_round
-  target_applications:
-  - aead
-  - hash
+  target_applications: []
   characteristics:
     state_size_bits: 384
     components:
@@ -6960,7 +6843,6 @@ mode_families:
   round_ids:
   - nlsv2_step
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 544
@@ -7027,7 +6909,6 @@ mode_families:
   round_ids:
   - cryptmt3_step
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 19937
@@ -7088,7 +6969,6 @@ mode_families:
   round_ids:
   - dragon_step
   target_applications:
-  - generic
   - software
   - mobile
   characteristics:
@@ -7169,7 +7049,6 @@ mode_families:
   round_ids:
   - hc128_step
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 32768
@@ -7234,7 +7113,6 @@ mode_families:
   round_ids:
   - lex_round
   target_applications:
-  - generic
   - software
   characteristics:
     state_size_bits: 256
@@ -7300,10 +7178,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - argon_pass
-  target_applications:
-  - password_hashing
-  - key_derivation
-  - proof_of_work
+  target_applications: []
   characteristics:
     components:
     - id: compression_function
@@ -7368,9 +7243,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - argon2_pass
-  target_applications:
-  - password_hashing
-  - key_derivation
+  target_applications: []
   characteristics:
     components:
     - id: compression_function
@@ -7481,8 +7354,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - antcrypt_step
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -7518,8 +7390,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - battcrypt_step
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: lookup_table
@@ -7565,9 +7436,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - catena_flap
-  target_applications:
-  - password_hashing
-  - key_derivation
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -7618,8 +7487,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - centrifuge_iteration
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -7658,8 +7526,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - earworm_step
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -7700,9 +7567,7 @@ mode_families:
   - standard_duplex
   round_ids:
   - gambit_step
-  target_applications:
-  - password_hashing
-  - key_derivation
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -7738,9 +7603,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - lanarea_step
-  target_applications:
-  - password_hashing
-  - key_derivation
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -7776,9 +7639,7 @@ mode_families:
   - standard_duplex
   round_ids:
   - lyra2_step
-  target_applications:
-  - password_hashing
-  - key_derivation
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -7815,8 +7676,7 @@ mode_families:
   - modular_squaring_kdf
   round_ids:
   - makwa_iteration
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: mul_mod
@@ -7853,8 +7713,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - mcs_phs_iteration
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -7890,9 +7749,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - omegacrypt_step
-  target_applications:
-  - password_hashing
-  - key_derivation
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -7932,8 +7789,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - parallel_step
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: lookup_table
@@ -7975,8 +7831,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - polypasshash_step
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -8017,8 +7872,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - pomelo_step
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: add_mod
@@ -8053,9 +7907,7 @@ mode_families:
   - standard_sponge
   round_ids:
   - rig_step
-  target_applications:
-  - password_hashing
-  - key_derivation
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -8091,8 +7943,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - schvrch_step
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -8122,8 +7973,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - tortuga_step
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -8163,8 +8013,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - twocats_step
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -8210,8 +8059,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - yarn_step
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -8252,9 +8100,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - yescrypt_step
-  target_applications:
-  - password_hashing
-  - key_derivation
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -8299,8 +8145,7 @@ mode_families:
   - native_keystream_generator
   round_ids:
   - rc4_prga
-  target_applications:
-  - encryption
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8327,7 +8172,6 @@ mode_families:
   round_ids:
   - zuc_round
   target_applications:
-  - encryption
   - telecommunications
   characteristics:
     components:
@@ -8362,8 +8206,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - sha1_round
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8385,8 +8228,7 @@ mode_families:
   - iterated_hash_kdf
   round_ids:
   - sha1_round
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8409,8 +8251,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - blowfish_round
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8438,9 +8279,7 @@ mode_families:
   construction_ids:
   - iterated_hash_kdf
   round_ids: []
-  target_applications:
-  - password_hashing
-  - key_derivation
+  target_applications: []
   characteristics:
     components:
     - id: xor
@@ -8467,8 +8306,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - blowfish_round
-  target_applications:
-  - password_hashing
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8498,9 +8336,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - abacus_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8529,9 +8365,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - arirang_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8560,9 +8394,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - aurora_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8591,9 +8423,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - blender_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8621,9 +8451,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - blue_midnight_wish_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8655,9 +8483,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - boole_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8686,9 +8512,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - cheetah_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8717,9 +8541,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - chi_hash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8748,9 +8570,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - crunch_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8779,9 +8599,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - cubehash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8812,9 +8630,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - dch_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8842,9 +8658,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - dynamic_sha_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8873,9 +8687,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - dynamic_sha2_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8904,9 +8716,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - echo_hash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8938,9 +8748,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - ecoh_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8969,9 +8777,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - edon_r_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -8999,9 +8805,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - enrupt_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9030,9 +8834,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - essence_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9060,9 +8862,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - fsb_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9091,9 +8891,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - fugue_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9125,9 +8923,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - hamsi_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9158,9 +8954,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - khichidi_1_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9189,9 +8983,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - lane_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9220,9 +9012,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - lesamnta_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9251,9 +9041,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - luffa_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9285,9 +9073,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - lux_hash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9316,9 +9102,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - mcssha3_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9346,9 +9130,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - md6_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9377,9 +9159,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - meshhash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9407,9 +9187,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - nasha_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9438,9 +9216,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - sandstorm_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9468,9 +9244,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - sarmal_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9499,9 +9273,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - sgail_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9530,9 +9302,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - shabal_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9563,9 +9333,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - shamata_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9594,9 +9362,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - shavite3_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9628,9 +9394,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - simd_hash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9662,9 +9426,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - spectral_hash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9692,9 +9454,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - streamhash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9722,9 +9482,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - swifftx_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9753,9 +9511,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - tangle_hash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9783,9 +9539,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - tib3_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9814,9 +9568,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - twister_hash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9845,9 +9597,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - vortex_hash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9881,9 +9631,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - wamm_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9911,9 +9659,7 @@ mode_families:
   construction_ids: []
   round_ids:
   - waterfall_hash_round
-  target_applications:
-  - digital_signatures
-  - message_authentication
+  target_applications: []
   characteristics:
     components: []
   reference_ids:
@@ -9942,9 +9688,6 @@ mode_families:
   construction_ids:
   - binary_tree_hash
   target_applications:
-  - digital_signatures
-  - message_authentication
-  - key_derivation
   - software
   reference_ids:
   - oconnor_et_al_2020_blake3
@@ -10028,7 +9771,6 @@ mode_families:
   target_applications:
   - software
   - embedded
-  - generic
   characteristics:
     state_size_bits: 512
     components:
@@ -10088,7 +9830,6 @@ mode_families:
   construction_ids:
   - native_keystream_generator
   target_applications:
-  - generic
   - software
   reference_ids:
   - bernstein_2008_chacha
@@ -10168,7 +9909,7 @@ mode_families:
   - block_cipher_based
   - block_cipher_based_stream
   target_applications:
-  - mobile_networks
+  - mobile
   - hardware
   reference_ids:
   - 3gpp_ts_55_216_a5_3
@@ -10212,7 +9953,6 @@ mode_families:
   - block_cipher_based
   - block_cipher_based_stream
   target_applications:
-  - generic
   - software
   reference_ids: &id001
   - bmgl_ref
@@ -10245,7 +9985,6 @@ mode_families:
   round_ids:
   - ghash_round
   target_applications:
-  - generic
   - software
   - hardware
   - tls
@@ -10286,7 +10025,6 @@ mode_families:
   round_ids:
   - polyval_round
   target_applications:
-  - generic
   - software
   - tls
   characteristics:
@@ -10335,7 +10073,6 @@ mode_families:
   round_ids:
   - poly1305_round
   target_applications:
-  - generic
   - software
   - tls
   - messaging
@@ -10380,7 +10117,6 @@ mode_families:
   - umac_nh_round
   - umac_hash_layers_round
   target_applications:
-  - generic
   - software
   characteristics:
     components:
@@ -10429,7 +10165,6 @@ mode_families:
   - gcm_mode
   - carter_wegman
   target_applications:
-  - generic
   - software
   - hardware
   - tls
@@ -10467,7 +10202,6 @@ mode_families:
   construction_ids:
   - encrypt_then_mac
   target_applications:
-  - generic
   - software
   - embedded
   - tls
@@ -10506,7 +10240,6 @@ mode_families:
   - block_cipher_based
   - cbc_mode
   target_applications:
-  - generic
   - software
   - hardware
   reference_ids: &id004
@@ -10540,7 +10273,6 @@ mode_families:
   - block_cipher_based
   - ctr_mode
   target_applications:
-  - generic
   - software
   - hardware
   reference_ids: &id005
@@ -10572,7 +10304,6 @@ mode_families:
   construction_ids:
   - hmac_construction
   target_applications:
-  - generic
   - software
   - hardware
   - tls
@@ -10606,7 +10337,6 @@ mode_families:
   construction_ids:
   - iterated_hash_kdf
   target_applications:
-  - generic
   - software
   reference_ids: &id007
   - pbkdf2_ref
@@ -10766,8 +10496,6 @@ mode_families:
   - quad_key_iv_setup
   target_applications:
   - software
-  - research
-  - encryption
   characteristics:
     state_size_bits: 160
     components:

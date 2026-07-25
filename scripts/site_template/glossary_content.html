@@ -172,18 +172,16 @@
 <p>Two families sharing an identical component_flow (ignoring parameters) or an identical full round hash (including parameters) is a <strong>queryable fact</strong>, exposed in the Custom Query Builder tab, rather than a hand-curated relation &mdash; literal component/round/state sharing was deliberately removed from the influence-edge vocabulary in favor of being retrievable by query (see <a href="#gl-relations">Relations</a>).</p>
 
 <h3 id="gl-applications">Target applications</h3>
-<p>Target application is a free-text list, not a fixed enum (deliberately &mdash; new applications keep appearing faster than a controlled vocabulary could track them), but the ~57 distinct values currently in use cluster into a few recognizable groups:</p>
+<p>Target application is a free-text list, not a fixed enum (deliberately &mdash; new applications keep appearing faster than a controlled vocabulary could track them), but every value must answer <strong>&ldquo;where/in what environment would you deploy this primitive?&rdquo;</strong> &mdash; a concrete deployment context, sector, protocol, or specialized computational substrate. Two things are kept out of this field on purpose, because they belong elsewhere: the cryptographic function/goal the family already fulfills (that's what <code>type</code> records &mdash; tags like <code>digital_signatures</code>, <code>message_authentication</code>, <code>key_derivation</code>, <code>password_hashing</code>, <code>random_number_generation</code>, <code>checksums</code>, or <code>stream_cipher</code> were removed as redundant restatements of the type; <code>fhe</code>/<code>mpc</code>/<code>zero_knowledge</code> survive because they describe the computational substrate the primitive runs under, not the function it performs), and meta/status information about the design itself (historical, deprecated, export-controlled, or a deliberately backdoored research exercise &mdash; a fact about the design's history that belongs in its <code>notes</code>, not a deployment target). Bare umbrella terms with no discriminating power (<code>generic</code>, <code>general_purpose</code>, <code>network</code>) and near-duplicates of a more specific value (<code>lightweight</code>/<code>lightweight_aead</code> vs. the concrete constrained-hardware cluster; <code>mobile_networks</code> merged into <code>mobile</code>; <code>data_lookup</code> merged into <code>hash_tables</code>) were also removed. A family with no genuinely distinguishing deployment context now simply carries an empty list rather than a filler tag.</p>
 <div class="table-wrap glossary-table-wrap"><table class="glossary-table">
 <thead><tr><th>Group</th><th>Values</th></tr></thead>
 <tbody>
-<tr><td>Constrained/embedded hardware</td><td>constrained_hardware, embedded, iot, lightweight, lightweight_aead, microcontrollers, resource_constrained_devices, rfid, bitslice, circuit_depth_constrained, ultra_low_latency</td></tr>
-<tr><td>General platform</td><td>generic, general_purpose, software, hardware, mobile, real_time</td></tr>
-<tr><td>Cryptographic function/use-case</td><td>aead, authenticated_encryption, encryption, digital_signatures, message_authentication, keyed_hashing, hash, key_derivation, password_hashing, random_number_generation, stream_cipher, checksums</td></tr>
-<tr><td>Networking/protocol context</td><td>tls, gsm, mobile_networks, wireless, telecommunications, network, messaging, broadcast</td></tr>
-<tr><td>Specialized computation settings</td><td>fhe, mpc, zero_knowledge, side_channel_resistant, proof_of_work</td></tr>
-<tr><td>Storage/lookup structures</td><td>storage, memory_encryption, content_addressable_storage, data_lookup, hash_tables, hash_table_dos_protection</td></tr>
-<tr><td>Sector/domain</td><td>banking, government, export_control</td></tr>
-<tr><td>Historical/meta</td><td>historical, legacy, research, cryptanalysis, backdoor_research, short_messages</td></tr>
+<tr><td>Constrained/embedded hardware</td><td>constrained_hardware, embedded, iot, microcontrollers, resource_constrained_devices, rfid, bitslice, circuit_depth_constrained, ultra_low_latency</td></tr>
+<tr><td>General platform</td><td>hardware, software, mobile, real_time</td></tr>
+<tr><td>Networking/protocol context</td><td>tls, gsm, wireless, telecommunications, messaging, broadcast, short_messages</td></tr>
+<tr><td>Specialized computation settings</td><td>fhe, mpc, zero_knowledge, side_channel_resistant</td></tr>
+<tr><td>Storage/lookup structures</td><td>storage, memory_encryption, content_addressable_storage, hash_tables, hash_table_dos_protection</td></tr>
+<tr><td>Sector/domain</td><td>banking, government</td></tr>
 </tbody>
 </table></div>
 

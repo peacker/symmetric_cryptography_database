@@ -332,19 +332,41 @@ vocabulary in favor of being retrievable by query.
 ## Target applications
 
 `target_applications` is a free-text list, not a fixed enum (deliberately — new applications
-keep appearing faster than a controlled vocabulary could track them), but the ~57 distinct
-values currently in use cluster into a few recognizable groups:
+keep appearing faster than a controlled vocabulary could track them), but every value must
+answer **"where/in what environment would you deploy this primitive?"** — a concrete
+deployment context, sector, protocol, or specialized computational substrate. Two things are
+kept out of this field on purpose, because they belong elsewhere:
+
+- **The cryptographic function/goal the family already fulfills.** `type` (`aead`, `hash`,
+  `mac`, `kdf`, `pbkdf`, `prng`, `enc`, ...) already records this; tags like `digital_signatures`,
+  `message_authentication`, `key_derivation`, `password_hashing`, `random_number_generation`,
+  `checksums`, or `stream_cipher` were removed as redundant restatements of the type, not
+  application context. (`fhe`/`mpc`/`zero_knowledge` survive this cut because they describe the
+  *computational substrate* the primitive runs under — an environment, like hardware vs.
+  software — not the function it performs.)
+- **Meta/status information about the design itself.** A family being historical, deprecated,
+  export-controlled, or a deliberately backdoored research exercise is a fact about the
+  design's own history, not a deployment target — that belongs in the family's `notes` (which
+  is where it was already documented for every family this applied to; removing the tag lost
+  no information).
+
+Also removed: bare umbrella terms with no discriminating power (`generic`, `general_purpose`,
+`network`) and near-duplicates of a more specific value already in the vocabulary (`lightweight`/
+`lightweight_aead` vs. the concrete `constrained_hardware`/`embedded`/`iot`/... cluster;
+`mobile_networks` merged into `mobile`; `data_lookup` merged into `hash_tables`). A family with
+no genuinely distinguishing deployment context now simply carries an empty
+`target_applications: []` rather than a filler tag.
+
+The remaining values cluster into a few recognizable groups:
 
 | Group | Values |
 |---|---|
-| Constrained/embedded hardware | `constrained_hardware`, `embedded`, `iot`, `lightweight`, `lightweight_aead`, `microcontrollers`, `resource_constrained_devices`, `rfid`, `bitslice`, `circuit_depth_constrained`, `ultra_low_latency` |
-| General platform | `generic`, `general_purpose`, `software`, `hardware`, `mobile`, `real_time` |
-| Cryptographic function/use-case | `aead`, `authenticated_encryption`, `encryption`, `digital_signatures`, `message_authentication`, `keyed_hashing`, `hash`, `key_derivation`, `password_hashing`, `random_number_generation`, `stream_cipher`, `checksums` |
-| Networking/protocol context | `tls`, `gsm`, `mobile_networks`, `wireless`, `telecommunications`, `network`, `messaging`, `broadcast` |
-| Specialized computation settings | `fhe`, `mpc`, `zero_knowledge`, `side_channel_resistant`, `proof_of_work` |
-| Storage/lookup structures | `storage`, `memory_encryption`, `content_addressable_storage`, `data_lookup`, `hash_tables`, `hash_table_dos_protection` |
-| Sector/domain | `banking`, `government`, `export_control` |
-| Historical/meta | `historical`, `legacy`, `research`, `cryptanalysis`, `backdoor_research`, `short_messages` |
+| Constrained/embedded hardware | `constrained_hardware`, `embedded`, `iot`, `microcontrollers`, `resource_constrained_devices`, `rfid`, `bitslice`, `circuit_depth_constrained`, `ultra_low_latency` |
+| General platform | `hardware`, `software`, `mobile`, `real_time` |
+| Networking/protocol context | `tls`, `gsm`, `wireless`, `telecommunications`, `messaging`, `broadcast`, `short_messages` |
+| Specialized computation settings | `fhe`, `mpc`, `zero_knowledge`, `side_channel_resistant` |
+| Storage/lookup structures | `storage`, `memory_encryption`, `content_addressable_storage`, `hash_tables`, `hash_table_dos_protection` |
+| Sector/domain | `banking`, `government` |
 
 ## Standardization processes
 
