@@ -94,7 +94,7 @@ mode_families:
   instances:
   - id: a5_1_gsm
     name: A5/1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - briceno_goldberg_wagner_1999_a5
     - biryukov_shamir_wagner_2000_a5_1
@@ -151,7 +151,7 @@ mode_families:
   instances:
   - id: a5_2_gsm
     name: A5/2
-    type: stream_cipher
+    type: enc
     reference_ids:
     - briceno_goldberg_wagner_1999_a5
     - barkan_biham_keller_2003_gsm
@@ -197,7 +197,7 @@ mode_families:
   instances:
   - id: salsa20_8
     name: Salsa20/8
-    type: stream_cipher
+    type: enc
     reference_ids:
     - bernstein_2005_salsa20_spec
     - bernstein_2007_salsa20_family
@@ -211,7 +211,7 @@ mode_families:
     notes: 8-round reduced variant, recommended by the designer for applications where speed matters more than confidence.
   - id: salsa20_12
     name: Salsa20/12
-    type: stream_cipher
+    type: enc
     reference_ids:
     - bernstein_2005_salsa20_spec
     - bernstein_2007_salsa20_family
@@ -226,7 +226,7 @@ mode_families:
       and security margin.
   - id: salsa20_20
     name: Salsa20/20
-    type: stream_cipher
+    type: enc
     reference_ids:
     - bernstein_2005_salsa20_spec
     - bernstein_2007_salsa20_family
@@ -240,7 +240,7 @@ mode_families:
     notes: Full 20-round variant, recommended by the designer for typical cryptographic applications.
   - id: snuffle_2005
     name: Snuffle 2005
-    type: stream_cipher
+    type: enc
     reference_ids:
     - bernstein_2005_salsa20_spec
     characteristics:
@@ -252,7 +252,7 @@ mode_families:
     notes: Snuffle 2005 is the original eSTREAM-submission name for the Salsa20/20 encryption function.
   - id: xsalsa20
     name: XSalsa20
-    type: stream_cipher
+    type: enc
     reference_ids:
     - bernstein_2011_xsalsa20
     characteristics:
@@ -347,7 +347,7 @@ mode_families:
   instances:
   - id: rc4_variable
     name: RC4 (Variable Key)
-    type: stream_cipher
+    type: enc
     characteristics:
       key_size_bits_min: 8
       key_size_bits_max: 2048
@@ -651,7 +651,7 @@ mode_families:
   instances:
   - id: grain_128_stream
     name: Grain-128 Stream Core
-    type: stream_cipher
+    type: enc
     characteristics:
       key_size_bits: 128
       nonce_size_bits: 96
@@ -689,7 +689,7 @@ mode_families:
   instances:
   - id: subterranean_substream
     name: Substream
-    type: stream_cipher
+    type: enc
     reference_ids:
     - claesen_daemen_genoe_peeters_1993_subterranean
     characteristics:
@@ -879,7 +879,7 @@ mode_families:
   instances:
   - id: wg_29
     name: WG (GF(2^29))
-    type: stream_cipher
+    type: enc
     reference_ids:
     - nawaz_gong_2005_wg
     characteristics:
@@ -915,7 +915,7 @@ mode_families:
   instances:
   - id: beepbeep_224
     name: BeepBeep
-    type: stream_cipher
+    type: enc
     reference_ids:
     - driscoll_2002_beepbeep
     characteristics:
@@ -1475,7 +1475,7 @@ mode_families:
   instances:
   - id: enocoro_128v2_v1
     name: Enocoro-128v2
-    type: stream_cipher
+    type: enc
     reference_ids:
     - enocoro_128v2_ref
     characteristics:
@@ -1785,7 +1785,7 @@ mode_families:
   instances:
   - id: isaac_v1
     name: ISAAC-v1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - isaac_ref
     characteristics:
@@ -1850,7 +1850,7 @@ mode_families:
   instances:
   - id: kcipher_2_v1
     name: KCipher-2
-    type: stream_cipher
+    type: enc
     reference_ids:
     - kcipher_2_ref
     characteristics:
@@ -1949,7 +1949,7 @@ mode_families:
   instances:
   - id: leviathan_v1
     name: LEVIATHAN
-    type: stream_cipher
+    type: enc
     reference_ids:
     - leviathan_ref
     characteristics:
@@ -1983,7 +1983,7 @@ mode_families:
   instances:
   - id: lili_128_v1
     name: LILI-128
-    type: stream_cipher
+    type: enc
     reference_ids:
     - lili_128_ref
     characteristics:
@@ -2309,7 +2309,7 @@ mode_families:
   instances:
   - id: mugi_v1
     name: MUGI
-    type: stream_cipher
+    type: enc
     reference_ids:
     - mugi_ref
     characteristics:
@@ -2353,7 +2353,7 @@ mode_families:
   instances:
   - id: multi_s01_v1
     name: MULTI-S01
-    type: stream_cipher
+    type: enc
     reference_ids:
     - multi_s01_ref
     characteristics:
@@ -2563,7 +2563,7 @@ mode_families:
   instances:
   - id: oryx_v1
     name: ORYX
-    type: stream_cipher
+    type: enc
     reference_ids:
     - oryx_ref
     characteristics:
@@ -2670,7 +2670,7 @@ mode_families:
   instances:
   - id: rc4plus_v1
     name: RC4+
-    type: stream_cipher
+    type: enc
     reference_ids:
     - rc4plus_ref
     characteristics:
@@ -2711,7 +2711,7 @@ mode_families:
   instances:
   - id: rc4a_v1
     name: RC4A-v1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - rc4a_ref
     characteristics:
@@ -2975,7 +2975,7 @@ mode_families:
   instances:
   - id: snow_v1
     name: SNOW-v1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - snow_ref
     characteristics:
@@ -3022,7 +3022,7 @@ mode_families:
   instances:
   - id: snow_2_0_v1
     name: SNOW 2.0-v1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - snow_2_0_ref
     characteristics:
@@ -3071,7 +3071,7 @@ mode_families:
   instances:
   - id: snow_3g_v1
     name: SNOW 3G-v1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - snow_3g_ref
     characteristics:
@@ -3110,7 +3110,7 @@ mode_families:
   instances:
   - id: sober_t16_v1
     name: SOBER-t16-v1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - sober_t16_ref
     characteristics:
@@ -3149,7 +3149,7 @@ mode_families:
   instances:
   - id: sober_t32_v1
     name: SOBER-t32-v1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - sober_t32_ref
     characteristics:
@@ -3199,7 +3199,7 @@ mode_families:
   instances:
   - id: sosemanuk1_v1
     name: SOSEMANUK1-v1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - sosemanuk1_ref
     characteristics:
@@ -3243,7 +3243,7 @@ mode_families:
   instances:
   - id: spritz_v1
     name: Spritz-v1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - spritz_ref
     characteristics:
@@ -3385,7 +3385,7 @@ mode_families:
   instances:
   - id: trivium_v1
     name: Trivium-v1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - trivium_ref
     characteristics:
@@ -3509,7 +3509,7 @@ mode_families:
   instances:
   - id: vmpc_v1
     name: VMPC
-    type: stream_cipher
+    type: enc
     reference_ids:
     - vmpc_ref
     characteristics:
@@ -3590,7 +3590,7 @@ mode_families:
   instances:
   - id: wake_v1
     name: WAKE
-    type: stream_cipher
+    type: enc
     reference_ids:
     - wake_ref
     characteristics:
@@ -3628,7 +3628,7 @@ mode_families:
   instances:
   - id: xchacha_v1
     name: XChaCha20
-    type: stream_cipher
+    type: enc
     reference_ids:
     - xchacha_ref
     characteristics:
@@ -4452,7 +4452,7 @@ mode_families:
   instances:
   - id: mir_1_v1
     name: MIR-1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - maximov_2002_mir1
     characteristics:
@@ -4521,7 +4521,7 @@ mode_families:
   instances:
   - id: achterbahn_v1
     name: Achterbahn
-    type: stream_cipher
+    type: enc
     reference_ids:
     - gammel_2005_achterbahn
     characteristics:
@@ -4583,7 +4583,7 @@ mode_families:
   instances:
   - id: grain_v0
     name: Grain (v0)
-    type: stream_cipher
+    type: enc
     reference_ids:
     - hell_2005_grain
     characteristics:
@@ -4643,7 +4643,7 @@ mode_families:
   instances:
   - id: mickey_v1
     name: MICKEY v1
-    type: stream_cipher
+    type: enc
     reference_ids:
     - babbage_2005_mickey
     characteristics:
@@ -4696,7 +4696,7 @@ mode_families:
   instances:
   - id: decim_v1
     name: DECIM
-    type: stream_cipher
+    type: enc
     reference_ids:
     - berbain_2005_decim
     characteristics:
@@ -4762,7 +4762,7 @@ mode_families:
   instances:
   - id: hc_256_v1
     name: HC-256
-    type: stream_cipher
+    type: enc
     reference_ids:
     - wu_2004_hc256
     characteristics:
@@ -4821,7 +4821,7 @@ mode_families:
   instances:
   - id: rabbit_v1
     name: Rabbit
-    type: stream_cipher
+    type: enc
     reference_ids:
     - boesgaard_2003_rabbit
     characteristics:
@@ -4883,7 +4883,7 @@ mode_families:
   instances:
   - id: f_fcsr_sf8
     name: F-FCSR-SF8
-    type: stream_cipher
+    type: enc
     reference_ids:
     - arnault_2005_ffcsr
     characteristics:
@@ -4943,7 +4943,7 @@ mode_families:
   instances:
   - id: seal_30
     name: SEAL 3.0
-    type: stream_cipher
+    type: enc
     reference_ids:
     - rogaway_1997_seal
     characteristics:
@@ -4998,7 +4998,7 @@ mode_families:
   instances:
   - id: sapphire_ii
     name: Sapphire II
-    type: stream_cipher
+    type: enc
     reference_ids:
     - johnson_1995_sapphire
     characteristics:
@@ -5063,7 +5063,7 @@ mode_families:
   instances:
   - id: sfinks_v1
     name: SFINKS
-    type: stream_cipher
+    type: enc
     reference_ids:
     - braeken_2005_sfinks
     characteristics:
@@ -5127,7 +5127,7 @@ mode_families:
   instances:
   - id: yamb_v1
     name: YAMB
-    type: stream_cipher
+    type: enc
     reference_ids:
     - lancrypto_2005_yamb
     characteristics:
@@ -7009,7 +7009,7 @@ mode_families:
   instances:
   - id: nlsv2_128
     name: NLSv2-128
-    type: stream_cipher
+    type: enc
     characteristics:
       key_size_bits: 128
       nonce_size_bits: 128
@@ -7072,7 +7072,7 @@ mode_families:
   instances:
   - id: cryptmt3_128
     name: CryptMT3
-    type: stream_cipher
+    type: enc
     characteristics:
       key_size_bits: 128
       state_size_bits: 19937
@@ -7140,7 +7140,7 @@ mode_families:
   instances:
   - id: dragon_128
     name: Dragon-128
-    type: stream_cipher
+    type: enc
     characteristics:
       key_size_bits: 128
       nonce_size_bits: 128
@@ -7152,7 +7152,7 @@ mode_families:
       '
   - id: dragon_256
     name: Dragon-256
-    type: stream_cipher
+    type: enc
     characteristics:
       key_size_bits: 256
       nonce_size_bits: 256
@@ -7216,7 +7216,7 @@ mode_families:
   instances:
   - id: hc128
     name: HC-128
-    type: stream_cipher
+    type: enc
     characteristics:
       key_size_bits: 128
       nonce_size_bits: 128
@@ -7284,7 +7284,7 @@ mode_families:
   instances:
   - id: lex_128
     name: LEX-128
-    type: stream_cipher
+    type: enc
     characteristics:
       key_size_bits: 128
       nonce_size_bits: 128
@@ -8314,7 +8314,7 @@ mode_families:
   instances:
   - id: rc4drop_768
     name: RC4-drop[768]
-    type: stream_cipher
+    type: enc
     reference_ids:
     - rc4drop_ref
     characteristics: {}
@@ -8347,7 +8347,7 @@ mode_families:
   instances:
   - id: zuc_v1
     name: ZUC-128
-    type: stream_cipher
+    type: enc
     reference_ids:
     - zuc_ref
     characteristics:
@@ -10063,7 +10063,7 @@ mode_families:
   instances:
   - id: forro14
     name: Forro14
-    type: stream_cipher
+    type: enc
     reference_ids:
     - coutinho_et_al_2022_forro
     characteristics:
@@ -10074,7 +10074,7 @@ mode_families:
       rounds: 14
   - id: forro10
     name: Forro10
-    type: stream_cipher
+    type: enc
     reference_ids:
     - coutinho_et_al_2022_forro
     characteristics:
@@ -10109,7 +10109,7 @@ mode_families:
   instances:
   - id: chacha8
     name: ChaCha8
-    type: stream_cipher
+    type: enc
     reference_ids:
     - bernstein_2008_chacha
     characteristics:
@@ -10122,7 +10122,7 @@ mode_families:
     notes: Bernstein's original 8-round ChaCha stream cipher, with a 64-bit nonce and 64-bit block counter.
   - id: chacha12
     name: ChaCha12
-    type: stream_cipher
+    type: enc
     reference_ids:
     - bernstein_2008_chacha
     characteristics:
@@ -10135,7 +10135,7 @@ mode_families:
     notes: Bernstein's original 12-round ChaCha stream cipher, with a 64-bit nonce and 64-bit block counter.
   - id: chacha20_orig
     name: ChaCha20 (original)
-    type: stream_cipher
+    type: enc
     reference_ids:
     - bernstein_2008_chacha
     characteristics:
@@ -10149,7 +10149,7 @@ mode_families:
       from the IETF profile (chacha20), which fixes the key at 256 bits and uses a 96-bit nonce / 32-bit counter.
   - id: chacha20
     name: ChaCha20
-    type: stream_cipher
+    type: enc
     reference_ids:
     - rfc_7539
     - rfc_8439
@@ -10185,7 +10185,7 @@ mode_families:
   instances:
   - id: a5_3_gsm
     name: A5/3
-    type: stream_cipher
+    type: enc
     reference_ids:
     - 3gpp_ts_55_216_a5_3
     - ts_35_202_kasumi
@@ -10197,7 +10197,7 @@ mode_families:
       cipher family.
   - id: a5_4_gsm
     name: A5/4
-    type: stream_cipher
+    type: enc
     reference_ids:
     - 3gpp_ts_55_226_a5_4
     - ts_35_202_kasumi
@@ -10712,7 +10712,7 @@ mode_families:
   instances:
   - id: kreyvium_v1
     name: Kreyvium
-    type: stream_cipher
+    type: enc
     reference_ids:
     - canteaut_et_al_2018_kreyvium
     characteristics:
@@ -10751,7 +10751,7 @@ mode_families:
   instances:
   - id: flip_default
     name: FLIP
-    type: stream_cipher
+    type: enc
     reference_ids:
     - meaux_et_al_2016_flip
     characteristics: {}
@@ -10796,7 +10796,7 @@ mode_families:
   instances:
   - id: quad_gf2_160_2
     name: QUAD (recommended GF(2), n=160, k=2)
-    type: stream_cipher
+    type: enc
     reference_ids:
     - berbain_gilbert_patarin_2006_quad
     characteristics:

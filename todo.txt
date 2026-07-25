@@ -1,3 +1,57 @@
+TODO:
+
+- are these properties needed in the mode properties:
+  "block_size_bits": { "type": "integer", "minimum": 1 },
+  "state_size_bits": { "type": "integer", "minimum": 1 },
+  "rounds": { "type": "integer", "minimum": 1 },
+
+- add N-hash https://en.wikipedia.org/wiki/N-hash
+  add new construction type described by the wikipedia page
+
+- are these linear transformations used in hight:
+  F0(x) = x≪1 ⊕ x≪2 ⊕ x≪7,
+  F1(x) = x≪3 ⊕ x≪4 ⊕ x≪6.
+  similar to what is used in ascon, keccak or xoodoo linear transformations?
+
+- Replace "Encryption Mode (confidentiality-only)" with "Encryption Mode (ENC)"
+  [DONE]
+  
+- add Enc-then-Hash, Hash-then-Enc, Enc-and-Hash AEAD types
+  Note: "Encrypt-then-MAC Composition" already exists as a construction
+  they could be level 2 categories of an AEAD
+
+- Duplex mode should be duplex construction, similarly to Sponge construction.
+  Or they should be at least consistent.
+
+- Sponge construction: 
+  what is the difference between Sponge Construction (general/unspecified) and Standard Sponge?
+  we could add full rate absorbing and squeezing, full rate absorbing only, full rate squeezing, and sue standard sponge to mean the rest.
+  are there other types of sponge?
+
+- is DrySponge a duplex or a sponge?
+
+- create a lineage for modular multiplication based ciphers
+
+- Not touched, minor: primitive_constructions.yaml's typical_primitive_types field lists stream_cipher on several entries even though stream_cipher isn't a primitive type (it's mode-tier) — it's a pure documentation field, unused by the actual site build, so it doesn't affect the genealogy graph. Happy to clean it up if you want.
+
+- CGEN prng (based on a block cipher): official source only shows 2 pages: https://link.springer.com/chapter/10.1007/11958239_3
+  ask someone with institutional access
+
+- [ ]	PEA	PEA	block_cipher	TODO	TODO	TODO — spec not found	no
+  -> seems a quantum based block cipher, out of scope for this database: https://openaccess.city.ac.uk/id/eprint/2509/1/PEA%20Polymorphic%20Encryption%20Algorithm.pdf
+
+- 4 genuine gaps where the yaml reference entry had no URL at all: 
+  alvarez_et_al_1996_akelarre (Akelarre), 
+  leech_1996_crisp (CRISP), 
+  cs_cipher_ref (CS-Cipher), and 
+  bmgl_ref (BMGL). 
+  I added the checklist's URLs to those entries in data/references.yaml (validated the YAML still parses).
+
+- LEA, Salsa, ChaCha use a "cascade"-type of construction. 
+  which other ciphers have it?
+  which was the first?
+  gimli??? -> to be checked
+
 - expand incomplete construction entries, e.g.:
   - id: filtered_fcsr
     name: Filtered FCSR
@@ -5,30 +59,122 @@
   - id: filtered_lfsr
     name: Filtered LFSR
 
-- merge families and primitives into primitives only
-
 - create clear definition of component/round/primitive/construction/mode/etc.
+  - Merkle–Damgård construction 
+    refs:
+    + " One way hash functions and DES", Merkle, CRYPTO 1989
+    + "A design principle for hash functions", Damgård, CRYPTO 1989: 
+    method of constructing hash functions:
+    uses a compression function as follows h_i <- f (h_{i−1},m_i)
+    -> MD4, MD5, SHA1. 
+    -> MD2 is not Merkle–Damgård, it uses
+       + a checksum of the message, appended to the message itself
+       + 8-bit S-box derived from digit of Pi 
+       + 8-bit words
+
+- add references to the constructions.yaml entries
+
+- add TWEAKEY framework among the constructions:
+   Tweaks and keys for block ciphers: The TWEAKEY framework. ASIACRYPT 2014
+
+- Add PX-structure as a construction:
+  Introduced in the uBlock paper.
+  The PX structure is a refined variant of the conventional SP-network (Substitution–Permutation network), 
+  where PX stands for Pshufb-Xor, with Pshufb and Xor denoting vector permutation and bitwise
+  XOR instructions, respectively.
+  Incorporating the notions of S-boxes and branch numbers, the PX structure offers provable security against differential and linear cryptanalysis, while
+  also being supported by relatively mature analytical frameworks for other attacks such as impossible differentials, integral analysis, and meet-in-the-middle
+  attacks. Under equivalent security levels, the PX structure provides superior
+  software and hardware implementation efficiency.
+
+- look for type 1/2 generalized feistel networks
+
+- add recursive Feistel as a construction
+
+- add universal hash functions 
+
+- add algebraic/arithmetization oriented ciphers
+
+
+DONE:
+
+Which is the first AndRX cipher? Simon for now
 
 - ciphers to add:
   ZORRO (together with PICARO and earlier NOEKEON, designed with Side-Channel protection in mind)
   Joltic-BC, SCREAM internal cipher -> leakage resilient design with extra tweak input
 
-- add TWEAKEY framework among the constructions:
-   Tweaks and keys for block ciphers: The TWEAKEY framework. ASIACRYPT 2014
+- In the symmetric cryptography database: add BLAKE3
+  include relations with its predecessors
 
-Which is the first AndRX cipher?
+- In the symmetric cryptography database: WARP (i already added the pdf 2020-warp.pdf)
+
+- In the symmetric cryptography database: FORRO (i already added the pdf 2022-forro.pdf)
+  include relations with its predecessors
+
+
+- In the symmetric cryptography database: 
+  Fix the references for 
+  MD2: Published in 1989 by Ronald Rivest as a checksum algorithm, which was later adopted for Public Key Infrastructures.
+       Added 1989-rsamd2-rfc1115.txt, specs as source code in Section 4.2.
+       Not a proper Merkle–Damgård construction.
+  MD4: Published in 1990 at the CRYPTO conference. It was created by Rivest as a much faster alternative to MD2.
+  MD5: Published in 1992 as IETF RFC 1321, replacing MD4 after potential security weaknesses were identified in the older algorithm.
+  HAVAL: Introduced in 1992 at the AUSCRYPT conference by Yuliang Zheng, Josef Pieprzyk, and Jennifer Seberry.
+  Note: I have added the two references:
+  symmetric_cryptography_database/references/1989-rsamd2-rfc1115.txt
+  symmetric_cryptography_database/references/1990-md4-crypto.pdf
 
 Other relations (verify them by reading the corresponding pdf):
 - SKINNY:
   + follows trend of locally non-optimal internal components: who started it?
   + introduces sparse linear layer 
-  + MANTIS is a tweakable variant of SKINNY for low-latency implementations. MANTIS uses components from PRINCE and MIDORI
   + 4-bit Sbox candidate S4 is essentially the PICCOLO Sbox with the last NOT gate at the end being removed 
   + one can view the cipher as a primitive in between an SPN and an “ANDrotation-XOR” function like SIMON
   + 8-bit sbox is original and uses 4-input AND-NOR and 4-input OR-NAND gates
   + In order to differentiate the rounds, we simply need a counter, and since the number of rounds of all SKINNY versions is smaller than 64, the most hardware friendly solution is to use a very cheap 6-bit affine LFSR (like in LED)
   + uses 4x4 matrix state as in AES or PRESENT, 
   + same shift row of AES, but simpler mixcolumn
+- MANTIS:
+  + tweakable variant of SKINNY for low-latency implementations. MANTIS uses components from PRINCE and MIDORI
+  + replace the PRINCE round function by the MIDORI-round function while keeping the entire design symmetric around the middle to keep the α-reflection property.
+     It is actually exactly this PRINCE-like MIDORI that we use as a starting point for designing the low-latency block cipher MANTIS.
+  + The cells of the internal state are permuted according to the MIDORI permutation
+  + The round constants are generated in a similar way as for PRINCE, that is we used the first digits of π to generate those constants     
+  + we adopted the linear layer of MIDORI
+  + we used the same Sbox as in MIDORI
 - GASTON permutation is derived from ASCON permutation by improving its linear layer (more diffusion)
 - PRINCE round function basically follows the AES structure, with the exception of using a MixColumns-like mapping with branch number 4 instead of 5.
 - MIDORI is an AES-like design
+
+- add GASCON and relation with ASCON
+- XXTEA related to XTEA
+- RAIDEN related to TEA
+- add SM4 relations:
+  + similar to AES, Substitution-box (S-box) based on the multiplicative inverse over the same finite mathematical field (GF(2⁸))
+  + unbalanced Feistel structure, from whom?
+- IDEA from DES??
+
+- add Subterranean
+  url can be found here: https://www.researchgate.net/profile/Luc-Claesen/publication/3601817_Subterranean_A_600_Mbitsec_cryptographic_VLSI_chip/links/00b495350dba879660000000/Subterranean-A-600-Mbit-sec-cryptographic-VLSI-chip.pdf
+  I have added the pdf: 1993-subterranean.pdf
+  Notice that the 2019 Subterranean v2 paper intro gives many relations to be included:
+  Subterranean is a cryptographic primitive to be used both for hashing and as a stream
+cipher and dates back to 1992 [17,18]. With some imagination its mode can be seen as a
+precursor to the sponge [7] with an absorbing phase followed by a squeezing phase.
+The round function of Subterranean has features that were adopted in several designs
+over the last three decades, including Keccak-p [12] and Xoodoo [21]. Namely, all
+its steps, except the addition of a constant, are bit-level shift-invariant operations, its
+non-linear step is χ, the mixing step is a lightweight bit-oriented mapping with a heavy
+inverse and it has a bit transposition step.
+But the Subterranean round function also differs from Keccak-p and Xoodoo in
+important ways. Namely, its state is essentially one-dimensional rather than 3-dimensional,
+due to the particular transposition and the 257-bit state, it is not software-friendly, and it
+has a buffer, similar to the belt in belt-and-mill designs such as RadioGatún [6].
+Despite the differences, it only takes some minor refurbishing to turn Subterranean
+into a lightweight symmetric cipher suite that can compete with new designs, at least
+when implemented in dedicated hardware. Refurbishing we did, and we call the result
+Subterranean 2.0. In short, it is Subterranean with the buffer removed and the hashing
+and stream encryption modes replaced by a duplex-based construction with modes on
+top, inspired by Xoodyak [19].
+NOTE: [17] is the 1993 paper, [7] is the 2007 "Sponge functions" Ecrypt Hash Workshop presentation.

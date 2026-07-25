@@ -1,15 +1,5 @@
 version: 1
 mode_types:
-- id: stream_cipher
-  name: Stream Cipher
-  notes: >
-    A variable-length symmetric encryption algorithm that generates a
-    keystream (from a key and nonce/IV) and combines it with plaintext, most
-    commonly by XOR, one bit/byte/word at a time rather than in fixed
-    blocks. Built either directly on a native state-update generator (LFSR/
-    NLFSR-based designs, RC4-style table generators) or as a mode wrapping a
-    block cipher or permutation (CTR mode, ARX permutation-based generators
-    like Salsa20/ChaCha).
 - id: aead
   name: Authenticated Encryption with Associated Data (AEAD)
   notes: >
@@ -65,14 +55,22 @@ mode_types:
     Competition submissions). Distinguished from a general-purpose kdf by
     this deliberate cost, tuned via explicit work-factor/memory parameters.
 - id: enc
-  name: Encryption Mode (confidentiality-only)
+  name: Encryption Mode (ENC)
   notes: >
-    A block-cipher mode of operation providing confidentiality alone, with
-    no built-in integrity/authenticity mechanism (CBC, CFB, OFB, plain CTR
+    A variable-length mode providing confidentiality alone, with no
+    built-in integrity/authenticity mechanism, generating a keystream (from
+    a key and nonce/IV) or otherwise transforming plaintext one bit/byte/
+    word or one block at a time. Built either directly on a native
+    state-update generator (LFSR/NLFSR-based designs, RC4-style table
+    generators, ARX permutation-based generators like Salsa20/ChaCha) or as
+    a mode wrapping a block cipher or permutation (CBC, CFB, OFB, plain CTR
     without a separate MAC) -- as opposed to aead, which bundles
     authentication in. Modern guidance generally prefers an aead mode
     unless integrity is provided by a separate composed mechanism
-    (encrypt-then-MAC).
+    (encrypt-then-MAC). The underlying mechanism (native keystream
+    generator vs. block-cipher-wrapped mode) is recorded via
+    `construction_ids`, not this type -- see the `native_keystream_generator`
+    / `block_cipher_based` roots in `data/mode_constructions.yaml`.
 - id: mac
   name: Message Authentication Code (MAC)
   notes: >

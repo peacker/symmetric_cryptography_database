@@ -38,9 +38,10 @@ a dedicated toggle on the Timelines and Genealogy tabs):
   "encrypt this arbitrary-length message" or "hash this file." Keccak-*f*, AES, and Salsa20's
   core update function are primitives.
 - **Mode — variable-length, directly usable as an algorithm.** An AEAD scheme, hash function,
-  XOF, MAC, KDF, PBKDF, PRNG, key wrap, or stream cipher: something a caller can hand an
-  arbitrary-length input to (or ask for arbitrary-length output from) and get a complete,
-  usable cryptographic result. AES-GCM, SHA-3, and Argon2 are modes.
+  XOF, MAC, KDF, PBKDF, PRNG, key wrap, or ENC (confidentiality-only) mode such as a stream
+  cipher: something a caller can hand an arbitrary-length input to (or ask for arbitrary-length
+  output from) and get a complete, usable cryptographic result. AES-GCM, SHA-3, and Argon2 are
+  modes.
 
 A mode is typically *built on top of* one or more primitives — AES-GCM wraps the AES block
 cipher in GCM; SHA3-256 wraps the Keccak-*f* permutation in a sponge — and that relationship
@@ -96,12 +97,11 @@ enum, specifically so each type carries its own citable definition (`data/primit
 
 | Type | Definition |
 |---|---|
-| Stream Cipher | Generates a keystream from a key/nonce and combines it with plaintext (usually by XOR), one bit/byte/word at a time rather than in fixed blocks. |
 | AEAD | Authenticated Encryption with Associated Data: confidentiality plus an integrity/authenticity tag in one algorithm, additionally binding unencrypted associated data into that tag (Rogaway, CCS 2002). |
 | Hash Function | Variable-length input, fixed-length output, unkeyed, one-way (pre-image/second-preimage/collision resistant); built by iterating a compression function or permutation. |
 | XOF (Extendable-Output Function) | Hash-like, but the output length is a caller-chosen parameter rather than fixed (SHAKE128/256, BLAKE3's XOF mode). |
 | PBKDF | A key derivation function deliberately made slow and/or memory-hard for deriving a key from a low-entropy password, resisting offline brute-force (PBKDF2, bcrypt, scrypt, Argon2). |
-| Encryption Mode (confidentiality-only) | A block-cipher mode providing confidentiality alone with no built-in integrity mechanism (CBC, CFB, OFB) — contrast AEAD. |
+| Encryption Mode (ENC) | Confidentiality alone, no built-in integrity mechanism — generates a keystream (a stream cipher, whether a native generator like RC4/Salsa20 or a block-cipher mode like CTR/OFB/CFB) or otherwise transforms plaintext block-by-block (CBC) — contrast AEAD. The generator-vs-block-cipher-mode distinction lives in `construction_ids`, not this type. |
 | MAC | A keyed function producing a fixed-size tag over a variable-length message for integrity/authenticity verification (HMAC, CBC-MAC, Poly1305, GHASH). |
 | PRNG / DRBG | A keyed/seeded algorithm producing output computationally indistinguishable from random, specified as a general-purpose randomness source rather than for encrypting a specific message. |
 | KDF | Derives cryptographic keys from initial keying material plus context, without a PBKDF's deliberate cracking-resistance cost (HKDF). |
