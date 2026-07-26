@@ -8593,6 +8593,73 @@ primitive_families:
       key_size_bits: 128
       output_size_bits: 128
       rounds: 6
+- id: moe
+  name: MOE
+  construction_ids:
+  - modular_multiplication_network
+  - modulo_2n
+  round_ids:
+  - moe_step
+  target_applications:
+  - hardware
+  - mpc
+  - hardware_trojan_resilient
+  characteristics:
+    block_size_bits: 128
+    components:
+    - id: mul_mod
+      params:
+        modulus: 340282366920938463463374607431768211456
+    - id: binary_matrix_mul
+    - id: xor
+    - id: constant
+  reference_ids:
+  - bronchain_et_al_2021_moe
+  process_participations: []
+  influences:
+  - source_family_id: lowmc
+    relations:
+    - inspired_by
+    note: 'MOE''s own specification explicitly reuses LowMC''s matrix/constant-generation procedure: "we suggest to follow
+      the approach proposed by the designers of LowMC [ARS+15] which uses a self-shrinking generator ... based on the LFSR
+      of the Grain cipher ... The bits produced are used to fill the matrix row by row," used to generate MOE''s random
+      128x128 binary matrix M and its nine round constants -- concrete reuse of LowMC''s own component-generation method,
+      not merely a shared "random linear layer" paradigm.'
+  innovative_ideas:
+  - id: moe_multiplication_over_sbox_for_mpc
+    name: Multiplication-and-binary-matrix round in place of an S-box-based SPN, for cheap MPC secret sharing
+    note: 'MOE''s Section 4.5 ("On the unsuitability of SPN constructions") argues a wide-trail S-box-based SPN would need
+      too many secret-sharing/recombination steps for its Trojan-resilience goal, and instead builds every round operation
+      -- key XOR, multiplication by a fixed odd constant (3) modulo 2^n and its inverse, and multiplication by a random
+      invertible binary matrix -- entirely out of operations linear in one of two different algebraic structures (Z/2^nZ
+      and F_2^n), each cheap to secret-share.'
+  notes: 'MOE (Multiplication Operated Encryption; Bronchain, Faust, Lallemand, Leander, Perrin, Standaert, IACR ToSC 2021(1))
+    is a 128-bit, 128-bit-key cipher designed for Trojan-resilient hardware via MPC-style secret sharing, mimicking the
+    AES API. Cited in MSX''s related-work section (Minematsu et al., IACR CiC 2026) alongside IDEA and RC6 as a prior design
+    using multiplication as a nonlinearity source: "MOE[BFL+21] uses multiplication by 3 modulo 2^128." Its 4-step encryption
+    routine (stepi = M o A3 o K_2i+1 o M o A3^-1 o K_2i) alternates key addition with multiplication by 3 (and its inverse)
+    modulo 2^128 and multiplication by a fixed random invertible 128x128 GF(2) matrix -- no S-box anywhere, unlike every
+    other family in this database''s modular_multiplication_network category. Claims 127-bit security for data complexity
+    below 2^64, an FX/key-alternating-cipher-style bound reminiscent of PRINCE/QARMA. The paper also surveys prior
+    modular-multiplication ciphers (IDEA, MARS, MESH, MMB, WIDEA-m, Nimbus, MultiSwap, xmx, Shabal) in a comparison table
+    without singling any one out as MOE''s own structural basis, so no influence edges were added from that survey per
+    this database''s influence-edge criteria -- only the LowMC edge above, for the concretely reused matrix-generation
+    procedure.
+
+    '
+  instances:
+  - id: moe_128
+    name: MOE
+    type: block_cipher
+    reference_ids:
+    - bronchain_et_al_2021_moe
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      output_size_bits: 128
+      rounds: 4
+    notes: 4 steps plus a final key addition K_8; the paper calls these "steps," not rounds, since each already interleaves
+      two full multiplication+matrix passes.
 - id: multi2
   name: MULTI2
   construction_ids:

@@ -364,7 +364,7 @@ The remaining values cluster into a few recognizable groups:
 | Constrained/embedded hardware | `constrained_hardware`, `embedded`, `iot`, `microcontrollers`, `resource_constrained_devices`, `rfid`, `bitslice`, `circuit_depth_constrained`, `ultra_low_latency` |
 | General platform | `hardware`, `software`, `mobile`, `real_time` |
 | Networking/protocol context | `tls`, `gsm`, `wireless`, `telecommunications`, `messaging`, `broadcast`, `short_messages` |
-| Specialized computation settings | `fhe`, `mpc`, `zero_knowledge`, `side_channel_resistant` |
+| Specialized computation settings | `fhe`, `mpc`, `zero_knowledge`, `side_channel_resistant`, `hardware_trojan_resilient` |
 | Storage/lookup structures | `storage`, `memory_encryption`, `content_addressable_storage`, `hash_tables`, `hash_table_dos_protection` |
 | Sector/domain | `banking`, `government` |
 

@@ -921,6 +921,22 @@ references:
   year: 1998
   venue: AES Candidate Submission
   url: https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/aes-development
+- id: bronchain_et_al_2021_moe
+  kind: article
+  title: 'MOE: Multiplication Operated Encryption with Trojan Resilience'
+  authors:
+  - Olivier Bronchain
+  - Sebastian Faust
+  - Virginie Lallemand
+  - Gregor Leander
+  - Léo Perrin
+  - François-Xavier Standaert
+  year: 2021
+  venue: IACR Transactions on Symmetric Cryptology, 2021(1), pp. 78-129
+  url: https://tosc.iacr.org/index.php/ToSC/article/view/8834
+  notes: 'Local copy: references/2021-moe.pdf. DOI 10.46586/tosc.v2021.i1.78-129.
+    Cited in MSX''s related-work section (Minematsu et al., "MSX," IACR CiC 2026)
+    alongside IDEA and RC6 as prior uses of multiplication as a nonlinearity source.'
 - id: burwick_et_al_1999_mars
   kind: article
   title: MARS - A Candidate Cipher for AES

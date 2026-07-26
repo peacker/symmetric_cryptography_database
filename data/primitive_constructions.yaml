@@ -774,21 +774,29 @@ primitive_constructions:
   notes: 'Level-1 root, an orthogonal facet in the same sense as tweakable_spn or arx_permutation_network: for designs
     whose primary (often sole) source of nonlinearity and diffusion is integer multiplication modulo a constant close
     to a power of two, tagged alongside the family''s own primary structural root rather than replacing it -- lay_massey
-    for IDEA/PES, spn for MMB, generalized_feistel for MSX, balanced_feistel for DFC. Despite the shared structural idea,
-    IDEA/PES, MMB, MSX, DFC, and Nimbus are five independently-motivated designs, not branches of one family tree: only
-    MMB -> IDEA (Daemen, Govaerts, Vandewalle designed MMB as an explicit "improved replacement" for IDEA, extending its
-    word-multiplication idea to wider words with a worst-case rather than average-case security analysis) and MSX -> DFC
-    (MSX''s own Design Rationale traces "the basic idea of MSX... back to Vaudenay [Vau03]" and DFC''s decorrelation module)
-    are citation-backed influence edges in this database. No source ties MSX or Nimbus to IDEA or MMB: MSX''s 2026 paper
-    frames its multiplication as an integer reinterpretation of Vaudenay''s decorrelation theory and does not cite IDEA
-    or MMB, and Nimbus''s NESSIE submission credits a modified linear congruential generator, not IDEA/MMB, as its inspiration.
-    This root therefore covers a convergent design cluster, not a single lineage -- see each leaf below for which exact-modulus
-    pattern groups which subset. Deliberately excludes designs where multiplication modulo ~2^n is only one ingredient
+    for IDEA/PES, spn for MMB, generalized_feistel for MSX, balanced_feistel for DFC; MOE and Nimbus carry no other
+    structural root since neither fits feistel/spn/arx (MOE''s own paper explicitly rejects an S-box-based SPN, see
+    heterogeneous_round_network''s sibling notes and moe_step in rounds.yaml). Despite the shared structural idea,
+    IDEA/PES, MMB, MSX, DFC, Nimbus, and MOE are six independently-motivated designs, not branches of one family tree:
+    only MMB -> IDEA (Daemen, Govaerts, Vandewalle designed MMB as an explicit "improved replacement" for IDEA, extending
+    its word-multiplication idea to wider words with a worst-case rather than average-case security analysis), MSX -> DFC
+    (MSX''s own Design Rationale traces "the basic idea of MSX... back to Vaudenay [Vau03]" and DFC''s decorrelation module),
+    and MOE -> LowMC (MOE''s spec explicitly reuses LowMC''s self-shrinking-generator-based matrix/constant-generation
+    procedure, tagged on lowmc rather than on any family in this root since LowMC itself is spn/partial_sbox_layer, not
+    a modular_multiplication_network member) are citation-backed influence edges in this database. No source ties MSX
+    or Nimbus to IDEA or MMB: MSX''s 2026 paper frames its multiplication as an integer reinterpretation of Vaudenay''s
+    decorrelation theory and does not cite IDEA or MMB, and Nimbus''s NESSIE submission credits a modified linear
+    congruential generator, not IDEA/MMB, as its inspiration. MOE''s own related-work section surveys IDEA, MARS, MESH,
+    MMB, WIDEA-m, Nimbus, MultiSwap, xmx, and Shabal as prior modular-multiplication designs in a comparison table without
+    singling any one out as its structural basis -- a related-work listing, not a citable influence edge per this
+    database''s criteria -- so none of those become edges into MOE either. This root therefore covers a convergent design
+    cluster, not a single lineage -- see each leaf below for which exact-modulus pattern groups which subset. Deliberately
+    excludes designs where multiplication modulo ~2^n is only one ingredient
     of a larger nonlinear toolkit rather than the round''s defining mechanism: RC6 and MARS both use multiplication modulo
     2^32, but RC6''s nonlinearity is fundamentally the data-dependent-rotation ARX structure it inherited from RC5 (multiplication
     only derives the rotation amounts), and MARS combines it with an 8-to-32-bit S-box inside an already heterogeneous,
     multi-phase round (see heterogeneous_round_network); Tiger, CLAE, and Bleep64 likewise use a mul_mod component as one
-    of several arithmetic/table operations rather than as the sole source of round nonlinearity. None of these six are
+    of several arithmetic/table operations rather than as the sole source of round nonlinearity. None of these five are
     tagged with this root.
 
     '
@@ -801,13 +809,17 @@ primitive_constructions:
   placeholder_family_names:
   - MSX
   - Nimbus
+  - MOE
   notes: 'Word multiplication reduced modulo a power of two (2^n, matching the native word size), the cheapest form to
-    implement since it needs no extra reduction step beyond natural machine-word truncation. Not generally invertible
-    on its own -- only odd multipliers give a bijection mod 2^n -- so members use it inside a round function that need
-    not itself be a bijection: MSX''s Feistel-style round (Minematsu, Suzaki, Rahman, Suryawanshi, Isobe, "MSX," IACR
-    Communications in Cryptology, 2026) and Nimbus''s y = g(a*x) XOR b (mod 2^64) round, where g is a fixed bit-reversal
-    permutation and the multiplier a is forced odd precisely so the multiplication step stays invertible (NESSIE submission,
-    2000), rather than as a directly self-inverting primitive-level operation.
+    implement since it needs no extra reduction step beyond natural machine-word truncation -- multiplication mod 2^n
+    is only a bijection when the multiplier is odd, and members split into two patterns depending on how they use that
+    fact. Nimbus (NESSIE submission, 2000) and MOE (Bronchain, Faust, Lallemand, Leander, Perrin, Standaert, "MOE," IACR
+    ToSC 2021(1)) both apply the multiplication directly to the *full* state as a self-inverting primitive-level step,
+    forcing/fixing an odd multiplier for exactly that reason (Nimbus''s keyed a; MOE''s fixed constant 3, whose inverse
+    mod 2^128 undoes an earlier step). MSX instead embeds the multiplication inside a Feistel-style round''s F-function
+    (Minematsu, Suzaki, Rahman, Suryawanshi, Isobe, "MSX," IACR Communications in Cryptology, 2026), where invertibility
+    of the multiplication itself is unnecessary since only the F-function''s output, not the multiplication in isolation,
+    needs to feed a reversible XOR/swap step.
 
     '
 - id: modulo_2n_plus_1
