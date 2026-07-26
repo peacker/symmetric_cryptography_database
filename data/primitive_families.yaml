@@ -1384,6 +1384,8 @@ primitive_families:
     modulo 2^16+1 under a 128-bit key.
   construction_ids:
   - lay_massey
+  - modular_multiplication_network
+  - modulo_2n_plus_1
   round_ids:
   - idea_round
   target_applications:
@@ -2937,6 +2939,8 @@ primitive_families:
   construction_ids:
   - feistel
   - balanced_feistel
+  - modular_multiplication_network
+  - modulo_prime_near_2n
   round_ids:
   - dfc_round
   target_applications:
@@ -2947,7 +2951,7 @@ primitive_families:
     - id: xor
     - id: mul_mod
       params:
-        modulus: 9223372036854775807
+        modulus: 18446744073709551629
     - id: add_mod
       params:
         modulus: 18446744073709551616
@@ -2969,7 +2973,11 @@ primitive_families:
     note: DFC's own EF sub-function is explicitly described as "a 4-round Feistel scheme (see Feistel [8])", citing H. Feistel's
       1973 Scientific American paper introducing the Feistel/Lucifer construction.
   notes: 'DFC (Decorrelated Fast Cipher) uses decorrelation theory to provide provable security against differential and linear
-    cryptanalysis.
+    cryptanalysis. Its confusion function CO(x) = ((x+K1)*K2 mod (2^64+13)) mod 2^32 makes multiplication modulo the prime
+    nearest 2^64 the core nonlinear step. CORRECTED (this audit): the mul_mod modulus above previously read 2^63-1 (9223372036854775807),
+    which does not match any published description of DFC; the AES-submission specification and secondary summaries of
+    it (e.g. Wikipedia''s DFC article) consistently give 2^64+13 (18446744073709551629) for the multiplication step, with
+    2^64 (already recorded in add_mod) used separately for the surrounding permutation/addition step.
 
     '
   instances:
@@ -3904,6 +3912,8 @@ primitive_families:
   name: MSX
   construction_ids:
   - generalized_feistel
+  - modular_multiplication_network
+  - modulo_2n
   round_ids:
   - msx_round
   target_applications:
@@ -4598,6 +4608,8 @@ primitive_families:
   name: PES
   construction_ids:
   - lay_massey
+  - modular_multiplication_network
+  - modulo_2n_plus_1
   round_ids:
   - pes_round
   target_applications: []
@@ -8543,6 +8555,8 @@ primitive_families:
   name: MMB
   construction_ids:
   - spn
+  - modular_multiplication_network
+  - modulo_2n_minus_1
   round_ids:
   - mmb_round
   target_applications:
@@ -8560,9 +8574,11 @@ primitive_families:
   influences:
   - source_family_id: idea
     relations:
-    - inspired_by
-    note: MMB uses multiplication modulo 2^32-1 analogous to IDEA's modular multiplication, extending the concept to 32-bit
-      words.
+    - improvement_of
+    note: MMB (Daemen, Govaerts, Vandewalle, "Block Ciphers Based on Modular Arithmetic," 1993) is explicitly designed
+      as an improved replacement for IDEA, extending IDEA's word-multiplication idea from 16-bit words mod 2^16+1 to 32-bit
+      words mod 2^32-1 and replacing IDEA's average-case differential/linear analysis with a worst-case security bound
+      on the multiplication step.
   notes: MMB (Modular Multiplication-Based Block cipher; Daemen et al., Eurocrypt 1993) is a 128-bit SPN block cipher with
     a 128-bit key and 6 rounds. Its round function uses four 32-bit multiplication operations modulo 2^32-1 (a prime) and
     XOR, serving as a precursor to the wide-trail strategy.
@@ -8618,7 +8634,8 @@ primitive_families:
 - id: nimbus
   name: Nimbus
   construction_ids:
-  - spn
+  - modular_multiplication_network
+  - modulo_2n
   round_ids:
   - nimbus_round
   target_applications:
@@ -8642,11 +8659,13 @@ primitive_families:
   notes: 'CORRECTED (this audit): the previous description here ("S-boxes and linear layers... parameterised") did not
     match the actual specification and appears to have never been checked against it. Nimbus''s round function has no
     S-box at all: each of 5 rounds computes y = g(a*x) XOR b (mod 2^64), where g is a fixed 64-bit bit-reversal permutation,
-    over keyed multiplicative/additive constants a, b. The spec states this "was inspired on the linear congruential
-    generator (LCG)" y = a*x + b (mod m), modified by replacing + with XOR, fixing m = 2^64, and adding the bit-reversal
-    for avalanche. The `spn` construction tag is consequently also suspect (there is no substitution layer, only modular
-    multiplication as the nonlinearity) but is left in place pending a better-fitting category, since none of this database''s
-    existing construction types cover a multiplication-based round network.
+    over keyed multiplicative/additive constants a, b (multiplier a forced odd so the step stays invertible). The spec
+    states this "was inspired on the linear congruential generator (LCG)" y = a*x + b (mod m), modified by replacing +
+    with XOR, fixing m = 2^64, and adding the bit-reversal for avalanche. FOLLOW-UP (this audit): the `spn` construction
+    tag flagged above as suspect (there is no substitution layer, only modular multiplication as the nonlinearity) has
+    now been replaced with `modular_multiplication_network` + `modulo_2n`, the multiplication-based-round-network category
+    this note called for; no source ties Nimbus''s LCG-derived design to IDEA or MMB, so no influence edge is added despite
+    the shared construction tag.
 
     '
   instances:

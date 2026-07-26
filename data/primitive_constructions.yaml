@@ -762,6 +762,103 @@ primitive_constructions:
     filter. No family in this database is currently tagged with this leaf
     (Grain filters both an LFSR and an NLFSR jointly, which is why it is
     tagged via the boolean_filter component rather than this leaf).
+- id: modular_multiplication_network
+  name: Modular Multiplication-Based Network
+  abbreviation: MMN
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - IDEA
+  - MMB
+  - MSX
+  notes: 'Level-1 root, an orthogonal facet in the same sense as tweakable_spn or arx_permutation_network: for designs
+    whose primary (often sole) source of nonlinearity and diffusion is integer multiplication modulo a constant close
+    to a power of two, tagged alongside the family''s own primary structural root rather than replacing it -- lay_massey
+    for IDEA/PES, spn for MMB, generalized_feistel for MSX, balanced_feistel for DFC. Despite the shared structural idea,
+    IDEA/PES, MMB, MSX, DFC, and Nimbus are five independently-motivated designs, not branches of one family tree: only
+    MMB -> IDEA (Daemen, Govaerts, Vandewalle designed MMB as an explicit "improved replacement" for IDEA, extending its
+    word-multiplication idea to wider words with a worst-case rather than average-case security analysis) and MSX -> DFC
+    (MSX''s own Design Rationale traces "the basic idea of MSX... back to Vaudenay [Vau03]" and DFC''s decorrelation module)
+    are citation-backed influence edges in this database. No source ties MSX or Nimbus to IDEA or MMB: MSX''s 2026 paper
+    frames its multiplication as an integer reinterpretation of Vaudenay''s decorrelation theory and does not cite IDEA
+    or MMB, and Nimbus''s NESSIE submission credits a modified linear congruential generator, not IDEA/MMB, as its inspiration.
+    This root therefore covers a convergent design cluster, not a single lineage -- see each leaf below for which exact-modulus
+    pattern groups which subset. Deliberately excludes designs where multiplication modulo ~2^n is only one ingredient
+    of a larger nonlinear toolkit rather than the round''s defining mechanism: RC6 and MARS both use multiplication modulo
+    2^32, but RC6''s nonlinearity is fundamentally the data-dependent-rotation ARX structure it inherited from RC5 (multiplication
+    only derives the rotation amounts), and MARS combines it with an 8-to-32-bit S-box inside an already heterogeneous,
+    multi-phase round (see heterogeneous_round_network); Tiger, CLAE, and Bleep64 likewise use a mul_mod component as one
+    of several arithmetic/table operations rather than as the sole source of round nonlinearity. None of these six are
+    tagged with this root.
+
+    '
+- id: modulo_2n
+  name: Multiplication Modulo 2^n
+  abbreviation: Mod 2^n
+  special_case_of: modular_multiplication_network
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - MSX
+  - Nimbus
+  notes: 'Word multiplication reduced modulo a power of two (2^n, matching the native word size), the cheapest form to
+    implement since it needs no extra reduction step beyond natural machine-word truncation. Not generally invertible
+    on its own -- only odd multipliers give a bijection mod 2^n -- so members use it inside a round function that need
+    not itself be a bijection: MSX''s Feistel-style round (Minematsu, Suzaki, Rahman, Suryawanshi, Isobe, "MSX," IACR
+    Communications in Cryptology, 2026) and Nimbus''s y = g(a*x) XOR b (mod 2^64) round, where g is a fixed bit-reversal
+    permutation and the multiplier a is forced odd precisely so the multiplication step stays invertible (NESSIE submission,
+    2000), rather than as a directly self-inverting primitive-level operation.
+
+    '
+- id: modulo_2n_plus_1
+  name: Multiplication Modulo 2^n+1
+  abbreviation: Mod 2^n+1
+  special_case_of: modular_multiplication_network
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - IDEA
+  - PES
+  notes: 'Multiplication in the multiplicative group of integers modulo the Fermat-prime-style constant 2^n+1 (order 2^n,
+    with the all-zero word conventionally representing 2^n so every non-negative n-bit input has a genuine multiplicative
+    inverse), introduced by Lai and Massey''s PES (1990) and carried over unchanged into its revision IDEA (1991) as one
+    of three deliberately algebraically-incompatible group operations -- XOR, addition mod 2^n, multiplication mod 2^n+1
+    -- combined in the MA-structure for confusion.
+
+    '
+- id: modulo_2n_minus_1
+  name: Multiplication Modulo 2^n-1
+  abbreviation: Mod 2^n-1
+  special_case_of: modular_multiplication_network
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - MMB
+  notes: 'Multiplication modulo 2^n-1, introduced by Daemen, Govaerts, and Vandewalle''s MMB ("Block Ciphers Based on Modular
+    Arithmetic," 3rd Symposium on State and Progress of Research in Cryptography, Fondazione Ugo Bordoni, 1993) as an
+    explicitly-named improved replacement for IDEA, extending IDEA''s word-multiplication idea from 16-bit words mod 2^16+1
+    to 32-bit words mod 2^32-1 and replacing IDEA''s average-case differential/linear analysis with a worst-case bound
+    on the multiplication step. Distinct from modulo_2n_plus_1: 2^32-1 is composite (unlike a Fermat prime), so MMB''s
+    multiplicative singularities and inverse structure differ from IDEA''s.
+
+    '
+- id: modulo_prime_near_2n
+  name: Multiplication Modulo a Prime Near 2^n
+  abbreviation: Mod prime~2^n
+  special_case_of: modular_multiplication_network
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - DFC
+  notes: 'Multiplication modulo a prime chosen simply as the nearest prime to a power of two (DFC''s confusion function
+    CO(x) = ((x+K1)*K2 mod (2^64+13)) mod 2^32, per its AES-submission specification and Wikipedia''s summary of it) rather
+    than a fixed +-1 offset. Motivated by Vaudenay''s decorrelation theory rather than by the IDEA/MMB line''s incompatible-group-operation
+    or worst-case-differential arguments: any sufficiently large prime field supplies the same provable bound, so the
+    exact constant 13 is incidental, not structural, unlike modulo_2n_plus_1/modulo_2n_minus_1''s exact +-1 offsets.
+    Kept as its own leaf rather than folded into modulo_2n_plus_1 since DFC''s design rationale and lineage (the decorrelation-theory
+    line that MSX itself cites) differ from that leaf''s IDEA/PES-specific algebraic trick.
+
+    '
 - id: generalized_triangular_dynamical_system
   name: Generalized Triangular Dynamical System (GTDS)
   abbreviation: GTDS

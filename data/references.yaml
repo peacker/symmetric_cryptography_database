@@ -2209,16 +2209,18 @@ references:
   notes: Placeholder reference for checklist coverage ingestion.
 - id: mmb_ref
   kind: paper
-  title: Fast Hashing on the Pentium (MMB)
+  title: Block Ciphers Based on Modular Arithmetic
   year: 1993
-  notes: Original MMB paper (formally titled as a hash paper but introducing the MMB
-    block cipher core).
+  notes: 'CORRECTED (this audit): the previous entry here ("Fast Hashing on the Pentium (MMB)", Eurocrypt 1993 LNCS 765)
+    named an unrelated 1996 CRYPTO paper by the same first two authors plus Vandewalle about MD4-family hash performance
+    on the Pentium -- it does not discuss MMB at all and was never at Eurocrypt 1993. The real MMB paper is this symposium
+    paper introducing the MMB block cipher core.'
   authors:
   - Joan Daemen
   - René Govaerts
   - Joos Vandewalle
-  venue: Advances in Cryptology — Eurocrypt 1993, LNCS 765
-  url: https://link.springer.com/chapter/10.1007/3-540-48285-7_8
+  venue: Proceedings of the 3rd Symposium on State and Progress of Research in Cryptography, Fondazione Ugo Bordoni, pp.
+    80-89
 - id: mugi_ref
   kind: paper
   title: 'MUGI: A Pseudorandom Number Generator for Practical Applications'
