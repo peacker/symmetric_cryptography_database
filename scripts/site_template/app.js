@@ -1099,14 +1099,15 @@
     if (modeSection.tierCheckbox) modeSection.tierCheckbox.addEventListener("change", onChange);
 
     // Top-level All/None: every Type/Construction/Target/Process checkbox in
-    // both tiers at once. Checkboxes carry a data-value attribute (set by
-    // buildChecklistFilter); the tier on/off toggles above don't, so this
-    // selector leaves those alone.
+    // both tiers, plus the "Fixed-length primitives"/"Variable-length modes"
+    // tier toggles themselves, so All/None puts every family filter back to
+    // a single known state in one click.
     function setEveryDimension(value) {
       [primitiveSection, modeSection].forEach((section) => {
         [section.typeSel, section.constructionSel, section.targetSel, section.processSel].forEach((selMap) => {
           Array.from(selMap.keys()).forEach((k) => selMap.set(k, value));
         });
+        if (section.tierCheckbox) section.tierCheckbox.checked = value;
       });
       if (container) {
         container.querySelectorAll("input[type=checkbox][data-value]").forEach((c) => { c.checked = value; });
