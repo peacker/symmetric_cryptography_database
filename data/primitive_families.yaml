@@ -10153,7 +10153,7 @@ primitive_families:
   construction_ids:
   - spn
   - full_sbox_layer
-  - bit_permutation_linear_layer
+  - px_structure
   round_ids:
   - ublock_round
   target_applications:

@@ -87,6 +87,25 @@ primitive_constructions:
     Linear-layer-type facet (see mds_linear_layer); replaces the earlier flat bit_based_spn tag.
 
     '
+- id: px_structure
+  name: PX Structure (Pshufb-Xor)
+  abbreviation: PX
+  special_case_of: spn
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - uBlock
+  notes: >
+    A refined SPN linear layer, introduced in the uBlock paper, built from
+    vector-permutation and XOR SIMD instructions -- Pshufb (byte/nibble
+    shuffle) and Xor -- rather than a bit-level rewiring (bit_permutation_
+    linear_layer) or an arithmetic MDS matrix (mds_linear_layer). Provides
+    provable security against differential/linear cryptanalysis (via S-box
+    and branch-number arguments) while mapping efficiently onto vector
+    (SIMD) hardware and software. Linear-layer-type facet, more specific
+    than the flat bit_permutation_linear_layer tag it replaces for uBlock.
+
+    '
 - id: near_mds_arx_linear_layer
   name: Near-MDS / ARX-like Linear Layer
   abbreviation: Near-MDS/ARX
