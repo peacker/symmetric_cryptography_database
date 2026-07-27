@@ -17,7 +17,7 @@ mode_constructions:
   name: Sponge Construction
   notes: 'A permutation-based mode that absorbs input into part of a fixed-size state (the rate, alongside an untouched
     capacity) interleaved with calls to a public permutation, then squeezes output the same way. Unidirectional/unkeyed by
-    default (hash and XOF use); see duplex_mode for the keyed, bidirectional sibling construction. Level-1 root; families
+    default (hash and XOF use); see duplex_construction for the keyed, bidirectional sibling construction. Level-1 root; families
     are tagged with a leaf below.
 
     '
@@ -50,15 +50,15 @@ mode_constructions:
     no further leaves defined given how few designs use this exact architecture).
 
     '
-- id: duplex_mode
-  name: Duplex Mode
+- id: duplex_construction
+  name: Duplex Construction
   notes: 'A permutation-based mode that interleaves absorb and squeeze in a single call per operation, enabling stateful,
     session-like keyed processing (as needed for AEAD). Level-1 root; families are tagged with a leaf below.
 
     '
 - id: standard_duplex
   name: Standard Duplex
-  special_case_of: duplex_mode
+  special_case_of: duplex_construction
   typical_primitive_types:
   - aead
   placeholder_family_names:
@@ -69,7 +69,7 @@ mode_constructions:
     '
 - id: monkey_duplex
   name: MonkeyDuplex
-  special_case_of: duplex_mode
+  special_case_of: duplex_construction
   typical_primitive_types:
   - aead
   placeholder_family_names:
@@ -83,7 +83,7 @@ mode_constructions:
     '
 - id: dry_sponge_duplex
   name: DrySponge
-  special_case_of: duplex_mode
+  special_case_of: duplex_construction
   typical_primitive_types:
   - aead
   placeholder_family_names:
@@ -97,7 +97,7 @@ mode_constructions:
     '
 - id: beetle_mode
   name: Beetle Mode
-  special_case_of: duplex_mode
+  special_case_of: duplex_construction
   typical_primitive_types:
   - aead
   placeholder_family_names:
@@ -109,7 +109,7 @@ mode_constructions:
     '
 - id: parallel_duplex_construction
   name: Parallel Duplex Construction
-  special_case_of: duplex_mode
+  special_case_of: duplex_construction
   typical_primitive_types:
   - aead
   placeholder_family_names:
