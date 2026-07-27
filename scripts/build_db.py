@@ -51,7 +51,6 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
             stage_id   TEXT NOT NULL,
             label      TEXT NOT NULL,
             kind       TEXT,
-            parent_stage_id TEXT,
             PRIMARY KEY (process_id, stage_id),
             FOREIGN KEY (process_id) REFERENCES processes(id) ON DELETE CASCADE
         );
@@ -385,10 +384,9 @@ def main() -> None:
             for stage in process.get("stages", []):
                 conn.execute(
                     "INSERT INTO process_stages"
-                    " (process_id, stage_id, label, kind, parent_stage_id)"
-                    " VALUES (?, ?, ?, ?, ?)",
-                    (process["id"], stage["id"], stage["label"],
-                     stage.get("kind"), stage.get("parent_stage_id")),
+                    " (process_id, stage_id, label, kind)"
+                    " VALUES (?, ?, ?, ?)",
+                    (process["id"], stage["id"], stage["label"], stage.get("kind")),
                 )
                 for participant in stage.get("participants", []):
                     family_id = participant.get("family_id")
