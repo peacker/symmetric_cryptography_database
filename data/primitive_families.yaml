@@ -2543,6 +2543,8 @@ primitive_families:
     were submitted to AES. Hoang and Rogaway name it as the running example of a Type-2 generalized Feistel network.
   construction_ids:
   - type2_generalized_feistel
+  - modular_multiplication_network
+  - modulo_2n
   round_ids:
   - rc6_round
   target_applications:
@@ -3307,6 +3309,8 @@ primitive_families:
   construction_ids:
   - heterogeneous_round_network
   - type3_generalized_feistel
+  - modular_multiplication_network
+  - modulo_2n
   round_ids:
   - mars_round
   target_applications:
@@ -6393,6 +6397,8 @@ primitive_families:
   name: Bleep64
   construction_ids:
   - lfsr_nlfsr_register_network
+  - modular_multiplication_network
+  - modulo_2n_plus_1
   round_ids:
   - bleep64_round
   target_applications:
@@ -6407,7 +6413,10 @@ primitive_families:
         poly: x^127 + x^63 + 1
     - id: mul_mod
       params:
-        modulus: 4294967296
+        modulus: 4294967297
+    - id: add_mod
+      params:
+        modulus: 4294967295
     - id: add_mod
       params:
         modulus: 4294967296
@@ -6429,7 +6438,12 @@ primitive_families:
   notes: 'Driscoll (Honeywell) 2019. Additive stream cipher + autokey product cipher for AEAD. Core: 127-bit LFSR (poly x^127+x^63+1,
     split as L0||L1, two 64-bit halves) + two 32-bit nonlinear state words x, y = 192 bits register storage. Key=128 bits
     (primary), nonce=96 bits, tag=64 bits (primary). Uses ones''-complement multiplication of 32-bit words as nonlinear filter.
-    Processes two 32-bit words per iteration. See bleep64_aead for the AEAD mode built on this core.
+    Processes two 32-bit words per iteration. See bleep64_aead for the AEAD mode built on this core. CORRECTED (this audit):
+    the mul_mod/add_mod moduli above previously both read 2^32; the official NIST LWC spec (Bleep64-spec.pdf, Sec. 2.1
+    and 2.4) states the ones''-complement additions feeding the multiply''s inputs are mod 2^32-1, while "this multiply
+    operation has characteristics of an operation in a ring of size 2^32+1" (chosen, as in IDEA, because that ring size
+    is prime, unlike 2^32-1) -- a third, ordinary two''s-complement add mod 2^32 combines the multiply-filter output with
+    the LFSR value afterward. All three moduli are now recorded.
 
     '
   instances:
@@ -6689,6 +6703,8 @@ primitive_families:
   name: CLAE
   construction_ids:
   - key_dependent_table_network
+  - modular_multiplication_network
+  - modulo_2n
   round_ids:
   - clae_round
   target_applications:
@@ -8557,6 +8573,7 @@ primitive_families:
   - spn
   - modular_multiplication_network
   - modulo_2n_minus_1
+  - constant_multiplier
   round_ids:
   - mmb_round
   target_applications:
@@ -8598,6 +8615,7 @@ primitive_families:
   construction_ids:
   - modular_multiplication_network
   - modulo_2n
+  - constant_multiplier
   round_ids:
   - moe_step
   target_applications:
@@ -11339,6 +11357,9 @@ primitive_families:
   name: Tiger Compression Function
   construction_ids:
   - davies_meyer
+  - modular_multiplication_network
+  - modulo_2n
+  - constant_multiplier
   round_ids:
   - tiger_pass
   target_applications:
