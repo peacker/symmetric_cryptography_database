@@ -4163,6 +4163,7 @@ primitive_families:
     area while retaining strong differential bounds.
   construction_ids:
   - tweakable_spn
+  - tweakey_framework
   round_ids:
   - skinny_round
   target_applications:
@@ -6853,6 +6854,7 @@ primitive_families:
   name: Deoxys
   construction_ids:
   - tweakable_spn
+  - tweakey_framework
   round_ids:
   - deoxys_round
   target_applications:
@@ -8253,6 +8255,7 @@ primitive_families:
   name: MANTIS
   construction_ids:
   - self_reciprocal_spn
+  - tweakey_framework
   round_ids:
   - mantis_round
   target_applications:
@@ -12151,6 +12154,7 @@ primitive_families:
   name: Joltik-BC
   construction_ids:
   - tweakable_spn
+  - tweakey_framework
   round_ids:
   - joltik_bc_round
   target_applications:

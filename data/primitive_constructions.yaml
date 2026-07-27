@@ -569,6 +569,32 @@ primitive_constructions:
     settings.
 
     '
+- id: tweakey_framework
+  name: TWEAKEY Framework
+  abbreviation: TWEAKEY
+  typical_primitive_types:
+  - tweakable_block_cipher
+  placeholder_family_names:
+  - SKINNY
+  - Deoxys
+  - Joltik-BC
+  - MANTIS
+  notes: >
+    A key/tweak-handling facet (Jean, Nikolic, Peyrin, "Tweaks and Keys for
+    Block Ciphers: The TWEAKEY Framework," ASIACRYPT 2014), tagged alongside
+    a family's own round-structure root (e.g. tweakable_spn for SKINNY/
+    Deoxys/Joltik-BC, self_reciprocal_spn for MANTIS) rather than replacing
+    it. Key and tweak are concatenated into a single "tweakey state" made of
+    several same-size words; each round consumes one subtweakey obtained by
+    XORing together all of that round's tweakey words after passing each
+    through its own word-permutation-plus-LFSR "tweakey schedule" -- a
+    deliberately simple, linear schedule (in contrast to the complex,
+    often-nonlinear key schedules of pre-TWEAKEY designs), since diffusion
+    and nonlinearity are left entirely to the cipher's own round function.
+    Distinct from even_mansour (a public permutation with key XORed only
+    before/after, no per-round tweak input) and from tweakable_spn on its
+    own (which only says the round processing is tweak-influenced, not how
+    the tweakey material is scheduled).
 - id: coupled_counter_system
   name: Coupled Counter System
   typical_primitive_types:
