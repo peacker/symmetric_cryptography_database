@@ -30,9 +30,10 @@ TODO:
 
 - is DrySponge a duplex or a sponge?
 
-- create a lineage for modular multiplication based ciphers
-
-- Not touched, minor: primitive_constructions.yaml's typical_primitive_types field lists stream_cipher on several entries even though stream_cipher isn't a primitive type (it's mode-tier) — it's a pure documentation field, unused by the actual site build, so it doesn't affect the genealogy graph. Happy to clean it up if you want.
+- Not touched, minor: primitive_constructions.yaml's typical_primitive_types field 
+  lists stream_cipher on several entries even though stream_cipher isn't a primitive type 
+  (it's mode-tier) — it's a pure documentation field, unused by the actual site build, 
+  so it doesn't affect the genealogy graph. Happy to clean it up if you want.
 
 - CGEN prng (based on a block cipher): official source only shows 2 pages: https://link.springer.com/chapter/10.1007/11958239_3
   ask someone with institutional access

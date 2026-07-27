@@ -878,6 +878,10 @@
             <details class="collapsible gen-filter-panel">
               <summary>${label}</summary>
               <div class="collapsible-body">
+                <div class="viz-filter-actions">
+                  <button id="${idPrefix}All" type="button">All</button>
+                  <button id="${idPrefix}None" type="button">None</button>
+                </div>
                 <div id="${idPrefix}Groups"></div>
               </div>
             </details>`;
@@ -1001,6 +1005,22 @@
           }
           onChange();
         });
+      });
+
+      // Top-level All/None spanning every group, mirroring the Types/Target
+      // applications/Processes panels' own top-level buttons -- the per-group
+      // All/None/Only buttons above only ever touch one group's members.
+      const allBtn = el("ConstructionAll");
+      const noneBtn = el("ConstructionNone");
+      if (allBtn) allBtn.addEventListener("click", () => {
+        groups.forEach((g) => g.members.forEach((m) => constructionSel.set(m.key, true)));
+        if (container) container.querySelectorAll("input[type=checkbox]").forEach((c) => { c.checked = true; });
+        onChange();
+      });
+      if (noneBtn) noneBtn.addEventListener("click", () => {
+        groups.forEach((g) => g.members.forEach((m) => constructionSel.set(m.key, false)));
+        if (container) container.querySelectorAll("input[type=checkbox]").forEach((c) => { c.checked = false; });
+        onChange();
       });
     }
 
