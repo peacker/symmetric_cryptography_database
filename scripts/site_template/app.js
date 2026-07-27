@@ -897,7 +897,16 @@
         </div>`;
     }
 
-    return tierSection("Primitive", "Fixed-length primitives") + tierSection("Mode", "Variable-length modes");
+    // Top-level All/None spanning every dimension in both tiers at once,
+    // wired up in createTierFilterPanel (mirrors the per-panel and per-group
+    // All/None buttons, but at the whole-"Family filters"-section level).
+    const familyActions = `
+      <div class="viz-filter-actions">
+        <button id="${prefix}FamilyAll" type="button">All</button>
+        <button id="${prefix}FamilyNone" type="button">None</button>
+      </div>`;
+
+    return familyActions + tierSection("Primitive", "Fixed-length primitives") + tierSection("Mode", "Variable-length modes");
   }
 
   // Builds the tier + 4-dimension filter panel for one tab (prefix "viz" or
@@ -1089,6 +1098,26 @@
     if (primitiveSection.tierCheckbox) primitiveSection.tierCheckbox.addEventListener("change", onChange);
     if (modeSection.tierCheckbox) modeSection.tierCheckbox.addEventListener("change", onChange);
 
+    // Top-level All/None: every Type/Construction/Target/Process checkbox in
+    // both tiers at once. Checkboxes carry a data-value attribute (set by
+    // buildChecklistFilter); the tier on/off toggles above don't, so this
+    // selector leaves those alone.
+    function setEveryDimension(value) {
+      [primitiveSection, modeSection].forEach((section) => {
+        [section.typeSel, section.constructionSel, section.targetSel, section.processSel].forEach((selMap) => {
+          Array.from(selMap.keys()).forEach((k) => selMap.set(k, value));
+        });
+      });
+      if (container) {
+        container.querySelectorAll("input[type=checkbox][data-value]").forEach((c) => { c.checked = value; });
+      }
+      onChange();
+    }
+    const familyAllBtn = document.getElementById(`${prefix}FamilyAll`);
+    const familyNoneBtn = document.getElementById(`${prefix}FamilyNone`);
+    if (familyAllBtn) familyAllBtn.addEventListener("click", () => setEveryDimension(true));
+    if (familyNoneBtn) familyNoneBtn.addEventListener("click", () => setEveryDimension(false));
+
     function isFamilyVisible(fid) {
       const tier = dims.familyTierById.get(fid) || "";
       if (tier === "primitive") return primitiveSection.isVisible(fid);
@@ -1130,7 +1159,12 @@
     const relLabel = (key) => RELATION_LABELS[key] || key.replace(/_/g, " ");
 
     if (container) {
-      container.innerHTML = groups.map((g, i) => `
+      const topActions = `
+        <div class="viz-filter-actions">
+          <button id="genRelationAll" type="button">All</button>
+          <button id="genRelationNone" type="button">None</button>
+        </div>`;
+      container.innerHTML = topActions + groups.map((g, i) => `
         <details class="collapsible filter-group" open>
           <summary>${escapeHtml(g.label)}</summary>
           <div class="collapsible-body">
@@ -1167,6 +1201,21 @@
         }
         onChange();
       });
+    });
+
+    // Top-level All/None spanning every group at once, mirroring the same
+    // pattern added to the Constructions and Family filters panels.
+    const relAllBtn = document.getElementById("genRelationAll");
+    const relNoneBtn = document.getElementById("genRelationNone");
+    if (relAllBtn) relAllBtn.addEventListener("click", () => {
+      groups.forEach((g) => g.members.forEach((m) => relSel.set(m, true)));
+      if (container) container.querySelectorAll("input[type=checkbox]").forEach((c) => { c.checked = true; });
+      onChange();
+    });
+    if (relNoneBtn) relNoneBtn.addEventListener("click", () => {
+      groups.forEach((g) => g.members.forEach((m) => relSel.set(m, false)));
+      if (container) container.querySelectorAll("input[type=checkbox]").forEach((c) => { c.checked = false; });
+      onChange();
     });
 
     function isEdgeVisible(edge) {
