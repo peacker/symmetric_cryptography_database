@@ -1,5 +1,8 @@
 TODO:
 
+- process_stages table has a parent_stage_id column which seems to always be empty.
+  can it be removed?
+
 - are these properties needed in the mode properties:
   "block_size_bits": { "type": "integer", "minimum": 1 },
   "state_size_bits": { "type": "integer", "minimum": 1 },
@@ -13,9 +16,6 @@ TODO:
   F1(x) = x≪3 ⊕ x≪4 ⊕ x≪6.
   similar to what is used in ascon, keccak or xoodoo linear transformations?
 
-- Replace "Encryption Mode (confidentiality-only)" with "Encryption Mode (ENC)"
-  [DONE]
-  
 - add Enc-then-Hash, Hash-then-Enc, Enc-and-Hash AEAD types
   Note: "Encrypt-then-MAC Composition" already exists as a construction
   they could be level 2 categories of an AEAD
