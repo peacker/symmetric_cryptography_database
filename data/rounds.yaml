@@ -2495,7 +2495,14 @@ rounds:
       state_bits: 64
       word_bits: 8
       branches: 8
-  notes: 'HIGHT GFN round: XOR, rotation, and 8-bit modular addition with subkeys.'
+  notes: 'HIGHT GFN round: XOR, rotation, and 8-bit modular addition with subkeys. The round function''s two rotation-XOR
+    sub-functions are F0(x) = (x<<<1) ^ (x<<<2) ^ (x<<<7) and F1(x) = (x<<<3) ^ (x<<<4) ^ (x<<<6) (Hong et al., CHES 2006;
+    IETF draft-kisa-hight-00) -- the same general shape as Ascon''s per-word linear layer (a word XORed with two rotated
+    copies of itself), just over 8-bit words with three nonzero rotation terms rather than Ascon''s identity-plus-two-rotations
+    over 64-bit words. Unlike Keccak/Xoodoo''s theta step, which diffuses via column/lane parity across the whole state,
+    F0/F1 are self-contained per-branch functions with no cross-branch mixing of their own -- that mixing comes from
+    the surrounding Type-2 GFN structure instead. No citation or shared-authorship link to Ascon/Keccak/Xoodoo is known;
+    this is a structural resemblance only, not a claimed influence.'
 - id: helix_round
   name: Helix round
   kind: full_round
