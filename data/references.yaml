@@ -1885,13 +1885,8 @@ references:
   organization: École Normale Supérieure — CNRS
   url: https://link.springer.com/chapter/10.1007/3-540-69710-1_13
   notes: 'CS-Cipher is a 64-bit block cipher (not a stream cipher -- the paper''s own abstract opens with "This paper
-    presents a new block cipher"); the previous title here ("CS-Cipher: A Flexible Stream Cipher with Provable
-    Security") and url (.../3-540-69710-1_3, which is a different FSE''98 paper) were wrong, inherited from the old
-    FAMILY_COVERAGE_CHECKLIST.md. Corrected against the actual paper, now available locally as
-    references/1998-cs-cipher.pdf (16 pages: full specification, design rationale, and implementation figures).
-    references/2000-cs_cipher.pdf was a separate, older, 1-page NESSIE submission cover letter for the same cipher
-    with no algorithm description, previously used as this family''s only source; it has since been removed from
-    the references/ folder and is not used here.'
+    presents a new block cipher"). Local copy: references/1998-cs-cipher.pdf (16 pages: full specification, design
+    rationale, and implementation figures).'
 - id: deoxys_ref
   kind: paper
   title: Deoxys v1.41
@@ -2227,10 +2222,7 @@ references:
   kind: paper
   title: Block Ciphers Based on Modular Arithmetic
   year: 1993
-  notes: 'CORRECTED (this audit): the previous entry here ("Fast Hashing on the Pentium (MMB)", Eurocrypt 1993 LNCS 765)
-    named an unrelated 1996 CRYPTO paper by the same first two authors plus Vandewalle about MD4-family hash performance
-    on the Pentium -- it does not discuss MMB at all and was never at Eurocrypt 1993. The real MMB paper is this symposium
-    paper introducing the MMB block cipher core.'
+  notes: Symposium paper introducing the MMB block cipher core.
   authors:
   - Joan Daemen
   - René Govaerts
@@ -2283,9 +2275,9 @@ references:
   title: 'NUSH: A Fast Software Block Cipher'
   year: 2000
   venue: NESSIE Submission
-  notes: 'Software-optimized block cipher for performance. Data-quality flag (relations audit): references/2000-nush.pdf
-    is only a 1-page design-rationale excerpt (no S-boxes, key schedule, or full round description) -- the complete NESSIE
-    submission is needed to check for a design-inspiration edge.'
+  notes: 'Software-optimized block cipher for performance. references/2000-nush.pdf is only a 1-page design-rationale
+    excerpt (no S-boxes, key schedule, or full round description) -- the complete NESSIE submission is needed to check
+    for a design-inspiration edge.'
 - id: orange_ref
   kind: paper
   title: ORANGE
@@ -2445,10 +2437,10 @@ references:
   title: 'SC2000: A New Block Cipher Candidate'
   year: 2000
   venue: NESSIE Submission
-  notes: 'Substitution-Permutation network with flexible parameters. Data-quality flag (relations audit): references/2000-sc2000.pdf
-    is only a 1-page Fujitsu IP/patent statement, not this paper -- it has no algorithm description or citations. Secondary
-    sources describe SC2000 as combining an unkeyed two-round Feistel network with SPN S-box/key-addition layers, but
-    cite no specific predecessor cipher as inspiration; the actual FSE 2001 paper is needed to check further.'
+  notes: 'Substitution-Permutation network with flexible parameters. references/2000-sc2000.pdf is only a 1-page Fujitsu
+    IP/patent statement, not this paper -- it has no algorithm description or citations. Secondary sources describe SC2000
+    as combining an unkeyed two-round Feistel network with SPN S-box/key-addition layers, but cite no specific predecessor
+    cipher as inspiration; the actual FSE 2001 paper is needed to check further.'
 - id: shacal_ref
   kind: paper
   title: SHACAL
@@ -2921,12 +2913,11 @@ references:
   venue: NIST Special Publication 800-38D
   organization: NIST
   url: https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38d.pdf
-  notes: 'Data-quality fix: this entry previously listed McGrew and Viega (GCM''s actual designers, credited in this
-    standard''s own acknowledgments and introduction, "They submitted GCM to NIST... and they discuss in detail its
-    security and performance") as the authors of this specific document, with year 2005 -- but the standard itself
-    (the document this url/local copy actually is) is authored solely by Morris Dworkin and dated November 2007.
-    Authenticated encryption mode for block ciphers; defines the GHASH universal hash (Sec. 6.4) and GCTR (CTR-mode
-    variant, Sec. 6.5) that together form GCM. Local copy: references/2007-nist-sp800-38d-gcm.pdf.'
+  notes: 'This NIST SP 800-38D standard is authored solely by Morris Dworkin (November 2007); GCM''s actual designers,
+    McGrew and Viega, are credited in the standard''s own acknowledgments and introduction ("They submitted GCM to
+    NIST... and they discuss in detail its security and performance") rather than as document authors. Authenticated
+    encryption mode for block ciphers; defines the GHASH universal hash (Sec. 6.4) and GCTR (CTR-mode variant, Sec. 6.5)
+    that together form GCM. Local copy: references/2007-nist-sp800-38d-gcm.pdf.'
 - id: cbc_ref
   kind: standard
   title: Recommendation for Block Cipher Modes of Operation
@@ -4592,9 +4583,9 @@ references:
   venue: VIETCRYPT 2006, LNCS 4341, pp. 37-49
   publisher: Springer
   organization: France Telecom Research and Development
-  notes: 'Data-quality flag: the local copy (references/2006-cgen.pdf) contains only pp. 37-38 (abstract and start of
-    the introduction); Sections 2-5 with the actual algorithm specification, the mCrypton comparison of Sections 2.2/3.2,
-    and test vectors are not present locally. The cgen mode_families.yaml entry is therefore necessarily partial.'
+  notes: 'The local copy (references/2006-cgen.pdf) contains only pp. 37-38 (abstract and start of the introduction);
+    Sections 2-5 with the actual algorithm specification, the mCrypton comparison of Sections 2.2/3.2, and test vectors
+    are not present locally. The cgen mode_families.yaml entry is therefore necessarily partial.'
 - id: standaert_et_al_2004_iceberg
   kind: paper
   title: 'ICEBERG: An Involutional Cipher Efficient for Block Encryption in Reconfigurable Hardware'

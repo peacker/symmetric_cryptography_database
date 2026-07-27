@@ -2911,10 +2911,8 @@ rounds:
     constant_injection: subkey
     state_model:
       state_bits: 64
-  notes: 'CORRECTED (this audit): previously listed a 4-bit sbox + binary_matrix_mul component flow, which does not match
-    the specification and contradicted the family-level correction already recorded on the nimbus family entry. Nimbus''s
-    actual round has no S-box: y = g(a*x) XOR b (mod 2^64), multiplication by a keyed odd constant a modulo 2^64, then
-    a fixed 64-bit bit-reversal permutation g, then XOR with keyed constant b.'
+  notes: 'Nimbus''s round has no S-box: y = g(a*x) XOR b (mod 2^64), multiplication by a keyed odd constant a modulo 2^64,
+    then a fixed 64-bit bit-reversal permutation g, then XOR with keyed constant b.'
 - id: noekeon_round
   name: NOEKEON round
   kind: full_round

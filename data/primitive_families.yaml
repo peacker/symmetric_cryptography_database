@@ -2976,10 +2976,8 @@ primitive_families:
       1973 Scientific American paper introducing the Feistel/Lucifer construction.
   notes: 'DFC (Decorrelated Fast Cipher) uses decorrelation theory to provide provable security against differential and linear
     cryptanalysis. Its confusion function CO(x) = ((x+K1)*K2 mod (2^64+13)) mod 2^32 makes multiplication modulo the prime
-    nearest 2^64 the core nonlinear step. CORRECTED (this audit): the mul_mod modulus above previously read 2^63-1 (9223372036854775807),
-    which does not match any published description of DFC; the AES-submission specification and secondary summaries of
-    it (e.g. Wikipedia''s DFC article) consistently give 2^64+13 (18446744073709551629) for the multiplication step, with
-    2^64 (already recorded in add_mod) used separately for the surrounding permutation/addition step.
+    nearest 2^64 (18446744073709551629, recorded in mul_mod) the core nonlinear step, with 2^64 (add_mod) used separately
+    for the surrounding permutation/addition step.
 
     '
   instances:
@@ -6438,12 +6436,12 @@ primitive_families:
   notes: 'Driscoll (Honeywell) 2019. Additive stream cipher + autokey product cipher for AEAD. Core: 127-bit LFSR (poly x^127+x^63+1,
     split as L0||L1, two 64-bit halves) + two 32-bit nonlinear state words x, y = 192 bits register storage. Key=128 bits
     (primary), nonce=96 bits, tag=64 bits (primary). Uses ones''-complement multiplication of 32-bit words as nonlinear filter.
-    Processes two 32-bit words per iteration. See bleep64_aead for the AEAD mode built on this core. CORRECTED (this audit):
-    the mul_mod/add_mod moduli above previously both read 2^32; the official NIST LWC spec (Bleep64-spec.pdf, Sec. 2.1
-    and 2.4) states the ones''-complement additions feeding the multiply''s inputs are mod 2^32-1, while "this multiply
-    operation has characteristics of an operation in a ring of size 2^32+1" (chosen, as in IDEA, because that ring size
-    is prime, unlike 2^32-1) -- a third, ordinary two''s-complement add mod 2^32 combines the multiply-filter output with
-    the LFSR value afterward. All three moduli are now recorded.
+    Processes two 32-bit words per iteration. See bleep64_aead for the AEAD mode built on this core. Per the official NIST
+    LWC spec (Bleep64-spec.pdf, Sec. 2.1 and 2.4), the ones''-complement additions feeding the multiply''s inputs are mod
+    2^32-1, and "this multiply operation has characteristics of an operation in a ring of size 2^32+1" -- a ring the spec
+    itself notes is not prime (2^32+1 = 641 x 6700417, unlike IDEA''s prime 2^16+1), relying instead on the ones''-complement
+    inputs to exclude the resulting non-uniformity''s main outlier. A third, ordinary two''s-complement add mod 2^32 combines
+    the multiply-filter output with the LFSR value afterward.
 
     '
   instances:
@@ -6838,12 +6836,7 @@ primitive_families:
     fixing either 8-bit half of its input still leaves both outputs as permutations of the remaining free input,
     which the paper credits for the cipher needing only 2 applications of its underlying FFT-diffusion graph for
     good diffusion, and for having no efficient differential or linear characteristic beyond 5 rounds. Optimized for
-    hardware (an estimated 2Gbps at 30MHz in a dedicated 15mm^2 chip) as well as 8-bit and 32-bit software platforms.
-    Previously, this database only had a 1-page NESSIE submission cover letter for CS-Cipher (references/2000-cs_cipher.pdf,
-    still present but unused as a source) with no algorithm description; the full FSE''98 paper (references/1998-cs-cipher.pdf)
-    corrected several errors this had caused, including a wrong reference title ("...A Flexible Stream Cipher with
-    Provable Security" -- CS-Cipher is a block cipher), a wrong reference URL, and a wrong round count (was recorded
-    as 2, actually 8).'
+    hardware (an estimated 2Gbps at 30MHz in a dedicated 15mm^2 chip) as well as 8-bit and 32-bit software platforms.'
   instances:
   - id: cs_cipher_v1
     name: CS-Cipher-64
@@ -8741,16 +8734,13 @@ primitive_families:
     - submissions_block_64bit
     status: submitted
   influences: []
-  notes: 'CORRECTED (this audit): the previous description here ("S-boxes and linear layers... parameterised") did not
-    match the actual specification and appears to have never been checked against it. Nimbus''s round function has no
-    S-box at all: each of 5 rounds computes y = g(a*x) XOR b (mod 2^64), where g is a fixed 64-bit bit-reversal permutation,
-    over keyed multiplicative/additive constants a, b (multiplier a forced odd so the step stays invertible). The spec
-    states this "was inspired on the linear congruential generator (LCG)" y = a*x + b (mod m), modified by replacing +
-    with XOR, fixing m = 2^64, and adding the bit-reversal for avalanche. FOLLOW-UP (this audit): the `spn` construction
-    tag flagged above as suspect (there is no substitution layer, only modular multiplication as the nonlinearity) has
-    now been replaced with `modular_multiplication_network` + `modulo_2n`, the multiplication-based-round-network category
-    this note called for; no source ties Nimbus''s LCG-derived design to IDEA or MMB, so no influence edge is added despite
-    the shared construction tag.
+  notes: 'Nimbus''s round function has no S-box at all: each of 5 rounds computes y = g(a*x) XOR b (mod 2^64), where g
+    is a fixed 64-bit bit-reversal permutation, over keyed multiplicative/additive constants a, b (multiplier a forced
+    odd so the step stays invertible). The spec states this "was inspired on the linear congruential generator (LCG)"
+    y = a*x + b (mod m), modified by replacing + with XOR, fixing m = 2^64, and adding the bit-reversal for avalanche.
+    Tagged `modular_multiplication_network` + `modulo_2n` rather than `spn`, since there is no substitution layer -- modular
+    multiplication is the round''s only nonlinearity. No source ties Nimbus''s LCG-derived design to IDEA or MMB, so no
+    influence edge is added despite the shared construction tag.
 
     '
   instances:
@@ -11532,14 +11522,13 @@ primitive_families:
       rounds: 48
 - id: newdes
   name: NewDES
-  notes: 'NewDES is a 64-bit, 120-bit-key product cipher designed as a simpler alternative to DES. CORRECTION (this audit):
-    previously misclassified as a classical Feistel network and reusing DES''s own round definition -- per its Wikipedia
-    description, NewDES has no half-block split/swap at all; each of its 17 rounds instead XORs subkey material into each
-    of the block''s eight 1-byte sub-blocks in sequence, feeding each through a fixed S-box whose output is XORed into
-    the next byte. Its own Wikipedia article states explicitly: "Despite its name, it is not derived from DES and has
-    quite a different structure." Retagged as generic spn pending a primary-source reclassification (Robert Scott,
-    Cryptologia 1985, not available locally) and a dedicated round definition (still reusing des_round, which is wrong);
-    deliberately did not add a DES influence edge given the explicit "not derived from DES" statement.
+  notes: 'NewDES is a 64-bit, 120-bit-key product cipher designed as a simpler alternative to DES. Per its Wikipedia description,
+    NewDES has no half-block split/swap at all; each of its 17 rounds instead XORs subkey material into each of the block''s
+    eight 1-byte sub-blocks in sequence, feeding each through a fixed S-box whose output is XORed into the next byte.
+    Its own Wikipedia article states explicitly: "Despite its name, it is not derived from DES and has quite a different
+    structure." Tagged as generic spn pending a primary-source reclassification (Robert Scott, Cryptologia 1985, not available
+    locally) and a dedicated round definition (still reusing des_round, which is wrong); deliberately does not carry a
+    DES influence edge given the explicit "not derived from DES" statement.
 
     '
   construction_ids:
