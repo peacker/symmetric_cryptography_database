@@ -1078,13 +1078,24 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
   margin-top: 0.5rem;
 }
 
-/* Stack the 4 filter boxes as soon as the side column itself (not the
-   viewport) is too narrow for them -- this is what actually fires on a
-   desktop/laptop window with "Filters on left" active, since the fixed
-   320px/240px column is narrower than any viewport-width breakpoint would
-   catch. */
+/* Stack these grids as soon as the side column itself (not the viewport) is
+   too narrow for them -- this is what actually fires on a desktop/laptop
+   window with "Filters on left" active, since the fixed 320px/240px column
+   is narrower than any viewport-width breakpoint would catch. Covers the
+   Family filters row (Types/Constructions/Target applications/Processes)
+   and the Plot controls rows (find-family + relation degree, and the
+   from/to year range), which have the exact same fixed-column-width vs.
+   viewport-media-query mismatch. */
 @container (max-width: 480px) {
   .gen-filters-row { grid-template-columns: 1fr; }
+  .viz-secondary-controls { grid-template-columns: 1fr; }
+  .viz-year-controls {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+  #vizYearRangeValue, #genYearRangeValue {
+    text-align: left;
+  }
 }
 
 .gen-frame {
