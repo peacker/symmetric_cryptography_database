@@ -1,103 +1,165 @@
 TODO:
 
-- process_stages table has a parent_stage_id column which seems to always be empty.
-  can it be removed?
-
-- are these properties needed in the mode properties:
-  "block_size_bits": { "type": "integer", "minimum": 1 },
-  "state_size_bits": { "type": "integer", "minimum": 1 },
-  "rounds": { "type": "integer", "minimum": 1 },
-
 - add N-hash https://en.wikipedia.org/wiki/N-hash
   add new construction type described by the wikipedia page
+  Researched: designed by Miyaguchi, Ohta, Iwata, "128-bit hash function (N-hash)," NTT Review,
+  Nov 1990. Iterated (Merkle-Damgard-style) hash over 128-bit blocks; compression function g runs
+  8 rounds of an F-function similar to FEAL's, combining the round output with both the message
+  block and the running hash value; 128-bit digest. Broken by Biham and Shamir (1991) via
+  differential cryptanalysis, faster than a birthday attack even against 12-round variants.
+  Not added yet: I don't have the compression function's *exact* feedforward formula (which of
+  Davies-Meyer/Matyas-Meyer-Oseas/Miyaguchi-Preneel it actually matches) confirmed from a primary
+  source, only a secondary summary -- and this database flags rather than guesses that kind of
+  detail (see e.g. the PEA entry). If you're fine with adding it now and flagging the compression
+  formula as unconfirmed (matching that PEA convention), say so and I'll add it; otherwise send
+  the NTT Review paper or another primary source and I'll model it precisely.
 
-- are these linear transformations used in hight:
-  F0(x) = x≪1 ⊕ x≪2 ⊕ x≪7,
-  F1(x) = x≪3 ⊕ x≪4 ⊕ x≪6.
-  similar to what is used in ascon, keccak or xoodoo linear transformations?
+- Enc-then-Hash, Hash-then-Enc, Enc-and-Hash AEAD types
+  Note: "Encrypt-then-MAC Composition" already exists as a construction (mode_constructions.yaml)
+  Unclear on two points before I add these:
+  1. Where do they belong? mode_types.yaml is a flat list (no sub-categories currently exist
+     there), while mode_constructions.yaml already has the one directly analogous entry
+     (encrypt_then_mac) as a root/leaf with no special_case_of. Do you want new sibling
+     mode_constructions.yaml entries (hash_then_encrypt, encrypt_and_hash, alongside the existing
+     encrypt_then_mac), or an actual new nested "AEAD types" level in mode_types.yaml (which
+     doesn't exist yet, so it'd be a schema change, not just a data one)?
+  2. "Hash" vs "MAC": a bare unkeyed hash can't provide unforgeability the way encrypt_then_mac
+     needs (encrypt_then_mac's own note already generalizes "MAC" to include a keyed universal
+     hash). Do you mean these three as literal unkeyed-hash compositions, or as a differently-named
+     restatement of the classical Bellare-Namprempre generic-composition trio (Encrypt-and-MAC /
+     MAC-then-Encrypt / Encrypt-then-MAC), just using "Hash" as the label?
 
-- add Enc-then-Hash, Hash-then-Enc, Enc-and-Hash AEAD types
-  Note: "Encrypt-then-MAC Composition" already exists as a construction
-  they could be level 2 categories of an AEAD
-
-- Duplex mode should be duplex construction, similarly to Sponge construction.
-  Or they should be at least consistent.
-
-- Sponge construction: 
+- Sponge construction:
   what is the difference between Sponge Construction (general/unspecified) and Standard Sponge?
-  we could add full rate absorbing and squeezing, full rate absorbing only, full rate squeezing, and sue standard sponge to mean the rest.
+  we could add full rate absorbing and squeezing, full rate absorbing only, full rate squeezing,
+  and sue standard sponge to mean the rest.
   are there other types of sponge?
+  Still open -- this reads like you were thinking out loud rather than requesting a specific
+  taxonomy, so I didn't want to invent leaf names unilaterally. If you want me to take a pass at
+  it, let me know whether the intended split is by absorb/squeeze rate (full vs. partial) as you
+  sketched, or something else (keyed vs. unkeyed, overwrite-mode sponges, etc.).
 
-- is DrySponge a duplex or a sponge?
-
-- Not touched, minor: primitive_constructions.yaml's typical_primitive_types field 
-  lists stream_cipher on several entries even though stream_cipher isn't a primitive type 
-  (it's mode-tier) — it's a pure documentation field, unused by the actual site build, 
+- Not touched, minor: primitive_constructions.yaml's typical_primitive_types field
+  lists stream_cipher on several entries even though stream_cipher isn't a primitive type
+  (it's mode-tier) — it's a pure documentation field, unused by the actual site build,
   so it doesn't affect the genealogy graph. Happy to clean it up if you want.
+  -> Done, see DONE section.
 
 - CGEN prng (based on a block cipher): official source only shows 2 pages: https://link.springer.com/chapter/10.1007/11958239_3
   ask someone with institutional access
 
 - [ ]	PEA	PEA	block_cipher	TODO	TODO	TODO — spec not found	no
   -> seems a quantum based block cipher, out of scope for this database: https://openaccess.city.ac.uk/id/eprint/2509/1/PEA%20Polymorphic%20Encryption%20Algorithm.pdf
+  Unclear: the PEA entry currently in the database (primitive_families.yaml, id "pea") is a
+  lightweight SPN block cipher with placeholder/unconfirmed parameters -- it doesn't look
+  related to the quantum-inspired "Polymorphic Encryption Algorithm" PDF linked above. Is this
+  note flagging that PDF as a *checked-and-rejected* candidate source for the real PEA spec (i.e.
+  still need to find the actual lightweight-PEA paper elsewhere), or is it saying the current
+  database entry is itself the wrong PEA and should be removed/replaced? I didn't want to delete
+  or rewrite a family entry on a guess.
 
-- 4 genuine gaps where the yaml reference entry had no URL at all: 
-  alvarez_et_al_1996_akelarre (Akelarre), 
-  leech_1996_crisp (CRISP), 
-  cs_cipher_ref (CS-Cipher), and 
-  bmgl_ref (BMGL). 
-  I added the checklist's URLs to those entries in data/references.yaml (validated the YAML still parses).
-
-- LEA, Salsa, ChaCha use a "cascade"-type of construction. 
+- LEA, Salsa, ChaCha use a "cascade"-type of construction.
   which other ciphers have it?
-  which was the first?
+  which was first?
   gimli??? -> to be checked
-
-- expand incomplete construction entries, e.g.:
-  - id: filtered_fcsr
-    name: Filtered FCSR
-
-  - id: filtered_lfsr
-    name: Filtered LFSR
-
-- create clear definition of component/round/primitive/construction/mode/etc.
-  - Merkle–Damgård construction 
-    refs:
-    + " One way hash functions and DES", Merkle, CRYPTO 1989
-    + "A design principle for hash functions", Damgård, CRYPTO 1989: 
-    method of constructing hash functions:
-    uses a compression function as follows h_i <- f (h_{i−1},m_i)
-    -> MD4, MD5, SHA1. 
-    -> MD2 is not Merkle–Damgård, it uses
-       + a checksum of the message, appended to the message itself
-       + 8-bit S-box derived from digit of Pi 
-       + 8-bit words
+  Partially resolved already: LEA's own influences note (data/primitive_families.yaml, id "lea",
+  influence edge to salsa20) already analyzes this in detail and concludes LEA's round is NOT
+  actually a cascade (its three word-pair computations are parallel/independent within a round);
+  Salsa20's quarterround IS a strict cascade (each step depends on the previous step's output).
+  Still open: a broader survey of *other* ciphers with a genuine cascade-shaped round (and which
+  was first -- the "gimli???" guess is unconfirmed) wasn't done and would need dedicated research
+  rather than a quick check; let me know if you want that as its own task.
 
 - add references to the constructions.yaml entries
-
-- add TWEAKEY framework among the constructions:
-   Tweaks and keys for block ciphers: The TWEAKEY framework. ASIACRYPT 2014
-
-- Add PX-structure as a construction:
-  Introduced in the uBlock paper.
-  The PX structure is a refined variant of the conventional SP-network (Substitution–Permutation network), 
-  where PX stands for Pshufb-Xor, with Pshufb and Xor denoting vector permutation and bitwise
-  XOR instructions, respectively.
-  Incorporating the notions of S-boxes and branch numbers, the PX structure offers provable security against differential and linear cryptanalysis, while
-  also being supported by relatively mature analytical frameworks for other attacks such as impossible differentials, integral analysis, and meet-in-the-middle
-  attacks. Under equivalent security levels, the PX structure provides superior
-  software and hardware implementation efficiency.
-
-- look for type 1/2 generalized feistel networks
-
-- add recursive Feistel as a construction
-
-- add universal hash functions 
-
-- add algebraic/arithmetization oriented ciphers
+  Scope check before I touch ~150 entries: primitive_constructions.schema.json and
+  mode_constructions.schema.json have no reference_ids field at all right now (unlike the family
+  schemas) -- every existing citation in these two files is an inline mention inside `notes`
+  (e.g. "Hoang and Rogaway, 'On Generalized Feistel Networks,' CRYPTO 2010"), never a linked
+  reference_ids array. Do you want (a) a schema change adding a proper reference_ids array plus
+  back-filling it citation-by-citation across every entry (a large task), or (b) just more inline
+  citations added to entries that are currently missing one, matching the existing convention?
+  If (b), is there a subset of entries you care about most, or truly all ~150?
 
 
 DONE:
+
+- process_stages table has a parent_stage_id column which seems to always be empty. can it be
+  removed?
+  Removed: confirmed 0 uses across data/processes.yaml and no downstream reader (export_viz.py,
+  app.js); dropped from schema/processes.schema.json and scripts/build_db.py.
+
+- are these properties needed in the mode properties: block_size_bits, state_size_bits, rounds?
+  Yes, keep all three -- checked actual usage: state_size_bits appears on 87 families/193
+  instances, block_size_bits on 17 families/78 instances, and rounds on 83 instances (family-level
+  rounds is unused, but that's fine, it's optional and varies per instance/variant).
+
+- Duplex mode should be duplex construction, similarly to Sponge construction. Or they should be
+  at least consistent.
+  Renamed duplex_mode -> duplex_construction (id and name) across mode_constructions.yaml and all
+  22 referencing family entries in mode_families.yaml.
+
+- is DrySponge a duplex or a sponge?
+  It's a duplex: dry_sponge_duplex is special_case_of duplex_construction (see
+  mode_constructions.yaml) -- this was already modeled, just never checked off.
+
+- Not touched, minor: primitive_constructions.yaml's typical_primitive_types field lists
+  stream_cipher even though it isn't a primitive type (it's mode-tier).
+  Replaced stream_cipher with update_function on all 16 affected leaves -- every one of them
+  describes a state-update mechanism, which is exactly what update_function means.
+
+- expand incomplete construction entries, e.g. filtered_fcsr, filtered_lfsr
+  Already fully expanded (this must have been done in an earlier pass and never checked off) --
+  both have complete notes and typical_primitive_types in primitive_constructions.yaml.
+
+- create clear definition of component/round/primitive/construction/mode/etc., incl. a
+  Merkle-Damgard worked example
+  Already substantially covered by GLOSSARY.md (Tiers, Family vs. instance, Types, Constructions,
+  Components, Rounds sections) plus README.md's construction-taxonomy section; the
+  MD2-is-not-Merkle-Damgard nuance from this TODO is already captured in the MD2 family entry
+  (see the MD2/MD4/MD5/HAVAL reference fix further down this DONE list).
+
+- add TWEAKEY framework among the constructions: Tweaks and keys for block ciphers: The TWEAKEY
+  framework. ASIACRYPT 2014
+  Added as a key/tweak-handling facet (primitive_constructions.yaml, id tweakey_framework), tagged
+  onto SKINNY, Deoxys, Joltik-BC, and MANTIS alongside each one's own round-structure root.
+
+- Add PX-structure as a construction (uBlock paper, Pshufb-Xor SIMD linear layer)
+  Added (primitive_constructions.yaml, id px_structure) and retagged uBlock with it, replacing the
+  more generic bit_permutation_linear_layer tag it carried before.
+
+- are these linear transformations used in hight: F0(x) = x≪1 ⊕ x≪2 ⊕ x≪7, F1(x) = x≪3 ⊕ x≪4 ⊕
+  x≪6. similar to what is used in ascon, keccak or xoodoo linear transformations?
+  Confirmed exact against the CHES 2006 paper / IETF draft-kisa-hight-00. Same general shape as
+  Ascon's per-word linear layer (word XORed with two rotated copies of itself); unlike
+  Keccak/Xoodoo's theta step, which mixes across lanes via column parity rather than rotating one
+  word in isolation. No citation/authorship link found, so recorded as a structural resemblance
+  only. See data/rounds.yaml's hight_round entry.
+
+- look for type 1/2 generalized feistel networks
+  Already fully modeled: type1_generalized_feistel through type5_generalized_feistel all exist in
+  primitive_constructions.yaml, each citing Zheng/Matsumoto/Imai (CRYPTO '89) and Hoang/Rogaway
+  (CRYPTO 2010) with their defining structure and a running-example family.
+
+- add recursive Feistel as a construction
+  Already exists: nested_feistel_network ("Nested (Recursive) Feistel Network", MISTY1/KASUMI).
+
+- add universal hash functions
+  Already modeled: universal_hash / polynomial_universal_hash / multiply_add_universal_hash
+  constructions, plus GHASH, Poly1305, and UMAC as full mode_families entries. VMAC is the one
+  still-missing family (already flagged in UMAC's own note) -- didn't add it since it needs a
+  primary-source reference (RFC/paper) I didn't want to fabricate.
+
+- add algebraic/arithmetization oriented ciphers
+  Already modeled: LowMC, MiMC, GMiMC, HadesMiMC, Poseidon, Rescue, and Vision all exist as
+  families, plus the hades/algebraic_feistel constructions. Anemoi/Griffin (newer, 2022-2023) are
+  not yet added -- not what was asked here, but flagging in case you want them too.
+
+- 4 genuine gaps where the yaml reference entry had no URL at all:
+  alvarez_et_al_1996_akelarre (Akelarre),
+  leech_1996_crisp (CRISP),
+  cs_cipher_ref (CS-Cipher), and
+  bmgl_ref (BMGL).
+  I added the checklist's URLs to those entries in data/references.yaml (validated the YAML still parses).
 
 Which is the first AndRX cipher? Simon for now
 
@@ -114,8 +176,8 @@ Which is the first AndRX cipher? Simon for now
   include relations with its predecessors
 
 
-- In the symmetric cryptography database: 
-  Fix the references for 
+- In the symmetric cryptography database:
+  Fix the references for
   MD2: Published in 1989 by Ronald Rivest as a checksum algorithm, which was later adopted for Public Key Infrastructures.
        Added 1989-rsamd2-rfc1115.txt, specs as source code in Section 4.2.
        Not a proper Merkle–Damgård construction.
@@ -129,19 +191,19 @@ Which is the first AndRX cipher? Simon for now
 Other relations (verify them by reading the corresponding pdf):
 - SKINNY:
   + follows trend of locally non-optimal internal components: who started it?
-  + introduces sparse linear layer 
-  + 4-bit Sbox candidate S4 is essentially the PICCOLO Sbox with the last NOT gate at the end being removed 
+  + introduces sparse linear layer
+  + 4-bit Sbox candidate S4 is essentially the PICCOLO Sbox with the last NOT gate at the end being removed
   + one can view the cipher as a primitive in between an SPN and an “ANDrotation-XOR” function like SIMON
   + 8-bit sbox is original and uses 4-input AND-NOR and 4-input OR-NAND gates
   + In order to differentiate the rounds, we simply need a counter, and since the number of rounds of all SKINNY versions is smaller than 64, the most hardware friendly solution is to use a very cheap 6-bit affine LFSR (like in LED)
-  + uses 4x4 matrix state as in AES or PRESENT, 
+  + uses 4x4 matrix state as in AES or PRESENT,
   + same shift row of AES, but simpler mixcolumn
 - MANTIS:
   + tweakable variant of SKINNY for low-latency implementations. MANTIS uses components from PRINCE and MIDORI
   + replace the PRINCE round function by the MIDORI-round function while keeping the entire design symmetric around the middle to keep the α-reflection property.
      It is actually exactly this PRINCE-like MIDORI that we use as a starting point for designing the low-latency block cipher MANTIS.
   + The cells of the internal state are permuted according to the MIDORI permutation
-  + The round constants are generated in a similar way as for PRINCE, that is we used the first digits of π to generate those constants     
+  + The round constants are generated in a similar way as for PRINCE, that is we used the first digits of π to generate those constants
   + we adopted the linear layer of MIDORI
   + we used the same Sbox as in MIDORI
 - GASTON permutation is derived from ASCON permutation by improving its linear layer (more diffusion)
