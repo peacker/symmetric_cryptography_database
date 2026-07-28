@@ -393,28 +393,155 @@ primitive_constructions:
     calls.
 
     '
+- id: sbl_block_cipher_compression
+  name: Classical Block-Cipher Single-Block-Length (SBL) Constructions
+  typical_primitive_types:
+  - compression_function
+  notes: 'Level-1 root for the classical PGV-style compression functions: an n-bit chaining variable and an m-bit message
+    block are combined via a single keyed block-cipher call to produce an n-bit compressed output, with the cipher output
+    fed forward (XORed) against part of the input to enforce one-wayness. Families are tagged with a leaf below.
+
+    '
 - id: davies_meyer
   name: Davies-Meyer Construction
   abbreviation: DM
+  special_case_of: sbl_block_cipher_compression
   typical_primitive_types:
   - compression_function
   placeholder_family_names:
-  - MDC-2
-  - Whirlpool-compression
-  notes: 'A one-block-length compression-function construction derived from a block cipher by XORing the block-cipher output
-    with the input chaining value.
+  - SHA-256
+  - MD5
+  - SHA-1
+  notes: 'f(h_{i-1}, m_i) = E_{m_i}(h_{i-1}) XOR h_{i-1}. The message block dictates the block-cipher key schedule; the previous
+    chaining state is encrypted under it and then fed forward via XOR. Used by MD5, SHA-1, and SHA-256 (each via its own
+    custom keyed round function acting as the block cipher).
 
     '
 - id: matyas_meyer_oseas
   name: Matyas-Meyer-Oseas Construction
   abbreviation: MMO
+  special_case_of: sbl_block_cipher_compression
   typical_primitive_types:
   - compression_function
   placeholder_family_names:
-  - Miyaguchi-Preneel-variants
-  - Snefru-style-compression
-  notes: 'A one-block-length compression-function construction derived from a block cipher, closely related to Davies-Meyer
-    but using a different assignment of message and chaining value roles.
+  - DES-based MMO (ISO 10126)
+  notes: 'f(h_{i-1}, m_i) = E_{h_{i-1}}(m_i) XOR m_i. The previous chaining state dictates the block-cipher key schedule;
+    the message block is encrypted under it and then fed forward via XOR -- the mirror image of Davies-Meyer''s role
+    assignment. Historically used in DES-based constructions for early retail banking security standards (e.g. ISO 10126).
+
+    '
+- id: miyaguchi_preneel
+  name: Miyaguchi-Preneel Construction
+  abbreviation: MP
+  special_case_of: sbl_block_cipher_compression
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - WHIRLPOOL
+  - Streebog
+  notes: 'f(h_{i-1}, m_i) = E_{h_{i-1}}(m_i) XOR h_{i-1} XOR m_i. A modified Matyas-Meyer-Oseas variant that dual-injects
+    both the previous chaining state and the message block into the final feed-forward step (rather than just one of
+    the two), maximizing data diffusion into the compressed output. WHIRLPOOL is built natively around a dedicated 512-bit
+    block cipher (W) using this construction; Streebog (GOST R 34.11-2012) uses the same feed-forward shape.
+
+    '
+- id: dbl_block_cipher_compression
+  name: Classical Block-Cipher Double-Block-Length (DBL) Constructions
+  typical_primitive_types:
+  - compression_function
+  notes: 'Level-1 root for DBL compression functions: multiple interleaved calls of an n-bit block cipher are combined
+    to produce a larger, collision-resistant 2n-bit compressed output rather than a single n-bit one. Families are tagged
+    with a leaf below.
+
+    '
+- id: abreast_dm
+  name: Abreast-DM
+  special_case_of: dbl_block_cipher_compression
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - Abreast-DM-AES-128
+  notes: 'Two independent Davies-Meyer tracks run abreast (in parallel) over the same block cipher, where the second track''s
+    key schedule is driven by a bitwise complement of the message ($\overline{m}_i$) instead of the message itself, keeping
+    the two tracks independent enough to reach a secure 2n-bit compression space. Example: Abreast-DM instantiated with
+    AES-128 gives a secure 256-bit compression space.
+
+    '
+- id: tandem_dm
+  name: Tandem-DM
+  special_case_of: dbl_block_cipher_compression
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - Tandem-DM-AES-256
+  notes: 'A two-stage cascading architecture: the intermediate output of the first block-cipher layer feeds into and modifies
+    the key-schedule variables used by the second block-cipher layer, rather than the two calls running independently in
+    parallel as in Abreast-DM. Example: Tandem-DM instantiated with AES-256 gives a secure 512-bit compression space.
+
+    '
+- id: hirose_construction
+  name: Hirose Construction
+  special_case_of: dbl_block_cipher_compression
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - Hirose-DM-AES-256
+  notes: 'An optimized DBL layout that runs two parallel block-cipher calls sharing the exact same key schedule (derived
+    from the message), differing only in that a fixed constant offset (c) is applied to the plaintext input of the second
+    track. Because both tracks share one key schedule, this avoids generating a second independent key schedule, making
+    it notably cheaper than Abreast-DM/Tandem-DM. Example: Hirose-DM instantiated with AES-256.
+
+    '
+- id: mdc2_mdc4
+  name: MDC-2 / MDC-4 (Modification Detection Codes)
+  abbreviation: MDC
+  special_case_of: dbl_block_cipher_compression
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - MDC2-DES
+  notes: 'Legacy IBM DBL designs that pass the message through multiple cross-interleaved block-cipher encryption steps
+    per block, with the two (MDC-2) or four (MDC-4, built from two chained MDC-2-style stages) intermediate outputs cross-fed
+    into each other''s next key/plaintext inputs before being combined into the final double-length output. Example: MDC2-DES,
+    historically supported in OpenSSL, maps a 64-bit DES cipher into a 128-bit compression space.
+
+    '
+- id: permutation_based_feedforward_compression
+  name: Permutation-Based Constructions (with Feed-Forward)
+  typical_primitive_types:
+  - compression_function
+  notes: 'Level-1 root for modern compression functions that use no separate key schedule and no keyed block cipher at
+    all: the previous chaining state and message are formatted directly into a single unified internal state, mixed via
+    an unkeyed public permutation, and forced one-way by a final feed-forward step binding the initial state to the
+    permuted state. Families are tagged with a leaf below.
+
+    '
+- id: davies_meyer_style_permutation_feedforward
+  name: Davies-Meyer Style Feed-Forward Permutation
+  special_case_of: permutation_based_feedforward_compression
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - BLAKE2b
+  - BLAKE2s
+  notes: 'The previous chaining state and message are parsed directly into a fixed-size internal state matrix; an unkeyed
+    ARX permutation scrambles the matrix, and a final matrix-wide feed-forward addition (in the Davies-Meyer sense, but
+    against a permutation rather than a keyed block-cipher output) binds the initial state into the final state to enforce
+    one-way compression. BLAKE2b/BLAKE2s use a widened ChaCha-core permutation as the engine, applying this finalization
+    feed-forward step for highly secure, fast compression on modern CPUs.
+
+    '
+- id: truncated_large_permutation
+  name: Truncated Large-Permutation Layout
+  special_case_of: permutation_based_feedforward_compression
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - MD6
+  notes: 'The chaining state and message are appended together into a single massive public random permutation call, and
+    the compressed output is obtained simply by truncating a substantial portion of the resulting permutation output --
+    no explicit feed-forward XOR step of its own. Example: the MD6 compression function (NIST SHA-3 first-round candidate)
+    formats inputs into an 89-word field, runs a large public permutation, and truncates the result to 16 words.
 
     '
 - id: arx_permutation_network

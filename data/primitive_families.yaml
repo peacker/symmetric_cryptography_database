@@ -10932,7 +10932,7 @@ primitive_families:
 - id: streebog
   name: Streebog Compression Function
   construction_ids:
-  - matyas_meyer_oseas
+  - miyaguchi_preneel
   round_ids:
   - streebog_round
   target_applications: []
@@ -11075,7 +11075,7 @@ primitive_families:
 - id: blake
   name: BLAKE Compression Functions
   construction_ids:
-  - davies_meyer
+  - davies_meyer_style_permutation_feedforward
   - arx_permutation_network
   - fixed_rotation_arx
   - arx_with_round_constants
@@ -11149,7 +11149,7 @@ primitive_families:
 - id: blake2
   name: BLAKE2 Compression Functions
   construction_ids:
-  - davies_meyer
+  - davies_meyer_style_permutation_feedforward
   - arx_permutation_network
   - fixed_rotation_arx
   - pure_arx_no_constants
@@ -11216,7 +11216,7 @@ primitive_families:
 - id: blake3
   name: BLAKE3 Compression Function
   construction_ids:
-  - davies_meyer
+  - davies_meyer_style_permutation_feedforward
   - arx_permutation_network
   - fixed_rotation_arx
   - pure_arx_no_constants
@@ -11425,7 +11425,7 @@ primitive_families:
 - id: whirlpool
   name: Whirlpool Compression Function
   construction_ids:
-  - matyas_meyer_oseas
+  - miyaguchi_preneel
   round_ids:
   - whirlpool_cipher_round
   target_applications: []

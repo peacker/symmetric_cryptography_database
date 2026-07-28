@@ -199,6 +199,40 @@ from, not an inherent property forced by the algorithm's function. A handful of 
 *and* Bitslice-Friendly SPN because their few-gate nonlinear circuit really is describable
 both ways; that overlap is intentional, not a modeling inconsistency.
 
+**Classical Block-Cipher Single-Block-Length (SBL) Constructions
+(`sbl_block_cipher_compression`)** — a compression function combining an *n*-bit chaining
+variable and an *m*-bit message block via a single keyed block-cipher call to produce an
+*n*-bit compressed output, the cipher output fed forward (XORed) against part of the input to
+enforce one-wayness.
+
+| Leaf | Definition |
+|---|---|
+| Davies–Meyer (`davies_meyer`) | f(h,m) = E_m(h) XOR h — the message drives the block cipher's key schedule; the chaining state is encrypted under it and fed forward via XOR (MD5, SHA-1, SHA-256). |
+| Matyas–Meyer–Oseas (`matyas_meyer_oseas`) | f(h,m) = E_h(m) XOR m — the mirror image of Davies-Meyer: the chaining state drives the key schedule, the message is encrypted and fed forward via XOR (DES-based MMO, e.g. ISO 10126). |
+| Miyaguchi–Preneel (`miyaguchi_preneel`) | f(h,m) = E_h(m) XOR h XOR m — an MMO variant that dual-injects both the chaining state and the message into the final feed-forward step for extra diffusion (WHIRLPOOL, Streebog). |
+
+**Classical Block-Cipher Double-Block-Length (DBL) Constructions
+(`dbl_block_cipher_compression`)** — multiple interleaved calls of an *n*-bit block cipher
+combined to produce a larger, collision-resistant 2*n*-bit compressed output.
+
+| Leaf | Definition |
+|---|---|
+| Abreast-DM (`abreast_dm`) | Two independent Davies-Meyer tracks run in parallel; the second track's key schedule is driven by a bitwise complement of the message, keeping the tracks independent enough for a secure 2n-bit space (Abreast-DM/AES-128 → 256-bit space). |
+| Tandem-DM (`tandem_dm`) | A two-stage cascade where the first block-cipher layer's intermediate output feeds into and modifies the second layer's key-schedule variables (Tandem-DM/AES-256 → 512-bit space). |
+| Hirose (`hirose_construction`) | Two parallel block-cipher calls sharing one key schedule (derived from the message), differing only by a fixed constant offset applied to the second track's plaintext input — avoids generating a second independent key schedule (Hirose-DM/AES-256). |
+| MDC-2 / MDC-4 (`mdc2_mdc4`) | Legacy IBM designs that cross-interleave multiple block-cipher encryption steps per block, chaining two (MDC-2) or four (MDC-4) intermediate outputs into each other's next key/plaintext inputs (MDC2-DES maps 64-bit DES into a 128-bit compression space). |
+
+**Permutation-Based Constructions with Feed-Forward
+(`permutation_based_feedforward_compression`)** — no separate key schedule or keyed block
+cipher: the chaining state and message are formatted directly into a single unified internal
+state, mixed by an unkeyed public permutation, and forced one-way by a final feed-forward step
+binding the initial state to the permuted state.
+
+| Leaf | Definition |
+|---|---|
+| Davies-Meyer Style Feed-Forward Permutation (`davies_meyer_style_permutation_feedforward`) | Chaining state and message are parsed directly into a fixed-size state matrix, scrambled by an unkeyed ARX permutation, then bound together by a final matrix-wide feed-forward addition — the Davies-Meyer feed-forward shape, but against a permutation rather than a keyed block-cipher output (BLAKE2b/BLAKE2s, and the same shape in BLAKE/BLAKE3). |
+| Truncated Large-Permutation Layout (`truncated_large_permutation`) | Chaining state and message are appended into a single massive public-permutation call, with the compressed output obtained simply by truncating a substantial portion of the result — no explicit feed-forward XOR of its own (MD6: inputs formatted into an 89-word field, truncated to 16 words). |
+
 **Other primitive-tier roots**, each a single-level category (no leaves currently defined,
 either because too few designs use the exact architecture to warrant splitting, or because no
 family in this database is tagged with the leaf-worthy variant yet):
@@ -207,8 +241,6 @@ family in this database is tagged with the leaf-worthy variant yet):
 |---|---|
 | Lai–Massey Scheme (`lay_massey`) | A two-branch structure where the same mixing function perturbs both halves symmetrically (IDEA). |
 | Even–Mansour Construction (`even_mansour`) | A key-alternating construction built around one or more public permutations with key addition before and after each call. |
-| Davies–Meyer Construction (`davies_meyer`) | A compression function derived from a block cipher by XORing the block-cipher output with the input chaining value. |
-| Matyas–Meyer–Oseas Construction (`matyas_meyer_oseas`) | Closely related to Davies-Meyer, with a different assignment of message and chaining-value roles to the block cipher's key/plaintext inputs. |
 | Stream State-Update Generator (`stream_state_update_generator`) | A keystream design based on repeated state updates and output extraction, typically with separate key-scheduling and generation phases. |
 | LFSR/NLFSR Register Network (`lfsr_nlfsr_register_network`) | A bit-oriented structure driven by linear/nonlinear feedback-shift-register state transitions and Boolean mixing. |
 | Key-Dependent Table Network (`key_dependent_table_network`) | Round behavior driven by key-derived tables or key-dependent substitution/permutation components. |

@@ -110,14 +110,42 @@
 </table></div>
 <p>Any cipher <em>could</em> in principle be designed as a Boolean-operator network (or an ARX network, or an SPN) &mdash; these are descriptions of what a given design's authors actually chose to build from, not an inherent property forced by the algorithm's function. A handful of families (Keccak, Ascon, Xoodoo, Gimli) are legitimately tagged with both Boolean-Operator Network <em>and</em> Bitslice-Friendly SPN because their few-gate nonlinear circuit really is describable both ways; that overlap is intentional, not a modeling inconsistency.</p>
 
+<p><strong>Classical Block-Cipher Single-Block-Length (SBL) Constructions</strong> &mdash; a compression function combining an <em>n</em>-bit chaining variable and an <em>m</em>-bit message block via a single keyed block-cipher call to produce an <em>n</em>-bit compressed output, the cipher output fed forward (XORed) against part of the input to enforce one-wayness.</p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Leaf</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td>Davies&ndash;Meyer</td><td>f(h,m) = E_m(h) XOR h &mdash; the message drives the block cipher's key schedule; the chaining state is encrypted under it and fed forward via XOR (MD5, SHA-1, SHA-256).</td></tr>
+<tr><td>Matyas&ndash;Meyer&ndash;Oseas</td><td>f(h,m) = E_h(m) XOR m &mdash; the mirror image of Davies-Meyer: the chaining state drives the key schedule, the message is encrypted and fed forward via XOR (DES-based MMO, e.g. ISO 10126).</td></tr>
+<tr><td>Miyaguchi&ndash;Preneel</td><td>f(h,m) = E_h(m) XOR h XOR m &mdash; an MMO variant that dual-injects both the chaining state and the message into the final feed-forward step for extra diffusion (WHIRLPOOL, Streebog).</td></tr>
+</tbody>
+</table></div>
+
+<p><strong>Classical Block-Cipher Double-Block-Length (DBL) Constructions</strong> &mdash; multiple interleaved calls of an <em>n</em>-bit block cipher combined to produce a larger, collision-resistant 2<em>n</em>-bit compressed output.</p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Leaf</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td>Abreast-DM</td><td>Two independent Davies-Meyer tracks run in parallel; the second track's key schedule is driven by a bitwise complement of the message, keeping the tracks independent enough for a secure 2n-bit space (Abreast-DM/AES-128 &rarr; 256-bit space).</td></tr>
+<tr><td>Tandem-DM</td><td>A two-stage cascade where the first block-cipher layer's intermediate output feeds into and modifies the second layer's key-schedule variables (Tandem-DM/AES-256 &rarr; 512-bit space).</td></tr>
+<tr><td>Hirose</td><td>Two parallel block-cipher calls sharing one key schedule (derived from the message), differing only by a fixed constant offset applied to the second track's plaintext input &mdash; avoids generating a second independent key schedule (Hirose-DM/AES-256).</td></tr>
+<tr><td>MDC-2 / MDC-4</td><td>Legacy IBM designs that cross-interleave multiple block-cipher encryption steps per block, chaining two (MDC-2) or four (MDC-4) intermediate outputs into each other's next key/plaintext inputs (MDC2-DES maps 64-bit DES into a 128-bit compression space).</td></tr>
+</tbody>
+</table></div>
+
+<p><strong>Permutation-Based Constructions with Feed-Forward</strong> &mdash; no separate key schedule or keyed block cipher: the chaining state and message are formatted directly into a single unified internal state, mixed by an unkeyed public permutation, and forced one-way by a final feed-forward step binding the initial state to the permuted state.</p>
+<div class="table-wrap glossary-table-wrap"><table class="glossary-table">
+<thead><tr><th>Leaf</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td>Davies-Meyer Style Feed-Forward Permutation</td><td>Chaining state and message are parsed directly into a fixed-size state matrix, scrambled by an unkeyed ARX permutation, then bound together by a final matrix-wide feed-forward addition &mdash; the Davies-Meyer feed-forward shape, but against a permutation rather than a keyed block-cipher output (BLAKE2b/BLAKE2s, and the same shape in BLAKE/BLAKE3).</td></tr>
+<tr><td>Truncated Large-Permutation Layout</td><td>Chaining state and message are appended into a single massive public-permutation call, with the compressed output obtained simply by truncating a substantial portion of the result &mdash; no explicit feed-forward XOR of its own (MD6: inputs formatted into an 89-word field, truncated to 16 words).</td></tr>
+</tbody>
+</table></div>
+
 <p><strong>Other primitive-tier roots</strong>, each a single-level category (no leaves currently defined, either because too few designs use the exact architecture to warrant splitting, or because no family in this database is tagged with the leaf-worthy variant yet):</p>
 <div class="table-wrap glossary-table-wrap"><table class="glossary-table">
 <thead><tr><th>Root</th><th>Definition</th></tr></thead>
 <tbody>
 <tr><td>Lai&ndash;Massey Scheme</td><td>A two-branch structure where the same mixing function perturbs both halves symmetrically (IDEA).</td></tr>
 <tr><td>Even&ndash;Mansour Construction</td><td>A key-alternating construction built around one or more public permutations with key addition before and after each call.</td></tr>
-<tr><td>Davies&ndash;Meyer Construction</td><td>A compression function derived from a block cipher by XORing the block-cipher output with the input chaining value.</td></tr>
-<tr><td>Matyas&ndash;Meyer&ndash;Oseas Construction</td><td>Closely related to Davies-Meyer, with a different assignment of message and chaining-value roles to the block cipher's key/plaintext inputs.</td></tr>
 <tr><td>Stream State-Update Generator</td><td>A keystream design based on repeated state updates and output extraction, typically with separate key-scheduling and generation phases.</td></tr>
 <tr><td>LFSR/NLFSR Register Network</td><td>A bit-oriented structure driven by linear/nonlinear feedback-shift-register state transitions and Boolean mixing.</td></tr>
 <tr><td>Key-Dependent Table Network</td><td>Round behavior driven by key-derived tables or key-dependent substitution/permutation components.</td></tr>
