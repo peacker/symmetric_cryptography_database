@@ -192,9 +192,7 @@ redo the literature search:
    venue at publication; refined successor to Rescue, already modeled).
 2. Poseidon2 -- Grassi, Khovratovich, Schofnegger, AFRICACRYPT 2023,
    eprint 2023/323. Faster successor to Poseidon (already modeled).
-3. Starkad -- the GF(2^n) sibling of Poseidon from the same original eprint
-   2019/458 design; currently only mentioned in poseidon's/hadesmimc's notes,
-   not a standalone family.
+3. st
 4. Anemoi -- Bouvier, Briaud, Chaidos, Perrin, Salen, Velichkov, Willems,
    CRYPTO 2023, eprint 2022/840. Introduces the "Flystel" S-box and "Jive"
    compression mode.
@@ -208,7 +206,8 @@ redo the literature search:
 8. Dasta -- Hebborn, Leander, ToSC 2020(3). Rasta variant using a fixed
    bit-permutation linear layer instead of freshly-random matrices.
 9. FiLIP -- Meaux, Carlet, Journault, Standaert, INDOCRYPT 2019. Improved
-   Filter Permutator succeeding FLIP (already modeled); Elisabeth/Margrethe
+   Filter Permutator succeeding FLIP (already modeled); 
+   Elisabeth/Margrethe
    (Cosseron, Hoffmann, Meaux, Standaert, ASIACRYPT 2022 and successors)
    continue this line with a larger (Z16) plaintext domain.
 10. Pasta -- Dobraunig, Grassi, Helminger, Rechberger, Schofnegger, Walch,
@@ -222,6 +221,20 @@ redo the literature search:
 13. Agrasta -- the aggressive round-reduced Rasta parameter set; currently
     mentioned as an instance note under rasta, not benchmarked in its own
     right.
+
+  LegendrePRF (2016)
+  CryptoDarkMatter (2018)
+  HADES
+  HadesMiMC (2020)
+  Ciminion, CryptoDarkMatter++ (2021)
+  Hydra (2023)
+  GenLowMC (new lookup aligned, dynamic generation of MPC circuit) (ongoing)
+  Sinsemilla, 
+  Pedersen -> not fully pre-image resistant and not collistion resistant on arbitrary lengths
+  Pasta
+  ARMADILLO
+  Zorro
+  
 
 Primary-source PDF availability note: eprint.iacr.org blocks all automated
 fetching in this environment (Cloudflare bot-challenge, confirmed via curl,
