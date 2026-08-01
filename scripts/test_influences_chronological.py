@@ -37,6 +37,13 @@ KNOWN_EXCEPTIONS = {
     # (2001). The dependency is real (HMAC-SHA256 wraps SHA-256), just dated
     # by the generic-construction paper rather than a SHA-256-specific one.
     ("hmac_sha256", "sha2_hash"),
+    # Rubato (EUROCRYPT 2022) explicitly reuses Pasta's Feistel S-box ("we use
+    # building blocks from HERA and Pasta"). Pasta's own eprint (2021/731) was
+    # public in June 2021, well before Rubato -- but our dobraunig_et_al_2023_pasta
+    # reference is dated 2023 to match its final TCHES publication year (the
+    # same final-venue-year convention used elsewhere in this database), which
+    # makes the year-proxy check see it as later than Rubato.
+    ("rubato", "pasta_pi"),
 }
 
 

@@ -12415,10 +12415,11 @@ primitive_families:
       operating over a native GF(p)/GF(2^n) state, including a plain balanced two-branch instance (Feistel-MiMC) as well
       as expanding (GMiMC-erf) and contracting (GMiMC-crf) unbalanced variants, per Albrecht, Grassi, Perrin, Ramacher,
       Rechberger, Rotaru, Roy, and Schofnegger's own framing ("Feistel Structures for MPC, and More", ESORICS 2019).
-  notes: GMiMC is a family of Feistel-network-based block ciphers/PRPs generalizing MiMC's cube-map round function to
-    a Feistel setting for MPC, ZK-SNARK, and post-quantum ZK-based signature applications, studied in three main
-    structural variants (balanced Feistel-MiMC, expanding GMiMC-erf, contracting GMiMC-crf). No local reference copy
-    (eprint.iacr.org blocked automated fetching); described in detail in references/2020-stark_friendly_hash_survey.pdf.
+  notes: 'GMiMC is a family of Feistel-network-based block ciphers/PRPs generalizing MiMC''s cube-map round function to
+    a Feistel setting for MPC, ZK-SNARK, and post-quantum ZK-based signature applications. Confirmed directly, four
+    concrete variants are studied -- GMiMC_crf (contracting), GMiMC_erf (expanding, used for GMiMCHash''s sponge
+    permutation), GMiMC_Nyb (Nyberg''s generalized-Feistel-network variant), and GMiMC_mrf (a new "Multi-Rotating"
+    construction) -- rather than three. Local copy: references/2019-gmimc.pdf.'
   instances:
   - id: gmimc_erf
     name: GMiMC-erf
@@ -12464,14 +12465,17 @@ primitive_families:
     - related_to
     note: Concurrent "Gen II" arithmetization-oriented block cipher also built on a power-map non-linearity, per Roy,
       Steiner, and Trevisani's 3-generation AO classification (Arion, 2023).
-  notes: HadesMiMC is the keyed block-cipher instantiation of the HADES design strategy (an SPN alternating full S-box
-    rounds, for resistance to statistical attacks, with partial S-box rounds, for reduced cost) over GF(p), using a
-    power-map S-box (typically x^5) and a Cauchy MDS matrix linear layer. Grassi, Kales, Khovratovich, Roy, Rechberger,
-    and Schofnegger's original eprint 2019/458 combined it with the unkeyed sponge-hash instantiations Poseidon (native
-    GF(p)) and Starkad (GF(2^n) sibling, not separately modeled in this database); this split is documented in the
-    final published Poseidon paper (grassi_et_al_2021_poseidon). No local copy of the HADES strategy paper itself was
-    found (eprint blocked, no alternate mirror located); local copy of the Poseidon paper covering the same strategy
-    is at references/2021-poseidon_usenix.pdf.
+  notes: 'HadesMiMC is the keyed block-cipher instantiation of the HADES design strategy (an SPN alternating full
+    S-box rounds, for resistance to statistical attacks, with partial S-box rounds, for reduced cost) over GF(p),
+    using a power-map S-box x^alpha (alpha the smallest integer >= 3 coprime to p-1, typically 3 or 5) and a Cauchy
+    MDS matrix linear layer -- confirmed directly, including R = 2*R_f + R_P total rounds (R_f full-S-box rounds at
+    each end, R_P partial-S-box rounds in the middle). Grassi, Kales, Khovratovich, Roy, Rechberger, and
+    Schofnegger''s original eprint 2019/458 combined it with the unkeyed sponge-hash instantiations Poseidon (native
+    GF(p)) and Starkad (GF(2^n) sibling, not separately modeled in this database, and explicitly dismissed -- "we
+    advice against using them" -- in a later updated version of the Poseidon paper alongside Poseidon''s own x^(-1)
+    S-box variant); this split is documented in the final published Poseidon paper (grassi_et_al_2021_poseidon).
+    Local copy of the HADES strategy paper: references/2019-hades_hadesmimc.pdf; local copy of the Poseidon paper
+    covering the same strategy is at references/2021-poseidon_usenix.pdf.'
   instances:
   - id: hadesmimc_default
     name: HadesMiMC
@@ -12488,6 +12492,7 @@ primitive_families:
   - full_sbox_layer
   - mds_linear_layer
   - zk_friendly_low_degree_inverse_map
+  - miyaguchi_preneel
   round_ids:
   - vision_round
   target_applications:
@@ -12500,15 +12505,20 @@ primitive_families:
     - id: constant
   reference_ids:
   - aly_et_al_2020_marvellous
+  - ashur_dhooghe_2018_marvellous
   process_participations: []
   influences: []
-  notes: Jarvis is the original MARVELlous-strategy block cipher (Ashur and Dhooghe, eprint 2018/1098) over GF(2^n),
-    applying the field-inversion S-box across the full state each round with a dense affine (MDS) diffusion layer;
-    Friday is its corresponding sponge-hash mode. Both were broken by a Grobner-basis algebraic attack (Albrecht, Cid,
-    Grassi, Khovratovich, Luftenegger, Rechberger, and Schofnegger, "Algebraic Cryptanalysis of STARK-Friendly Designs -
-    Application to MARVELlous and MiMC", ASIACRYPT 2019, eprint 2019/419), motivating the redesign as Vision/Rescue.
-    Documented as related work (including the break) in the Vision/Rescue paper itself; local copy of that paper at
-    references/2019-vision_rescue_marvellous.pdf. No local copy of Jarvis's own original design paper was found.
+  notes: 'Jarvis is the original MARVELlous-strategy block cipher (Ashur and Dhooghe, "MARVELlous: a STARK-Friendly
+    Family of Cryptographic Primitives," eprint 2018/1098) over GF(2^n), applying the field-inversion S-box across
+    the full state each round with a dense affine (MDS) diffusion layer. Friday is NOT a sponge-hash mode -- confirmed
+    directly from the paper: "Friday is a Merkle-Damgard based hash function instantiated with Jarvis as its
+    compression function," precisely via Miyaguchi-Preneel mode (H_i = E_{H_{i-1}}(m_i) xor H_{i-1} xor m_i, E=Jarvis)
+    then Merkle-Damgard iteration (see the friday_hash mode family). Both Jarvis and Friday were broken by a
+    Grobner-basis algebraic attack (Albrecht, Cid, Grassi, Khovratovich, Luftenegger, Rechberger, and Schofnegger,
+    "Algebraic Cryptanalysis of STARK-Friendly Designs - Application to MARVELlous and MiMC", ASIACRYPT 2019, eprint
+    2019/419), motivating the redesign as Vision/Rescue. Local copy of Jarvis''s own original paper:
+    references/2018-jarvis_friday.pdf; the break is also documented as related work in the Vision/Rescue paper,
+    local copy references/2019-vision_rescue_marvellous.pdf.'
   instances:
   - id: jarvis_default
     name: Jarvis
@@ -12665,6 +12675,7 @@ primitive_families:
   - spn
   - full_sbox_layer
   - near_mds_arx_linear_layer
+  - asasa
   round_ids:
   - rasta_round
   target_applications:
@@ -12686,12 +12697,14 @@ primitive_families:
       (applied to only part of the state) for a full-state quadratic non-linear layer plus a freshly-generated random
       affine layer every round, per Dobraunig, Eichlseder, Grassi, Lallemand, Leander, List, Mendel, and Rechberger's
       own comparison (CRYPTO 2018).
-  notes: Rasta is a Z2 block cipher for low-AND-depth FHE/MPC evaluation, applying a full-state quadratic (chi-like)
+  notes: 'Rasta is a Z2 block cipher for low-AND-depth FHE/MPC evaluation, applying a full-state quadratic (chi-like)
     non-linear layer over GF(2) each round, followed by a freshly-generated random invertible affine (binary matrix)
     layer and round-constant XOR -- a new random matrix is derived deterministically per round from the public key/IV,
-    unlike LowMC's reuse of one style of random matrix in a partial S-box layer. The aggressive round-reduced variant
-    Agrasta is defined in the same paper. No local copy (eprint blocked, no alternate mirror found); described in detail
-    in references/2025-fhe_friendly_ciphers_sok.pdf.
+    unlike LowMC''s reuse of one style of random matrix in a partial S-box layer. The aggressive round-reduced variant
+    Agrasta is defined in the same paper. An A-S-A-S-...-A (ASASA) topology, per the paper''s own citation: "Generic
+    substitution-permutation designs which interleave a key-dependent affine layer with key-dependent S-boxes have
+    been studied since SASAS" -- Rasta''s own "twist" is that the S-box (chi) is fixed/public while the affine layers
+    are nonce/counter-derived rather than key-dependent. Local copy: references/2018-rasta_agrasta.pdf.'
   instances:
   - id: rasta_agrasta
     name: Agrasta
@@ -12727,12 +12740,16 @@ primitive_families:
     note: 'Masta is described by Niu et al. ("SoK: FHE-Friendly Symmetric Ciphers and Transciphering", 2025) as "an Fp
       variant of the Z2 cipher Rasta," replacing Rasta''s bit-based full non-linear layer and binary matrix with a
       cube-map non-linear layer and a random matrix over a larger prime field.'
-  notes: Masta is an Fp (modular-arithmetic) HE-friendly block cipher, replacing Rasta's GF(2) structure with a cube-map
-    non-linear layer and a freshly-generated random invertible matrix over a prime field, aiming for better arithmetic
-    efficiency under FHE schemes that natively support Fp operations (BGV/BFV). Its random-matrix linear layer incurs
-    quadratically-growing homomorphic plaintext-ciphertext multiplications with block size, a limitation addressed by
-    its successor Pasta (Dobraunig, Grassi, Helminger, Rechberger, Schofnegger, Walch, 2023, not separately modeled in
-    this database). No local copy found; described in detail in references/2025-fhe_friendly_ciphers_sok.pdf.
+  notes: 'Masta is an Fp (modular-arithmetic) HE-friendly block cipher, replacing Rasta''s GF(2) structure with a
+    cube-map non-linear layer, aiming for better arithmetic efficiency under FHE schemes that natively support Fp
+    operations (BGV/BFV). Its linear layer is cheaper than a fully random matrix: multiplication by a random nonzero
+    element of F_(t^n) (a structured, near-circulant matrix), needing only O(log M) random bits per encryption vs.
+    Rasta''s O(log^2 M). Its quadratically-growing homomorphic plaintext-ciphertext multiplication cost (in block
+    size) is a limitation later addressed by HERA (component-wise-multiplied randomized key schedule instead of a
+    randomized linear layer) and by Pasta (Dobraunig, Grassi, Helminger, Rechberger, Schofnegger, Walch, 2023, not
+    separately modeled in this database as a mode-tier family, though its Pasta-pi permutation is modeled as
+    pasta_pi) -- Pasta''s own paper explicitly frames Masta as independent, concurrent work, not a predecessor it
+    "succeeds," so no direct lineage edge is asserted between them. Local copy: references/2020-masta.pdf.'
   instances:
   - id: masta_default
     name: Masta
@@ -12779,13 +12796,16 @@ primitive_families:
     note: HERA introduces randomness via a component-wise multiplication of the round key with a randomized vector in
       place of Masta's random matrix, reducing homomorphic plaintext-ciphertext multiplication cost from quadratic to
       linear in the block size, per Niu et al.'s SoK classification.
-  notes: HERA is an Fp HE-friendly block cipher proposed alongside the RtF (Real-to-Finite-field) transciphering
-    framework for approximate (CKKS) homomorphic encryption. Unlike Masta/Pasta, its linear layer is a fixed MDS matrix;
-    randomness is instead introduced by multiplying the round key component-wise with a randomized vector before
-    addition, reducing per-block homomorphic plaintext-ciphertext multiplications from quadratic to linear in the block
-    size. An algebraic attack exploiting round-key collisions (Liu, Kalam, Sarkar, Meier, 2024) breaks its 192/256-bit
-    security claims but leaves the 128-bit claim intact. No local copy (eprint blocked, no alternate mirror found);
-    described in detail in references/2025-fhe_friendly_ciphers_sok.pdf.
+  notes: 'HERA is an Fp HE-friendly block cipher proposed alongside the RtF (Real-to-Finite-field) transciphering
+    framework for approximate (CKKS) homomorphic encryption. Unlike Masta/Pasta, its linear layer is a fixed,
+    AES-inspired MDS matrix (not randomized); randomness is instead introduced entirely via a randomized key schedule
+    -- multiplying the round key component-wise with a fresh random nonzero vector per round, drawn from a
+    nonce-seeded XOF -- reducing per-block homomorphic plaintext-ciphertext multiplications from quadratic to linear
+    in the block size. The single name "HERA" is used, confirmed directly from the paper, for both the fixed-length
+    keyed permutation and the overall counter-mode stream cipher built on it (no feed-forward step, unlike Rasta --
+    the key enters only via the randomized key schedule, never as the permutation input). An algebraic attack
+    exploiting round-key collisions (Liu, Kalam, Sarkar, Meier, 2024) breaks its 192/256-bit security claims but
+    leaves the 128-bit claim intact. Local copy: references/2020-hera.pdf.'
   instances:
   - id: hera_5_16
     name: HERA(5,16,16,28-bit)
@@ -13091,10 +13111,11 @@ primitive_families:
       external vs. internal rounds at state width t >= 4, and applies only one round constant per internal round,
       cutting linear-layer multiplications by up to 90% and Plonk-circuit constraints by up to 70% versus the
       original design.'
-  notes: Poseidon2 can be used as either a sponge or a compression function (unlike the original Poseidon, sponge-only),
+  notes: 'Poseidon2 can be used as either a sponge or a compression function (unlike the original Poseidon, sponge-only),
     and is described in its own paper as "currently the fastest arithmetization-oriented hash function without
-    lookups." No local reference copy (eprint blocked; Springer/AFRICACRYPT version paywalled). Exact S-box exponent
-    and precise external/internal round counts were not confirmed from the sources read for this database.
+    lookups." Confirmed directly (Table 1): R_F=8 full/external rounds always; R_P (internal/partial rounds) set per
+    instance, e.g. RP=14 for (n,t,d)=(31,16,5), RP=56 for (256,2,5). S-box exponent d is the smallest integer >=3
+    coprime to p-1 (same convention as Poseidon), not a single fixed value. Local copy: references/2023-poseidon2.pdf.'
   instances:
   - id: poseidon2_default
     name: Poseidon2
@@ -13208,10 +13229,12 @@ primitive_families:
   notes: 'Introduces the Legendre-symbol S-box S(x) = x^d * chi_p(x) (chi_p the Legendre/quadratic-character symbol
     of F_p), motivated by the observation that "Legendre symbols correspond to high-degree maps but can be evaluated
     much faster" -- letting a cipher approach the security of a high-degree map without its slow evaluation cost.
-    Combined with a SHARK-strategy-style linear layer; the Grendel hash function is the Grendel permutation used in
-    sponge mode. No local reference copy (eprint blocked, no verified mirror found); no peer-reviewed conference/
-    journal venue beyond ePrint was located. Exact field size, state width, and round count were not confirmed from
-    the sources read for this database.'
+    Combined with a SHARK-strategy-style linear layer (MDS matrix via Reed-Solomon/Vandermonde construction). No
+    peer-reviewed conference/journal venue beyond ePrint was located. Confirmed directly: "the GCD attack does not
+    apply to Grendel because it is not a block cipher with an unknown key; instead it is a permutation with no
+    secrets" -- consistent with modeling it here as an unkeyed permutation, not a block cipher. The GrendelHash mode
+    family (see mode_families.yaml) wraps this permutation in a sponge: "the Grendel hash function uses the Grendel
+    sponge internally." Local copy: references/2021-grendel.pdf.'
   instances:
   - id: grendel_default
     name: Grendel
@@ -13225,7 +13248,9 @@ primitive_families:
   name: GRIFFIN
   construction_ids:
   - feistel
+  - horst
   - spn
+  - fluid_spn
   - zk_friendly_low_degree_inverse_map
   round_ids:
   - griffin_round
@@ -13243,10 +13268,15 @@ primitive_families:
   notes: 'Titled "Horst Meets Fluid-SPN: Griffin for Zero-Knowledge Applications." Introduces "Horst," a Feistel-style
     update extended with a multiplication, (x,y) -> (y*G(x)+F(x), x), applied to 2 of the state''s t branches, combined
     with an SPN-style "Fluid-SPN" non-linear layer (invertible low-degree power maps) on the remaining branches, over
-    a prime field. No local reference copy (eprint blocked; author-page mirrors relink the same blocked URL; Springer/
-    CRYPTO version paywalled). Compared against Poseidon/Rescue/Reinforced Concrete as prior AO designs but not
-    described as a direct improvement/variant of any single one of them. Exact state-width instances and round counts
-    were not confirmed from the sources read for this database.'
+    a prime field -- confirmed directly, the paper itself coins "Fluid-SPN" (see the fluid_spn construction leaf).
+    Confirmed directly: the paper itself names and defines all three GRIFFIN-pi (the permutation, modeled here),
+    GRIFFIN-Sponge, and GRIFFIN-Compression as separate constructs ("GRIFFIN-Sponge and GRIFFIN-Compression are
+    respectively a sponge hash function and a compression function over F_p^t instantiated with the permutation
+    GRIFFIN-pi") -- the latter two are mode-tier wrappers, not separately modeled as their own families here.
+    Confirmed instances (Table 2, kappa=128, p~2^256): t in {3,4,8,12,16,20,24}, d in {3,5,7,11}; R=16(d=3)/14(d=5)
+    for t=3, R=15/11 for t=4, R=11/9 for t=8, R=10/9 for t in {12,16,20,24}. Compared against Poseidon/Rescue/
+    Reinforced Concrete as prior AO designs but not described as a direct improvement/variant of any single one of
+    them. Local copy: references/2022-griffin.pdf.'
   instances:
   - id: griffin_default
     name: GRIFFIN
@@ -13276,13 +13306,13 @@ primitive_families:
   process_participations: []
   influences: []
   notes: 'Titled "New Design Techniques for Efficient Arithmetization-Oriented Hash Functions: Anemoi Permutations
-    and Jive Compression Mode." A classical SPN using a novel "Flystel" S-box (a butterfly-structure construction),
-    operating over both prime fields GF(p) and binary fields GF(2^n); includes a companion compression mode "Jive,"
-    described as inspired by "Latin dance symmetric algorithms (Salsa, ChaCha derivatives)." No local reference copy
-    (eprint blocked; project page and IOG mirror both relink the same blocked URL; Springer/CRYPTO version paywalled).
-    Claims roughly 2x improvement over Poseidon/Rescue in R1CS constraints, but is presented as new design techniques
-    benchmarked against them rather than a direct improvement/variant of a single prior design. Exact state-width
-    options and round counts were not confirmed from the sources read for this database.'
+    and Jive Compression Mode." A classical SPN using a novel "Flystel" S-box (confirmed directly: a 3-round-Feistel-
+    based butterfly construction, open/closed variants proven CCZ-equivalent), operating over both prime fields
+    GF(p) and binary fields GF(2^n); includes a companion compression mode "Jive," confirmed directly as inspired by
+    "the ''Latin dance'' symmetric algorithms (Salsa, ChaCha and derivatives)," named "after another Latin dance."
+    Claims roughly 2x improvement over Poseidon/Rescue in R1CS constraints. Confirmed instances (Table 1, s=128):
+    round counts range from 21(alpha=3) to 9(alpha=11) depending on state width l in {1,2,4,8}; concrete instances
+    AnemoiJive-BLS12-381 and -BN-254 use l=1, 19 rounds, 127-bit security. Local copy: references/2022-anemoi_jive.pdf.'
   instances:
   - id: anemoi_default
     name: ANEMOI
@@ -13311,13 +13341,14 @@ primitive_families:
   - grassi_et_al_2022_reinforced_concrete
   process_participations: []
   influences: []
-  notes: 'A sponge over F_p^3 (a "modified 7-round SP network" per secondary documentation, since the primary paper
-    PDF was unobtainable) targeting the Plookup lookup argument, described in its own abstract as "the first generic
-    purpose hash that is fast both for a zero-knowledge prover and in native x86 computations," claimed up to 15x
-    faster than Poseidon. Introduces three named round components later reused by name in Monolith and discussed by
-    Skyscraper: Bricks (a low-degree power-map permutation), Concrete (MDS matrix + round constants), and Bars (the
-    lookup-table nonlinear layer, decomposing a field element into smaller-domain lookups). No local reference copy
-    (eprint blocked; ACM DL and CORE both return 403; no open mirror found).'
+  notes: 'A sponge over F_p^3 targeting the Plookup lookup argument, described in its own abstract as "the first
+    generic purpose hash that is fast both for a zero-knowledge prover and in native x86 computations," claimed up
+    to 15x faster than Poseidon. Confirmed directly, three named round components (later reused by name in Monolith
+    and discussed by Skyscraper): Bricks(x1,x2,x3) = (x1^d, x2*(x1^2+a1*x1+b1), x3*(x2^2+a2*x2+b2)) (degree-5
+    non-linear diffusion); Concrete = multiply by MDS matrix circ(2,1,1) + round constants; Bars = Comp o SBox o
+    Decomp (the lookup-table nonlinear layer, no low-degree polynomial description). Round structure: 7
+    Concrete-Bricks pairs with a single Bars layer replacing the middle Bricks call. Local copy:
+    references/2021-reinforced_concrete.pdf.'
   instances:
   - id: reinforced_concrete_default
     name: Reinforced Concrete
@@ -13326,8 +13357,9 @@ primitive_families:
     - grassi_et_al_2022_reinforced_concrete
     characteristics:
       state_width_field_elements: 3
-    notes: F_p^3 state (3 field elements); exact field size and full round count not independently confirmed beyond
-      the "7-round" secondary-source description.
+      rounds: 7
+    notes: F_p^3 state (3 field elements), 7 rounds; instantiated over the BN254 and BLS12-381 scalar fields plus a
+      special crafted 250-bit prime, rate 2/capacity 1 for 128-bit security.
 
 - id: tip5
   name: Tip5
@@ -13363,8 +13395,8 @@ primitive_families:
     rest, then an MDS layer (structured for O(k log k) evaluation) and round constants; 5 rounds for all variants.
     Tip4 and Tip4'' are named variants defined in a separate Toposware technical note (Robin Salen, 2023), not in
     the original Tip5 paper. ePrint-only (no separate conference/journal publication located for the primary Tip5
-    paper); no local copy of the primary paper (eprint blocked, no mirror found), but local copy of the Tip4/Tip4''
-    note: references/2023-tip4_tip4prime_toposware.pdf.'
+    paper). Local copy: references/2023-tip5.pdf; local copy of the Tip4/Tip4'' note:
+    references/2023-tip4_tip4prime_toposware.pdf.'
   instances:
   - id: tip5_default
     name: Tip5
@@ -13474,6 +13506,7 @@ primitive_families:
     - id: constant
   reference_ids:
   - bouvier_et_al_2025_skyscraper
+  - bouvier_et_al_2025_skyscraper_v2
   process_participations: []
   influences:
   - source_family_id: reinforced_concrete
@@ -13493,13 +13526,14 @@ primitive_families:
   notes: 'Targets large prime fields (p >= 2^248) for elliptic-curve-based SNARKs, explicitly choosing a Feistel
     network over an SPN specifically to allow non-invertible nonlinear mappings. Alternates a low-degree "Square"
     round ((xL,xR) -> (xR + (xL)^2/sigma + gamma_i, xL), using Montgomery multiplication) with a lookup-based "Bars"
-    round ((xL,xR) -> (xR + B''(xL) + gamma_i, xL), an 8-bit S-box per chunk then rotate); 10 total rounds, kappa >=
-    124-bit security, base state F_p^2 (n in {1,2,3}), extended to wider states via a Monolith-like Type-3-Feistel +
-    MDS-matrix combination. A later eprint revision, "Skyscraper-v2," adds rounds at the start/end to address a
-    subsequent cryptanalysis result (256ns vs. this version''s 135ns to hash two 256-bit BLS12-381-scalar-field
-    elements); this entry documents the original TCHES-published design, whose PDF was obtainable, not the
-    "-v2" revision, whose PDF was not (eprint blocked, no mirror) -- see todo_manual.txt. Local copy:
-    references/2025-skyscraper.pdf (downloaded from tches.iacr.org, not eprint).'
+    round ((xL,xR) -> (xR + B''(xL) + gamma_i, xL), an 8-bit S-box per chunk then rotate); kappa >= 124-bit security,
+    base state F_p^2 (n in {1,2,3}), extended to wider states via a Monolith-like Type-3-Feistel + MDS-matrix
+    combination. A later eprint revision, "Skyscraper-v2," confirmed directly, raises the round count from 10 to 18
+    ("we update the round number from 10 to 18, introducing 4 additional square rounds at the beginning and the end
+    of the permutation") to defeat a rebound distinguisher (Bak, 2025) exploiting the original''s 2-Feistel-round
+    middle section, raising the BLS12-381-scalar-field-pair hashing time from 135ns to 256ns. Both versions'' PDFs
+    are now available locally. Local copies: references/2025-skyscraper.pdf (original TCHES) and
+    references/2025-skyscraper_v2.pdf (hardened revision).'
   instances:
   - id: skyscraper_default
     name: Skyscraper
@@ -13509,7 +13543,16 @@ primitive_families:
     characteristics:
       rounds: 10
     notes: p >= 2^248, kappa >= 124-bit security, n in {1,2,3} (base state F_p^2 for n=1); 135ns to hash two 256-bit
-      BLS12-381-scalar-field elements, per the TCHES-published version documented here.
+      BLS12-381-scalar-field elements, per the original TCHES-published version.
+  - id: skyscraper_v2
+    name: Skyscraper-v2
+    type: permutation
+    reference_ids:
+    - bouvier_et_al_2025_skyscraper_v2
+    characteristics:
+      rounds: 18
+    notes: Hardened revision adding 4 Square rounds at each end (10 -> 18 total rounds) to defeat a rebound
+      distinguisher (Bak, 2025); 256ns to hash two 256-bit BLS12-381-scalar-field elements.
 
 - id: polocolo
   name: Polocolo
@@ -13532,23 +13575,26 @@ primitive_families:
   notes: 'Titled "Polocolo: A ZK-Friendly Hash Function Based on S-boxes Using Power Residues"; the name derives from
     "power residue for lower cost table lookup." S-box S(x) = x^(-1) * T[(x/p)_m] (the field inverse of x multiplied
     by a small lookup table T indexed by x''s m-th-power-residue class), with a new MDS linear layer, targeting the
-    PlonKup lookup argument specifically (distinct from the STARK/FRI setting Tip5/Monolith/Skyscraper target).
+    Plonkup lookup argument specifically (distinct from the STARK/FRI setting Tip5/Monolith/Skyscraper target).
     Reports needing 21% fewer PLONK gates than Anemoi and 24% fewer than Reinforced Concrete in its own benchmark
     comparisons (not modeled as influence edges here, since these are performance comparisons rather than lineage
-    statements). No local reference copy (eprint blocked; Springer paywalled; no mirror found). Exact field/prime
-    and round count were not confirmed from the sources read for this database.'
+    statements). Confirmed directly (Table 1): state widths t in {3,4,5,6,7,8}; round counts R=6 for t=3, R=5 for t
+    in {4,...,8} (a tighter variant uses R=5 for t=3, R=4 for t in {4,6,8}); operates over the BLS12/BN254 scalar
+    fields. Local copy: references/2025-polocolo.pdf.'
   instances:
   - id: polocolo_default
     name: Polocolo
     type: permutation
     reference_ids:
     - ha_et_al_2025_polocolo
-    characteristics: {}
-    notes: State widths t=3 and t=8 both appear in the paper's own efficiency comparisons; exact field/prime and
-      round count not confirmed from the sources read for this database.
+    characteristics:
+      state_width_field_elements: 3
+      rounds: 6
+    notes: t=3, R=6 (the paper's primary instance); other confirmed widths t in {4,5,6,7,8} use R=5, all over the
+      BLS12/BN254 scalar fields.
 
-- id: ciminion
-  name: Ciminion
+- id: ciminion_permutation
+  name: Ciminion p_C / p_E
   construction_ids:
   - mpc_sharing_friendly
   round_ids:
@@ -13563,59 +13609,30 @@ primitive_families:
   - dobraunig_et_al_2021_ciminion
   process_participations: []
   influences: []
-  notes: 'Titled "Ciminion: Symmetric Encryption Based on Toffoli-Gates over Large Finite Fields." Nonlinearity comes
-    from a Toffoli-gate-based mechanism (not a small S-box) over large binary or prime fields, combined with a
-    lightweight linear layer, aimed at minimizing field multiplications for MPC/FHE/ZK use -- a Farfalle-like
-    construction. Does not fit this database''s existing SPN/Feistel/ARX structural-root taxonomy cleanly; no
-    structural root is asserted here pending a direct read of the primary paper (unobtainable as a PDF in this
-    session -- eprint blocked, no mirror found). See todo_manual.txt.'
+  notes: 'Confirmed directly from the paper: two permutations of F_q^3, named literally "p_C" and "p_E" ("we employ
+    two permutations p_C and p_E that have respectively N and R rounds"), each built from the Toffoli gate (not a
+    small S-box) -- nonlinearity via a degree-2 AND-like operation over a large field rather than a lookup table.
+    Both are invertible but the surrounding mode never inverts them ("mandating its use only in modes that... never
+    evaluate its inverse using the secret key"). p_C is a one-time setup/absorbing permutation (derives a secret
+    intermediate state from a nonce and key); p_E is the repeatedly-applied keystream-generating permutation --
+    together they underlie the mode-tier ciminion stream-encryption scheme. Does not fit this database''s existing
+    SPN/Feistel/ARX structural-root taxonomy cleanly; no structural root beyond mpc_sharing_friendly is asserted.
+    Local copy: references/2021-ciminion.pdf.'
   instances:
-  - id: ciminion_default
-    name: Ciminion
-    type: update_function
+  - id: ciminion_p_c
+    name: Ciminion p_C
+    type: permutation
     reference_ids:
     - dobraunig_et_al_2021_ciminion
     characteristics: {}
-    notes: Parameters not confirmed from the sources read for this database.
-
-- id: hydra
-  name: Hydra
-  construction_ids:
-  - spn
-  - alternating_full_partial_sbox_layer
-  - lay_massey
-  - mpc_sharing_friendly
-  round_ids:
-  - hydra_round
-  target_applications:
-  - mpc
-  characteristics:
-    components: []
-  reference_ids:
-  - grassi_et_al_2023_hydra
-  process_participations: []
-  influences:
-  - source_family_id: ciminion
-    relations:
-    - improvement_of
-    note: '"Following the approach introduced by Ciminion''s designers, we present a novel primitive" -- explicitly
-      designed to remove Ciminion''s "critical weakness," namely that "its security highly relies on the independence
-      of its subkeys, which is achieved by using an expensive key schedule."'
-  notes: 'Titled "From Farfalle to Megafono via Ciminion: The PRF Hydra for MPC Applications." Introduces "Megafono,"
-    a keyed extendable-PRF framework (an initial keyed permutation, then a parallel expansion layer of keyed ciphers,
-    with the internal state expanded "for free" by appending the sum of the first permutation''s internal states to
-    its output); the concrete instantiation Hydra uses the HADES strategy (alternating full/partial S-box rounds)
-    together with generalized versions of the Lai-Massey scheme. No local reference copy (eprint blocked; author-page
-    mirror relinks the same blocked URL). Exact S-box form, state width, and round counts were not confirmed from
-    the sources read for this database.'
-  instances:
-  - id: hydra_default
-    name: Hydra
-    type: update_function
+    notes: The setup/absorbing permutation, N rounds; derives a secret intermediate state from a nonce and key.
+  - id: ciminion_p_e
+    name: Ciminion p_E
+    type: permutation
     reference_ids:
-    - grassi_et_al_2023_hydra
+    - dobraunig_et_al_2021_ciminion
     characteristics: {}
-    notes: Parameters not confirmed from the sources read for this database.
+    notes: The keystream-generating permutation, R rounds; repeatedly applied to produce encryption keystream.
 
 - id: cryptodarkmatter
   name: Crypto Dark Matter
@@ -13631,24 +13648,41 @@ primitive_families:
   - boneh_et_al_2018_cryptodarkmatter
   process_participations: []
   influences: []
-  notes: 'Titled "Exploring Crypto Dark Matter: New Simple PRF Candidates and Their Applications." Weak-PRF candidates
-    built by mixing linear functions over different small moduli -- a secret mod-2 linear map followed by a public
-    mod-3 linear map -- implementable as a depth-2 ACC0 circuit; explicitly framed as a "deterministic variant of
-    Learning Parity with Noise," with a secondary depth-3 strong-PRF variant using a similar mod-mixing approach.
-    No algebraic S-box at all, and no evidence read confirms it is length-preserving/invertible, so it is modeled
-    here as an update_function rather than a block_cipher. No local reference copy (eprint blocked; INRIA HAL mirror
-    also returned an HTML landing page, not a raw PDF). "CryptoDarkMatter++" is not a real paper title -- the closest
-    real citable 2020/2021 follow-up is Cheon, Cho, J.H. Kim, and J. Kim''s "Adventures in Crypto Dark Matter" (PKC
-    2021 / eprint 2020/783), an attacks-and-fixes paper on these candidates, not separately modeled here; see
-    todo_manual.txt.'
+  notes: 'Titled "Exploring Crypto Dark Matter: New Simple PRF Candidates and Their Applications." Confirmed directly:
+    this is a general TECHNIQUE ("mixing linear functions over different small moduli"), not a single named PRF --
+    the paper presents several distinctly-named candidates built on it (see instances below), all implementable in
+    low ACC0 circuit depth and explicitly framed as a "deterministic variant of Learning Parity with Noise." No
+    algebraic S-box at all, and no evidence read confirms any candidate is length-preserving/invertible, so each is
+    modeled here as an update_function rather than a block_cipher. "CryptoDarkMatter++" is not a real paper title --
+    the closest real citable 2020/2021 follow-up is Cheon, Cho, J.H. Kim, and J. Kim''s "Adventures in Crypto Dark
+    Matter" (PKC 2021 / eprint 2020/783), an attacks-and-fixes paper on these candidates, not separately modeled
+    here; see todo_manual.txt. Local copy: references/2018-cryptodarkmatter.pdf.'
   instances:
-  - id: cryptodarkmatter_default
-    name: Crypto Dark Matter (Mod-2/Mod-3 weak PRF)
+  - id: cryptodarkmatter_construction_3_1
+    name: Crypto Dark Matter Construction 3.1 (basic Mod-2/Mod-3 weak PRF)
     type: update_function
     reference_ids:
     - boneh_et_al_2018_cryptodarkmatter
     characteristics: {}
-    notes: Parameters not confirmed from the sources read for this database.
+    notes: 'The paper''s main weak-PRF candidate, F_A(x):=map(Ax): a secret mod-2 linear map followed by a public
+      mod-3 linear map, depth-2 ACC0[2,3]. Remark 3.2 generalizes this to arbitrary primes p != q.'
+  - id: cryptodarkmatter_construction_6_3
+    name: Crypto Dark Matter Construction 6.3 (alternative weak PRF)
+    type: update_function
+    reference_ids:
+    - boneh_et_al_2018_cryptodarkmatter
+    characteristics: {}
+    notes: 'F_k(x) = sum(k_i*x_i mod 2) + sum(k_i*x_i mod 3) (mod 2), a deterministic-LPN-style variant motivated by
+      two-party garbled-circuit efficiency; a special case of LWR with constant composite modulus.'
+  - id: cryptodarkmatter_construction_7_9
+    name: Crypto Dark Matter Construction 7.9 (depth-3 strong PRF)
+    type: update_function
+    reference_ids:
+    - boneh_et_al_2018_cryptodarkmatter
+    characteristics: {}
+    notes: 'F''_A(x):=F_A(bin(G*x)) (Remark 7.14), a depth-3 ACC0[2,3] strong-PRF candidate built from the paper''s
+      Encoded-Input PRF/Protected EI-PRF framework (Definitions 7.1-7.2), combining the Construction 3.1 weak PRF
+      with a linear error-correcting code over Z_3 as the "encoding" step.'
 
 - id: rain
   name: Rain
@@ -13660,7 +13694,10 @@ primitive_families:
   target_applications:
   - mpc
   characteristics:
-    components: []
+    components:
+    - id: inversion_sbox
+    - id: field_matrix_mul
+    - id: xor
   reference_ids:
   - dobraunig_kales_rechberger_schofnegger_zaverucha_2022_rain
   - baum_et_al_2024_mandarain
@@ -13671,10 +13708,14 @@ primitive_families:
     MPCitH-based signature scheme which can produce signatures that are less than 5 KB in size," per its own paper.
     A later VOLE-in-the-head scheme, MandaRain (ASIACRYPT 2024), is separately "based on ... Rain." Neither Rainier
     nor MandaRain is modeled as its own family here, since both are signature schemes/protocols built on this
-    primitive rather than symmetric primitives in their own right. Rain''s exact round-function structure (reported
-    secondhand as field inversion in F_(2^n) plus an unstructured affine layer) was not independently confirmed
-    against the primary text in this session; no local reference copy (eprint blocked; ACM DL paywalled, no open
-    mirror found).'
+    primitive rather than symmetric primitives in their own right. Confirmed directly: Rain is a keyed permutation
+    over F_(2^n) ("we define a keyed permutation F_k(x) consisting of a nonlinear operation S and a constant addition
+    ... together with a linear layer"), S(x)=x^(-1) (field inversion) plus a deliberately unstructured/dense random
+    linear layer (not the paper''s own "compression function" -- that term is never used; it becomes a one-way
+    function only via the generic block-cipher-to-OWF recipe f_x(k):=E_k(x), fixing the plaintext and treating the
+    key as the OWF domain). "We emphasize again that Rain is not a classical block cipher, and is only intended to be
+    used... for a MPCitH proof system." Rain3/Rain4 (3 or 4 rounds) over F_2^128/192/256. Local copy:
+    references/2021-rain.pdf.'
   instances:
   - id: rain_default
     name: Rain
@@ -13879,3 +13920,218 @@ primitive_families:
     characteristics: {}
     notes: 2k-bit register (k = c+m, chaining bits c plus message-block bits m); J=k transposition steps per
       invocation. Concrete parameter sizes not confirmed from the sources read for this database.
+
+- id: dasta
+  name: Dasta
+  construction_ids:
+  - spn
+  - asasa
+  - full_sbox_layer
+  - bit_permutation_linear_layer
+  round_ids:
+  - dasta_round
+  target_applications:
+  - fhe
+  - mpc
+  characteristics:
+    components:
+    - id: field_matrix_mul
+    - id: bit_permutation
+    - id: and
+  reference_ids:
+  - hebborn_leander_2020_dasta
+  process_participations: []
+  influences:
+  - source_family_id: rasta
+    relations:
+    - variant_of
+    note: 'Titled "Dasta -- Alternative Linear Layer for Rasta." Keeps Rasta''s full-state chi non-linear layer but
+      splits the linear layer into a fixed linear transformation L (from a binary BCH-based code) and a small
+      parameterized family of counter-selected bit permutations, replacing Rasta''s freshly-generated random matrix
+      per round; 200-400x faster keystream generation offline and 15-20% faster in HE (HElib) than Rasta.'
+  notes: 'The fixed-length building block B_i(k) = L.P_{r,i}.chi. ... .chi.L.P_{0,i}(k) + k (a Davies-Meyer-style
+    feed-forward over a keyed permutation) is captioned only as "Generation of i-th block of Dasta" (Figure 2) --
+    the paper gives it no separate name; modeled here as a compression-function-shaped primitive since it feeds
+    forward the permutation output onto its own input. No round constants are used. Local copy:
+    references/2020-dasta.pdf.'
+  instances:
+  - id: dasta_default
+    name: Dasta
+    type: compression_function
+    reference_ids:
+    - hebborn_leander_2020_dasta
+    characteristics: {}
+    notes: Parameters (key/block size, round count) not confirmed from the sources read for this database.
+
+- id: chaghri
+  name: Chaghri
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - chaghri_round
+  target_applications:
+  - fhe
+  characteristics:
+    components:
+    - id: sbox
+      params: {input_bits: 63, output_bits: 63}
+    - id: field_matrix_mul
+    - id: xor
+  reference_ids:
+  - ashur_mahzoun_toprakhisar_2022_chaghri
+  process_participations: []
+  influences:
+  - source_family_id: vision
+    relations:
+    - variant_of
+    note: 'Confirmed directly: "Chaghri takes Vision as a starting point, and improves it with respect to the
+      efficiency metrics specific to BGV rather than ZK-STARK" -- explicitly derived from the Marvellous/Vision
+      design strategy, NOT from Rasta (Rasta/Dasta/Pasta/Masta/Rubato are cited only as related work in Chaghri''s
+      own paper, not as a structural basis).'
+  notes: 'An SPN block cipher over F_(2^63)^3 (189-bit block), 8 rounds x 2 identical steps, each step: S-box
+    (pi = B o G, G(x)=x^(2^32+1) a cheap "Gold exponent" power map, B a sparse F_2-linearized affine polynomial) ->
+    3x3 MDS matrix over F_(2^63) -> subkey XOR. A preprint-version affine polynomial B was broken by a "Coefficient
+    Grouping" attack (Liu, Anand, Wang, Meier, Isobe); the published CCS 2022 version fixes B to guarantee
+    exponential algebraic-degree growth. Local copy: references/2022-chagri.pdf.'
+  instances:
+  - id: chaghri_default
+    name: Chaghri
+    type: block_cipher
+    reference_ids:
+    - ashur_mahzoun_toprakhisar_2022_chaghri
+    characteristics:
+      block_size_bits: 189
+      output_size_bits: 189
+      rounds: 8
+    notes: 3-word F_(2^63) state (189-bit block); 8 rounds of 2 steps each (16 step-applications total).
+
+- id: rubato
+  name: Rubato
+  construction_ids:
+  - feistel
+  - mds_linear_layer
+  round_ids:
+  - rubato_round
+  target_applications:
+  - fhe
+  characteristics:
+    components:
+    - id: sbox
+    - id: field_matrix_mul
+    - id: xor
+  reference_ids:
+  - ha_et_al_2022_rubato
+  process_participations: []
+  influences:
+  - source_family_id: hera
+    relations:
+    - related_to
+    note: '"We use building blocks from HERA and Pasta... For linear layers and the key schedule, we follow the
+      style of HERA": component-wise-multiplied randomized key schedule and MixRows/MixColumns MDS matrices.'
+  - source_family_id: pasta_pi
+    relations:
+    - related_to
+    note: Reuses Pasta''s quadratic Feistel S-box directly, Feistel(x)=(x1,x2+x1^2,...), confirmed independently
+      from both Rubato''s and Pasta-pi''s own papers.
+  notes: 'Titled "Rubato: Noisy Ciphers for Approximate Homomorphic Encryption." Confirmed directly, the paper''s own
+    name for its construction category is "Noisy Ciphers" ("we propose a family of noisy ciphers, dubbed Rubato").
+    The final round truncates (drops n-l words) then applies AGN ("Adding Gaussian Noise"): samples e~D_(alpha*q)
+    and adds it to each retained output word -- the sole element making Rubato "noisy" rather than deterministic.
+    The single name "Rubato" is used, confirmed directly, for both the fixed-length keyed transform and the overall
+    counter-mode stream/transciphering scheme -- no separate name for either (the mode-tier wrapper is not
+    separately modeled here). Local copy: references/2022-rubato.pdf.'
+  instances:
+  - id: rubato_default
+    name: Rubato
+    type: block_cipher
+    reference_ids:
+    - ha_et_al_2022_rubato
+    characteristics: {}
+    notes: Multiple parameter sets (v in {4,6,8}-word circulant MDS matrices) given in the paper; exact instances
+      not confirmed from the sources read for this database.
+
+- id: rescue_prime
+  name: Rescue-Prime (Rescue-XLIX)
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  - fluid_spn
+  - zk_friendly_low_degree_inverse_map
+  round_ids:
+  - rescue_xlix_round
+  target_applications:
+  - zero_knowledge
+  characteristics:
+    components:
+    - id: power_map_sbox
+    - id: prime_field_matrix_mul
+    - id: constant
+  reference_ids:
+  - szepieniec_ashur_dhooghe_2020_rescue_prime
+  process_participations: []
+  influences:
+  - source_family_id: rescue
+    relations:
+    - variant_of
+    note: 'Confirmed directly: "based on the original Rescue proposal... No scientific novelty is claimed... we do
+      make use of the opportunity to apply three simplifications": (1) forward/inverse S-box step order flipped;
+      (2) round constants generated directly from a SHAKE-256-expanded seed string rather than a block-cipher-style
+      key schedule; (3) security margin reduced from 100% to 50%. New names ("Rescue-XLIX" the permutation,
+      "Rescue-Prime" the sponge hash) mark these as technically dissimilar from original Rescue''s objects.'
+  notes: 'A self-described Standard Specification (SoK), not a peer-reviewed research contribution -- "no scientific
+    novelty is claimed." Round structure identical in shape to Rescue (forward power map, MDS matrix, constants,
+    inverse power map, MDS matrix, constants) but reordered so the STARK "folding" arithmetization technique applies
+    uniformly across the whole permutation. Local copy: references/2020-rescue_prime.pdf.'
+  instances:
+  - id: rescue_prime_default
+    name: Rescue-Prime
+    type: permutation
+    reference_ids:
+    - szepieniec_ashur_dhooghe_2020_rescue_prime
+    characteristics: {}
+    notes: Round count set via a Grobner-basis-attack-complexity formula times 1.5 (50% security margin), floored at
+      5 rounds; exact field/state-width instances not confirmed from the sources read for this database.
+
+- id: diversify_hash
+  name: DiversifyHash / GroupHash (Zcash)
+  construction_ids:
+  - hash_to_curve_group_hash
+  round_ids:
+  - diversify_hash_step
+  target_applications:
+  - zero_knowledge
+  characteristics:
+    components:
+    - id: sbox
+    - id: permutation
+  reference_ids:
+  - zcash_electric_coin_company_diversifyhash
+  process_participations: []
+  influences: []
+  notes: 'DiversifyHashSapling (Jubjub curve) and DiversifyHashOrchard (Pallas curve) hash a diversifier directly to
+    a curve point via the underlying GroupHash primitive (BLAKE2s-256 -> field element -> curve point via
+    decompress-or-reject -> cofactor clear) -- a hash-to-curve mechanism, structurally distinct from Sinsemilla/
+    PedersenHash''s scalar-multiplication-sum mechanism (see the group_exponentiation_hash construction leaf).
+    Used to derive per-address generators g_d for diversified payment addresses. Its claimed security property is
+    Unlinkability (indistinguishability of addresses derived by different spending authorities), reduced to the
+    Decisional Diffie-Hellman assumption on the curve''s prime-order subgroup -- NOT collision resistance, unlike
+    Sinsemilla/PedersenHash. No local PDF copy kept for the living spec URL; local copy of this pinned snapshot:
+    references/2026-zcash_protocol_primitives_spec.pdf.'
+  instances:
+  - id: diversify_hash_sapling
+    name: DiversifyHashSapling
+    type: compression_function
+    reference_ids:
+    - zcash_electric_coin_company_diversifyhash
+    characteristics: {}
+    notes: Maps an 88-bit diversifier to a point on the Jubjub curve, for Sapling diversified payment addresses.
+  - id: diversify_hash_orchard
+    name: DiversifyHashOrchard
+    type: compression_function
+    reference_ids:
+    - zcash_electric_coin_company_diversifyhash
+    characteristics: {}
+    notes: Maps an 88-bit diversifier to a point on the Pallas curve, for Orchard diversified payment addresses.

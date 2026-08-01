@@ -309,3 +309,54 @@ mode_constructions:
     each output bit. Introduced by Meaux, Journault, Standaert, and Carlet ("Towards Stream Ciphers for Efficient FHE
     with Low-Noise Ciphertexts", EUROCRYPT 2016) specifically to keep the FHE noise growth of the keystream generator
     additive rather than multiplicative in the circuit depth, unlike classical LFSR/NLFSR-based stream ciphers.
+- id: parallel_permutation_construction
+  name: Parallel Permutation-Based Construction
+  abbreviation: PPB
+  typical_primitive_types:
+  - mac
+  - enc
+  placeholder_family_names:
+  - Kravatte
+  - Farasha
+  notes: 'Level-1 root: builds a keyed PRF (arbitrary-length input to arbitrary-length output) from a cryptographic
+    permutation applied in parallel across several lanes -- a compression layer absorbing input across parallel
+    permutation calls followed by an expansion layer producing output the same way -- rather than the sequential
+    absorb/squeeze interleaving of a sponge or duplex. The permutation itself is never inverted. Introduced by
+    Bertoni, Daemen, Hoffert, Peeters, Van Assche, and Van Keer, "Farfalle: parallel permutation-based cryptography"
+    (IACR ToSC 2017(4)): "It has a compression layer and an expansion layer, each involving the parallel application
+    of a permutation."
+
+    '
+- id: farfalle
+  name: Farfalle
+  abbreviation: Farfalle
+  special_case_of: parallel_permutation_construction
+  typical_primitive_types:
+  - mac
+  - enc
+  placeholder_family_names:
+  - Kravatte
+  - Ciminion
+  notes: 'The specific Farfalle construction (mask derivation + compression layer + expansion layer, each a parallel
+    application of a permutation, linked by rolling functions), as opposed to the broader parallel-permutation-based
+    root: Kravatte is Farfalle instantiated with Keccak-p[1600, nr=6] ("KRAVATTE is Farfalle[pb,pc,pd,pe,rollc,rolle]
+    with pb=pc=pd=pe=KECCAK-p[1600,nr=6]"); Ciminion explicitly modifies it ("our mode of operation resembles the
+    Farfalle construction... we slightly modify Farfalle"); Hydra''s Megafono strategy is "inspired by Farfalle and
+    Ciminion" but diverges further (its own paper hedges it as only "1/2 x Farfalle"-like) and is tagged with the
+    parallel_permutation_construction root without this specific leaf.
+
+    '
+- id: farasha
+  name: Farasha
+  abbreviation: Farasha
+  special_case_of: parallel_permutation_construction
+  typical_primitive_types:
+  - mac
+  notes: 'A provably-secure Farfalle-like construction, not a literal Farfalle instance: "Farasha can be seen as a
+    simple and provable Farfalle-like construction where the rolling functions in the compression and expansion
+    phases of Farfalle are replaced by a uniform almost xor universal (AXU) function and a simple counter,
+    respectively," and Farfalle''s intermediate permutations p_b/p_d are removed entirely. Introduced by Aaraj,
+    Bellini, Jejurikar, Manzano, Rohit, and Salazar, "Farasha: A Provable Permutation-based Parallelizable PRF" (SAC
+    2022), analyzed in the random-permutation model rather than proposing one fixed concrete permutation.
+
+    '

@@ -4377,9 +4377,10 @@ references:
   venue: ESORICS 2019, LNCS 11736, pp. 151-171
   publisher: Springer
   url: https://eprint.iacr.org/2019/397
-  notes: 'No local copy: eprint.iacr.org blocks automated fetching (Cloudflare challenge) and no alternate mirror was
-    found. Its Feistel-MiMC and GMiMC-erf/crf structure, round counts, and cryptanalysis are described in detail in
-    the secondary source references/2020-stark_friendly_hash_survey.pdf (Section on GMiMC).'
+  notes: 'Local copy: references/2019-gmimc.pdf. Confirmed directly: generalizes MiMC''s cube-map round function
+    (Nyberg-Knudsen-style x^3 Feistel round) to prime fields and multiple field elements at once, in four concrete
+    variants -- GMiMC_crf (contracting), GMiMC_erf (expanding, used for GMiMCHash''s sponge permutation), GMiMC_Nyb
+    (Nyberg''s GFN), and GMiMC_mrf (new "Multi-Rotating" construction).'
 
 - id: grassi_et_al_2020_hades
   kind: paper
@@ -4394,8 +4395,12 @@ references:
   venue: EUROCRYPT 2020, LNCS 12106, pp. 674-704
   publisher: Springer
   url: https://doi.org/10.1007/978-3-030-45724-2_23
-  notes: The general full/partial-round SPN strategy paper; HadesMiMC/Starkad/Poseidon (grassi_et_al_2021_poseidon) is
-    its concrete instantiation. No local copy found (eprint blocked, no alternate mirror located).
+  notes: 'Local copy: references/2019-hades_hadesmimc.pdf (an updated version differing from the EUROCRYPT 2020
+    proceedings version). The general full/partial-round SPN strategy paper; confirmed directly: R_F full-S-box-layer
+    rounds (split R_f at the start, R_f at the end) sandwich R_P partial-S-box-layer (1 S-box/round) rounds in the
+    middle; HadesMiMC is its concrete block-cipher instantiation over F_p^t with S-box x^alpha (alpha the smallest
+    integer >= 3 coprime to p-1) and an MDS (Cauchy-matrix) linear layer. HadesMiMC/Starkad/Poseidon
+    (grassi_et_al_2021_poseidon) is its concrete instantiation.'
 
 - id: grassi_et_al_2021_poseidon
   kind: paper
@@ -4481,9 +4486,11 @@ references:
   venue: CRYPTO 2018, LNCS 10991, pp. 662-692
   publisher: Springer
   url: https://eprint.iacr.org/2018/181
-  notes: 'No local copy: eprint.iacr.org blocks automated fetching and no alternate mirror was found. Parameters, round
-    counts, and the Agrasta aggressive-reduced-round variant are described in detail in the secondary source
-    references/2025-fhe_friendly_ciphers_sok.pdf.'
+  notes: 'Local copy: references/2018-rasta_agrasta.pdf. A twist on the classical ASASA topology (Biryukov and
+    Shamir, "Structural Cryptanalysis of SASAS," EUROCRYPT 2001, cited directly in the paper''s own related work):
+    a full-state chi-transformation (quoted as "previously used in Keccak and ASASA") alternated with affine layers
+    freshly derived per round from a public nonce and counter rather than from the secret key. The aggressive
+    round-reduced variant Agrasta is defined in the same paper.'
 
 - id: meaux_et_al_2016_flip
   kind: paper
@@ -4497,9 +4504,13 @@ references:
   venue: EUROCRYPT 2016, LNCS 9665, pp. 311-343
   publisher: Springer
   url: https://eprint.iacr.org/2016/254
-  notes: 'No local copy: eprint.iacr.org blocks automated fetching and no alternate mirror was found. Described in detail
-    (including its break by Duval, Lallemand, and Rotella, and the FiLIP/Elisabeth/Margrethe successor lineage) in the
-    secondary source references/2025-fhe_friendly_ciphers_sok.pdf.'
+  notes: 'Local copy: references/2016-flip.pdf. Confirmed directly: introduces the "filter permutator" construction
+    ("we introduce a new stream cipher construction, next denoted as a filter permutator (by analogy with filter
+    generators). Its main design principle is to filter a constant key register with a variable (public) bit
+    permutation") -- register + PRNG-driven bit-permutation generator + a fixed Boolean filter built as a direct sum
+    of linear, quadratic, and triangular symmetric functions, over F_2. No genuine fixed-size lookup-table primitive
+    underlies it (the permutation generator ranges over the whole, non-fixed-size key register). Broken by Duval,
+    Lallemand, and Rotella; succeeded by FiLIP, Elisabeth, and Margrethe (see their own entries).'
 
 - id: ha_et_al_2020_masta
   kind: paper
@@ -4516,8 +4527,10 @@ references:
   venue: IEEE Access, 8, pp. 194741-194751
   publisher: IEEE
   url: https://ieeexplore.ieee.org/document/9245538
-  notes: 'No local copy found. An Fp (modular-arithmetic) variant of the Z2 cipher Rasta. Described in detail in the
-    secondary source references/2025-fhe_friendly_ciphers_sok.pdf.'
+  notes: 'Local copy: references/2020-masta.pdf. Confirmed directly from the paper: "we propose a new variant of
+    Rasta, dubbed Masta," using modular (Fp) arithmetic and replacing Rasta''s fully random affine layer with a
+    cheaper one built from finite-field multiplication by a random nonzero element (O(log M) random bits per
+    encryption vs. Rasta''s O(log^2 M)). This paper predates Pasta (2021) and does not mention it.'
 
 - id: cho_et_al_2021_hera
   kind: paper
@@ -4535,9 +4548,13 @@ references:
   venue: ASIACRYPT 2021, LNCS 13092, pp. 640-669
   publisher: Springer
   url: https://eprint.iacr.org/2020/1335
-  notes: 'No local copy: eprint.iacr.org blocks automated fetching and no alternate mirror was found. Introduces the
-    HERA cipher alongside the RtF (Real-to-Finite-field) transciphering framework. Described in detail in the secondary
-    source references/2025-fhe_friendly_ciphers_sok.pdf.'
+  notes: 'Local copy: references/2020-hera.pdf. Introduces the HERA cipher alongside the RtF
+    (Real-to-Finite-field) transciphering framework. Confirmed directly: the same name "HERA" is used for both the
+    fixed-length keyed permutation and the overall counter-mode stream cipher (no separate name for either). Its
+    novelty is a randomized key schedule (ARK[k,nc,i](x) = x + k*rc_i, a fresh random nonzero multiplier per round
+    from a nonce-seeded XOF) layered on FIXED (not randomized) AES-style MixColumns/MixRows linear layers and a
+    full-state cube-map S-box (x^3) -- unlike Rasta/Masta/Dasta, which randomize the linear layer instead of the key
+    schedule.'
 - id: yuval_1997_treyfer
   kind: paper
   title: 'Reinventing the Travois: Encryption/MAC in 30 ROM Bytes'
@@ -4701,9 +4718,12 @@ references:
   venue: Progress in Cryptology - AFRICACRYPT 2023, Springer LNCS
   publisher: Springer
   url: https://eprint.iacr.org/2023/323
-  notes: No local copy (eprint.iacr.org blocks automated PDF fetching; Springer/AFRICACRYPT version paywalled, no free
-    mirror located). Decreases multiplications in the linear layer by up to 90% and Plonk-circuit constraints by up
-    to 70% versus the original Poseidon; can be used as either a sponge or a compression function.
+  notes: 'Local copy: references/2023-poseidon2.pdf. Decreases multiplications in the linear layer by up to 90% and
+    Plonk-circuit constraints by up to 70% versus the original Poseidon; can be used as either a sponge or a
+    compression function. Confirmed directly: R_F=8 full/external rounds always, R_P (internal/partial rounds) set
+    per instance (e.g. 14-56 depending on field/width -- Table 1); three concrete changes vs. Poseidon: "(1) an
+    additional linear layer at the beginning of the permutation, (2) different linear layer matrices, (3) round
+    constants only applied to the first word in the internal rounds."'
 - id: grassi_et_al_2026_poseidon2b
   kind: paper
   title: 'Poseidon(2)b: Binary Field Versions of Poseidon/Poseidon2'
@@ -4749,9 +4769,11 @@ references:
   venue: IACR Cryptology ePrint Archive, Paper 2021/984
   publisher: IACR
   url: https://eprint.iacr.org/2021/984
-  notes: No local copy (eprint blocked, no verified mirror found). No peer-reviewed conference/journal venue was located
-    beyond the ePrint listing. Introduces the Grendel S-box S(x) = x^d * chi_p(x) (chi_p the Legendre/quadratic-character
-    symbol of F_p), combined with a SHARK-strategy-style linear layer, instantiated as a sponge hash (permutation).
+  notes: 'Local copy: references/2021-grendel.pdf. No peer-reviewed conference/journal venue was located beyond the
+    ePrint listing. Introduces the Grendel S-box S(x) = x^d * chi_p(x) (chi_p the Legendre/quadratic-character symbol
+    of F_p), combined with a SHARK-strategy-style linear layer. Confirmed directly: "the GCD attack does not apply to
+    Grendel because it is not a block cipher with an unknown key; instead it is a permutation with no secrets"; the
+    GrendelHash hash function "uses the Grendel sponge internally," which in turn wraps the Grendel permutation.'
 - id: grassi_et_al_2023_griffin
   kind: paper
   title: 'Horst Meets Fluid-SPN: Griffin for Zero-Knowledge Applications'
@@ -4766,10 +4788,13 @@ references:
   venue: Advances in Cryptology - CRYPTO 2023, Springer LNCS 14083, pp. 573-606
   publisher: Springer
   url: https://eprint.iacr.org/2022/403
-  notes: No local copy (eprint blocked; author-page mirrors relink the same blocked URL; Springer/CRYPTO version paywalled,
-    IACR's 4-year open-access lag with Springer does not apply until August 2027). Also eprint 2022/403. Introduces
-    "Horst," a Feistel-style update extended with a multiplication, (x,y) -> (y*G(x)+F(x), x), combined with an
-    SPN-style "Fluid-SPN" layer over prime fields using invertible low-degree power maps.
+  notes: 'Local copy: references/2022-griffin.pdf. Also eprint 2022/403. Introduces "Horst," a Feistel-style update
+    extended with a multiplication, (x,y) -> (y*G(x)+F(x), x), combined with an SPN-style "Fluid-SPN" layer over
+    prime fields using invertible low-degree power maps. Confirmed directly: the paper itself names and defines all
+    three of GRIFFIN-pi (the permutation), GRIFFIN-Sponge, and GRIFFIN-Compression ("GRIFFIN-Sponge and
+    GRIFFIN-Compression are respectively a sponge hash function and a compression function over F_p^t instantiated
+    with the permutation GRIFFIN-pi"), and itself coins the term "Fluid-SPN" (Rescue is its own worked example: "in
+    this sense, Rescue is a Fluid-SPN").'
 - id: bouvier_et_al_2023_anemoi
   kind: paper
   title: 'New Design Techniques for Efficient Arithmetization-Oriented Hash Functions: Anemoi Permutations and Jive
@@ -4786,10 +4811,11 @@ references:
   venue: Advances in Cryptology - CRYPTO 2023, Springer
   publisher: Springer
   url: https://eprint.iacr.org/2022/840
-  notes: No local copy (eprint blocked; project page and IOG mirror both relink the same blocked URL; Springer/CRYPTO
-    version paywalled). Also eprint 2022/840. Introduces the "Flystel" S-box (a butterfly-structure construction) inside
-    a classical SPN, plus a companion compression mode "Jive"; operates over both prime fields GF(p) and binary
-    fields GF(2^n). Claimed ~2x improvement in R1CS constraints over Poseidon/Rescue.
+  notes: 'Local copy: references/2022-anemoi_jive.pdf. Also eprint 2022/840. Introduces the "Flystel" S-box (a
+    3-round-Feistel-based butterfly construction, open/closed variants CCZ-equivalent) inside a classical SPN, plus a
+    companion compression mode "Jive" -- confirmed directly as inspired by "the ''Latin dance'' symmetric algorithms
+    (Salsa, ChaCha and derivatives)," named "after another Latin dance." Operates over both prime fields GF(p) and
+    binary fields GF(2^n). Claimed ~2x improvement in R1CS constraints over Poseidon/Rescue.'
 - id: grassi_et_al_2022_reinforced_concrete
   kind: paper
   title: 'Reinforced Concrete: A Fast Hash Function for Verifiable Computation'
@@ -4804,10 +4830,12 @@ references:
   venue: 'ACM SIGSAC Conference on Computer and Communications Security (CCS ''22), pp. 1323-1335'
   publisher: ACM
   url: https://eprint.iacr.org/2021/1038
-  notes: No local copy (eprint blocked; ACM DL returns 403; CORE aggregator returns 403; no open mirror found). Also
-    eprint 2021/1038 (first posted 2021). A sponge over F_p^3 using three named round components -- Bricks (low-degree
-    power-map permutation), Concrete (MDS matrix + round constants), and Bars (a lookup-table nonlinear layer
-    decomposing a field element into smaller-domain lookups) -- targeting the Plookup lookup argument.
+  notes: 'Local copy: references/2021-reinforced_concrete.pdf. Also eprint 2021/1038 (first posted 2021). A sponge
+    over F_p^3 using three named round components, confirmed directly: Bricks(x1,x2,x3) = (x1^d, x2*(x1^2+a1*x1+b1),
+    x3*(x2^2+a2*x2+b2)) (degree-5 non-linear diffusion); Concrete = multiply by MDS matrix circ(2,1,1) + round
+    constants; Bars = Comp o SBox o Decomp, a lookup-table nonlinear layer with no low-degree polynomial description
+    -- targeting the Plookup lookup argument. Round structure: 7 Concrete-Bricks pairs with a single Bars layer
+    replacing the middle Bricks call.'
 - id: szepieniec_et_al_2023_tip5
   kind: paper
   title: The Tip5 Hash Function for Recursive STARKs
@@ -4821,10 +4849,11 @@ references:
   venue: IACR Cryptology ePrint Archive, Paper 2023/107
   publisher: IACR
   url: https://eprint.iacr.org/2023/107
-  notes: No local copy (eprint blocked, no mirror found). ePrint-only technical report tied to the Neptune/Triton VM
-    project; no separate conference/journal publication located. Defines a sponge over the Goldilocks prime
-    p = 2^64 - 2^32 + 1 with a split-and-lookup S-box (part of the state) alongside a power-map S-box x^7 (rest of the
-    state), interleaved with an MDS layer (SHARK-style), inspired explicitly by Reinforced Concrete's lookup approach.
+  notes: 'Local copy: references/2023-tip5.pdf. ePrint-only technical report tied to the Neptune/Triton VM project;
+    no separate conference/journal publication located. Confirmed directly (Table 1): field p = 2^64-2^32+1, N=5
+    rounds, state m=16, rate r=10, capacity c=6, digest d=5, power-map exponent alpha=7, s=4 split-and-lookup calls
+    per round; round = S-box layer (4 split-and-lookup S, 12 power-map T) -> 16x16 circulant MDS matrix -> round
+    constants; inspired explicitly by Reinforced Concrete''s lookup approach.'
 - id: salen_2023_tip4_tip4prime
   kind: paper
   title: Two additional instantiations from the Tip5 hash function construction
@@ -4893,11 +4922,11 @@ references:
   venue: Advances in Cryptology - EUROCRYPT 2025, Springer LNCS, pp. 303-332
   publisher: Springer
   url: https://eprint.iacr.org/2025/926
-  notes: No local copy (eprint blocked; Springer paywalled; no arXiv/institutional mirror found). Name derives from
-    "power residue for lower cost table lookup." S-box S(x) = x^(-1) * T[(x/p)_m] (field inverse multiplied by a small
-    lookup table indexed by x's m-th-power-residue class), with a new MDS linear layer, targeting the PlonKup lookup
-    argument. Exact field/prime and round count not confirmed from sources read. State widths t=3 and t=8 both appear
-    in the paper's own efficiency comparisons.
+  notes: 'Local copy: references/2025-polocolo.pdf. Name derives from "power residue for lower cost table lookup."
+    S-box S(x) = x^(-1) * T[(x/p)_m] (field inverse multiplied by a small lookup table indexed by x''s
+    m-th-power-residue class), with a new MDS linear layer, targeting the Plonkup lookup argument. Confirmed directly
+    (Table 1): state widths t in {3,4,5,6,7,8}; round counts R=6 for t=3, R=5 for t in {4,...,8} (a tighter variant
+    uses R=5 for t=3, R=4 for t in {4,6,8}); operates over the BLS12/BN254 scalar fields.'
 - id: dobraunig_et_al_2021_ciminion
   kind: paper
   title: 'Ciminion: Symmetric Encryption Based on Toffoli-Gates over Large Finite Fields'
@@ -4910,10 +4939,13 @@ references:
   venue: Advances in Cryptology - EUROCRYPT 2021, pp. 3-34
   publisher: Springer
   url: https://eprint.iacr.org/2021/267
-  notes: No local copy (eprint blocked, no mirror found). Also eprint 2021/267. Nonlinearity comes from a Toffoli-gate-based
-    mechanism (not a small S-box) over large binary or prime fields, combined with a lightweight linear layer, aimed
-    at minimizing field multiplications for MPC/FHE/ZK use; a Farfalle-like construction. Exact per-round structure
-    (single wide nonlinear map vs. several parallel gates) not confirmed beyond this from the fetched abstract.
+  notes: 'Local copy: references/2021-ciminion.pdf. Also eprint 2021/267. Confirmed directly: Ciminion is "a
+    nonce-based stream-encryption scheme" (mode-tier) built from two named permutations of F_q^3, "p_C" (a one-time
+    setup/absorbing permutation deriving a secret intermediate state from a nonce+key) and "p_E" (the repeatedly
+    applied keystream-generating permutation), each built from the Toffoli gate. Explicitly, per its own section
+    title "A Modified Version of Farfalle": "our mode of operation resembles the Farfalle construction... we slightly
+    modify Farfalle." Both p_C and p_E are invertible but the mode never inverts them ("mandating its use only in
+    modes that... never evaluate its inverse using the secret key").'
 - id: grassi_et_al_2023_hydra
   kind: paper
   title: 'From Farfalle to Megafono via Ciminion: The PRF Hydra for MPC Applications'
@@ -4926,11 +4958,14 @@ references:
   venue: Advances in Cryptology - EUROCRYPT 2023
   publisher: Springer
   url: https://eprint.iacr.org/2022/342
-  notes: No local copy (eprint blocked; author-page mirror relinks the same blocked URL). Also eprint 2022/342.
-    Introduces "Megafono," a keyed extendable-PRF framework; the concrete instantiation Hydra uses the HADES strategy
-    (alternating full/partial S-box rounds) together with generalized versions of the Lai-Massey scheme. Explicitly
-    designed to remove Ciminion's "critical weakness," its reliance on an expensive key schedule for subkey
-    independence (dobraunig_et_al_2021_ciminion) -- a same-lineage, partly-same-author continuation.
+  notes: 'Local copy: references/2022-hydra.pdf. Also eprint 2022/342. Confirmed directly (Abstract): "Megafono is a
+    keyed extendable PRF, expanding a fixed-length input to an arbitrary-length output. Similar to Farfalle, an
+    initial keyed permutation is applied to the input, followed by an expansion layer, involving the parallel
+    application of keyed ciphers." The concrete instantiation Hydra uses the HADES strategy (alternating full/partial
+    S-box rounds) together with generalized versions of the Lai-Massey scheme. Explicitly designed to remove
+    Ciminion''s "critical weakness," its reliance on an expensive key schedule for subkey independence
+    (dobraunig_et_al_2021_ciminion) -- a same-lineage, partly-same-author continuation ("From Farfalle to Megafono
+    via Ciminion").'
 - id: boneh_et_al_2018_cryptodarkmatter
   kind: paper
   title: 'Exploring Crypto Dark Matter: New Simple PRF Candidates and Their Applications'
@@ -4944,13 +4979,16 @@ references:
   venue: 'Theory of Cryptography Conference (TCC 2018), Part II'
   publisher: Springer
   url: https://eprint.iacr.org/2018/1218
-  notes: No local copy (eprint blocked; INRIA HAL mirror also returned an HTML landing page, not a raw PDF). Also
-    eprint 2018/1218. Weak-PRF candidates built by mixing linear functions over different small moduli (a secret
-    mod-2 linear map followed by a public mod-3 linear map), implementable as a depth-2 ACC0 circuit; explicitly
-    framed as a "deterministic variant of Learning Parity with Noise" aimed at better MPC round/communication
-    complexity than AES/LowMC/Rasta. A follow-up attacks-and-fixes paper exists (Cheon, Cho, J.H. Kim, J. Kim,
-    "Adventures in Crypto Dark Matter," PKC 2021 / eprint 2020/783) -- note for the record that this PKC 2021 paper,
-    not any paper literally titled "CryptoDarkMatter++", is the real citable 2020/2021 follow-up to this design.
+  notes: 'Local copy: references/2018-cryptodarkmatter.pdf. Also eprint 2018/1218. A general TECHNIQUE ("mixing
+    linear functions over different small moduli"), not one single named PRF -- confirmed directly, the paper
+    presents multiple distinctly-named candidates: the main/basic weak PRF (Construction 3.1, F_A(x):=map(Ax), the
+    "mod-2/mod-3" case, depth-2 ACC0[2,3]) and its general mod-p/mod-q form (Remark 3.2); an alternative weak PRF
+    (Construction 6.3, a deterministic-LPN-style variant for garbled-circuit efficiency); and a depth-3 strong PRF
+    candidate (Remark 7.14, F''_A(x):=F_A(bin(G*x))) built from a new Encoded-Input PRF/Protected EI-PRF framework
+    (Definitions 7.1-7.2, concrete instance Construction 7.9). A follow-up attacks-and-fixes paper exists (Cheon,
+    Cho, J.H. Kim, J. Kim, "Adventures in Crypto Dark Matter," PKC 2021 / eprint 2020/783) -- note for the record
+    that this PKC 2021 paper, not any paper literally titled "CryptoDarkMatter++", is the real citable 2020/2021
+    follow-up to this design.'
 - id: dobraunig_kales_rechberger_schofnegger_zaverucha_2022_rain
   kind: paper
   title: Shorter Signatures Based on Tailor-Made Minimalist Symmetric-Key Crypto
@@ -4964,12 +5002,13 @@ references:
   venue: ACM SIGSAC Conference on Computer and Communications Security (CCS 2022)
   publisher: ACM
   url: https://eprint.iacr.org/2021/692
-  notes: No local copy (eprint blocked; ACM DL paywalled, no open mirror found). Also eprint 2021/692 (first posted
-    2021). Introduces the one-way function Rain and, combining it with a Banquet-like MPC-in-the-head proof system,
-    the signature scheme Rainier -- "the first MPCitH-based signature scheme which can produce signatures that are
-    less than 5 KB in size" (quoted). Rain's exact round-function structure (reported secondhand as field inversion
-    plus an unstructured affine layer) was not independently confirmed against the primary text; treat as unverified
-    pending a direct read.
+  notes: 'Local copy: references/2021-rain.pdf. Also eprint 2021/692 (first posted 2021). Introduces the one-way
+    function Rain and, combining it with a Banquet-like MPC-in-the-head proof system, the signature scheme Rainier --
+    "the first MPCitH-based signature scheme which can produce signatures that are less than 5 KB in size" (quoted).
+    Confirmed directly: Rain is a keyed permutation over F_2^n, S(x)=x^(2^n-2)=x^(-1) (field inversion), a
+    round-varying "randomly chosen" dense linear layer (deliberately unstructured, contrasted with MiMC/Jarvis/
+    Vision''s structured affine layers) plus round-constant addition; explicitly "not a classical block cipher,"
+    intended only as an MPCitH one-way function. Rain3/Rain4 (3/4 rounds) over F_2^128/192/256.'
 - id: kim_et_al_2023_aim
   kind: paper
   title: 'AIM: Symmetric Primitive for Shorter Signatures with Stronger Security'
@@ -5108,3 +5147,252 @@ references:
     state -- selecting between two fixed permutations bit-by-bit from the data itself, related to the Zemor-Tillich
     group-based hash construction -- with no algebraic S-box at all. Genuinely multi-purpose: FIL-MAC, hashing/signatures
     (via strengthened Merkle-Damgard), and PRNG/PRF/stream-cipher use are all specified in the paper''s own Section 2.'
+
+- id: ashur_dhooghe_2018_marvellous
+  kind: paper
+  title: 'MARVELlous: a STARK-Friendly Family of Cryptographic Primitives'
+  authors:
+  - Tomer Ashur
+  - Siemen Dhooghe
+  year: 2018
+  venue: IACR Cryptology ePrint Archive, Report 2018/1098
+  publisher: IACR
+  url: https://eprint.iacr.org/2018/1098
+  notes: 'Local copy: references/2018-jarvis_friday.pdf. Introduces Jarvis (a Rijndael-inspired block cipher over
+    GF(2^n): inversion S-box x -> x^(2^n-2) + affine layer + round-key XOR) and Friday, confirmed directly: "Friday
+    is a Merkle-Damgard based hash function instantiated with Jarvis as its compression function" -- precisely,
+    Jarvis is first turned into a compression function via Miyaguchi-Preneel mode (H_i = E_{H_{i-1}}(m_i) xor
+    H_{i-1} xor m_i with E=Jarvis), then iterated via Merkle-Damgard. Both were later broken by a Grobner-basis
+    algebraic attack (Albrecht et al., ASIACRYPT 2019), motivating the redesign as Vision/Rescue
+    (aly_et_al_2020_marvellous).'
+
+- id: szepieniec_ashur_dhooghe_2020_rescue_prime
+  kind: paper
+  title: 'Rescue-Prime: a Standard Specification (SoK)'
+  authors:
+  - Alan Szepieniec
+  - Tomer Ashur
+  - Siemen Dhooghe
+  year: 2020
+  venue: Nervos Foundation / imec-COSIC KU Leuven / TU Eindhoven (no peer-reviewed venue; self-described SoK)
+  publisher: ''
+  url: ''
+  notes: 'Local copy: references/2020-rescue_prime.pdf. Confirmed directly: "based on the original Rescue proposal...
+    No scientific novelty is claimed... we do make use of the opportunity to apply three simplifications": (1) the
+    order of the forward (x^alpha) and inverse (x^(1/alpha)) S-box steps within a round is flipped relative to
+    original Rescue; (2) round constants are generated directly from a SHAKE-256-expanded seed string rather than via
+    a block-cipher-style key schedule; (3) the security margin is reduced from 100% to 50%, justified by several
+    years of unbroken cryptanalysis. "Rescue-XLIX" names the permutation with these changes, "Rescue-Prime" the
+    sponge-hash built on it -- new names are used specifically to distinguish these technically-dissimilar objects
+    from original Rescue''s.'
+
+- id: hebborn_leander_2020_dasta
+  kind: paper
+  title: Dasta -- Alternative Linear Layer for Rasta
+  authors:
+  - Phil Hebborn
+  - Gregor Leander
+  year: 2020
+  venue: 'IACR Transactions on Symmetric Cryptology, Vol. 2020, No. 3, pp. 46-86'
+  publisher: IACR
+  url: https://doi.org/10.13154/tosc.v2020.i3.46-86
+  notes: 'Local copy: references/2020-dasta.pdf. Confirmed directly: keeps Rasta''s full-state chi non-linear layer
+    but splits the linear layer into a fixed linear transformation L (from a binary BCH-based code, giving a
+    guaranteed branch number) and a small parameterized family of bit permutations P selected by the block counter,
+    replacing Rasta''s freshly-generated random invertible matrix per round. The fixed-length building block
+    B_i(k) = L o P_{r,i} o chi o ... o chi o L o P_{0,i}(k) + k (a Davies-Meyer-style feed-forward over a keyed
+    permutation) is captioned only as "Generation of i-th block of Dasta" (Figure 2) -- the paper gives it no
+    separate name. 200-400x faster keystream generation offline and 15-20% faster in HE (HElib) than Rasta, at the
+    same AND-depth/AND-count.'
+
+- id: ashur_mahzoun_toprakhisar_2022_chaghri
+  kind: paper
+  title: Chaghri -- A FHE-friendly Block Cipher
+  authors:
+  - Tomer Ashur
+  - Mohammad Mahzoun
+  - Dilara Toprakhisar
+  year: 2022
+  venue: 'ACM SIGSAC Conference on Computer and Communications Security (CCS ''22), pp. 139-150'
+  publisher: ACM
+  url: https://doi.org/10.1145/3548606.3559364
+  notes: 'Local copy: references/2022-chagri.pdf. Confirmed directly: an SPN block cipher over F_(2^63)^3 (189-bit
+    block), 8 rounds x 2 identical steps, each step S-box (pi = B o G, G(x)=x^(2^32+1) a cheap "Gold exponent" power
+    map, B a sparse F_2-linearized affine polynomial) -> 3x3 MDS matrix over F_(2^63) -> subkey XOR. Explicitly
+    derived from the Marvellous/Vision design strategy, NOT from Rasta: "Chaghri takes Vision as a starting point,
+    and improves it with respect to the efficiency metrics specific to BGV rather than ZK-STARK" -- Rasta/Dasta/
+    Pasta/Masta/Rubato are cited only as related work, not as a structural basis. A preprint-version affine
+    polynomial B was broken by Liu, Anand, Wang, Meier, and Isobe''s "Coefficient Grouping" attack; the published
+    CCS 2022 version fixes B to guarantee exponential algebraic-degree growth.'
+
+- id: ha_et_al_2022_rubato
+  kind: paper
+  title: 'Rubato: Noisy Ciphers for Approximate Homomorphic Encryption (Full Version)'
+  authors:
+  - Jincheol Ha
+  - Seongkwang Kim
+  - Byeonghak Lee
+  - Jooyoung Lee
+  - Mincheol Son
+  year: 2022
+  venue: Advances in Cryptology - EUROCRYPT 2022 (full version, KAIST / Samsung SDS)
+  publisher: Springer
+  url: https://eprint.iacr.org/2022/537
+  notes: 'Local copy: references/2022-rubato.pdf. Confirmed directly: the paper''s own name for its construction
+    category is "Noisy Ciphers" (title: "Rubato: Noisy Ciphers for Approximate Homomorphic Encryption"; abstract:
+    "we propose a family of noisy ciphers, dubbed Rubato"). "Rubato" names both the fixed-length keyed transform
+    (AGN o Fin o RF o ... o ARK, RF = ARK o Feistel o MixRows o MixColumns, Feistel(x)=(x1,x2+x1^2,...) reusing
+    Pasta''s quadratic Feistel S-box) and the overall counter-mode stream/transciphering scheme -- no separate name
+    for either. AGN ("Adding Gaussian Noise") is the sole element making it "noisy": Gaussian noise e~D_(alpha*q) is
+    added to each retained output word after a truncation step. "We use building blocks from HERA and Pasta... For
+    linear layers and the key schedule, we follow the style of HERA."'
+
+- id: cosseron_et_al_2022_elisabeth
+  kind: paper
+  title: 'Towards Case-Optimized Hybrid Homomorphic Encryption: Featuring the Elisabeth Stream Cipher'
+  authors:
+  - Orel Cosseron
+  - Clement Hoffmann
+  - Pierrick Meaux
+  - Francois-Xavier Standaert
+  year: 2022
+  venue: Advances in Cryptology - ASIACRYPT 2022, Part III, LNCS 13793, pp. 32-67
+  publisher: Springer
+  url: https://eprint.iacr.org/2022/180
+  notes: 'Local copy: references/2022-elisabeth.pdf. Confirmed directly: generalizes FiLIP''s Improved Filter
+    Permutator (IFP, defined over F_2) to any group G, calling the result a "Group Filter Permutator" (GFP; "The XOR
+    is replaced by the addition of G and the Boolean function by a function from G^n to G"). Elisabeth instantiates
+    GFP over G = Z_16, motivated by TFHE''s native 4-bit negacyclic-LUT bootstrapping. Its filter is a direct sum of
+    12 copies of a 5-to-1 inner function g built from two layers of eight fixed Z_16->Z_16 4-bit lookup tables
+    ("NLUTs") -- a genuine fixed-size S-box-like component, unlike FLIP/FiLIP''s purely algebraic filters. Later
+    broken (Elisabeth-4) by Gilbert et al., "Cryptanalysis of Elisabeth-4" (ASIACRYPT 2023); patched by Margrethe
+    (hoffmann_meaux_standaert_2023_margrethe).'
+
+- id: hoffmann_meaux_standaert_2023_margrethe
+  kind: paper
+  title: The Patching Landscape of Elisabeth-4 and the Mixed Filter Permutator Paradigm
+  authors:
+  - Clement Hoffmann
+  - Pierrick Meaux
+  - Francois-Xavier Standaert
+  year: 2023
+  venue: IACR Cryptology ePrint Archive (2023; venue not printed on the PDF itself)
+  publisher: IACR
+  url: ''
+  notes: 'Local copy: references/2023-margrethe.pdf. Responds to Gilbert et al.''s linearization attack on
+    Elisabeth-4 (exploiting the small monomial count created by NLUTs + mod-16 addition) with three fixes; the
+    headline one, Margrethe, introduces a new "Mixed Filter Permutator" (MFP) paradigm, confirmed directly: "The MFP
+    paradigm differs from the GFP by the use of two (potentially) different groups" -- key elements are individual
+    bits (G1=F_2) while the filter output is Z_16 (G2), unlike Elisabeth''s single-group (Z_16-keyed) GFP. Its filter
+    is 14 copies of a genuine fixed-size 18-to-4-bit lookup-table S-box g: F_2^18 -> Z_16, summed with 4 extra raw
+    key bits per copy. Quote: "Leaving the GFP paradigm, Margrethe-18-4 fixes the root of the issue... by mixing the
+    key at the bit level."'
+
+- id: meaux_et_al_2019_filip
+  kind: paper
+  title: 'Improved Filter Permutators: Combining Symmetric Encryption Design, Boolean Functions, Low Complexity
+    Cryptography, and Homomorphic Encryption, for Private Delegation of Computations'
+  authors:
+  - Pierrick Meaux
+  - Claude Carlet
+  - Anthony Journault
+  - Francois-Xavier Standaert
+  year: 2019
+  venue: INDOCRYPT 2019, LNCS 11898, pp. 68-91
+  publisher: Springer
+  url: https://eprint.iacr.org/2019/483
+  notes: 'Local copy: references/2019-filip.pdf. Confirmed directly: introduces the "Improved Filter Permutator"
+    (IFP) paradigm, an explicit generalization of FLIP''s filter permutator (meaux_et_al_2016_flip) -- "we first
+    introduce improved filter permutators that allow better security analyses, instances and implementations than
+    the previously proposed FLIP family of stream ciphers." Adds a larger key register relative to the filter''s
+    input size and an XOR whitening step before the filter; the filter itself remains a purely algebraic
+    direct-sum-of-monomials (DSM) or XOR-threshold/XOR-majority function over F_2, with no fixed-size lookup-table
+    primitive (same as FLIP).'
+
+- id: bertoni_et_al_2017_farfalle
+  kind: paper
+  title: 'Farfalle: parallel permutation-based cryptography'
+  authors:
+  - Guido Bertoni
+  - Joan Daemen
+  - Seth Hoffert
+  - Michael Peeters
+  - Gilles Van Assche
+  - Ronny Van Keer
+  year: 2017
+  venue: 'IACR Transactions on Symmetric Cryptology, 2017(4)'
+  publisher: IACR
+  url: https://eprint.iacr.org/2016/1188
+  notes: 'Local copy: references/2016-farfalle.pdf. Confirmed directly: "Farfalle... has a compression layer and an
+    expansion layer, each involving the parallel application of a permutation," building a PRF (keyed, arbitrary
+    input/output length) rather than inverting the permutation (same never-inverted pattern as a sponge). Kravatte is
+    Farfalle instantiated with Keccak-p[1600, nr=6] ("KRAVATTE is Farfalle[pb,pc,pd,pe,rollc,rolle] with
+    pb=pc=pd=pe=KECCAK-p[1600,nr=6]"). Named variants, all built from Kravatte: Kravatte-SAE (session-supporting
+    AEAD), Kravatte-SIV (nonce-misuse-resistant AEAD), Kravatte-WBC (tweakable wide-block cipher, a Feistel network
+    of two Farfalle instances, one of them the reduced SHORT-KRAVATTE), and Kravatte-WBC-AE (AEAD atop the wide
+    block cipher).'
+
+- id: aaraj_et_al_2022_farasha
+  kind: paper
+  title: 'Farasha: A Provable Permutation-based Parallelizable PRF'
+  authors:
+  - Najwa Aaraj
+  - Emanuele Bellini
+  - Ravindra Jejurikar
+  - Marc Manzano
+  - Raghvendra Rohit
+  - Eugenio Salazar
+  year: 2022
+  venue: Selected Areas in Cryptography (SAC 2022)
+  publisher: Springer
+  url: ''
+  notes: 'Local copy: references/2022-farasha.pdf. Confirmed directly: "Farasha can be seen as a simple and provable
+    Farfalle-like construction where the rolling functions in the compression and expansion phases of Farfalle are
+    replaced by a uniform almost xor universal (AXU) function and a simple counter, respectively," with Farfalle''s
+    intermediate permutations p_b/p_d removed. Analyzed in the random-permutation model (no single fixed concrete
+    permutation proposed); a concrete instance "Farasha-wLFSR" uses a word-based LFSR for the AXU function.'
+
+- id: bouvier_et_al_2025_skyscraper_v2
+  kind: paper
+  title: 'Skyscraper-v2: Fast Hashing on Big Primes'
+  authors:
+  - Clemence Bouvier
+  - Lorenzo Grassi
+  - Dmitry Khovratovich
+  - Katharina Koschatko
+  - Christian Rechberger
+  - Fabian Schmid
+  - Markus Schofnegger
+  year: 2025
+  venue: IACR Cryptology ePrint Archive, Report 2025/058 (minor revision of the TCHES 2025 publication)
+  publisher: IACR
+  url: https://eprint.iacr.org/2025/058
+  notes: 'Local copy: references/2025-skyscraper_v2.pdf. Confirmed directly: "This document describes the updated
+    version of the Skyscraper permutation published at CHES 2025, dubbed Skyscraper-v2. The update has been prompted
+    by the recently published rebound distinguisher by Antoine Bak." Round count raised from 10 (bouvier_et_al_2025_skyscraper)
+    to 18 -- "we update the round number from 10 to 18, introducing 4 additional square rounds at the beginning and
+    the end of the permutation" -- to defeat a rebound distinguisher exploiting the low algebraic complexity of the
+    2-Feistel-round middle section. Timing for hashing two BLS12-381-scalar-field elements rises from 135ns to 256ns
+    accordingly ("faster than Poseidon2 by a factor of more than 15, and faster than... Reinforced Concrete by a
+    factor of more than 5").'
+
+- id: zcash_electric_coin_company_diversifyhash
+  kind: spec
+  title: Zcash Protocol Specification -- DiversifyHash and GroupHash
+  authors:
+  - Daira-Emma Hopwood
+  - Sean Bowe
+  - Taylor Hornby
+  - Nathan Wilcox
+  year: 2026
+  venue: 'Version v2026.7.0-89-gc5d14d [NU6.2], sections 5.4.1.6 and 5.4.9.5/5.4.9.8'
+  publisher: Electric Coin Company
+  url: https://zips.z.cash/protocol/protocol.pdf
+  notes: 'Local copy of this pinned snapshot: references/2026-zcash_protocol_primitives_spec.pdf (the living spec
+    at the URL above may have moved on since). DiversifyHashSapling/DiversifyHashOrchard hash a diversifier directly
+    to a curve point (Jubjub / Pallas respectively) via the underlying GroupHash primitive (BLAKE2s-256 -> field
+    element -> curve point via decompress-or-reject -> cofactor clear) -- a hash-to-curve mechanism, distinct from
+    PedersenHash/SinsemillaHash''s scalar-multiplication-sum mechanism. Used to derive per-address generators for
+    diversified payment addresses. Its claimed security property is Unlinkability (indistinguishability of addresses
+    from different spending authorities), reduced to the Decisional Diffie-Hellman assumption on the curve''s
+    prime-order subgroup -- not collision resistance.'

@@ -10534,3 +10534,350 @@ mode_families:
     notes: The paper's recommended practical parameter set, targeting an ~80-bit security level; key_size_bits
       reflects the shorter, periodically-extended 80-bit key option the paper suggests over the full 160-bit
       state-length key otherwise assumed for simplicity of the security proof.
+
+- id: ciminion
+  name: Ciminion
+  construction_ids:
+  - parallel_permutation_construction
+  - farfalle
+  round_ids:
+  - ciminion_round
+  target_applications:
+  - mpc
+  - fhe
+  - zero_knowledge
+  underlying_primitive_ids:
+  - ciminion_p_c
+  - ciminion_p_e
+  characteristics:
+    components: []
+  reference_ids:
+  - dobraunig_et_al_2021_ciminion
+  process_participations: []
+  influences:
+  - source_family_id: ciminion_permutation
+    relations:
+    - used_by
+    note: Built directly from the p_C (setup) and p_E (keystream) permutations of the ciminion_permutation family.
+  notes: 'Titled "Ciminion: Symmetric Encryption Based on Toffoli-Gates over Large Finite Fields." Confirmed directly:
+    "In order to create a nonce-based stream-encryption scheme, we propose to work with the mode of operation
+    described in Fig. 3" -- p_C derives a secret intermediate state from a nonce and key, then a simple rolling
+    function plus p_E repeatedly generate keystream. Explicitly, per its own section title "A Modified Version of
+    Farfalle": "our mode of operation resembles the Farfalle construction... we slightly modify Farfalle." A
+    Wegman-Carter MAC is proposed only as an optional appendix add-on, not part of the base scheme. Local copy:
+    references/2021-ciminion.pdf.'
+  instances:
+  - id: ciminion_default
+    name: Ciminion
+    type: enc
+    reference_ids:
+    - dobraunig_et_al_2021_ciminion
+    characteristics: {}
+    notes: Parameters (field size, N/R round counts) not confirmed from the sources read for this database.
+
+- id: hydra
+  name: Hydra
+  construction_ids:
+  - parallel_permutation_construction
+  round_ids:
+  - hydra_round
+  target_applications:
+  - mpc
+  characteristics:
+    components: []
+  reference_ids:
+  - grassi_et_al_2023_hydra
+  process_participations: []
+  influences:
+  - source_family_id: ciminion
+    relations:
+    - improvement_of
+    note: '"Following the approach introduced by Ciminion''s designers, we present a novel primitive" -- explicitly
+      designed to remove Ciminion''s "critical weakness," namely that "its security highly relies on the independence
+      of its subkeys, which is achieved by using an expensive key schedule."'
+  - source_family_id: hadesmimc
+    relations:
+    - related_to
+    note: Hydra's concrete instantiation of the Megafono strategy reuses the HADES strategy (alternating full/partial
+      S-box rounds), the same strategy hadesmimc embodies at the primitive tier, together with generalized versions
+      of the Lai-Massey scheme.
+  notes: 'Titled "From Farfalle to Megafono via Ciminion: The PRF Hydra for MPC Applications." Confirmed directly
+    (Abstract): "Megafono is a keyed extendable PRF, expanding a fixed-length input to an arbitrary-length output.
+    Similar to Farfalle, an initial keyed permutation is applied to the input, followed by an expansion layer,
+    involving the parallel application of keyed ciphers." Hydra is the concrete Megafono instantiation, hedged by its
+    own paper as only "1/2 x Farfalle"-like rather than a literal Farfalle leaf. No paper-given name exists for the
+    initial keyed permutation separate from "Hydra" itself, so no separate primitive-tier entry is modeled for it.
+    Exact S-box form, state width, and round counts were not confirmed from the sources read for this database.
+    Local copy: references/2022-hydra.pdf.'
+  instances:
+  - id: hydra_default
+    name: Hydra
+    type: mac
+    reference_ids:
+    - grassi_et_al_2023_hydra
+    characteristics: {}
+    notes: Parameters not confirmed from the sources read for this database.
+
+- id: kravatte
+  name: Kravatte
+  construction_ids:
+  - parallel_permutation_construction
+  - farfalle
+  round_ids:
+  - kravatte_round
+  target_applications:
+  - mpc
+  underlying_primitive_ids:
+  - keccak_f1600
+  characteristics:
+    components: []
+  reference_ids:
+  - bertoni_et_al_2017_farfalle
+  process_participations: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - used_by
+    note: 'Confirmed directly: "KRAVATTE is Farfalle[pb,pc,pd,pe,rollc,rolle] with pb=pc=pd=pe=KECCAK-p[1600,nr=6]"
+      -- Keccak-p[1600] reduced to 6 of its full 24 rounds (vs. the keccak family''s keccak_f1600 instance, the full
+      24-round variant).'
+  notes: 'Farfalle instantiated with Keccak-p[1600,nr=6]. Named variants, all built from Kravatte, confirmed directly:
+    Kravatte-SAE (session-supporting AEAD), Kravatte-SIV (nonce-misuse-resistant SIV AEAD), Kravatte-WBC (a
+    tweakable wide block cipher, a Feistel network of two Farfalle instances -- one of them the reduced
+    SHORT-KRAVATTE, using pd=identity instead of Keccak-p[1600,nr=4]), and Kravatte-WBC-AE (AEAD atop the wide block
+    cipher). Local copy: references/2016-farfalle.pdf.'
+  instances:
+  - id: kravatte_sae
+    name: Kravatte-SAE
+    type: aead
+    reference_ids:
+    - bertoni_et_al_2017_farfalle
+    characteristics:
+      key_size_bits: 128
+    notes: Session-supporting authenticated encryption; tag length t=128, alignment unit length l=8.
+  - id: kravatte_siv
+    name: Kravatte-SIV
+    type: aead
+    reference_ids:
+    - bertoni_et_al_2017_farfalle
+    characteristics:
+      key_size_bits: 256
+    notes: Nonce-misuse-resistant synthetic-IV AEAD; tag length t=256.
+  - id: kravatte_wbc_ae
+    name: Kravatte-WBC-AE
+    type: aead
+    reference_ids:
+    - bertoni_et_al_2017_farfalle
+    characteristics:
+      key_size_bits: 128
+    notes: AEAD built atop Kravatte-WBC, a tweakable wide block cipher formed from a Feistel network of two Farfalle
+      instances (Kravatte and the reduced SHORT-KRAVATTE); tag length t=128, alignment unit length l=8.
+
+- id: farasha
+  name: Farasha
+  construction_ids:
+  - parallel_permutation_construction
+  - farasha
+  round_ids:
+  - farasha_round
+  target_applications:
+  - mpc
+  characteristics:
+    components: []
+  reference_ids:
+  - aaraj_et_al_2022_farasha
+  process_participations: []
+  influences: []
+  notes: 'Confirmed directly: "Farasha can be seen as a simple and provable Farfalle-like construction where the
+    rolling functions in the compression and expansion phases of Farfalle are replaced by a uniform almost xor
+    universal (AXU) function and a simple counter, respectively," with Farfalle''s intermediate permutations p_b/p_d
+    removed entirely. Analyzed in the random-permutation model (no single fixed concrete permutation proposed); the
+    concrete instance Farasha-wLFSR uses a word-based LFSR for the AXU rolling function. Local copy:
+    references/2022-farasha.pdf.'
+  instances:
+  - id: farasha_wlfsr
+    name: Farasha-wLFSR
+    type: mac
+    reference_ids:
+    - aaraj_et_al_2022_farasha
+    characteristics: {}
+    notes: Concrete instance using a word-based LFSR for the AXU compression-phase rolling function.
+
+- id: filip
+  name: FiLIP
+  construction_ids:
+  - filter_permutator
+  round_ids:
+  - filip_round
+  target_applications:
+  - fhe
+  underlying_primitive_ids: []
+  characteristics:
+    components:
+    - id: permutation_vector
+    - id: boolean_filter
+  reference_ids:
+  - meaux_et_al_2019_filip
+  process_participations: []
+  influences:
+  - source_family_id: flip
+    relations:
+    - improvement_of
+    note: '"We first introduce improved filter permutators that allow better security analyses, instances and
+      implementations than the previously proposed FLIP family of stream ciphers." Confirmed no fixed-size
+      lookup-table primitive underlies FiLIP any more than FLIP -- its filter remains a purely algebraic
+      direct-sum-of-monomials or XOR-threshold/XOR-majority function over F_2.'
+  notes: 'Introduces the "Improved Filter Permutator" (IFP) paradigm -- a larger key register relative to the filter''s
+    input size, plus an XOR whitening step before the filter, both new vs. FLIP. Local copy: references/2019-filip.pdf.'
+  instances:
+  - id: filip_1280
+    name: FiLIP-1280
+    type: enc
+    reference_ids:
+    - meaux_et_al_2019_filip
+    characteristics:
+      key_size_bits: 1280
+    notes: A 128-bit-security-targeting instance (N=1280 key register bits); several smaller 80-bit-security
+      instances (e.g. FiLIP-512/430/320) are also given in the paper.
+
+- id: elisabeth
+  name: Elisabeth
+  construction_ids:
+  - filter_permutator
+  round_ids:
+  - elisabeth_round
+  target_applications:
+  - fhe
+  characteristics:
+    components:
+    - id: permutation_vector
+    - id: sbox
+      params: {input_bits: 20, output_bits: 4}
+  reference_ids:
+  - cosseron_et_al_2022_elisabeth
+  process_participations: []
+  influences:
+  - source_family_id: filip
+    relations:
+    - generalization_of
+    note: 'Confirmed directly: generalizes FiLIP''s Improved Filter Permutator (defined over F_2) to any group G,
+      calling the result a "Group Filter Permutator" (GFP), then instantiates it over G=Z_16.'
+  notes: 'Motivated by TFHE''s native 4-bit negacyclic-LUT bootstrapping. Its filter is a direct sum of 12 copies of a
+    5-to-1 inner function built from two layers of eight fixed Z_16->Z_16 4-bit lookup tables ("NLUTs") -- a genuine
+    fixed-size S-box-like component, unlike FLIP/FiLIP''s purely algebraic filters (not separately modeled as its own
+    primitive-tier entry here; see todo_manual.txt). Later broken (Elisabeth-4) by a linearization attack (Gilbert et
+    al., ASIACRYPT 2023); patched by Margrethe. Local copy: references/2022-elisabeth.pdf.'
+  instances:
+  - id: elisabeth_4
+    name: Elisabeth-4
+    type: enc
+    reference_ids:
+    - cosseron_et_al_2022_elisabeth
+    characteristics:
+      key_size_bits: 1024
+    notes: Key register of 256 Z_16 elements (1024 bits); broken by Gilbert et al.'s linearization attack
+      (ASIACRYPT 2023), motivating Margrethe.
+
+- id: margrethe
+  name: Margrethe
+  construction_ids:
+  - filter_permutator
+  round_ids:
+  - margrethe_round
+  target_applications:
+  - fhe
+  characteristics:
+    components:
+    - id: permutation_vector
+    - id: sbox
+      params: {input_bits: 18, output_bits: 4}
+  reference_ids:
+  - hoffmann_meaux_standaert_2023_margrethe
+  process_participations: []
+  influences:
+  - source_family_id: elisabeth
+    relations:
+    - improvement_of
+    note: '"Leaving the GFP paradigm, Margrethe-18-4 fixes the root of the issue [Gilbert et al.''s linearization
+      attack] by mixing the key at the bit level" -- introduces a new "Mixed Filter Permutator" (MFP) paradigm,
+      confirmed directly: "The MFP paradigm differs from the GFP by the use of two (potentially) different groups,"
+      key bits over F_2 rather than Elisabeth''s Z_16-keyed register.'
+  notes: 'Its filter is 14 copies of a genuine fixed-size 18-to-4-bit lookup-table S-box (not negacyclicity-constrained,
+    unlike Elisabeth''s NLUTs), summed with 4 extra raw key bits per copy (not separately modeled as its own
+    primitive-tier entry here; see todo_manual.txt). Local copy: references/2023-margrethe.pdf.'
+  instances:
+  - id: margrethe_18_4
+    name: Margrethe-18-4
+    type: enc
+    reference_ids:
+    - hoffmann_meaux_standaert_2023_margrethe
+    characteristics: {}
+    notes: 18-to-4-bit LUT, 14 direct-sum copies; general family notation Margrethe-a-b for an a-to-b-bit LUT.
+
+- id: friday_hash
+  name: Friday
+  construction_ids:
+  - merkle_damgard
+  round_ids:
+  - vision_round
+  target_applications:
+  - zero_knowledge
+  - mpc
+  underlying_primitive_ids:
+  - jarvis_default
+  characteristics:
+    components: []
+  reference_ids:
+  - ashur_dhooghe_2018_marvellous
+  process_participations: []
+  influences:
+  - source_family_id: jarvis
+    relations:
+    - used_by
+    note: 'Confirmed directly: "Friday is a Merkle-Damgard based hash function instantiated with Jarvis as its
+      compression function." Precisely, Jarvis is first turned into a compression function via Miyaguchi-Preneel
+      mode (H_i = E_{H_{i-1}}(m_i) xor H_{i-1} xor m_i, E=Jarvis -- see the jarvis family''s miyaguchi_preneel
+      construction tag), then iterated via Merkle-Damgard.'
+  notes: 'Broken by the same Grobner-basis algebraic attack that broke Jarvis (Albrecht et al., ASIACRYPT 2019),
+    motivating the redesign as Vision/Rescue. Local copy: references/2018-jarvis_friday.pdf.'
+  instances:
+  - id: friday_default
+    name: Friday
+    type: hash
+    reference_ids:
+    - ashur_dhooghe_2018_marvellous
+    characteristics: {}
+    notes: Parameters inherited from the underlying Jarvis instance (Jarvis-128/160/192/256).
+
+- id: grendelhash
+  name: GrendelHash
+  construction_ids:
+  - sponge_construction
+  - standard_sponge
+  round_ids:
+  - grendel_round
+  target_applications:
+  - zero_knowledge
+  underlying_primitive_ids:
+  - grendel_default
+  characteristics:
+    components: []
+  reference_ids:
+  - szepieniec_2021_grendel
+  process_participations: []
+  influences:
+  - source_family_id: grendel
+    relations:
+    - used_by
+    note: 'Confirmed directly: "The Grendel hash function uses the Grendel sponge internally. The output length is
+      fixed."'
+  notes: 'A sponge construction wrapping the Grendel permutation, with a fixed output length and standard padding.
+    Local copy: references/2021-grendel.pdf.'
+  instances:
+  - id: grendelhash_default
+    name: GrendelHash
+    type: hash
+    reference_ids:
+    - szepieniec_2021_grendel
+    characteristics: {}
+    notes: Output length and rate/capacity split not confirmed from the sources read for this database.

@@ -391,3 +391,120 @@ guessed, not silently dropped):
     references.yaml only for the classical commitment concept the colloquial
     name references. Pasta's own paper explicitly frames Masta as
     independent, concurrent work, not a predecessor Pasta "succeeds."
+
+31 manually-added PDFs read and reconciled against the database (2026-08-01)
+==============================================================================
+
+You pushed 31 PDFs from another machine (real primary-source papers for
+designs previously modeled from secondary sources, plus several genuinely
+new ones) and asked me to read each carefully and correct/add entries. I
+split the reading across 6 parallel research agents (read-only, local PDFs
+only, no web fetching needed) and then made every edit myself from their
+verified, quoted findings -- same discipline as the previous session: no
+fact went into the YAML that wasn't actually read.
+
+What changed: added 5 new primitive-tier construction ids (asasa, horst,
+fluid_spn, hash_to_curve_group_hash; miyaguchi_preneel was already added by
+your own 2026-07-28 session, I just pointed jarvis at it instead of
+re-adding it -- see item 20 below for how I caught that) and a new mode-tier
+root parallel_permutation_construction with farfalle/farasha leaves; fixed 9
+existing families (rasta, masta, hera, jarvis, gmimc, hadesmimc, rain,
+cryptodarkmatter, and the S-box-coverage/round facts on
+griffin/anemoi/reinforced_concrete/tip5/poseidon2/skyscraper/polocolo/
+grendel) against their real primary text instead of secondary surveys or
+WebSearch snippets; restructured ciminion and hydra, which turned out to be
+mode-tier PRFs (arbitrary-length output) rather than primitive-tier block
+ciphers as I'd modeled them last session -- Ciminion's own two permutations
+(literally named p_C and p_E in the paper) now form a proper primitive-tier
+family, ciminion_permutation; and added 10 new families: dasta, chaghri,
+rubato, rescue_prime, diversify_hash (primitive-tier) and ciminion, hydra,
+kravatte, farasha, filip, elisabeth, margrethe, friday_hash, grendelhash
+(mode-tier). `make test` and `make build-site` both pass on the result
+(481 families, up from 468).
+
+20. Duplicate-id bug I introduced and fixed mid-session, worth knowing about:
+    I added a `miyaguchi_preneel` primitive construction without first
+    checking whether your own 2026-07-28 "Add SBL/DBL/permutation-feedforward
+    compression-function categories" commit had already added one (it had,
+    as a proper level-2 leaf under `sbl_block_cipher_compression`, id also
+    `miyaguchi_preneel`). `make validate` didn't catch it (schema-valid on
+    its own), but `make build-db`'s SQLite UNIQUE constraint did. I removed
+    my duplicate and pointed `jarvis` at your existing leaf instead, adding
+    Jarvis to its placeholder_family_names and the confirmed Friday quote to
+    its notes. Take this as a reminder to grep for an id before adding one
+    when working from a stale local checkout, not as a live bug -- it's
+    already fixed and the build is clean.
+
+21. Corrections to specific facts from your message, confirmed against the
+    primary papers rather than assumed:
+    - **Rain is not a "compression function"** -- its own paper calls it a
+      "one-way function" and defines it as a keyed permutation
+      (F_k(x) = ... field inversion + linear layer); it only becomes an OWF
+      via the generic block-cipher-to-OWF recipe (fix the plaintext, treat
+      the key as the domain), the same recipe LowMC/Picnic uses. Kept typed
+      as block_cipher, not switched to compression_function.
+    - **Griffin's paper does use all three names you asked about** --
+      GRIFFIN-pi, GRIFFIN-Sponge, GRIFFIN-Compression are genuine, separately
+      defined terms in the paper (I'd have guessed otherwise without reading
+      it). Only GRIFFIN-pi (the permutation) is modeled as its own family;
+      GRIFFIN-Sponge/Compression are mode-tier wrappers around it, described
+      in griffin's notes but not given separate family entries (would need a
+      mode-tier "griffin_sponge"/"griffin_compression" pair if you want them
+      queryable independently -- not done, to keep scope bounded).
+    - **Chaghri descends from Vision, not Rasta** -- its own paper states
+      "Chaghri takes Vision as a starting point," and cites Rasta/Dasta/
+      Pasta/Masta/Rubato only as related work. No influence edge to rasta
+      was added; chaghri -> vision (variant_of) was added instead.
+    - **HERA's novelty is a randomized key schedule, not a randomized linear
+      layer** -- unlike Rasta/Masta/Dasta, HERA's MDS linear layer is fixed;
+      randomness comes entirely from multiplying the round key by a fresh
+      random nonzero vector each round. The pre-existing hera family entry
+      already had this basically right; corrected the framing slightly and
+      added the "single name for both the primitive and the stream cipher"
+      fact your message asked me to check.
+    - **CryptoDarkMatter is a framework, not one PRF** -- confirmed: the
+      paper presents at least 3 distinctly-named candidates (Construction
+      3.1 basic weak PRF, Construction 6.3 alternative weak PRF, Construction
+      7.9/Remark 7.14 depth-3 strong PRF). Modeled as one family with 3
+      instances rather than 3 separate families, to keep the "it's a
+      technique, not a cipher" framing visible in one place.
+
+22. Not added (real gaps or deliberate scope calls, not oversights):
+    - **KangarooTwelve, Motorist/KEYAK/Ketje** -- you flagged these as
+      "a separate, but related note... we can consider," with no PDF
+      attached. Not added; would need their own sourcing pass.
+    - **Fibonacci Feistel Networks** (the alternative LowMC linear layer from
+      Albrecht et al.) -- you flagged this with "=> new construction to add?"
+      (a question, not an instruction). Not added; if you want it, it'd be a
+      new leaf under the `feistel` root, tagged on a new lowmc-variant
+      instance or a new construction facet on `lowmc` itself.
+    - **The PRF-tier architectural question** ("Farfalle can be seen as a
+      variable-length primitive, whose type is PRF -> verify... this could
+      open the case for a new layer between fixed-length primitives and
+      variable-length modes... UHF might be part of this layer") -- this is
+      a real, substantive question about whether this database's two-tier
+      (primitive/mode) model needs a third PRF tier. I did not attempt to
+      restructure the tier system unilaterally; I modeled Ciminion/Hydra/
+      Kravatte/Farasha as ordinary mode-tier families (type enc/mac) instead,
+      which works today but doesn't resolve your underlying question. Worth
+      a dedicated design discussion, not a one-off data fix.
+    - **Elisabeth's and Margrethe's NLUT/lookup-table S-boxes** -- confirmed
+      these DO have genuine fixed-size lookup-table primitives inside them
+      (Elisabeth: eight 4-bit NLUTs; Margrethe: one 18-to-4-bit LUT), unlike
+      FLIP/FiLIP's purely algebraic filters. Noted in both families' notes
+      but not split out into their own primitive-tier entries, to avoid an
+      unbounded-scope tangent (would need a clean way to model "S-box used
+      inside a filter-permutator filter, not inside a round" first).
+    - **GroupHash** (the primitive underlying DiversifyHash, and also cited
+      by PedersenHash's basis-point generation) -- described in
+      diversify_hash's notes and the hash_to_curve_group_hash construction's
+      notes, but not split into its own separate primitive-tier family from
+      DiversifyHash. Consider splitting if you want GroupHash's other call
+      sites (Pedersen basis points, Sinsemilla's Q/S generators) modeled as
+      explicit uses of a shared primitive rather than described in prose.
+    - **Zcash spec primitives found but not added**: MixingPedersenHash
+      (a 2-line composition: P + [x]*J_Sapling, minor variant of the same
+      Pedersen/DLP family) and the various PRF/CRH functions that are just
+      SHA256Compress/BLAKE2b/BLAKE2s with domain-separation prefixes
+      (already modeled generically elsewhere) -- confirmed as pure
+      compositions, not new primitives, so correctly left out.

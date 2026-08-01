@@ -439,10 +439,13 @@ primitive_constructions:
   placeholder_family_names:
   - WHIRLPOOL
   - Streebog
+  - Jarvis
   notes: 'f(h_{i-1}, m_i) = E_{h_{i-1}}(m_i) XOR h_{i-1} XOR m_i. A modified Matyas-Meyer-Oseas variant that dual-injects
     both the previous chaining state and the message block into the final feed-forward step (rather than just one of
     the two), maximizing data diffusion into the compressed output. WHIRLPOOL is built natively around a dedicated 512-bit
-    block cipher (W) using this construction; Streebog (GOST R 34.11-2012) uses the same feed-forward shape.
+    block cipher (W) using this construction; Streebog (GOST R 34.11-2012) uses the same feed-forward shape. Ashur
+    and Dhooghe''s MARVELlous-strategy paper uses it to turn the Jarvis block cipher into the compression function
+    underlying the Friday hash function: "we substitute Jarvis in for the block cipher E in [this] construction."
 
     '
 - id: dbl_block_cipher_compression
@@ -1220,3 +1223,76 @@ primitive_constructions:
     reduces to that hardness assumption), and collision-resistant only on bounded-length input rather than for arbitrary-length
     messages the way a Merkle-Damgard or sponge hash is, since the input is encoded directly as exponents/scalars over a
     fixed-size set of generators.
+- id: hash_to_curve_group_hash
+  name: Hash-to-Curve Group Hash
+  abbreviation: Group hash
+  special_case_of: advanced_protocol_friendly_construction
+  typical_primitive_types:
+  - compression_function
+  notes: 'A distinct mechanism from group_exponentiation_hash above: hashes a short input directly to a point on an
+    elliptic curve (via a conventional hash to a field element, then a try-and-increment/decompression map to a curve
+    point, then cofactor clearing), rather than computing a scalar-multiplication sum over the input''s bits/digits.
+    Used to derive per-context generators (e.g. Zcash''s GroupHash, underlying DiversifyHash) rather than to hash a
+    message for collision resistance -- its target security property is typically indistinguishability/unlinkability
+    of the derived points (reducible to a Decisional Diffie-Hellman-style assumption on the curve), not collision
+    resistance.
+
+    '
+- id: asasa
+  name: ASASA (Affine-Substitution-Affine-Substitution-Affine)
+  abbreviation: ASASA
+  typical_primitive_types:
+  - block_cipher
+  placeholder_family_names:
+  - Rasta
+  - Dasta
+  notes: 'Level-1 root: a generic SPN topology alternating affine (linear) layers and substitution (S-box) layers,
+    A-S-A-S-...-A, studied since Biryukov and Shamir''s structural cryptanalysis of the classical (fully key-dependent
+    affine and S-box layers) case, "Structural Cryptanalysis of SASAS" (EUROCRYPT 2001). Rasta''s own paper cites this
+    lineage directly: "Generic substitution-permutation designs which interleave a key-dependent affine layer with
+    key-dependent S-boxes have been studied since SASAS" (Dobraunig, Eichlseder, Grassi, Lallemand, Leander, List,
+    Mendel, Rechberger, "Rasta: A cipher with low ANDdepth and few ANDs per bit," CRYPTO 2018). Rasta itself is a
+    "twist" on the classical ASASA pattern rather than a literal instance of it: its substitution layer is fixed and
+    public (not key-dependent), while its affine layers are derived from a public nonce and counter (not from the
+    secret key either) -- key material enters only via the input/feed-forward, not via any layer of the ASASA chain
+    itself. Families tagged with this root should note in their own notes whether their affine/substitution layers
+    are actually key-dependent (the classical case) or nonce/counter-dependent (Rasta''s variant).
+
+    '
+- id: horst
+  name: Horst Construction
+  abbreviation: Horst
+  special_case_of: feistel
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  placeholder_family_names:
+  - GRIFFIN
+  notes: 'Extends the additive Feistel update (x,y) -> (y+F(x),x) with a multiplication: (x,y) -> (y*G(x)+F(x),x),
+    for G: F_q -> F_q\{0} and F: F_q -> F_q. Introduced by Grassi, Hao, Rechberger, Schofnegger, Walch, and Wang,
+    "Horst Meets Fluid-SPN: Griffin for Zero-Knowledge Applications" (2022), whose own footnote explains the name:
+    "chosen in order to emphasize the link between (x,y) -> (y+F(x),x) and (y,x) -> (x,y*G(x)+F(x))", after
+    cryptographer Horst Feistel.
+
+    '
+- id: fluid_spn
+  name: Fluid-SPN
+  abbreviation: Fluid-SPN
+  special_case_of: spn
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  placeholder_family_names:
+  - Rescue
+  - GRIFFIN
+  notes: 'A fourth, independent SPN facet: a scheme is "fluid" if it admits an equivalent algebraic representation
+    that can be proven/verified more efficiently in a target protocol than its natural forward description, i.e. the
+    scheme''s arithmetization "flows" to fit the target proof system rather than having one fixed circuit shape. Term
+    coined by Grassi, Hao, Rechberger, Schofnegger, Walch, and Wang in "Horst Meets Fluid-SPN: Griffin for
+    Zero-Knowledge Applications" (2022), whose own worked example is Rescue: its forward round F0(x) = gamma + x^d and
+    inverse F1(y) = y^(1/d) both admit the single verification equation G(x,y,z) = z^d - (gamma+x^d) independent of y,
+    letting a STARK prover use whichever direction is cheaper -- "in this sense, Rescue is a Fluid-SPN." Griffin
+    itself explicitly merges this idea with the horst leaf ("our design merges ideas of a Fluid-SPN and a construction
+    as the Horst one"), so a family may carry both leaves at once.
+
+    '

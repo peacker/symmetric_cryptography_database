@@ -5250,12 +5250,19 @@ rounds:
 
 - id: rain_round
   name: Rain round
-  kind: other
-  spec: {}
-  notes: Secondary reporting (not independently confirmed against the primary paper text in this session) describes
-    the round function as composed of field inversion in F_(2^n) followed by an unstructured random affine layer
-    over F_2 -- flagged here as unverified pending a direct read; no component_flow is asserted from this database
-    without stronger confirmation.
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+      notes: Add round key and round constant before the S-box
+    - component_id: inversion_sbox
+      notes: S(x) = x^(2^n-2) = x^(-1) for x != 0, else 0 -- field inversion in F_(2^n)
+    - component_id: field_matrix_mul
+      notes: Multiplication by a randomly chosen, deliberately unstructured/dense n x n matrix over F_2 (chosen for
+        diffusion, explicitly contrasted with the structured affine layers of MiMC/Jarvis/Vision)
+  notes: 'Confirmed directly from the paper (Dobraunig, Kales, Rechberger, Schofnegger, Zaverucha, "Shorter
+    Signatures Based on Tailor-Made Minimalist Symmetric-Key Crypto," 2022): R_i(x) = M_i(S(x+k+c^(i))) for i<r; the
+    last round instead computes R_r(x) = k+S(x+k+c^(r)). Rain3/Rain4 (3 or 4 rounds) over F_2^128/192/256.'
 
 - id: aim_round
   name: AIM round
@@ -5266,3 +5273,154 @@ rounds:
     secondary reporting (not independently confirmed against the primary text) describes AIM's S-boxes as Mersenne-exponent
     power maps (x^(2^e-1)). Flagged as unverified pending a direct read; no component_flow is asserted from this
     database without stronger confirmation.
+
+- id: dasta_round
+  name: Dasta block-generation step
+  kind: other
+  spec:
+    component_flow:
+    - component_id: field_matrix_mul
+      notes: Fixed linear transformation L, derived from a binary BCH-based [2n,n,d] code (guarantees a branch number),
+        reused unchanged across all rounds
+    - component_id: bit_permutation
+      notes: A per-round, counter-selected bit permutation P_{j,i} drawn from a small parameterized family (powers of
+        1-2 fixed base permutations), replacing Rasta's freshly-random matrix
+    - component_id: and
+      notes: chi, the same full-state quadratic non-linear layer as Rasta
+  notes: 'B_i(k) = L.P_{r,i}.chi. ... .chi.L.P_{0,i}(k) + k -- a Davies-Meyer-style feed-forward over a keyed
+    permutation, captioned only as "Generation of i-th block of Dasta" (Figure 2 of Hebborn and Leander, "Dasta --
+    Alternative Linear Layer for Rasta," ToSC 2020(3)); no separate name is given to this fixed-length building
+    block. No round constants are used.'
+
+- id: chaghri_round
+  name: Chaghri step
+  kind: other
+  spec:
+    component_flow:
+    - component_id: sbox
+      notes: 'pi = B o G: G(x) = x^(2^32+1), a cheap "Gold exponent" power map (1 Frobenius automorphism + 1
+        multiplication under BGV); B a sparse F_2-linearized affine polynomial chosen so the Dickson matrix is
+        non-singular (a permutation)'
+    - component_id: field_matrix_mul
+      notes: 3x3 MDS matrix over F_(2^63)
+    - component_id: xor
+      notes: Subkey injection
+  notes: 8 rounds, each made of 2 identical steps (16 step-applications total), over a 3-word F_(2^63) state
+    (189-bit block); N=1.5*max(security_level,5) per the Marvellous-strategy safety formula. Key schedule iterates
+    the decryption-direction round function on the master key with round constants substituted for subkeys.
+
+- id: rubato_round
+  name: Rubato round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+      notes: ARK -- add round key, component-wise multiplied by a fresh random nonzero value per round (HERA-style
+        randomized key schedule)
+    - component_id: sbox
+      notes: 'Feistel(x) = (x1, x2+x1^2, x3+x2^2, ..., xn+x_(n-1)^2), a quadratic Feistel non-linear layer reused
+        directly from Pasta''s S_feistel'
+    - component_id: field_matrix_mul
+      notes: MixRows/MixColumns, v x v circulant MDS matrices (v in {4,6,8} depending on parameter set), HERA-style
+  notes: 'Final round additionally truncates (Tr_(n,l), drops n-l words) then applies AGN ("Adding Gaussian Noise"):
+    samples e ~ D_(alpha*q) and outputs x_i+e_i for each retained word -- the sole element making Rubato "noisy"
+    rather than deterministic. Reuses HERA''s linear-layer/key-schedule style and Pasta''s Feistel S-box.'
+
+- id: rescue_xlix_round
+  name: Rescue-XLIX round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+      notes: Forward power map x -> x^alpha (order flipped relative to original Rescue, where the inverse map came
+        first)
+    - component_id: prime_field_matrix_mul
+    - component_id: constant
+    - component_id: power_map_sbox
+      notes: Inverse power map x -> x^(1/alpha)
+    - component_id: prime_field_matrix_mul
+    - component_id: constant
+  notes: Same alternating forward/inverse-power-map structure as Rescue (rescue_round), reordered (inverse-then-forward
+    in original Rescue, forward-then-inverse here) so the STARK "folding" arithmetization technique applies uniformly
+    across the whole permutation. Round constants generated directly by expanding a seed string
+    "Rescue-XLIX(%i,%i,%i,%i)" via SHAKE-256, rather than via a block-cipher-style key schedule. Round count set via
+    a Grobner-basis-attack-complexity formula times 1.5 (for a reduced 50% security margin vs. original Rescue's
+    100%), floored at 5 rounds.
+
+- id: kravatte_round
+  name: Kravatte round (Keccak-p[1600,nr=6])
+  kind: other
+  spec: {}
+  notes: Kravatte reuses the standard Keccak-p[1600] round function (see the keccak family's own round definition),
+    reduced to 6 of the full 24 rounds; no separate round definition is introduced here to avoid duplicating that
+    definition -- see the keccak primitive family for the theta/rho/pi/chi/iota round.
+
+- id: farasha_round
+  name: Farasha round
+  kind: other
+  spec: {}
+  notes: Analyzed in the random-permutation model; no single fixed concrete permutation is proposed (a concrete
+    instance "Farasha-wLFSR" uses a word-based LFSR for its AXU rolling function, but the underlying permutations
+    P/P' remain generic). No component_flow is asserted here since no fixed round structure exists to record.
+
+- id: filip_round
+  name: FiLIP filter evaluation
+  kind: other
+  spec:
+    component_flow:
+    - component_id: permutation_vector
+      notes: A larger key register (N >= 2n) than FLIP's, permuted per output bit by the same IV-seeded-PRNG
+        mechanism, plus an XOR whitening step before the filter (both new vs. FLIP)
+    - component_id: boolean_filter
+      notes: A direct-sum-of-monomials (DSM) function, or an XOR-threshold/XOR-majority function -- purely algebraic,
+        no lookup-table S-box, same as FLIP
+  notes: 'The Improved Filter Permutator (IFP) paradigm, an explicit generalization of FLIP''s filter permutator: "we
+    first introduce improved filter permutators that allow better security analyses, instances and implementations
+    than the previously proposed FLIP family of stream ciphers." Over F_2.'
+
+- id: elisabeth_round
+  name: Elisabeth filter evaluation
+  kind: other
+  spec:
+    component_flow:
+    - component_id: permutation_vector
+      notes: Group Filter Permutator (GFP) generator over G=Z_16 -- XOR replaced by addition mod 16
+    - component_id: sbox
+      notes: 'The 5-to-1 inner function g: G^5 -> G, built from two layers of eight fixed Z_16->Z_16 4-bit lookup
+        tables ("NLUTs"), then adding the 5th input word for balance -- a genuine fixed-size lookup-table component,
+        unlike FLIP/FiLIP''s purely algebraic filters'
+  notes: 'f(x_1,...,x_60) = direct sum (mod 16) of 12 copies of g. "The XOR is replaced by the addition of G and the
+    Boolean function by a function from G^n to G." Motivated by TFHE''s native 4-bit negacyclic-LUT bootstrapping.
+    Later shown vulnerable to a linearization attack (Gilbert et al., ASIACRYPT 2023) exploiting the small monomial
+    count the NLUT+mod-16-addition structure creates; patched by Margrethe.'
+
+- id: margrethe_round
+  name: Margrethe filter evaluation
+  kind: other
+  spec:
+    component_flow:
+    - component_id: permutation_vector
+      notes: Mixed Filter Permutator (MFP) generator -- key register over G1=F_2 (individual bits), filter output
+        over G2=Z_16, unlike Elisabeth's single-group (Z_16-keyed) design
+    - component_id: sbox
+      notes: 'g: F_2^18 -> Z_16, a genuine fixed-size 18-to-4-bit lookup table (not negacyclicity-constrained, unlike
+        Elisabeth''s NLUTs)'
+  notes: 'f = sum (mod 16) of 14 copies of [g(22-bit chunk) + (4 remaining key bits read as a nibble)]. "The MFP
+    paradigm differs from the GFP by the use of two (potentially) different groups." Introduced specifically to fix
+    Elisabeth-4''s linearization weakness by mixing key material at the bit level rather than the Z_16-element level.'
+
+- id: diversify_hash_step
+  name: DiversifyHash / GroupHash step
+  kind: other
+  spec:
+    component_flow:
+    - component_id: sbox
+      notes: BLAKE2s-256 keyed by a domain-separator/personalization string, applied to the diversifier input to
+        produce a field element
+    - component_id: permutation
+      notes: Decompress-or-reject the field element to a curve point (try-and-increment-style), then clear the
+        cofactor by scalar multiplication -- a hash-to-curve map, not a scalar-multiplication sum over the input
+  notes: 'DiversifyHashSapling maps into the Jubjub curve, DiversifyHashOrchard into the Pallas curve; both are direct
+    applications of the underlying GroupHash primitive. Used to derive per-address generators g_d for diversified
+    payment addresses (pk_d = [ivk].g_d). Distinct mechanism from Sinsemilla/PedersenHash''s windowed
+    scalar-multiplication-sum: this hashes the diversifier directly to a curve point.'
