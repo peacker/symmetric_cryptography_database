@@ -50,10 +50,6 @@
                     "type": "string",
                     "enum": ["round", "phase", "list", "category", "portfolio", "outcome", "other"]
                 },
-                "parent_stage_id": {
-                    "type": "string",
-                    "minLength": 1
-                },
                 "participants": {
                     "type": "array",
                     "items": {

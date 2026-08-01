@@ -186,6 +186,13 @@ body {
   max-height: 78vh;
   overflow-y: auto;
   padding-right: 0.2rem;
+  /* The Types/Constructions/Target applications/Process boxes inside "Family
+     filters" (.gen-filters-row) need to know THIS column's width, not the
+     viewport's -- the column is a fixed 320px/240px regardless of whether the
+     window is a narrow phone or a wide desktop, so a viewport media query
+     alone left desktop windows stuck at 4-across in a 320px column (cramped)
+     while only phone-width viewports ever got the 1-column stack. */
+  container-type: inline-size;
 }
 
 .view-panel.is-side-layout .viz-frame,
@@ -1069,6 +1076,26 @@ tbody tr:nth-child(even) td { background: #fbfaf5; }
 
 .tier-section .gen-filters-row {
   margin-top: 0.5rem;
+}
+
+/* Stack these grids as soon as the side column itself (not the viewport) is
+   too narrow for them -- this is what actually fires on a desktop/laptop
+   window with "Filters on left" active, since the fixed 320px/240px column
+   is narrower than any viewport-width breakpoint would catch. Covers the
+   Family filters row (Types/Constructions/Target applications/Processes)
+   and the Plot controls rows (find-family + relation degree, and the
+   from/to year range), which have the exact same fixed-column-width vs.
+   viewport-media-query mismatch. */
+@container (max-width: 480px) {
+  .gen-filters-row { grid-template-columns: 1fr; }
+  .viz-secondary-controls { grid-template-columns: 1fr; }
+  .viz-year-controls {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+  #vizYearRangeValue, #genYearRangeValue {
+    text-align: left;
+  }
 }
 
 .gen-frame {
