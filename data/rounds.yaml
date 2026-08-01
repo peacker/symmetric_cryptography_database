@@ -4965,3 +4965,297 @@ rounds:
     Tag = Pad xor UHASH(message), the Carter-Wegman masking step, with Pad derived from the nonce via a separately
     keyed PRF (a block cipher in the original design). Longer tags run L1/L2/L3 multiple times in parallel with
     independent keys/pads.'
+
+- id: poseidon2_round
+  name: Poseidon2 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+    - component_id: prime_field_matrix_mul
+    - component_id: constant
+  notes: HADES-strategy full/partial rounds as in HadesMiMC/Poseidon (hadesmimc_full_round/hadesmimc_partial_round),
+    but with an extra linear layer applied before the first round and, per Poseidon2's own paper, two different
+    linear layers used for external vs. internal rounds at state width t >= 4, and only one round constant added per
+    internal round rather than the full-width addition HadesMiMC/Poseidon use. Exact S-box exponent and precise
+    external/internal round counts were not confirmed from the sources read for this database.
+
+- id: neptune_round
+  name: Neptune round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+    - component_id: prime_field_matrix_mul
+    - component_id: constant
+  notes: HADES-strategy full/partial rounds as in HadesMiMC/Poseidon, with a non-linear layer redesigned around the
+    paper's own invertible-quadratic-map analysis to reduce multiplications relative to Poseidon. Exact state widths
+    and round counts were not confirmed from the sources read for this database.
+
+- id: grendel_round
+  name: Grendel round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      notes: 'S(x) = x^d * chi_p(x), chi_p the Legendre/quadratic-character symbol of F_p, applied to every word of
+        the state (full S-box layer)'
+    - component_id: field_matrix_mul
+    - component_id: constant
+  notes: A SHARK-strategy-style SPN round -- full S-box layer (the Legendre-symbol S-box S(x) = x^d * chi_p(x)) then
+    a linear diffusion layer and round-constant addition. Exact field size, state width, and round count were not
+    confirmed from the sources read for this database.
+
+- id: griffin_round
+  name: GRIFFIN round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+      notes: 'The "Horst" branches: (x,y) -> (y*G(x)+F(x), x), a Feistel-style update extended with a multiplication'
+    - component_id: power_map_sbox
+      notes: 'Remaining "Fluid-SPN" branches use invertible low-degree power maps; per the paper, for state width t
+        the non-linear layer''s output is described by 2 equations of degree d and t-2 equations of degree 3'
+    - component_id: field_matrix_mul
+    - component_id: constant
+  notes: Combines a Feistel-style "Horst" update (2 of the t branches) with an SPN-style "Fluid-SPN" non-linear
+    layer (remaining branches) over a prime field, followed by a linear layer and constant addition. Exact
+    state-width instances and round counts were not confirmed from the sources read for this database.
+
+- id: anemoi_round
+  name: ANEMOI round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      notes: 'The "Flystel" S-box, a butterfly-structure construction, over GF(p) or GF(2^n)'
+    - component_id: field_matrix_mul
+    - component_id: constant
+  notes: A classical SPN round using the novel "Flystel" S-box in place of a power-map or inversion S-box. Exact
+    state-width options and round counts were not confirmed from the sources read for this database.
+
+- id: reinforced_concrete_round
+  name: Reinforced Concrete round (Bricks-Concrete-Bars)
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+      notes: 'Bricks: a low-degree power map x -> x^d, d the smallest value with gcd(p-1,d)=1'
+    - component_id: field_matrix_mul
+      notes: 'Concrete: multiply the state by a 3x3 MDS matrix and add round constants'
+    - component_id: lookup_table
+      notes: 'Bars: decomposes each field element into several smaller-domain lookup transformations and recomposes
+        the result -- the round''s actual lookup-table nonlinear layer'
+    - component_id: constant
+  notes: A sponge over F_p^3 (a "modified 7-round SP network" per secondary documentation) whose three named
+    components -- Bricks, Concrete, Bars -- were reused verbatim by name in Monolith and discussed structurally by
+    Skyscraper. Exact round count/ordering beyond "7 rounds" was not independently confirmed against the primary
+    paper text in this database (paper PDF unobtainable).
+
+- id: tip5_round
+  name: Tip5/Tip4/Tip4' round
+  kind: full_round
+  spec:
+    state_model: {field: 'p = 2^64 - 2^32 + 1 (Goldilocks)'}
+    component_flow:
+    - component_id: lookup_table
+      notes: 'Split-and-lookup S-box S on the first state elements (part of the rate): decomposes a field element
+        into 8-bit-ish chunks, applies a lookup table L: F_(2^8+1) -> F_(2^8+1), x -> (x+1)^3 - 1, and recomposes'
+    - component_id: power_map_sbox
+      params: {exponent: 7}
+      notes: Power-map S-box T applied to the remaining state elements
+    - component_id: field_matrix_mul
+      notes: Circulant MDS matrix, structured for O(k log k) evaluation
+    - component_id: constant
+  notes: 5 rounds for all three variants (Tip5, Tip4, Tip4'), inspired by the SHARK strategy of interleaving full
+    S-box layers with MDS layers, and by Reinforced Concrete's lookup approach. Tip5 uses state width 16/rate 10/
+    capacity 6 (160-bit security); Tip4 uses state width 16/rate 12/capacity 4 (128-bit); Tip4' uses state width
+    12/rate 8/capacity 4 (128-bit, 8 power maps per round instead of 12).
+
+- id: monolith_round
+  name: Monolith round (Bars-Bricks-Concrete)
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: lookup_table
+      notes: 'Bars: the "Kintsugi" nonlinear layer -- splits a field element into smaller bit arrays and applies
+        constant-time-friendly S-boxes using Daemen''s chi function, then recomposes'
+    - component_id: power_map_sbox
+      params: {exponent: 2}
+      notes: 'Bricks: a Feistel Type-3 construction with square (x -> x^2) mappings, degree-2 constraints per element'
+    - component_id: field_matrix_mul
+      notes: 'Concrete: multiplication by a circulant MDS matrix'
+    - component_id: constant
+  notes: 'Round R_i(.) = c^(i) + Concrete(Bricks(Bars(.))), uniformly 6 rounds for every parameter set. Two field
+    families: Goldilocks p = 2^64-2^32+1 (state width 8 or 12) and Mersenne p = 2^31-1 (state width 16 or 24).
+    Explicitly adopts Reinforced Concrete''s naming convention while redesigning Bars for constant-time-friendly
+    native implementation.'
+
+- id: skyscraper_square_round
+  name: Skyscraper "Square" round
+  kind: half_round
+  spec:
+    component_flow:
+    - component_id: power_map_sbox
+      params: {exponent: 2}
+      notes: '(xL,xR) -> (xR + (xL)^2/sigma + gamma_i, xL), a degree-2 Feistel round using Montgomery multiplication
+        (sigma a Montgomery constant) instead of plain squaring'
+    - component_id: constant
+  notes: One of two alternating Feistel round types in Skyscraper (see skyscraper_bars_round); low-degree, cheap in
+    the clear.
+
+- id: skyscraper_bars_round
+  name: Skyscraper "Bars" round
+  kind: half_round
+  spec:
+    component_flow:
+    - component_id: lookup_table
+      notes: "(xL,xR) -> (xR + B'(xL) + gamma_i, xL); B' decomposes the field element into 8-bit chunks, applies an
+        8-bit S-box to each, rotates, and recomposes -- unlike Reinforced Concrete/Monolith/Tip5, this Bars function
+        is NOT required to be invertible, since the surrounding Feistel network supplies invertibility"
+    - component_id: constant
+  notes: The other of two alternating Feistel round types in Skyscraper (see skyscraper_square_round); 10 total
+    Feistel rounds for p >= 2^248, kappa >= 124-bit security, n in {1,2,3} (state F_p^(2n)); for t=2n>2 the squaring
+    round is replaced by a Monolith-like Type-3-Feistel-plus-MDS-matrix combination. Chosen over an SPN specifically
+    to allow non-invertible nonlinear mappings.
+
+- id: polocolo_round
+  name: Polocolo round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: lookup_table
+      notes: 'S(x) = x^(-1) * T[(x/p)_m]: the field inverse of x multiplied by a small lookup table T indexed by the
+        m-th-power-residue class of x (the m-th power residue takes m+1 distinct values)'
+    - component_id: field_matrix_mul
+      notes: A new MDS matrix proposed specifically for Polocolo's linear layer
+    - component_id: constant
+  notes: Targets the PlonKup lookup argument. Exact field/prime and round count were not confirmed from the sources
+    read for this database; state widths t=3 and t=8 both appear in the paper's own efficiency comparisons.
+
+- id: sinsemilla_round
+  name: Sinsemilla incremental step
+  kind: step
+  spec:
+    state_model: {group: Pallas curve, window_bits: 10}
+    component_flow:
+    - component_id: lookup_table
+      notes: 'S(j) = GroupHash_P("z.cash:SinsemillaS", I2LEOSP_32(j)), a per-window base drawn from a table of
+        2^10 = 1024 precomputed generators, selected by the 10-bit message piece'
+    - component_id: permutation
+      notes: 'Incomplete elliptic-curve point addition: Acc <- (Acc + S(m_i)) + Acc'
+  notes: Windowed incremental hashing over the Pallas curve; message split into 10-bit pieces, accumulator seeded
+    by Acc = Q(D) = GroupHash_P("z.cash:SinsemillaQ", D). Collision-resistant only for fixed-length input (per
+    personalization domain D), reduced to the Discrete Logarithm Problem; not designed for preimage resistance.
+
+- id: pedersen_hash_zcash_step
+  name: Zcash Pedersen hash incremental step
+  kind: step
+  spec:
+    state_model: {group: Jubjub curve, window_bits: 3}
+    component_flow:
+    - component_id: lookup_table
+      notes: 'enc(m_j) = (1-2*s2)*(1+s0+2*s1) encodes each 3-bit chunk s0,s1,s2 of the message as a scalar'
+    - component_id: permutation
+      notes: 'PedersenHashToPoint(D,M) := sum over windows i of [<M_i>] I(D,i), I(D,i) := FindGroupHash(D,i-1) a
+        distinct generator per 3*c-bit segment -- a fixed-base-per-segment scalar multiplication and sum'
+  notes: Windowed scalar-multiplication-based hashing over the Jubjub curve, used for Sapling note commitments and
+    the Sapling Merkle tree; collision-resistant only for fixed-length input, reduced to the Discrete Logarithm
+    Problem; not designed for preimage resistance. Superseded by Sinsemilla in Orchard.
+
+- id: pasta_pi_round
+  name: Pasta-pi round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: field_matrix_mul
+      notes: 'Affine layer A_j: block matrix [[2I,I],[I,2I]] composed with per-round pseudorandom invertible matrices
+        M_j,L, M_j,R and round constants, all generated from a SHAKE128 XOF seeded by nonce and block counter'
+    - component_id: sbox
+      notes: "S_feistel(x) = S'(xL) || S'(xR); S' over F_p^t is defined word-by-word as S'(y)_0 = y_0, S'(y)_l =
+        y_l + (y_(l-1))^2 for l>0 -- applied in all rounds but the last"
+  notes: "Pasta-pi(x,N,i) = A_r . S_cube . A_(r-1) . S_feistel . ... . A_1 . S_feistel . A_0 (x); the final round's
+    S-box is S_cube(x) = x0^3 || x1^3 || ... instead of S_feistel. An SPN-like structure over F_p (full affine layer
+    every round, not a literal two-branch Feistel network despite S_feistel's name). Pasta-3 (3 rounds, 256 key
+    words, 128 plain/cipher words) and Pasta-4 (4 rounds, 64 key words, 32 plain/cipher words) both target 128-bit
+    security; the Pasta family of stream ciphers truncates Pasta-pi's output under a nonce and block counter to
+    produce keystream."
+
+- id: armadillo_round
+  name: ARMADILLO transposition step
+  kind: step
+  spec:
+    state_model: {register_bits: '2k, k = c+m (chaining bits c, message-block bits m)'}
+    component_flow:
+    - component_id: bit_permutation
+      notes: 'A data-dependent choice, at each of J=k steps, between two fixed base bit permutations sigma_0/sigma_1,
+        selected bit-by-bit from X_inter = C||U -- the sole source of nonlinearity, with no algebraic S-box at all'
+    - component_id: xor
+      notes: 'Output V_c||V_t := S xor X_inter, S the rightmost k bits after all J transposition steps'
+  notes: Related to the Zemor-Tillich group-based hash construction (a semi-group homomorphism from {0,1}* to a
+    permutation group). Used, per the paper's own Section 2, for three applications -- a FIL-MAC, a hash/signature
+    scheme (via strengthened Merkle-Damgard chaining on V_c), and a PRNG/PRF/stream cipher -- rather than a single
+    fixed primitive type.
+
+- id: poseidon2b_round
+  name: Poseidon(2)b round
+  kind: full_round
+  spec:
+    state_model: {field: binary extension field GF(2^n)}
+  notes: A binary-extension-field analogue of the Poseidon2/Poseidon round structure (see poseidon2_round), designed
+    to inherit the circuit-friendly properties of the prime-field version for use with binary-field proving systems
+    such as Binius. Exact S-box and round-count parameters were not confirmed from the sources read for this
+    database (would require a full read of the downloaded PDF beyond confirming it is a valid file).
+
+- id: ciminion_round
+  name: Ciminion round
+  kind: other
+  spec: {}
+  notes: Nonlinearity comes from a Toffoli-gate-based mechanism (not a small table-lookup or power-map S-box) over
+    large binary or prime fields, combined with a lightweight linear layer -- a Farfalle-like construction. Whether
+    this is evaluated as one wide nonlinear map or several narrower gates per round was not confirmed from the
+    sources read for this database; no component-level breakdown is asserted here pending a direct read of the
+    primary paper (unobtainable as a PDF in this session).
+
+- id: hydra_round
+  name: Hydra round
+  kind: other
+  spec: {}
+  notes: Combines the HADES strategy (alternating full/partial S-box rounds, as in hadesmimc_full_round/
+    hadesmimc_partial_round) with generalized versions of the Lai-Massey scheme, inside the "Megafono" keyed
+    extendable-PRF framework. Exact S-box form, state width, and round counts were not confirmed from the sources
+    read for this database.
+
+- id: cryptodarkmatter_round
+  name: CryptoDarkMatter round
+  kind: other
+  spec:
+    component_flow:
+    - component_id: linear_transform
+      notes: A secret mod-2 linear map applied to the input
+    - component_id: linear_transform
+      notes: A public mod-3 linear map applied to the mod-2 map's output -- together implementable as a depth-2
+        ACC0 circuit
+  notes: No small S-box or table lookup at all -- nonlinearity comes entirely from mixing linear maps defined over
+    different small moduli (mod 2 then mod 3), described by the paper as a "deterministic variant of Learning Parity
+    with Noise." A secondary depth-3 strong-PRF variant using a similar mod-mixing approach also exists; not
+    separately modeled here.
+
+- id: rain_round
+  name: Rain round
+  kind: other
+  spec: {}
+  notes: Secondary reporting (not independently confirmed against the primary paper text in this session) describes
+    the round function as composed of field inversion in F_(2^n) followed by an unstructured random affine layer
+    over F_2 -- flagged here as unverified pending a direct read; no component_flow is asserted from this database
+    without stronger confirmation.
+
+- id: aim_round
+  name: AIM round
+  kind: other
+  spec: {}
+  notes: The paper's own text positions AIM against "recent MPCitH-friendly ciphers ... designed using simple
+    algebraic S-boxes operating on a large field," proposing AIM instead for higher resistance to algebraic attacks;
+    secondary reporting (not independently confirmed against the primary text) describes AIM's S-boxes as Mersenne-exponent
+    power maps (x^(2^e-1)). Flagged as unverified pending a direct read; no component_flow is asserted from this
+    database without stronger confirmation.

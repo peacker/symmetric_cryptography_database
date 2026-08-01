@@ -238,3 +238,143 @@ had copies of the 13 eprint-only papers above (or of gmimc/hadesmimc's HADES
 paper/rasta/masta/hera among the 13 I did model) despite a real search effort
 for each -- if you get institutional access to any of them, drop the PDF in
 references/ and I'll wire up the reference/round/family entries.
+
+New Level-1 construction root (advanced_protocol_friendly_construction) +
+7 leaves, PQC-signature/MPC/ZK hash-zoo families (2026-07-31)
+======================================================================
+
+Per your request, added a new level-1 construction root
+`advanced_protocol_friendly_construction` (orthogonal facet, same pattern as
+modular_multiplication_network) with 7 level-2 leaves to
+data/primitive_constructions.yaml: pqc_signature_friendly_owf,
+zk_friendly_low_degree_map (Type 1), zk_friendly_low_degree_inverse_map
+(Type 2), zk_friendly_lookup_table (Type 3), mpc_sharing_friendly,
+big_sbox_layer, and group_exponentiation_hash (a 7th leaf, added specifically
+to hold Sinsemilla/Pedersen, per your call when I flagged they didn't fit the
+original 6). Tagged the 8 already-documented families that qualify (lowmc,
+mimc, gmimc, hadesmimc, jarvis, vision, rescue, arion) and fixed a pre-existing
+tagging bug on zorro (full_sbox_layer -> partial_sbox_layer -- its own notes
+already said "only four S-boxes per round", i.e. partial, not full).
+
+Ran 4 parallel research agents (one per your Type1/2, Type3, MPC+PQC-sig, and
+misc/ambiguous clusters) to independently verify every new citation and
+attempt PDF downloads before writing anything, per your instruction not to
+add unread/uninstructed info. Net result: 20 new primitive families added
+(poseidon2, poseidon2b, neptune, grendel, griffin, anemoi,
+reinforced_concrete, tip5 [+ tip4/tip4' instances], monolith, skyscraper,
+polocolo, ciminion, hydra, cryptodarkmatter, rain, aim, sinsemilla,
+pedersen_hash_zcash, pasta_pi, armadillo), 25 new references.yaml entries,
+and PDFs for 12 of them (see git diff of references/ for the full list --
+2026-poseidon2b.pdf, 2022-neptune.pdf, 2023-monolith.pdf, 2025-skyscraper.pdf,
+2023-tip4_tip4prime_toposware.pdf, 2020-legendre_prf_cryptanalysis.pdf,
+2023-aim.pdf, 2017-picnic.pdf, 2024-mandarain_one_tree_to_rule_them_all.pdf,
+2021-pasta.pdf, 2010-armadillo.pdf; plus the pre-existing 2023-arion.pdf
+lineage). All of `make validate`, the full `make test` CI suite, and
+`make build-db` pass.
+
+**Note: this session's `griffin`, `anemoi`, `ciminion`, and
+`reinforced_concrete` families supersede items 2, 4, 5, 6, 7, and 10 in the
+"Algebraic/AO ciphers" section above (Poseidon2, Anemoi, Griffin, Ciminion,
+Reinforced Concrete, and Pasta are no longer un-modeled -- Rescue-Prime (1),
+Starkad (3), Dasta (8), FiLIP (9), Rubato (11), Chaghri (12), and Agrasta (13)
+from that same list are still open and unchanged.**
+
+Everything genuinely unresolved from *this* session (not fabricated, not
+guessed, not silently dropped):
+
+9. GenLowMC -- NOT FOUND ANYWHERE. You described it as "new lookup aligned,
+   dynamic generation of MPC circuit (ongoing)". A direct query against the
+   IACR ePrint Archive's own search engine returned zero results, as did
+   several targeted WebSearch queries. If you have a specific author, venue,
+   or talk this name came from, that detail would let a follow-up search
+   actually find it -- otherwise treat as unpublished/informally named.
+
+10. "CryptoDarkMatter++" is not a real paper title -- do not cite it as one.
+    The real, closest 2020/2021 follow-up to the 2018 "Crypto Dark Matter"
+    PRF paper (now the cryptodarkmatter family) is Cheon, Cho, J.H. Kim, J.
+    Kim, "Adventures in Crypto Dark Matter: Attacks and Fixes for Weak
+    Pseudorandom Functions," PKC 2021 / eprint 2020/783 -- an attacks-and-
+    fixes paper, not a new design. Not added as its own family (this
+    database doesn't model standalone cryptanalysis papers as families);
+    add it if you want that changed.
+
+11. LegendrePRF -- two solid sources verified (Grassi/Rechberger/Rotaru/
+    Scholl/Smart, "MPC-Friendly Symmetric Key Primitives," CCS 2016 / eprint
+    2016/542, no PDF obtainable; and Beullens/Beyne/Udovenko/Vitto,
+    "Cryptanalysis of the Legendre PRF and Generalizations," ToSC 2020(1) /
+    eprint 2019/1357, PDF already sitting at
+    references/2020-legendre_prf_cryptanalysis.pdf but currently orphaned --
+    no references.yaml entry or family cites it yet). Not added as a family:
+    it doesn't fit primitive_types.yaml's vocabulary (block_cipher /
+    tweakable_block_cipher / permutation / compression_function /
+    update_function) -- it's naturally mode-tier (stream_cipher/prng-shaped),
+    which would require extending mode_constructions.yaml with the same new
+    taxonomy added to the primitive tier this session. Needs a tier/type
+    decision before it can be added.
+
+12. Picnic, AIMer, Rainier, MandaRain are MPC-in-the-head/VOLE-in-the-head
+    *signature schemes* (asymmetric protocols), correctly out of scope for
+    this *symmetric*-primitive database per its own README -- cited from
+    lowmc's and rain's notes/reference_ids instead, with PDFs already
+    downloaded (references/2017-picnic.pdf,
+    references/2024-mandarain_one_tree_to_rule_them_all.pdf). Not a gap,
+    just flagging the scope call explicitly.
+
+13. Pasta (the mode-tier stream-cipher family) -- only the underlying
+    permutation (pasta_pi, primitive-tier) was added. The stream-cipher
+    wrapper itself needs mode_constructions.yaml touched the same way
+    primitive_constructions.yaml was this session; deferred for the same
+    tier-duplication reason as LegendrePRF. All facts needed are already in
+    references/2021-pasta.pdf.
+
+14. Sinsemilla / Pedersen hash -- deliberately no local PDF kept: both are
+    specified in the living, continuously-updated Zcash Protocol
+    Specification (https://zips.z.cash/protocol/protocol.pdf), not a static
+    paper. The reference entry (zcash_protocol_specification_2026) pins the
+    exact version read (v2026.7.0-89-gc5d14d [NU6.2]) in its `venue` field.
+    Download that exact version's PDF into references/ if you want an
+    archival snapshot instead.
+
+15. Facts flagged as unverified/secondhand in the new families' own notes --
+    confirm against a primary-text read before treating as settled: Rain's
+    round function (field inversion + affine layer -- reported via
+    WebSearch summary only); AIM's S-box (Mersenne-exponent power map --
+    same caveat; a follow-up "AIM2" paper, eprint 2023/1474, exists but
+    wasn't read or cited); Ciminion/Hydra's exact per-round component
+    breakdown; and most of poseidon2/poseidon2b/neptune/grendel/griffin/
+    anemoi/reinforced_concrete/polocolo's exact S-box exponents, state-width
+    instance lists, and round counts (their primary papers are all eprint-
+    PDF-blocked with no working mirror found this session).
+
+16. Skyscraper vs. Skyscraper-v2 -- the `skyscraper` family documents the
+    original TCHES-published design (135ns/2 field elements; PDF obtained).
+    A later eprint revision "Skyscraper-v2" (same eprint 2025/058) adds
+    rounds to patch a subsequent cryptanalysis result and reports 256ns
+    instead -- that revised PDF could not be fetched (eprint blocked, no
+    mirror). Decide whether to re-point the family at the hardened revision
+    once a copy is obtainable.
+
+17. ARMADILLO2 cryptanalysis (Naya-Plasencia/Peyrin collision attacks and
+    follow-ups) -- found via search snippets only, not fetched/read; not
+    cited in the armadillo family's notes.
+
+18. Taxonomy gap: `armadillo` was left with `construction_ids: []`. Its
+    nonlinearity (data-dependent selection between two fixed bit-
+    permutations, related to the Zemor-Tillich group-based hash) doesn't
+    match any existing root/leaf, including the new group_exponentiation_hash
+    leaf (whose own definition centers on scalar-multiplication/exponentiation
+    in a group -- a real but debatable analogy I chose not to force). May be
+    worth a dedicated root for "keyed/data-dependent permutation-selection
+    networks" if this class of design gets more members later.
+
+19. Corrections to assumptions in your original request, confirmed against
+    primary sources this session (read each family's own notes for detail):
+    ARMADILLO has no algebraic S-box at all and is NOT a LowMC/Zorro-style
+    partial-S-box-on-part-of-state design (contrary to the closing note's
+    grouping) -- Zorro's own tagging *was* the one that needed fixing, and
+    was fixed. Zcash's "Pedersen hash" is not sourced from Torben Pedersen's
+    1991 paper in Zcash's own normative spec (it cites a different lineage --
+    see pedersen_hash_zcash's notes); Pedersen 1991 is kept in
+    references.yaml only for the classical commitment concept the colloquial
+    name references. Pasta's own paper explicitly frames Masta as
+    independent, concurrent work, not a predecessor Pasta "succeeds."

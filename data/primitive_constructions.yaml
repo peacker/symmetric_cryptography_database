@@ -931,3 +931,120 @@ primitive_constructions:
     Triangular Dynamical System", arXiv 2204.01802) and instantiated as the Arion permutation/block cipher (Roy, Steiner,
     Trevisani, "Arion", 2023), explicitly positioned by its authors as reducing to neither the Feistel nor the SPN structure,
     unlike the Gen I/II arithmetization-oriented designs (LowMC/MiMC/HADES/Poseidon/GMiMC/Rescue-Prime) that came before it.
+- id: advanced_protocol_friendly_construction
+  name: Advanced-Protocol-Friendly Construction
+  abbreviation: APF
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  - compression_function
+  placeholder_family_names:
+  - MiMC
+  - LowMC
+  - Poseidon
+  - Rescue
+  notes: 'Level-1 root, an orthogonal facet in the same sense as modular_multiplication_network: tagged on a family alongside
+    its ordinary structural root (spn, feistel, algebraic_feistel, even_mansour, generalized_triangular_dynamical_system,
+    ...) rather than replacing it, whenever the round function''s shape is deliberately chosen to minimize cost under a
+    specific external protocol''s cost model -- a zero-knowledge proof system''s arithmetic circuit (R1CS/AIR/Plonkish
+    constraint count, degree, or lookup-argument budget), secret-sharing-based MPC''s multiplicative depth/count, or an
+    MPC-in-the-head post-quantum signature''s one-way-function evaluation cost -- rather than raw software/hardware
+    instruction-level speed. This is a "why," not a "what": the leaves below classify the specific mechanism/motivation,
+    and a family may carry several at once when its design paper explicitly targets more than one setting (e.g. Rain and
+    AIM are both MPC-in-the-head signature OWFs and are analyzed as secret-sharing-MPC-friendly PRFs).
+
+    '
+- id: pqc_signature_friendly_owf
+  name: PQC Signature-Friendly OWF
+  abbreviation: PQC-sig OWF
+  special_case_of: advanced_protocol_friendly_construction
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  placeholder_family_names:
+  - LowMC
+  notes: A one-way function purpose-built as the core primitive of an MPC-in-the-head-based post-quantum signature scheme
+    (e.g. Picnic, which signs by proving knowledge of a LowMC preimage via an MPC-in-the-head zero-knowledge proof) --
+    optimized specifically for that signing protocol's cost model rather than for general-purpose MPC or ZK-SNARK/STARK
+    circuit use.
+- id: zk_friendly_low_degree_map
+  name: ZK-Friendly Type 1 (Low-Degree Map)
+  abbreviation: ZK-T1
+  special_case_of: advanced_protocol_friendly_construction
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  placeholder_family_names:
+  - MiMC
+  - GMiMC
+  notes: The forward round function is evaluated directly as a low-degree monomial map y = x^d over a large field --
+    cheap to evaluate in the clear and cheap per-constraint inside a proof system, but reaching a target security margin
+    needs many rounds, and each round costs one multiplicative-degree step in the arithmetic circuit, often yielding more
+    constraints overall than the Type 2 (low-degree-inverse) alternative below for a comparable security level.
+- id: zk_friendly_low_degree_inverse_map
+  name: ZK-Friendly Type 2 (Low-Degree-Inverse Map)
+  abbreviation: ZK-T2
+  special_case_of: advanced_protocol_friendly_construction
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  placeholder_family_names:
+  - Rescue
+  - Vision
+  notes: The round function is defined as x = y^d, i.e. evaluated forward by taking the low-degree-inverse map y = x^(1/d)
+    -- slow to evaluate directly in the clear (computing a field d-th root), but proof-system-friendly since the prover
+    can instead supply y and let the verifier check the cheap low-degree relation x = y^d, letting these designs use far
+    fewer rounds and fewer constraints than Type 1 for a comparable security margin. This asymmetry is also why a number
+    of early instances of this pattern turned out to use too few rounds and were subsequently broken.
+- id: zk_friendly_lookup_table
+  name: ZK-Friendly Type 3 (Lookup-Based)
+  abbreviation: ZK-T3
+  special_case_of: advanced_protocol_friendly_construction
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  notes: The nonlinear layer is a direct table lookup y = T[x] rather than an algebraic map -- very fast to evaluate in
+    the clear and needing the fewest rounds of the three ZK-friendly types, but only proof-system-friendly once a
+    dedicated lookup argument (e.g. Plookup-style protocols) is available in the target proof system, and constraint
+    cost is governed by that lookup argument's own cost model rather than by circuit degree or round count.
+- id: mpc_sharing_friendly
+  name: MPC/Secret-Sharing-Friendly
+  abbreviation: MPC-friendly
+  special_case_of: advanced_protocol_friendly_construction
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  placeholder_family_names:
+  - LowMC
+  - MiMC
+  notes: The round function is deliberately chosen to minimize multiplicative depth and/or the total number of
+    multiplications (AND gates in GF(2), field multiplications in GF(p)) relative to the number of free XOR/addition
+    operations, since secret-sharing-based MPC protocols (e.g. Shamir-sharing- or replicated-secret-sharing-based
+    protocols) can evaluate linear operations locally at no communication cost while every multiplication requires
+    interaction/communication among the parties -- the same cost model that also drives FHE-friendly design, but recorded
+    here specifically for designs whose own paper frames the target as secret-sharing MPC evaluation of a PRF/PRP on
+    shared inputs.
+- id: big_sbox_layer
+  name: Big/Huge n-to-n-bit S-box Layer
+  abbreviation: Big S-box
+  special_case_of: advanced_protocol_friendly_construction
+  typical_primitive_types:
+  - block_cipher
+  - permutation
+  notes: One monolithic large nonlinear map over a wide n-bit word (n well beyond the 3-8-bit S-boxes of the classical
+    SPN tradition) forms the entire nonlinear layer for a round, rather than many small S-boxes applied in parallel across
+    the state -- an MPC/ZK-motivated alternative to the SPN full/partial-S-box-layer facets above, distinct from the
+    algebraic power-map mechanism of the zk_friendly_low_degree(_inverse)_map leaves. Membership pending source-confirmed
+    per-family verification; see todo_manual.txt for candidates under review.
+- id: group_exponentiation_hash
+  name: Group-Exponentiation / Discrete-Log-Based Hash
+  abbreviation: Group-exp hash
+  special_case_of: advanced_protocol_friendly_construction
+  typical_primitive_types:
+  - compression_function
+  notes: Nonlinearity comes from a fixed-base scalar multiplication / exponentiation in a cryptographic group (e.g. an
+    elliptic-curve group) rather than from an algebraic S-box, lookup table, or bitwise round function -- typically not
+    preimage-resistant against an adversary able to solve the group's discrete-log problem (preimage resistance instead
+    reduces to that hardness assumption), and collision-resistant only on bounded-length input rather than for arbitrary-length
+    messages the way a Merkle-Damgard or sponge hash is, since the input is encoded directly as exponents/scalars over a
+    fixed-size set of generators.

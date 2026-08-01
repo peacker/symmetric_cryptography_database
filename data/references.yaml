@@ -4689,3 +4689,422 @@ references:
   notes: No local copy (fetched via WebFetch of the rfc-editor.org HTML). Original authors of the UMAC construction
     are Black, Halevi, Krawczyk, Krovetz, and Rogaway (CRYPTO 1999); this RFC is Krovetz's own IETF specification of
     the algorithm, used here as the primary source for its exact layered-hash definition.
+
+- id: grassi_khovratovich_schofnegger_2023_poseidon2
+  kind: paper
+  title: 'Poseidon2: A Faster Version of the Poseidon Hash Function'
+  authors:
+  - Lorenzo Grassi
+  - Dmitry Khovratovich
+  - Markus Schofnegger
+  year: 2023
+  venue: Progress in Cryptology - AFRICACRYPT 2023, Springer LNCS
+  publisher: Springer
+  url: https://eprint.iacr.org/2023/323
+  notes: No local copy (eprint.iacr.org blocks automated PDF fetching; Springer/AFRICACRYPT version paywalled, no free
+    mirror located). Decreases multiplications in the linear layer by up to 90% and Plonk-circuit constraints by up
+    to 70% versus the original Poseidon; can be used as either a sponge or a compression function.
+- id: grassi_et_al_2026_poseidon2b
+  kind: paper
+  title: 'Poseidon(2)b: Binary Field Versions of Poseidon/Poseidon2'
+  authors:
+  - Lorenzo Grassi
+  - Dmitry Khovratovich
+  - Katharina Koschatko
+  - Christian Rechberger
+  - Markus Schofnegger
+  - Verena Schroppel
+  - Zhuo Wu
+  year: 2026
+  venue: 'IACR Communications in Cryptology, Vol. 2, No. 4, DOI: 10.62056/a66ce0zn4'
+  publisher: IACR
+  url: https://eprint.iacr.org/2025/1893
+  notes: 'Also eprint 2025/1893 (received Oct 2025); the CiC journal version is dated January 2026 and is used here
+    as the year of record. Binary-extension-field analogues of Poseidon/Poseidon2 for use with binary-field proving
+    systems such as Binius; benchmarked against Vision-32b and Anemoi. Local copy: references/2026-poseidon2b.pdf
+    (downloaded from cic.iacr.org, not eprint).'
+- id: grassi_onofri_pedicini_sozzi_2022_neptune
+  kind: paper
+  title: Invertible Quadratic Non-Linear Layers for MPC-/FHE-/ZK-Friendly Schemes over F_p^n - Application to Poseidon
+  authors:
+  - Lorenzo Grassi
+  - Silvia Onofri
+  - Marco Pedicini
+  - Luca Sozzi
+  year: 2022
+  venue: 'IACR Transactions on Symmetric Cryptology, Volume 2022, Issue 3, pp. 20-72'
+  publisher: IACR
+  url: https://eprint.iacr.org/2021/1695
+  notes: 'Also eprint 2021/1695. Proves a quadratic-map S-box over F_p^n (m=2) is never invertible for n >= 3 (and
+    for n >= 5 when m=3), then proposes Neptune -- explicitly stated as "a variant of the sponge hash function
+    Poseidon, whose non-linear layer is designed by taking into account the results presented in this paper" -- as
+    a concrete application, reducing multiplications relative to Poseidon. Local copy: references/2022-neptune.pdf
+    (downloaded from tosc.iacr.org, not eprint).'
+- id: szepieniec_2021_grendel
+  kind: paper
+  title: On the Use of the Legendre Symbol in Symmetric Cipher Design
+  authors:
+  - Alan Szepieniec
+  year: 2021
+  venue: IACR Cryptology ePrint Archive, Paper 2021/984
+  publisher: IACR
+  url: https://eprint.iacr.org/2021/984
+  notes: No local copy (eprint blocked, no verified mirror found). No peer-reviewed conference/journal venue was located
+    beyond the ePrint listing. Introduces the Grendel S-box S(x) = x^d * chi_p(x) (chi_p the Legendre/quadratic-character
+    symbol of F_p), combined with a SHARK-strategy-style linear layer, instantiated as a sponge hash (permutation).
+- id: grassi_et_al_2023_griffin
+  kind: paper
+  title: 'Horst Meets Fluid-SPN: Griffin for Zero-Knowledge Applications'
+  authors:
+  - Lorenzo Grassi
+  - Yonglin Hao
+  - Christian Rechberger
+  - Markus Schofnegger
+  - Roman Walch
+  - Qingju Wang
+  year: 2023
+  venue: Advances in Cryptology - CRYPTO 2023, Springer LNCS 14083, pp. 573-606
+  publisher: Springer
+  url: https://eprint.iacr.org/2022/403
+  notes: No local copy (eprint blocked; author-page mirrors relink the same blocked URL; Springer/CRYPTO version paywalled,
+    IACR's 4-year open-access lag with Springer does not apply until August 2027). Also eprint 2022/403. Introduces
+    "Horst," a Feistel-style update extended with a multiplication, (x,y) -> (y*G(x)+F(x), x), combined with an
+    SPN-style "Fluid-SPN" layer over prime fields using invertible low-degree power maps.
+- id: bouvier_et_al_2023_anemoi
+  kind: paper
+  title: 'New Design Techniques for Efficient Arithmetization-Oriented Hash Functions: Anemoi Permutations and Jive
+    Compression Mode'
+  authors:
+  - Clemence Bouvier
+  - Pierre Briaud
+  - Pyrros Chaidos
+  - Leo Perrin
+  - Robin Salen
+  - Vesselin Velichkov
+  - Danny Willems
+  year: 2023
+  venue: Advances in Cryptology - CRYPTO 2023, Springer
+  publisher: Springer
+  url: https://eprint.iacr.org/2022/840
+  notes: No local copy (eprint blocked; project page and IOG mirror both relink the same blocked URL; Springer/CRYPTO
+    version paywalled). Also eprint 2022/840. Introduces the "Flystel" S-box (a butterfly-structure construction) inside
+    a classical SPN, plus a companion compression mode "Jive"; operates over both prime fields GF(p) and binary
+    fields GF(2^n). Claimed ~2x improvement in R1CS constraints over Poseidon/Rescue.
+- id: grassi_et_al_2022_reinforced_concrete
+  kind: paper
+  title: 'Reinforced Concrete: A Fast Hash Function for Verifiable Computation'
+  authors:
+  - Lorenzo Grassi
+  - Dmitry Khovratovich
+  - Reinhard Luftenegger
+  - Christian Rechberger
+  - Markus Schofnegger
+  - Roman Walch
+  year: 2022
+  venue: 'ACM SIGSAC Conference on Computer and Communications Security (CCS ''22), pp. 1323-1335'
+  publisher: ACM
+  url: https://eprint.iacr.org/2021/1038
+  notes: No local copy (eprint blocked; ACM DL returns 403; CORE aggregator returns 403; no open mirror found). Also
+    eprint 2021/1038 (first posted 2021). A sponge over F_p^3 using three named round components -- Bricks (low-degree
+    power-map permutation), Concrete (MDS matrix + round constants), and Bars (a lookup-table nonlinear layer
+    decomposing a field element into smaller-domain lookups) -- targeting the Plookup lookup argument.
+- id: szepieniec_et_al_2023_tip5
+  kind: paper
+  title: The Tip5 Hash Function for Recursive STARKs
+  authors:
+  - Alan Szepieniec
+  - Alexander Lemmens
+  - Jan Ferdinand Sauer
+  - Bobbin Threadbare
+  - Al-Kindi
+  year: 2023
+  venue: IACR Cryptology ePrint Archive, Paper 2023/107
+  publisher: IACR
+  url: https://eprint.iacr.org/2023/107
+  notes: No local copy (eprint blocked, no mirror found). ePrint-only technical report tied to the Neptune/Triton VM
+    project; no separate conference/journal publication located. Defines a sponge over the Goldilocks prime
+    p = 2^64 - 2^32 + 1 with a split-and-lookup S-box (part of the state) alongside a power-map S-box x^7 (rest of the
+    state), interleaved with an MDS layer (SHARK-style), inspired explicitly by Reinforced Concrete's lookup approach.
+- id: salen_2023_tip4_tip4prime
+  kind: paper
+  title: Two additional instantiations from the Tip5 hash function construction
+  authors:
+  - Robin Salen
+  year: 2023
+  venue: Toposware, Inc. technical note
+  publisher: Toposware
+  url: https://toposware.com/paper_tip5.pdf
+  notes: 'Local copy: references/2023-tip4_tip4prime_toposware.pdf. Defines Tip4 (state width 16, rate 12, capacity 4,
+    128-bit security) and Tip4'' (state width 12, rate 8, capacity 4, 128-bit security, fewer power maps per round)
+    as named variants of Szepieniec et al.''s Tip5 construction (szepieniec_et_al_2023_tip5) -- these two variants do
+    not appear in the original Tip5 paper itself.'
+- id: grassi_et_al_2024_monolith
+  kind: paper
+  title: 'Monolith: Circuit-Friendly Hash Functions with New Nonlinear Layers for Fast and Constant-Time Implementations'
+  authors:
+  - Lorenzo Grassi
+  - Dmitry Khovratovich
+  - Reinhard Luftenegger
+  - Christian Rechberger
+  - Markus Schofnegger
+  - Roman Walch
+  year: 2024
+  venue: 'IACR Transactions on Symmetric Cryptology, Vol. 2024, No. 3, pp. 44-83'
+  publisher: IACR
+  url: https://eprint.iacr.org/2023/1025
+  notes: 'Also eprint 2023/1025 (first posted 2023). Local copy: references/2023-monolith.pdf (downloaded from
+    tosc.iacr.org, not eprint). Introduces the "Kintsugi" nonlinear-layer strategy, explicitly described as improving
+    on Reinforced Concrete and Tip5''s Bars construction; round = c + Concrete(Bricks(Bars(state))), Bricks a
+    Feistel-Type-3 squaring map (degree 2), Concrete an MDS matrix, uniformly 6 rounds. Two field families: Goldilocks
+    p = 2^64-2^32+1 (state width 8 or 12) and Mersenne p = 2^31-1 (state width 16 or 24).'
+- id: bouvier_et_al_2025_skyscraper
+  kind: paper
+  title: 'Skyscraper: Fast Hashing on Big Primes'
+  authors:
+  - Clemence Bouvier
+  - Lorenzo Grassi
+  - Dmitry Khovratovich
+  - Katharina Koschatko
+  - Christian Rechberger
+  - Fabian Schmid
+  - Markus Schofnegger
+  year: 2025
+  venue: 'IACR Transactions on Cryptographic Hardware and Embedded Systems, Vol. 2025, No. 2, pp. 743-780'
+  publisher: IACR
+  url: https://eprint.iacr.org/2025/058
+  notes: 'Local copy: references/2025-skyscraper.pdf (downloaded from tches.iacr.org, not eprint) -- this is the
+    original TCHES-published design (135ns to hash two 256-bit BLS12-381-scalar-field elements). A later eprint
+    revision under the title "Skyscraper-v2: Fast Hashing on Big Primes" (same eprint 2025/058) adds rounds at the
+    start/end of the permutation to address a subsequent cryptanalysis result, reporting 256ns for the same benchmark;
+    that revised PDF could not be obtained (eprint blocked, no mirror). Targets large prime fields (>= 2^248) for
+    elliptic-curve SNARKs; uses a Feistel network (not SPN) specifically to allow non-invertible nonlinear mappings,
+    alternating a low-degree "Square" round (Montgomery-multiplication-based) with a lookup-based "Bars" round
+    (8-bit S-box per chunk, then rotate).'
+- id: ha_et_al_2025_polocolo
+  kind: paper
+  title: 'Polocolo: A ZK-Friendly Hash Function Based on S-boxes Using Power Residues'
+  authors:
+  - Jincheol Ha
+  - Seongha Hwang
+  - Jooyoung Lee
+  - Seungmin Park
+  - Mincheol Son
+  year: 2025
+  venue: Advances in Cryptology - EUROCRYPT 2025, Springer LNCS, pp. 303-332
+  publisher: Springer
+  url: https://eprint.iacr.org/2025/926
+  notes: No local copy (eprint blocked; Springer paywalled; no arXiv/institutional mirror found). Name derives from
+    "power residue for lower cost table lookup." S-box S(x) = x^(-1) * T[(x/p)_m] (field inverse multiplied by a small
+    lookup table indexed by x's m-th-power-residue class), with a new MDS linear layer, targeting the PlonKup lookup
+    argument. Exact field/prime and round count not confirmed from sources read. State widths t=3 and t=8 both appear
+    in the paper's own efficiency comparisons.
+- id: dobraunig_et_al_2021_ciminion
+  kind: paper
+  title: 'Ciminion: Symmetric Encryption Based on Toffoli-Gates over Large Finite Fields'
+  authors:
+  - Christoph Dobraunig
+  - Lorenzo Grassi
+  - Anna Guinet
+  - Daniel Kuijsters
+  year: 2021
+  venue: Advances in Cryptology - EUROCRYPT 2021, pp. 3-34
+  publisher: Springer
+  url: https://eprint.iacr.org/2021/267
+  notes: No local copy (eprint blocked, no mirror found). Also eprint 2021/267. Nonlinearity comes from a Toffoli-gate-based
+    mechanism (not a small S-box) over large binary or prime fields, combined with a lightweight linear layer, aimed
+    at minimizing field multiplications for MPC/FHE/ZK use; a Farfalle-like construction. Exact per-round structure
+    (single wide nonlinear map vs. several parallel gates) not confirmed beyond this from the fetched abstract.
+- id: grassi_et_al_2023_hydra
+  kind: paper
+  title: 'From Farfalle to Megafono via Ciminion: The PRF Hydra for MPC Applications'
+  authors:
+  - Lorenzo Grassi
+  - Morten Oygarden
+  - Markus Schofnegger
+  - Roman Walch
+  year: 2023
+  venue: Advances in Cryptology - EUROCRYPT 2023
+  publisher: Springer
+  url: https://eprint.iacr.org/2022/342
+  notes: No local copy (eprint blocked; author-page mirror relinks the same blocked URL). Also eprint 2022/342.
+    Introduces "Megafono," a keyed extendable-PRF framework; the concrete instantiation Hydra uses the HADES strategy
+    (alternating full/partial S-box rounds) together with generalized versions of the Lai-Massey scheme. Explicitly
+    designed to remove Ciminion's "critical weakness," its reliance on an expensive key schedule for subkey
+    independence (dobraunig_et_al_2021_ciminion) -- a same-lineage, partly-same-author continuation.
+- id: boneh_et_al_2018_cryptodarkmatter
+  kind: paper
+  title: 'Exploring Crypto Dark Matter: New Simple PRF Candidates and Their Applications'
+  authors:
+  - Dan Boneh
+  - Yuval Ishai
+  - Alain Passelegue
+  - Amit Sahai
+  - David J. Wu
+  year: 2018
+  venue: 'Theory of Cryptography Conference (TCC 2018), Part II'
+  publisher: Springer
+  url: https://eprint.iacr.org/2018/1218
+  notes: No local copy (eprint blocked; INRIA HAL mirror also returned an HTML landing page, not a raw PDF). Also
+    eprint 2018/1218. Weak-PRF candidates built by mixing linear functions over different small moduli (a secret
+    mod-2 linear map followed by a public mod-3 linear map), implementable as a depth-2 ACC0 circuit; explicitly
+    framed as a "deterministic variant of Learning Parity with Noise" aimed at better MPC round/communication
+    complexity than AES/LowMC/Rasta. A follow-up attacks-and-fixes paper exists (Cheon, Cho, J.H. Kim, J. Kim,
+    "Adventures in Crypto Dark Matter," PKC 2021 / eprint 2020/783) -- note for the record that this PKC 2021 paper,
+    not any paper literally titled "CryptoDarkMatter++", is the real citable 2020/2021 follow-up to this design.
+- id: dobraunig_kales_rechberger_schofnegger_zaverucha_2022_rain
+  kind: paper
+  title: Shorter Signatures Based on Tailor-Made Minimalist Symmetric-Key Crypto
+  authors:
+  - Christoph Dobraunig
+  - Daniel Kales
+  - Christian Rechberger
+  - Markus Schofnegger
+  - Greg Zaverucha
+  year: 2022
+  venue: ACM SIGSAC Conference on Computer and Communications Security (CCS 2022)
+  publisher: ACM
+  url: https://eprint.iacr.org/2021/692
+  notes: No local copy (eprint blocked; ACM DL paywalled, no open mirror found). Also eprint 2021/692 (first posted
+    2021). Introduces the one-way function Rain and, combining it with a Banquet-like MPC-in-the-head proof system,
+    the signature scheme Rainier -- "the first MPCitH-based signature scheme which can produce signatures that are
+    less than 5 KB in size" (quoted). Rain's exact round-function structure (reported secondhand as field inversion
+    plus an unstructured affine layer) was not independently confirmed against the primary text; treat as unverified
+    pending a direct read.
+- id: kim_et_al_2023_aim
+  kind: paper
+  title: 'AIM: Symmetric Primitive for Shorter Signatures with Stronger Security'
+  authors:
+  - Seongkwang Kim
+  - Jincheol Ha
+  - Mincheol Son
+  - Byeonghak Lee
+  - Dukjae Moon
+  - Joohee Lee
+  - Sangyub Lee
+  - Jihoon Kwon
+  - Jihoon Cho
+  - Hyojin Yoon
+  - Jooyoung Lee
+  year: 2023
+  venue: ACM SIGSAC Conference on Computer and Communications Security (CCS 2023)
+  publisher: ACM
+  url: https://eprint.iacr.org/2022/1387
+  notes: 'Local copy: references/2023-aim.pdf (downloaded from aimer-signature.org, not eprint). Also eprint 2022/1387.
+    Proposes AIM, an MPCitH-friendly one-way function with high resistance to algebraic attacks, positioned against
+    "recent MPCitH-friendly ciphers ... designed using simple algebraic S-boxes operating on a large field" (quoted);
+    combined with the BN++ proof system to yield the signature scheme AIMer. AIM''s exact S-box form (reported
+    secondhand as a Mersenne-exponent power map) was not independently confirmed against the primary text in this
+    session.'
+- id: chase_et_al_2017_picnic
+  kind: paper
+  title: Post-Quantum Zero-Knowledge and Signatures from Symmetric-Key Primitives
+  authors:
+  - Melissa Chase
+  - David Derler
+  - Steven Goldfeder
+  - Claudio Orlandi
+  - Sebastian Ramacher
+  - Christian Rechberger
+  - Daniel Slamanig
+  - Greg Zaverucha
+  year: 2017
+  venue: ACM SIGSAC Conference on Computer and Communications Security (CCS 2017)
+  publisher: ACM
+  url: https://eprint.iacr.org/2017/279
+  notes: 'Local copy: references/2017-picnic.pdf (downloaded from microsoft.github.io, not eprint). Also eprint
+    2017/279. The Picnic post-quantum signature scheme: the public key is y = f(x) for a one-way function f and secret
+    x, and a signature is a non-interactive zero-knowledge (MPC-in-the-head) proof of knowledge of x; the concrete
+    scheme instantiates f with LowMC (lowmc family). One of the NIST PQC alternate third-round candidates.'
+- id: baum_et_al_2024_mandarain
+  kind: paper
+  title: 'One Tree to Rule Them All: Optimizing GGM Trees and OWFs for Post-Quantum Signatures'
+  authors:
+  - Carsten Baum
+  - Ward Beullens
+  - Shibam Mukherjee
+  - Emmanuela Orsini
+  - Sebastian Ramacher
+  - Christian Rechberger
+  - Lawrence Roy
+  - Peter Scholl
+  year: 2024
+  venue: Advances in Cryptology - ASIACRYPT 2024
+  publisher: Springer
+  url: https://eprint.iacr.org/2024/490
+  notes: 'Local copy: references/2024-mandarain_one_tree_to_rule_them_all.pdf (downloaded from a NIST CSRC mirror, not
+    eprint). Also eprint 2024/490. Proposes VOLE-in-the-head (VOLEitH) improvements over MPCitH and three concrete
+    signature schemes built on them -- FAESTER (AES), KuMQuat (MQ), and MandaRain, the last "based on ... Rain" (the
+    same one-way function as dobraunig_kales_rechberger_schofnegger_zaverucha_2022_rain).'
+- id: zcash_protocol_specification_2026
+  kind: spec
+  title: Zcash Protocol Specification
+  authors:
+  - Daira-Emma Hopwood
+  - Sean Bowe
+  - Taylor Hornby
+  - Nathan Wilcox
+  year: 2026
+  venue: 'Version v2026.7.0-89-gc5d14d [NU6.2]'
+  publisher: Electric Coin Company
+  url: https://zips.z.cash/protocol/protocol.pdf
+  notes: Living, continuously-updated specification; no local copy kept (cite the URL, version pinned in this entry's
+    venue field). Normative source for both SinsemillaHash (section 5.4.1.9) and PedersenHash (section 5.4.1.7).
+    Both are explicitly specified as collision-resistant only for fixed-length input, reducing to the Discrete
+    Logarithm Problem (Pallas curve for Sinsemilla, Jubjub curve for Pedersen); neither claims preimage resistance
+    as a property. PedersenHash's own bibliography attributes its construction to Chaum/Damgard/van de Graaf (1987),
+    Bos/Chaum/Purdy (1988), and Chaum/van Heijst/Pfitzmann (1991), with a tighter Discrete-Log security reduction from
+    Bellare/Goldreich/Goldwasser (1995) -- not to Torben Pedersen's 1991 paper (pedersen_1991_vss), despite the common
+    name.
+- id: pedersen_1991_vss
+  kind: paper
+  title: Non-Interactive and Information-Theoretic Secure Verifiable Secret Sharing
+  authors:
+  - Torben P. Pedersen
+  year: 1991
+  venue: Advances in Cryptology - CRYPTO '91, LNCS 576, pp. 129-140
+  publisher: Springer
+  url: https://doi.org/10.1007/3-540-46766-1_9
+  notes: No local copy (Springer-paywalled, not attempted). The classical discrete-log-based commitment scheme
+    colloquially referenced by the name "Pedersen commitment"/"Pedersen hash" -- cited here for that generic concept
+    only. Zcash's own concrete PedersenHash construction is NOT sourced from this paper; see
+    zcash_protocol_specification_2026 for its actual documented lineage.
+- id: dobraunig_et_al_2023_pasta
+  kind: paper
+  title: 'Pasta: A Case for Hybrid Homomorphic Encryption'
+  authors:
+  - Christoph Dobraunig
+  - Lorenzo Grassi
+  - Lukas Helminger
+  - Christian Rechberger
+  - Markus Schofnegger
+  - Roman Walch
+  year: 2023
+  venue: 'IACR Transactions on Cryptographic Hardware and Embedded Systems, Vol. 2023, No. 3, pp. 30-73'
+  publisher: IACR
+  url: https://eprint.iacr.org/2021/731
+  notes: 'Local copy: references/2021-pasta.pdf (downloaded from a Semantic Scholar mirror; eprint.iacr.org is behind
+    a Cloudflare challenge that blocked automated fetching). Also eprint 2021/731. Defines the Pasta-pi permutation
+    over F_p (prime field) and the Pasta family of stream ciphers built on it. Explicitly frames the concurrent
+    Masta design as independent work, not a predecessor -- Pasta''s own lineage is the Rasta strategy adapted to F_p
+    -- and reports outperforming Masta by up to 6x; its S_feistel S-box was later reused directly by the Rubato cipher.'
+- id: badel_et_al_2010_armadillo
+  kind: paper
+  title: 'ARMADILLO: a Multi-Purpose Cryptographic Primitive Dedicated to Hardware'
+  authors:
+  - Stephane Badel
+  - Nilay Dagtekin
+  - Jorge Nakahara Jr.
+  - Khaled Ouafi
+  - Nicolas Reffe
+  - Pouyan Sepehrdad
+  - Petr Susil
+  - Serge Vaudenay
+  year: 2010
+  venue: Cryptographic Hardware and Embedded Systems (CHES 2010), LNCS 6225, pp. 398-412
+  publisher: Springer
+  url: https://doi.org/10.1007/978-3-642-15031-9_27
+  notes: 'Local copy: references/2010-armadillo.pdf (downloaded from the EPFL Infoscience institutional repository,
+    not Springer). Nonlinearity comes entirely from data-dependent bit transposition (permutation) of the whole
+    state -- selecting between two fixed permutations bit-by-bit from the data itself, related to the Zemor-Tillich
+    group-based hash construction -- with no algebraic S-box at all. Genuinely multi-purpose: FIL-MAC, hashing/signatures
+    (via strengthened Merkle-Damgard), and PRNG/PRF/stream-cipher use are all specified in the paper''s own Section 2.'
