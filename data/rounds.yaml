@@ -3636,6 +3636,10 @@ rounds:
   name: Fountain State Update
   kind: step
   spec: {}
+- id: rocca_round
+  name: Rocca Round Update
+  kind: step
+  spec: {}
 - id: grain_clock
   name: Grain Clock Step
   kind: step

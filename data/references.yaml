@@ -3393,6 +3393,20 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography (Round 1 submission)
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/HYENA-spec.pdf
+- id: sakamoto_et_al_2021_rocca
+  kind: paper
+  title: 'Rocca: An efficient AES-based encryption scheme for beyond 5G'
+  authors:
+  - Kosei Sakamoto
+  - Fukang Liu
+  - Yuto Nakano
+  - Shinsaku Kiyomoto
+  - Takanori Isobe
+  year: 2021
+  venue: IACR Transactions on Symmetric Cryptology, 2021(2):1–30
+  publisher: IACR
+  url: https://tosc.iacr.org/index.php/ToSC/article/view/9852
+  notes: 'Updated and extended version of the Rocca paper. Local copy: references/2022-rocca.pdf.'
 - id: sui_2019_laem
   kind: report
   title: 'LAEM: Lightweight Authentication Encryption Mode'

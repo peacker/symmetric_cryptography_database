@@ -10881,3 +10881,48 @@ mode_families:
     - szepieniec_2021_grendel
     characteristics: {}
     notes: Output length and rate/capacity split not confirmed from the sources read for this database.
+- id: rocca_aead
+  name: Rocca
+  construction_ids: []
+  round_ids:
+  - rocca_round
+  target_applications:
+  - software
+  characteristics:
+    state_size_bits: 1024
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: binary_matrix_mul
+    - id: word_permutation
+    - id: xor
+    - id: constant
+  reference_ids:
+  - sakamoto_et_al_2021_rocca
+  process_participations: []
+  influences:
+  - source_family_id: rocca
+    relations:
+    - used_by
+    note: Rocca is built directly on the Rocca core update function, reusing its 8-word state layout and AES-based
+      update structure unchanged.
+  notes: 'AES-based authenticated-encryption with associated data for beyond-5G software targets. The paper defines a 256-bit
+    key, 128-bit nonce, 128-bit tag, 256-bit absorbed blocks, 20-round initialization/finalization phases, and a per-block
+    update that combines four AES rounds, four 128-bit XOR operations, and a cost-free permutation of the eight state words.
+    '
+  instances:
+  - id: rocca_aead_v1
+    name: Rocca
+    type: aead
+    reference_ids:
+    - sakamoto_et_al_2021_rocca
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      block_size_bits: 256
+      state_size_bits: 1024
+    notes: 'Rocca authenticated-encryption scheme from the 2021 ToSC paper (updated/extended local copy in references/2022-rocca.pdf).
+      The paper also defines a raw encryption mode, but this entry models the AEAD construction.'
