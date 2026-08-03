@@ -1,5 +1,9 @@
 TODO:
 
+- add the following designs:
+  Pholkos (Bossert et al, CT-RSA 2022) 
+  Vistrutah (Avanzi et al., IACR Transactions on Symmetric Cryptology, Vol. 2025, No. 3, pp. 1–150) - can easily be turned into a tweakable cipher as well
+
 - add N-hash https://en.wikipedia.org/wiki/N-hash
   add new construction type described by the wikipedia page
   Researched: designed by Miyaguchi, Ohta, Iwata, "128-bit hash function (N-hash)," NTT Review,

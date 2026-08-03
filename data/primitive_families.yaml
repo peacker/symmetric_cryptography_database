@@ -8795,18 +8795,40 @@ primitive_families:
     - id: and
     - id: or
   reference_ids:
-  - multi2_ref
+  - multi2_patent_us_4982429
+  - multi2_iso_iec_9979
   process_participations: []
-  influences: []
-  notes: MULTI2 (NHK, 1988; ISO/IEC 9979) is a 64-bit block cipher used for digital broadcasting content protection (ISDB/BSkyB).
-    It uses a 64-bit plaintext key and a 256-bit system key. The recommended number of rounds is 8, but it is configurable.
-    Its round function applies four operations (π1–π4) using addition, XOR, rotation, AND, and OR on two 32-bit words.
+  influences:
+  - source_family_id: des
+    relations:
+    - inspired_by
+    note: 'MULTI2''s inventors (Takaragi, Nakagawa, Sasaki of Hitachi) present it explicitly against DES''s substitution-box/permutation-table
+      structure in the patent''s Background of the Invention (Figs. 11-13, labeled "PRIOR ART", reproduce DES''s extensional
+      permutation table and S-box S1): "as compared with the conventional encipherment process in the DES algorithm, the
+      number of processes for the substitution transformation and permutation transformation can be reduced, so that the
+      encipherment process can be executed at a high speed." MULTI2''s own π1-π4 round structure keeps DES''s alternating
+      substitution-transformation/permutation-transformation pattern but widens it from a bit-oriented S-box/permutation
+      to 32-bit-word operations. Independently confirmed by ISO/IEC 9979 Register Entry No. 9: "MULTI2 is a symmetric
+      block cipher algorithm based on the permutation-substitution calculation like DES."'
+  - source_family_id: feal
+    relations:
+    - generalization_of
+    note: 'The same patent Background explains FEAL processes plaintext on a byte (8-bit) unit basis, which was efficient
+      on 8-bit microcomputers but "inefficient" once 32-bit microcomputers became the target platform, and states this
+      is exactly why the invention was needed: "the encryption algorithm for fundamentally executing the processes on a
+      4-byte unit basis which is suitable for the 32-bit microcomputer is demanded." MULTI2 generalizes FEAL''s per-unit
+      processing granularity from 1 byte to 4 bytes (32-bit words) to reach that goal.'
+  notes: MULTI2 (Takaragi, Nakagawa, and Sasaki of Hitachi; patented 1988/1991, ISO/IEC 9979 1994) is a 64-bit block cipher
+    used for digital broadcasting content protection (ISDB/BSkyB). It uses a 64-bit plaintext key and a 256-bit system key.
+    The recommended number of rounds is 8, but it is configurable. Its round function applies four operations (π1–π4)
+    using addition, XOR, rotation, AND, and OR on two 32-bit words.
   instances:
   - id: multi2_v1
     name: MULTI2
     type: block_cipher
     reference_ids:
-    - multi2_ref
+    - multi2_patent_us_4982429
+    - multi2_iso_iec_9979
     characteristics:
       block_size_bits: 64
       key_size_bits: 64
@@ -8919,10 +8941,10 @@ primitive_families:
 - id: nush
   name: NUSH
   construction_ids:
-  - spn
   - arx_permutation_network
   - fixed_rotation_arx
-  - pure_arx_no_constants
+  - modadd_key_injection_arx
+  - arx_with_round_constants
   round_ids:
   - nush_round
   target_applications:
@@ -8935,6 +8957,8 @@ primitive_families:
         modulus: 4294967296
     - id: rotation_fixed
     - id: xor
+    - id: and
+    - id: or
   reference_ids:
   - nush_ref
   process_participations:
@@ -8943,9 +8967,12 @@ primitive_families:
     - submissions_block_variable
     status: submitted
   influences: []
-  notes: NUSH (Lebedev, Volchkov; NESSIE Submission, 2000) is a fast software block cipher family supporting 64, 128, and
-    256-bit blocks and matching key sizes. Its round function uses 32-bit modular addition, fixed rotations, and XOR — no
-    S-boxes — giving extremely fast software performance.
+  notes: 'NUSH (Lebedev, Volchkov; NESSIE Submission, 2000) is a fast software block cipher family supporting 64, 128,
+    and 256-bit blocks and matching key sizes (register width n = 16, 32, or 64 bits respectively, block = 4n). Its
+    R transformation (four per round, generalized-Feistel-style over four n-bit registers a, b, c, d) uses modular
+    addition, a fixed rotation, XOR, and a per-iteration keyed AND-or-OR selection (the "#" operator, alternating
+    between the two across iterations per a fixed table) -- no S-boxes -- and injects both a subkey word and a
+    round-index-dependent constant C[i] on every iteration, giving extremely fast software performance.'
   instances:
   - id: nush_v1
     name: NUSH-64
@@ -8956,8 +8983,10 @@ primitive_families:
       block_size_bits: 64
       key_size_bits: 64
       output_size_bits: 64
-      rounds: 8
-    notes: 64-bit block variant. 128-bit (16r) and 256-bit (24r) variants also defined.
+      rounds: 9
+    notes: 64-bit block variant (register width n=16, l=9 rounds / L=36 iterations per the spec's own parameter table).
+      128-bit (n=32, l=17) and 256-bit (n=64, l=33) block variants are also defined, each independently combinable with
+      a 128-, 192-, or 256-bit key.
 - id: oribatida
   name: Oribatida
   construction_ids:
@@ -9422,7 +9451,8 @@ primitive_families:
 - id: sc2000
   name: SC2000
   construction_ids:
-  - spn
+  - heterogeneous_round_network
+  - balanced_feistel
   - full_sbox_layer
   - mds_linear_layer
   round_ids:
@@ -9435,12 +9465,16 @@ primitive_families:
     components:
     - id: sbox
       params:
-        input_bits: 4
-        output_bits: 4
+        input_bits: 6
+        output_bits: 6
     - id: sbox
       params:
-        input_bits: 2
-        output_bits: 2
+        input_bits: 5
+        output_bits: 5
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
     - id: linear_transform
     - id: xor
   reference_ids:
@@ -9451,11 +9485,16 @@ primitive_families:
     - submissions_block_128bit
     status: submitted
   influences: []
-  notes: SC2000 (Fujitsu, NESSIE Submission, 2000) is a 128-bit SPN block cipher supporting 128, 192, and 256-bit keys with
-    7, 10, and 11 rounds respectively. It combines three layers of 2-bit and 4-bit S-boxes per round with an MDS-based linear
-    diffusion layer, targeting both hardware and software efficiency.
+  notes: 'SC2000 (Shimoyama, Yanami, Yokoyama, Takenaka, Itoh, Yajima, Torii, Tanaka -- Fujitsu Laboratories / Science
+    University of Tokyo; FSE 2001) is a 128-bit block cipher supporting 128-, 192-, and 256-bit keys. Each round is a
+    heterogeneous mix of three function types, applied as I-B-I-(R x R)-...-I-B-I: the I function XORs in extended
+    round-key material; the B/B^-1 function is an SPN layer of thirty-two 4-bit S-boxes (S4); and the R function is a
+    balanced-Feistel layer whose F function processes two 32-bit halves through 6-bit and 5-bit S-boxes (S6, S5) and an
+    MDS linear map M. For a 128-bit key the cipher uses 14 I-layers, 7 B-layers, and 12 R-layers (19 data-randomizing
+    rounds total); for a 192- or 256-bit key it uses 16 I-layers, 8 B-layers, and 14 R-layers (22 data-randomizing
+    rounds total).'
   instances:
-  - id: sc2000_v1
+  - id: sc2000_128
     name: SC2000-128
     type: block_cipher
     reference_ids:
@@ -9464,8 +9503,30 @@ primitive_families:
       block_size_bits: 128
       key_size_bits: 128
       output_size_bits: 128
-      rounds: 7
-    notes: 'SC2000 with 128-bit key (7 rounds). 192-bit: 10 rounds, 256-bit: 11 rounds.'
+      rounds: 19
+    notes: '128-bit key: 14 I, 7 B, 12 R layers (19 data-randomizing rounds).'
+  - id: sc2000_192
+    name: SC2000-192
+    type: block_cipher
+    reference_ids:
+    - sc2000_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 192
+      output_size_bits: 128
+      rounds: 22
+    notes: '192-bit key: 16 I, 8 B, 14 R layers (22 data-randomizing rounds).'
+  - id: sc2000_256
+    name: SC2000-256
+    type: block_cipher
+    reference_ids:
+    - sc2000_ref
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+      output_size_bits: 128
+      rounds: 22
+    notes: '256-bit key: 16 I, 8 B, 14 R layers (22 data-randomizing rounds), same round count as the 192-bit key.'
 - id: shacal
   name: SHACAL
   construction_ids:

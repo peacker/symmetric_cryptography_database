@@ -2261,15 +2261,40 @@ references:
   venue: CRYPTREC Candidate / Hitachi
   url: https://www.cryptrec.go.jp/cryptrec_03_spec_cypherlist_files/PDF/10_03spec.pdf
   notes: 'Japanese stream cipher, CRYPTREC candidate. Local copy: references/2001-multi_s01.pdf.'
-- id: multi2_ref
-  kind: standard
-  title: 'MULTI2: An Encryption Algorithm for Satellite Broadcasting'
-  year: 1988
-  notes: Original MULTI2 paper. Standardised as ISO/IEC 9979-0002.
+- id: multi2_patent_us_4982429
+  kind: patent
+  title: Encipher Method and Decipher Method (US Patent 4,982,429)
   authors:
-  - Shoji Miyaguchi
-  venue: CRYPTO 1988, LNCS 403
-  url: https://link.springer.com/chapter/10.1007/0-387-34799-2_27
+  - Kazuo Takaragi
+  - Fusao Nakagawa
+  - Ryoichi Sasaki
+  year: 1991
+  organization: Hitachi, Ltd. / Hitachi Control Systems, Inc.
+  status: granted
+  url: https://patents.google.com/patent/US4982429A/en
+  notes: 'Local copy: references/1988-multi2-patent_US-4982429-A.pdf. Filed 1989-04-27 (Japan priority application
+    63-103919, 1988-04-28), granted 1991-01-01. This is the original design document for what became MULTI2, describing
+    the substitution-transformation (P1-P4) / permutation-transformation (R1-R3) encipher method. The prior "multi2_ref"
+    entry (a purported Miyaguchi paper "MULTI2: An Encryption Algorithm for Satellite Broadcasting," CRYPTO 1988, LNCS
+    403) does not correspond to any real paper in that proceedings volume and has been removed; MULTI2''s actual
+    inventors are Takaragi, Nakagawa, and Sasaki of Hitachi, not Miyaguchi. The patent''s Background of the Invention
+    explicitly frames the design against both prior algorithms: it describes DES''s substitution-box/permutation-table
+    process in detail (Figs. 11-13, labeled "PRIOR ART") and states that, compared with DES, "the number of processes
+    for the substitution transformation and permutation transformation can be reduced, so that the encipherment process
+    can be executed at a high speed" -- and separately explains that FEAL processes data on a byte-unit basis (efficient
+    on 8-bit microcomputers but not 32-bit ones), concluding that "the encryption algorithm for fundamentally executing
+    the processes on a 4-byte unit basis which is suitable for the 32-bit microcomputer is demanded" -- exactly the
+    object the invention delivers. See the multi2 family''s influences[] for both edges.'
+- id: multi2_iso_iec_9979
+  kind: standard
+  title: 'ISO/IEC 9979 Register Entry No. 9: MULTI2'
+  year: 1994
+  organization: ISO/IEC (registration sponsored by Japan IPA; requested by Hitachi, Ltd.)
+  status: registered
+  notes: 'Local copy: references/1994-multi2-ISO_IEC_9979-version.pdf. Registered 1994-11-14. States "MULTI2 is a
+    symmetric block cipher algorithm based on the permutation-substitution calculation like DES" and lists both US
+    patents (4,982,429 and 5,103,479) plus a Japanese patent application as license restrictions. Confirms the 64-bit
+    block / 64-bit data key / 256-bit system key / configurable-round parameters used by the multi2 family entry.'
 - id: nimbus_ref
   kind: paper
   title: 'Nimbus: A Flexible Block Cipher Family'

@@ -27,7 +27,7 @@ KNOWN_MISSING = {
     "khichidi_1",
     "labyrinth", "lane", "lea_iso", "lesamnta", "luffa", "lux_hash",
     "m3lcrypt", "mcrypton", "mcssha3", "md6", "meshhash", "mibs", "mmb",
-    "multi2", "nasha", "newdes", "oryx", "panama", "pbkdf2", "pea",
+    "nasha", "newdes", "oryx", "panama", "pbkdf2", "pea",
     "picaro",
     "polyval", "pufferfish", "rc4plus", "sandstorm",
     "sarmal", "sgail", "shabal",

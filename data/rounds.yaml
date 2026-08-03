@@ -2971,12 +2971,16 @@ rounds:
       params:
         modulus: 4294967296
     - component_id: rotation_fixed
+    - component_id: and
+    - component_id: or
     - component_id: xor
-    constant_injection: subkey
+    constant_injection: subkey_and_round_constant
     state_model:
       state_bits: 64
       word_bits: 32
-  notes: 'NUSH round: modular addition, fixed rotation, XOR (no S-boxes).'
+  notes: 'NUSH round: modular addition, fixed rotation, a keyed AND/OR selection operator, XOR (no S-boxes). The AND-vs-OR
+    choice at each of the four R-transformation iterations per round is fixed by a lookup table in the spec, not
+    data- or key-dependent.'
 - id: orange_round
   name: ORANGE round
   kind: other
@@ -3164,20 +3168,25 @@ rounds:
     component_flow:
     - component_id: sbox
       params:
-        input_bits: 4
-        output_bits: 4
+        input_bits: 6
+        output_bits: 6
     - component_id: sbox
       params:
-        input_bits: 2
-        output_bits: 2
+        input_bits: 5
+        output_bits: 5
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
     - component_id: linear_transform
     - component_id: xor
     constant_injection: subkey
     state_model:
       state_bits: 128
-      word_bits: 4
-  notes: 'SC2000 round: combined 2-bit and 4-bit S-box layers, MDS linear transform,
-    key XOR.'
+      word_bits: 32
+  notes: 'SC2000 heterogeneous structure, applied I-B-I-(R x R)-...-I-B-I: I XORs in round-key material only; B is
+    an SPN layer of thirty-two 4-bit S-boxes (S4); R is a balanced-Feistel layer whose F function runs two 32-bit
+    halves through 6-bit and 5-bit S-boxes (S6, S5) and an MDS linear map M.'
 - id: shacal_round
   name: SHACAL round
   kind: other
