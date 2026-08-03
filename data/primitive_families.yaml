@@ -2798,6 +2798,15 @@ primitive_families:
       the AES S-box design, we use a Galois field inversion. Specifically our S-box
       is defined as y = S(x) = f((x XOR b)^-1), where a^-1 denotes the inverse of
       a in GF(2^4)..." (a 4-bit analogue of Rijndael''s 8-bit GF(2^8) inversion S-box).'
+  - source_family_id: lblock
+    relations:
+    - related_to
+    - inspired_by
+    note: 'TWINE''s own paper explicitly cites LBlock as a close, independently proposed predecessor: "LBlock [45], proposed
+      independently of ours, is quite similar to TWINE... Nevertheless, there are two important differences between TWINE
+      and LBlock: 1. LBlock uses ten distinct S-boxes, while TWINE uses one S-box, including the key schedule. 2. LBlock
+      uses a bit permutation in its key scheduling, which decreases software efficiency." The relation records that explicit
+      design comparison and predecessor role without claiming TWINE is merely a variant of LBlock.'
   instances:
   - id: twine_80
     name: TWINE-80
@@ -2815,6 +2824,58 @@ primitive_families:
       key_size_bits: 128
       rounds: 36
       output_size_bits: 64
+- id: lblock
+  name: LBlock
+  notes: LBlock is a 32-round lightweight 64-bit block cipher with an 80-bit key. Its paper describes it as a variant Feistel
+    structure optimized for compact hardware and 8-bit software, using an 8-bit rotation of one half, an eight-nibble S-box
+    layer, and a 32-bit word permutation inside the round function.
+  construction_ids:
+  - feistel
+  - balanced_feistel
+  round_ids:
+  - lblock_round
+  target_applications:
+  - constrained_hardware
+  - embedded
+  - iot
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: xor
+    - id: rotation_fixed
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: word_permutation
+      params:
+        word_size_bits: 4
+    - id: constant
+  reference_ids:
+  - wu_zhang_2011_lblock
+  process_participations: []
+  influences: []
+  innovative_ideas:
+  - id: lblock_rotated_half_feistel_update
+    name: Rotated-half lightweight Feistel update
+    note: Each round updates one 32-bit half with an S-box-plus-permutation round function while rotating the other half by
+      8 bits before XOR, so both hardware wiring cost and 8-bit software overhead stay low.
+  - id: lblock_key_schedule_nibble_sboxes
+    name: 80-bit key schedule with nibble S-boxes and round-counter injection
+    note: The key register is rotated by 29 bits each round, transformed by two dedicated 4-bit S-boxes on the high nibble
+      positions, and mixed with the round counter before emitting the next 32-bit subkey.
+  instances:
+  - id: lblock_64_80
+    name: LBlock
+    type: block_cipher
+    reference_ids:
+    - wu_zhang_2011_lblock
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 80
+      rounds: 32
+      output_size_bits: 64
+    notes: Original ACNS 2011 LBlock instance with a 64-bit block, 80-bit key, variant-Feistel structure, and 32 rounds.
 - id: crypton
   name: CRYPTON
   notes: CRYPTON is a 12-round, 128-bit AES candidate whose SPN uses byte substitutions and transposition-oriented diffusion,

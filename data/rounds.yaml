@@ -940,6 +940,30 @@ rounds:
   notes: 'TWINE is a lightweight 16-branch generalized Feistel block cipher.
 
     '
+- id: lblock_round
+  name: LBlock Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+      branches: 2
+      word_bits: 4
+    component_flow:
+    - component_id: xor
+    - component_id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - component_id: word_permutation
+      params:
+        word_size_bits: 4
+    - component_id: rotation_fixed
+      params:
+        amount: 8
+    constant_injection: subkey
+  notes: LBlock round update on a 64-bit two-branch state. The round function applies subkey XOR, eight parallel 4-bit S-boxes,
+    and a 32-bit nibble permutation to one half, then XORs that result with the other half after an 8-bit rotation.
 - id: crypton_round
   name: CRYPTON Round
   kind: full_round

@@ -1,0 +1,92 @@
+Simplified Manual Todo (2026-08-03)
+===================================
+
+Purpose
+-------
+This file rewrites manual follow-ups into short, clear tasks with simple language.
+Use these tasks to finish remaining audit and modeling work.
+
+Task Format
+-----------
+- Task Name: Short action label
+- Description: What to do in plain language
+
+Open Tasks
+----------
+
+1. Task Name: Decide Orthros Tier
+   Description: Choose the correct schema tier/type for Orthros (it behaves like a low-latency PRF), then model it and add the influence edge from uLBC.
+
+2. Task Name: Add Turtle Predecessor
+   Description: Create a family entry for Turtle cipher and link it as Tortuga's predecessor.
+
+3. Task Name: Add scrypt Influence Family
+   Description: Add a family entry for scrypt and connect influence edges from POMELO and Tortuga.
+
+4. Task Name: Add Mersenne Twister Family
+   Description: Add a family entry for Mersenne Twister so CryptMT3 can reference it with a proper cross-family edge.
+
+5. Task Name: Verify LEA Construction Tag
+   Description: Read LEA primary paper and confirm whether generalized_feistel is correct; retag only if the paper supports a different structure.
+
+6. Task Name: Fix NewDES Round Mapping
+   Description: Create a dedicated NewDES round definition and replace the incorrect des_round mapping.
+
+7. Task Name: Plan SHA-3 Stub Cleanup
+   Description: Create a separate scoped plan for the ~55 SHA-3 round-1-only stub families and prioritize candidates before editing.
+
+8. Task Name: Fetch Missing PDFs
+   Description: When any missing paper is available, add it to references with a clear filename (YYYY-name.ext), then update references and tests.
+
+9. Task Name: Fix LOKI PDF Match Bug
+    Description: Update scripts/reference_pdfs.py fuzzy matching so loki does not incorrectly match loki97, and track loki in KNOWN_MISSING until correct paper is added.
+
+10. Task Name: Add LOKI Primary PDF
+    Description: Add LOKI89/LOKI91 primary paper PDF to references and wire it to loki_ref.
+
+11. Task Name: Add AO Remaining Families
+    Description: Model still-open AO families that are not yet added (for example: Starkad, Agrasta, and others still unresolved) after reading primary sources.
+
+12. Task Name: Confirm GenLowMC Source
+    Description: Find a citable source for GenLowMC (author, venue, talk, or draft); if none exists, mark as unpublished and do not model.
+
+13. Task Name: Add DarkMatter Follow-up Reference
+    Description: Add the PKC 2021 attacks-and-fixes paper as a reference record if you want that cryptanalysis lineage tracked.
+
+14. Task Name: Decide LegendrePRF Tier
+    Description: Decide whether LegendrePRF should be represented in mode tier; if yes, extend mode taxonomy and add proper entries.
+
+15. Task Name: Evaluate Pasta Stream Family
+    Description: Decide whether to model Pasta stream-cipher wrapper in mode tier in addition to existing pasta_pi primitive family.
+
+16. Task Name: Archive Zcash Spec PDF
+    Description: Optionally save a local archival copy of the exact Zcash protocol version used in notes.
+
+17. Task Name: Verify Unconfirmed Facts
+    Description: Re-check secondhand claims (for example AIM/Rain details and some AO round parameters) directly from primary papers before treating them as final.
+
+18. Task Name: Decide Skyscraper v2 Update
+    Description: Choose whether to move family notes from original Skyscraper to hardened Skyscraper-v2 once v2 paper is available.
+
+19. Task Name: Add ARMADILLO2 Cryptanalysis Notes
+    Description: Read and cite ARMADILLO2 cryptanalysis papers, then add concise lineage/attack notes to armadillo.
+
+20. Task Name: Classify Armadillo Construction
+    Description: Decide whether armadillo needs a new construction category (data-dependent permutation selection) and update taxonomy if approved.
+
+21. Task Name: Keep Signature Schemes Out of Scope
+    Description: Keep asymmetric signature schemes (for example Picnic, AIMer, Rainier, MandaRain) out of symmetric-family modeling unless project scope changes.
+
+22. Task Name: Split Griffin Wrappers (Optional)
+    Description: If queryability is needed, add separate mode-tier entries for griffin_sponge and griffin_compression.
+
+23. Task Name: Prevent Duplicate Construction IDs
+    Description: Before adding any new construction id, search existing ids first to avoid duplicates that only fail at build-db stage.
+
+Completion Checklist
+--------------------
+- Run make validate after each grouped change.
+- Run make test before closing a task batch.
+- Run make build-db (and make build-site when relevant).
+- Update scripts/test_reference_pdf_coverage.py KNOWN_MISSING when source coverage changes.
+- Commit in small logical units (one concern per commit).

@@ -433,9 +433,8 @@ references:
   organization: IETF
   status: informational
   url: https://www.rfc-editor.org/rfc/rfc2994
-  notes: 'Local copy: references/2000-misty1-rfc2994.txt. Note: references/2000-misty1.pdf is a mislabeled 1-page NESSIE
-    submission cover sheet, not this specification -- it fuzzy-matches the "misty1" family name by filename only and
-    should probably be removed or renamed.'
+  notes: 'Local copy: references/2000-misty1-rfc2994.txt. The mislabeled references/2000-misty1.pdf (a 1-page NESSIE
+    submission cover sheet, not this specification) has been removed.'
 - id: fleischmann_2009_sha3_classification
   kind: article
   title: Classification of the SHA-3 Candidates
@@ -841,6 +840,16 @@ references:
   url: https://doi.org/10.1007/978-3-642-34047-5_13
   notes: 'Local copy: references/2012-twine-sac-full.pdf (full version after SAC
     2012, via web.archive.org mirror of jpn.nec.com).'
+- id: wu_zhang_2011_lblock
+  kind: article
+  title: 'LBlock: A Lightweight Block Cipher'
+  authors:
+  - Wenling Wu
+  - Lei Zhang
+  year: 2011
+  venue: ACNS 2011
+  url: https://doi.org/10.1007/978-3-642-21554-4_19
+  notes: 'Local copy: references/2011-lblock.pdf.'
 - id: lim_1998_crypton
   kind: article
   title: 'CRYPTON: A New 128-bit Block Cipher'
@@ -2113,14 +2122,23 @@ references:
   notes: Stream cipher with authenticated encryption capability.
 - id: lili_128_ref
   kind: paper
-  title: 'LILI-128: A Light-Weight Stream Cipher'
+  title: The LILI-128 Keystream Generator
   authors:
-  - Mark Fountain
-  - Safuat Hamdy
+  - Ed Dawson
+  - Andrew Clark
+  - Jovan Golić
+  - William Millan
+  - Leonie Penna
+  - Leonie Simpson
   year: 2000
   venue: NESSIE Submission
-  organization: ISIGlobal / Rohde & Schwarz
-  notes: Lightweight stream cipher optimized for constrained devices.
+  organization: Queensland University of Technology / University of Belgrade
+  notes: 'Local copy: references/2000-lili-128.pdf (renamed from the stale references/2000-lili_128.pdf, which held a
+    1-page NESSIE cover sheet, not this paper). Clock-controlled nonlinear-filter LFSR stream cipher. The paper''s own
+    related-work discussion lists ORYX and SOBER together only as prior examples combining nonlinear filtering with
+    irregular clocking (no single one singled out as an adopted basis), and states its stop-and-go-free clocking was
+    chosen specifically to avoid a weakness of an earlier stop-and-go clock-controlled design -- per this database''s
+    influence standard neither reaches the bar for an influences[] edge.'
 - id: lilliput_ae_ref
   kind: paper
   title: Lilliput-AE
@@ -2273,11 +2291,16 @@ references:
 - id: nush_ref
   kind: paper
   title: 'NUSH: A Fast Software Block Cipher'
+  authors:
+  - Anatoly Lebedev
+  - Alexander Volchkov
   year: 2000
   venue: NESSIE Submission
-  notes: 'Software-optimized block cipher for performance. references/2000-nush.pdf is only a 1-page design-rationale
-    excerpt (no S-boxes, key schedule, or full round description) -- the complete NESSIE submission is needed to check
-    for a design-inspiration edge.'
+  notes: 'Software-optimized block cipher for performance. Local copy: references/2000-nush.pdf -- the full NESSIE
+    submission specification (block cipher NUSH plus the related NUSH Stream, NUSH Self-Synchro, NUSH MAC, NUSH Hash,
+    NUSH PRF constructions built on the same primitive, and asymmetric NUSH PKCode/NUSH Sign schemes out of scope for
+    this database). No design-rationale or related-work section is present, so no predecessor-cipher influence claim
+    can be sourced from it.'
 - id: orange_ref
   kind: paper
   title: ORANGE
@@ -2434,13 +2457,26 @@ references:
   url: https://www.cosic.esat.kuleuven.be/nessie/
 - id: sc2000_ref
   kind: paper
-  title: 'SC2000: A New Block Cipher Candidate'
-  year: 2000
-  venue: NESSIE Submission
-  notes: 'Substitution-Permutation network with flexible parameters. references/2000-sc2000.pdf is only a 1-page Fujitsu
-    IP/patent statement, not this paper -- it has no algorithm description or citations. Secondary sources describe SC2000
-    as combining an unkeyed two-round Feistel network with SPN S-box/key-addition layers, but cite no specific predecessor
-    cipher as inspiration; the actual FSE 2001 paper is needed to check further.'
+  title: The Block Cipher SC2000
+  authors:
+  - Takeshi Shimoyama
+  - Hitoshi Yanami
+  - Kazuhiro Yokoyama
+  - Masahiko Takenaka
+  - Kouichi Itoh
+  - Jun Yajima
+  - Naoya Torii
+  - Hidema Tanaka
+  year: 2001
+  venue: FSE 2001, LNCS 2355, pp. 312-327 (Springer, 2002)
+  notes: 'Local copy: references/2000-sc2000.pdf -- the actual FSE 2001 design paper (previously this filename held
+    a 1-page Fujitsu IP/patent statement with no algorithm description; that has been replaced). The cipher pairs a
+    Feistel-structured R layer with an SPN-structured B layer per round. Its references section cites Square, Rijndael,
+    Twofish, and a SAC''98 fast-Boolean-functions paper together for the generic MDS-diffusion-matrix technique, and
+    Biham''s DES bitslice paper plus two Serpent bitslice papers together for the generic bitslicing implementation
+    technique -- in both cases several prior designs are listed side by side for a shared generic technique without
+    singling one out as the concrete basis, so per this database''s influence standard neither is recorded as an
+    influences[] edge.'
 - id: shacal_ref
   kind: paper
   title: SHACAL
