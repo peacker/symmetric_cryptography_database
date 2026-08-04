@@ -5780,6 +5780,8 @@ primitive_families:
   name: SPRING
   construction_ids:
   - spn
+  - big_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - spring_round
   target_applications:
@@ -6854,6 +6856,7 @@ primitive_families:
   construction_ids:
   - spn
   - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - cs_cipher_round
   - cs_cipher_key_round
@@ -7443,6 +7446,10 @@ primitive_families:
       setting.
 - id: rocca
   name: Rocca Core Update Function
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - rocca_round
   target_applications:
@@ -7461,6 +7468,15 @@ primitive_families:
   reference_ids:
   - sakamoto_et_al_2021_rocca
   process_participations: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - inspired_by
+    - related_to
+    note: 'Rocca is explicitly designed as an AES-based construction: the abstract presents Rocca as "an AES-based authenticated-encryption
+      with associated-data scheme," and the design section states "the AES round function is chosen as the only nonlinear
+      function." The core update applies four AES rounds per step plus XOR and a cost-free block permutation over the 8-word
+      state, so the lineage to Rijndael is direct at the round-function level.'
   notes: 'AES-NI-friendly state-update core with an 8 × 128-bit internal state. Each round updates the state with four AES
     rounds and four 128-bit XOR operations, then applies a free permutation of the 128-bit state words. See rocca_aead for
     the AEAD construction built on it.'
@@ -8668,6 +8684,8 @@ primitive_families:
   name: MMB
   construction_ids:
   - spn
+  - big_sbox_layer
+  - near_mds_arx_linear_layer
   - modular_multiplication_network
   - modulo_2n_minus_1
   - constant_multiplier
@@ -9368,6 +9386,7 @@ primitive_families:
   construction_ids:
   - spn
   - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - safer_round
   target_applications:
@@ -9957,6 +9976,7 @@ primitive_families:
   construction_ids:
   - spn
   - full_sbox_layer
+  - mds_linear_layer
   round_ids:
   - bksq_round
   target_applications:
@@ -11699,6 +11719,7 @@ primitive_families:
   construction_ids:
   - spn
   - full_sbox_layer
+  - bit_permutation_linear_layer
   round_ids:
   - des_round
   target_applications: []
@@ -12222,6 +12243,7 @@ primitive_families:
   construction_ids:
   - spn
   - full_sbox_layer
+  - near_mds_arx_linear_layer
   characteristics:
     components:
     - id: sbox
@@ -13246,6 +13268,7 @@ primitive_families:
   construction_ids:
   - spn
   - alternating_full_partial_sbox_layer
+  - near_mds_arx_linear_layer
   - zk_friendly_low_degree_map
   round_ids:
   - poseidon2_round
@@ -13288,6 +13311,7 @@ primitive_families:
   construction_ids:
   - spn
   - alternating_full_partial_sbox_layer
+  - near_mds_arx_linear_layer
   - zk_friendly_low_degree_map
   round_ids:
   - poseidon2b_round
@@ -13325,6 +13349,7 @@ primitive_families:
   construction_ids:
   - spn
   - alternating_full_partial_sbox_layer
+  - mds_linear_layer
   - zk_friendly_low_degree_map
   round_ids:
   - neptune_round
@@ -13407,6 +13432,8 @@ primitive_families:
   - feistel
   - horst
   - spn
+  - full_sbox_layer
+  - mds_linear_layer
   - fluid_spn
   - zk_friendly_low_degree_inverse_map
   round_ids:
@@ -13447,6 +13474,8 @@ primitive_families:
   name: ANEMOI
   construction_ids:
   - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   - zk_friendly_low_degree_inverse_map
   round_ids:
   - anemoi_round
@@ -13483,6 +13512,8 @@ primitive_families:
   name: Reinforced Concrete
   construction_ids:
   - spn
+  - full_sbox_layer
+  - mds_linear_layer
   - zk_friendly_lookup_table
   round_ids:
   - reinforced_concrete_round
@@ -13591,6 +13622,8 @@ primitive_families:
   name: Monolith
   construction_ids:
   - spn
+  - full_sbox_layer
+  - mds_linear_layer
   - zk_friendly_lookup_table
   round_ids:
   - monolith_round
@@ -13715,6 +13748,8 @@ primitive_families:
   name: Polocolo
   construction_ids:
   - spn
+  - full_sbox_layer
+  - mds_linear_layer
   - zk_friendly_lookup_table
   round_ids:
   - polocolo_round
@@ -13995,6 +14030,8 @@ primitive_families:
   name: Pasta-pi
   construction_ids:
   - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
   round_ids:
   - pasta_pi_round
   target_applications:

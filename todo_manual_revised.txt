@@ -10,6 +10,7 @@ Task Format
 -----------
 - Task Name: Short action label
 - Description: What to do in plain language
+- Notes: Additional notes occasionally added to clarify the task
 
 Open Tasks
 ----------
@@ -28,6 +29,13 @@ Open Tasks
 
 5. Task Name: Verify LEA Construction Tag
    Description: Read LEA primary paper and confirm whether generalized_feistel is correct; retag only if the paper supports a different structure.
+   Notes: The paper does not mention the Feistel structure (except when talking about TEA and XTEA).
+   Also the word "generalized" is not mentioned.
+   The round function resembles the Type 3 Feistel structure described in Fig. 1 of 2010-generalized_feistel.pdf
+   where the F functions are simple XORs with part of the round key 
+   (note that in the original DES construction the round key is XORed in the F function), 
+   while the vertical branch contains a XOR with another part of the round key, 
+   a rotation, and the mixing function with the other branch is done through a modular addition.
 
 6. Task Name: Fix NewDES Round Mapping
    Description: Create a dedicated NewDES round definition and replace the incorrect des_round mapping.

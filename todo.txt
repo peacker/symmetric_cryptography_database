@@ -1,8 +1,95 @@
 TODO:
 
+- Move the About tab to be the left most, followed by Glossary, 
+  then add a "Disclaimer" tab to state that:
+  + this website was initially created by a 
+    massive AI crawl and AI is often used to retrieve information.
+  + When a full manual review will be completed, this will be mentioned in this disclaimer.
+
+- Find other intersting visualizations:
+  TODO: define which ones first.
+  Group the tab into two groups:
+  - Views
+  - Tables
+  - Documentation (if you have a better name feel free to propose it, for About, Glossary, Disclaimer)
+  
+- set the following defaults:
+  + panels on the left enabled when on a large landscape screen (e.g. a laptop)
+
+- When from radial the user clicks layers, or vicevers, make sure that the plot starts from the Fit position.
+
+- Reuse as much code as possible for the filters of the Tables and of the Views.
+  The Views filter can probably serve as inspiration as they have been refined more.
+  In particular, enable 
+  + the filters on left/top feature, with the same defaults.
+  + the collaps/expand all buttons
+  Use the same commands when the filter is the same:
+  + e.g. the Reference Year Max and Min in the Custom Query Filter can be done as in the Timelines/Genealogy tabs
+  Note: the "Color by" control 
+
+- It does not make sense to color by application, as most ciphers target multiple Applications
+  Similarly, it does not make sense to color by construction.
+  Maybe there could be a feature to highlight only a certain set of Targe Applications or Consctrutions
+
+- add Tune Layout button also in the Timeline tab, reusing the same code.
+
+- In the Timelines tab, add the option None to "Group families by".
+  In this case the labels should al collaps to the top forming a sort of histogram.
+
+- Fix "Find family" behaviour:
+  Currently, if the user types "DES" also HADES family will appear.
+  The should be an option to match the exact word or contained in the word.
+ 
+- the construction_sharing_edges table seems to generate a misleading pattern.
+  For example, if we take the full_sbox_layer construction_id
+  we see newdes being connected to safer, then safer to shark, then shark to square and so on.
+  If the idea of this table was to be used in the Geneaology view, this will cause a long column of descendands,
+  but this might not be correct as multiple ciphers could be published the same year and not be dependent.
+  I would change this as follows: we give credit to the first family introducing a construction (based on the year).
+  The all subsequent families will be connected to the first family.
+  This will generate a flat one-to-many plot in the "by generation" view, and, 
+  less flat one-to-many view in the "by year" view.
+  
+- In the process_stage_participants table (in the All SQLite Tables) it seems that
+  each row has either a family_id or a name entry, and when it has one, the other is empty,
+  except very few cases.
+  This behaviour looks like a bug. If not, report the reason, otherwise fix it.
+
+- in the table family_influences, tea, salsa20, rijndael, prince and present
+  are the only families with an entry under innovative_idea_ids_json.
+  This behaviour looks like a bug. If not, report the reason, otherwise fix it.
+
+- in the table families, chacha20_poly1305, aes_cbc, aes_ctr, hmac_sha256, umac, bmgl, aes_gcm, pbkdf2
+  are the only families with an entry under authors_json.
+  This behaviour looks like a bug. If not, report the reason, otherwise fix it.
+
+- add [low priority]
+  Espresso: Espresso seems to be a 2015 proposal for 5G, that was never much analyzed or taken into consideration:
+  + 0 official citations mentioned in the corresponding Cryptography and Communications journal metrics https://link.springer.com/article/10.1007/s12095-015-0173-2/metrics)
+  + 68 citations in Semantic Scholar: https://www.semanticscholar.org/paper/Espresso%3A-A-stream-cipher-for-5G-wireless-systems-Dubrova-Hell/3207ac8ba385c108180dc03471fa00efc7923743#citing-papers
+  Among its citations, the 2019 paper "Generalized NLFSR Transformation Algorithms and Cryptanalysis of the Class of Espresso-like Stream Ciphers" mentions "The transformation result shows that the Galois NLFSR used in any Espresso-like stream ciphers can be easily transformed back into the original Fibonacci LFSR, so this kind of design should be avoided in the future". Other cryptanalysis results state similar results. So it is well-known that this cipher is weak.
+  Unfortunately, I cannot find this citation either in the paper.
+  Another relevant citation I cannot find is the following https://link.springer.com/chapter/10.1007/978-981-97-0641-9_51, where the authors already use LSTM and CNN models to predict the keystream of Espresso.
+  Finally, one of the state of the art techniques to predict keystreams with neural networks is https://eprint.iacr.org/2023/819. Again, no citation found.
+  The authors make some wrong statements like "Espresso is being considered as a potential cryptographic primitive in 5G". This is not true, it was proposed as suitable for 5G by the authors of Espresso, but the cipher is not secure, none would ever propose it for 5G now.
+
 - add the following designs:
   Pholkos (Bossert et al, CT-RSA 2022) 
   Vistrutah (Avanzi et al., IACR Transactions on Symmetric Cryptology, Vol. 2025, No. 3, pp. 1–150) - can easily be turned into a tweakable cipher as well
+
+- when tapping or clicking on a lable or a relation in both the timelines and genealogy view
+  a small yellow note on the bottom appears.
+  Add a new "Open PDF" button inside the note to open the corresponding PDF.
+  If more than one reference if present, add a menu from which to choose the exact document.
+  When the note is about the relation open the pdf of the two families, side by side if in landscape mode,
+  on top of each other for vertical mode, giving the option to switch if desired.
+  The PDF should be scrollable within a fixed positioned window, so that is possible to 
+  scroll into two different positions of the two pdfs to, for example, compare the design figure
+  by having them side by side, without scrolling the full webpage down or up.
+
+- when the filters of the Timelines and Geneaology tab are on the left
+  make the Collapse all and Expand all button static, so that if the user has scrolled
+  down to the button of the filters, he can still collapse them without scrolling up again
 
 - add N-hash https://en.wikipedia.org/wiki/N-hash
   add new construction type described by the wikipedia page
