@@ -856,7 +856,10 @@ mode_families:
     - id: nonlinear_filter
   reference_ids:
   - nawaz_gong_2005_wg
-  process_participations: []
+  process_participations:
+  - process_id: estream_competition_nist_2004_2008
+    stage_ids: [phase_1, phase_2]
+    status: candidate
   influences: []
   notes: WG (Welch-Gong) is a word-oriented stream cipher built from an 11-stage LFSR over GF(2^29) filtered by a Welch-Gong
     transformation, designed to produce keystream with provable randomness properties (balance, long period, ideal 2-level
@@ -2713,7 +2716,10 @@ mode_families:
     - id: constant
   reference_ids:
   - remus_ref
-  process_participations: []
+  process_participations:
+  - process_id: lightweight_crypto_nist_2018_2023
+    stage_ids: [round_1]
+    status: candidate
   influences:
   - source_family_id: skinny
     relations:
@@ -4377,7 +4383,10 @@ mode_families:
     - id: shift_fixed
   reference_ids:
   - maximov_2002_mir1
-  process_participations: []
+  process_participations:
+  - process_id: estream_competition_nist_2004_2008
+    stage_ids: [phase_1]
+    status: candidate
   influences:
   - source_family_id: rijndael
     relations:
@@ -8210,7 +8219,10 @@ mode_families:
     components: []
   reference_ids:
   - catfish_ref
-  process_participations: []
+  process_participations:
+  - process_id: phc_competition_nist_2013_2015
+    stage_ids: [submissions]
+    status: candidate
   influences: []
   instances:
   - id: catfish_v1
@@ -8232,7 +8244,10 @@ mode_families:
     components: []
   reference_ids:
   - m3lcrypt_ref
-  process_participations: []
+  process_participations:
+  - process_id: phc_competition_nist_2013_2015
+    stage_ids: [submissions]
+    status: candidate
   influences: []
   instances:
   - id: m3lcrypt_v1
@@ -8310,7 +8325,10 @@ mode_families:
     components: []
   reference_ids:
   - pufferfish_ref
-  process_participations: []
+  process_participations:
+  - process_id: phc_competition_nist_2013_2015
+    stage_ids: [submissions, finalist]
+    status: finalist
   influences:
   - source_family_id: blowfish
     relations:
@@ -9955,7 +9973,10 @@ mode_families:
   - software
   reference_ids: &id001
   - bmgl_ref
-  process_participations: []
+  process_participations:
+  - process_id: nessie_competition_european_commission_2000_2003
+    stage_ids: [submissions_stream]
+    status: submitted
   influences:
   - source_family_id: rijndael
     relations:
@@ -10926,3 +10947,82 @@ mode_families:
       state_size_bits: 1024
     notes: 'Rocca authenticated-encryption scheme from the 2021 ToSC paper (updated/extended local copy in references/2022-rocca.pdf).
       The paper also defines a raw encryption mode, but this entry models the AEAD construction.'
+- id: espresso
+  name: Espresso
+  construction_ids:
+  - native_keystream_generator
+  round_ids:
+  - espresso_round
+  target_applications:
+  - hardware
+  - wireless
+  - ultra_low_latency
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: nlfsr
+      params:
+        length: 256
+    - id: and
+    - id: xor
+    - id: boolean_filter
+      params:
+        inputs: 20
+        degree: 6
+  reference_ids:
+  - dubrova_hell_2017_espresso
+  process_participations: []
+  influences: []
+  notes: 'Espresso (Dubrova, Hell; Cryptography and Communications 9(2):273-289, 2017, online-first 2015, also IACR
+    eprint 2015/241) is a hardware-oriented stream cipher proposed by its authors for 5G wireless communication
+    systems. It uses a single 256-bit non-linear feedback shift register (NLFSR) in the Galois configuration --
+    rather than the paired LFSR+NLFSR structure of Grain/Trivium -- filtered by a 20-variable, algebraic-degree-6
+    non-linear Boolean output function to produce one keystream bit per clock; key size 128 bits, IV size 96 bits.
+    The Galois-configuration feedback is constructed (via a transformation method from Dubrova''s own prior work) to
+    be equivalent to a maximum-length LFSR, guaranteeing period 2^256-1 while keeping the per-stage feedback small
+    and low-propagation-delay for hardware. The paper reports Espresso as the fastest stream cipher below 1500 GE
+    among those it compares against, including Grain-128 and Trivium. No lineage-qualifying influence edge to an
+    earlier named stream cipher family in this database is recorded: the paper''s own related work was not
+    accessible in full text for this entry (both SpringerLink and the IACR eprint mirror blocked automated
+    retrieval), so no concrete "based on"/"derived from" language or shared component could be confirmed against
+    the criteria this database requires for an influence edge; only benchmark-style comparisons to Grain-128 and
+    Trivium were found in available secondary sources, which do not qualify.
+
+
+    Despite the 5G framing, Espresso has seen very little independent citation or cryptanalytic adoption: Semantic
+    Scholar records 73 citing papers as of this entry, while the publisher''s own SpringerLink citation-metrics
+    figure is close to zero. The 5G framing itself is the authors'' own proposal for suitability, not evidence that
+    Espresso was independently evaluated or adopted by any 5G standards body -- this distinction is recorded here
+    as a caveat rather than as fact, since the exact wording of any specific claim in the paper about 5G
+    consideration/adoption could not be verified against the paywalled full text.
+
+
+    Independent analysis that has been carried out points the same way: Yao and Parampalli (2021, journal version
+    of a 2019 preprint; see yao_parampalli_2021_espresso_like_cryptanalysis) show that the Galois NLFSR used in
+    Espresso -- and in the wider class of "Espresso-like" ciphers built the same way -- can always be transformed
+    back into an equivalent Fibonacci-configuration LFSR with a nonlinear output function, after which standard
+    algebraic and Rønjom-Helleseth attacks break the transformed cipher; their preprint concludes verbatim that
+    "this kind of design should be avoided in the future." Separately, Akhilesh, Singh, and Mishra (2024; see
+    akhilesh_singh_mishra_2024_espresso_lstm) train LSTM and CNN models that effectively predict Espresso''s
+    keystream, a second and independent cryptanalysis result. Given both results, this database records Espresso as
+    a broken/weak design rather than a viable modern stream cipher, notwithstanding its original 5G-oriented
+    performance pitch.
+
+
+    Unconfirmed/not modeled here: the initialization (key/IV loading) clock count analogous to Trivium''s 1152 or
+    Grain''s 160 warm-up clocks was not found in the secondary sources available for this entry and is deliberately
+    omitted from the instance''s characteristics below rather than guessed.'
+  instances:
+  - id: espresso_v1
+    name: Espresso
+    type: enc
+    reference_ids:
+    - dubrova_hell_2017_espresso
+    characteristics:
+      key_size_bits: 128
+      iv_size_bits: 96
+      state_size_bits: 256
+      block_size_bits: 1
+      output_size_bits: 1
+    notes: Baseline Espresso stream-cipher instance. Initialization/warm-up clock count not confirmed from the
+      sources read for this entry; omitted rather than guessed.

@@ -1,95 +1,35 @@
 TODO:
 
-- Move the About tab to be the left most, followed by Glossary, 
-  then add a "Disclaimer" tab to state that:
-  + this website was initially created by a 
-    massive AI crawl and AI is often used to retrieve information.
-  + When a full manual review will be completed, this will be mentioned in this disclaimer.
+- Proposed visualizations (requested: "propose other interesting visualizations"; see DONE section for the
+  request itself). None of these are implemented yet -- flagging as new tasks per the request:
 
-- Find other intersting visualizations:
-  TODO: define which ones first.
-  Group the tab into two groups:
-  - Views
-  - Tables
-  - Documentation (if you have a better name feel free to propose it, for About, Glossary, Disclaimer)
-  
-- set the following defaults:
-  + panels on the left enabled when on a large landscape screen (e.g. a laptop)
+  + Construction taxonomy treemap/sunburst: root construction -> leaf, box/wedge size = family count using
+    it. An alternative entry point to browsing constructions vs. the flat checklist filter, and makes which
+    taxonomies are "big families" (SPN, Feistel) vs. niche (single-leaf) visible at a glance.
 
-- When from radial the user clicks layers, or vicevers, make sure that the plot starts from the Fit position.
+  + Construction-adoption-over-time stream/stacked-area chart: per 5-year bucket, how many *new* families
+    adopted each top-level construction. Complements the Timelines scatter with an aggregate trend view --
+    would show things like the ARX/permutation-based rise post-2010 or Feistel's relative decline.
 
-- Reuse as much code as possible for the filters of the Tables and of the Views.
-  The Views filter can probably serve as inspiration as they have been refined more.
-  In particular, enable 
-  + the filters on left/top feature, with the same defaults.
-  + the collaps/expand all buttons
-  Use the same commands when the filter is the same:
-  + e.g. the Reference Year Max and Min in the Custom Query Filter can be done as in the Timelines/Genealogy tabs
-  Note: the "Color by" control 
+  + Parameter-space scatter: block/state size vs. key size (or vs. rounds), one point per instance, colored
+    by type/construction/era. Should visually cluster lightweight designs (small block/key) apart from
+    general-purpose/high-security ones, and make outliers (e.g. unusually many rounds for a small state)
+    jump out.
 
-- It does not make sense to color by application, as most ciphers target multiple Applications
-  Similarly, it does not make sense to color by construction.
-  Maybe there could be a feature to highlight only a certain set of Targe Applications or Consctrutions
+  + Standardization-process attrition funnel/Sankey: per process (AES, SHA-3, CAESAR, NIST-LWC, eSTREAM,
+    PHC, NESSIE), submitted -> round 1 -> round 2 -> finalist -> winner, sized by family count at each
+    stage. The processes data already supports this; it would visualize the elimination funnel instead of
+    only a flat participant list per stage.
 
-- add Tune Layout button also in the Timeline tab, reusing the same code.
+  + Component usage heatmap: components (sbox, xor, lfsr, mds matrix, ...) x families or x decade, shaded
+    by usage count. Gives a visual overview of which building blocks are common/rare and when they
+    appeared, complementing the existing text-based "Component id/name contains" search in the Query
+    Builder.
 
-- In the Timelines tab, add the option None to "Group families by".
-  In this case the labels should al collaps to the top forming a sort of histogram.
-
-- Fix "Find family" behaviour:
-  Currently, if the user types "DES" also HADES family will appear.
-  The should be an option to match the exact word or contained in the word.
- 
-- the construction_sharing_edges table seems to generate a misleading pattern.
-  For example, if we take the full_sbox_layer construction_id
-  we see newdes being connected to safer, then safer to shark, then shark to square and so on.
-  If the idea of this table was to be used in the Geneaology view, this will cause a long column of descendands,
-  but this might not be correct as multiple ciphers could be published the same year and not be dependent.
-  I would change this as follows: we give credit to the first family introducing a construction (based on the year).
-  The all subsequent families will be connected to the first family.
-  This will generate a flat one-to-many plot in the "by generation" view, and, 
-  less flat one-to-many view in the "by year" view.
-  
-- In the process_stage_participants table (in the All SQLite Tables) it seems that
-  each row has either a family_id or a name entry, and when it has one, the other is empty,
-  except very few cases.
-  This behaviour looks like a bug. If not, report the reason, otherwise fix it.
-
-- in the table family_influences, tea, salsa20, rijndael, prince and present
-  are the only families with an entry under innovative_idea_ids_json.
-  This behaviour looks like a bug. If not, report the reason, otherwise fix it.
-
-- in the table families, chacha20_poly1305, aes_cbc, aes_ctr, hmac_sha256, umac, bmgl, aes_gcm, pbkdf2
-  are the only families with an entry under authors_json.
-  This behaviour looks like a bug. If not, report the reason, otherwise fix it.
-
-- add [low priority]
-  Espresso: Espresso seems to be a 2015 proposal for 5G, that was never much analyzed or taken into consideration:
-  + 0 official citations mentioned in the corresponding Cryptography and Communications journal metrics https://link.springer.com/article/10.1007/s12095-015-0173-2/metrics)
-  + 68 citations in Semantic Scholar: https://www.semanticscholar.org/paper/Espresso%3A-A-stream-cipher-for-5G-wireless-systems-Dubrova-Hell/3207ac8ba385c108180dc03471fa00efc7923743#citing-papers
-  Among its citations, the 2019 paper "Generalized NLFSR Transformation Algorithms and Cryptanalysis of the Class of Espresso-like Stream Ciphers" mentions "The transformation result shows that the Galois NLFSR used in any Espresso-like stream ciphers can be easily transformed back into the original Fibonacci LFSR, so this kind of design should be avoided in the future". Other cryptanalysis results state similar results. So it is well-known that this cipher is weak.
-  Unfortunately, I cannot find this citation either in the paper.
-  Another relevant citation I cannot find is the following https://link.springer.com/chapter/10.1007/978-981-97-0641-9_51, where the authors already use LSTM and CNN models to predict the keystream of Espresso.
-  Finally, one of the state of the art techniques to predict keystreams with neural networks is https://eprint.iacr.org/2023/819. Again, no citation found.
-  The authors make some wrong statements like "Espresso is being considered as a potential cryptographic primitive in 5G". This is not true, it was proposed as suitable for 5G by the authors of Espresso, but the cipher is not secure, none would ever propose it for 5G now.
-
-- add the following designs:
-  Pholkos (Bossert et al, CT-RSA 2022) 
-  Vistrutah (Avanzi et al., IACR Transactions on Symmetric Cryptology, Vol. 2025, No. 3, pp. 1–150) - can easily be turned into a tweakable cipher as well
-
-- when tapping or clicking on a lable or a relation in both the timelines and genealogy view
-  a small yellow note on the bottom appears.
-  Add a new "Open PDF" button inside the note to open the corresponding PDF.
-  If more than one reference if present, add a menu from which to choose the exact document.
-  When the note is about the relation open the pdf of the two families, side by side if in landscape mode,
-  on top of each other for vertical mode, giving the option to switch if desired.
-  The PDF should be scrollable within a fixed positioned window, so that is possible to 
-  scroll into two different positions of the two pdfs to, for example, compare the design figure
-  by having them side by side, without scrolling the full webpage down or up.
-
-- when the filters of the Timelines and Geneaology tab are on the left
-  make the Collapse all and Expand all button static, so that if the user has scrolled
-  down to the button of the filters, he can still collapse them without scrolling up again
+  + Round component-flow-signature similarity view: cluster/group families whose
+    round_component_flow_signatures are identical or near-identical (already filterable by exact substring
+    in the Query Builder) into a dendrogram or grouped list, to surface "structurally similar round"
+    families that don't have a hand-tagged influence edge between them.
 
 - add N-hash https://en.wikipedia.org/wiki/N-hash
   add new construction type described by the wikipedia page
@@ -278,6 +218,161 @@ Which is the first AndRX cipher? Simon for now
   Note: I have added the two references:
   symmetric_cryptography_database/references/1989-rsamd2-rfc1115.txt
   symmetric_cryptography_database/references/1990-md4-crypto.pdf
+
+- Move the About tab to be the left most, followed by Glossary, then add a "Disclaimer" tab; group the
+  tabs into Views / Tables / Documentation.
+  Grouped the nav bar into three labeled clusters -- Views (Timelines, Genealogy), Tables (All SQLite
+  Tables, Custom Query Builder), Documentation (About, Glossary, Disclaimer, in that order). Asked and
+  confirmed: Documentation sits last (after the two working-tab groups), not literally first -- the
+  grouping idea superseded the original "About leftmost" phrasing. Added the Disclaimer tab with the
+  requested AI-crawl/manual-review-pending text. (index.html.tmpl nav markup + new .nav-group/.nav-group-label
+  styles.css, new Disclaimer view-panel.)
+
+- Propose other interesting visualizations to be added in the website.
+  See the new "Proposed visualizations" entries added at the top of the TODO section above (construction
+  treemap, adoption-over-time chart, parameter-space scatter, process attrition funnel, component usage
+  heatmap, round-signature similarity view) -- none implemented yet, just proposed as requested.
+
+- set the following defaults: panels on the left enabled when on a large landscape screen (e.g. a laptop).
+  Default via window.matchMedia('(min-width: 1024px) and (orientation: landscape)') for Timelines/
+  Genealogy/Query Builder at page load; portrait/narrow screens keep the stacked-on-top default. The
+  existing manual toggle still overrides it for the rest of the session. (app.js,
+  setupFullscreenAndFilterToggles)
+
+- When from radial the user clicks layers, or viceversa, make sure that the plot starts from the Fit
+  position.
+  Genealogy's Layered/Radial buttons now call fitGenZoom() right after switching, so the plot always
+  starts from Fit instead of carrying over whatever zoom/pan was set in the previous layout.
+
+- Reuse as much code as possible for the filters of the Tables and of the Views.
+  Reused the Views' filter UX in the Custom Query Builder tab: added the Filters-on-left/top toggle and
+  Collapse all/Expand all buttons (the same generic data-toggle-layout/data-collapse-all wiring
+  Timelines/Genealogy already use, no new JS mechanism), and replaced the free-typed Reference Year
+  Min/Max number inputs with the same From/To year range-slider component Timelines/Genealogy use.
+  "All SQLite Tables" intentionally left alone -- it's a raw per-table browser (table picker + cell
+  search) with no family/relation concept to filter on, unlike the Query Builder, so there is no
+  equivalent filter UI to reuse there.
+
+- It does not make sense to color by application or construction (most ciphers have several of each);
+  maybe highlight a chosen set instead.
+  Removed Construction and Target application from Genealogy's "Color nodes by" (kept Type and Process,
+  both close to single-valued per family) since coloring by a multi-valued dimension just showed the
+  alphabetically-first value. Added a "Highlight" control instead: pick Construction or Target
+  application, then check specific values to fade every non-matching node/label to 15% opacity in both
+  Radial and Layered layouts, without hiding them outright.
+
+- add Tune Layout button also in the Timeline tab, reusing the same code.
+  Added a floating "Tune layout" button/panel to the Timelines tab, reusing the Genealogy panel's exact
+  CSS classes/interaction pattern (open/close/reset). Exposes Row spacing and Group gap sliders -- the
+  previously-hardcoded STACK_STEP/GROUP_GAP_UNITS constants -- persisted to localStorage the same way
+  Genealogy's layout params are.
+
+- In the Timelines tab, add the option None to "Group families by" (labels collapse into a histogram).
+  Added: all families collapse into a single "All families" row, so same-year points stack into a
+  histogram-like column via the existing per-group stacking logic (no new rendering path needed).
+
+- Fix "Find family" behaviour (exact word vs. contains, e.g. "DES" matching "HADES").
+  Added an "Exact word" checkbox next to "Find family" on both Timelines and Genealogy. Off (default) is
+  the old substring search; On requires a word-boundary-bounded whole-word match, so "DES" no longer also
+  matches "HADES". Shared via a new familyNameMatches() helper.
+
+- the construction_sharing_edges table seems to generate a misleading pattern (long descendant chains).
+  BUG-FIXED. compute_construction_sharing_edges (scripts/common.py) built a chronological chain per
+  construction leaf (each family linked only to its nearest-earlier neighbor), producing the long columns
+  flagged (newdes -> safer -> shark -> square -> ...). Changed to a star: the single earliest-year family
+  per leaf is credited as the origin, and every later family sharing that leaf links directly to it, e.g.
+  full_sbox_layer is now newdes -> {aes, safer, shark, square, serpent, prince, gift, ...} (one hop deep)
+  instead of a 70-long chain. Kept the existing cycle-guard (skip an edge if the target can already reach
+  the hub through curated/derived edges). validate.py and make test (incl. test_influences_acyclic.py,
+  test_derived_construction_relations.py) pass; rebuilt the db and confirmed the star shape directly.
+
+- process_stage_participants: each row has either family_id or name, rarely both -- bug or intentional?
+  PARTIAL-GAP, fixed. Intentional split confirmed: family_id is used when the participant has a full
+  family entry; bare name is for competition entrants never modeled as a family (mostly early-eliminated
+  eSTREAM/NESSIE/PHC submissions -- 156 legitimately name-only after the fix). But 13 rows used name-only
+  for participants that DO have a matching family (bmgl, mir_1, wg, ascon x4, catfish, m3lcrypt,
+  pufferfish x2, remus) -- a real backfill gap. Backfilled family_id in data/processes.yaml and added the
+  missing process_participations entries (cross-checked against sibling entries) in data/mode_families.yaml
+  and data/primitive_families.yaml (ascon gained a second entry, for CAESAR use-case-1 portfolio).
+  family_id-only now 335 rows (was 326), name-only 156 (was 169). test_process_alignment.py and full
+  make test pass.
+
+- in family_influences, only tea/salsa20/rijndael/prince/present have innovative_idea_ids_json -- bug?
+  NOT-A-BUG. innovative_idea_ids on an influence edge is a validated pointer into the *source* family's
+  own innovative_ideas list, pinpointing which specific documented idea propagated through that specific
+  edge -- a narrower, more precise claim than the influence edge itself. 74 families have innovative_ideas
+  catalogued, but only 5 edges cite one via innovative_idea_ids; the rest of the ~988 influence edges are
+  general relation claims (inspired_by/variant_of/etc.) not yet pinned to a specific idea. Incremental
+  curation, same evidentiary bar as the influence-edges backlog -- not something to bulk-fill on a guess.
+
+- in families, only 8 mode families (chacha20_poly1305, aes_cbc, aes_ctr, hmac_sha256, umac, bmgl,
+  aes_gcm, pbkdf2) have authors_json -- bug?
+  NOT-A-BUG (structural). authors only exists in mode_families.schema.json, not
+  primitive_families.schema.json -- primitive ciphers get authorship from their reference paper's
+  authors_json directly. Within mode_families.yaml (232 families) all 8 checked cases are legitimate
+  disambiguation, recording the true original designers where they differ from the cited standard
+  document's author (e.g. aes_cbc -> Ehrsam/Meyer/Smith/Tuchman 1976 vs. reference author Dworkin's NIST
+  SP 800-38A; umac -> the UMAC paper authors vs. RFC 4418's editor Krovetz). Not populated elsewhere
+  because most modes' reference authors already equal the true designers, so the field is only added when
+  disambiguation is needed -- no evidence of a script/backfill bug.
+
+- add [low priority] Espresso (2015/2017 5G stream cipher proposal with near-zero independent citation
+  and known cryptanalysis) as a family, flagging the citation/weakness facts from the research already
+  done in this file.
+  Added as a mode-tier family (data/mode_families.yaml, id "espresso") -- "stream cipher" is a mode
+  category in this database's tiering (same as Trivium/Grain/Rabbit), not a primitive, despite the
+  original ask saying primitive_families.yaml. 256-bit Galois-NLFSR + 20-variable/degree-6 Boolean filter,
+  128-bit key, 96-bit IV (data/rounds.yaml, id "espresso_round", reusing existing nlfsr/and/xor/
+  boolean_filter component vocabulary, no new components/constructions needed). Notes capture: ~73
+  Semantic Scholar citations vs. the publisher's own near-zero metric; Yao & Parampalli's 2019/2021
+  Galois-to-Fibonacci-LFSR transformation result ("this kind of design should be avoided in the future",
+  quoted from the arXiv preprint) breaking it via algebraic and Rønjom-Helleseth attacks; a second,
+  independent LSTM/CNN keystream-prediction result (Akhilesh, Singh, Mishra 2024); and a caveat that the
+  "for 5G" framing is the authors' own pitch, not evidence of independent adoption. No influence edge
+  added -- the paper's related-work section was paywalled/inaccessible, so no "based on"/"derived from"
+  language could be confirmed against another family already in the database. Three new references.yaml
+  entries added. validate.py and make test pass (487 families, no regressions).
+
+- add the following designs: Pholkos (Bossert et al, CT-RSA 2022), Vistrutah (Avanzi et al., IACR ToSC
+  2025) -- can easily be turned into a tweakable cipher as well.
+  Added both as primitive_families.yaml entries (ids "pholkos", "vistrutah"), each reusing the AES-round
+  SPN/full_sbox_layer/mds_linear_layer constructions plus a dedicated round entry (data/rounds.yaml:
+  pholkos_round, vistrutah_round) modeling their paired-AES-round step structure. Influence edges added
+  with quoted textual evidence: rijndael -> pholkos (generalization_of, "utilizes the AES round function
+  ... extends them to build a family of primitives with state and key sizes of 256 and 512 bits"),
+  rijndael -> vistrutah and pholkos -> vistrutah (generalization_of/inspired_by, quoting Vistrutah's "new
+  Rijndael" framing and its related-work sentence on building on Pholkos/Simpira/Haraka). Vistrutah's
+  notes record the paper's own Remark 1 confirming the "can be turned into a tweakable cipher" claim from
+  the todo. Two new references.yaml entries (CT-RSA 2022 / ToSC 2025, both with eprint mirrors). Haraka,
+  AESQ, Simpira, and ASURA are cited by both papers as direct design ancestors but aren't yet catalogued
+  as families here, so no edges could be added to them -- noted in each family's notes rather than
+  fabricated. validate.py and make test pass.
+
+- when tapping or clicking on a label or a relation in both the timelines and genealogy view, add an
+  "Open PDF" button inside the note (menu to choose if more than one reference; side-by-side/stacked dual
+  viewer for a relation between two families, independently scrollable).
+  Added an "Open PDF" button inside the pinned yellow note (both tabs, for a family label/dot AND for a
+  relation arrow/edge) whenever a local reference PDF exists for that family. A family note opens a
+  single pane; a relation note opens two panes (one per family), defaulting to side-by-side on a
+  landscape screen and stacked on portrait, with a button to switch either way. Each pane is an
+  independently-scrollable <iframe>, so two pages/figures can be compared without scrolling the page
+  underneath; a family with more than one local PDF gets a dropdown to pick which one. Backed by a new
+  build-time family_id -> local-PDF-path map (scripts/build_static_site.py, reusing
+  scripts/reference_pdfs.py's existing filename-matching logic rather than re-deriving it in JS) baked
+  into data.js, plus references/*.pdf|*.txt now get copied into build/site/references/ so the deployed
+  site can actually serve/open them.
+
+- when the filters of the Timelines and Genealogy tab are on the left, make Collapse all/Expand all
+  static so they're reachable without scrolling back up.
+  Made the Collapse all/Expand all bar sticky (position: sticky; top: 0) at the top of the side filter
+  column whenever "Filters on left" is active, so it stays reachable after scrolling down through a long
+  filter list. Stacked-on-top mode is unaffected (no scroll-away problem there).
+
+- Not touched, minor: primitive_constructions.yaml's typical_primitive_types field
+  lists stream_cipher even though it isn't a primitive type (it's mode-tier) — it's a pure documentation field,
+  unused by the actual site build, so it doesn't affect the genealogy graph. Happy to clean it up if you want.
+  Replaced stream_cipher with update_function on all 16 affected leaves -- every one of them describes a
+  state-update mechanism, which is exactly what update_function means.
 
 Other relations (verify them by reading the corresponding pdf):
 - SKINNY:

@@ -5471,3 +5471,109 @@ references:
     diversified payment addresses. Its claimed security property is Unlinkability (indistinguishability of addresses
     from different spending authorities), reduced to the Decisional Diffie-Hellman assumption on the curve''s
     prime-order subgroup -- not collision resistance.'
+
+- id: bossert_et_al_2022_pholkos
+  kind: paper
+  title: 'Pholkos -- Efficient Large-State Tweakable Block Ciphers from the AES Round Function'
+  authors:
+  - Jannis Bossert
+  - Eik List
+  - Stefan Lucks
+  - Sebastian Schmitz
+  year: 2022
+  venue: CT-RSA 2022, LNCS 13161, Springer, Cham, pp. 511-536
+  url: https://eprint.iacr.org/2020/275
+  notes: 'Cryptology ePrint Archive preprint of the CT-RSA 2022 paper. Reference implementation confirming round
+    counts (16 AES rounds = 8 steps of 2 AES rounds each for Pholkos-256; 20 AES rounds = 10 steps for Pholkos-512
+    and Pholkos-512-256) and the 128-bit tweak: https://gitlab.com/elist/pholkos.'
+
+- id: avanzi_et_al_2025_vistrutah
+  kind: paper
+  title: The Large Block Cipher Vistrutah
+  authors:
+  - Roberto Avanzi
+  - Avik Chakraborti
+  - Bishwajit Chakraborty
+  - Eik List
+  year: 2025
+  venue: 'IACR Transactions on Symmetric Cryptology, Vol. 2025, No. 3, pp. 1-150'
+  url: https://tosc.iacr.org/index.php/ToSC/article/view/12467
+  notes: 'DOI: 10.46586/tosc.v2025.i3.1-150. Full version: https://eprint.iacr.org/2025/976.'
+
+- id: dubrova_hell_2017_espresso
+  kind: paper
+  title: 'Espresso: A stream cipher for 5G wireless communication systems'
+  authors:
+  - Elena Dubrova
+  - Martin Hell
+  year: 2017
+  venue: 'Cryptography and Communications, Vol. 9, No. 2, pp. 273-289'
+  publisher: Springer
+  url: https://doi.org/10.1007/s12095-015-0173-2
+  notes: 'DOI 10.1007/s12095-015-0173-2 (the DOI slug reflects the 2015 online-first date; DBLP and the journal''s
+    own volume/issue record it as Vol. 9, No. 2 (2017), pp. 273-289 -- 2017 is the correct citable year). Also
+    available as a preprint: IACR eprint 2015/241 (https://eprint.iacr.org/2015/241). Confirmed from secondary
+    sources (abstract/metadata; the full text is paywalled on SpringerLink and the eprint mirror blocks automated
+    fetches): Espresso is a hardware-oriented stream cipher for 5G wireless systems combining a 256-bit
+    non-linear feedback shift register (NLFSR) in the Galois configuration with a 20-variable, algebraic-degree-6
+    non-linear output function; key size 128 bits, IV size 96 bits. The design methodology is presented as
+    combining "the advantage of the Galois configuration of NLFSRs, short propagation delay, with the advantage
+    of the Fibonacci configuration of NLFSRs, which can be analyzed formally," and the paper reports Espresso as
+    the fastest stream cipher below 1500 GE among those compared, including Grain-128 and Trivium. As of this
+    entry, Semantic Scholar records 73 citing papers (https://api.semanticscholar.org/graph/v1/paper/DOI:10.1007/s12095-015-0173-2),
+    while the publisher''s own SpringerLink citation-metrics count is reported by the database maintainer as
+    near-zero -- i.e. very little independent citation/adoption despite the 5G framing. The paper''s own framing
+    that Espresso is suitable "for 5G wireless communication systems" is the authors'' own proposal, not evidence
+    of independent consideration or adoption by any 5G standards body; this database does not attest to the exact
+    wording of any specific in-paper claim about 5G standardization that could not be verified against the full
+    text.'
+
+- id: yao_parampalli_2021_espresso_like_cryptanalysis
+  kind: paper
+  title: Cryptanalysis of the class of maximum period galois NLFSR-based stream ciphers
+  authors:
+  - Ge Yao
+  - Udaya Parampalli
+  year: 2021
+  venue: 'Cryptography and Communications, Vol. 13, pp. 847-864'
+  publisher: Springer
+  url: https://doi.org/10.1007/s12095-021-00511-0
+  notes: 'DOI 10.1007/s12095-021-00511-0. This is the peer-reviewed journal version of the earlier preprint "Generalized
+    NLFSR Transformation Algorithms and Cryptanalysis of the Class of Espresso-like Stream Ciphers" (Ge Yao, Udaya
+    Parampalli, University of Melbourne; arXiv:1911.01002, submitted 2019-11-04, https://arxiv.org/abs/1911.01002),
+    read directly from the arXiv PDF for this entry. Both versions analyze Espresso as the representative design of
+    a class the authors call "Espresso-like stream ciphers": ciphers built from a single maximum-period Galois NLFSR.
+    The arXiv preprint states verbatim: "Espresso is based on a 256-bit Galois NLFSR initialized by a 128-bit key.
+    The 2^256-1 maximum period is assured because the Galois NLFSR is transformed from a maximum length LFSR. However,
+    we propose a Galois-to-Fibonacci transformation algorithm and successfully transform the Galois NLFSR into a
+    Fibonacci LFSR with a nonlinear output function. The transformed cipher is broken by the standard algebraic
+    attack and the Rønjom-Helleseth attack with complexity O(2^68.44) and O(2^66.86) respectively... the transformation
+    result shows that the Galois NLFSR used in any Espresso-like stream ciphers can be easily transformed back into
+    the original Fibonacci LFSR. Therefore, this kind of design should be avoided in the future." The published 2021
+    journal version reports the same class of result under the paper''s new title, with the Espresso cipher itself
+    transformed to an LFSR filter generator and broken by a fast algebraic attack and a Rønjom-Helleseth attack
+    (complexity figures reported in secondary sources as ~2^68.5 and ~2^48.6 respectively, not independently
+    confirmed against the paywalled full text of the 2021 version). Directly on-topic for Espresso, not a generic
+    benchmark comparison.'
+
+- id: akhilesh_singh_mishra_2024_espresso_lstm
+  kind: paper
+  title: LSTM-Based Cryptanalysis of Stream Cipher Espresso
+  authors:
+  - Akhilesh
+  - H. Singh
+  - Girish Mishra
+  year: 2024
+  venue: 'Proceedings of ICCNSML 2023 (Cryptology and Network Security with Machine Learning), Lecture Notes in
+    Networks and Systems, Vol. 918, Springer, Singapore'
+  publisher: Springer
+  url: https://link.springer.com/chapter/10.1007/978-981-97-0641-9_51
+  notes: 'DOI 10.1007/978-981-97-0641-9_51, published online 2024-04-23. Full text is paywalled on SpringerLink;
+    this entry is based on secondary indices (search-engine result snippets and citation aggregators) plus the
+    consistent DOI/venue metadata, not a direct read of the full paper -- the exact full given names for the first
+    two authors ("Akhilesh" and "H. Singh") could not be independently confirmed beyond the initials shown in
+    citation indices; Girish Mishra is a known DRDO/SAG cryptography researcher with prior deep-learning-based
+    stream-cipher cryptanalysis publications, which supports this attribution. The paper trains LSTM and CNN models
+    to predict Espresso''s keystream bits/bytes and reports the models are effective at this prediction task -- a
+    second, independent cryptanalysis result against Espresso distinct from the Galois-to-Fibonacci algebraic
+    attacks of yao_parampalli_2021_espresso_like_cryptanalysis.'

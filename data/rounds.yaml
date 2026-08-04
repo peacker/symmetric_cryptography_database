@@ -5461,3 +5461,87 @@ rounds:
     applications of the underlying GroupHash primitive. Used to derive per-address generators g_d for diversified
     payment addresses (pk_d = [ivk].g_d). Distinct mechanism from Sinsemilla/PedersenHash''s windowed
     scalar-multiplication-sum: this hashes the diversifier directly to a curve point.'
+
+- id: pholkos_round
+  name: Pholkos step (paired AES rounds + TWEAKEY-style tweakey addition)
+  kind: full_round
+  spec:
+    state_model:
+      word_bits: 128
+      word_count_parameterized: true
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+    - component_id: xor
+    - component_id: word_permutation
+      params:
+        word_size_bits: 128
+    constant_injection: tweakey_xor
+  notes: 'A Pholkos step chains two unmodified AES rounds (SubBytes, ShiftRows, MixColumns, AddRoundKey) applied in
+    parallel to each 128-bit substate (2 substates for Pholkos-256, 4 for Pholkos-512), then applies a fixed byte
+    permutation across substates for full-state diffusion. Round tweakeys are derived from the key and tweak via a
+    TWEAKEY-style schedule: parallel word-permutation-plus-update key/tweak lanes (tau for the tweak, kappa for the
+    key) combined by XOR (gamma) each round.'
+
+- id: vistrutah_round
+  name: Vistrutah step (two AES rounds per slice + cell-shuffle mixing layer)
+  kind: full_round
+  spec:
+    state_model:
+      word_bits: 128
+      word_count_parameterized: true
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    - component_id: field_matrix_mul
+      params:
+        field_size: 256
+    - component_id: xor
+    - component_id: word_permutation
+      params:
+        word_size_bits: 8
+    constant_injection: round_constant
+  notes: 'Vistrutah''s "2R" step chains two unmodified AES rounds (SubBytes, ShiftRows, MixColumns, AddRoundKey)
+    applied in parallel to each 128-bit slice of the state (2 slices for Vistrutah-256, 4 for Vistrutah-512), then
+    applies a state-wide cell-shuffle mixing layer -- omitted only after the cipher''s last step. The 256-bit
+    version reuses ASURA''s byte shuffle verbatim; the 512-bit version uses a dedicated tube-based permutation.
+    Round keys alternate a fixed value with one updated via fixed per-slice permutations (rho0/rho1) each step, an
+    "inline" schedule computed on the fly rather than precomputed and stored.'
+
+- id: espresso_round
+  name: Espresso clock step
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 256
+    component_flow:
+    - component_id: nlfsr
+      params:
+        length: 256
+    - component_id: and
+    - component_id: xor
+    - component_id: boolean_filter
+      params:
+        inputs: 20
+        degree: 6
+    constant_injection: key_iv_mixing
+  notes: 'Espresso state-update abstraction: a single 256-bit non-linear feedback shift register (NLFSR) in the
+    Galois configuration (feedback applied at multiple stages, each combining AND/XOR nonlinear terms, rather than
+    only at the last stage as in a Fibonacci-configuration NLFSR), read each clock by a separate 20-variable,
+    algebraic-degree-6 non-linear Boolean filter function to produce 1 keystream bit. Unlike Grain/Trivium''s
+    paired LFSR+NLFSR structure, Espresso uses a single register whose Galois-configuration feedback is
+    constructed (per Dubrova''s prior transformation methodology) to be equivalent to a maximum-length LFSR,
+    guaranteeing period 2^256-1.'

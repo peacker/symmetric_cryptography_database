@@ -4079,6 +4079,13 @@ primitive_families:
     - finalist
     - winner
     status: winner
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    - final_portfolio_uc1
+    status: portfolio
   influences:
   - source_family_id: keccak
     relations:
@@ -14329,3 +14336,183 @@ primitive_families:
     - zcash_electric_coin_company_diversifyhash
     characteristics: {}
     notes: Maps an 88-bit diversifier to a point on the Pallas curve, for Orchard diversified payment addresses.
+
+- id: pholkos
+  name: Pholkos
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  - tweakable_spn
+  - tweakey_framework
+  round_ids:
+  - pholkos_round
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - bossert_et_al_2022_pholkos
+  process_participations: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - generalization_of
+    note: 'Confirmed directly from the abstract: "Pholkos is no novel round-function design, but utilizes the AES
+      round function, following design ideas of Haraka and AESQ ... It extends them to build a family of primitives
+      with state and key sizes of 256 and 512 bits." Each Pholkos step chains two unmodified AES rounds unchanged,
+      generalizing Rijndael''s SPN to wider states with a TWEAKEY-style tweakey schedule and a 128-bit tweak input.'
+  notes: 'Pholkos (Bossert, List, Lucks, Schmitz; CT-RSA 2022) is a family of tweakable block ciphers with 256- or
+    512-bit states, reusing the unmodified AES round function (SubBytes, ShiftRows, MixColumns, AddRoundKey) applied
+    in parallel to two or four 128-bit substates per step, followed by a fixed byte permutation across substates for
+    full-state diffusion. Following design ideas of Haraka and AESQ (not yet separately catalogued in this
+    database), Pholkos targets exceptionally high AES-NI/AVX2 throughput (1-2 cycles/byte) together with
+    beyond-birthday-bound ("bigger birthday") security for large-block encryption/authentication modes such as SCT,
+    ThetaCB3, and ZAE. Its TWEAKEY-style schedule derives round tweakeys from parallel word-permutation-plus-update
+    key and tweak lanes (kappa, tau) combined by XOR (gamma) each round. The public reference implementation
+    additionally defines an experimental 1024-bit-state Pholkos-1024 variant not described in the published CT-RSA
+    2022 paper; this database records only the two published 256- and 512-bit variants.'
+  instances:
+  - id: pholkos_256_256
+    name: Pholkos-256-256
+    type: tweakable_block_cipher
+    reference_ids:
+    - bossert_et_al_2022_pholkos
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      tweak_size_bits: 128
+      output_size_bits: 256
+      rounds: 16
+    notes: 8 steps of 2 AES rounds each (16 AES rounds total, confirmed from the reference implementation). A
+      256-bit-tweak Pholkos-256-256 variant is also defined in the reference implementation.
+  - id: pholkos_512_512
+    name: Pholkos-512-512
+    type: tweakable_block_cipher
+    reference_ids:
+    - bossert_et_al_2022_pholkos
+    characteristics:
+      block_size_bits: 512
+      key_size_bits: 512
+      tweak_size_bits: 128
+      output_size_bits: 512
+      rounds: 20
+    notes: 10 steps of 2 AES rounds each (20 AES rounds total, confirmed from the reference implementation).
+  - id: pholkos_512_256
+    name: Pholkos-512-256
+    type: tweakable_block_cipher
+    reference_ids:
+    - bossert_et_al_2022_pholkos
+    characteristics:
+      block_size_bits: 512
+      key_size_bits: 256
+      tweak_size_bits: 128
+      output_size_bits: 512
+      rounds: 20
+    notes: 512-bit-state variant keyed with a 256-bit key; also 10 steps of 2 AES rounds (20 AES rounds total).
+
+- id: vistrutah
+  name: Vistrutah
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - vistrutah_round
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - avanzi_et_al_2025_vistrutah
+  process_participations: []
+  influences:
+  - source_family_id: rijndael
+    relations:
+    - generalization_of
+    - inspired_by
+    note: 'Confirmed directly: the design rationale states that adopting Rijndael-256-256 unmodified "would be
+      problematic" for software performance and RK-attack resistance, so "these considerations drove our design of
+      a ''new Rijndael'' with 256- and 512-bit block sizes." An isomorphism between Vistrutah-512 and the AES is
+      used directly to reuse AES''s cryptanalysis for Vistrutah-512.'
+  - source_family_id: pholkos
+    relations:
+    - inspired_by
+    note: 'Confirmed directly from the related-work section: "Simpira, Haraka, and Pholkos, for instance, employ
+      pairs of AES rounds as 128-bit keyed S-boxes. We build on this design philosophy, improving on both security
+      and performance."'
+  notes: 'Vistrutah (Avanzi, A. Chakraborti, B. Chakraborty, List; IACR ToSC 2025(3), pp. 1-150) is a non-tweakable
+    "bricklayer" block cipher with 256- or 512-bit blocks. Each step chains two AES rounds (SubBytes, ShiftRows,
+    MixColumns, AddRoundKey) applied in parallel to each 128-bit slice of the state, then applies a state-wide
+    cell-shuffle mixing layer (omitted only after the last step) -- the 256-bit version reuses ASURA''s byte shuffle
+    verbatim; the 512-bit version uses a dedicated tube-based permutation (neither ASURA nor Simpira/Haraka/AESQ is
+    yet separately catalogued in this database). Its "inline" key schedule computes round keys on the fly by
+    alternating a fixed round-key value with one updated via fixed permutations each step, avoiding any
+    precomputed/stored round-key schedule (mitigating cold-boot key leakage) at the cost of key agility. The paper
+    explicitly notes (Remark 1) that its active-cell cryptanalysis under related-key differentials "give[s] an
+    indication of the security level achievable in a potential extension of Vistrutah to a tweakable block cipher
+    when following the TWEAKEY approach" -- i.e. the design can readily be turned into a tweakable cipher, though
+    the published design itself is non-tweakable. Long (full-security) variants: 14-round Vistrutah-256 and
+    Vistrutah-512-256, 18-round Vistrutah-512. Short (reduced-round, for Hash-Encrypt-Hash modes like HCTR2 and
+    ForkCiphers) variants: 10-round Vistrutah-256 and Vistrutah-512-256, 12-round Vistrutah-512-512.'
+  instances:
+  - id: vistrutah_256
+    name: Vistrutah-256 (long)
+    type: block_cipher
+    reference_ids:
+    - avanzi_et_al_2025_vistrutah
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      output_size_bits: 256
+      rounds: 14
+    notes: Full-security long version (256 bits of security). A 10-round short version is also defined for use
+      inside Hash-Encrypt-Hash (HEH) modes such as HCTR2 and ForkCiphers.
+  - id: vistrutah_512_512
+    name: Vistrutah-512 (long)
+    type: block_cipher
+    reference_ids:
+    - avanzi_et_al_2025_vistrutah
+    characteristics:
+      block_size_bits: 512
+      key_size_bits: 512
+      output_size_bits: 512
+      rounds: 18
+    notes: Full-security long version (512 bits of security). A 12-round short version is also defined for HEH
+      modes.
+  - id: vistrutah_512_256
+    name: Vistrutah-512-256 (long)
+    type: block_cipher
+    reference_ids:
+    - avanzi_et_al_2025_vistrutah
+    characteristics:
+      block_size_bits: 512
+      key_size_bits: 256
+      output_size_bits: 512
+      rounds: 14
+    notes: 512-bit-state variant keyed with a 256-bit key (256-bit security target). A 10-round short version is
+      also defined.

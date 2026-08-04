@@ -3,11 +3,13 @@
 
 These edges are not hand-curated (see data/*_families.yaml) -- they are
 computed at build time (scripts/common.py: compute_construction_sharing_edges)
-from two families sharing the same level-2 construction leaf, chained
-chronologically older -> newer. This test recomputes them directly from the
-YAML sources (the same function scripts/build_db.py calls) and checks the
-invariants the derivation is supposed to guarantee, so a future change to the
-YAML data or the derivation logic can't silently produce a malformed edge.
+from families sharing the same level-2 construction leaf: the earliest-year
+family is credited as the leaf's origin and every later family sharing that
+leaf is linked directly to it (a star, older -> newer, not a chronological
+chain). This test recomputes them directly from the YAML sources (the same
+function scripts/build_db.py calls) and checks the invariants the derivation
+is supposed to guarantee, so a future change to the YAML data or the
+derivation logic can't silently produce a malformed edge.
 """
 from __future__ import annotations
 
@@ -56,9 +58,10 @@ def main() -> None:
                 "runs newer -> older, expected older -> newer"
             )
 
-    # The derivation is a per-leaf chain built from a total order (year, id),
-    # so it cannot contain a cycle by construction; check anyway in case a
-    # future refactor of compute_construction_sharing_edges breaks that.
+    # The derivation is a per-leaf star (origin -> every later member) built
+    # from a total order (year, id) with cycle-guarded edge acceptance, so it
+    # cannot contain a cycle by construction; check anyway in case a future
+    # refactor of compute_construction_sharing_edges breaks that.
     adj: dict[str, list[str]] = defaultdict(list)
     for source_id, target_id, _ in edges:
         adj[source_id].append(target_id)

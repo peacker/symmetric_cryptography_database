@@ -87,7 +87,7 @@ processes:
     label: Synchronous stream cipher submissions
     kind: category
     participants:
-    - name: BMGL
+    - family_id: bmgl
     - family_id: leviathan
     - family_id: lili_128
     - family_id: snow
@@ -170,7 +170,7 @@ processes:
     - family_id: dragon
     - name: Frogbit
     - family_id: hc_256
-    - name: Mir-1
+    - family_id: mir_1
     - name: Py
     - name: SOSEMANUK
     - family_id: f_fcsr
@@ -196,7 +196,7 @@ processes:
     - family_id: trivium
     - name: TSC-3
     - name: VEST
-    - name: WG
+    - family_id: wg
     - name: Zk-Crypt
   - id: phase_2
     label: Phase 2
@@ -228,7 +228,7 @@ processes:
     - family_id: trivium
     - name: TSC-4
     - name: VEST
-    - name: WG
+    - family_id: wg
     - name: Zk-Crypt
   - id: phase_3
     label: Phase 3
@@ -433,7 +433,8 @@ processes:
     - name: SHELL
     - name: STRIBOB
     - name: TriviA-ck
-    - name: Ascon
+    - family_id: ascon
+      name: Ascon
     - name: ACORN
     - name: AEGIS-128
     - name: OCB
@@ -468,7 +469,8 @@ processes:
     - name: SHELL
     - name: STRIBOB
     - name: TriviA-ck
-    - name: Ascon
+    - family_id: ascon
+      name: Ascon
     - name: ACORN
     - name: AEGIS-128
     - name: OCB
@@ -493,7 +495,8 @@ processes:
     - name: Keyak
     - name: NORX
     - name: Tiaoxin
-    - name: Ascon
+    - family_id: ascon
+      name: Ascon
     - name: ACORN
     - name: AEGIS-128
     - name: OCB
@@ -505,7 +508,8 @@ processes:
     label: Final Portfolio – Use Case 1 (Lightweight)
     kind: portfolio
     participants:
-    - name: Ascon
+    - family_id: ascon
+      name: Ascon
       note: First choice
     - name: ACORN
       note: Second choice
@@ -543,20 +547,20 @@ processes:
     - family_id: argon2
     - family_id: battcrypt
     - family_id: catena
-    - name: Catfish
+    - family_id: catfish
     - family_id: centrifuge
     - family_id: earworm
     - family_id: gambit
     - family_id: lanarea
     - family_id: lyra2
-    - name: M3lcrypt
+    - family_id: m3lcrypt
     - family_id: makwa
     - family_id: mcs_phs
     - family_id: omegacrypt
     - family_id: parallel
     - family_id: polypasshash
     - family_id: pomelo
-    - name: Pufferfish
+    - family_id: pufferfish
     - family_id: rig
     - family_id: schvrch
     - family_id: tortuga
@@ -571,7 +575,7 @@ processes:
     - family_id: battcrypt
     - family_id: parallel
     - family_id: pomelo
-    - name: Pufferfish
+    - family_id: pufferfish
   - id: special_recognition
     label: Special Recognition
     kind: outcome
@@ -683,7 +687,7 @@ processes:
     - family_id: yarara_and_coral
     - family_id: gift_cofb
     - name: Pyjamask-AEAD
-    - name: REMUS
+    - family_id: remus
     - name: Dumbo/Jumbo (Elephant)
   - id: round_2
     label: Round 2 (32 candidates, 2019)

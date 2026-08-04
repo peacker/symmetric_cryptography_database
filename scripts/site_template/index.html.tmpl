@@ -21,12 +21,22 @@
           </button>
         </section>
         <nav class="navigator" id="navigator" aria-label="Section navigation">
-          <button type="button" class="nav-tab is-active" data-view-target="visualizations">Timelines</button>
-          <button type="button" class="nav-tab" data-view-target="genealogy">Genealogy</button>
-          <button type="button" class="nav-tab" data-view-target="tables">All SQLite Tables</button>
-          <button type="button" class="nav-tab" data-view-target="builder">Custom Query Builder</button>
-          <button type="button" class="nav-tab" data-view-target="glossary">Glossary</button>
-          <button type="button" class="nav-tab" data-view-target="about">About</button>
+          <div class="nav-group" aria-label="Views">
+            <span class="nav-group-label">Views</span>
+            <button type="button" class="nav-tab is-active" data-view-target="visualizations">Timelines</button>
+            <button type="button" class="nav-tab" data-view-target="genealogy">Genealogy</button>
+          </div>
+          <div class="nav-group" aria-label="Tables">
+            <span class="nav-group-label">Tables</span>
+            <button type="button" class="nav-tab" data-view-target="tables">All SQLite Tables</button>
+            <button type="button" class="nav-tab" data-view-target="builder">Custom Query Builder</button>
+          </div>
+          <div class="nav-group" aria-label="Documentation">
+            <span class="nav-group-label">Documentation</span>
+            <button type="button" class="nav-tab" data-view-target="about">About</button>
+            <button type="button" class="nav-tab" data-view-target="glossary">Glossary</button>
+            <button type="button" class="nav-tab" data-view-target="disclaimer">Disclaimer</button>
+          </div>
         </nav>
       </header>
 
@@ -59,6 +69,7 @@
               <option value="construction">Construction</option>
               <option value="target">Target application</option>
               <option value="process">Process</option>
+              <option value="none">None</option>
             </select>
           </label>
           <div class="viz-display-group">
@@ -89,6 +100,7 @@
           <label class="toolbar-field viz-search-field">Find family
             <input id="vizFamilySearch" type="search" placeholder="Type a family name" autocomplete="off" />
           </label>
+          <label class="inline-check" title="When checked, matches only the whole word (e.g. &quot;DES&quot; won't match &quot;HADES&quot;)"><input id="vizFamilySearchExact" type="checkbox" /> Exact word</label>
           <div class="viz-year-controls">
             <label class="toolbar-field">From year
               <input id="vizYearStart" type="range" />
@@ -130,6 +142,26 @@
             <button type="button" id="vizFsZoomOut" aria-label="Zoom out">−</button>
             <button type="button" id="vizFsZoomFit" aria-label="Fit to screen">Fit</button>
             <button type="button" id="vizFsZoomIn" aria-label="Zoom in">+</button>
+          </div>
+          <button type="button" id="vizParamsToggle" class="gen-params-toggle" aria-expanded="false" aria-controls="vizParamsPanel">Tune layout</button>
+          <div id="vizParamsPanel" class="gen-params-panel" hidden>
+            <div class="gen-params-panel-head">
+              <strong>Layout tuning</strong>
+              <button type="button" id="vizParamsClose" class="gen-params-close" aria-label="Close">×</button>
+            </div>
+            <div class="gen-params-row">
+              <span class="gen-params-label" title="Vertical spacing between points stacked within the same row/group">Row spacing</span>
+              <input id="vizParamStackStep" type="range" min="15" max="80" step="1" />
+              <span id="vizParamStackStepValue" class="viz-ctrl-value">34%</span>
+            </div>
+            <div class="gen-params-row">
+              <span class="gen-params-label" title="Extra vertical gap inserted between groups/rows">Group gap</span>
+              <input id="vizParamGroupGap" type="range" min="10" max="120" step="1" />
+              <span id="vizParamGroupGapValue" class="viz-ctrl-value">42%</span>
+            </div>
+            <div class="gen-params-actions">
+              <button type="button" id="vizParamsReset" class="name-mode-btn">Reset spacing</button>
+            </div>
           </div>
         </div>
         </div>
@@ -175,6 +207,7 @@
           <label class="toolbar-field viz-search-field">Find family
             <input id="genFamilySearch" type="search" placeholder="Type a family name, or right-click/long-press a node" autocomplete="off" />
           </label>
+          <label class="inline-check" title="When checked, matches only the whole word (e.g. &quot;DES&quot; won't match &quot;HADES&quot;)"><input id="genFamilySearchExact" type="checkbox" /> Exact word</label>
           <label class="toolbar-field" title="How many relation hops from the matched family to also show (0 = only the matched family itself)">Relation degree
             <div class="viz-name-mode">
               <button id="genDegreeMinus" type="button" class="name-mode-btn">-</button>
@@ -227,11 +260,20 @@
               <label class="toolbar-field">Color nodes by
                 <select id="genColorBy">
                   <option value="type">Type</option>
-                  <option value="construction">Construction</option>
-                  <option value="target">Target application</option>
                   <option value="process">Process</option>
                 </select>
               </label>
+              <div class="viz-name-section" title="Most families have more than one Construction or Target application, so coloring by either would be arbitrary (only the alphabetically-first value would show) -- highlighting a chosen subset instead fades everything else out without hiding it.">
+                <span class="viz-name-section-label">Highlight</span>
+                <div class="viz-name-mode">
+                  <select id="genHighlightBy">
+                    <option value="none">None</option>
+                    <option value="construction">Construction</option>
+                    <option value="target">Target application</option>
+                  </select>
+                </div>
+                <div id="genHighlightValues" class="filter-checklist viz-filter-checklist" hidden></div>
+              </div>
               <div class="viz-name-section">
                 <span class="viz-name-section-label">Names</span>
                 <div class="viz-name-mode" role="group"><button id="genNameClip" type="button" class="name-mode-btn is-active">Clip</button><button id="genNameFull" type="button" class="name-mode-btn">Full</button></div>
@@ -322,46 +364,67 @@
       </section>
 
       <section class="panel view-panel" data-view="builder">
-        <h2>Custom Query Builder</h2>
-        <p class="small-note">Base join: instances (primitive or mode) + families + reference links. Uses the same Fixed-length primitives / Variable-length modes filtering as the Timelines and Genealogy tabs. Component/round columns (family.component_ids, family.round_component_flow_signatures, family.round_state_models, family.round_hashes) let you find families that literally share a component or round structure via a query, instead of a hand-tagged relation — sort or filter on one of these to see which families line up.</p>
-        <div id="qbTierFilterPanel"></div>
-        <div class="builder-grid">
-          <details class="collapsible" open>
-            <summary>Filters</summary>
-            <div class="collapsible-body filters">
-              <label>Reference kind
-                <div id="fReferenceKind" class="filter-checklist"></div>
-              </label>
-              <label>Reference year min
-                <input id="fReferenceYearMin" type="number" />
-              </label>
-              <label>Reference year max
-                <input id="fReferenceYearMax" type="number" />
-              </label>
-              <label>Family name contains
-                <input id="fFamilyName" type="search" autocomplete="off" />
-              </label>
-              <label>Reference title contains
-                <input id="fReferenceTitle" type="search" autocomplete="off" />
-              </label>
-              <label>Component id/name contains
-                <input id="fComponentSearch" type="search" autocomplete="off" placeholder="e.g. sbox, xor, field_matrix_mul" />
-              </label>
-              <label>Round component-flow signature contains
-                <input id="fRoundFlowSearch" type="search" autocomplete="off" placeholder="e.g. xor|sbox|binary_matrix_mul" />
-              </label>
-              <label class="inline-check"><input id="fHasReferenceLink" type="checkbox" /> Only rows with reference URL</label>
-              <button id="resetFilters" type="button">Reset filters</button>
-            </div>
-          </details>
-          <details class="collapsible" open>
-            <summary>Columns</summary>
-            <div class="collapsible-body">
-              <div id="columnPicker" class="column-picker"></div>
-            </div>
-          </details>
+        <div class="view-header-row">
+          <h2>Custom Query Builder</h2>
+          <div class="view-header-actions">
+            <button type="button" class="view-toggle-btn" data-toggle-filters="qb">Hide filters</button>
+            <button type="button" class="view-toggle-btn" data-toggle-layout="qb" aria-pressed="false">Filters on left</button>
+            <button type="button" class="view-toggle-btn" data-fullscreen-target="builder">Fullscreen</button>
+          </div>
         </div>
-
+        <p class="small-note">Base join: instances (primitive or mode) + families + reference links. Uses the same Fixed-length primitives / Variable-length modes filtering as the Timelines and Genealogy tabs. Component/round columns (family.component_ids, family.round_component_flow_signatures, family.round_state_models, family.round_hashes) let you find families that literally share a component or round structure via a query, instead of a hand-tagged relation — sort or filter on one of these to see which families line up.</p>
+        <div class="view-body" id="qbViewBody">
+        <div id="qbControlsWrap" class="view-controls-wrap">
+        <div class="filter-sections-bar">
+          <button type="button" class="view-toggle-btn" data-collapse-all="qb">Collapse all</button>
+          <button type="button" class="view-toggle-btn" data-expand-all="qb">Expand all</button>
+        </div>
+        <details class="collapsible filter-section" open>
+          <summary>Family filters</summary>
+          <div class="collapsible-body">
+            <div id="qbTierFilterPanel"></div>
+          </div>
+        </details>
+        <details class="collapsible filter-section" open>
+          <summary>Filters</summary>
+          <div class="collapsible-body filters">
+            <label>Reference kind
+              <div id="fReferenceKind" class="filter-checklist"></div>
+            </label>
+            <div class="viz-year-controls">
+              <label class="toolbar-field">From year
+                <input id="fReferenceYearMin" type="range" />
+              </label>
+              <label class="toolbar-field">To year
+                <input id="fReferenceYearMax" type="range" />
+              </label>
+              <button id="fReferenceYearReset" type="button">Reset years</button>
+              <span id="fReferenceYearValue" class="small-note">All years</span>
+            </div>
+            <label>Family name contains
+              <input id="fFamilyName" type="search" autocomplete="off" />
+            </label>
+            <label>Reference title contains
+              <input id="fReferenceTitle" type="search" autocomplete="off" />
+            </label>
+            <label>Component id/name contains
+              <input id="fComponentSearch" type="search" autocomplete="off" placeholder="e.g. sbox, xor, field_matrix_mul" />
+            </label>
+            <label>Round component-flow signature contains
+              <input id="fRoundFlowSearch" type="search" autocomplete="off" placeholder="e.g. xor|sbox|binary_matrix_mul" />
+            </label>
+            <label class="inline-check"><input id="fHasReferenceLink" type="checkbox" /> Only rows with reference URL</label>
+            <button id="resetFilters" type="button">Reset filters</button>
+          </div>
+        </details>
+        <details class="collapsible filter-section" open>
+          <summary>Columns</summary>
+          <div class="collapsible-body">
+            <div id="columnPicker" class="column-picker"></div>
+          </div>
+        </details>
+        </div>
+        <div class="qb-frame" id="qbFrame">
         <details class="collapsible" open>
           <summary>SQL Preview</summary>
           <div class="collapsible-body">
@@ -374,6 +437,8 @@
         <p class="small-note">Tip: drag the divider at the right edge of each header to resize columns.</p>
 
         <div class="table-wrap"><table id="builderView"><thead></thead><tbody></tbody></table></div>
+        </div>
+        </div>
       </section>
 
       <section class="panel view-panel" data-view="glossary">
@@ -399,6 +464,28 @@ __GLOSSARY_CONTENT__
           <p class="small-note">For precise definitions of every tier, type, construction, component, target application, process, and relation used here, see the <strong>Glossary</strong> tab above (or its <a href="https://github.com/peacker/symmetric_cryptography_database/blob/main/GLOSSARY.md" target="_blank" rel="noopener">Markdown source</a> on GitHub).</p>
         </div>
       </section>
+
+      <section class="panel view-panel" data-view="disclaimer">
+        <h2>Disclaimer</h2>
+        <div class="about-body">
+          <p>This website was initially created from a large-scale AI-assisted crawl of academic papers, standards documents, and other public sources, and AI is routinely used to help retrieve, summarize, and cross-check the information presented here. Entries are checked against primary sources where possible, but the dataset has not yet undergone a full manual review by a human expert, and occasional errors or misattributions may remain.</p>
+          <p class="small-note">Once a full manual review has been completed, this disclaimer will be updated to say so.</p>
+        </div>
+      </section>
     </main>
+
+    <div id="pdfViewerModal" class="pdf-viewer-modal" hidden>
+      <div class="pdf-viewer-backdrop"></div>
+      <div class="pdf-viewer-dialog" role="dialog" aria-modal="true" aria-label="Reference PDF viewer">
+        <div class="pdf-viewer-toolbar">
+          <span id="pdfViewerTitle" class="pdf-viewer-title"></span>
+          <div class="pdf-viewer-actions">
+            <button type="button" id="pdfViewerLayoutToggle" class="name-mode-btn" hidden>Stack</button>
+            <button type="button" id="pdfViewerClose" class="gen-params-close" aria-label="Close PDF viewer">×</button>
+          </div>
+        </div>
+        <div id="pdfViewerPanes" class="pdf-viewer-panes"></div>
+      </div>
+    </div>
   </body>
 </html>

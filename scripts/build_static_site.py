@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import json
+import shutil
 import sqlite3
 import time
 from pathlib import Path
+
+from reference_pdfs import REFERENCES_DIR, build_family_pdf_map
 
 ROOT = Path(__file__).resolve().parents[1]
 DB_PATH = ROOT / "build" / "symmetric_primitives.db"
@@ -201,6 +204,33 @@ def load_process_data(conn: sqlite3.Connection) -> dict[str, object]:
     return {"processes": processes, "familyProcessMap": family_process_map}
 
 
+def build_family_pdf_payload() -> dict[str, list[str]]:
+    """family_id -> sorted list of "references/<file>" paths, relative to the
+    site root, for the "Open PDF" button (Timelines/Genealogy notes). Reuses
+    reference_pdfs.build_family_pdf_map() rather than re-deriving the
+    filename-matching logic in JS, so both stay in sync automatically.
+    """
+    fam_map = build_family_pdf_map()
+    return {
+        fid: [f"references/{p.name}" for p in paths]
+        for fid, paths in fam_map.items()
+        if paths
+    }
+
+
+def copy_reference_pdfs() -> None:
+    """Copy references/*.pdf|*.txt into build/site/references/ so the "Open
+    PDF" button has something to link/embed -- the site is otherwise fully
+    self-contained (index.html/styles.css/app.js/data.js), but these files
+    are the actual documents the family-PDF map above points at.
+    """
+    dest = SITE_DIR / "references"
+    dest.mkdir(parents=True, exist_ok=True)
+    for src in REFERENCES_DIR.iterdir():
+        if src.is_file() and src.suffix.lower() in {".pdf", ".txt"}:
+            shutil.copy2(src, dest / src.name)
+
+
 def build_site() -> None:
     if not DB_PATH.exists():
         raise SystemExit(f"Missing {DB_PATH}. Run make build-db first.")
@@ -219,6 +249,7 @@ def build_site() -> None:
         "tables": all_tables,
         "joinBuilder": builder_dataset,
         "processData": process_data,
+        "familyPdfMap": build_family_pdf_payload(),
     }
 
     cache_token = str(int(time.time()))
@@ -233,6 +264,7 @@ def build_site() -> None:
     write_text(SITE_DIR / "styles.css", styles_css)
     write_text(SITE_DIR / "app.js", app_js)
     write_text(SITE_DIR / "data.js", data_js)
+    copy_reference_pdfs()
 
     print(f"Static site generated in: {SITE_DIR}")
 

@@ -45,6 +45,134 @@
     return /^https?:\/\//i.test(String(text || "").trim());
   }
 
+  // Shared "Find family" matching, used by both the Timelines and Genealogy
+  // search boxes. Plain substring search (the historic behavior) makes a
+  // search for "DES" also match "HADES" -- exact mode instead requires the
+  // needle to appear as a whole word (bounded by non-word characters), so
+  // "DES" matches "DES" or "Triple DES" but not "HADES".
+  function familyNameMatches(name, needle, exact) {
+    const text = String(name || "");
+    if (!needle) return true;
+    if (!exact) return text.toLowerCase().includes(needle.toLowerCase());
+    try {
+      const escaped = needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return new RegExp(`\\b${escaped}\\b`, "i").test(text);
+    } catch (error) {
+      return text.toLowerCase().includes(needle.toLowerCase());
+    }
+  }
+
+  // ── "Open PDF" viewer -- shared by every family/relation note across the
+  // Timelines and Genealogy tabs. data.familyPdfMap (family_id -> local
+  // "references/<file>" paths) is precomputed at build time (see
+  // scripts/build_static_site.py, scripts/reference_pdfs.py) by the same
+  // filename-matching logic the influence-mining workflow already relies on,
+  // rather than re-deriving it here.
+  function pdfPathsForFamily(fid) {
+    const map = (data && data.familyPdfMap) || {};
+    return map[fid] || [];
+  }
+
+  // entries: [{fid, name}] for a single family, or [{fid,name},{fid,name}]
+  // for a relation between two families. Returns null (no "Open PDF" button)
+  // unless at least one entry actually resolves to a local PDF.
+  function pdfEntriesForFamilies(entries) {
+    const any = entries.some((e) => pdfPathsForFamily(e.fid).length);
+    return any ? entries : null;
+  }
+
+  function openPdfViewer(entries) {
+    const modal = document.getElementById("pdfViewerModal");
+    const panesEl = document.getElementById("pdfViewerPanes");
+    const titleEl = document.getElementById("pdfViewerTitle");
+    const layoutToggle = document.getElementById("pdfViewerLayoutToggle");
+    if (!modal || !panesEl) return;
+
+    panesEl.innerHTML = "";
+    entries.forEach((entry) => {
+      const paths = pdfPathsForFamily(entry.fid);
+      const paneEl = document.createElement("div");
+      paneEl.className = "pdf-viewer-pane";
+      const head = document.createElement("div");
+      head.className = "pdf-viewer-pane-head";
+      const label = document.createElement("span");
+      label.className = "pdf-viewer-pane-family";
+      label.textContent = entry.name;
+      head.appendChild(label);
+      const frame = document.createElement("iframe");
+      frame.className = "pdf-viewer-pane-frame";
+      frame.title = `${entry.name} reference PDF`;
+      if (paths.length > 1) {
+        const select = document.createElement("select");
+        select.className = "pdf-viewer-pane-select";
+        paths.forEach((p) => {
+          const opt = document.createElement("option");
+          opt.value = p;
+          opt.textContent = p.replace(/^references\//, "");
+          select.appendChild(opt);
+        });
+        select.addEventListener("change", () => { frame.src = select.value; });
+        head.appendChild(select);
+      }
+      paneEl.appendChild(head);
+      if (paths.length) {
+        frame.src = paths[0];
+        paneEl.appendChild(frame);
+      } else {
+        const empty = document.createElement("div");
+        empty.className = "pdf-viewer-pane-empty";
+        empty.textContent = "No local PDF on file for this family.";
+        paneEl.appendChild(empty);
+      }
+      panesEl.appendChild(paneEl);
+    });
+
+    if (titleEl) titleEl.textContent = entries.length > 1 ? `${entries[0].name} ↔ ${entries[1].name}` : entries[0].name;
+
+    if (layoutToggle) {
+      if (entries.length > 1) {
+        layoutToggle.hidden = false;
+        // Default to side-by-side on a landscape screen (room for two panes
+        // wide), stacked on portrait -- the button still lets the user
+        // switch either way, e.g. to compare two figures that are each
+        // wider than they are tall.
+        const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+        panesEl.classList.toggle("is-stacked", !isLandscape);
+        layoutToggle.textContent = panesEl.classList.contains("is-stacked") ? "Side by side" : "Stack";
+        layoutToggle.onclick = () => {
+          const stacked = panesEl.classList.toggle("is-stacked");
+          layoutToggle.textContent = stacked ? "Side by side" : "Stack";
+        };
+      } else {
+        layoutToggle.hidden = true;
+        panesEl.classList.remove("is-stacked");
+      }
+    }
+
+    modal.hidden = false;
+    document.body.classList.add("pdf-viewer-open");
+  }
+
+  function setupPdfViewer() {
+    const modal = document.getElementById("pdfViewerModal");
+    if (!modal) return;
+    const closeBtn = document.getElementById("pdfViewerClose");
+    const backdrop = modal.querySelector(".pdf-viewer-backdrop");
+    function close() {
+      modal.hidden = true;
+      document.body.classList.remove("pdf-viewer-open");
+      const panesEl = document.getElementById("pdfViewerPanes");
+      // Clearing the panes drops their <iframe>s so a large embedded PDF
+      // isn't still rendering/decoded in the background after closing.
+      if (panesEl) panesEl.innerHTML = "";
+    }
+    if (closeBtn) closeBtn.addEventListener("click", close);
+    if (backdrop) backdrop.addEventListener("click", close);
+    document.addEventListener("keydown", (ev) => {
+      if (ev.key === "Escape" && !modal.hidden) close();
+    });
+  }
+
   // Wraps a text display element so hovering a target shows its tip (desktop
   // mouse) and clicking/tapping a target pins that tip in place (needed since
   // touch screens have no hover state at all) until the box itself is
@@ -53,24 +181,45 @@
   // per tab.
   function createPinnableInfoBox(boxEl, baseText) {
     let pinned = false;
-    function show(text) {
+    // Pinning a note about a family (or a relation between two families) that
+    // has a locally-stored reference PDF adds an "Open PDF" button inside the
+    // note -- textContent can't hold an element, so the pinned state renders
+    // structured DOM instead of a plain string; the unpinned hover-preview
+    // stays plain text like before.
+    function show(text, pdfEntries) {
       if (!boxEl) return;
-      boxEl.textContent = `${text}  (tap here to dismiss)`;
+      pinned = true;
+      boxEl.textContent = "";
+      const span = document.createElement("span");
+      span.textContent = `${text}  (tap here to dismiss)`;
+      boxEl.appendChild(span);
+      if (pdfEntries && pdfEntries.length) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "info-box-pdf-btn";
+        btn.textContent = "Open PDF";
+        btn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          openPdfViewer(pdfEntries);
+        });
+        boxEl.appendChild(btn);
+      }
       boxEl.classList.add("is-pinned");
     }
     function reset() {
       if (!boxEl) return;
+      pinned = false;
       boxEl.textContent = baseText;
       boxEl.classList.remove("is-pinned");
     }
-    function attach(el, textOrFn) {
+    function attach(el, textOrFn, pdfEntriesOrFn) {
       const getText = typeof textOrFn === "function" ? textOrFn : () => textOrFn;
+      const getPdfEntries = typeof pdfEntriesOrFn === "function" ? pdfEntriesOrFn : () => pdfEntriesOrFn;
       el.addEventListener("mouseenter", () => { if (!pinned && boxEl) boxEl.textContent = getText(); });
       el.addEventListener("mouseleave", () => { if (!pinned && boxEl) boxEl.textContent = baseText; });
       el.addEventListener("click", (ev) => {
         ev.stopPropagation();
-        pinned = true;
-        show(getText());
+        show(getText(), pdfEntriesOrFn ? getPdfEntries() : null);
       });
     }
     if (boxEl) {
@@ -252,12 +401,23 @@
     // wired up for the two tabs that have a plot/graph frame beside their
     // filters (viz, gen); the short key here matches the "{key}ControlsWrap"
     // id convention used above, not the full data-view name.
-    const SIDE_LAYOUT_VIEW_NAMES = { viz: "visualizations", gen: "genealogy" };
+    const SIDE_LAYOUT_VIEW_NAMES = { viz: "visualizations", gen: "genealogy", qb: "builder" };
+    // Default to "Filters on left" on a large landscape screen (e.g. a
+    // laptop), where width is more available than height -- narrower or
+    // portrait screens (tablet/phone) keep the stacked-on-top default. This
+    // only sets the *initial* state; the button below still lets the user
+    // override it either way for the rest of the session.
+    const isLargeLandscape = !!(window.matchMedia && window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches);
     document.querySelectorAll("[data-toggle-layout]").forEach((btn) => {
       const key = btn.getAttribute("data-toggle-layout");
       const wrap = document.getElementById(`${key}ControlsWrap`);
       const panel = wrap ? wrap.closest(".view-panel") : null;
       if (!panel) return;
+      if (isLargeLandscape) {
+        panel.classList.add("is-side-layout");
+        btn.textContent = "Filters on top";
+        btn.setAttribute("aria-pressed", "true");
+      }
       btn.addEventListener("click", () => {
         const isSide = panel.classList.toggle("is-side-layout");
         btn.textContent = isSide ? "Filters on top" : "Filters on left";
@@ -497,13 +657,6 @@
       .join("");
   }
 
-  function parseOptionalNumber(value) {
-    const t = String(value || "").trim();
-    if (!t) return NaN;
-    const n = Number(t);
-    return Number.isFinite(n) ? n : NaN;
-  }
-
   function setupBuilder() {
     const builder = data.joinBuilder;
     const view = createTableView("builderView");
@@ -512,6 +665,8 @@
       referenceKind: document.getElementById("fReferenceKind"),
       referenceYearMin: document.getElementById("fReferenceYearMin"),
       referenceYearMax: document.getElementById("fReferenceYearMax"),
+      referenceYearReset: document.getElementById("fReferenceYearReset"),
+      referenceYearValue: document.getElementById("fReferenceYearValue"),
       familyName: document.getElementById("fFamilyName"),
       referenceTitle: document.getElementById("fReferenceTitle"),
       componentSearch: document.getElementById("fComponentSearch"),
@@ -537,9 +692,48 @@
     const familyProcessMap = processData.familyProcessMap || {};
     const qbFilterPanel = createTierFilterPanel("qb", dims, familyProcessMap, processList, () => refresh());
 
+    // Reference year filter -- a "From year"/"To year" range-slider pair,
+    // same control as the Timelines/Genealogy tabs' year filter (see
+    // normalizeYearControls() in setupFamilyVisualization), instead of two
+    // free-typed number inputs.
+    let qbYearsBounds = null;
+    function initializeQbYearBounds() {
+      if (qbYearsBounds) return qbYearsBounds;
+      const validYears = builder.rows
+        .map((r) => Number(r["reference.year"]))
+        .filter((year) => Number.isFinite(year))
+        .sort((a, b) => a - b);
+      if (!validYears.length) return null;
+      qbYearsBounds = { min: validYears[0], max: validYears[validYears.length - 1] };
+      [ui.referenceYearMin, ui.referenceYearMax].forEach((input) => {
+        input.min = String(qbYearsBounds.min);
+        input.max = String(qbYearsBounds.max);
+        input.step = "1";
+      });
+      ui.referenceYearMin.value = String(qbYearsBounds.min);
+      ui.referenceYearMax.value = String(qbYearsBounds.max);
+      return qbYearsBounds;
+    }
+    function normalizeQbYearControls() {
+      const bounds = initializeQbYearBounds();
+      if (!bounds) {
+        if (ui.referenceYearValue) ui.referenceYearValue.textContent = "No years available";
+        return null;
+      }
+      let start = Number(ui.referenceYearMin.value || bounds.min);
+      let end = Number(ui.referenceYearMax.value || bounds.max);
+      if (start > end) {
+        if (document.activeElement === ui.referenceYearMin) { end = start; ui.referenceYearMax.value = String(end); }
+        else { start = end; ui.referenceYearMin.value = String(start); }
+      }
+      if (ui.referenceYearValue) ui.referenceYearValue.textContent = start === end ? `${start}` : `${start} - ${end}`;
+      return { start, end };
+    }
+
     function fillFilterOptions() {
       const referenceKinds = Array.from(new Set(builder.rows.map((r) => normalizeValue(r["reference.kind"]).trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
       renderFilterChecklist(ui.referenceKind, referenceKinds);
+      initializeQbYearBounds();
     }
 
     function renderColumnPicker() {
@@ -611,10 +805,9 @@
       const refKindValues = selectedChecklistValues(ui.referenceKind);
       if (refKindValues.size) clauses.push(`"reference.kind" IN (${Array.from(refKindValues).map((v) => `'${v.replace(/'/g, "''")}'`).join(", ")})`);
 
-      const ryMin = parseOptionalNumber(ui.referenceYearMin.value);
-      if (Number.isFinite(ryMin)) clauses.push(`"reference.year" >= ${ryMin}`);
-      const ryMax = parseOptionalNumber(ui.referenceYearMax.value);
-      if (Number.isFinite(ryMax)) clauses.push(`"reference.year" <= ${ryMax}`);
+      const qbYearRange = initializeQbYearBounds() ? { start: Number(ui.referenceYearMin.value), end: Number(ui.referenceYearMax.value) } : null;
+      if (qbYearRange && qbYearRange.start !== qbYearsBounds.min) clauses.push(`"reference.year" >= ${qbYearRange.start}`);
+      if (qbYearRange && qbYearRange.end !== qbYearsBounds.max) clauses.push(`"reference.year" <= ${qbYearRange.end}`);
 
       const familyName = (ui.familyName.value || "").trim();
       if (familyName) clauses.push(`"family.name" LIKE '%${familyName.replace(/'/g, "''")}%'`);
@@ -634,8 +827,8 @@
 
     function filterRows(rows) {
       const refKindValues = selectedChecklistValues(ui.referenceKind);
-      const ryMin = parseOptionalNumber(ui.referenceYearMin.value);
-      const ryMax = parseOptionalNumber(ui.referenceYearMax.value);
+      const ryMin = Number(ui.referenceYearMin.value);
+      const ryMax = Number(ui.referenceYearMax.value);
       const familyName = (ui.familyName.value || "").trim().toLowerCase();
       const referenceTitle = (ui.referenceTitle.value || "").trim().toLowerCase();
       const componentSearch = (ui.componentSearch.value || "").trim().toLowerCase();
@@ -662,6 +855,7 @@
     }
 
     function refresh() {
+      normalizeQbYearControls();
       const visible = builder.columns.filter((c) => visibleColumns.has(c));
       const filtered = filterRows(builder.rows);
       renderGrid(view, visible, filtered);
@@ -685,11 +879,24 @@
       if (target && target.matches('input[type="checkbox"][data-value]')) refresh();
     });
 
+    if (ui.referenceYearReset) ui.referenceYearReset.addEventListener("click", () => {
+      const bounds = initializeQbYearBounds();
+      if (!bounds) return;
+      ui.referenceYearMin.value = String(bounds.min);
+      ui.referenceYearMax.value = String(bounds.max);
+      refresh();
+    });
+
     ui.resetFilters.addEventListener("click", () => {
       Array.from(ui.referenceKind.querySelectorAll('input[type="checkbox"][data-value]')).forEach((box) => {
         box.checked = false;
       });
-      [ui.referenceYearMin, ui.referenceYearMax, ui.familyName, ui.referenceTitle, ui.componentSearch, ui.roundFlowSearch].forEach((node) => { node.value = ""; });
+      const bounds = initializeQbYearBounds();
+      if (bounds) {
+        ui.referenceYearMin.value = String(bounds.min);
+        ui.referenceYearMax.value = String(bounds.max);
+      }
+      [ui.familyName, ui.referenceTitle, ui.componentSearch, ui.roundFlowSearch].forEach((node) => { node.value = ""; });
       ui.hasReferenceLink.checked = false;
       refresh();
     });
@@ -1263,6 +1470,7 @@
     const colReset = document.getElementById("vizColReset");
     const colSpacingValue = document.getElementById("vizColSpacingValue");
     const familySearch = document.getElementById("vizFamilySearch");
+    const familySearchExact = document.getElementById("vizFamilySearchExact");
     const vizFrame = document.getElementById("vizFrame");
     const collapseGroups = document.getElementById("vizCollapseGroups");
     const collapseCount = document.getElementById("vizCollapseCount");
@@ -1285,8 +1493,31 @@
     const ZOOM_FACTOR = 1.2;
     const LEFT_AXIS_WIDTH = 100;
     const AXIS_HEIGHT = 48;
-    const STACK_STEP = 0.34;
-    const GROUP_GAP_UNITS = 0.42;
+
+    // ── Layout tuning parameters (user-adjustable, persisted) ───────────
+    // Mirrors the Genealogy tab's floating "Tune layout" panel: row/group
+    // spacing that used to be hardcoded is exposed as sliders so a crowded
+    // or overly sparse plot can be retuned live instead of filing a request.
+    const VIZ_LAYOUT_PARAMS_KEY = "spdb_viz_layout_params_v1";
+    const DEFAULT_VIZ_LAYOUT_PARAMS = {
+      stackStep: 0.34,     // vertical spacing between stacked points within a row (lane-step units)
+      groupGapUnits: 0.42, // extra vertical gap inserted between groups/rows (lane-step units)
+    };
+    function loadVizLayoutParams() {
+      const out = { ...DEFAULT_VIZ_LAYOUT_PARAMS };
+      try {
+        const raw = JSON.parse(localStorage.getItem(VIZ_LAYOUT_PARAMS_KEY) || "{}");
+        Object.keys(DEFAULT_VIZ_LAYOUT_PARAMS).forEach((k) => {
+          const v = Number(raw[k]);
+          if (Number.isFinite(v)) out[k] = v;
+        });
+      } catch { /* corrupt/unavailable storage falls back to defaults */ }
+      return out;
+    }
+    let vizLayoutParams = loadVizLayoutParams();
+    function saveVizLayoutParams() {
+      try { localStorage.setItem(VIZ_LAYOUT_PARAMS_KEY, JSON.stringify(vizLayoutParams)); } catch { /* storage unavailable (e.g. private mode) -- tuning still works, just doesn't persist */ }
+    }
     const POINT_RADIUS = 4.25;
     const BASE_RELATION_TEXT = "Hover or tap a family dot/label or a relation arrow to see details. Use the zoom controls or Cmd/Ctrl + wheel inside the plot to adjust scale.";
     const relationTip = createPinnableInfoBox(relationInfoBox, BASE_RELATION_TEXT);
@@ -1344,6 +1575,7 @@
     }
 
     function groupsForFamily(familyId, mode) {
+      if (mode === "none") return ["All families"];
       if (mode === "type") {
         const values = Array.from(familyToTypes.get(familyId) || []);
         return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["No type tagged"];
@@ -1556,7 +1788,7 @@
       cornerPane.innerHTML = `<b>${escapeHtml(modeLabel(mode))}</b><span style="font-weight:400;opacity:0.75">Publication year</span>`;
       const rawPoints = [];
       const yearRange = normalizeYearControls();
-      const searchNeedle = familySearch.value.trim().toLowerCase();
+      const searchNeedle = familySearch.value.trim();
 
       families.forEach((family) => {
         const year = Number(family.year);
@@ -1566,7 +1798,7 @@
         if (!familyId) return;
         if (!filterPanel.isFamilyVisible(familyId)) return;
         const familyName = String(family.name || familyId);
-        if (searchNeedle && !familyName.toLowerCase().includes(searchNeedle)) return;
+        if (!familyNameMatches(familyName, searchNeedle, !!(familySearchExact && familySearchExact.checked))) return;
         groupsForFamily(familyId, mode).forEach((group) => {
           rawPoints.push({
             familyId,
@@ -1635,8 +1867,8 @@
         points.forEach((p) => { _maxLinesNeeded = Math.max(_maxLinesNeeded, _countLines(p.name)); });
       }
       const effectiveStackStep = nameMode === "wrap"
-        ? Math.max(STACK_STEP, _maxLinesNeeded * (fontPx * 1.4) / _earlyLaneStep + 0.04)
-        : STACK_STEP;
+        ? Math.max(vizLayoutParams.stackStep, _maxLinesNeeded * (fontPx * 1.4) / _earlyLaneStep + 0.04)
+        : vizLayoutParams.stackStep;
 
       const familyCountByGroup = new Map();
       points.forEach((p) => {
@@ -1673,7 +1905,7 @@
         const spanUnits = 1 + Math.max(0, maxStack - 1) * effectiveStackStep;
         const endUnit = nextBaseUnit + spanUnits;
         groupLayout.set(label, { startUnit: nextBaseUnit, endUnit });
-        nextBaseUnit = endUnit + GROUP_GAP_UNITS;
+        nextBaseUnit = endUnit + vizLayoutParams.groupGapUnits;
       });
 
       visiblePoints.forEach((point) => {
@@ -1936,7 +2168,7 @@
           const pointTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
           pointTitle.textContent = richTip;
           circle.appendChild(pointTitle);
-          relationTip.attach(circle, richTip);
+          relationTip.attach(circle, richTip, () => pdfEntriesForFamilies([{ fid: point.familyId, name: point.name }]));
           attachFamilyContextMenu(circle, point.name, familySearch, render);
           plotSvg.appendChild(circle);
         }
@@ -1968,7 +2200,7 @@
           const fullTitle = document.createElementNS("http://www.w3.org/2000/svg", "title");
           fullTitle.textContent = richTip;
           label.appendChild(fullTitle);
-          relationTip.attach(label, richTip);
+          relationTip.attach(label, richTip, () => pdfEntriesForFamilies([{ fid: point.familyId, name: point.name }]));
           attachFamilyContextMenu(label, point.name, familySearch, render);
           plotSvg.appendChild(label);
           labelBounds.set(point, label.getBBox());
@@ -2017,7 +2249,10 @@
             const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
             title.textContent = hoverText;
             hoverLine.appendChild(title);
-            relationTip.attach(hoverLine, hoverText);
+            relationTip.attach(hoverLine, hoverText, () => pdfEntriesForFamilies([
+              { fid: sourceId, name: String((familyById.get(sourceId) || {}).name || sourceId) },
+              { fid: targetId, name: String((familyById.get(targetId) || {}).name || targetId) },
+            ]));
             hoverLines.push(hoverLine);
           });
         });
@@ -2145,6 +2380,7 @@
     collapseCount.addEventListener("input", render);
     familySearch.addEventListener("input", render);
     familySearch.addEventListener("change", render);
+    if (familySearchExact) familySearchExact.addEventListener("change", render);
     fontMinus.addEventListener("click", () => {
       fontPx = Math.max(8, fontPx - 1);
       render();
@@ -2183,6 +2419,57 @@
     if (vizFsZoomIn) vizFsZoomIn.addEventListener("click", () => setZoom(zoomScale * ZOOM_FACTOR));
     if (vizFsZoomFit) vizFsZoomFit.addEventListener("click", () => fitZoom());
     attachPinchZoom(plotScroll, () => zoomScale, (s, ax, ay) => setZoom(s, ax, ay));
+
+    // ── "Tune layout" floating panel -- mirrors the Genealogy tab's panel
+    // (same toggle/close/reset interaction), exposing the row/group spacing
+    // that used to be hardcoded.
+    const vizParamsToggle = document.getElementById("vizParamsToggle");
+    const vizParamsPanel = document.getElementById("vizParamsPanel");
+    const vizParamsClose = document.getElementById("vizParamsClose");
+    const vizParamsReset = document.getElementById("vizParamsReset");
+    const vizParamStackStep = document.getElementById("vizParamStackStep");
+    const vizParamStackStepValue = document.getElementById("vizParamStackStepValue");
+    const vizParamGroupGap = document.getElementById("vizParamGroupGap");
+    const vizParamGroupGapValue = document.getElementById("vizParamGroupGapValue");
+    if (vizParamsToggle && vizParamsPanel) {
+      vizParamsToggle.addEventListener("click", () => {
+        const open = vizParamsPanel.hidden;
+        vizParamsPanel.hidden = !open;
+        vizParamsToggle.setAttribute("aria-expanded", String(open));
+      });
+    }
+    if (vizParamsClose && vizParamsPanel && vizParamsToggle) {
+      vizParamsClose.addEventListener("click", () => {
+        vizParamsPanel.hidden = true;
+        vizParamsToggle.setAttribute("aria-expanded", "false");
+      });
+    }
+    const VIZ_LAYOUT_PARAM_SLIDERS = [
+      { key: "stackStep", input: vizParamStackStep, out: vizParamStackStepValue },
+      { key: "groupGapUnits", input: vizParamGroupGap, out: vizParamGroupGapValue },
+    ];
+    function syncVizLayoutParamSliders() {
+      VIZ_LAYOUT_PARAM_SLIDERS.forEach(({ key, input, out }) => {
+        if (input) input.value = String(Math.round(vizLayoutParams[key] * 100));
+        if (out) out.textContent = `${Math.round(vizLayoutParams[key] * 100)}%`;
+      });
+    }
+    syncVizLayoutParamSliders();
+    VIZ_LAYOUT_PARAM_SLIDERS.forEach(({ key, input, out }) => {
+      if (!input) return;
+      input.addEventListener("input", () => {
+        vizLayoutParams[key] = Number(input.value) / 100;
+        if (out) out.textContent = `${Math.round(vizLayoutParams[key] * 100)}%`;
+        saveVizLayoutParams();
+        render();
+      });
+    });
+    if (vizParamsReset) vizParamsReset.addEventListener("click", () => {
+      vizLayoutParams = { ...DEFAULT_VIZ_LAYOUT_PARAMS };
+      syncVizLayoutParamSliders();
+      saveVizLayoutParams();
+      render();
+    });
     yearStart.addEventListener("input", () => {
       if (suppressYearRender) return;
       render();
@@ -2243,9 +2530,12 @@
     const genPlotScroll = document.getElementById("genPlotScroll");
     const genFrame = document.getElementById("genFrame");
     const genColorBy = document.getElementById("genColorBy");
+    const genHighlightBy = document.getElementById("genHighlightBy");
+    const genHighlightValues = document.getElementById("genHighlightValues");
     const genConnectedOnly = document.getElementById("genConnectedOnly");
     const genStandardsOnly = document.getElementById("genStandardsOnly");
     const genFamilySearch = document.getElementById("genFamilySearch");
+    const genFamilySearchExact = document.getElementById("genFamilySearchExact");
     const genFamilyCountBadge = document.getElementById("genFamilyCount");
     const genFamilySearchDegree = document.getElementById("genFamilySearchDegree");
     const genDegreeMinus = document.getElementById("genDegreeMinus");
@@ -2454,12 +2744,11 @@
     const typeColorMap = new Map();
     const allTypes = Array.from(new Set(Array.from(famToTypes.values()).flatMap((s) => Array.from(s)))).sort();
     allTypes.forEach((t, i) => typeColorMap.set(t, TYPE_COLORS[i % TYPE_COLORS.length]));
-    const constrColorMap = new Map();
+    // Construction/target application are deliberately not coloring
+    // dimensions (see nodeColor()) -- these two lists only feed the
+    // "Highlight" checklist below, picking out a chosen subset instead.
     const allConstrs = Array.from(new Set(Array.from(famToConstrs.values()).flatMap((s) => Array.from(s)))).sort();
-    allConstrs.forEach((c, i) => constrColorMap.set(c, TYPE_COLORS[i % TYPE_COLORS.length]));
-    const targetColorMap = new Map();
     const allTargets = Array.from(new Set(Array.from(famToTargets.values()).flatMap((s) => Array.from(s)))).sort();
-    allTargets.forEach((t, i) => targetColorMap.set(t, TYPE_COLORS[i % TYPE_COLORS.length]));
     const relationTypes = Array.from(new Set(influences.flatMap((e) => {
       const rs = parseJsonArray(e.relations_json);
       const fb = String(e.relation || "").trim();
@@ -2547,20 +2836,54 @@
       if (s > e) { const tmp = s; s = e; e = tmp; } return { start: s, end: e };
     }
 
+    // Coloring only covers Type and Process -- both are close to
+    // single-valued per family in practice. Construction and Target
+    // application are not: most families carry several of each, so coloring
+    // by either would just show the alphabetically-first value and imply a
+    // precision the data doesn't have. Those two are offered as a
+    // "Highlight" pick-a-subset control instead (see isHighlighted() below),
+    // which fades everything else out without pretending each family has
+    // exactly one construction/target.
     function nodeColor(fid) {
       const mode = genColorBy.value;
       if (mode === "process") { const pid = genFamilyProcessMap[fid]; return pid ? (genProcColorMap.get(pid) || "#7a8c8f") : "#7a8c8f"; }
-      if (mode === "construction") { const cc = Array.from(famToConstrs.get(fid) || []).sort(); return cc.length ? (constrColorMap.get(cc[0]) || "#5a7a8a") : "#7a8c8f"; }
-      if (mode === "target") { const tt = Array.from(famToTargets.get(fid) || []).sort(); return tt.length ? (targetColorMap.get(tt[0]) || "#5a7a8a") : "#7a8c8f"; }
       const tt = Array.from(famToTypes.get(fid) || []).sort(); return tt.length ? (typeColorMap.get(tt[0]) || "#5a7a8a") : "#7a8c8f";
+    }
+
+    // ── Highlight: pick a subset of Constructions/Target applications and
+    // fade every non-matching node, instead of trying to color by a
+    // multi-valued dimension (see nodeColor() above).
+    let genHighlightDim = "none";
+    const genHighlightSelected = new Set();
+    function isHighlightActive() { return genHighlightDim !== "none" && genHighlightSelected.size > 0; }
+    function isHighlighted(fid) {
+      if (!isHighlightActive()) return true;
+      const map = genHighlightDim === "construction" ? famToConstrs : famToTargets;
+      const values = map.get(fid);
+      if (!values) return false;
+      return Array.from(values).some((v) => genHighlightSelected.has(v));
+    }
+    function highlightOpacity(fid) { return isHighlighted(fid) ? 1 : 0.15; }
+    function renderHighlightChecklist() {
+      if (!genHighlightValues) return;
+      if (genHighlightDim === "none") { genHighlightValues.hidden = true; genHighlightValues.innerHTML = ""; return; }
+      const entries = genHighlightDim === "construction"
+        ? allConstrs.map((c) => ({ key: c, label: genDims.constructionNameById.get(c) || c }))
+        : allTargets.map((t) => ({ key: t, label: t }));
+      genHighlightValues.hidden = false;
+      genHighlightValues.innerHTML = entries.map(({ key, label }) => {
+        const esc = escapeHtml(label);
+        const checked = genHighlightSelected.has(key) ? " checked" : "";
+        return `<label><input type="checkbox" data-value="${escapeHtml(key)}"${checked}/><span>${esc}</span></label>`;
+      }).join("");
     }
 
     function isVis(fid, ignoreSearch = false) {
       const fam = genFamById.get(fid); if (!fam) return false;
       const yr = getYrRange(); const year = Number(fam.year);
       if (yr && (year < yr.start || year > yr.end)) return false;
-      const needle = ignoreSearch ? "" : genFamilySearch.value.trim().toLowerCase();
-      if (needle && !String(fam.name || fid).toLowerCase().includes(needle)) return false;
+      const needle = ignoreSearch ? "" : genFamilySearch.value.trim();
+      if (needle && !familyNameMatches(fam.name || fid, needle, !!(genFamilySearchExact && genFamilySearchExact.checked))) return false;
       if (genStandardsOnly.checked && !stdFamIds.has(fid)) return false;
       if (!genFilterPanel.isFamilyVisible(fid)) return false;
       return true;
@@ -2788,21 +3111,13 @@
       const present = new Set();
       if (mode === "process") {
         ids.forEach((fid) => present.add(genFamilyProcessMap[fid] || "__none__"));
-      } else if (mode === "construction") {
-        ids.forEach((fid) => (famToConstrs.get(fid) || new Set()).forEach((c) => present.add(c)));
-      } else if (mode === "target") {
-        ids.forEach((fid) => (famToTargets.get(fid) || new Set()).forEach((t) => present.add(t)));
       } else {
         ids.forEach((fid) => (famToTypes.get(fid) || new Set()).forEach((t) => present.add(t)));
       }
       const items = mode === "process"
         ? [...genProcessList.filter((p) => present.has(String(p.id))).map((p) => ({ color: genProcColorMap.get(String(p.id)), label: String(p.name) })),
            ...(present.has("__none__") ? [{ color: genProcColorMap.get("__none__"), label: "No process" }] : [])]
-        : mode === "construction"
-          ? allConstrs.filter((c) => present.has(c)).map((c) => ({ color: constrColorMap.get(c) || "#7a8c8f", label: genDims.constructionNameById.get(c) || c }))
-          : mode === "target"
-            ? allTargets.filter((t) => present.has(t)).map((t) => ({ color: targetColorMap.get(t) || "#7a8c8f", label: t }))
-            : allTypes.filter((t) => present.has(t)).map((t) => ({ color: typeColorMap.get(t) || "#7a8c8f", label: t }));
+        : allTypes.filter((t) => present.has(t)).map((t) => ({ color: typeColorMap.get(t) || "#7a8c8f", label: t }));
       const mkItem = (color, label, bold) => {
         const s = document.createElement("span"); s.className = "viz-process-legend-item";
         const d = document.createElement("span"); d.className = "viz-process-legend-dot"; d.style.cssText = `background:${color};${bold ? "border:2px solid #000;box-sizing:border-box" : ""}`;
@@ -2934,7 +3249,7 @@
         }
         const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.2 + 5)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
-        edgeTip.attach(hp, hoverTxt);
+        edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([{ fid: src, name: srcName }, { fid: tgt, name: tgtName }]));
         hoverPaths.push(hp);
       });
       // Append edge hit-areas before nodes/labels so nodes/labels paint (and
@@ -2953,13 +3268,14 @@
         const famConstrs = Array.from(famToConstrs.get(fid) || []).map((c) => genDims.constructionNameById.get(c) || c).sort().join(", ") || "—";
         const pid = genFamilyProcessMap[fid]; const proc = pid ? genProcessList.find((p) => String(p.id) === pid) : null;
         const tip = [`${name} (${fam.year})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : []), ...(fam.notes ? [fam.notes] : [])].join("\n");
-        const rect = svgEl("rect", { x: String(cx - w / 2), y: String(cy), width: String(w), height: String(NH), rx: "4", ry: "4", fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.22)", "stroke-width": isStd ? "2" : "1", opacity: isIso ? "0.58" : "1" });
+        const hlOpacity = highlightOpacity(fid);
+        const rect = svgEl("rect", { x: String(cx - w / 2), y: String(cy), width: String(w), height: String(NH), rx: "4", ry: "4", fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.22)", "stroke-width": isStd ? "2" : "1", opacity: String((isIso ? 0.58 : 1) * hlOpacity) });
         const rt = svgEl("title", {}); rt.textContent = tip; rect.appendChild(rt);
-        edgeTip.attach(rect, tip);
+        edgeTip.attach(rect, tip, () => pdfEntriesForFamilies([{ fid, name }]));
         attachFamilyContextMenu(rect, name, genFamilySearch, render);
         genPlot.appendChild(rect);
         const maxCh = Math.min(genNumChars, Math.max(4, Math.floor((w - NODE_PAD_X * 2) / (genFontPx * 0.56))));
-        const lblStyle = `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:#fff;pointer-events:none;font-weight:${isStd ? 700 : 400};opacity:${isIso ? "0.8" : "1"}`;
+        const lblStyle = `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:#fff;pointer-events:none;font-weight:${isStd ? 700 : 400};opacity:${(isIso ? 0.8 : 1) * hlOpacity}`;
         const lbl = svgEl("text", { "text-anchor": "middle", style: lblStyle });
         const disp = genNameMode === "full" ? name : (name.length <= maxCh ? name : name.slice(0, Math.max(1, maxCh - 1)) + "…");
         lbl.setAttribute("x", String(cx));
@@ -3290,7 +3606,10 @@
         }
         const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.1 + 5)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
-        edgeTip.attach(hp, hoverTxt);
+        edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([
+          { fid: src, name: String((genFamById.get(src) || {}).name || src) },
+          { fid: tgt, name: String((genFamById.get(tgt) || {}).name || tgt) },
+        ]));
         hoverPaths.push(hp);
       });
       // Append edge hit-areas before nodes/labels so nodes/labels paint (and
@@ -3316,10 +3635,11 @@
         const showBullets = !genShowBullets || genShowBullets.checked;
         const nodeRad = isStd ? 4 : 3;
         const name = String(fam.name || fid);
+        const hlOpacity = highlightOpacity(fid);
         if (showBullets) {
-          const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeRad), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "1.5" : "0.8", "pointer-events": "all" });
+          const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeRad), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "1.5" : "0.8", opacity: String(hlOpacity), "pointer-events": "all" });
           const ct = svgEl("title", {}); ct.textContent = tip; circ.appendChild(ct);
-          edgeTip.attach(circ, tip);
+          edgeTip.attach(circ, tip, () => pdfEntriesForFamilies([{ fid, name }]));
           attachFamilyContextMenu(circ, name, genFamilySearch, render);
           genPlot.appendChild(circ);
         }
@@ -3331,7 +3651,7 @@
         const textRot = isRight ? (deg - 90) : (deg + 90);
         const maxLabelCh = genNumChars;
         const labelFill = showBullets ? (isStd ? "#162022" : "#1a2a2e") : color;
-        const radStyle = `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:${labelFill};pointer-events:${showBullets ? "none" : "all"};font-weight:${isStd ? 700 : 400}`;
+        const radStyle = `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:${labelFill};pointer-events:${showBullets ? "none" : "all"};font-weight:${isStd ? 700 : 400};opacity:${hlOpacity}`;
         const anchor = isRight ? "start" : "end";
         const disp = genNameMode === "full" ? name : (name.length <= maxLabelCh ? name : name.slice(0, Math.max(2, maxLabelCh - 1)) + "…");
         const lbl = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": anchor,
@@ -3339,7 +3659,7 @@
         lbl.textContent = disp;
         if (!showBullets) {
           const lt = svgEl("title", {}); lt.textContent = tip; lbl.appendChild(lt);
-          edgeTip.attach(lbl, tip);
+          edgeTip.attach(lbl, tip, () => pdfEntriesForFamilies([{ fid, name }]));
           attachFamilyContextMenu(lbl, name, genFamilySearch, render);
         }
         genPlot.appendChild(lbl);
@@ -3357,11 +3677,12 @@
       // purpose below, including the search's relation-degree hop -- hidden
       // relations shouldn't let the BFS reach through them either.
       const relVisibleInfluences = influences.filter((e) => genRelationFilterPanel.isEdgeVisible(e));
-      const needle = genFamilySearch.value.trim().toLowerCase();
+      const needle = genFamilySearch.value.trim();
+      const exactWord = !!(genFamilySearchExact && genFamilySearchExact.checked);
       let visIds = eligibleIds;
       if (needle) {
         const matched = new Set(eligibleIds.filter((fid) =>
-          String((genFamById.get(fid) || {}).name || fid).toLowerCase().includes(needle)));
+          familyNameMatches((genFamById.get(fid) || {}).name || fid, needle, exactWord)));
         const rawDegree = genFamilySearchDegree ? parseInt(genFamilySearchDegree.value, 10) : 1;
         const degree = Number.isFinite(rawDegree) ? Math.max(0, rawDegree) : 1;
         // BFS outward from the matched set, one relation "hop" per round, so a
@@ -3415,6 +3736,21 @@
     }
 
     genColorBy.addEventListener("change", render);
+    renderHighlightChecklist();
+    if (genHighlightBy) genHighlightBy.addEventListener("change", () => {
+      genHighlightDim = genHighlightBy.value;
+      genHighlightSelected.clear();
+      renderHighlightChecklist();
+      render();
+    });
+    if (genHighlightValues) genHighlightValues.addEventListener("change", (ev) => {
+      const t = ev.target;
+      if (t && t.type === "checkbox" && t.dataset.value !== undefined) {
+        if (t.checked) genHighlightSelected.add(t.dataset.value);
+        else genHighlightSelected.delete(t.dataset.value);
+        render();
+      }
+    });
     genConnectedOnly.addEventListener("change", render);
     genStandardsOnly.addEventListener("change", render);
     if (genByGeneration) genByGeneration.addEventListener("change", render);
@@ -3422,6 +3758,7 @@
     if (genCollapseEdges) genCollapseEdges.addEventListener("change", render);
     genFamilySearch.addEventListener("input", render);
     genFamilySearch.addEventListener("change", render);
+    if (genFamilySearchExact) genFamilySearchExact.addEventListener("change", render);
     if (genFamilySearchDegree) {
       genFamilySearchDegree.addEventListener("input", render);
       genFamilySearchDegree.addEventListener("change", render);
@@ -3479,6 +3816,7 @@
       if (genLayoutRadial) genLayoutRadial.classList.remove("is-active");
       syncParamsGroupVisibility();
       render();
+      fitGenZoom();
     });
     if (genLayoutRadial) genLayoutRadial.addEventListener("click", () => {
       genLayoutMode = "radial";
@@ -3486,6 +3824,7 @@
       if (genLayoutLayered) genLayoutLayered.classList.remove("is-active");
       syncParamsGroupVisibility();
       render();
+      fitGenZoom();
     });
     syncParamsGroupVisibility();
 
@@ -3629,4 +3968,5 @@
   setupFamilyVisualization();
   setupGenealogy();
   setupFullscreenAndFilterToggles();
+  setupPdfViewer();
 })();

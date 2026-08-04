@@ -125,30 +125,36 @@ def compute_construction_sharing_edges(
     shared level-2 construction tags, direction older -> newer.
 
     For each construction leaf, every family tagged with it is chronologically
-    ordered by family_year(); each family links only to its nearest earlier
-    neighbor sharing that same leaf, forming a chronological chain per leaf
-    rather than a fully-connected graph (which would be O(n^2) for a popular
-    leaf like balanced_feistel). Families with no resolvable year are skipped
-    since there is no defined direction for them.
+    ordered by family_year(); the single earliest family is credited as the
+    origin of that construction leaf and every later family tagged with the
+    same leaf is linked directly to that origin (a star, not a chain). A
+    chronological chain (each family linked only to its nearest earlier
+    neighbor) was tried first, but it implies each later family was
+    influenced by its immediate predecessor specifically, when in fact many
+    of them were published the same or a nearby year without any dependency
+    on each other -- only on the leaf's origin. The star also gives a flat,
+    one-hop-deep fan-out in the genealogy "by generation" view instead of an
+    artificially long descendant column. Families with no resolvable year
+    are skipped since there is no defined direction for them.
 
     Same-year families break the sort tie alphabetically by id, which has no
     grounding in actual design chronology -- e.g. SPARX and LAX come from the
     same 2016 paper, where LAX is explicitly the generalization built on top
-    of SPARX, but "lax" < "sparx" alphabetically, so an unguarded chain would
-    derive lax -> sparx: the opposite of the sparx -> lax influence edge
-    that's hand-curated from the paper itself. This isn't always a direct
-    contradiction on the same pair either -- subterranean_2_0, sycon_aead,
-    and xoodyak all resolve to the same year (2019), so their alphabetical
-    chain derives subterranean_2_0 -> sycon_aead -> xoodyak, which closes a
-    cycle three hops later through the curated xoodyak -> subterranean_2_0
-    edge, without subterranean_2_0/xoodyak ever sharing a direct derived
-    edge. So instead of only checking the immediate pair, each candidate
-    edge is tested against a running graph seeded with every curated
-    influences edge: if the target can already reach the source (through
-    curated or previously-accepted derived edges), adding source -> target
-    would close a cycle, and the edge is dropped. Genealogy's tree-building
-    assumes the combined (curated + derived) edge set is acyclic, so this
-    matters more than the derived edges merely being self-consistent.
+    of SPARX, but "lax" < "sparx" alphabetically, so an unguarded derivation
+    could pick LAX as the (alphabetically earlier) hub and derive
+    lax -> sparx: the opposite of the sparx -> lax influence edge that's
+    hand-curated from the paper itself. More generally, crediting an
+    earliest-year hub can still contradict a curated influence edge or close
+    a cycle through other derived/curated edges elsewhere in the graph (e.g.
+    subterranean_2_0, sycon_aead, and xoodyak all resolve to 2019, and
+    xoodyak -> subterranean_2_0 is a curated edge). So instead of adding
+    every hub -> later edge unconditionally, each candidate edge is tested
+    against a running graph seeded with every curated influences edge: if
+    the later family can already reach the hub (through curated or
+    previously-accepted derived edges), adding hub -> later would close a
+    cycle, and the edge is dropped. Genealogy's tree-building assumes the
+    combined (curated + derived) edge set is acyclic, so this matters more
+    than the derived edges merely being self-consistent.
     """
     graph: dict[str, set[str]] = {}
     for family in families:
@@ -180,11 +186,12 @@ def compute_construction_sharing_edges(
     edges: list[tuple[str, str, str]] = []
     for construction_id, members in by_leaf.items():
         members.sort(key=lambda pair: (pair[0], pair[1]))
-        for (_, earlier_id), (_, later_id) in zip(members, members[1:]):
-            if earlier_id == later_id:
+        _, origin_id = members[0]
+        for _, later_id in members[1:]:
+            if origin_id == later_id:
                 continue
-            if reachable(later_id, earlier_id):
+            if reachable(later_id, origin_id):
                 continue
-            graph.setdefault(earlier_id, set()).add(later_id)
-            edges.append((earlier_id, later_id, construction_id))
+            graph.setdefault(origin_id, set()).add(later_id)
+            edges.append((origin_id, later_id, construction_id))
     return edges
