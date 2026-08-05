@@ -2567,6 +2567,7 @@
     const genByGeneration = document.getElementById("genByGeneration");
     const genShowBullets = document.getElementById("genShowBullets");
     const genCollapseEdges = document.getElementById("genCollapseEdges");
+    const genDebugHitAreas = document.getElementById("genDebugHitAreas");
     const genNameClip = document.getElementById("genNameClip");
     const genNameFull = document.getElementById("genNameFull");
     const genZoomOut = document.getElementById("genZoomOut");
@@ -3045,7 +3046,18 @@
     // otherwise stop this delegated listener from ever seeing the click.
     genPlot.addEventListener("click", (ev) => {
       const hits = hitsAtPoint(ev.clientX, ev.clientY);
-      if (!hits.edgeEls.length && !hits.nodeEls.length) return;
+      if (!hits.edgeEls.length && !hits.nodeEls.length) {
+        // A pin can only otherwise be cleared by clicking the exact same
+        // edge/node again -- easy to lose track of once pinned, especially
+        // since a dense hub can pin dozens of edges/nodes at once from a
+        // single, easy-to-trigger-by-accident click (a trackpad tap while
+        // passing through a crowded spot, say). Clicking anywhere empty
+        // is a common "dismiss" gesture elsewhere in this UI already (see
+        // createPinnableInfoBox's own pinned-text dismissal) and gives an
+        // obvious way out without having to relocate the original spot.
+        if (hotPinned) { hotPinned = null; clearHotClasses(); }
+        return;
+      }
       if (hotPinned && sameEls(hotPinned.edgeEls, hits.edgeEls) && sameEls(hotPinned.nodeEls, hits.nodeEls)) {
         hotPinned = null;
       } else {
@@ -3053,6 +3065,19 @@
       }
       applyHotClasses(hits.edgeEls, hits.nodeEls);
     }, true);
+    // The empty-space case above only fires for clicks that land somewhere
+    // inside genPlot's own SVG canvas -- a click on the page background, a
+    // filter panel, or any other element outside genPlot never reaches a
+    // listener registered on genPlot at all (it's not an ancestor of the
+    // click target, so it's never in that event's capture/bubble path).
+    // Without this, a pin from an easy-to-trigger-by-accident click (a
+    // trackpad tap while passing through a crowded hub, say) would have no
+    // way to be dismissed by clicking elsewhere on the page.
+    document.addEventListener("click", (ev) => {
+      if (!hotPinned || genPlot.contains(ev.target)) return;
+      hotPinned = null;
+      clearHotClasses();
+    });
     function renderHighlightChecklist() {
       if (!genHighlightValues) return;
       if (genHighlightDim === "none") { genHighlightValues.hidden = true; genHighlightValues.innerHTML = ""; return; }
@@ -3451,7 +3476,8 @@
         // match several unrelated edges at once. Tracking the visible width
         // keeps the hit-area just forgiving enough for mouse imprecision.
         const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
-        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(maxStrokeW + 0.5), fill: "none", "pointer-events": "all" });
+        const hitAreaStroke = (genDebugHitAreas && genDebugHitAreas.checked) ? "rgba(255,0,0,0.35)" : "rgba(0,0,0,0.001)";
+        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW + 0.5), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([{ fid: src, name: srcName }, { fid: tgt, name: tgtName }]));
         // nodeElsByFamily is only fully populated once the node loop below
@@ -3844,7 +3870,8 @@
         // crowded spot with several close but distinct lines doesn't match
         // several unrelated edges at once.
         const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
-        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(maxStrokeW + 0.5), fill: "none", "pointer-events": "all" });
+        const hitAreaStroke = (genDebugHitAreas && genDebugHitAreas.checked) ? "rgba(255,0,0,0.35)" : "rgba(0,0,0,0.001)";
+        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW + 0.5), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([
           { fid: src, name: String((genFamById.get(src) || {}).name || src) },
@@ -4025,6 +4052,7 @@
     if (genByGeneration) genByGeneration.addEventListener("change", render);
     if (genShowBullets) genShowBullets.addEventListener("change", render);
     if (genCollapseEdges) genCollapseEdges.addEventListener("change", render);
+    if (genDebugHitAreas) genDebugHitAreas.addEventListener("change", render);
     genFamilySearch.addEventListener("input", render);
     genFamilySearch.addEventListener("change", render);
     if (genFamilySearchExact) genFamilySearchExact.addEventListener("change", render);

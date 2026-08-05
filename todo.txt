@@ -108,6 +108,26 @@ TODO:
 
 DONE:
 
+- Fifth follow-up round, reported directly rather than filed here first: you asked to *see* the edge
+  hit-areas to investigate "many relations stay highlighted after the cursor passed and left."
+  1. Added a permanent "Show hit-areas (debug)" checkbox to Genealogy's Tune Layout panel (draws each
+     edge's actual invisible hit-area in solid red) rather than a one-off screenshot, so this is
+     inspectable directly whenever it's needed again. Confirmed via it that the hit-areas themselves are
+     now appropriately thin (previous round's fix) -- what looks like "many highlighted" right at a hub
+     is genuinely dozens of distinct curves passing through the same few pixels there, not oversized
+     hit-areas.
+  2. The actual "stuck after leaving" cause: tested pure hover-through-then-away (no click) with real
+     synthetic pointer movement and it correctly cleared every time -- the behavior you hit is the pin
+     mechanism (click to pin, added two rounds ago) triggered unintentionally, most likely by a trackpad
+     tap while passing through a dense hub. Once pinned, there was no way to dismiss it except clicking
+     the exact same spot again, which is easy to lose track of on a hub with dozens of edges. Added two
+     "click away to dismiss" escape hatches: clicking empty space *inside* the plot, and (a separate fix,
+     since a click outside genPlot's own SVG never reaches a listener registered on it at all) clicking
+     *anywhere else on the page* while something's pinned.
+  Verified via Playwright with real (not synthetic-dispatch) pointer movement for the hover/leave check,
+  and explicit pin-then-click-elsewhere sequences for both new dismiss paths. make test and a full
+  build-site pass; no console errors.
+
 - Fourth follow-up round, reported directly rather than filed here first:
   1. Edge hover hit-area still too generous after the previous round's fix (tracking visible thickness +3
      units of tolerance) -- reduced the tolerance to +0.5, close to "a dot" as requested.
