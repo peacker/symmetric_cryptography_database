@@ -1008,11 +1008,6 @@ pre {
   font-size: 12px;
 }
 
-.viz-edge {
-  stroke: rgba(76, 91, 95, 0.35);
-  fill: none;
-}
-
 table {
   width: 100%;
   border-collapse: separate;

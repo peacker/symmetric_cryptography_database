@@ -1464,7 +1464,6 @@
     const cornerPane = document.getElementById("vizCornerPane");
     const processLegend = document.getElementById("vizProcessLegend");
     const groupBy = document.getElementById("vizGroupBy");
-    const showArrows = document.getElementById("vizShowArrows");
     const hideDots = document.getElementById("vizHideDots");
     const nameModeOff = document.getElementById("vizNameOff");
     const nameModeClip = document.getElementById("vizNameClip");
@@ -1496,7 +1495,7 @@
     const yearReset = document.getElementById("vizYearReset");
     const yearRangeValue = document.getElementById("vizYearRangeValue");
     const relationInfoBox = document.getElementById("vizRelationInfo");
-    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !vizFrame || !groupBy || !showArrows || !hideDots || !nameModeOff || !nameModeClip || !nameModeWrap || !nameModeFull || !colorByProcess || !processLegend || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !colMinus || !colPlus || !colReset || !colSpacingValue || !familySearch || !collapseGroups || !collapseCount || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
+    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !vizFrame || !groupBy || !hideDots || !nameModeOff || !nameModeClip || !nameModeWrap || !nameModeFull || !colorByProcess || !processLegend || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !colMinus || !colPlus || !colReset || !colSpacingValue || !familySearch || !collapseGroups || !collapseCount || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
 
     const BASE_FONT = 12;
     const BASE_ZOOM = 1;
@@ -1547,7 +1546,6 @@
     let suppressYearRender = false;
 
     const tables = data.tables || {};
-    const influences = (tables.family_influences && tables.family_influences.rows) || [];
 
     const dims = buildDimensionMaps(tables);
     const families = dims.families;
@@ -1607,14 +1605,6 @@
       }
       const values = Array.from(familyToTargets.get(familyId) || []);
       return values.length ? values.sort((a, b) => a.localeCompare(b)) : ["Unspecified target"];
-    }
-
-    function relationInfo(edge) {
-      const relations = parseJsonArray(edge.relations_json);
-      const fallback = String(edge.relation || "").trim();
-      const effective = relations.length ? relations : (fallback ? [fallback] : []);
-      const label = effective.map((item) => String(item).replace(/_/g, " ")).join(", ");
-      return { count: Math.max(1, effective.length || 1), label: label || "related" };
     }
 
     function modePalette(mode) {
@@ -1692,8 +1682,16 @@
       // very first render happens before the user has switched to this
       // tab) -- there's nothing sensible to fit to yet, so report failure
       // rather than zooming to (near) zero.
-      if (!plotScroll.clientWidth || !lastRenderSize.plotWidth) return false;
-      const fitWidth = Math.max(240, plotScroll.clientWidth - 8);
+      // Deliberately uses offsetWidth, not clientWidth: plotScroll is the
+      // only one of the two synced panes that scrolls vertically, so on a
+      // browser with classic (space-reserving, not overlay) scrollbars, a
+      // tall plot gives it a vertical scrollbar that shrinks clientWidth
+      // below the x-axis pane's -- fitting to that narrower width left the
+      // axis visibly short of the plot's actual right edge. offsetWidth
+      // (the grid column's full width, not reduced by this element's own
+      // scrollbar) is shared by both panes, so plot and axis always agree.
+      if (!plotScroll.offsetWidth || !lastRenderSize.plotWidth) return false;
+      const fitWidth = Math.max(240, plotScroll.offsetWidth - 8);
       // Deliberately bypasses clampZoom()/MIN_ZOOM: "Fit" must always be
       // able to shrink all the way down to the container's actual width,
       // even for a very wide plot on a narrow screen, so the user can see
@@ -1982,22 +1980,6 @@
 
       const palette = modePalette(mode);
 
-      const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-      const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
-      marker.setAttribute("id", "vizArrowHead");
-      marker.setAttribute("markerWidth", "10");
-      marker.setAttribute("markerHeight", "7");
-      marker.setAttribute("markerUnits", "userSpaceOnUse");
-      marker.setAttribute("refX", "9");
-      marker.setAttribute("refY", "3.5");
-      marker.setAttribute("orient", "auto");
-      const markerPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      markerPath.setAttribute("d", "M0,0 L10,3.5 L0,7 z");
-      markerPath.setAttribute("fill", "rgba(76, 91, 95, 0.35)");
-      marker.appendChild(markerPath);
-      defs.appendChild(marker);
-      plotSvg.appendChild(defs);
-
       groupLabels.forEach((label, index) => {
         const layout = groupLayout.get(label);
         if (!layout) return;
@@ -2123,42 +2105,6 @@
         y: yFor(point.yUnit || 0),
       }));
 
-      const anchorsByFamily = new Map();
-      pointPositions.forEach((point) => {
-        if (!anchorsByFamily.has(point.familyId)) anchorsByFamily.set(point.familyId, []);
-        anchorsByFamily.get(point.familyId).push(point);
-      });
-
-      function relationEndpointPairs(sourceId, targetId) {
-        const sources = anchorsByFamily.get(sourceId) || [];
-        const targets = anchorsByFamily.get(targetId) || [];
-        if (!sources.length || !targets.length) return [];
-
-        // A family can appear in several lanes. Connect every visible target dot
-        // from an actual source dot, preferring the matching lane when possible.
-        return targets.map((target) => {
-          let best = null;
-          sources.forEach((source) => {
-            const sameGroup = source.group === target.group;
-            const dx = target.x - source.x;
-            const dy = target.y - source.y;
-            const candidate = { source, target, sameGroup, distance: dx * dx + dy * dy };
-            if (!best
-                || (candidate.sameGroup && !best.sameGroup)
-                || (candidate.sameGroup === best.sameGroup && candidate.distance < best.distance)) {
-              best = candidate;
-            }
-          });
-          return best;
-        });
-      }
-
-      // Keep relation lines behind the dots and text even though their endpoints
-      // are calculated after the rendered labels have been measured.
-      const edgeLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      plotSvg.appendChild(edgeLayer);
-      const labelBounds = new Map();
-
       const useProcessColor = colorByProcess.checked;
 
       pointPositions.forEach((point) => {
@@ -2220,62 +2166,8 @@
           relationTip.attach(label, richTip, () => pdfEntriesForFamilies([{ fid: point.familyId, name: point.name }]));
           attachFamilyContextMenu(label, point.name, familySearch, render);
           plotSvg.appendChild(label);
-          labelBounds.set(point, label.getBBox());
         }
       });
-
-      const hoverLines = [];
-      if (showArrows.checked) {
-        influences.forEach((edge) => {
-          const sourceId = String(edge.source_family_id || "");
-          const targetId = String(edge.target_family_id || "");
-          const endpointPairs = relationEndpointPairs(sourceId, targetId);
-          if (!endpointPairs.length) return;
-
-          const rel = relationInfo(edge);
-          const width = 1.15 + (rel.count - 1) * 1.05;
-          const hoverText = `${edge.source_family_id} -> ${edge.target_family_id} | Relations: ${rel.label} | ${normalizeValue(edge.note)}`;
-
-          endpointPairs.forEach((endpoints) => {
-            const sourceBounds = labelBounds.get(endpoints.source);
-            const targetBounds = labelBounds.get(endpoints.target);
-            const sx = sourceBounds ? sourceBounds.x + sourceBounds.width : endpoints.source.x;
-            const sy = sourceBounds ? sourceBounds.y + sourceBounds.height : endpoints.source.y;
-            const tx = targetBounds ? targetBounds.x : endpoints.target.x;
-            const ty = targetBounds ? targetBounds.y + targetBounds.height : endpoints.target.y;
-
-            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-            line.setAttribute("x1", String(sx));
-            line.setAttribute("y1", String(sy));
-            line.setAttribute("x2", String(tx));
-            line.setAttribute("y2", String(ty));
-            line.setAttribute("stroke-width", String(width));
-            line.setAttribute("marker-end", "url(#vizArrowHead)");
-            line.setAttribute("class", "viz-edge");
-            line.setAttribute("pointer-events", "none");
-            edgeLayer.appendChild(line);
-
-            const hoverLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-            hoverLine.setAttribute("x1", String(sx));
-            hoverLine.setAttribute("y1", String(sy));
-            hoverLine.setAttribute("x2", String(tx));
-            hoverLine.setAttribute("y2", String(ty));
-            hoverLine.setAttribute("stroke", "rgba(0,0,0,0.001)");
-            hoverLine.setAttribute("stroke-width", String(Math.max(10, width + 8)));
-            hoverLine.setAttribute("pointer-events", "all");
-            const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
-            title.textContent = hoverText;
-            hoverLine.appendChild(title);
-            relationTip.attach(hoverLine, hoverText, () => pdfEntriesForFamilies([
-              { fid: sourceId, name: String((familyById.get(sourceId) || {}).name || sourceId) },
-              { fid: targetId, name: String((familyById.get(targetId) || {}).name || targetId) },
-            ]));
-            hoverLines.push(hoverLine);
-          });
-        });
-      }
-
-      hoverLines.forEach((hoverLine) => plotSvg.appendChild(hoverLine));
 
       if (collapseOn) {
         ellipsisCells.forEach((cell) => {
@@ -2381,7 +2273,6 @@
     }
 
     groupBy.addEventListener("change", render);
-    showArrows.addEventListener("change", render);
     hideDots.addEventListener("change", render);
     [["off", nameModeOff], ["clip", nameModeClip], ["wrap", nameModeWrap], ["full", nameModeFull]].forEach(([mode, btn]) => {
       btn.addEventListener("click", () => {
