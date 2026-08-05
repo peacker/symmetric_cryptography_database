@@ -108,13 +108,39 @@ TODO:
 
 DONE:
 
+- Genealogy relation-edge follow-ups, reported directly rather than filed here first:
+  1. Removed "Show relation arrows" from Timelines' plot controls, along with the drawing code behind it
+     (relationEndpointPairs, relationInfo, the arrowhead marker, the edge/hover-line layer) -- relation
+     edges are Genealogy's job now, and this duplicated a "fit endpoints from rendered label bounds"
+     path no other Timelines feature needed.
+  2. Added an "Edge opacity" slider to Genealogy's Tune Layout panel (both layouts, plus collapsed-edges
+     mode), persisted/exported/imported alongside the existing spacing sliders. Defaults to 50%, matching
+     the opacity that was already hardcoded -- edges default to less than fully opaque since dense graphs
+     otherwise bury family labels under overlapping lines.
+  3. Hovering (or clicking, which pins it through the next hover -- click the same edge again to unpin)
+     a relation edge's hit-area now bolds that edge to full opacity and a thicker stroke, and highlights
+     its two endpoint nodes (a bright stroke ring on the node box/bullet, bold label text), in both the
+     radial and layered layouts. Implemented as two small shared helpers (setHotHighlight/
+     clearHotHighlight) plus a per-node-id element map populated by each layout's own node-drawing loop.
+  Verified via Playwright (direct DOM event dispatch, since a real mouse hover over one of ~1400
+  overlapping invisible hit-areas isn't reliably reproducible via synthetic pointer coordinates):
+  hover/click/unpin all toggle the right classes in both layouts and in collapsed-edges mode; the
+  opacity slider's value is reflected on the actual edge paths. make test and a full build-site pass;
+  no console errors.
+
 - Three fullscreen UI bugs (Timelines + Genealogy tabs), reported directly rather than filed here first:
   1. Timelines fullscreen: the years axis didn't stretch to match the plot width, losing alignment with
-     the vertical gridlines. Root cause: nothing listened for a native window `resize` event while a
-     panel was in our CSS-overlay "fullscreen" mode -- our own Fullscreen button re-fits correctly, but
-     the browser's real fullscreen (F11) or simply resizing/maximizing the window *after* toggling it
-     never re-triggered the fit, so the plot/axis SVGs stayed stuck at whatever width they were last fit
-     to. Added a debounced window resize listener that re-fits whichever panel is currently fullscreen.
+     the vertical gridlines. First fix (incomplete): nothing listened for a native window `resize` event
+     while a panel was in our CSS-overlay "fullscreen" mode, so the browser's real fullscreen (F11) or
+     resizing/maximizing the window *after* toggling it never re-triggered the fit -- added a debounced
+     window resize listener for that case. This didn't fix the case you actually hit, though (no resize
+     needed, happens on the very first fullscreen toggle): on a browser with classic, space-reserving
+     scrollbars (not macOS-style overlay ones), a tall plot gives vizPlotScroll its own vertical
+     scrollbar, shrinking its clientWidth below the x-axis pane's (which never scrolls vertically since
+     it's a fixed 48px-tall strip) -- fitting *both* panes' width to plotScroll.clientWidth left the axis
+     short of the plot's actual right edge every time, independent of any resize. Fixed by fitting to
+     offsetWidth instead (the full grid-column width, unreduced by the pane's own scrollbar), which both
+     panes share since they're the same CSS grid column.
   2. Genealogy fullscreen: the plot didn't stretch all the way down, leaving a beige gap at the bottom.
      Root cause: genFrame's height is fit to window.innerHeight with a fullscreen-vs-normal ratio, but
      that calculation only ran inside the full layout functions (drawSugiyama/drawRadial), not inside

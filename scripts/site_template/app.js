@@ -2491,6 +2491,8 @@
     const genParamColGapValue = document.getElementById("genParamColGapValue");
     const genParamIsoW = document.getElementById("genParamIsoW");
     const genParamIsoWValue = document.getElementById("genParamIsoWValue");
+    const genParamEdgeOpacity = document.getElementById("genParamEdgeOpacity");
+    const genParamEdgeOpacityValue = document.getElementById("genParamEdgeOpacityValue");
     const genParamsReset = document.getElementById("genParamsReset");
     const genParamsExport = document.getElementById("genParamsExport");
     const genParamsImportBtn = document.getElementById("genParamsImportBtn");
@@ -2518,6 +2520,7 @@
       layeredNodeHMult: 1.85,     // layered: node box height (× font size)
       layeredColGap: 10,          // layered: horizontal gap between sibling nodes (px)
       layeredIsoWMult: 7.5,       // layered: width of isolated-node columns (× font size)
+      edgeOpacity: 0.5,           // relation edges: below 100% by default so overlapping edges don't bury family labels
     };
     function loadLayoutParams() {
       const out = { ...DEFAULT_LAYOUT_PARAMS };
@@ -2792,6 +2795,30 @@
       return Array.from(values).some((v) => genHighlightSelected.has(v));
     }
     function highlightOpacity(fid) { return isHighlighted(fid) ? 1 : 0.15; }
+
+    // ── Edge/node hover-click highlight: hovering (or clicking, which pins
+    // it through the next hover) a relation edge's hit-area bolds that edge
+    // and its two endpoint nodes so they're easy to trace visually even when
+    // many overlapping, semi-transparent edges make that hard otherwise.
+    // Reset to null at the top of render() below since each render rebuilds
+    // the plot's DOM from scratch, so any previously-highlighted elements no
+    // longer exist.
+    let hotHighlight = null; // { edgeEls: Element[], nodeEls: Element[], pinned: boolean }
+    function clearHotHighlight() {
+      if (!hotHighlight) return;
+      hotHighlight.edgeEls.forEach((el) => el.classList.remove("gen-edge-hot"));
+      hotHighlight.nodeEls.forEach((el) => el.classList.remove("gen-node-hot"));
+      hotHighlight = null;
+    }
+    function setHotHighlight(edgeEls, nodeEls, pinned) {
+      // A hover shouldn't steal a highlight the user deliberately pinned by
+      // clicking -- only another click (or clearHotHighlight()) can do that.
+      if (hotHighlight && hotHighlight.pinned && !pinned) return;
+      clearHotHighlight();
+      edgeEls.forEach((el) => el.classList.add("gen-edge-hot"));
+      nodeEls.forEach((el) => el.classList.add("gen-node-hot"));
+      hotHighlight = { edgeEls, nodeEls, pinned };
+    }
     function renderHighlightChecklist() {
       if (!genHighlightValues) return;
       if (genHighlightDim === "none") { genHighlightValues.hidden = true; genHighlightValues.innerHTML = ""; return; }
@@ -3151,6 +3178,7 @@
       }
 
       const hoverPaths = [];
+      const nodeElsByFamily = new Map();
       visEdges.forEach((e) => {
         const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
         if (!posX.has(src) || !posX.has(tgt)) return;
@@ -3165,19 +3193,31 @@
         const tgtName = String((genFamById.get(tgt) || {}).name || tgt);
         const note = String(e.note || "").trim();
         const hoverTxt = `${srcName} → ${tgtName}: ${relLabel}${note ? " | " + note : ""}`;
+        const edgeEls = [];
         if (genCollapseEdges && genCollapseEdges.checked) {
-          genPlot.appendChild(svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.32)", "stroke-width": "0.9", fill: "none", "pointer-events": "none", "marker-end": "url(#genArrow)" }));
+          edgeEls.push(genPlot.appendChild(svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.7)", "stroke-width": "0.9", fill: "none", "pointer-events": "none", opacity: String(layoutParams.edgeOpacity), "marker-end": "url(#genArrow)" })));
         } else {
           rels.forEach((relation, i) => {
             const strokeW = 0.8 + (rels.length - i - 1) * 1.3;
-            const attrs = { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", "pointer-events": "none", opacity: "0.5" };
+            const attrs = { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", "pointer-events": "none", opacity: String(layoutParams.edgeOpacity) };
             if (i === rels.length - 1) attrs["marker-end"] = "url(#genArrow)";
-            genPlot.appendChild(svgEl("path", attrs));
+            edgeEls.push(genPlot.appendChild(svgEl("path", attrs)));
           });
         }
         const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.2 + 5)), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([{ fid: src, name: srcName }, { fid: tgt, name: tgtName }]));
+        // nodeElsByFamily is only fully populated once the node loop below
+        // runs, but these listeners fire later (on user interaction), by
+        // which point the whole render() call -- and this closure's read of
+        // it -- has already completed.
+        const hotNodes = () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])];
+        hp.addEventListener("mouseenter", () => setHotHighlight(edgeEls, hotNodes(), false));
+        hp.addEventListener("mouseleave", () => { if (!hotHighlight || !hotHighlight.pinned) clearHotHighlight(); });
+        hp.addEventListener("click", () => {
+          if (hotHighlight && hotHighlight.pinned && hotHighlight.edgeEls === edgeEls) clearHotHighlight();
+          else setHotHighlight(edgeEls, hotNodes(), true);
+        });
         hoverPaths.push(hp);
       });
       // Append edge hit-areas before nodes/labels so nodes/labels paint (and
@@ -3210,6 +3250,7 @@
         lbl.setAttribute("y", String(cy + NH * 0.67));
         lbl.textContent = disp;
         genPlot.appendChild(lbl);
+        nodeElsByFamily.set(fid, [rect, lbl]);
       });
     }
 
@@ -3517,6 +3558,7 @@
       // Draw every relation as a solid colored band. Wider bands are drawn first so
       // multi-relation edges retain a visible stripe for each relation type.
       const hoverPaths = [];
+      const nodeElsByFamily = new Map();
       visEdges.forEach((e) => {
         const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
         if (!angleOf.has(src) || !angleOf.has(tgt)) return;
@@ -3524,12 +3566,13 @@
         const rels = edgeRelations(e);
         const relLabel = rels.map((r) => String(r).replace(/_/g, " ")).join(", ");
         const hoverTxt = `${String((genFamById.get(src) || {}).name || src)} → ${String((genFamById.get(tgt) || {}).name || tgt)}: ${relLabel}${e.note ? " | " + String(e.note) : ""}`;
+        const edgeEls = [];
         if (genCollapseEdges && genCollapseEdges.checked) {
-          genPlot.appendChild(svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.28)", "stroke-width": "0.9", fill: "none" }));
+          edgeEls.push(genPlot.appendChild(svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.7)", "stroke-width": "0.9", fill: "none", opacity: String(layoutParams.edgeOpacity) })));
         } else {
           rels.forEach((relation, i) => {
             const strokeW = 0.8 + (rels.length - i - 1) * 1.3;
-            genPlot.appendChild(svgEl("path", { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", opacity: "0.5" }));
+            edgeEls.push(genPlot.appendChild(svgEl("path", { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", opacity: String(layoutParams.edgeOpacity) })));
           });
         }
         const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.1 + 5)), fill: "none", "pointer-events": "all" });
@@ -3538,6 +3581,15 @@
           { fid: src, name: String((genFamById.get(src) || {}).name || src) },
           { fid: tgt, name: String((genFamById.get(tgt) || {}).name || tgt) },
         ]));
+        // See the matching comment in drawSugiyama: nodeElsByFamily is
+        // populated by the node loop below, but these fire later.
+        const hotNodes = () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])];
+        hp.addEventListener("mouseenter", () => setHotHighlight(edgeEls, hotNodes(), false));
+        hp.addEventListener("mouseleave", () => { if (!hotHighlight || !hotHighlight.pinned) clearHotHighlight(); });
+        hp.addEventListener("click", () => {
+          if (hotHighlight && hotHighlight.pinned && hotHighlight.edgeEls === edgeEls) clearHotHighlight();
+          else setHotHighlight(edgeEls, hotNodes(), true);
+        });
         hoverPaths.push(hp);
       });
       // Append edge hit-areas before nodes/labels so nodes/labels paint (and
@@ -3564,12 +3616,14 @@
         const nodeRad = isStd ? 4 : 3;
         const name = String(fam.name || fid);
         const hlOpacity = highlightOpacity(fid);
+        let circEl = null;
         if (showBullets) {
           const circ = svgEl("circle", { cx: String(nx.toFixed(1)), cy: String(ny.toFixed(1)), r: String(nodeRad), fill: isStd ? "#152021" : color, stroke: isStd ? "#000" : "rgba(0,0,0,0.25)", "stroke-width": isStd ? "1.5" : "0.8", opacity: String(hlOpacity), "pointer-events": "all" });
           const ct = svgEl("title", {}); ct.textContent = tip; circ.appendChild(ct);
           edgeTip.attach(circ, tip, () => pdfEntriesForFamilies([{ fid, name }]));
           attachFamilyContextMenu(circ, name, genFamilySearch, render);
           genPlot.appendChild(circ);
+          circEl = circ;
         }
         const isRight = deg <= 180;
         const rad = (deg - 90) * Math.PI / 180;
@@ -3591,12 +3645,14 @@
           attachFamilyContextMenu(lbl, name, genFamilySearch, render);
         }
         genPlot.appendChild(lbl);
+        nodeElsByFamily.set(fid, circEl ? [circEl, lbl] : [lbl]);
       });
     }
 
     // ── Render dispatcher ─────────────────────────────────────────────
     function render() {
       updateYrLbl();
+      hotHighlight = null; // the DOM elements it referenced are about to be discarded
       while (genPlot.firstChild) genPlot.removeChild(genPlot.firstChild);
 
       const eligibleIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVis(fid, true));
@@ -3777,6 +3833,7 @@
       { key: "layeredNodeHMult", input: genParamNodeH, out: genParamNodeHValue, scale: 100, fmt: (v) => `${Math.round(v * 100)}%` },
       { key: "layeredColGap", input: genParamColGap, out: genParamColGapValue, scale: 1, fmt: (v) => `${Math.round(v)}px` },
       { key: "layeredIsoWMult", input: genParamIsoW, out: genParamIsoWValue, scale: 100, fmt: (v) => `${Math.round(v * 100)}%` },
+      { key: "edgeOpacity", input: genParamEdgeOpacity, out: genParamEdgeOpacityValue, scale: 100, fmt: (v) => `${Math.round(v * 100)}%` },
     ];
     function syncLayoutParamSliders() {
       LAYOUT_PARAM_SLIDERS.forEach(({ key, input, out, scale, fmt }) => {
