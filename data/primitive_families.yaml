@@ -12868,7 +12868,7 @@ primitive_families:
     explicitly dismissed -- "we advice against using them" -- in a later updated version of the Poseidon paper
     alongside Poseidon''s own x^(-1) S-box variant); this split is documented in the final published Poseidon paper
     (grassi_et_al_2021_poseidon).
-    Local copy of the HADES strategy paper: references/[2019][hadesmimc][][hades_hadesmimc].pdf; local copy of the Poseidon paper
+    Local copy of the HADES strategy paper: references/[2019][hadesmimc][][hades_design_strategy].pdf; local copy of the Poseidon paper
     covering the same strategy is at references/[2021][hadesmimc,poseidon][][poseidon_usenix].pdf.'
   instances:
   - id: hadesmimc_default
@@ -12911,7 +12911,7 @@ primitive_families:
     Grobner-basis algebraic attack (Albrecht, Cid, Grassi, Khovratovich, Luftenegger, Rechberger, and Schofnegger,
     "Algebraic Cryptanalysis of STARK-Friendly Designs - Application to MARVELlous and MiMC", ASIACRYPT 2019, eprint
     2019/419), motivating the redesign as Vision/Rescue. Local copy of Jarvis''s own original paper:
-    references/[2018][friday_hash,jarvis][][jarvis_friday].pdf; the break is also documented as related work in the Vision/Rescue paper,
+    references/[2018][friday_hash,jarvis][][].pdf; the break is also documented as related work in the Vision/Rescue paper,
     local copy references/[2019][jarvis,rescue,vision][][vision_rescue_marvellous].pdf.'
   instances:
   - id: jarvis_default

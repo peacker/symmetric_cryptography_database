@@ -10601,7 +10601,7 @@ mode_families:
     plainly "we advice against using them" regarding Starkad and the x^-1 Poseidon variant -- this database records
     Starkad as originally specified rather than omitting it, since it is a real, citable, distinct design the
     authors themselves later walked back, not a fabricated one; see hadesmimc''s own notes (primitive_families.yaml)
-    for that dismissal''s exact wording and context. Local copy: references/[2019][hadesmimc,starkad][][starkad_and_poseidon].pdf (fetched
+    for that dismissal''s exact wording and context. Local copy: references/[2019][hadesmimc,starkad][][starkad_original_eprint].pdf (fetched
     via the Wayback Machine; eprint.iacr.org itself blocks automated fetching in this environment).'
   instances:
   - id: starkad_256
@@ -11050,7 +11050,7 @@ mode_families:
       mode (H_i = E_{H_{i-1}}(m_i) xor H_{i-1} xor m_i, E=Jarvis -- see the jarvis family''s miyaguchi_preneel
       construction tag), then iterated via Merkle-Damgard.'
   notes: 'Broken by the same Grobner-basis algebraic attack that broke Jarvis (Albrecht et al., ASIACRYPT 2019),
-    motivating the redesign as Vision/Rescue. Local copy: references/[2018][friday_hash,jarvis][][jarvis_friday].pdf.'
+    motivating the redesign as Vision/Rescue. Local copy: references/[2018][friday_hash,jarvis][][].pdf.'
   instances:
   - id: friday_default
     name: Friday

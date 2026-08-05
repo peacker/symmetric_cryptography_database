@@ -154,7 +154,7 @@ references:
   notes: >-
     Defines a concrete 64-bit, 32-round, 80-bit-key DES-like cipher whose
     round functions preserve a hidden block system. Local copy:
-    references/[1999][paterson_trapdoor_cipher][][paterson+trapdoor+cipher].pdf.
+    references/[1999][paterson_trapdoor_cipher][][].pdf.
 - id: angelova_borissov_2013_parity_check_des
   kind: paper
   title: Plaintext Recovery in DES-like Cryptosystems Based on S-boxes with Embedded
@@ -229,7 +229,7 @@ references:
   venue: Information Security and Cryptology – ICISC 2019, LNCS 11975, pp. 1–19
   publisher: Springer
   url: https://doi.org/10.1007/978-3-030-40921-0_1
-  notes: 'Revised CHAM specification increasing the round counts. Local copy: references/[2020][cham,cham_revised][][revised].pdf.'
+  notes: 'Revised CHAM specification increasing the round counts. Local copy: references/[2020][cham,cham_revised][][].pdf.'
 - id: shin_et_al_2025_saecham
   kind: article
   title: 'SAECHAM: Secure and Efficient Lightweight Block Cipher CHAM Variant'
@@ -340,7 +340,7 @@ references:
   url: https://www.rfc-editor.org/info/rfc7539
   notes: 'First stable CFRG specification of the IETF ChaCha20 profile, its block
     function, Poly1305, and their AEAD construction; obsoleted by RFC 8439. Local
-    PDF rendered from the official RFC text: references/[2015][chacha,chacha20_poly1305,chacha_stream][rfc][chacha20].pdf.'
+    PDF rendered from the official RFC text: references/[2015][chacha,chacha20_poly1305,chacha_stream][rfc][rfc7539].pdf.'
 - id: bogdanov_2007_present
   kind: article
   title: 'PRESENT: An Ultra-Lightweight Block Cipher'
@@ -652,7 +652,7 @@ references:
   year: 2009
   venue: CHES 2009
   url: https://www.iacr.org/archive/ches2009/57470001/57470001.pdf
-  notes: 'KATAN and KTANTAN share this single specification; local copy references/[2009][katan,ktantan][][katan_ktantan].pdf.
+  notes: 'KATAN and KTANTAN share this single specification; local copy references/[2009][katan,ktantan][][].pdf.
     (references/2009-katan.pdf is an unrelated mislabeled AES-GCM paper — do not use.)'
 - id: adams_1997_cast128
   kind: standard
@@ -1105,7 +1105,7 @@ references:
   status: current
   url: https://www.rfc-editor.org/info/rfc8439
   notes: 'Updates RFC 7539 by incorporating errata and additional security-considerations
-    text. Local PDF rendered from the official RFC text: references/[2018][chacha,chacha20_poly1305,chacha_stream,poly1305][rfc][chacha20].pdf.'
+    text. Local PDF rendered from the official RFC text: references/[2018][chacha,chacha20_poly1305,chacha_stream,poly1305][rfc][rfc8439].pdf.'
 - id: rivest_1987_rc4
   kind: article
   title: 'RC4: A Stream Cipher'
@@ -1533,7 +1533,7 @@ references:
   url: https://doi.org/10.1007/978-3-319-18681-8_8
   notes: 'The C2SI 2015 conference paper (Springer, DOI above) is paywalled; these seminar
     slides cover the full design (round function, all three instantiations, key schedule,
-    security analysis) and are used as the local copy: references/[2015][cube_cipher][presentation][cube].pdf.'
+    security analysis) and are used as the local copy: references/[2015][cube_cipher][presentation][].pdf.'
 - id: bertoni_et_al_2006_radiogatun
   kind: paper
   title: 'RadioGatún, a Belt-and-Mill Hash Function'
@@ -1572,7 +1572,7 @@ references:
   url: https://csrc.nist.gov/projects/lightweight-cryptography
   notes: >-
     The submission specifies the GASCON permutation family used by DryGASCON.
-    Local copy: references/[2019][drygascon_aead,drygascon_hash,gascon][][drygascon].pdf.
+    Local copy: references/[2019][drygascon_aead,drygascon_hash,gascon][][].pdf.
 - id: sneik_2019
   kind: article
   title: SNEIK - Submission to NIST Lightweight Cryptography
@@ -1894,7 +1894,7 @@ references:
   organization: École Normale Supérieure — CNRS
   url: https://link.springer.com/chapter/10.1007/3-540-69710-1_13
   notes: 'CS-Cipher is a 64-bit block cipher (not a stream cipher -- the paper''s own abstract opens with "This paper
-    presents a new block cipher"). Local copy: references/[1998][cs_cipher][][cs+cipher].pdf (16 pages: full specification, design
+    presents a new block cipher"). Local copy: references/[1998][cs_cipher][][].pdf (16 pages: full specification, design
     rationale, and implementation figures).'
 - id: deoxys_ref
   kind: paper
@@ -1982,7 +1982,7 @@ references:
   kind: paper
   title: GAGE and InGAGE v1
   year: 2019
-  notes: 'NIST LWC Round 1 submission. Local copy: references/[2019][gage,gage_hash,ingage_aead][][gage_ingaege].pdf.'
+  notes: 'NIST LWC Round 1 submission. Local copy: references/[2019][gage,gage_hash,ingage_aead][][].pdf.'
   authors:
   - Danilo Gligoroski
   - Hristina Mihajloska
@@ -2013,7 +2013,7 @@ references:
   venue: NIST Lightweight Cryptography Competition Round 1
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/HERN-HERON-spec.pdf
   notes: 'Lightweight block cipher pair for constrained environments. Local copy:
-    references/[2019][hern_and_heron][][hern_heron].pdf.'
+    references/[2019][hern_and_heron][][].pdf.'
 - id: hight_ref
   kind: paper
   title: 'HIGHT: A New Block Cipher Suitable for Low-Resource Device'
@@ -2131,7 +2131,7 @@ references:
   year: 2000
   venue: NESSIE Submission
   organization: Queensland University of Technology / University of Belgrade
-  notes: 'Local copy: references/[2000][lili_128][][lili+128].pdf (renamed from the stale references/2000-lili_128.pdf, which held a
+  notes: 'Local copy: references/[2000][lili_128][][].pdf (renamed from the stale references/2000-lili_128.pdf, which held a
     1-page NESSIE cover sheet, not this paper). Clock-controlled nonlinear-filter LFSR stream cipher. The paper''s own
     related-work discussion lists ORYX and SOBER together only as prior examples combining nonlinear filtering with
     irregular clocking (no single one singled out as an adopted basis), and states its stop-and-go-free clocking was
@@ -2181,7 +2181,7 @@ references:
   venue: CRYPTO 2016
   url: https://eprint.iacr.org/2016/660.pdf
   notes: 'MANTIS is the low-latency tweakable variant; shares paper with SKINNY. Local
-    copy: references/[2016][mantis,skinny][][skinny_mantis].pdf.'
+    copy: references/[2016][mantis,skinny][][].pdf.'
 - id: mcrypton_ref
   kind: paper
   title: mCrypton — A Lightweight Block Cipher for Security of Low-Cost RFID Tags
@@ -2456,7 +2456,7 @@ references:
   year: 2019
   venue: IACR ePrint 2019/992
   url: https://eprint.iacr.org/2019/992
-  notes: Derived from references/[2019][remus,romulus][][remus_romulus].pdf.
+  notes: Derived from references/[2019][remus,romulus][][].pdf.
 - id: iwata_et_al_2019_remus_v1_nist_lwc
   kind: report
   title: 'Remus v1.0'
@@ -2594,7 +2594,7 @@ references:
   year: 2006
   venue: 3GPP TS 35.216
   url: https://web.archive.org/web/20200822072535/https://www.gsma.com/aboutus/wp-content/uploads/2014/12/snow3gspec.pdf
-  notes: Derived from references/[2006][snow_3g][][snow3gspec].pdf.
+  notes: Derived from references/[2006][snow_3g][spec][].pdf.
 - id: sober_t16_ref
   kind: paper
   title: Primitive Specification and Supporting Documentation for SOBER-t16 Submission
@@ -2797,7 +2797,7 @@ references:
   year: 2010
   venue: Skein specification v1.3
   url: https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf
-  notes: Threefish is the underlying block cipher in Skein; derived from references/[2010][helix,helix_aead,phelix,phelix_aead,skein,threefish][][skein_threefish].pdf.
+  notes: Threefish is the underlying block cipher in Skein; derived from references/[2010][skein,threefish][][].pdf.
 - id: treyfer_ref
   kind: paper
   title: A Related-Key Attack on TREYFER
@@ -3785,7 +3785,7 @@ references:
   url: https://link.springer.com/chapter/10.1007/978-3-540-68351-3_4
   notes: HC-128 is a simplified version of HC-256 for 128-bit security; two 512-entry
     32-bit tables P and Q; 128-bit key and 128-bit IV; eSTREAM Phase 3; local copy
-    references/[2008][hc_128][][hc+128].pdf.
+    references/[2008][hc_128][][].pdf.
 - id: biryukov_2008_lex
   kind: article
   title: Design of a New Stream Cipher—LEX
@@ -4204,7 +4204,7 @@ references:
   year: 2010
   venue: SHA-3 Competition Round 3 Submission
   url: https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf
-  notes: 'Skein/Threefish Round 3 specification. Local copy: references/[2010][helix,helix_aead,phelix,phelix_aead,skein,threefish][][skein_threefish].pdf.'
+  notes: 'Skein/Threefish Round 3 specification. Local copy: references/[2010][skein,threefish][][].pdf.'
 - id: ferguson_et_al_2003_helix
   kind: paper
   title: 'Helix: Fast Encryption and Authentication in a Single Cryptographic Primitive'
@@ -4218,7 +4218,7 @@ references:
   year: 2003
   venue: FSE 2003, LNCS 2887
   publisher: Springer
-  notes: 'Local copy: references/[2003][helix,helix_aead][][].pdf. Cited as reference [37] in the Skein/Threefish spec (references/[2010][helix,helix_aead,phelix,phelix_aead,skein,threefish][][skein_threefish].pdf, Sect.
+  notes: 'Local copy: references/[2003][helix,helix_aead][][].pdf. Cited as reference [37] in the Skein/Threefish spec (references/[2010][skein,threefish][][].pdf, Sect.
     8.3, "MIX function"): "Threefish''s MIX function is derived from Helix and Phelix."'
 - id: whiting_et_al_2005_phelix
   kind: paper
@@ -4230,7 +4230,7 @@ references:
   - Frederic Muller
   year: 2005
   venue: ECRYPT Stream Cipher Project Report 2005/027
-  notes: 'Local copy: references/[2004][phelix,phelix_aead][][].pdf. Cited as reference [108] in the Skein/Threefish spec (references/[2010][helix,helix_aead,phelix,phelix_aead,skein,threefish][][skein_threefish].pdf, Sect.
+  notes: 'Local copy: references/[2004][phelix,phelix_aead][][].pdf. Cited as reference [108] in the Skein/Threefish spec (references/[2010][skein,threefish][][].pdf, Sect.
     8.3, "MIX function"): "Threefish''s MIX function is derived from Helix and Phelix." An improved/faster successor
     to Helix by an overlapping author team; later shown vulnerable to differential attacks (Wu and Preneel, 2007),
     which is why it was not selected as an eSTREAM finalist.'
@@ -4405,7 +4405,7 @@ references:
   year: 2014
   venue: CAESAR Round 1 submission
   url: https://competitions.cr.yp.to/round1/joltikv1.pdf
-  notes: 'Defines the Joltik authenticated-encryption modes and their internal tweakable block cipher Joltik-BC. Local copy: references/[2014][joltik_bc][][joltik].pdf.'
+  notes: 'Defines the Joltik authenticated-encryption modes and their internal tweakable block cipher Joltik-BC. Local copy: references/[2014][joltik_bc][][].pdf.'
 - id: grosso_et_al_2015_scream
   kind: specification
   title: 'SCREAM: Side-Channel Resistant Authenticated Encryption with Masking'
@@ -4413,7 +4413,7 @@ references:
   year: 2015
   venue: CAESAR Round 2 specification, version 3
   url: https://competitions.cr.yp.to/round2/screamv3.pdf
-  notes: 'Defines SCREAM and its internal 128-bit tweakable LS-design, Scream. Local copy: references/[2015][scream_tbc][][scream].pdf.'
+  notes: 'Defines SCREAM and its internal 128-bit tweakable LS-design, Scream. Local copy: references/[2015][scream_tbc][][].pdf.'
 - id: oconnor_et_al_2020_blake3
   kind: specification
   title: 'BLAKE3: One Function, Fast Everywhere'
@@ -4541,7 +4541,7 @@ references:
   venue: EUROCRYPT 2020, LNCS 12106, pp. 674-704
   publisher: Springer
   url: https://doi.org/10.1007/978-3-030-45724-2_23
-  notes: 'Local copy: references/[2019][hadesmimc][][hades_hadesmimc].pdf (an updated version differing from the EUROCRYPT 2020
+  notes: 'Local copy: references/[2019][hadesmimc][][hades_design_strategy].pdf (an updated version differing from the EUROCRYPT 2020
     proceedings version). The general full/partial-round SPN strategy paper; confirmed directly: R_F full-S-box-layer
     rounds (split R_f at the start, R_f at the end) sandwich R_P partial-S-box-layer (1 S-box/round) rounds in the
     middle; HadesMiMC is its concrete block-cipher instantiation over F_p^t with S-box x^alpha (alpha the smallest
@@ -4585,7 +4585,7 @@ references:
     original combined design paper, before Starkad was dropped in the final published Poseidon paper
     (grassi_et_al_2021_poseidon) -- the only located source giving Starkad''s own construction and concrete
     parameters (e.g. "x3 - Starkad"-Permutation in F_2^n with p(x) = x^63+x+1, n=63, t=24, RF=8, RP=48, N=1512, per
-    Table 2 / Section 5). Local copy: references/[2019][hadesmimc,starkad][][starkad_and_poseidon].pdf.'
+    Table 2 / Section 5). Local copy: references/[2019][hadesmimc,starkad][][starkad_original_eprint].pdf.'
 
 - id: aly_et_al_2020_marvellous
   kind: paper
@@ -4604,7 +4604,7 @@ references:
     S-box); also documents the break of the authors'' own earlier Jarvis/Friday design (eprint 2018/1098) by Albrecht,
     Cid, Grassi, Khovratovich, Luftenegger, Rechberger, and Schofnegger ("Algebraic Cryptanalysis of STARK-Friendly
     Designs: Application to MARVELlous and MiMC", ASIACRYPT 2019, eprint 2019/419), which motivated Vision/Rescue as
-    their replacement. Local copy: references/[2019][jarvis,rescue,vision][][vision_rescue_marvellous].pdf.'
+    their replacement. Local copy: references/[2019][jarvis,rescue,vision][][marvellous_strategy].pdf.'
 
 - id: roy_et_al_2023_arion
   kind: paper
@@ -4841,7 +4841,7 @@ references:
   url: https://iacr.org/archive/fse2005/35570033/35570033.pdf
   notes: 'No local copy. Poly1305''s original design paper; the algorithm itself is fully and precisely specified
     (with worked test vectors) in RFC 8439 Sec. 2.5, which is used as the primary source for this database''s
-    poly1305 entry via the local copy references/[2018][chacha,chacha20_poly1305,chacha_stream,poly1305][rfc][chacha20].pdf. Bernstein''s own words on genericizing
+    poly1305 entry via the local copy references/[2018][chacha,chacha20_poly1305,chacha_stream,poly1305][rfc][rfc8439].pdf. Bernstein''s own words on genericizing
     the original AES-keyed nonce encryption: "There is nothing special about AES here. One can replace AES with an
     arbitrary keyed function from an arbitrary set of nonces to 16-byte strings" -- the basis for Poly1305 being
     reused with ChaCha20 (RFC 8439) rather than only AES.'
@@ -5385,7 +5385,7 @@ references:
   venue: IACR Cryptology ePrint Archive, Report 2018/1098
   publisher: IACR
   url: https://eprint.iacr.org/2018/1098
-  notes: 'Local copy: references/[2018][friday_hash,jarvis][][jarvis_friday].pdf. Introduces Jarvis (a Rijndael-inspired block cipher over
+  notes: 'Local copy: references/[2018][friday_hash,jarvis][][].pdf. Introduces Jarvis (a Rijndael-inspired block cipher over
     GF(2^n): inversion S-box x -> x^(2^n-2) + affine layer + round-key XOR) and Friday, confirmed directly: "Friday
     is a Merkle-Damgard based hash function instantiated with Jarvis as its compression function" -- precisely,
     Jarvis is first turned into a compression function via Miyaguchi-Preneel mode (H_i = E_{H_{i-1}}(m_i) xor

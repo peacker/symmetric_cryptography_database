@@ -108,6 +108,56 @@ TODO:
 
 DONE:
 
+- Follow-up round on the Timelines/Genealogy work above, reported directly rather than filed here first:
+  1. Timelines axis, still misaligned after the offsetWidth fix: added a ResizeObserver that mirrors
+     xAxisSvg's width directly off plotSvg's actual rendered width, so they can never visibly disagree
+     regardless of the exact root cause (belt-and-suspenders on top of the existing fit fix).
+  2. Genealogy default edge opacity lowered from 50% to 10% -- even 50% buried labels on large plots.
+  3. Reworked the hover/pin interaction entirely: hovering now keeps working after clicking to pin
+     something (previously a pin blocked all further hover updates); moving the mouse off the plot falls
+     back to showing the pinned edge instead of clearing the highlight.
+  4. Replaced per-element mouseenter/mouseleave/click listeners with a single delegated mousemove/click
+     pair on genPlot using elementsFromPoint(). With 1000+ overlapping invisible edge hit-areas, native
+     mouseenter only ever reached whichever one was topmost in paint order -- anything underneath was
+     silently, permanently unreachable ("some relations never highlightable"). elementsFromPoint()
+     collects every hit-area actually under the cursor, so overlapping edges highlight/pin together.
+  5. Node hover/click wasn't working at all: nodes now register into the same hit-test map as edges
+     (radial labels are also now always hit-testable, not just when there's no bullet shown), so
+     hovering/clicking a node highlights itself, every edge touching it, and those edges' other
+     endpoints -- mirroring what edge-hover already did.
+  Verified via Playwright (direct DOM event dispatch with elements scrolled into view first, since a
+  real mouse hover over one of ~1400 overlapping invisible hit-areas isn't reproducible via synthetic
+  pointer coordinates otherwise): hover-after-pin, mouseleave-falls-back-to-pinned, buried-edge
+  union-highlighting, and node-hover all confirmed working in both layouts. make test and a full
+  build-site pass; no console errors.
+
+- Reference PDF filename audit: fixed the specific files flagged (see conversation) plus a systematic
+  sweep for the same two problems elsewhere:
+  1. Wrong names (a name in the filename that the document doesn't actually back): the Skein/Threefish
+     spec had helix/helix_aead/phelix/phelix_aead in its names field -- those come from Helix/Phelix
+     merely being *cited* in the spec's own bibliography (as the source of its MIX function), not from
+     the spec documenting them; both already have their own dedicated files. Renamed to
+     [2010][skein,threefish][][].pdf. Checked the other 4+-name files for the same mistake
+     (bear_lion,cast256,mars,rc6,skipjack; ade,kalyna,mukhomor,rsb; the SHA/SHACAL FIPS; the Ascon NIST
+     SP) -- all confirmed legitimate on inspection, no further fix needed.
+  2. Uninformative/redundant notes (a notes field that just restates part of the names field in a
+     different separator, adding no information): fixed the ~10 explicitly flagged files plus ~20 more
+     found via the same pattern (remus/romulus, locus/lotus/twegift_64, drygascon, elephant, gage,
+     cast128, cast256, cs_cipher, lili_128, sha1_hash, hc_128, katan/ktantan, simon/speck, joltik_bc,
+     cube_cipher, scream_tbc, mantis/skinny, friday_hash/jarvis, isap/simple/spix/spoc_aead,
+     yarara_and_coral, cham_revised, safer_plus/saferpp). A few looked similar but turned out to add
+     real information beyond the names field and were deliberately left alone (md2's "rsamd2" identifies
+     the RSA-authored source; bear_lion's note adds "lioness", not in names; feal's "fealnx" and snow's
+     "snow10" disambiguate from sibling files; armadillo/curupira's notes distinguish multiple dated
+     papers; rasta's "agrasta" and grain_128's "grain128aead" flag related designs not yet modeled as
+     their own families). Also: hadesmimc's two single-name files got clarifying notes instead of
+     removal (hades_design_strategy / starkad_original_eprint) since 3 hadesmimc-related files exist and
+     genuinely need telling apart; snow_3g's "spec" note moved into the doctype field, matching the
+     existing convention used by 2 other files; the two ChaCha20+Poly1305 RFC files got their shared,
+     non-distinguishing "chacha20" note replaced with their actual RFC numbers (rfc7539/rfc8439).
+  reference_pdfs.py, make test, and a full build-site pass confirm every renamed family still resolves
+  (unresolved count unchanged at 82, unparsed filenames at 0).
+
 - Genealogy relation-edge follow-ups, reported directly rather than filed here first:
   1. Removed "Show relation arrows" from Timelines' plot controls, along with the drawing code behind it
      (relationEndpointPairs, relationInfo, the arrowhead marker, the edge/hover-line layer) -- relation
