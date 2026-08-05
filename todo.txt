@@ -39,20 +39,6 @@ TODO:
     in the Query Builder) into a dendrogram or grouped list, to surface "structurally similar round"
     families that don't have a hand-tagged influence edge between them.
 
-- add N-hash https://en.wikipedia.org/wiki/N-hash
-  add new construction type described by the wikipedia page
-  Researched: designed by Miyaguchi, Ohta, Iwata, "128-bit hash function (N-hash)," NTT Review,
-  Nov 1990. Iterated (Merkle-Damgard-style) hash over 128-bit blocks; compression function g runs
-  8 rounds of an F-function similar to FEAL's, combining the round output with both the message
-  block and the running hash value; 128-bit digest. Broken by Biham and Shamir (1991) via
-  differential cryptanalysis, faster than a birthday attack even against 12-round variants.
-  Not added yet: I don't have the compression function's *exact* feedforward formula (which of
-  Davies-Meyer/Matyas-Meyer-Oseas/Miyaguchi-Preneel it actually matches) confirmed from a primary
-  source, only a secondary summary -- and this database flags rather than guesses that kind of
-  detail (see e.g. the PEA entry). If you're fine with adding it now and flagging the compression
-  formula as unconfirmed (matching that PEA convention), say so and I'll add it; otherwise send
-  the NTT Review paper or another primary source and I'll model it precisely.
-
 - Enc-then-Hash, Hash-then-Enc, Enc-and-Hash AEAD types
   Note: "Encrypt-then-MAC Composition" already exists as a construction (mode_constructions.yaml)
   Unclear on two points before I add these:
@@ -121,6 +107,27 @@ TODO:
 
 
 DONE:
+
+- add N-hash https://en.wikipedia.org/wiki/N-hash
+  add new construction type described by the wikipedia page
+  Added: no official spec is online, so modeled directly from the primary source you provided
+  (references/1990-n-hash-extract_p12-16.pdf, Biham & Shamir, "Differential Cryptanalysis of Feal
+  and N-Hash," EUROCRYPT '91) rather than the earlier secondary summary -- the paper's Figures 2-4
+  confirm the compression function precisely: f(h,m) = g(h,m) XOR m XOR h, textually described as
+  "the XOR of the output of the g-function with the block itself and with the old hashed value."
+  That's a Miyaguchi-Preneel-shaped double feedforward (both message and chaining value XORed in),
+  not Davies-Meyer or Matyas-Meyer-Oseas, so no unconfirmed-formula flag was needed.
+  No new construction type was needed either: g's internal PS round (Figure 3-4, "F similar to
+  Feal's" called 4x per round over four 32-bit words in two layers of two parallel F-calls) matches
+  the already-existing Type-2 Generalized Feistel Network taxonomy, just doubled up within one PS
+  round -- so it's tagged feistel/type2_generalized_feistel alongside sbl_block_cipher_compression/
+  miyaguchi_preneel, plus inspired_by feal (the F-function is FEAL's S-box arithmetic, extended
+  from 2 to 4 words). Added as a primitive-tier compression_function family (n_hash) plus a
+  mode-tier hash family (n_hash_hash), following the same MD4/MD4-hash split pattern; added
+  n_hash_round; added references biham_shamir_1991_feal_nhash (local copy renamed to
+  references/[1991][n_hash,n_hash_hash][][biham_shamir_differential_cryptanalysis].pdf) and
+  miyaguchi_ohta_iwata_1990_nhash (the original SECURICOM '90 spec, no local copy -- cited
+  secondhand only, per the paper's own bibliography).
 
 - process_stages table has a parent_stage_id column which seems to always be empty. can it be
   removed?

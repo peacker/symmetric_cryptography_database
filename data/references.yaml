@@ -3061,6 +3061,28 @@ references:
   year: 1997
   venue: Lecture Notes in Computer Science (Springer)
   url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/fealnx.pdf
+- id: biham_shamir_1991_feal_nhash
+  kind: paper
+  title: Differential Cryptanalysis of Feal and N-Hash
+  authors:
+  - Eli Biham
+  - Adi Shamir
+  year: 1991
+  venue: Advances in Cryptology - EUROCRYPT '91, LNCS 547, pp. 1-16
+  notes: 'The only available primary description of N-Hash''s internal construction (Figures 2-4): the
+    original specification (see miyaguchi_ohta_iwata_1990_nhash) is cited here but not independently
+    available online. Local copy: references/[1991][n_hash,n_hash_hash][][biham_shamir_differential_cryptanalysis].pdf.'
+- id: miyaguchi_ohta_iwata_1990_nhash
+  kind: paper
+  title: 128-bit hash function (N-Hash)
+  authors:
+  - Shoji Miyaguchi
+  - Kazuo Ohta
+  - Tsutomu Iwata
+  year: 1990
+  venue: Proceedings of SECURICOM 90, pp. 123-137
+  notes: N-Hash's original specification. No local copy available online; cited (and its construction
+    diagrammed) secondhand via biham_shamir_1991_feal_nhash, ref [6] in that paper's bibliography.
 - id: feistel_1973_lucifer
   kind: article
   title: Cryptography and Computer Privacy

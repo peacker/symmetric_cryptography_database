@@ -5465,6 +5465,51 @@ mode_families:
       lines. Outputs of both lines merged with chaining variable.
 
       '
+- id: n_hash_hash
+  name: N-Hash
+  construction_ids:
+  - merkle_damgard
+  round_ids:
+  - n_hash_round
+  target_applications: []
+  characteristics:
+    block_size_bits: 128
+    state_size_bits: 128
+    components:
+    - id: add_mod
+      params:
+        modulus: 256
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - biham_shamir_1991_feal_nhash
+  - miyaguchi_ohta_iwata_1990_nhash
+  process_participations: []
+  influences:
+  - source_family_id: n_hash
+    relations:
+    - used_by
+    note: N-Hash is the Merkle-Damgård iteration of the N-Hash compression function over arbitrary-length, padded input.
+  notes: 'Designed by Miyaguchi, Ohta, and Iwata (NTT), presented at SECURICOM ''90; hashes arbitrary-length input to a
+    128-bit digest over 128-bit message blocks. No official specification is available online -- this entry is modeled
+    from Biham and Shamir''s EUROCRYPT ''91 cryptanalysis paper, the only available primary source describing the construction.
+    Broken via differential cryptanalysis in the same paper, faster than a birthday attack even against variants with
+    up to 12 rounds (the standard construction uses 8).
+
+    '
+  instances:
+  - id: n_hash_v1
+    name: N-Hash
+    type: hash
+    reference_ids:
+    - biham_shamir_1991_feal_nhash
+    characteristics:
+      output_size_bits: 128
+      block_size_bits: 128
+      state_size_bits: 128
+      rounds: 8
+    notes: Introduced by Miyaguchi, Ohta, and Iwata at SECURICOM 90 as a 128-bit cryptographic hash function built from
+      a FEAL-derived compression function (see n_hash). Broken by Biham and Shamir (1991) via differential cryptanalysis.
 - id: sha1_hash
   name: SHA-1
   construction_ids:

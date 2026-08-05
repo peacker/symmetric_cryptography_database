@@ -2462,6 +2462,20 @@ rounds:
     component_flow:
     - component_id: xor
   notes: Generic placeholder round entry pending full parameter extraction.
+- id: n_hash_round
+  name: N-Hash PS round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+    - component_id: add_mod
+    - component_id: rotation_fixed
+  notes: 'One PS round invokes a FEAL-style F-function (same Si(x,y) = ROL2(x+y+i mod 256) S-box arithmetic
+    as FEAL, per Biham and Shamir''s Figure 4) four times across four 32-bit words, arranged as two
+    stacked layers of two parallel F-calls each -- the same "k/2 parallel round functions per layer"
+    shape as a Type-2 Generalized Feistel Network, just doubled up within one PS round. Eight PS rounds
+    make up the g-function. Modeled from Biham and Shamir''s EUROCRYPT ''91 paper (Figures 3-4), the
+    only available primary description of N-Hash''s internal structure.'
 - id: fesh_round
   name: FESH round
   kind: full_round

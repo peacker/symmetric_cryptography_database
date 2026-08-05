@@ -11108,6 +11108,62 @@ primitive_families:
     notes: Fixed-length compression step mapping a 512-bit message block and 160-bit chaining value to a new 160-bit chaining
       value, using two parallel lines each with 5 rounds x 16 steps (80 operations per line), merged with the incoming chaining
       variable. Iterated by RIPEMD-160 (see ripemd_hash).
+- id: n_hash
+  name: N-Hash Compression Function
+  construction_ids:
+  - sbl_block_cipher_compression
+  - miyaguchi_preneel
+  - feistel
+  - type2_generalized_feistel
+  round_ids:
+  - n_hash_round
+  target_applications: []
+  characteristics:
+    block_size_bits: 128
+    state_size_bits: 128
+    components:
+    - id: add_mod
+      params:
+        modulus: 256
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - biham_shamir_1991_feal_nhash
+  - miyaguchi_ohta_iwata_1990_nhash
+  process_participations: []
+  influences:
+  - source_family_id: feal
+    relations:
+    - inspired_by
+    note: 'The g-function''s F-function reuses FEAL''s S-box arithmetic (Si(x,y) = ROL2(x+y+i mod 256)) almost verbatim,
+      just extended from FEAL''s two 32-bit words to four; Biham and Shamir''s cryptanalysis paper describes it as "similar
+      to the one of Feal."
+
+      '
+  notes: 'No official specification is available online. Modeled from Biham and Shamir, "Differential Cryptanalysis of
+    Feal and N-Hash" (EUROCRYPT ''91), which diagrams the construction (Figures 2-4) while cryptanalyzing it -- the original
+    specification (Miyaguchi, Ohta, Iwata, "128-bit hash function (N-Hash)," SECURICOM ''90) is cited there but not independently
+    available. Compression function f(h_{i-1}, m_i) = g(h_{i-1}, m_i) XOR m_i XOR h_{i-1}, a Miyaguchi-Preneel-shaped
+    double feedforward matching the paper''s own description: "the new hashed value is the XOR of the output of the g-function
+    with the block itself and with the old hashed value." g runs 8 PS rounds, each invoking the FEAL-style F-function 4
+    times over four 32-bit words in a Type-2-GFN-shaped network (see n_hash_round). Broken by Biham and Shamir (1991) via
+    differential cryptanalysis, faster than a birthday attack even against variants with up to 12 rounds.
+
+    '
+  instances:
+  - id: n_hash_compression
+    name: N-Hash Compression Function
+    type: compression_function
+    reference_ids:
+    - biham_shamir_1991_feal_nhash
+    characteristics:
+      output_size_bits: 128
+      block_size_bits: 128
+      state_size_bits: 128
+      rounds: 8
+    notes: Fixed-length compression step mapping a 128-bit message block and 128-bit chaining value to a new 128-bit chaining
+      value; iterated by the N-Hash hash function over arbitrary-length input. See n_hash_hash for the iterated, variable-length
+      hash function.
 - id: sha1_sha2
   name: SHA-1 Compression Function
   construction_ids:
