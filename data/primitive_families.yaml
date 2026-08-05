@@ -12813,7 +12813,7 @@ primitive_families:
     alongside Poseidon''s own x^(-1) S-box variant); this split is documented in the final published Poseidon paper
     (grassi_et_al_2021_poseidon).
     Local copy of the HADES strategy paper: references/[2019][hadesmimc][][hades_hadesmimc].pdf; local copy of the Poseidon paper
-    covering the same strategy is at references/[2021][hadesmimc+poseidon][][poseidon_usenix].pdf.'
+    covering the same strategy is at references/[2021][hadesmimc,poseidon][][poseidon_usenix].pdf.'
   instances:
   - id: hadesmimc_default
     name: HadesMiMC
@@ -12855,8 +12855,8 @@ primitive_families:
     Grobner-basis algebraic attack (Albrecht, Cid, Grassi, Khovratovich, Luftenegger, Rechberger, and Schofnegger,
     "Algebraic Cryptanalysis of STARK-Friendly Designs - Application to MARVELlous and MiMC", ASIACRYPT 2019, eprint
     2019/419), motivating the redesign as Vision/Rescue. Local copy of Jarvis''s own original paper:
-    references/[2018][friday_hash+jarvis][][jarvis_friday].pdf; the break is also documented as related work in the Vision/Rescue paper,
-    local copy references/[2019][jarvis+rescue+vision][][vision_rescue_marvellous].pdf.'
+    references/[2018][friday_hash,jarvis][][jarvis_friday].pdf; the break is also documented as related work in the Vision/Rescue paper,
+    local copy references/[2019][jarvis,rescue,vision][][vision_rescue_marvellous].pdf.'
   instances:
   - id: jarvis_default
     name: Jarvis
@@ -12895,7 +12895,7 @@ primitive_families:
   notes: 'Vision is a GF(2^n)-native SPN block cipher from the MARVELlous design strategy, applying the field-inversion
     S-box x -> x^(-1) (differential uniformity 2 for n odd) across the full state each round, followed by a Cauchy MDS
     matrix and round-constant addition. Targets ZK-STARK, R1CS-based proof systems, and MPC. Local copy:
-    references/[2019][jarvis+rescue+vision][][vision_rescue_marvellous].pdf.'
+    references/[2019][jarvis,rescue,vision][][vision_rescue_marvellous].pdf.'
   instances:
   - id: vision_default
     name: Vision
@@ -12936,7 +12936,7 @@ primitive_families:
   notes: 'Rescue is a GF(p)-native SPN block cipher/permutation from the MARVELlous design strategy. Each round applies
     a forward power map x -> x^d, an MDS matrix, and a constant, then the inverse power map x -> x^(1/d), another MDS
     matrix, and a constant -- alternating a low-degree map with its (typically high-degree) inverse every round, unlike
-    MiMC/GMiMC/HadesMiMC which apply only the forward direction. Local copy: references/[2019][jarvis+rescue+vision][][vision_rescue_marvellous].pdf.'
+    MiMC/GMiMC/HadesMiMC which apply only the forward direction. Local copy: references/[2019][jarvis,rescue,vision][][vision_rescue_marvellous].pdf.'
   instances:
   - id: rescue_default
     name: Rescue
@@ -13575,7 +13575,7 @@ primitive_families:
     apply to Grendel because it is not a block cipher with an unknown key; instead it is a permutation with no
     secrets" -- consistent with modeling it here as an unkeyed permutation, not a block cipher. The GrendelHash mode
     family (see mode_families.yaml) wraps this permutation in a sponge: "the Grendel hash function uses the Grendel
-    sponge internally." Local copy: references/[2021][grendel+grendelhash][][].pdf.'
+    sponge internally." Local copy: references/[2021][grendel,grendelhash][][].pdf.'
   instances:
   - id: grendel_default
     name: Grendel
@@ -13619,7 +13619,7 @@ primitive_families:
     Confirmed instances (Table 2, kappa=128, p~2^256): t in {3,4,8,12,16,20,24}, d in {3,5,7,11}; R=16(d=3)/14(d=5)
     for t=3, R=15/11 for t=4, R=11/9 for t=8, R=10/9 for t in {12,16,20,24}. Compared against Poseidon/Rescue/
     Reinforced Concrete as prior AO designs but not described as a direct improvement/variant of any single one of
-    them. Local copy: references/[2022][griffin+griffin_sponge][][].pdf.'
+    them. Local copy: references/[2022][griffin,griffin_sponge][][].pdf.'
   instances:
   - id: griffin_default
     name: GRIFFIN
@@ -13981,7 +13981,7 @@ primitive_families:
     intermediate state from a nonce and key); p_E is the repeatedly-applied keystream-generating permutation --
     together they underlie the mode-tier ciminion stream-encryption scheme. Does not fit this database''s existing
     SPN/Feistel/ARX structural-root taxonomy cleanly; no structural root beyond mpc_sharing_friendly is asserted.
-    Local copy: references/[2021][ciminion+ciminion_permutation][][].pdf.'
+    Local copy: references/[2021][ciminion,ciminion_permutation][][].pdf.'
   instances:
   - id: ciminion_p_c
     name: Ciminion p_C
@@ -14272,7 +14272,7 @@ primitive_families:
     predecessor Pasta "succeeds" -- Pasta''s own lineage is the Rasta strategy adapted to F_p -- and reports
     outperforming Masta by up to 6x; its S_feistel S-box was later reused directly by the Rubato cipher. The
     mode-tier Pasta stream-cipher family itself (which truncates Pasta-pi''s output under a nonce and block counter)
-    is now separately modeled too -- see the mode-tier "pasta" family (data/mode_families.yaml). Local copy: references/[2021][pasta+pasta_pi][][].pdf
+    is now separately modeled too -- see the mode-tier "pasta" family (data/mode_families.yaml). Local copy: references/[2021][pasta,pasta_pi][][].pdf
     (downloaded from a Semantic Scholar mirror; eprint.iacr.org is behind a Cloudflare challenge that blocked
     automated fetching).'
   instances:
@@ -14566,7 +14566,7 @@ primitive_families:
     Unlinkability (indistinguishability of addresses derived by different spending authorities), reduced to the
     Decisional Diffie-Hellman assumption on the curve''s prime-order subgroup -- NOT collision resistance, unlike
     Sinsemilla/PedersenHash. No local PDF copy kept for the living spec URL; local copy of this pinned snapshot:
-    references/[2026][diversify_hash+pedersen_hash_zcash+sinsemilla][][zcash_protocol_primitives_spec].pdf.'
+    references/[2026][diversify_hash,pedersen_hash_zcash,sinsemilla][][zcash_protocol_primitives_spec].pdf.'
   instances:
   - id: diversify_hash_sapling
     name: DiversifyHashSapling

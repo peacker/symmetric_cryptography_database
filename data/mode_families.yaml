@@ -10499,7 +10499,7 @@ mode_families:
     and partial S-box SPN rounds with a power-map non-linearity and Cauchy MDS diffusion), designed to minimize R1CS/Plonk
     constraint counts for zero-knowledge proof systems. Its binary-extension-field sibling Starkad is documented in
     the same original design (see starkad, this file). Widely deployed in ZK-rollup and blockchain
-    proof systems. Local copy: references/[2021][hadesmimc+poseidon][][poseidon_usenix].pdf.'
+    proof systems. Local copy: references/[2021][hadesmimc,poseidon][][poseidon_usenix].pdf.'
   instances:
   - id: poseidon_default
     name: Poseidon
@@ -10556,7 +10556,7 @@ mode_families:
     plainly "we advice against using them" regarding Starkad and the x^-1 Poseidon variant -- this database records
     Starkad as originally specified rather than omitting it, since it is a real, citable, distinct design the
     authors themselves later walked back, not a fabricated one; see hadesmimc''s own notes (primitive_families.yaml)
-    for that dismissal''s exact wording and context. Local copy: references/[2019][hadesmimc+starkad][][starkad_and_poseidon].pdf (fetched
+    for that dismissal''s exact wording and context. Local copy: references/[2019][hadesmimc,starkad][][starkad_and_poseidon].pdf (fetched
     via the Wayback Machine; eprint.iacr.org itself blocks automated fetching in this environment).'
   instances:
   - id: starkad_256
@@ -10731,7 +10731,7 @@ mode_families:
     function plus p_E repeatedly generate keystream. Explicitly, per its own section title "A Modified Version of
     Farfalle": "our mode of operation resembles the Farfalle construction... we slightly modify Farfalle." A
     Wegman-Carter MAC is proposed only as an optional appendix add-on, not part of the base scheme. Local copy:
-    references/[2021][ciminion+ciminion_permutation][][].pdf.'
+    references/[2021][ciminion,ciminion_permutation][][].pdf.'
   instances:
   - id: ciminion_default
     name: Ciminion
@@ -11005,7 +11005,7 @@ mode_families:
       mode (H_i = E_{H_{i-1}}(m_i) xor H_{i-1} xor m_i, E=Jarvis -- see the jarvis family''s miyaguchi_preneel
       construction tag), then iterated via Merkle-Damgard.'
   notes: 'Broken by the same Grobner-basis algebraic attack that broke Jarvis (Albrecht et al., ASIACRYPT 2019),
-    motivating the redesign as Vision/Rescue. Local copy: references/[2018][friday_hash+jarvis][][jarvis_friday].pdf.'
+    motivating the redesign as Vision/Rescue. Local copy: references/[2018][friday_hash,jarvis][][jarvis_friday].pdf.'
   instances:
   - id: friday_default
     name: Friday
@@ -11038,7 +11038,7 @@ mode_families:
     note: 'Confirmed directly: "The Grendel hash function uses the Grendel sponge internally. The output length is
       fixed."'
   notes: 'A sponge construction wrapping the Grendel permutation, with a fixed output length and standard padding.
-    Local copy: references/[2021][grendel+grendelhash][][].pdf.'
+    Local copy: references/[2021][grendel,grendelhash][][].pdf.'
   instances:
   - id: grendelhash_default
     name: GrendelHash
@@ -11090,7 +11090,7 @@ mode_families:
       tag_size_bits: 128
       block_size_bits: 256
       state_size_bits: 1024
-    notes: 'Rocca authenticated-encryption scheme from the 2021 ToSC paper (updated/extended local copy in references/[2022][rocca+rocca_aead][][].pdf).
+    notes: 'Rocca authenticated-encryption scheme from the 2021 ToSC paper (updated/extended local copy in references/[2022][rocca,rocca_aead][][].pdf).
       The paper also defines a raw encryption mode, but this entry models the AEAD construction.'
 - id: espresso
   name: Espresso

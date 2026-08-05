@@ -214,7 +214,7 @@ and PDFs for 12 of them (see git diff of references/ for the full list --
 [2026][poseidon2b][][].pdf, [2022][neptune][][].pdf, [2023][monolith][][].pdf, [2025][skyscraper][][].pdf,
 [2023][tip5][][tip4_tip4prime_toposware].pdf, [2020][legendre_prf][][legendre_prf_cryptanalysis].pdf,
 [2023][aim][][].pdf, [2017][lowmc][][picnic].pdf, [2024][rain][][mandarain_one_tree_to_rule_them_all].pdf,
-[2021][pasta+pasta_pi][][].pdf, [2010][armadillo][][].pdf; plus the pre-existing [2023][arion][][].pdf
+[2021][pasta,pasta_pi][][].pdf, [2010][armadillo][][].pdf; plus the pre-existing [2023][arion][][].pdf
 lineage). All of `make validate`, the full `make test` CI suite, and
 `make build-db` pass.
 
@@ -271,7 +271,7 @@ guessed, not silently dropped):
     wrapper itself needs mode_constructions.yaml touched the same way
     primitive_constructions.yaml was this session; deferred for the same
     tier-duplication reason as LegendrePRF. All facts needed are already in
-    references/[2021][pasta+pasta_pi][][].pdf.
+    references/[2021][pasta,pasta_pi][][].pdf.
 
 14. Sinsemilla / Pedersen hash -- deliberately no local PDF kept: both are
     specified in the living, continuously-updated Zcash Protocol
@@ -478,7 +478,7 @@ session). Summary of what changed, by task:
   generalized_feistel leaf to type3_generalized_feistel: LEA's round (three of four 32-bit words each
   replaced by a keyed, rotated combination of two adjacent input words; the fourth just carried over)
   matches Type-3 GFN's "shift branches, combine an adjacent pair into a new branch" skeleton by
-  structural inspection against Hoang-Rogaway's Fig. 1 ([2010][bear_lion+cast256+mars+rc6+skipjack][][generalized_feistel].pdf), not by
+  structural inspection against Hoang-Rogaway's Fig. 1 ([2010][bear_lion,cast256,mars,rc6,skipjack][][generalized_feistel].pdf), not by
   citation. One flagged difference from the strict original definition: LEA's "F" step combines a
   *pair* of branches via keyed addition rather than transforming one branch and XORing it into the
   next, so this is a generalization of the shape, not a byte-for-byte instance. Full comparison in
@@ -556,7 +556,7 @@ session). Summary of what changed, by task:
 
 - **LegendrePRF and Pasta tier decisions**: both resolved without needing any new mode_constructions.yaml
   taxonomy, contrary to what earlier sessions assumed. Pasta: read the actual paper's "Pasta
-  Specification" section directly (references/[2021][pasta+pasta_pi][][].pdf, already local) -- its keystream
+  Specification" section directly (references/[2021][pasta,pasta_pi][][].pdf, already local) -- its keystream
   generation (apply the Pasta-pi permutation to key+nonce+counter, truncate, add to plaintext) is
   exactly Counter Mode's own shape, just over F_p with field addition instead of XOR, so it reuses the
   existing ctr_mode leaf (same pattern aes_ctr itself already uses) rather than needing a new one.

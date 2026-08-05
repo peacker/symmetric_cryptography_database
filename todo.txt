@@ -1,5 +1,13 @@
 TODO:
 
+- when two relation lines are overlapping, the tip for overing with the mouse should show all relations descriptions.
+  when clicking it, it should let you choose which relation description to display.
+
+- when the "find family" is focused on a cipher, and 
+  when increasing the relation degree from 1 to 2 or above, 
+  only the predecessors and successor that eventually connect to the cipher should be displayed,
+  not also the first or second degree relations of the ciphers that are not the focused cipher.
+
 - Proposed visualizations (requested: "propose other interesting visualizations"; see DONE section for the
   request itself). None of these are implemented yet -- flagging as new tasks per the request:
 
@@ -217,7 +225,7 @@ Which is the first AndRX cipher? Simon for now
   HAVAL: Introduced in 1992 at the AUSCRYPT conference by Yuliang Zheng, Josef Pieprzyk, and Jennifer Seberry.
   Note: I have added the two references:
   symmetric_cryptography_database/references/[1989][md2][rfc][rsamd2].txt
-  symmetric_cryptography_database/references/[1990][md4+md4_hash][][crypto].pdf
+  symmetric_cryptography_database/references/[1990][md4,md4_hash][][crypto].pdf
 
 - Move the About tab to be the left most, followed by Glossary, then add a "Disclaimer" tab; group the
   tabs into Views / Tables / Documentation.
@@ -406,7 +414,7 @@ Other relations (verify them by reading the corresponding pdf):
 
 - add Subterranean
   url can be found here: https://www.researchgate.net/profile/Luc-Claesen/publication/3601817_Subterranean_A_600_Mbitsec_cryptographic_VLSI_chip/links/00b495350dba879660000000/Subterranean-A-600-Mbit-sec-cryptographic-VLSI-chip.pdf
-  I have added the pdf: [1993][subterranean+subterranean_hash+subterranean_stream][][].pdf
+  I have added the pdf: [1993][subterranean,subterranean_hash,subterranean_stream][][].pdf
   Notice that the 2019 Subterranean v2 paper intro gives many relations to be included:
   Subterranean is a cryptographic primitive to be used both for hashing and as a stream
 cipher and dates back to 1992 [17,18]. With some imagination its mode can be seen as a

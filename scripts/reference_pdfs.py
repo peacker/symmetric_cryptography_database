@@ -3,10 +3,10 @@
 
 references/ filenames follow one fixed, deterministic format:
 
-    [YYYY][name1+name2+...][doctype][notes].ext
+    [YYYY][name1,name2,...][doctype][notes].ext
 
   - YYYY: the document's own year.
-  - names: one or more identifiers, joined by "+" when a single document
+  - names: one or more identifiers, joined by "," when a single document
     covers more than one entry (e.g. a combined paper, a multi-cipher
     competition submission, or a primitive shared across tiers). Each name
     is ideally this database's own family id, so a family resolves to its
@@ -14,10 +14,19 @@ references/ filenames follow one fixed, deterministic format:
     When a document doesn't belong to any single family (a general survey,
     a construction-level paper, RFC text not tied to one family, ...) the
     names field instead holds a short descriptive slug.
+    "," was picked over "+" specifically because some family *names* (not
+    ids) legitimately contain a literal "+" (e.g. SAFER+, RC4+) -- a "+"
+    separator would be ambiguous for anyone reading/writing the names field
+    from a cipher's display name rather than its id. No existing family id
+    or name contains a comma, colon, or square bracket, so those remain
+    safe as the separator and the field delimiters respectively.
   - doctype: optional (e.g. "rfc", "fips", "patent", "nist_sp", "spec",
     "presentation") -- empty ("[]") when it's just an ordinary paper.
   - notes: optional free-text disambiguation (a version tag, which of two
     same-year papers on the same design this is, a patent number, ...).
+    Free text here is not split on any separator, so it may contain "+"
+    (used historically as a hyphen stand-in) -- just avoid literal "[" or
+    "]", which would break the filename's own field delimiters.
 
 This replaces an earlier "YYYY-name[-suffix].ext" convention that relied on
 fuzzy filename matching (prefix/substring heuristics) to guess which family
@@ -53,7 +62,7 @@ def parse_filename(path: Path) -> dict | None:
     year, names, doctype, notes = m.groups()
     return {
         "year": int(year),
-        "names": [n for n in names.split("+") if n],
+        "names": [n for n in names.split(",") if n],
         "doctype": doctype,
         "notes": notes,
         "path": path,
@@ -79,7 +88,7 @@ def build_family_pdf_map() -> dict[str, list[Path]]:
     unresolved family shows up as an empty list rather than a missing key.
 
     A file resolves to every family id listed in its own names field,
-    exactly -- e.g. "[1990][md4+md4_hash][][].pdf" resolves for both the
+    exactly -- e.g. "[1990][md4,md4_hash][][].pdf" resolves for both the
     md4 and md4_hash families.
     """
     by_name: dict[str, list[Path]] = {}
