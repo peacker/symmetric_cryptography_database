@@ -1487,6 +1487,7 @@
     const yAxisSvg = document.getElementById("familyVizYAxis");
     const plotScroll = document.getElementById("vizPlotScroll");
     const xAxisTrack = document.getElementById("vizXAxisTrack");
+    const xAxisPane = xAxisTrack ? xAxisTrack.parentElement : null;
     const yAxisTrack = document.getElementById("vizYAxisTrack");
     const cornerPane = document.getElementById("vizCornerPane");
     const processLegend = document.getElementById("vizProcessLegend");
@@ -1522,7 +1523,29 @@
     const yearReset = document.getElementById("vizYearReset");
     const yearRangeValue = document.getElementById("vizYearRangeValue");
     const relationInfoBox = document.getElementById("vizRelationInfo");
-    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !vizFrame || !groupBy || !hideDots || !nameModeOff || !nameModeClip || !nameModeWrap || !nameModeFull || !colorByProcess || !processLegend || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !colMinus || !colPlus || !colReset || !colSpacingValue || !familySearch || !collapseGroups || !collapseCount || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
+    if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !xAxisPane || !yAxisTrack || !cornerPane || !vizFrame || !groupBy || !hideDots || !nameModeOff || !nameModeClip || !nameModeWrap || !nameModeFull || !colorByProcess || !processLegend || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !colMinus || !colPlus || !colReset || !colSpacingValue || !familySearch || !collapseGroups || !collapseCount || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
+
+    // *** The actual root cause of the axis-misalignment bug ***
+    // xAxisSvg's height (AXIS_HEIGHT) never scales with zoom while its width
+    // does, and yAxisSvg's width (LEFT_AXIS_WIDTH) never scales while its
+    // height does -- so at any zoom level other than 1x, each one's CSS box
+    // has a *different aspect ratio than its own viewBox*. SVG's default
+    // preserveAspectRatio ("xMidYMid meet") reacts to that by uniformly
+    // scaling to whichever axis needs the *smaller* scale factor (to avoid
+    // cropping) and letterboxing/centering the rest -- confirmed directly
+    // via getScreenCTM(): at a large fit-to-width zoom multiplier (reachable
+    // on a very wide monitor, matched here with a 3200px-wide viewport),
+    // xAxisSvg's actual on-screen scale came out to exactly 1.0 (its height
+    // constraint, since AXIS_HEIGHT never changes) while plotSvg's was the
+    // intended ~1.34x -- the ticks were being rendered at a *different,
+    // smaller scale* than the gridlines, compressed and centered inside the
+    // wider box instead of stretched to fill it. plotSvg itself doesn't
+    // show this (both its dimensions scale together, so its aspect ratio
+    // matches its viewBox at any zoom), which is why only the axes drifted.
+    // "none" instead stretches non-uniformly to exactly fill the CSS box on
+    // both axes, which is what every other part of this code already
+    // assumes happens.
+    [plotSvg, xAxisSvg, yAxisSvg].forEach((svg) => svg.setAttribute("preserveAspectRatio", "none"));
 
     // Safety net on top of applyZoom() setting both SVGs' width from the same
     // expression: whatever the actual cause of a divergence turns out to be
@@ -1687,7 +1710,18 @@
 
     function syncAxisTracks() {
       yAxisTrack.style.transform = `translateY(${-plotScroll.scrollTop}px)`;
-      xAxisTrack.style.transform = `translateX(${-plotScroll.scrollLeft}px)`;
+      // Deliberately native scrollLeft, not a CSS transform: plotSvg's own
+      // horizontal position moves via the browser's native scrolling, and a
+      // separate translateX() applied to the axis track is a *different*
+      // code path that isn't guaranteed to round sub-pixel/device-pixel
+      // positions identically to native scrolling on every browser/display
+      // combination -- exactly the kind of thing that could drift out of
+      // sync at high zoom on a high- or mixed-DPI display without ever
+      // showing up in a same-DPI, low-zoom test. Setting scrollLeft on the
+      // (overflow:hidden, so no visible scrollbar or user-drag) axis pane
+      // itself keeps both elements on the *same* native scroll-positioning
+      // pipeline, which can't disagree with itself.
+      xAxisPane.scrollLeft = plotScroll.scrollLeft;
     }
 
     function clampZoom(nextZoom) {
@@ -3394,7 +3428,15 @@
             edgeEls.push(genPlot.appendChild(svgEl("path", attrs)));
           });
         }
-        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.2 + 5)), fill: "none", "pointer-events": "all" });
+        // Hit-area tolerance beyond the edge's own thickest visible stroke,
+        // not a flat generous minimum: a wide fixed hit-width let elements
+        // hitsAtPoint() would happily find (a real fix, elsewhere) drown out
+        // *precision* instead -- in a crowded spot with several close but
+        // distinct lines, a fat hit-area made nearly any point among them
+        // match several unrelated edges at once. Tracking the visible width
+        // keeps the hit-area just forgiving enough for mouse imprecision.
+        const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
+        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(maxStrokeW + 3), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([{ fid: src, name: srcName }, { fid: tgt, name: tgtName }]));
         // nodeElsByFamily is only fully populated once the node loop below
@@ -3782,7 +3824,12 @@
             edgeEls.push(genPlot.appendChild(svgEl("path", { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", opacity: String(layoutParams.edgeOpacity) })));
           });
         }
-        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(Math.max(10, rels.length * 2.1 + 5)), fill: "none", "pointer-events": "all" });
+        // See the matching comment in drawSugiyama: tracks the edge's own
+        // visible thickness rather than a flat generous minimum, so a
+        // crowded spot with several close but distinct lines doesn't match
+        // several unrelated edges at once.
+        const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
+        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(maxStrokeW + 3), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([
           { fid: src, name: String((genFamById.get(src) || {}).name || src) },

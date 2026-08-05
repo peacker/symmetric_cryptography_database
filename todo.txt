@@ -108,6 +108,39 @@ TODO:
 
 DONE:
 
+- Third follow-up round, reported directly rather than filed here first:
+  1. Timelines axis, ACTUAL root cause finally found (all previous fixes were treating symptoms): you
+     suggested directly measuring the screen-pixel distance between consecutive axis ticks vs consecutive
+     plot gridlines, which exposed it immediately. xAxisSvg's height (AXIS_HEIGHT) never scales with zoom
+     while its width does, and yAxisSvg's width (LEFT_AXIS_WIDTH) never scales while its height does -- so
+     at any zoom other than 1x, each axis SVG's CSS box has a *different aspect ratio than its own
+     viewBox*. SVG's default preserveAspectRatio ("xMidYMid meet") reacts to that by uniformly scaling to
+     whichever dimension needs the *smaller* factor and letterboxing the rest -- confirmed via
+     getScreenCTM() at a large fit-to-width zoom (reachable on a wide monitor): xAxisSvg's actual on-screen
+     scale was exactly 1.0 (its unscaled-height constraint) while plotSvg's was the intended ~1.34x, so the
+     ticks rendered compressed and centered instead of stretched to fill the box -- a genuine ~1.5x scale
+     mismatch, not a sub-pixel rounding issue at all. plotSvg itself never showed this since both its own
+     dimensions scale together, keeping its aspect ratio matched to its viewBox at any zoom -- which is
+     exactly why only the axes drifted and why it was so hard to pin down. Fixed with
+     preserveAspectRatio="none" on all three Timelines SVGs (stretch to exactly fill the box on both axes,
+     which the rest of the code already assumed happened). Re-verified with the same tick-vs-gridline
+     screen-position measurement at an exaggerated wide+scaled-display viewport (3200px, devicePixelRatio
+     1.25): before the fix, consecutive ticks were spaced ~1.5x wider on screen than consecutive gridlines;
+     after, their absolute screen positions match exactly. Also switched the axis's horizontal scroll sync
+     from a CSS translateX() transform to native scrollLeft assignment on the axis pane itself, so both
+     plot and axis share the same scroll-positioning code path instead of two that could in principle
+     round differently.
+  2. Edge hover precision: the invisible hit-area under each edge was far fatter than the edge's own
+     visible line (a flat "at least 10 units wide" minimum, vs. lines as thin as 0.8-3.4 units) --
+     combined with the union-highlighting from the previous round, that meant hovering almost anywhere
+     near a cluster of close-but-distinct lines matched several of them together, making it hard to target
+     one specifically. Changed the hit-area width to track each edge's own visible thickness (+3 units of
+     tolerance) instead of a fixed generous minimum.
+  Verified via Playwright with getScreenCTM()-based screen-position measurements (not just DOM attribute
+  comparisons, which would have missed this entirely -- the underlying viewBox-unit coordinates were
+  already correct and identical, this was purely a screen-rendering-time scaling bug). make test and a
+  full build-site pass; no console errors.
+
 - Second follow-up round, reported directly rather than filed here first:
   1. Timelines axis, root cause finally identified: you narrowed it to moving the browser window from a
      laptop's screen to a wide external monitor -- a different-DPI monitor switch, which commonly keeps
