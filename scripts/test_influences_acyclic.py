@@ -15,7 +15,7 @@ original — see subterranean vs subterranean_2_0), or two edges recording
 the same relationship were added in opposite directions -- including a
 hand-curated influence edge contradicted by a derived construction-sharing
 edge going the other way (e.g. two same-year families sharing a construction
-leaf break the derivation's year tie alphabetically, which has no grounding
+tag break the derivation's year tie alphabetically, which has no grounding
 in actual design chronology). compute_construction_sharing_edges already
 skips deriving an edge for any pair with a curated influence between them for
 exactly this reason; this test checks the combined graph anyway in case a
@@ -28,7 +28,6 @@ from collections import defaultdict
 from common import (
     all_families,
     compute_construction_sharing_edges,
-    construction_leaf_ids,
     load_all_data,
 )
 
@@ -69,14 +68,13 @@ def main() -> None:
     ])
     families = all_families(data)
     references_by_id = {r["id"]: r for r in data["references"].get("references", [])}
-    leaf_ids = construction_leaf_ids(data)
 
     adj: dict[str, list[str]] = defaultdict(list)
     for f in families:
         for inf in f.get("influences", []):
             adj[inf["source_family_id"]].append(f["id"])
     for source_id, target_id, _construction_id in compute_construction_sharing_edges(
-        families, leaf_ids, references_by_id
+        families, references_by_id
     ):
         adj[source_id].append(target_id)
 

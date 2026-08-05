@@ -2708,12 +2708,14 @@
     const genFamById = new Map(families.map((r) => [String(r.id), r]));
 
     // construction_sharing_edges is computed at build time (scripts/common.py:
-    // compute_construction_sharing_edges), not hand-curated -- two families
-    // tagged with the same level-2 construction leaf, chained chronologically
-    // older -> newer. Folded into the same edge list as family_influences so
-    // it flows through the existing edgeRelations()/render() machinery, tagged
-    // with a synthetic "shares_construction" relation kept independently
-    // toggleable via RELATION_GROUPS below.
+    // compute_construction_sharing_edges), not hand-curated -- for every
+    // construction id a family carries (root or leaf), the earliest-year
+    // family tagged with it is the star's origin, with every later family
+    // sharing that id linked directly to it, older -> newer. Folded into the
+    // same edge list as family_influences so it flows through the existing
+    // edgeRelations()/render() machinery, tagged with a synthetic
+    // "shares_construction" relation kept independently toggleable via
+    // RELATION_GROUPS below.
     const constructionSharingRows = (tables.construction_sharing_edges && tables.construction_sharing_edges.rows) || [];
     const derivedConstructionEdges = constructionSharingRows.map((row) => {
       const label = genDims.constructionNameById.get(row.construction_id) || row.construction_id;
@@ -2722,7 +2724,7 @@
         target_family_id: row.target_family_id,
         relation: "shares_construction",
         relations_json: JSON.stringify(["shares_construction"]),
-        note: `Both tagged as ${label} (derived from shared construction leaf, not hand-curated).`,
+        note: `Both tagged as ${label} (derived from a shared construction id, not hand-curated).`,
       };
     });
     const influences = rawInfluences.concat(derivedConstructionEdges);

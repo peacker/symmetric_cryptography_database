@@ -108,22 +108,27 @@ Two categories of relation were deliberately removed from this vocabulary becaus
   "Component id/name contains" and "Round component-flow signature contains" filters, so "which
   families share this S-box / this round structure" is answered by filtering or sorting, not by
   a maintained tag that can silently go stale as components.yaml evolves.
-- **Construction-leaf sharing** (e.g. "both Type-2 GFN") *is* surfaced, but as a **derived
-  relation**, computed at build time rather than hand-curated: for every level-2 construction
-  leaf, `scripts/common.py:compute_construction_sharing_edges` chronologically chains every
-  family tagged with that leaf (each family links only to its nearest earlier neighbor sharing
-  the leaf, not a fully-connected graph, to avoid an O(n²) blowup on popular leaves like
-  `balanced_feistel`), directional older → newer. These live in their own SQLite table,
-  `construction_sharing_edges` — kept separate from `family_influences` so a computed fact is
-  never mistaken for an authored, citation-backed one. On the Genealogy tab these edges are
+- **Construction-tag sharing** (e.g. "both Type-2 GFN", or "both tagged `spn`" when no more
+  specific leaf applies) *is* surfaced, but as a **derived relation**, computed at build time
+  rather than hand-curated: for every construction id a family carries — level-1 root or level-2
+  leaf alike — `scripts/common.py:compute_construction_sharing_edges` finds the single
+  earliest-year family tagged with that id and links every later family tagged with the same id
+  directly to it (a star, not a chain: each later family is credited to the id's origin, not to
+  whichever other family happens to sit right before it chronologically), directional
+  older → newer. Root and leaf ids are treated the same way deliberately — the point is "who
+  introduced this idea first", which applies whether the idea is filed at the root or at a more
+  specific leaf, not something worth restricting to one level. These live in their own SQLite
+  table, `construction_sharing_edges` — kept separate from `family_influences` so a computed fact
+  is never mistaken for an authored, citation-backed one. On the Genealogy tab these edges are
   folded into the same graph as curated influences, tagged with a synthetic `shares_construction`
   relation, and are independently toggleable via their own "Derived: shares a specific
-  construction type" filter group, alongside the curated relation groups. Not every leaf carries
-  equal signal: a few (e.g. `fixed_rotation_arx`, `arx_with_round_constants`) are the *majority*
-  choice within their facet rather than a distinctive one, so sharing them is common enough among
-  otherwise-unrelated designs to be a weaker hint of real lineage than a rare leaf like
-  `data_dependent_rotation_arx` or a named-methodology one like `long_trail_strategy_arx` — this
-  caveat is noted directly in the leaf's own `notes` in `data/primitive_constructions.yaml`.
+  construction type" filter group, alongside the curated relation groups. Not every id carries
+  equal signal: a few (e.g. `fixed_rotation_arx`, `arx_with_round_constants`, or broad roots like
+  `spn`/`feistel` themselves) are the *majority* choice within their facet rather than a
+  distinctive one, so sharing them is common enough among otherwise-unrelated designs to be a
+  weaker hint of real lineage than a rare leaf like `data_dependent_rotation_arx` or a
+  named-methodology one like `long_trail_strategy_arx` — this caveat is noted directly in the
+  relevant construction's own `notes` in `data/primitive_constructions.yaml` where it applies.
 
 ## Quick start
 

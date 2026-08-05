@@ -369,8 +369,8 @@ primitive_constructions:
     giving a provable-security argument via recursive application of Luby-Rackoff-style bounds.
 
     '
-- id: lay_massey
-  name: Lay-Massey Scheme
+- id: lai_massey
+  name: Lai-Massey Scheme
   abbreviation: LM
   typical_primitive_types:
   - block_cipher
@@ -692,6 +692,28 @@ primitive_constructions:
   notes: 'A construction where round behavior is driven by key-derived tables or key-dependent substitution/permutation components.
 
     '
+- id: data_dependent_permutation_network
+  name: Data-Dependent Permutation-Selection Network
+  abbreviation: DDPN
+  typical_primitive_types:
+  - block_cipher
+  - compression_function
+  placeholder_family_names:
+  - ARMADILLO
+  notes: 'Nonlinearity comes entirely from selecting, at each step, which one of a small fixed set of permutations of
+    the (whole or partial) state to apply next -- the selection itself driven by the running data (or key) value,
+    not by an algebraic/lookup-table substitution the way an S-box works. Distinct from key_dependent_table_network
+    (KDTN, e.g. FROG/HPC), where the tables/permutations applied are derived once from the key at setup time and
+    then used uniformly; here the choice of which fixed permutation to apply changes per step, per data bit/word.
+    This is a real, named external design paradigm -- "data-dependent permutations" (DDP) via "controlled
+    permutation boxes" (CP-boxes), per Moldovyan et al.''s cipher family (SPECTR-H64, CIKS-1, COBRA-H64/H128, none
+    yet modeled in this database) -- and the closely related group-theoretic idea in the Zemor-Tillich hash (a
+    semigroup homomorphism from {0,1}* into a permutation/matrix group, walking a Cayley graph one generator per
+    input bit). ARMADILLO (see armadillo, this file) is the first family in this database using the mechanism: at
+    each of J=k steps it selects between two fixed base permutations sigma_0/sigma_1 of the whole state based on the
+    data itself, with no S-box anywhere in the design.
+
+    '
 - id: heterogeneous_round_network
   name: Heterogeneous Round Network
   abbreviation: HRN
@@ -950,7 +972,7 @@ primitive_constructions:
   - MSX
   notes: 'Level-1 root, an orthogonal facet in the same sense as tweakable_spn or arx_permutation_network: tagged on every
     family in this database whose round function includes modular/integer multiplication as a nonlinear operation, alongside
-    the family''s own primary structural root rather than replacing it (lay_massey for IDEA/PES, spn for MMB, generalized_feistel
+    the family''s own primary structural root rather than replacing it (lai_massey for IDEA/PES, spn for MMB, generalized_feistel
     for MSX, balanced_feistel for DFC, type2_generalized_feistel for RC6, heterogeneous_round_network + type3_generalized_feistel
     for MARS, lfsr_nlfsr_register_network for Bleep64, key_dependent_table_network for CLAE, davies_meyer for Tiger; MOE
     and Nimbus carry no other structural root since neither fits feistel/spn/arx -- MOE''s own paper explicitly rejects

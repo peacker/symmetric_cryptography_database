@@ -3,13 +3,13 @@
 
 These edges are not hand-curated (see data/*_families.yaml) -- they are
 computed at build time (scripts/common.py: compute_construction_sharing_edges)
-from families sharing the same level-2 construction leaf: the earliest-year
-family is credited as the leaf's origin and every later family sharing that
-leaf is linked directly to it (a star, older -> newer, not a chronological
-chain). This test recomputes them directly from the YAML sources (the same
-function scripts/build_db.py calls) and checks the invariants the derivation
-is supposed to guarantee, so a future change to the YAML data or the
-derivation logic can't silently produce a malformed edge.
+from families sharing the same construction id, level-1 root or level-2 leaf
+alike: the earliest-year family is credited as that id's origin and every
+later family sharing it is linked directly to it (a star, older -> newer,
+not a chronological chain). This test recomputes them directly from the YAML
+sources (the same function scripts/build_db.py calls) and checks the
+invariants the derivation is supposed to guarantee, so a future change to the
+YAML data or the derivation logic can't silently produce a malformed edge.
 """
 from __future__ import annotations
 
@@ -18,7 +18,6 @@ from collections import defaultdict
 from common import (
     all_families,
     compute_construction_sharing_edges,
-    construction_leaf_ids,
     family_year,
     load_all_data,
 )
@@ -34,8 +33,12 @@ def main() -> None:
     references_by_id = {r["id"]: r for r in data["references"].get("references", [])}
     years = {f["id"]: family_year(f, references_by_id) for f in families}
 
-    leaf_ids = construction_leaf_ids(data)
-    edges = compute_construction_sharing_edges(families, leaf_ids, references_by_id)
+    known_construction_ids = {
+        construction["id"]
+        for key in ("primitive_constructions", "mode_constructions")
+        for construction in data[key].get(key, [])
+    }
+    edges = compute_construction_sharing_edges(families, references_by_id)
 
     errors: list[str] = []
 
@@ -46,10 +49,10 @@ def main() -> None:
             errors.append(f"edge references unknown target family '{target_id}'")
         if source_id == target_id:
             errors.append(f"self-loop on family '{source_id}' via construction '{construction_id}'")
-        if construction_id not in leaf_ids:
+        if construction_id not in known_construction_ids:
             errors.append(
                 f"edge {source_id} -> {target_id} uses '{construction_id}', which is not a "
-                "level-2 construction leaf (has no special_case_of)"
+                "known primitive/mode construction id"
             )
         source_year, target_year = years.get(source_id), years.get(target_id)
         if source_year is not None and target_year is not None and source_year > target_year:
@@ -58,10 +61,11 @@ def main() -> None:
                 "runs newer -> older, expected older -> newer"
             )
 
-    # The derivation is a per-leaf star (origin -> every later member) built
-    # from a total order (year, id) with cycle-guarded edge acceptance, so it
-    # cannot contain a cycle by construction; check anyway in case a future
-    # refactor of compute_construction_sharing_edges breaks that.
+    # The derivation is a per-construction-id star (origin -> every later
+    # member) built from a total order (year, id) with cycle-guarded edge
+    # acceptance, so it cannot contain a cycle by construction; check anyway
+    # in case a future refactor of compute_construction_sharing_edges breaks
+    # that.
     adj: dict[str, list[str]] = defaultdict(list)
     for source_id, target_id, _ in edges:
         adj[source_id].append(target_id)
@@ -93,8 +97,9 @@ def main() -> None:
             print(f"  {err}")
         raise SystemExit(1)
 
+    distinct_construction_ids = {construction_id for _, _, construction_id in edges}
     print(f"Derived construction relations OK — {len(edges)} edges across "
-          f"{len(leaf_ids)} construction leaves.")
+          f"{len(distinct_construction_ids)} construction ids.")
 
 
 if __name__ == "__main__":

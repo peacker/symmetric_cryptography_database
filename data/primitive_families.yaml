@@ -1383,7 +1383,7 @@ primitive_families:
   notes: IDEA is an 8.5-round, 64-bit Lai–Massey cipher whose round function mixes XOR, addition modulo 2^16, and multiplication
     modulo 2^16+1 under a 128-bit key.
   construction_ids:
-  - lay_massey
+  - lai_massey
   - modular_multiplication_network
   - modulo_2n_plus_1
   round_ids:
@@ -3760,6 +3760,80 @@ primitive_families:
       tweak_size_bits: 48
       rounds: 8
       output_size_bits: 10
+- id: orthros
+  name: Orthros
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - near_mds_arx_linear_layer
+  round_ids:
+  - orthros_round_bit_perm
+  - orthros_round_nibble_perm
+  target_applications:
+  - ultra_low_latency
+  - hardware
+  - circuit_depth_constrained
+  characteristics:
+    block_size_bits: 128
+    key_size_bits: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: bit_permutation
+    - id: word_permutation
+      params:
+        word_size_bits: 4
+    - id: binary_matrix_mul
+    - id: xor
+    - id: constant
+  reference_ids:
+  - banik_et_al_2021_orthros
+  process_participations: []
+  influences:
+  - source_family_id: midori
+    relations:
+    - inspired_by
+    note: 'Orthros''s own paper states directly: "The round functions of Orthros are based on Midori. It is already
+      suitable to low-latency ciphers, however we performed a thorough study on it and showed that we can further
+      improve latency by adopting new permutation layers and S-boxes." Orthros also reuses Midori-128''s 4x4 binary
+      near-MDS matrix (branch number 4) unchanged, replacing only the S-box and permutation layers ("we propose a
+      hybrid use of bit and nibble permutations... while Midori-128 uses a single linear layer including both").'
+  notes: 'Orthros (Banik, Isobe, Liu, Minematsu, Sakamoto, IACR ToSC 2021, issue 1, pp. 37-77) is a 128-bit-block,
+    128-bit-key pseudorandom function (PRF), not a block cipher: "The overall structure of Orthros is a sum of two
+    SPN-type keyed permutations called Branch1 and Branch2... The 128-bit ciphertext C is an XOR of the outputs of
+    Branch1 and Branch2," making the construction non-invertible in general even though each branch alone is an
+    invertible 12-round SPN. Modeled here under primitive_types.yaml''s block_cipher category (as this database
+    already does for PRINCE/MANTIS-style low-latency designs usable as PRFs) since there is no dedicated
+    sum-of-permutations-PRF primitive type and each branch is itself literally a keyed 128-bit SPN block cipher;
+    the two-branch XOR-sum wrapper that makes the whole non-invertible is captured in round_ids/notes rather than
+    construction_ids, since neither branch''s internal structure changes because of it. Each of Branch1 and Branch2
+    is a 12-round keyed permutation over the same 128-bit key K (independent round-key schedules KSF1/KSF2, both
+    bit-permutation-based), using an identical 4-bit S-box (non-involutory, unlike Midori/QARMA''s, since Orthros
+    never needs to run its branches "in reverse"): rounds 1-4 apply a per-branch bit permutation (Pbr1/Pbr2), rounds
+    5-11 switch to a per-branch nibble permutation (Pn1/Pn2), and round 12 is S-box-and-key-addition only (see
+    orthros_round_bit_perm / orthros_round_nibble_perm, data/rounds.yaml). This bit-then-nibble-permutation hybrid
+    is the paper''s central diffusion-speed claim: "each branch of Orthros achieves the 2.5-round full diffusion and
+    attains 64 active S-boxes over 10 rounds, while Midori-128 requires 3 rounds for full diffusion and 13 rounds
+    for 64 active S-boxes." Achieves ~2.4ns minimum latency on the STM 90nm library versus 2.56ns (PRINCE), 4.10ns
+    (Midori-128), 4.38ns (QARMA9-128) for fully unrolled circuits. Local copy: references/2021-orthros.pdf (fetched
+    from tosc.iacr.org; eprint.iacr.org/2021/390 blocks automated fetching).'
+  instances:
+  - id: orthros_default
+    name: Orthros
+    type: block_cipher
+    reference_ids:
+    - banik_et_al_2021_orthros
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      rounds: 12
+      output_size_bits: 128
+    notes: Per-branch round count (Branch1 and Branch2 each run all 12 rounds independently and in parallel; the
+      two 128-bit branch outputs are then XORed to produce the final 128-bit output, so overall latency is that of
+      one branch, not both in series).
+
 - id: ulbc
   name: uLBC
   construction_ids:
@@ -3802,6 +3876,15 @@ primitive_families:
       for Midori128 and Case I." Both use a 4-bit-S-box confusion layer, a permutation,
       and the same 4x4 almost-MDS binary matrix (branch number 4), differing mainly
       in nibble- vs byte-level permutation.'
+  - source_family_id: orthros
+    relations:
+    - inspired_by
+    note: 'uLBC''s own abstract states: "Revisiting the permutation technique used in Orthros, we investigate the
+      selection of nibble permutations and propose a method for selecting them systematically rather than relying
+      on random search." uLBC''s paper further directly compares its nibble-permutation search outcome against
+      "Branch1/2 of Orthros" by active-S-box count and impossible-differential round count (its Table 12/13
+      analysis), i.e. Orthros''s permutation-selection approach is the explicit starting point uLBC systematizes
+      and improves on, not merely a benchmark comparison.'
   notes: 'this family operates with 128-bit blocks and supports key lengths of either 128 or 256 bits.  Additionally, a tweakable
     variant with a 384-bit tweakey is available.
 
@@ -4678,7 +4761,7 @@ primitive_families:
 - id: pes
   name: PES
   construction_ids:
-  - lay_massey
+  - lai_massey
   - modular_multiplication_network
   - modulo_2n_plus_1
   round_ids:
@@ -6276,7 +6359,7 @@ primitive_families:
 - id: ballet
   name: Ballet
   construction_ids:
-  - lay_massey
+  - lai_massey
   - arx_permutation_network
   - fixed_rotation_arx
   - pure_arx_no_constants
@@ -6319,7 +6402,7 @@ primitive_families:
     note: 'Ballet''s own paper cites SIMECK by reference number in its introduction as an example of the ARX design
       trend it follows -- a trend-context citation, not "based on" language about a shared mechanism, but an explicit
       named citation in Ballet''s own reference list.'
-  notes: 'Ballet is a simplified four-branch, almost-symmetric Lay–Massey ARX block-cipher construction. Its three variants
+  notes: 'Ballet is a simplified four-branch, almost-symmetric Lai–Massey ARX block-cipher construction. Its three variants
     are Ballet-128/128, Ballet-128/256, and Ballet-256/256.
 
     '
@@ -8038,7 +8121,7 @@ primitive_families:
 - id: lea
   name: LEA
   construction_ids:
-  - generalized_feistel
+  - type3_generalized_feistel
   - arx_permutation_network
   - fixed_rotation_arx
   - xor_key_injection_arx
@@ -8081,7 +8164,10 @@ primitive_families:
       mention Salsa20 -- and no closer specific predecessor for this parallel-branch shape was found.
   notes: LEA (Lightweight Encryption Algorithm; Hong et al., WISA 2013) is a 128-bit ARX block cipher with key sizes of 128,
     192, or 256 bits and 24, 28, or 32 rounds respectively. Its round function applies 32-bit modular additions, XORs, and
-    fixed rotations to four 32-bit words — no S-boxes are used. Designed for fast software on general-purpose CPUs.
+    fixed rotations to four 32-bit words — no S-boxes are used. Designed for fast software on general-purpose CPUs. Tagged
+    type3_generalized_feistel (not the generic generalized_feistel leaf) by structural inspection against Hoang-Rogaway's
+    Type-3 GFN, not by citation -- the paper itself never calls its own structure "Feistel" or "generalized"; see
+    lea_round's notes (data/rounds.yaml) for the full comparison.
   instances:
   - id: lea_v1
     name: LEA-128
@@ -8569,6 +8655,63 @@ primitive_families:
       output_size_bits: 64
       rounds: 16
     notes: Midori64 with 4-bit S-boxes. Midori128 uses 8-bit S-boxes with 20 rounds.
+- id: turtle
+  name: Turtle
+  construction_ids:
+  - feistel
+  - balanced_feistel
+  - nested_feistel_network
+  round_ids:
+  - turtle_round
+  target_applications:
+  - software
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: xor
+  reference_ids:
+  - blaze_1996_turtle
+  process_participations: []
+  influences: []
+  notes: 'Turtle (Matt Blaze, AT&T Laboratories, "Efficient Symmetric-Key Ciphers Based on an NP-Complete
+    Subproblem," preliminary draft, 3 October 1996) is a recursively-structured, variable-block-length Feistel
+    block cipher built on top of a "random Feistel network" (RFN) primitive: a standard 4-round Luby-Rackoff
+    construction "R = R + f1(L); L = L + f2(R); R = R + f3(L); L = L + f4(R)" whose four round functions f1..f4
+    are, at the base case, literal keyed random functions/lookup tables on w-bit words (the paper shows recovering
+    the internal state of a 3-round RFN from input/output pairs is NP-complete, via a reduction from Numerical
+    Matching with Target Sums). Turtle extends this to arbitrary block lengths by recursion: for an n-bit block
+    with n > w, each of the 4 round functions is itself a full Turtle instance on an (n/2)-bit half-block, "so that
+    the algorithm''s recursive structure provides a natural mechanism for extending its block length to whatever is
+    required." Turtle w/n (word size w, block size n) requires w * 2^w * (n/w)^2 bits of key material; the paper''s
+    headline instance, Turtle 8/64 (w=8, n=64), uses 64 random functions and 131,072 bits (16KB) of key material,
+    and its reference implementation "encrypts approximately 60,000 blocks per second on a 100MHz Pentium." The
+    same paper also describes Hare, a keystream generator built from a single pass through a 4-RFN with active/
+    inactive RFN-swapping for extended period, not separately modeled here. Explicitly marked "PRELIMINARY DRAFT -
+    DO NOT DISTRIBUTE OR CITE" on its own title page and never located in a separate peer-reviewed published form,
+    but it is the exact document Tortuga''s own PHC spec cites as "the Turtle algorithm originally designed by Matt
+    Blaze" (see tortuga, mode_families.yaml) and remains the only locatable primary source for Turtle -- read here
+    via page-image OCR since the archived PDF''s Type 3 bitmap fonts have no ToUnicode map (pdftotext produces
+    garbage). Local copy: references/1996-turtle.pdf (mirrored from the author''s own mattblaze.org; the paper''s
+    original crypto.com/papers/turtle.pdf URL, cited by Tortuga''s spec, is dead).'
+  instances:
+  - id: turtle_8_64
+    name: Turtle 8/64
+    type: block_cipher
+    reference_ids:
+    - blaze_1996_turtle
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 131072
+      rounds: 4
+      output_size_bits: 64
+    notes: 'w=8 (word size), n=64 (block size); 64 keyed 8-bit random functions, 131,072 bits (16KB) of key
+      material total, per the paper''s formula w*2^w*(n/w)^2. "rounds: 4" counts the outer Feistel rounds at this
+      recursion level only -- the round functions f1..f4 are themselves base-case random-function lookups (w=n/2=32
+      would instead recurse into another 4-round Turtle instance per branch).'
 - id: misty1
   name: MISTY1
   construction_ids:
@@ -11714,21 +11857,26 @@ primitive_families:
       rounds: 48
 - id: newdes
   name: NewDES
-  notes: 'NewDES is a 64-bit, 120-bit-key product cipher designed as a simpler alternative to DES. Per its Wikipedia description,
-    NewDES has no half-block split/swap at all; each of its 17 rounds instead XORs subkey material into each of the block''s
-    eight 1-byte sub-blocks in sequence, feeding each through a fixed S-box whose output is XORed into the next byte.
-    Its own Wikipedia article states explicitly: "Despite its name, it is not derived from DES and has quite a different
-    structure." Tagged as generic spn pending a primary-source reclassification (Robert Scott, Cryptologia 1985, not available
-    locally) and a dedicated round definition (still reusing des_round, which is wrong); deliberately does not carry a
-    DES influence edge given the explicit "not derived from DES" statement.
-
-    '
+  notes: 'NewDES is a 64-bit, 120-bit-key product cipher designed as a simpler alternative to DES. Its own Wikipedia
+    article states explicitly: "Despite its name, it is not derived from DES and has quite a different structure" --
+    deliberately does not carry a DES influence edge given that. Round structure and byte/key mapping confirmed
+    directly against riordan_1990_newdes_reference_implementation (the original Cryptologia 1985 paper itself
+    remains paywalled with no free copy found): NewDES has no half-block split/swap and no bit-level permutation at
+    all -- see newdes_round_forward/newdes_round_backward (data/rounds.yaml) for the exact, previously-approximated
+    byte/key mapping now confirmed from a reference implementation. construction_ids left as an approximate
+    spn/full_sbox_layer tag pending a real taxonomy decision: the confirmed structure (two symmetric 4-byte halves,
+    alternately updated from each other via 4 parallel per-byte S-box+key-XOR operations, no permutation layer) is
+    arguably closer to some kind of Feistel-family network than a classic SPN, but doesn''t cleanly match
+    unbalanced_feistel (halves are equal-sized) or alternating_feistel_network (that leaf specifically means
+    contracting/expanding halves of different widths, per BEAR/LION -- not NewDES''s case) or any existing
+    generalized-Feistel Type-1..5 leaf either; removed bit_permutation_linear_layer, which the confirmed structure
+    does not have (no bit-level permutation anywhere in NewDES, only byte-level XOR and S-box substitution).'
   construction_ids:
   - spn
   - full_sbox_layer
-  - bit_permutation_linear_layer
   round_ids:
-  - des_round
+  - newdes_round_forward
+  - newdes_round_backward
   target_applications: []
   characteristics:
     block_size_bits: 64
@@ -11740,6 +11888,7 @@ primitive_families:
         output_bits: 8
   reference_ids:
   - newdes_ref
+  - riordan_1990_newdes_reference_implementation
   process_participations: []
   influences: []
   instances:
@@ -12001,7 +12150,7 @@ primitive_families:
 - id: mukhomor
   name: Mukhomor
   construction_ids:
-  - lay_massey
+  - lai_massey
   characteristics:
     components:
     - id: sbox
@@ -12636,6 +12785,7 @@ primitive_families:
     - id: cauchy_matrix
     - id: constant
   reference_ids:
+  - grassi_et_al_2019_starkad_poseidon
   - grassi_et_al_2020_hades
   - grassi_et_al_2021_poseidon
   process_participations: []
@@ -12657,9 +12807,10 @@ primitive_families:
     MDS matrix linear layer -- confirmed directly, including R = 2*R_f + R_P total rounds (R_f full-S-box rounds at
     each end, R_P partial-S-box rounds in the middle). Grassi, Kales, Khovratovich, Roy, Rechberger, and
     Schofnegger''s original eprint 2019/458 combined it with the unkeyed sponge-hash instantiations Poseidon (native
-    GF(p)) and Starkad (GF(2^n) sibling, not separately modeled in this database, and explicitly dismissed -- "we
-    advice against using them" -- in a later updated version of the Poseidon paper alongside Poseidon''s own x^(-1)
-    S-box variant); this split is documented in the final published Poseidon paper (grassi_et_al_2021_poseidon).
+    GF(p)) and Starkad (GF(2^n) sibling, now modeled separately in mode_families.yaml -- see starkad -- and
+    explicitly dismissed -- "we advice against using them" -- in a later updated version of the Poseidon paper
+    alongside Poseidon''s own x^(-1) S-box variant); this split is documented in the final published Poseidon paper
+    (grassi_et_al_2021_poseidon).
     Local copy of the HADES strategy paper: references/2019-hades_hadesmimc.pdf; local copy of the Poseidon paper
     covering the same strategy is at references/2021-poseidon_usenix.pdf.'
   instances:
@@ -13476,6 +13627,19 @@ primitive_families:
     - grassi_et_al_2023_griffin
     characteristics: {}
     notes: Parameters not confirmed from the sources read for this database.
+  - id: griffin_compression
+    name: GRIFFIN-Compression
+    type: compression_function
+    reference_ids:
+    - grassi_et_al_2023_griffin
+    characteristics: {}
+    notes: 'Modeled as an instance of this same family rather than a separate top-level one, since it is exactly
+      GRIFFIN-pi reused via a fixed feedforward compression construction, with no separate round/construction facts
+      of its own to record -- confirmed directly, the paper''s own line: "GRIFFIN-Sponge and GRIFFIN-Compression
+      are respectively a sponge hash function and a compression function over F_p^t instantiated with the
+      permutation GRIFFIN-pi." This is primitive-tier (compression_function is one of this database''s primitive
+      types), unlike GRIFFIN-Sponge, which is mode-tier -- see the mode-tier "griffin_sponge" family
+      (data/mode_families.yaml) for that one.'
 
 - id: anemoi
   name: ANEMOI
@@ -13845,6 +14009,7 @@ primitive_families:
     components: []
   reference_ids:
   - boneh_et_al_2018_cryptodarkmatter
+  - cheon_cho_kim_kim_2021_cryptodarkmatter_attacks
   process_participations: []
   influences: []
   notes: 'Titled "Exploring Crypto Dark Matter: New Simple PRF Candidates and Their Applications." Confirmed directly:
@@ -13854,8 +14019,10 @@ primitive_families:
     algebraic S-box at all, and no evidence read confirms any candidate is length-preserving/invertible, so each is
     modeled here as an update_function rather than a block_cipher. "CryptoDarkMatter++" is not a real paper title --
     the closest real citable 2020/2021 follow-up is Cheon, Cho, J.H. Kim, and J. Kim''s "Adventures in Crypto Dark
-    Matter" (PKC 2021 / eprint 2020/783), an attacks-and-fixes paper on these candidates, not separately modeled
-    here; see todo_manual.txt. Local copy: references/2018-cryptodarkmatter.pdf.'
+    Matter" (PKC 2021 / eprint 2020/783; see cheon_cho_kim_kim_2021_cryptodarkmatter_attacks), an attacks-and-fixes
+    paper reporting non-trivial-advantage attacks against the basic and alternative Mod-2/Mod-3 weak PRF candidates
+    below, not separately modeled here as its own family (a cryptanalysis paper, not a new design). Local copy:
+    references/2018-cryptodarkmatter.pdf.'
   instances:
   - id: cryptodarkmatter_construction_3_1
     name: Crypto Dark Matter Construction 3.1 (basic Mod-2/Mod-3 weak PRF)
@@ -13882,6 +14049,49 @@ primitive_families:
     notes: 'F''_A(x):=F_A(bin(G*x)) (Remark 7.14), a depth-3 ACC0[2,3] strong-PRF candidate built from the paper''s
       Encoded-Input PRF/Protected EI-PRF framework (Definitions 7.1-7.2), combining the Construction 3.1 weak PRF
       with a linear error-correcting code over Z_3 as the "encoding" step.'
+
+- id: legendre_prf
+  name: Legendre PRF
+  construction_ids:
+  - advanced_protocol_friendly_construction
+  - mpc_sharing_friendly
+  round_ids:
+  - legendre_prf_round
+  target_applications:
+  - mpc
+  characteristics:
+    components: []
+  reference_ids:
+  - grassi_et_al_2016_mpc_friendly
+  - beullens_beyne_udovenko_vitto_2020_legendre_prf_cryptanalysis
+  process_participations: []
+  influences: []
+  notes: 'Tier/type decision (previously deferred in todo_manual_revised.txt): modeled as a primitive-tier family,
+    type update_function, the same pattern already used for cryptodarkmatter''s own weak-PRF candidates immediately
+    above -- a keyed function that is neither a block cipher (not confirmed invertible/length-preserving; in fact
+    it is drastically output-compressing, mapping a full field element down to one of three symbols) nor a
+    permutation, with no state to update across invocations (a single algebraic evaluation, not an iterated
+    construction -- hence round_ids: []). No mode-tier taxonomy extension needed. Confirmed directly (slide deck,
+    references/2020-legendre_prf_cryptanalysis.pdf): L_k(x) = ((x+k)/p) in {-1,0,1}, the Legendre symbol of (x+k)
+    modulo a prime p, keyed by an additive shift k -- "a pseudorandom function proposed by Grassi et al. (2016)"
+    (see grassi_et_al_2016_mpc_friendly), whose own paper analyzes it (alongside the Naor-Reingold PRF and a new
+    design, MiMC, already modeled separately in this database) for secret-sharing-based MPC evaluation, motivating
+    the mpc_sharing_friendly tag. Documented applications: Ethereum 2.0''s proof-of-custody design, and LegRoast
+    signatures (an asymmetric signature scheme citing it as a building block, itself out of scope for this
+    database per its own symmetric-primitives-only scope). Cryptanalysis: Beullens, Beyne, Udovenko, and Vitto
+    ("Cryptanalysis of the Legendre PRF and Generalizations," ToSC 2020(1)) present key-recovery attacks against
+    the Legendre PRF and generalizations (Frobenius PRFs, higher-degree residues); the paper''s own public
+    challenge site (legendreprf.org) recorded the 64-bit and 74-bit challenge instances broken using this work''s
+    methods.'
+  instances:
+  - id: legendre_prf_v1
+    name: Legendre PRF
+    type: update_function
+    reference_ids:
+    - grassi_et_al_2016_mpc_friendly
+    characteristics: {}
+    notes: Baseline instance. Key/field size is a free parameter of the prime p chosen at instantiation time (not
+      a fixed bit count), so left unspecified in characteristics rather than guessed.
 
 - id: rain
   name: Rain
@@ -14061,7 +14271,7 @@ primitive_families:
     predecessor Pasta "succeeds" -- Pasta''s own lineage is the Rasta strategy adapted to F_p -- and reports
     outperforming Masta by up to 6x; its S_feistel S-box was later reused directly by the Rubato cipher. The
     mode-tier Pasta stream-cipher family itself (which truncates Pasta-pi''s output under a nonce and block counter)
-    is not separately modeled in this database; see todo_manual.txt. Local copy: references/2021-pasta.pdf
+    is now separately modeled too -- see the mode-tier "pasta" family (data/mode_families.yaml). Local copy: references/2021-pasta.pdf
     (downloaded from a Semantic Scholar mirror; eprint.iacr.org is behind a Cloudflare challenge that blocked
     automated fetching).'
   instances:
@@ -14084,7 +14294,8 @@ primitive_families:
 
 - id: armadillo
   name: ARMADILLO
-  construction_ids: []
+  construction_ids:
+  - data_dependent_permutation_network
   round_ids:
   - armadillo_round
   target_applications:
@@ -14098,6 +14309,8 @@ primitive_families:
     - id: xor
   reference_ids:
   - badel_et_al_2010_armadillo
+  - abdelraheem_et_al_2011_armadillo2_cryptanalysis
+  - naya_plasencia_peyrin_2012_armadillo2_practical_cryptanalysis
   process_participations: []
   influences: []
   notes: 'Titled "ARMADILLO: a Multi-Purpose Cryptographic Primitive Dedicated to Hardware" (CHES 2010). Its sole
@@ -14105,13 +14318,45 @@ primitive_families:
     J=k steps, selecting between two fixed base permutations sigma_0/sigma_1 based on the data itself -- related to
     the Zemor-Tillich group-based hash construction (a semi-group homomorphism from {0,1}* to a permutation group).
     There is no algebraic S-box at all, unlike LowMC/Zorro''s partial-S-box-layer pattern this database''s SPN
-    taxonomy models elsewhere -- ARMADILLO genuinely does not fit that pattern, and none of construction_ids above
-    is asserted since no existing root/leaf cleanly matches this mechanism; see todo_manual.txt. Genuinely
-    multi-purpose, per the paper''s own Section 2: a FIL-MAC, a hash/signature scheme (via strengthened
-    Merkle-Damgard chaining), and a PRNG/PRF/stream cipher. An updated variant, ARMADILLO2, is introduced in the
-    same paper''s Section 6 (not separately modeled here); later cryptanalytic breaks of ARMADILLO2 were not
-    independently verified in this session. Local copy: references/2010-armadillo.pdf (downloaded from the EPFL
-    Infoscience institutional repository, not Springer).'
+    taxonomy models elsewhere -- ARMADILLO genuinely does not fit that pattern. Genuinely multi-purpose, per the
+    paper''s own Section 2: a FIL-MAC, a hash/signature scheme (via strengthened Merkle-Damgard chaining), and a
+    PRNG/PRF/stream cipher. An updated variant, ARMADILLO2, is introduced in the same paper''s Section 6 (not
+    separately modeled here). Local copy: references/2010-armadillo.pdf (downloaded from the EPFL Infoscience
+    institutional repository, not Springer).
+
+
+    Construction taxonomy decision (previously deferred, todo_manual.txt): tagged data_dependent_permutation_network
+    (new level-1 root, primitive_constructions.yaml), added specifically for this mechanism after confirming no
+    existing root/leaf fits -- including group_exponentiation_hash (special_case_of advanced_protocol_friendly_
+    construction), considered and rejected as too specific to elliptic-curve-style scalar-multiplication/
+    exponentiation designs (Zémor-Tillich itself, ARMADILLO''s closest analogue, is a matrix/permutation-group walk
+    driven by input bits, not a scalar exponentiation, so even that leaf''s own family would not fit it), and
+    key_dependent_table_network, rejected because ARMADILLO''s two permutations sigma_0/sigma_1 are fixed at design
+    time (public), with the *data* -- not the key -- selecting between them at each step; KDTN''s FROG/HPC-style
+    placeholder families instead derive their tables/permutations from the key once at setup and then apply them
+    uniformly. The new root generalizes the mechanism to the actually-named external paradigm it belongs to:
+    "data-dependent permutations" (DDP) via "controlled permutation boxes," per Moldovyan et al.''s CP-box cipher
+    family (SPECTR-H64, CIKS-1, COBRA-H64/H128 -- none yet modeled in this database), so the new root is reusable if
+    any of those get added later rather than being ARMADILLO-specific.
+
+
+    Cryptanalysis of ARMADILLO2 (the paper''s own recommended variant, Section 6): Abdelraheem, Blondeau,
+    Naya-Plasencia, Videau, and Zenner ("Cryptanalysis of ARMADILLO2," ASIACRYPT 2011) give the first published
+    attacks, a meet-in-the-middle "parallel matching" technique that inverts the ARMADILLO2 building block for a
+    chosen public input given part of the output, yielding key-recovery attacks on the FIL-MAC and stream-cipher
+    (PRNG) modes and a (second)-preimage attack on the hash mode, all faster than exhaustive search though still
+    close to the generic bound (e.g. the 256-bit-output hash preimage attack needs "either 2^208 computations and
+    2^205 memory, or 2^249 computations and 2^45 memory"). Naya-Plasencia and Peyrin ("Practical Cryptanalysis of
+    ARMADILLO2," FSE 2012) then found a much cheaper break: a parity-bit invariant preserved through every
+    ARMADILLO2 internal permutation gives "a cheap distinguisher" for the stream-cipher mode, weak diffusion under
+    attacker-controlled Hamming weight gives a practical free-start collision attack on the compression function,
+    and a new "local-linearization" technique (which the authors note "seems to be very efficient on data-dependent
+    bit transpositions designs" generally, i.e. plausibly relevant beyond ARMADILLO2) gives a practical semi-free-
+    start collision attack on the full hash function -- both experimentally verified, requiring "at most 2^10.2
+    operations for 256-bit output version and negligible memory," i.e. under one second on ordinary hardware, plus
+    a related-key recovery attack in the stream-cipher mode. Neither attack was independently re-verified in this
+    session; both are recorded as read directly from the cited papers. Local copies:
+    references/2011-armadillo2-cryptanalysis.pdf, references/2012-armadillo2-practical-cryptanalysis.pdf.'
   instances:
   - id: armadillo_default
     name: ARMADILLO

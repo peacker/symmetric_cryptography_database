@@ -116,8 +116,15 @@ def fuzzy_match(ref: dict, family_names: list[str], files: list[Path]) -> list[P
             # prefix — require a prefix match rather than "appears anywhere",
             # otherwise names that happen to be English-word fragments of
             # another word give false positives (e.g. "tangle" inside
-            # "rectangle").
-            if stem_compact.startswith(c):
+            # "rectangle"). But a bare digit right after the matched prefix is
+            # itself a distinct model/version number, not a suffix of the same
+            # design -- "loki" must not match "loki97.pdf" (LOKI97 is a later,
+            # structurally unrelated AES-candidate cipher by the same research
+            # lineage, not the same family as LOKI89/91), the same way "aes"
+            # must not match a hypothetical "aes128.pdf" over "aes-128.pdf".
+            if stem_compact.startswith(c) and not (
+                len(stem_compact) > len(c) and stem_compact[len(c)].isdigit()
+            ):
                 direct.append(f)
                 break
     if direct:

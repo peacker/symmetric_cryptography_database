@@ -58,6 +58,27 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def duplicate_ids(items: list[dict]) -> list[str]:
+    """Ids appearing more than once in a flat list of {"id": ...} dicts.
+
+    Every *_ids set built below (component_ids, primitive_construction_ids,
+    etc.) is a set comprehension over one of these lists -- which silently
+    collapses a duplicate id instead of erroring, so a second entry
+    accidentally reusing an id another entry already has would pass schema
+    validation (each entry is independently schema-valid) and only surface
+    later as a SQLite UNIQUE constraint failure in build_db.py, far from
+    where the mistake was made. Catching it here instead means "search for
+    an id before adding one" mistakes fail fast, at validate.py, every time.
+    """
+    seen: dict[str, int] = {}
+    for item in items:
+        item_id = item.get("id")
+        if item_id is None:
+            continue
+        seen[item_id] = seen.get(item_id, 0) + 1
+    return [item_id for item_id, count in seen.items() if count > 1]
+
+
 def build_schema_registry() -> Registry:
     """Registers every schema/*.schema.json file by its own $id, so a $ref like
     'family_common.schema.json#/$defs/influence' (used by primitive_families
@@ -112,6 +133,27 @@ def main() -> None:
     ok &= validate_schema(processes_doc,           SCHEMA_DIR / "processes.schema.json",           "processes", registry)
     ok &= validate_schema(timeline_doc,            SCHEMA_DIR / "timeline.schema.json",            "timeline", registry)
     if not ok:
+        raise SystemExit(1)
+
+    # Duplicate ids within one catalogue -- see duplicate_ids()'s docstring
+    # for why this can't just be "build the id set and move on". Families/
+    # instances have their own dedicated cross-tier collision check in
+    # scripts/test_family_coverage.py, so they're not repeated here.
+    errors_found = False
+    for label, doc, key in (
+        ("component", components_doc, "components"),
+        ("primitive construction", primitive_constructions_doc, "primitive_constructions"),
+        ("mode construction", mode_constructions_doc, "mode_constructions"),
+        ("round", rounds_doc, "rounds"),
+        ("primitive type", primitive_types_doc, "primitive_types"),
+        ("mode type", mode_types_doc, "mode_types"),
+        ("reference", references_doc, "references"),
+        ("process", processes_doc, "processes"),
+    ):
+        for dup_id in duplicate_ids(doc.get(key, [])):
+            print(f"DUPLICATE ID ERROR: {label} id '{dup_id}' is defined more than once in data/{key}.yaml")
+            errors_found = True
+    if errors_found:
         raise SystemExit(1)
 
     family_common_schema = load_json(SCHEMA_DIR / "family_common.schema.json")

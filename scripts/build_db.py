@@ -12,7 +12,6 @@ from common import (
     all_families,
     all_instances,
     compute_construction_sharing_edges,
-    construction_leaf_ids,
     family_year,
     load_all_data,
     round_component_flow_signature,
@@ -547,8 +546,7 @@ def main() -> None:
                      json.dumps(innovative_idea_ids, ensure_ascii=True) if innovative_idea_ids else None,
                      edge["note"]))
 
-        leaf_ids = construction_leaf_ids(data)
-        sharing_edges = compute_construction_sharing_edges(families, leaf_ids, references_by_id)
+        sharing_edges = compute_construction_sharing_edges(families, references_by_id)
         for source_family_id, target_family_id, construction_id in sharing_edges:
             conn.execute(
                 "INSERT INTO construction_sharing_edges"

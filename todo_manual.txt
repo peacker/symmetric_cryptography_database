@@ -439,3 +439,154 @@ kravatte, farasha, filip, elisabeth, margrethe, friday_hash, grendelhash
       SHA256Compress/BLAKE2b/BLAKE2s with domain-separation prefixes
       (already modeled generically elsewhere) -- confirmed as pure
       compositions, not new primitives, so correctly left out.
+
+Lai-Massey typo fix, construction_sharing_edges redesign, and a batch of
+todo_manual_revised.txt items closed (2026-08-05)
+======================================================================
+
+Fixed a pre-existing id/name typo: the "Lai-Massey Scheme" construction was misspelled
+"lay_massey" everywhere (primitive_constructions.yaml, the 4 tagged families idea/pes/ballet/
+mukhomor, GLOSSARY.md). Renamed to "lai_massey" across the board; validate.py and make test pass.
+
+Redesigned construction_sharing_edges per your instruction: it previously only derived a star
+from level-2 construction *leaves* (deliberately excluding level-1 roots as "too broad to be
+meaningful"). Per your framing -- the goal is "identify the cipher that introduced a new design
+idea and connect as successors all the ciphers that reused this idea," which applies the same way
+whether the idea is filed at the root or leaf level, and doesn't need a dedicated table, just
+reading construction_ids + year -- removed the leaf-only restriction. scripts/common.py's
+compute_construction_sharing_edges now derives a star (earliest-year family as origin, cycle-guarded
+against curated influences, same as before) from *every* construction id a family carries, root or
+leaf. This immediately fixed the Lai-Massey gap you asked about (lay_massey/lai_massey had no leaf
+under it, so it got zero derived edges under the old leaf-only rule; now pes -> {idea, mukhomor,
+ballet} forms a proper star). Practical effect: derived edges roughly doubled (450 -> ~830), since
+broad roots like spn (86 families) and feistel (51 families) now participate too -- flagging this
+scale explicitly since it's a real behavior change, not just a bug fix; construction_leaf_ids() was
+removed as dead code (no longer used anywhere). scripts/build_db.py, scripts/test_influences_acyclic.py,
+scripts/test_derived_construction_relations.py, README.md, and app.js's own comments/tooltip text
+were all updated to match. All tests pass.
+
+Then worked through todo_manual_revised.txt's open list, in order, resolving everything except the
+4 items still listed as open at the top of that file (SHA-3 stub cleanup planning, GenLowMC sourcing,
+optional Zcash spec archival, and the broad "verify unconfirmed facts" sweep -- none touched this
+session). Summary of what changed, by task:
+
+- **LEA construction retag**: confirmed directly against 2013-lea.pdf that the paper never calls its
+  own structure "Feistel" or "generalized" (the word "Feistel" appears exactly once, describing
+  TEA/XTEA for comparison) -- matching what you'd already found. Retagged from the generic
+  generalized_feistel leaf to type3_generalized_feistel: LEA's round (three of four 32-bit words each
+  replaced by a keyed, rotated combination of two adjacent input words; the fourth just carried over)
+  matches Type-3 GFN's "shift branches, combine an adjacent pair into a new branch" skeleton by
+  structural inspection against Hoang-Rogaway's Fig. 1 (2010-generalized_feistel.pdf), not by
+  citation. One flagged difference from the strict original definition: LEA's "F" step combines a
+  *pair* of branches via keyed addition rather than transforming one branch and XORing it into the
+  next, so this is a generalization of the shape, not a byte-for-byte instance. Full comparison in
+  lea_round's notes (data/rounds.yaml); short pointer in lea's own notes.
+
+- **NewDES round definition**: fetched a public-domain reference implementation (Mark Riordan's
+  newdes.c, 1990, which itself cites the original 1985 Cryptologia paper -- still paywalled, no free
+  copy found) and read the raw C source directly rather than trusting a secondhand summary (caught
+  and fixed my own arithmetic error mid-task: 7 subkey bytes per forward+backward round pair, not 6).
+  Created two dedicated round entries, newdes_round_forward/newdes_round_backward (replacing the
+  previous, incorrect reuse of des_round), modeling the real structure: 4 of 8 bytes updated from the
+  other 4 in one shot per round (not a single byte-to-next-byte chain as the old notes approximated),
+  alternating direction, with one exception (byte B2 in the backward half-round combines two other
+  bytes with no subkey material at all). 8 forward+backward pairs plus one final forward-only round =
+  17 rounds total, matching the cipher's own count. Also fixed construction_ids: removed
+  bit_permutation_linear_layer (confirmed there is no bit-level permutation anywhere in NewDES, only
+  byte-level XOR/substitution); left spn/full_sbox_layer as a flagged approximation rather than
+  forcing a cleaner-but-unsupported taxonomy fit. Saved the reference implementation locally
+  (references/1990-newdes-reference-implementation.txt) and added a references.yaml entry for it,
+  distinct from the still-unavailable original paper's own entry.
+
+- **LOKI89/91 primary paper**: found and downloaded via the University of Wollongong's Figshare-backed
+  repository (the HTML landing page 403s a plain fetch, but its Figshare API endpoint gives a direct
+  PDF download URL) -- references/1990-loki.pdf, MD5-verified. Confirms the existing loki family notes
+  (64-bit block/key, 16-round Feistel, GF(2^8) S-boxes) were already accurate.
+
+- **LOKI/LOKI97 reference_pdfs.py bug**: fixed the fuzzy-matcher bug you'd flagged (loki was silently
+  matching loki97.pdf, a later and structurally unrelated cipher) by requiring that a digit right
+  after a matched id-prefix NOT be treated as a suffix of the same design (loki97/loki89/aes128-style
+  numbered variants now correctly need an exact token match, not just a prefix match). Verified the
+  fix only changes loki's own resolution (404 -> 403 total resolved families, i.e. exactly the one
+  false-positive removed) before rebuilding.
+
+- **DarkMatter follow-up reference**: added Cheon/Cho/J.H.Kim/J.Kim's "Adventures in Crypto Dark
+  Matter" (PKC 2021) as a references.yaml entry and linked it from cryptodarkmatter's own
+  reference_ids/notes, exactly as you'd already scoped it (a reference record, not a new family --
+  it's an attacks-and-fixes paper, not a design).
+
+- **Duplicate construction-id prevention**: added a general duplicate-id check to scripts/validate.py
+  covering every id-keyed catalogue (components, primitive/mode constructions, rounds, primitive/mode
+  types, references, processes) -- not just constructions, since the same class of mistake (the
+  miyaguchi_preneel duplicate from the 2026-08-01 session, caught only by build-db's SQLite UNIQUE
+  constraint) can happen in any of them. Verified it actually catches a real duplicate before trusting
+  it clean on the current data.
+
+- **Orthros, Turtle, Mersenne Twister, scrypt edges** (research delegated to a background agent, then
+  independently spot-checked): added orthros (primitive-tier, low-latency PRF/block cipher, midori ->
+  orthros -> ulbc influence chain, quoting each paper's own stated lineage) and turtle (primitive-tier,
+  Matt Blaze's 1996 design, recovered via page-image OCR since pdftotext failed on the source PDF's
+  Type-3 bitmap fonts) plus the turtle -> tortuga edge that was previously just a "not modeled" note.
+  Added mersenne_twister (mode-tier, type prng, full MT19937 recurrence/tempering constants confirmed
+  from the authors' own reference C code) and its edge to cryptmt3. Read POMELO's and Tortuga's own
+  local PDFs directly and confirmed both genuinely cite scrypt (not just one of them), so added both
+  scrypt -> pomelo and scrypt -> tortuga edges.
+
+- **ARMADILLO2 cryptanalysis + Armadillo construction taxonomy**: found both cryptanalysis papers
+  (2011 MITM/preimage, 2012 practical free-start collisions) via non-eprint mirrors (HAL, IACR's own
+  proceedings archive) and added a cryptanalysis summary to armadillo's notes. Separately decided the
+  construction-taxonomy question left open twice before: added a new level-1 root,
+  data_dependent_permutation_network, grounded in the real external "data-dependent permutations"/
+  controlled-permutation-box literature (Moldovyan et al.'s SPECTR-H64/CIKS-1/COBRA-H64/H128 cipher
+  family, none yet modeled here) rather than inventing an ARMADILLO-specific category, and explained in
+  armadillo's own notes why the two previously-considered options (key_dependent_table_network,
+  group_exponentiation_hash) don't fit.
+
+- **Starkad and Agrasta**: Agrasta was already correctly modeled (an instance under rasta, not just a
+  note as this file previously said -- no change needed, that must have been fixed in an earlier
+  session and this file wasn't updated to say so). Starkad was genuinely missing; recovered its eprint
+  PDF via the Wayback Machine's cached copy (eprint.iacr.org itself still blocks all automated
+  fetching) and added it as a mode-tier family (GF(2^n) sibling of Poseidon, reusing HadesMiMC's own
+  round entries), plus fixed a chronology-test failure this surfaced by adding the same 2019 reference
+  to hadesmimc's own reference_ids (HadesMiMC is specified in that same paper).
+
+- **GenLowMC**: third confirmed miss across three separate sessions now. Still nothing findable.
+
+- **LegendrePRF and Pasta tier decisions**: both resolved without needing any new mode_constructions.yaml
+  taxonomy, contrary to what earlier sessions assumed. Pasta: read the actual paper's "Pasta
+  Specification" section directly (references/2021-pasta.pdf, already local) -- its keystream
+  generation (apply the Pasta-pi permutation to key+nonce+counter, truncate, add to plaintext) is
+  exactly Counter Mode's own shape, just over F_p with field addition instead of XOR, so it reuses the
+  existing ctr_mode leaf (same pattern aes_ctr itself already uses) rather than needing a new one.
+  Added as a proper mode-tier family with an underlying_primitive_ids link back to pasta_pi's own
+  instances. LegendrePRF: confirmed via the locally-available cryptanalysis slide deck that it's
+  L_k(x) = ((x+k)/p), a single stateless algebraic evaluation (Legendre symbol of x+k mod p) -- not a
+  block cipher (drastically output-compressing, not confirmed invertible) and not an iterated
+  construction (no rounds to speak of). Modeled as primitive-tier, type update_function -- the exact
+  pattern this database already uses for cryptodarkmatter's own weak-PRF candidates, which resolves
+  the "doesn't fit primitive_types.yaml" blocker the same way: update_function was always the right
+  fit, it just wasn't previously matched to a precedent. Tagged mpc_sharing_friendly per the founding
+  paper's own explicit MPC framing; added both the founding paper (Grassi et al. 2016) and the
+  cryptanalysis paper as references.
+
+- **Griffin sponge/compression split**: added griffin_sponge as a new mode-tier hash family (reusing
+  griffin_round rather than duplicating it) and griffin_compression as a new *instance* of the
+  existing primitive-tier griffin family (not a new top-level family) -- compression functions are
+  primitive-tier in this database's own tiering, unlike hash functions, so only the sponge half
+  actually belonged at mode-tier.
+
+- **Skyscraper-v2**: checked and found already correctly resolved in the working tree from an earlier
+  session (not touched again this session).
+
+- **Signature schemes out of scope**: confirmed as already correctly excluded; no action needed.
+
+All of `make validate` and the full `make test` suite (validate, process_alignment, family_coverage,
+reference_pdf_coverage, influences_acyclic, influences_chronological, derived_construction_relations)
+pass on the combined result: 494 families (257 primitive, 237 mode), 746 instances, 1386 influence/
+derived edges. `make build-site` also passes cleanly. No commits made; everything is sitting in the
+working tree for review. One minor, harmless leftover noticed during review: references/
+2019-poseidon_starkad.pdf (fetched in an earlier session, from 2026-08-01) is now effectively an
+orphaned duplicate of references/2019-starkad_and_poseidon.pdf (fetched fresh this session, from a
+different mirror, different bytes) -- neither collides with or breaks anything, just redundant disk
+space; safe to delete the older one if you want to tidy it up, not done here since it wasn't part of
+the requested work.

@@ -100,42 +100,41 @@ def round_component_flow_signature(round_entry: dict) -> str:
     return "|".join(str(step.get("component_id", "")) for step in flow)
 
 
-def construction_leaf_ids(data: dict[str, dict]) -> set[str]:
-    """Ids of every level-2 construction (one with special_case_of set), across
-    both the primitive and mode construction catalogues.
-
-    Only leaves participate in derived construction-sharing edges -- sharing a
-    level-1 root (e.g. two families both merely tagged "spn" with no more
-    specific leaf) is too broad to be a meaningful relation.
-    """
-    leaves: set[str] = set()
-    for key in ("primitive_constructions", "mode_constructions"):
-        for construction in data[key].get(key, []):
-            if construction.get("special_case_of"):
-                leaves.add(construction["id"])
-    return leaves
-
-
 def compute_construction_sharing_edges(
     families: list[dict],
-    leaf_ids: set[str],
     references_by_id: dict[str, dict],
 ) -> list[tuple[str, str, str]]:
     """Derive (source_family_id, target_family_id, construction_id) edges from
-    shared level-2 construction tags, direction older -> newer.
+    shared construction tags -- level-1 roots (e.g. "spn") and level-2 leaves
+    (e.g. "full_sbox_layer") alike -- direction older -> newer.
 
-    For each construction leaf, every family tagged with it is chronologically
+    The idea being tracked: identify whichever family introduced a design
+    idea first, then connect every later family that reuses it as a
+    successor. That applies the same way whether the shared idea is filed
+    under a level-1 root or a level-2 leaf in *_constructions.yaml -- the two
+    levels are just how specific the tag happens to be, not a signal about
+    whether the idea is worth tracking. An earlier version of this function
+    only considered leaves, on the theory that a bare root tag (no more
+    specific leaf available) was too broad to be meaningful; in practice
+    plenty of genuine "who used this first" facts live at the root level
+    (e.g. every family tagged directly with "lai_massey", which has no leaf
+    under it at all), so restricting to leaves silently dropped them. No
+    separate curated table is needed either way: this reads whatever
+    construction_ids a family already carries and its year, and derives the
+    edges automatically.
+
+    For each construction id, every family tagged with it is chronologically
     ordered by family_year(); the single earliest family is credited as the
-    origin of that construction leaf and every later family tagged with the
-    same leaf is linked directly to that origin (a star, not a chain). A
-    chronological chain (each family linked only to its nearest earlier
-    neighbor) was tried first, but it implies each later family was
-    influenced by its immediate predecessor specifically, when in fact many
-    of them were published the same or a nearby year without any dependency
-    on each other -- only on the leaf's origin. The star also gives a flat,
-    one-hop-deep fan-out in the genealogy "by generation" view instead of an
-    artificially long descendant column. Families with no resolvable year
-    are skipped since there is no defined direction for them.
+    origin and every later family tagged with the same id is linked directly
+    to that origin (a star, not a chain). A chronological chain (each family
+    linked only to its nearest earlier neighbor) was tried first, but it
+    implies each later family was influenced by its immediate predecessor
+    specifically, when in fact many of them were published the same or a
+    nearby year without any dependency on each other -- only on the shared
+    id's origin. The star also gives a flat, one-hop-deep fan-out in the
+    genealogy "by generation" view instead of an artificially long
+    descendant column. Families with no resolvable year are skipped since
+    there is no defined direction for them.
 
     Same-year families break the sort tie alphabetically by id, which has no
     grounding in actual design chronology -- e.g. SPARX and LAX come from the
@@ -174,17 +173,16 @@ def compute_construction_sharing_edges(
                     stack.append(nxt)
         return False
 
-    by_leaf: dict[str, list[tuple[int, str]]] = {}
+    by_construction_id: dict[str, list[tuple[int, str]]] = {}
     for family in families:
         year = family_year(family, references_by_id)
         if year is None:
             continue
         for construction_id in family.get("construction_ids", []) or []:
-            if construction_id in leaf_ids:
-                by_leaf.setdefault(construction_id, []).append((year, family["id"]))
+            by_construction_id.setdefault(construction_id, []).append((year, family["id"]))
 
     edges: list[tuple[str, str, str]] = []
-    for construction_id, members in by_leaf.items():
+    for construction_id, members in by_construction_id.items():
         members.sort(key=lambda pair: (pair[0], pair[1]))
         _, origin_id = members[0]
         for _, later_id in members[1:]:

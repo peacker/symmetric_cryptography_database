@@ -6910,6 +6910,56 @@ mode_families:
       use.
 
       '
+- id: mersenne_twister
+  name: Mersenne Twister
+  construction_ids:
+  - native_keystream_generator
+  round_ids:
+  - mt19937_step
+  target_applications:
+  - software
+  characteristics:
+    state_size_bits: 19937
+    components:
+    - id: lfsr
+      params:
+        length: 19937
+        note: twisted generalized-feedback-shift-register (TGFSR) recurrence over GF(2), period 2^19937-1 for the
+          MT19937 parameterization
+    - id: and
+    - id: xor
+    - id: shift_fixed
+  reference_ids:
+  - matsumoto_nishimura_1998_mersenne_twister
+  process_participations: []
+  influences: []
+  notes: 'Mersenne Twister (Matsumoto & Nishimura, ACM TOMACS 1998) is a general-purpose pseudorandom number
+    generator, not a cryptographic primitive -- the paper makes no security claims, only statistical-quality ones
+    ("It passed several stringent statistical tests, including diehard"). Modeled here (mode tier, type prng) as
+    the well-documented core generator that CryptMT3 (see cryptmt3 in this file) wraps with a cryptographic
+    nonlinear filter to turn into a stream cipher; included in this database specifically to support that edge, not
+    because MT itself is cryptographically secure. "A new algorithm named Mersenne Twister (MT) ... provides a
+    super astronomical period of 2^19937-1 and 623-dimensional equidistribution up to 32 bits accuracy, while
+    consuming a working area of only 624 words. This is a new variant of the previously proposed generators TGFSR,
+    modified so as to admit a Mersenne-prime period." Generation: a linear recurrence x_{k+n} := x_{k+m} XOR
+    ((x_k^upper | x_{k+1}^lower) A) over a 624-word (w=32-bit words) state, with a canonical parameter set
+    MT19937 = (w,n,m,r) = (32, 624, 397, 31) and twist constant a = 0x9908B0DF. Each raw state word is then passed
+    through an invertible linear "tempering" transform (shift/mask/XOR sequence with parameters u=11, s=7,
+    b=0x9D2C5680, t=15, c=0xEFC60000, l=18) before being output, improving k-dimensional equidistribution without
+    changing the period. Reference C implementation given directly in the paper (credited to Takuji Nishimura, with
+    suggestions from Topher Cooper and Marc Rieffel). Local copy: references/1998-mersenne-twister.pdf.'
+  instances:
+  - id: mt19937
+    name: MT19937
+    type: prng
+    reference_ids:
+    - matsumoto_nishimura_1998_mersenne_twister
+    characteristics:
+      state_size_bits: 19937
+      output_word_bits: 32
+    notes: The canonical parameterization (w,n,m,r)=(32,624,397,31), twist constant a=0x9908B0DF, period 2^19937-1;
+      624 32-bit words of state (19937 bits, i.e. 624*32-31 "wasted" high bits of the last word discounted per the
+      paper's own state-size accounting).
 - id: cryptmt3
   name: CryptMT3
   construction_ids:
@@ -6942,7 +6992,15 @@ mode_families:
     - phase_2
     - phase_3
     status: candidate
-  influences: []
+  influences:
+  - source_family_id: mersenne_twister
+    relations:
+    - used_by
+    note: 'CryptMT3''s own notes and its own state_size_bits=19937 directly reflect MT19937''s 2^19937-1 period; the
+      cipher uses the unmodified Mersenne Twister generate/temper recurrence (see mersenne_twister family and
+      mt19937_step, data/rounds.yaml) as its linear "mother generator," feeding its output into a nonlinear
+      128-bit-multiplication filter with memory to produce the actual keystream -- direct, unmodified component
+      reuse of MT19937''s state-transition function, not merely a shared design goal.'
   innovative_ideas:
   - id: cryptmt3_mt_mother_generator
     name: Mersenne Twister as guaranteed-period mother generator
@@ -7894,7 +7952,17 @@ mode_families:
     - submissions
     - finalist
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: scrypt
+    relations:
+    - related_to
+    note: 'POMELO''s own spec (Section 2.2, "Low Memory Attack") identifies scrypt as the prior design sharing its
+      core low-memory-attack defense: "An important design goal of password hashing algorithm is to prevent the
+      large memory state being bypassed easily in password cracking. Writing to random memory locations is an
+      effective way to resist the low-memory attack. A password hashing scheme that is designed to resist the
+      low-memory is the scrypt [10]." POMELO then presents its own quantitative low-memory-attack analysis in the
+      same section, positioning its data-dependent random-write/read passes as pursuing the same goal scrypt''s
+      ROMix established.'
   innovative_ideas: []
   notes: 'POMELO (PHC 2015, v2) by Hongjun Wu (Nanyang Technological University). ARX-based memory-hard password hashing algorithm.
     Fills a large array using add, rotate, XOR operations, then performs data-dependent read/write passes. Designed to be
@@ -7996,13 +8064,29 @@ mode_families:
   - source_family_id: tea
     relations:
     - related_to
-    note: Tortuga's spec cites TEA (Wheeler & Needham) for its confusion/diffusion rationale of mixing algebraic operations,
-      alongside using the Turtle cipher (Matt Blaze) -- not in this database as its own family -- as its core permutation.
+    note: Tortuga's spec cites TEA (Wheeler & Needham) for its confusion/diffusion rationale of mixing algebraic operations
+      (see also the turtle influence edge below for the permutation itself).
+  - source_family_id: turtle
+    relations:
+    - used_by
+    note: 'Tortuga''s spec states directly: "The new algorithm is a keyed sponge function with a recursive Feistel
+      network as the permutation. Specifically, the permutation used is the Turtle algorithm originally designed by
+      Matt Blaze [1]... The Turtle algorithm uses this small sub-permutation recursively to generate the necessary
+      block cipher on the fly." Turtle (unkeyed-at-the-mode-level, keyed internally) is used unmodified as Tortuga''s
+      sponge permutation, i.e. direct component reuse, not mere citation.'
   - source_family_id: keccak
     relations:
     - related_to
     note: Tortuga's sponge-based design cites Bertoni/Daemen/Peeters/Van Assche's sponge-functions paper for the capacity/security-level
       concept underlying its construction.
+  - source_family_id: scrypt
+    relations:
+    - related_to
+    note: 'Tortuga''s spec cites scrypt directly for its underlying memory-hardness rationale: "The importance of
+      memory hardness in password hashing applications was thoroughly explored by Colin Percival, the inventor of
+      the scrypt algorithm [2]," immediately after describing Turtle''s "create a block cipher on the fly which
+      requires an enormous key" approach as achieving memory-hardness -- scrypt is cited as the design goal
+      Tortuga''s Turtle-based construction is itself pursuing, not merely a benchmark.'
   innovative_ideas: []
   notes: 'Tortuga (PHC 2014) by Teath Sch. Password hashing function based on the Turtle algorithm, an iterative hash-based
     construction with configurable time cost.
@@ -10413,7 +10497,7 @@ mode_families:
   notes: 'Poseidon is a sponge-construction hash function over GF(p) built on the HADES permutation (alternating full
     and partial S-box SPN rounds with a power-map non-linearity and Cauchy MDS diffusion), designed to minimize R1CS/Plonk
     constraint counts for zero-knowledge proof systems. Its binary-extension-field sibling Starkad is documented in
-    the same original design (not separately modeled in this database). Widely deployed in ZK-rollup and blockchain
+    the same original design (see starkad, this file). Widely deployed in ZK-rollup and blockchain
     proof systems. Local copy: references/2021-poseidon_usenix.pdf.'
   instances:
   - id: poseidon_default
@@ -10425,6 +10509,66 @@ mode_families:
     notes: Parameterized over the prime field, state width t (rate + capacity), and the numbers of full/partial rounds
       chosen per target security level; commonly instantiated over SNARK-friendly curve scalar fields such as
       BLS12-381 and BN254.
+- id: starkad
+  name: Starkad
+  construction_ids:
+  - sponge_construction
+  - standard_sponge
+  round_ids:
+  - hadesmimc_full_round
+  - hadesmimc_partial_round
+  target_applications:
+  - zero_knowledge
+  underlying_primitive_ids:
+  - hadesmimc_default
+  characteristics:
+    components:
+    - id: power_map_sbox
+      params: {exponent: 3}
+    - id: cauchy_matrix
+    - id: constant
+  reference_ids:
+  - grassi_et_al_2019_starkad_poseidon
+  process_participations: []
+  influences:
+  - source_family_id: hadesmimc
+    relations:
+    - used_by
+    note: 'Starkad-Hash is Starkad''s own sponge construction "instantiating a sponge construction with
+      Starkad-Permutation," where Starkad-Permutation (Starkadπ) is explicitly the GF(2^n) (binary-extension-field)
+      instantiation of the same HadesMiMC/HADES strategy permutation used, over GF(p), as Poseidonπ: "HadesMiMC ...
+      works with texts of t >= 2 words in Fp or F2n" (Section 2.5-2.6). Same alternating full/partial-S-box-layer
+      round structure and MDS diffusion as the keyed HadesMiMC block cipher, just over a binary extension field and
+      used unkeyed.'
+  notes: 'Starkad (Grassi, Kales, Khovratovich, Roy, Rechberger, Schofnegger, eprint 2019/458, "Starkad and
+    Poseidon: New Hash Functions for Zero Knowledge Proof Systems") is Poseidon''s GF(2^n) sibling: a sponge hash
+    built on the same HADES-strategy permutation (alternating full and partial power-map-S-box SPN rounds with an
+    MDS/near-MDS linear layer) as Poseidon/HadesMiMC, but instantiated over a binary extension field F_2^n rather
+    than a prime field, targeting STARK-friendly (AET-cost) proof systems rather than SNARK/R1CS ones: "our
+    STARK-friendly hash Starkad wins by a factor of 4 over the hash function Friday by using a much smaller field."
+    Uses the same three S-box choices as Poseidon (x^3, x^5, or x^-1), with the constraint that x^3 is only a
+    permutation over GF(2^n) for odd n and x^5 only when 2^n != 1 mod 5 -- unlike Poseidon''s x^5 default, the
+    paper''s primary Starkad instantiations use x^3 or x^-1. Concrete primary instantiation "Starkad-256": S-box
+    x^3, security margin M=127, GF(2^63) via the irreducible polynomial p(x) = x^63+x+1 (n=63), state width t=24
+    (N=n*t=1512), RF=8 full rounds + RP=48 partial rounds (R=2*RF+RP=64 total). Starkad was subsequently dropped
+    from the final published Poseidon paper (grassi_et_al_2021_poseidon, USENIX Security 2021), which states
+    plainly "we advice against using them" regarding Starkad and the x^-1 Poseidon variant -- this database records
+    Starkad as originally specified rather than omitting it, since it is a real, citable, distinct design the
+    authors themselves later walked back, not a fabricated one; see hadesmimc''s own notes (primitive_families.yaml)
+    for that dismissal''s exact wording and context. Local copy: references/2019-starkad_and_poseidon.pdf (fetched
+    via the Wayback Machine; eprint.iacr.org itself blocks automated fetching in this environment).'
+  instances:
+  - id: starkad_256
+    name: Starkad-256
+    type: hash
+    reference_ids:
+    - grassi_et_al_2019_starkad_poseidon
+    characteristics:
+      state_size_bits: 1512
+      rounds: 64
+    notes: 'Primary Starkad instantiation from Table 2/Section 5: S-box x^3, GF(2^63) (p(x)=x^63+x+1), t=24 words
+      (63 bits each, N=1512), security margin M=127, RF=8 full-S-box rounds + RP=48 partial-S-box rounds (R=64
+      total, matching R=2*RF+RP).'
 - id: kreyvium
   name: Kreyvium
   construction_ids:
@@ -11026,3 +11170,96 @@ mode_families:
       output_size_bits: 1
     notes: Baseline Espresso stream-cipher instance. Initialization/warm-up clock count not confirmed from the
       sources read for this entry; omitted rather than guessed.
+- id: pasta
+  name: Pasta
+  construction_ids:
+  - block_cipher_based
+  - ctr_mode
+  target_applications:
+  - fhe
+  reference_ids:
+  - dobraunig_et_al_2023_pasta
+  process_participations: []
+  influences:
+  - source_family_id: pasta_pi
+    relations:
+    - related_to
+    note: 'Confirmed directly (Section 7, "Pasta Specification"): "Pasta is a family of stream ciphers which applies
+      the Pasta-pi permutation under a nonce N and a block counter i to the secret key, followed by a truncation, to
+      produce the final keystream." Enc_sk(m,N): c_i = m_i + left_t(Pasta-pi(sk,N,i)) -- i.e. the same
+      encrypt-successive-counter-values-and-combine-with-plaintext shape as Counter Mode (see aes_ctr''s own
+      rijndael edge for the same relation pattern), just built from a keyed permutation instead of a block cipher,
+      and using field addition (mod p) instead of XOR to combine keystream with plaintext since Pasta operates over
+      F_p rather than Z_2.'
+  notes: 'Pasta (Dobraunig, Grassi, Helminger, Rechberger, Schofnegger, Walch, "Pasta: A Case for Hybrid
+    Homomorphic Encryption," TCHES 2023) is the mode-tier stream cipher built around the Pasta-pi permutation
+    (see that family for the permutation''s own internal round structure). Tagged ctr_mode (alongside its
+    block_cipher_based root, matching how aes_ctr itself is tagged) even though Pasta-pi is typed `permutation`
+    rather than `block_cipher` in this database: Pasta-pi takes the secret key as a direct input (unlike a sponge/
+    duplex permutation, which does not), and is invoked once per nonce+counter pair to produce one keystream block,
+    truncated and added to the corresponding plaintext block -- functionally identical to Counter Mode''s own
+    encrypt-the-counter-and-XOR-with-plaintext shape, just over F_p with field addition standing in for XOR. No new
+    mode_constructions.yaml taxonomy was needed to model this. Previously deferred in todo_manual.txt pending this
+    tier decision.'
+  underlying_primitive_ids:
+  - pasta_3
+  - pasta_4
+  instances:
+  - id: pasta_stream_3
+    name: Pasta-3
+    type: enc
+    reference_ids:
+    - dobraunig_et_al_2023_pasta
+    characteristics:
+      rounds: 3
+    notes: 'Confirmed from Table 8: 3 rounds, 256 key words, 128 plaintext words, 128 ciphertext words, SHAKE128 as
+      XOF, targeting 128-bit security for primes with log2(p) > 16 and gcd(p-1,3)=1. Word size is field-dependent
+      (not a fixed bit count), so key_size_bits is left unset rather than computed from an assumed prime size --
+      see the pasta_pi family''s own pasta_3 instance for the matching permutation-level parameters.'
+  - id: pasta_stream_4
+    name: Pasta-4
+    type: enc
+    reference_ids:
+    - dobraunig_et_al_2023_pasta
+    characteristics:
+      rounds: 4
+    notes: 'Confirmed from Table 8: 4 rounds, 64 key words, 32 plaintext words, 32 ciphertext words, SHAKE128 as
+      XOF, same 128-bit security target as Pasta-3 with a smaller state. See the pasta_pi family''s own pasta_4
+      instance for the matching permutation-level parameters.'
+- id: griffin_sponge
+  name: GRIFFIN-Sponge
+  construction_ids:
+  - sponge_construction
+  - standard_sponge
+  round_ids:
+  - griffin_round
+  target_applications:
+  - zero_knowledge
+  characteristics:
+    components: []
+  reference_ids:
+  - grassi_et_al_2023_griffin
+  process_participations: []
+  influences:
+  - source_family_id: griffin
+    relations:
+    - used_by
+    note: 'Confirmed directly, the paper''s own line: "GRIFFIN-Sponge and GRIFFIN-Compression are respectively a
+      sponge hash function and a compression function over F_p^t instantiated with the permutation GRIFFIN-pi."
+      GRIFFIN-Sponge is a standard sponge hash built directly on the GRIFFIN-pi permutation.'
+  notes: 'Fixed-output sponge hash construction wrapping the GRIFFIN-pi permutation (see the primitive-tier
+    "griffin" family for the permutation''s own round/construction detail; reuses griffin_round here rather than
+    duplicating it). Split out into its own mode-tier family (previously only described in griffin''s own notes,
+    not separately modeled) per todo_manual_revised.txt -- GRIFFIN-Compression, the paper''s other named construct,
+    is modeled instead as a new instance of the primitive-tier "griffin" family itself (type compression_function),
+    since compression functions are primitive-tier in this database''s own tiering, unlike hash functions.'
+  instances:
+  - id: griffin_sponge_default
+    name: GRIFFIN-Sponge
+    type: hash
+    reference_ids:
+    - grassi_et_al_2023_griffin
+    characteristics: {}
+    notes: Rate/capacity split and concrete parameters not confirmed from the sources read for this database --
+      see griffin's own instance table (Table 2 of the paper) for the underlying permutation's confirmed
+      state-width/round-count options, which this hash mode's own parameters would be chosen from.

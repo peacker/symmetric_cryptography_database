@@ -1,4 +1,4 @@
-Simplified Manual Todo (2026-08-03)
+Simplified Manual Todo (2026-08-05)
 ===================================
 
 Purpose
@@ -15,81 +15,58 @@ Task Format
 Open Tasks
 ----------
 
-1. Task Name: Decide Orthros Tier
-   Description: Choose the correct schema tier/type for Orthros (it behaves like a low-latency PRF), then model it and add the influence edge from uLBC.
-
-2. Task Name: Add Turtle Predecessor
-   Description: Create a family entry for Turtle cipher and link it as Tortuga's predecessor.
-
-3. Task Name: Add scrypt Influence Family
-   Description: Add a family entry for scrypt and connect influence edges from POMELO and Tortuga.
-
-4. Task Name: Add Mersenne Twister Family
-   Description: Add a family entry for Mersenne Twister so CryptMT3 can reference it with a proper cross-family edge.
-
-5. Task Name: Verify LEA Construction Tag
-   Description: Read LEA primary paper and confirm whether generalized_feistel is correct; retag only if the paper supports a different structure.
-   Notes: The paper does not mention the Feistel structure (except when talking about TEA and XTEA).
-   Also the word "generalized" is not mentioned.
-   The round function resembles the Type 3 Feistel structure described in Fig. 1 of 2010-generalized_feistel.pdf
-   where the F functions are simple XORs with part of the round key 
-   (note that in the original DES construction the round key is XORed in the F function), 
-   while the vertical branch contains a XOR with another part of the round key, 
-   a rotation, and the mixing function with the other branch is done through a modular addition.
-
-6. Task Name: Fix NewDES Round Mapping
-   Description: Create a dedicated NewDES round definition and replace the incorrect des_round mapping.
-
-7. Task Name: Plan SHA-3 Stub Cleanup
+1. Task Name: Plan SHA-3 Stub Cleanup
    Description: Create a separate scoped plan for the ~55 SHA-3 round-1-only stub families and prioritize candidates before editing.
+   Notes: Deliberately not started this session either -- explicitly flagged as its own project-sized
+   piece of work (fetching ~55 individual, often obscure, several publicly-broken competition
+   submissions one at a time), not something to fold into a general cleanup pass.
 
-8. Task Name: Fetch Missing PDFs
-   Description: When any missing paper is available, add it to references with a clear filename (YYYY-name.ext), then update references and tests.
+2. Task Name: Confirm GenLowMC Source
+   Description: Find a citable source for GenLowMC (author, venue, talk, or draft); if none exists, mark as unpublished and do not model.
+   Notes: Third confirmed miss across three separate sessions (2026-07-31, and twice more since).
+   Zero results from IACR eprint's own search engine and multiple targeted web searches each time.
+   Treat as unpublished/informally named unless you have a specific author/venue/talk lead to search on.
 
-9. Task Name: Fix LOKI PDF Match Bug
-    Description: Update scripts/reference_pdfs.py fuzzy matching so loki does not incorrectly match loki97, and track loki in KNOWN_MISSING until correct paper is added.
+3. Task Name: Archive Zcash Spec PDF
+   Description: Optionally save a local archival copy of the exact Zcash protocol version used in notes.
+   Notes: Still optional/low-priority; skipped again this session. The reference entry
+   (zcash_protocol_specification_2026) already pins the exact spec version read in its venue field,
+   so this is purely a "nice to have" archival snapshot, not a correctness gap.
 
-10. Task Name: Add LOKI Primary PDF
-    Description: Add LOKI89/LOKI91 primary paper PDF to references and wire it to loki_ref.
+4. Task Name: Verify Unconfirmed Facts
+   Description: Re-check secondhand claims (for example AIM/Rain details and some AO round parameters) directly from primary papers before treating them as final.
+   Notes: Not revisited this session (2026-08-05) -- still open from the 2026-07-31 AO/PQC-signature
+   session. Specifically flagged there as unverified/secondhand: Rain's round function (field
+   inversion + affine layer), AIM's S-box (Mersenne-exponent power map), Ciminion/Hydra's exact
+   per-round component breakdown, and most of poseidon2/poseidon2b/neptune/grendel/griffin/anemoi/
+   reinforced_concrete/polocolo's exact S-box exponents, state-width instance lists, and round counts
+   (their primary papers were eprint-blocked with no working mirror found in that session -- worth
+   retrying the same non-eprint-mirror strategies that worked for Orthros/Turtle/Mersenne
+   Twister/Starkad this session: tosc.iacr.org/tches.iacr.org direct download links, HAL, author
+   institutional mirrors, and the Wayback Machine's cached copy of the eprint PDF).
 
-11. Task Name: Add AO Remaining Families
-    Description: Model still-open AO families that are not yet added (for example: Starkad, Agrasta, and others still unresolved) after reading primary sources.
-
-12. Task Name: Confirm GenLowMC Source
-    Description: Find a citable source for GenLowMC (author, venue, talk, or draft); if none exists, mark as unpublished and do not model.
-
-13. Task Name: Add DarkMatter Follow-up Reference
-    Description: Add the PKC 2021 attacks-and-fixes paper as a reference record if you want that cryptanalysis lineage tracked.
-
-14. Task Name: Decide LegendrePRF Tier
-    Description: Decide whether LegendrePRF should be represented in mode tier; if yes, extend mode taxonomy and add proper entries.
-
-15. Task Name: Evaluate Pasta Stream Family
-    Description: Decide whether to model Pasta stream-cipher wrapper in mode tier in addition to existing pasta_pi primitive family.
-
-16. Task Name: Archive Zcash Spec PDF
-    Description: Optionally save a local archival copy of the exact Zcash protocol version used in notes.
-
-17. Task Name: Verify Unconfirmed Facts
-    Description: Re-check secondhand claims (for example AIM/Rain details and some AO round parameters) directly from primary papers before treating them as final.
-
-18. Task Name: Decide Skyscraper v2 Update
-    Description: Choose whether to move family notes from original Skyscraper to hardened Skyscraper-v2 once v2 paper is available.
-
-19. Task Name: Add ARMADILLO2 Cryptanalysis Notes
-    Description: Read and cite ARMADILLO2 cryptanalysis papers, then add concise lineage/attack notes to armadillo.
-
-20. Task Name: Classify Armadillo Construction
-    Description: Decide whether armadillo needs a new construction category (data-dependent permutation selection) and update taxonomy if approved.
-
-21. Task Name: Keep Signature Schemes Out of Scope
-    Description: Keep asymmetric signature schemes (for example Picnic, AIMer, Rainier, MandaRain) out of symmetric-family modeling unless project scope changes.
-
-22. Task Name: Split Griffin Wrappers (Optional)
-    Description: If queryability is needed, add separate mode-tier entries for griffin_sponge and griffin_compression.
-
-23. Task Name: Prevent Duplicate Construction IDs
-    Description: Before adding any new construction id, search existing ids first to avoid duplicates that only fail at build-db stage.
+Resolved Since the Last Revision (2026-08-05 session) -- kept here only as a pointer, not a task
+--------------------------------------------------------------------------------------------------
+Everything else from the previous revision of this file is done; see todo_manual.txt's own dated
+entry for 2026-08-05 for the full report (what was added/fixed/decided, files touched, what's still
+flagged as unconfirmed within an otherwise-resolved item). Short list for reference: Orthros family +
+uLBC edge; Turtle family + Tortuga edge; scrypt edges from POMELO and Tortuga; Mersenne Twister family
++ CryptMT3 edge; LEA construction retag (generalized_feistel -> type3_generalized_feistel); NewDES's
+own dedicated round definition (replacing the incorrect des_round reuse); the LOKI/LOKI97
+reference_pdfs.py fuzzy-match bug (fixed) and LOKI's own primary paper (fetched); the Crypto Dark
+Matter PKC 2021 attacks-and-fixes paper (added as a reference); Starkad (added) and Agrasta (confirmed
+already correctly modeled, no change needed); LegendrePRF (added, primitive-tier, type
+update_function -- no mode-tier taxonomy extension needed after all) and Pasta (added, mode-tier,
+reusing the existing ctr_mode leaf -- no new taxonomy needed there either); ARMADILLO2 cryptanalysis
+notes (added, citing both the 2011 MITM and 2012 practical-collision papers); Armadillo's construction
+taxonomy (decided -- new data_dependent_permutation_network root, grounded in the real
+"data-dependent permutations"/CP-box literature); Skyscraper-v2 (confirmed already resolved in an
+earlier session, not touched again); signature schemes out of scope (confirmed, no action needed);
+Griffin's GRIFFIN-Sponge (new mode-tier family) and GRIFFIN-Compression (new instance under the
+existing primitive-tier griffin family) split; and the "search before adding a construction id"
+practice is now also machine-enforced (scripts/validate.py fails the build on any duplicate id across
+every *_constructions.yaml/components.yaml/rounds.yaml/etc. catalogue, not just at the SQLite
+build-db stage).
 
 Completion Checklist
 --------------------

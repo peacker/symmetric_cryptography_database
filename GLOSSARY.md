@@ -239,7 +239,7 @@ family in this database is tagged with the leaf-worthy variant yet):
 
 | Root | Definition |
 |---|---|
-| Lai–Massey Scheme (`lay_massey`) | A two-branch structure where the same mixing function perturbs both halves symmetrically (IDEA). |
+| Lai–Massey Scheme (`lai_massey`) | A two-branch structure where the same mixing function perturbs both halves symmetrically (IDEA). |
 | Even–Mansour Construction (`even_mansour`) | A key-alternating construction built around one or more public permutations with key addition before and after each call. |
 | Stream State-Update Generator (`stream_state_update_generator`) | A keystream design based on repeated state updates and output extraction, typically with separate key-scheduling and generation phases. |
 | LFSR/NLFSR Register Network (`lfsr_nlfsr_register_network`) | A bit-oriented structure driven by linear/nonlinear feedback-shift-register state transitions and Boolean mixing. |

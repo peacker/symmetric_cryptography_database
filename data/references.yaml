@@ -2158,13 +2158,18 @@ references:
   kind: paper
   title: LOKI — A Cryptographic Primitive for Authentication and Secrecy Applications
   year: 1990
-  notes: Original LOKI89 paper. LOKI91 revision published 1991 to address weak-key
-    vulnerabilities.
+  notes: 'Original LOKI89 paper. LOKI91 revision published 1991 to address weak-key
+    vulnerabilities. Local copy: references/1990-loki.pdf. (2-page AUSCRYPT ''90 extended
+    abstract, LNCS 453 pp. 229-236; open-access author copy via University of Wollongong
+    Research Online, https://ro.uow.edu.au/infopapers/1047/, MD5 45f3da4f53a211de89dd61c933386d40.)
+    Confirms: 64-bit block, 64-bit key, DEA-1(DES)-resembling Feistel structure (P/S/E
+    round function per Fig. 1), 16 rounds, key schedule via a 12-bit left rotation
+    (ROL 12) of each 32-bit key half per round.'
   authors:
   - Lawrence Brown
   - Josef Pieprzyk
   - Jennifer Seberry
-  venue: Auscrypt 1990, LNCS 453
+  venue: Auscrypt 1990, LNCS 453, pp. 229-236
   url: https://link.springer.com/chapter/10.1007/BFb0030348
 - id: lotus_ref
   kind: paper
@@ -4195,14 +4200,34 @@ references:
     Local copy: references/2007-rc4drop.pdf.'
 - id: newdes_ref
   kind: paper
-  title: NewDES
+  title: Wide-Open Encryption Design Offers Flexible Implementations
   authors:
   - Robert Scott
   year: 1985
-  venue: Cryptologia
-  url: https://en.wikipedia.org/wiki/NewDES
-  notes: 17-round 64-bit block cipher designed as a DES replacement. No widely available
-    free PDF spec.
+  venue: Cryptologia, Vol. 9, No. 1, pp. 75-90
+  url: https://www.tandfonline.com/doi/abs/10.1080/0161-118591859799
+  notes: 17-round, 64-bit block, 120-bit-key cipher designed as an easier-to-implement DES
+    alternative. Paywalled, no free PDF found (checked Tandfonline/publisher, ResearchGate,
+    institutional repositories). Structural claims about NewDES in this database are verified
+    instead against riordan_1990_newdes_reference_implementation, a public-domain reference
+    implementation that itself cites this paper -- see that entry and newdes_round_forward/
+    newdes_round_backward (data/rounds.yaml) for what was actually confirmed and how.
+- id: riordan_1990_newdes_reference_implementation
+  kind: source_code
+  title: 'newdes.c -- reference implementation of the NEWDES algorithm'
+  authors:
+  - Mark Riordan
+  year: 1990
+  venue: Public-domain C source (based on the author's March 1988 8086 assembly version), distributed via the
+    RPEM package
+  url: https://www.nic.funet.fi/pub/crypt/cryptography/rpem/rpem/newdes.c
+  notes: 'Local copy: references/1990-newdes-reference-implementation.txt. Explicitly cites Robert Scott''s
+    "Wide-open Encryption Design Offers Flexible Implementations," Cryptologia 9(1), Jan 1985, pp. 75-90 (the
+    paper behind newdes_ref, which is itself paywalled with no free copy found) as its source. Used here to
+    confirm NewDES''s exact round structure byte-for-byte where the paper itself is unavailable -- see
+    newdes_round_forward/newdes_round_backward (data/rounds.yaml) for the resulting model. Also explicitly warns
+    that a DIFFERENT algorithm circulates under the same "NewDES" name (plain DES with the initial/final
+    permutations stripped) and that this is not that algorithm.'
 - id: catfish_ref
   kind: paper
   title: 'Catfish: Password Hashing Scheme'
@@ -4492,8 +4517,29 @@ references:
   url: https://www.usenix.org/system/files/sec21-grassi.pdf
   notes: 'Final published version of the design originally released as eprint 2019/458, "Starkad and Poseidon: New Hash
     Functions for Zero Knowledge Proof Systems," which split the design into the block cipher HadesMiMC and the hash
-    functions Poseidon (native GF(p)) and Starkad (GF(2^n) sibling of Poseidon, not separately modeled in this database).
-    Local copy: references/2021-poseidon_usenix.pdf.'
+    function Poseidon (native GF(p)) -- its GF(2^n) sibling Starkad is dropped from this final version ("we advise
+    against using them") but is modeled separately in this database (see starkad, mode_families.yaml) from the
+    original eprint version (grassi_et_al_2019_starkad_poseidon). Local copy: references/2021-poseidon_usenix.pdf.'
+- id: grassi_et_al_2019_starkad_poseidon
+  kind: paper
+  title: 'Starkad and Poseidon: New Hash Functions for Zero Knowledge Proof Systems'
+  authors:
+  - Lorenzo Grassi
+  - Daniel Kales
+  - Dmitry Khovratovich
+  - Arnab Roy
+  - Christian Rechberger
+  - Markus Schofnegger
+  year: 2019
+  venue: IACR Cryptology ePrint Archive, Report 2019/458 (original version, prior to the USENIX Security 2021 split
+    that dropped Starkad)
+  url: https://eprint.iacr.org/2019/458
+  notes: 'eprint.iacr.org blocks automated fetching in this environment; fetched instead via the Wayback Machine''s
+    archived copy of the original PDF (web.archive.org/web/2019/https://eprint.iacr.org/2019/458.pdf). This is the
+    original combined design paper, before Starkad was dropped in the final published Poseidon paper
+    (grassi_et_al_2021_poseidon) -- the only located source giving Starkad''s own construction and concrete
+    parameters (e.g. "x3 - Starkad"-Permutation in F_2^n with p(x) = x^63+x+1, n=63, t=24, RF=8, RP=48, N=1512, per
+    Table 2 / Section 5). Local copy: references/2019-starkad_and_poseidon.pdf.'
 
 - id: aly_et_al_2020_marvellous
   kind: paper
@@ -5060,10 +5106,70 @@ references:
     "mod-2/mod-3" case, depth-2 ACC0[2,3]) and its general mod-p/mod-q form (Remark 3.2); an alternative weak PRF
     (Construction 6.3, a deterministic-LPN-style variant for garbled-circuit efficiency); and a depth-3 strong PRF
     candidate (Remark 7.14, F''_A(x):=F_A(bin(G*x))) built from a new Encoded-Input PRF/Protected EI-PRF framework
-    (Definitions 7.1-7.2, concrete instance Construction 7.9). A follow-up attacks-and-fixes paper exists (Cheon,
-    Cho, J.H. Kim, J. Kim, "Adventures in Crypto Dark Matter," PKC 2021 / eprint 2020/783) -- note for the record
-    that this PKC 2021 paper, not any paper literally titled "CryptoDarkMatter++", is the real citable 2020/2021
-    follow-up to this design.'
+    (Definitions 7.1-7.2, concrete instance Construction 7.9). A follow-up attacks-and-fixes paper exists (see
+    cheon_cho_kim_kim_2021_cryptodarkmatter_attacks) -- note for the record that this PKC 2021 paper, not any
+    paper literally titled "CryptoDarkMatter++", is the real citable 2020/2021 follow-up to this design.'
+- id: cheon_cho_kim_kim_2021_cryptodarkmatter_attacks
+  kind: paper
+  title: 'Adventures in Crypto Dark Matter: Attacks and Fixes for Weak Pseudorandom Functions'
+  authors:
+  - Jung Hee Cheon
+  - Wonhee Cho
+  - Jeong Han Kim
+  - Jiseung Kim
+  year: 2021
+  venue: Public-Key Cryptography (PKC 2021), LNCS 12710
+  publisher: Springer
+  url: https://eprint.iacr.org/2020/783
+  notes: 'Also eprint 2020/783; extended journal version in Designs, Codes and Cryptography (2022), DOI
+    10.1007/s10623-022-01071-x. Cryptanalysis of the basic and alternative Mod-2/Mod-3 weak PRF candidates from
+    boneh_et_al_2018_cryptodarkmatter (Constructions 3.1 and 6.3): the paper reports attacks with advantage
+    larger than 2^(-0.105n) against the alternative weak PRF and 2^(-0.21n) against the weak PRF variant keyed
+    with a circulant matrix, plus proposed fixes/parameter adjustments. Not fetched as a local PDF (eprint.iacr.org
+    blocks automated fetching in this environment; no open-access mirror found this session) -- add if you get
+    institutional access. Cited from cryptodarkmatter''s own notes/reference_ids as the cryptanalysis lineage for
+    that family, not modeled as a separate family here (this database does not model standalone cryptanalysis
+    papers as families).'
+- id: grassi_et_al_2016_mpc_friendly
+  kind: paper
+  title: MPC-Friendly Symmetric Key Primitives
+  authors:
+  - Lorenzo Grassi
+  - Christian Rechberger
+  - Dragos Rotaru
+  - Peter Scholl
+  - Nigel P. Smart
+  year: 2016
+  venue: ACM CCS 2016, pp. 430-443
+  publisher: ACM
+  url: https://eprint.iacr.org/2016/542
+  notes: 'Also eprint 2016/542. Proposes/analyzes three PRF designs for secret-sharing-based MPC evaluation: the
+    Naor-Reingold PRF, the Legendre-symbol PRF L_k(x)=((x+k)/p) (attributed by this paper to unpublished folklore
+    predating it, not introduced here as new -- see legendre_prf''s own notes), and a new specialized block cipher
+    design, MiMC (already modeled in this database as its own family). Not fetched as a local PDF (eprint.iacr.org
+    blocks automated fetching in this environment; no open-access mirror found this session).'
+- id: beullens_beyne_udovenko_vitto_2020_legendre_prf_cryptanalysis
+  kind: paper
+  title: Cryptanalysis of the Legendre PRF and Generalizations
+  authors:
+  - Ward Beullens
+  - Tim Beyne
+  - Aleksei Udovenko
+  - Giuseppe Vitto
+  year: 2020
+  venue: IACR Transactions on Symmetric Cryptology (ToSC), Vol. 2020, No. 1, pp. 313-330
+  publisher: Ruhr-University Bochum
+  url: https://eprint.iacr.org/2019/1357
+  notes: 'Local copy: references/2020-legendre_prf_cryptanalysis.pdf (a presentation/slide deck version; the
+    eprint/ToSC paper itself was not separately fetched -- eprint.iacr.org blocks automated fetching in this
+    environment, and tosc.iacr.org''s own copy was not retrieved this session, but the slide deck quotes the
+    formal definition and key results directly). Confirms L_k(x)=((x+k)/p) in {-1,0,1} is "a pseudorandom function
+    proposed by Grassi et al. (2016)" (i.e. formalized/analyzed by grassi_et_al_2016_mpc_friendly, which the slide
+    deck itself attributes the PRF proposal to), used in Ethereum 2.0''s proof-of-custody design and in LegRoast
+    signatures (Beullens et al. 2020 -- an asymmetric signature scheme, out of scope for this database). Presents
+    key-recovery attacks against the Legendre PRF and generalizations (Frobenius PRFs, higher-degree residues);
+    the referenced legendreprf.org public challenge site reports the 64-bit and 74-bit challenge instances broken
+    using this work''s methods (84-bit later broken by a follow-up, Kaluderovic et al. 2020, not modeled here).'
 - id: dobraunig_kales_rechberger_schofnegger_zaverucha_2022_rain
   kind: paper
   title: Shorter Signatures Based on Tailor-Made Minimalist Symmetric-Key Crypto
@@ -5577,3 +5683,83 @@ references:
     to predict Espresso''s keystream bits/bytes and reports the models are effective at this prediction task -- a
     second, independent cryptanalysis result against Espresso distinct from the Galois-to-Fibonacci algebraic
     attacks of yao_parampalli_2021_espresso_like_cryptanalysis.'
+- id: banik_et_al_2021_orthros
+  kind: paper
+  title: 'Orthros: A Low-Latency PRF'
+  authors:
+  - Subhadeep Banik
+  - Takanori Isobe
+  - Fukang Liu
+  - Kazuhiko Minematsu
+  - Kosei Sakamoto
+  year: 2021
+  venue: IACR Transactions on Symmetric Cryptology, Vol. 2021, No. 1, pp. 37-77
+  url: https://tosc.iacr.org/index.php/ToSC/article/view/8833
+  notes: 'Fetched directly from tosc.iacr.org (eprint.iacr.org/2021/390 blocks automated fetching). DOI
+    10.46586/tosc.v2021.i1.37-77. Local copy: references/2021-orthros.pdf.'
+- id: blaze_1996_turtle
+  kind: report
+  title: 'Efficient Symmetric-Key Ciphers Based on an NP-Complete Subproblem (Extended Abstract)'
+  authors:
+  - Matt Blaze
+  year: 1996
+  venue: AT&T Laboratories, preliminary draft, October 3 1996
+  url: https://www.mattblaze.org/papers/turtle.pdf
+  notes: 'Self-labeled "PRELIMINARY DRAFT - October 3, 1996 - DO NOT DISTRIBUTE OR CITE" on its own title page, but
+    this is the informal technical report itself (never formally published/superseded elsewhere per available
+    evidence) that Tortuga''s own spec (sch_2014_tortuga) cites by name and by this exact original crypto.com URL
+    (now dead; mattblaze.org is the author''s own current mirror) as reference [1], "Efficient Symmetric-Key Ciphers
+    Based on an NP Complete Subproblem" -- i.e. this document, not a separate peer-reviewed version, is the citable
+    primary source. Describes two designs: Turtle (a recursively-structured, variable-block-length Feistel block
+    cipher) and Hare (a keystream generator built from the same primitive). Local copy: references/1996-turtle.pdf
+    (OCR-extracted; the PDF uses Type 3 bitmap fonts with no embedded ToUnicode map, so pdftotext yields garbage --
+    read via page-image OCR instead).'
+- id: matsumoto_nishimura_1998_mersenne_twister
+  kind: article
+  title: 'Mersenne Twister: A 623-Dimensionally Equidistributed Uniform Pseudo-Random Number Generator'
+  authors:
+  - Makoto Matsumoto
+  - Takuji Nishimura
+  year: 1998
+  venue: ACM Transactions on Modeling and Computer Simulation, Vol. 8, No. 1, pp. 3-30
+  url: https://math.sci.hiroshima-u.ac.jp/m-mat/MT/ARTICLES/mt.pdf
+  notes: 'Fetched from the authors'' own hosted copy at Hiroshima University (Matsumoto''s current institutional
+    mirror of the pre-camera-ready ACM TOMACS paper). Filename deliberately avoids the word "twister" on its own
+    (see mt19937 in the filename instead) to avoid colliding with the unrelated Twister SHA-3-candidate hash
+    family''s reference-PDF fuzzy-matching. Local copy: references/1998-matsumoto-nishimura-mt19937.pdf.'
+- id: abdelraheem_et_al_2011_armadillo2_cryptanalysis
+  kind: paper
+  title: Cryptanalysis of ARMADILLO2
+  authors:
+  - Mohamed Ahmed Abdelraheem
+  - Céline Blondeau
+  - María Naya-Plasencia
+  - Marion Videau
+  - Erik Zenner
+  year: 2011
+  venue: 'Advances in Cryptology - ASIACRYPT 2011, Seoul, South Korea, pp. 308-326 (DOI 10.1007/978-3-642-25385-0_17)'
+  url: https://inria.hal.science/inria-00619236
+  notes: 'Fetched directly from inria.hal.science (eprint.iacr.org/2011/160 mirrors the same paper but blocks
+    automated fetching). Meet-in-the-middle / parallel-matching-algorithm cryptanalysis: inverts the ARMADILLO2
+    building block for a chosen public input given part of the output, yielding key-recovery attacks on the
+    FIL-MAC and PRNG/stream-cipher modes and a (second)-preimage attack on the hash mode, all faster than
+    exhaustive search (e.g. 2^208 time / 2^205 memory, or 2^249 time / 2^45 memory, for the 256-bit-output hash).
+    Local copy: references/2011-armadillo2-cryptanalysis.pdf.'
+- id: naya_plasencia_peyrin_2012_armadillo2_practical_cryptanalysis
+  kind: paper
+  title: Practical Cryptanalysis of ARMADILLO2
+  authors:
+  - María Naya-Plasencia
+  - Thomas Peyrin
+  year: 2012
+  venue: Fast Software Encryption (FSE) 2012
+  url: https://www.iacr.org/archive/fse2012/75490147/75490147.pdf
+  notes: 'Fetched directly from IACR''s own FSE 2012 proceedings archive (not eprint.iacr.org, which is
+    Cloudflare-gated in this environment). Follow-up to abdelraheem_et_al_2011_armadillo2_cryptanalysis: exploits a
+    parity-bit invariant preserved through all ARMADILLO2 internal permutations for a cheap stream-cipher
+    distinguisher, then exploits weak diffusion under attacker-controlled Hamming weight for a practical free-start
+    collision attack on the compression function, and introduces a new "local-linearization" technique for a
+    practical semi-free-start collision attack on the hash function -- all experimentally verified, requiring "at
+    most 2^10.2 operations for 256-bit output version and negligible memory," i.e. collisions found in under a
+    second on ordinary hardware, plus a related-key recovery attack in the stream-cipher mode. Local copy:
+    references/2012-armadillo2-practical-cryptanalysis.pdf.'
