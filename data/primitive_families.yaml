@@ -2462,7 +2462,7 @@ primitive_families:
   - source_family_id: des
     relations:
     - inspired_by
-    note: 'Structural deduction, not a stated citation: SEED''s specification (1998-seed.pdf) names no predecessor cipher
+    note: 'Structural deduction, not a stated citation: SEED''s specification ([1998][seed][][].pdf) names no predecessor cipher
       anywhere, but its top level is a classical balanced Feistel network -- "A 128-bit input is divided into two 64-bit
       blocks and the right 64-bit block is an input to the round function F" over 16 rounds -- matching DES''s design pattern.'
   instances:
@@ -3099,7 +3099,7 @@ primitive_families:
   - source_family_id: des
     relations:
     - inspired_by
-    note: 'Structural deduction, not a stated citation: E2''s specification (1998-e2.pdf) has no bibliography or references
+    note: 'Structural deduction, not a stated citation: E2''s specification ([1998][e2][][].pdf) has no bibliography or references
       section at all, but its data-randomizing part is explicitly "a 12-round Feistel cipher structure with F-Function"
       -- classical balanced two-branch Feistel (Rr = Lr-1 XOR F(Rr-1); Lr = Rr-1) -- matching DES''s design pattern.'
   notes: 'E2 (Efficient Encryption) by NTT uses a 12-round Feistel with initial and final key mixing transformations (IT/FT).
@@ -3817,7 +3817,7 @@ primitive_families:
     is the paper''s central diffusion-speed claim: "each branch of Orthros achieves the 2.5-round full diffusion and
     attains 64 active S-boxes over 10 rounds, while Midori-128 requires 3 rounds for full diffusion and 13 rounds
     for 64 active S-boxes." Achieves ~2.4ns minimum latency on the STM 90nm library versus 2.56ns (PRINCE), 4.10ns
-    (Midori-128), 4.38ns (QARMA9-128) for fully unrolled circuits. Local copy: references/2021-orthros.pdf (fetched
+    (Midori-128), 4.38ns (QARMA9-128) for fully unrolled circuits. Local copy: references/[2021][orthros][][].pdf (fetched
     from tosc.iacr.org; eprint.iacr.org/2021/390 blocks automated fetching).'
   instances:
   - id: orthros_default
@@ -8695,7 +8695,7 @@ primitive_families:
     but it is the exact document Tortuga''s own PHC spec cites as "the Turtle algorithm originally designed by Matt
     Blaze" (see tortuga, mode_families.yaml) and remains the only locatable primary source for Turtle -- read here
     via page-image OCR since the archived PDF''s Type 3 bitmap fonts have no ToUnicode map (pdftotext produces
-    garbage). Local copy: references/1996-turtle.pdf (mirrored from the author''s own mattblaze.org; the paper''s
+    garbage). Local copy: references/[1996][turtle][][].pdf (mirrored from the author''s own mattblaze.org; the paper''s
     original crypto.com/papers/turtle.pdf URL, cited by Tortuga''s spec, is dead).'
   instances:
   - id: turtle_8_64
@@ -10950,6 +10950,7 @@ primitive_families:
     - id: not
   reference_ids:
   - rivest_1990_md4
+  - rivest_1992_rfc1320_md4
   process_participations: []
   influences: []
   innovative_ideas:
@@ -12754,7 +12755,7 @@ primitive_families:
     a Feistel setting for MPC, ZK-SNARK, and post-quantum ZK-based signature applications. Confirmed directly, four
     concrete variants are studied -- GMiMC_crf (contracting), GMiMC_erf (expanding, used for GMiMCHash''s sponge
     permutation), GMiMC_Nyb (Nyberg''s generalized-Feistel-network variant), and GMiMC_mrf (a new "Multi-Rotating"
-    construction) -- rather than three. Local copy: references/2019-gmimc.pdf.'
+    construction) -- rather than three. Local copy: references/[2019][gmimc][][].pdf.'
   instances:
   - id: gmimc_erf
     name: GMiMC-erf
@@ -12811,8 +12812,8 @@ primitive_families:
     explicitly dismissed -- "we advice against using them" -- in a later updated version of the Poseidon paper
     alongside Poseidon''s own x^(-1) S-box variant); this split is documented in the final published Poseidon paper
     (grassi_et_al_2021_poseidon).
-    Local copy of the HADES strategy paper: references/2019-hades_hadesmimc.pdf; local copy of the Poseidon paper
-    covering the same strategy is at references/2021-poseidon_usenix.pdf.'
+    Local copy of the HADES strategy paper: references/[2019][hadesmimc][][hades_hadesmimc].pdf; local copy of the Poseidon paper
+    covering the same strategy is at references/[2021][hadesmimc+poseidon][][poseidon_usenix].pdf.'
   instances:
   - id: hadesmimc_default
     name: HadesMiMC
@@ -12854,8 +12855,8 @@ primitive_families:
     Grobner-basis algebraic attack (Albrecht, Cid, Grassi, Khovratovich, Luftenegger, Rechberger, and Schofnegger,
     "Algebraic Cryptanalysis of STARK-Friendly Designs - Application to MARVELlous and MiMC", ASIACRYPT 2019, eprint
     2019/419), motivating the redesign as Vision/Rescue. Local copy of Jarvis''s own original paper:
-    references/2018-jarvis_friday.pdf; the break is also documented as related work in the Vision/Rescue paper,
-    local copy references/2019-vision_rescue_marvellous.pdf.'
+    references/[2018][friday_hash+jarvis][][jarvis_friday].pdf; the break is also documented as related work in the Vision/Rescue paper,
+    local copy references/[2019][jarvis+rescue+vision][][vision_rescue_marvellous].pdf.'
   instances:
   - id: jarvis_default
     name: Jarvis
@@ -12894,7 +12895,7 @@ primitive_families:
   notes: 'Vision is a GF(2^n)-native SPN block cipher from the MARVELlous design strategy, applying the field-inversion
     S-box x -> x^(-1) (differential uniformity 2 for n odd) across the full state each round, followed by a Cauchy MDS
     matrix and round-constant addition. Targets ZK-STARK, R1CS-based proof systems, and MPC. Local copy:
-    references/2019-vision_rescue_marvellous.pdf.'
+    references/[2019][jarvis+rescue+vision][][vision_rescue_marvellous].pdf.'
   instances:
   - id: vision_default
     name: Vision
@@ -12935,7 +12936,7 @@ primitive_families:
   notes: 'Rescue is a GF(p)-native SPN block cipher/permutation from the MARVELlous design strategy. Each round applies
     a forward power map x -> x^d, an MDS matrix, and a constant, then the inverse power map x -> x^(1/d), another MDS
     matrix, and a constant -- alternating a low-degree map with its (typically high-degree) inverse every round, unlike
-    MiMC/GMiMC/HadesMiMC which apply only the forward direction. Local copy: references/2019-vision_rescue_marvellous.pdf.'
+    MiMC/GMiMC/HadesMiMC which apply only the forward direction. Local copy: references/[2019][jarvis+rescue+vision][][vision_rescue_marvellous].pdf.'
   instances:
   - id: rescue_default
     name: Rescue
@@ -12991,7 +12992,7 @@ primitive_families:
     inter-branch feedback, followed by an efficiently-evaluable circulant MDS matrix and key addition. ArionHash
     instantiates the unkeyed permutation Arion-pi in sponge mode. Explicitly positioned by its authors as reducing to
     neither the Feistel nor the SPN structure that characterizes earlier "Gen I/II" AO designs. Local copy:
-    references/2023-arion.pdf.'
+    references/[2023][arion][][].pdf.'
   instances:
   - id: arion_bls12_bn254
     name: Arion (BLS12/BN254, 128-bit security)
@@ -13041,7 +13042,7 @@ primitive_families:
     Agrasta is defined in the same paper. An A-S-A-S-...-A (ASASA) topology, per the paper''s own citation: "Generic
     substitution-permutation designs which interleave a key-dependent affine layer with key-dependent S-boxes have
     been studied since SASAS" -- Rasta''s own "twist" is that the S-box (chi) is fixed/public while the affine layers
-    are nonce/counter-derived rather than key-dependent. Local copy: references/2018-rasta_agrasta.pdf.'
+    are nonce/counter-derived rather than key-dependent. Local copy: references/[2018][rasta][][rasta_agrasta].pdf.'
   instances:
   - id: rasta_agrasta
     name: Agrasta
@@ -13086,7 +13087,7 @@ primitive_families:
     randomized linear layer) and by Pasta (Dobraunig, Grassi, Helminger, Rechberger, Schofnegger, Walch, 2023, not
     separately modeled in this database as a mode-tier family, though its Pasta-pi permutation is modeled as
     pasta_pi) -- Pasta''s own paper explicitly frames Masta as independent, concurrent work, not a predecessor it
-    "succeeds," so no direct lineage edge is asserted between them. Local copy: references/2020-masta.pdf.'
+    "succeeds," so no direct lineage edge is asserted between them. Local copy: references/[2020][masta][][].pdf.'
   instances:
   - id: masta_default
     name: Masta
@@ -13142,7 +13143,7 @@ primitive_families:
     keyed permutation and the overall counter-mode stream cipher built on it (no feed-forward step, unlike Rasta --
     the key enters only via the randomized key schedule, never as the permutation input). An algebraic attack
     exploiting round-key collisions (Liu, Kalam, Sarkar, Meier, 2024) breaks its 192/256-bit security claims but
-    leaves the 128-bit claim intact. Local copy: references/2020-hera.pdf.'
+    leaves the 128-bit claim intact. Local copy: references/[2020][hera][][].pdf.'
   instances:
   - id: hera_5_16
     name: HERA(5,16,16,28-bit)
@@ -13453,7 +13454,7 @@ primitive_families:
     and is described in its own paper as "currently the fastest arithmetization-oriented hash function without
     lookups." Confirmed directly (Table 1): R_F=8 full/external rounds always; R_P (internal/partial rounds) set per
     instance, e.g. RP=14 for (n,t,d)=(31,16,5), RP=56 for (256,2,5). S-box exponent d is the smallest integer >=3
-    coprime to p-1 (same convention as Poseidon), not a single fixed value. Local copy: references/2023-poseidon2.pdf.'
+    coprime to p-1 (same convention as Poseidon), not a single fixed value. Local copy: references/[2023][poseidon2][][].pdf.'
   instances:
   - id: poseidon2_default
     name: Poseidon2
@@ -13489,7 +13490,7 @@ primitive_families:
       to inherit the circuit-friendly properties of the prime-field versions for use with binary-field proving
       systems such as Binius; many prime-field cryptanalytic results carry over directly.'
   notes: 'Targets a 128-bit security level over binary extension fields; benchmarked against Vision-32b and Anemoi.
-    Local copy: references/2026-poseidon2b.pdf (downloaded from the IACR Communications in Cryptology open-access
+    Local copy: references/[2026][poseidon2b][][].pdf (downloaded from the IACR Communications in Cryptology open-access
     host, not eprint). Exact state-width and S-box parameters were not confirmed from the sources read for this
     database.'
   instances:
@@ -13533,7 +13534,7 @@ primitive_families:
       concrete multiplication reduction relative to Poseidon/hadesmimc.'
   notes: 'Not to be confused with the unrelated "neptune" Rust crate (a Poseidon implementation library for Filecoin/Lurk)
     -- this is the academic permutation design from Grassi, Onofri, Pedicini, and Sozzi''s paper on invertible
-    quadratic non-linear layers. Local copy: references/2022-neptune.pdf (downloaded from tosc.iacr.org, not eprint).
+    quadratic non-linear layers. Local copy: references/[2022][neptune][][].pdf (downloaded from tosc.iacr.org, not eprint).
     Exact state widths and round counts were not confirmed from the sources read for this database.'
   instances:
   - id: neptune_default
@@ -13574,7 +13575,7 @@ primitive_families:
     apply to Grendel because it is not a block cipher with an unknown key; instead it is a permutation with no
     secrets" -- consistent with modeling it here as an unkeyed permutation, not a block cipher. The GrendelHash mode
     family (see mode_families.yaml) wraps this permutation in a sponge: "the Grendel hash function uses the Grendel
-    sponge internally." Local copy: references/2021-grendel.pdf.'
+    sponge internally." Local copy: references/[2021][grendel+grendelhash][][].pdf.'
   instances:
   - id: grendel_default
     name: Grendel
@@ -13618,7 +13619,7 @@ primitive_families:
     Confirmed instances (Table 2, kappa=128, p~2^256): t in {3,4,8,12,16,20,24}, d in {3,5,7,11}; R=16(d=3)/14(d=5)
     for t=3, R=15/11 for t=4, R=11/9 for t=8, R=10/9 for t in {12,16,20,24}. Compared against Poseidon/Rescue/
     Reinforced Concrete as prior AO designs but not described as a direct improvement/variant of any single one of
-    them. Local copy: references/2022-griffin.pdf.'
+    them. Local copy: references/[2022][griffin+griffin_sponge][][].pdf.'
   instances:
   - id: griffin_default
     name: GRIFFIN
@@ -13669,7 +13670,7 @@ primitive_families:
     "the ''Latin dance'' symmetric algorithms (Salsa, ChaCha and derivatives)," named "after another Latin dance."
     Claims roughly 2x improvement over Poseidon/Rescue in R1CS constraints. Confirmed instances (Table 1, s=128):
     round counts range from 21(alpha=3) to 9(alpha=11) depending on state width l in {1,2,4,8}; concrete instances
-    AnemoiJive-BLS12-381 and -BN-254 use l=1, 19 rounds, 127-bit security. Local copy: references/2022-anemoi_jive.pdf.'
+    AnemoiJive-BLS12-381 and -BN-254 use l=1, 19 rounds, 127-bit security. Local copy: references/[2022][anemoi][][anemoi_jive].pdf.'
   instances:
   - id: anemoi_default
     name: ANEMOI
@@ -13707,7 +13708,7 @@ primitive_families:
     non-linear diffusion); Concrete = multiply by MDS matrix circ(2,1,1) + round constants; Bars = Comp o SBox o
     Decomp (the lookup-table nonlinear layer, no low-degree polynomial description). Round structure: 7
     Concrete-Bricks pairs with a single Bars layer replacing the middle Bricks call. Local copy:
-    references/2021-reinforced_concrete.pdf.'
+    references/[2021][reinforced_concrete][][].pdf.'
   instances:
   - id: reinforced_concrete_default
     name: Reinforced Concrete
@@ -13754,8 +13755,8 @@ primitive_families:
     rest, then an MDS layer (structured for O(k log k) evaluation) and round constants; 5 rounds for all variants.
     Tip4 and Tip4'' are named variants defined in a separate Toposware technical note (Robin Salen, 2023), not in
     the original Tip5 paper. ePrint-only (no separate conference/journal publication located for the primary Tip5
-    paper). Local copy: references/2023-tip5.pdf; local copy of the Tip4/Tip4'' note:
-    references/2023-tip4_tip4prime_toposware.pdf.'
+    paper). Local copy: references/[2023][tip5][][].pdf; local copy of the Tip4/Tip4'' note:
+    references/[2023][tip5][][tip4_tip4prime_toposware].pdf.'
   instances:
   - id: tip5_default
     name: Tip5
@@ -13827,7 +13828,7 @@ primitive_families:
     prior designs in this cluster, allowing efficient constant-time native implementations. Round = c + Concrete(
     Bricks(Bars(state))): Bars is the Kintsugi lookup-based nonlinear layer, Bricks a Feistel-Type-3 squaring map
     (x -> x^2, degree 2), Concrete a circulant MDS matrix; uniformly 6 rounds for every parameter set. Local copy:
-    references/2023-monolith.pdf (downloaded from tosc.iacr.org, not eprint).'
+    references/[2023][monolith][][].pdf (downloaded from tosc.iacr.org, not eprint).'
   instances:
   - id: monolith_goldilocks
     name: Monolith (Goldilocks)
@@ -13893,8 +13894,8 @@ primitive_families:
     ("we update the round number from 10 to 18, introducing 4 additional square rounds at the beginning and the end
     of the permutation") to defeat a rebound distinguisher (Bak, 2025) exploiting the original''s 2-Feistel-round
     middle section, raising the BLS12-381-scalar-field-pair hashing time from 135ns to 256ns. Both versions'' PDFs
-    are now available locally. Local copies: references/2025-skyscraper.pdf (original TCHES) and
-    references/2025-skyscraper_v2.pdf (hardened revision).'
+    are now available locally. Local copies: references/[2025][skyscraper][][].pdf (original TCHES) and
+    references/[2025][skyscraper][][v2].pdf (hardened revision).'
   instances:
   - id: skyscraper_default
     name: Skyscraper
@@ -13943,7 +13944,7 @@ primitive_families:
     comparisons (not modeled as influence edges here, since these are performance comparisons rather than lineage
     statements). Confirmed directly (Table 1): state widths t in {3,4,5,6,7,8}; round counts R=6 for t=3, R=5 for t
     in {4,...,8} (a tighter variant uses R=5 for t=3, R=4 for t in {4,6,8}); operates over the BLS12/BN254 scalar
-    fields. Local copy: references/2025-polocolo.pdf.'
+    fields. Local copy: references/[2025][polocolo][][].pdf.'
   instances:
   - id: polocolo_default
     name: Polocolo
@@ -13980,7 +13981,7 @@ primitive_families:
     intermediate state from a nonce and key); p_E is the repeatedly-applied keystream-generating permutation --
     together they underlie the mode-tier ciminion stream-encryption scheme. Does not fit this database''s existing
     SPN/Feistel/ARX structural-root taxonomy cleanly; no structural root beyond mpc_sharing_friendly is asserted.
-    Local copy: references/2021-ciminion.pdf.'
+    Local copy: references/[2021][ciminion+ciminion_permutation][][].pdf.'
   instances:
   - id: ciminion_p_c
     name: Ciminion p_C
@@ -14022,7 +14023,7 @@ primitive_families:
     Matter" (PKC 2021 / eprint 2020/783; see cheon_cho_kim_kim_2021_cryptodarkmatter_attacks), an attacks-and-fixes
     paper reporting non-trivial-advantage attacks against the basic and alternative Mod-2/Mod-3 weak PRF candidates
     below, not separately modeled here as its own family (a cryptanalysis paper, not a new design). Local copy:
-    references/2018-cryptodarkmatter.pdf.'
+    references/[2018][cryptodarkmatter][][].pdf.'
   instances:
   - id: cryptodarkmatter_construction_3_1
     name: Crypto Dark Matter Construction 3.1 (basic Mod-2/Mod-3 weak PRF)
@@ -14072,7 +14073,7 @@ primitive_families:
     it is drastically output-compressing, mapping a full field element down to one of three symbols) nor a
     permutation, with no state to update across invocations (a single algebraic evaluation, not an iterated
     construction -- hence round_ids: []). No mode-tier taxonomy extension needed. Confirmed directly (slide deck,
-    references/2020-legendre_prf_cryptanalysis.pdf): L_k(x) = ((x+k)/p) in {-1,0,1}, the Legendre symbol of (x+k)
+    references/[2020][legendre_prf][][legendre_prf_cryptanalysis].pdf): L_k(x) = ((x+k)/p) in {-1,0,1}, the Legendre symbol of (x+k)
     modulo a prime p, keyed by an additive shift k -- "a pseudorandom function proposed by Grassi et al. (2016)"
     (see grassi_et_al_2016_mpc_friendly), whose own paper analyzes it (alongside the Naor-Reingold PRF and a new
     design, MiMC, already modeled separately in this database) for secret-sharing-based MPC evaluation, motivating
@@ -14124,7 +14125,7 @@ primitive_families:
     function only via the generic block-cipher-to-OWF recipe f_x(k):=E_k(x), fixing the plaintext and treating the
     key as the OWF domain). "We emphasize again that Rain is not a classical block cipher, and is only intended to be
     used... for a MPCitH proof system." Rain3/Rain4 (3 or 4 rounds) over F_2^128/192/256. Local copy:
-    references/2021-rain.pdf.'
+    references/[2021][rain][][].pdf.'
   instances:
   - id: rain_default
     name: Rain
@@ -14156,7 +14157,7 @@ primitive_families:
     not modeled as its own family here, since it is a signature scheme built on this primitive rather than a
     symmetric primitive in its own right. AIM''s exact S-box form (reported secondhand as a Mersenne-exponent power
     map x^(2^e-1)) was not independently confirmed against the primary text in this session. Local copy:
-    references/2023-aim.pdf (downloaded from aimer-signature.org, not eprint).'
+    references/[2023][aim][][].pdf (downloaded from aimer-signature.org, not eprint).'
   instances:
   - id: aim_default
     name: AIM
@@ -14271,7 +14272,7 @@ primitive_families:
     predecessor Pasta "succeeds" -- Pasta''s own lineage is the Rasta strategy adapted to F_p -- and reports
     outperforming Masta by up to 6x; its S_feistel S-box was later reused directly by the Rubato cipher. The
     mode-tier Pasta stream-cipher family itself (which truncates Pasta-pi''s output under a nonce and block counter)
-    is now separately modeled too -- see the mode-tier "pasta" family (data/mode_families.yaml). Local copy: references/2021-pasta.pdf
+    is now separately modeled too -- see the mode-tier "pasta" family (data/mode_families.yaml). Local copy: references/[2021][pasta+pasta_pi][][].pdf
     (downloaded from a Semantic Scholar mirror; eprint.iacr.org is behind a Cloudflare challenge that blocked
     automated fetching).'
   instances:
@@ -14321,7 +14322,7 @@ primitive_families:
     taxonomy models elsewhere -- ARMADILLO genuinely does not fit that pattern. Genuinely multi-purpose, per the
     paper''s own Section 2: a FIL-MAC, a hash/signature scheme (via strengthened Merkle-Damgard chaining), and a
     PRNG/PRF/stream cipher. An updated variant, ARMADILLO2, is introduced in the same paper''s Section 6 (not
-    separately modeled here). Local copy: references/2010-armadillo.pdf (downloaded from the EPFL Infoscience
+    separately modeled here). Local copy: references/[2010][armadillo][][].pdf (downloaded from the EPFL Infoscience
     institutional repository, not Springer).
 
 
@@ -14356,7 +14357,7 @@ primitive_families:
     operations for 256-bit output version and negligible memory," i.e. under one second on ordinary hardware, plus
     a related-key recovery attack in the stream-cipher mode. Neither attack was independently re-verified in this
     session; both are recorded as read directly from the cited papers. Local copies:
-    references/2011-armadillo2-cryptanalysis.pdf, references/2012-armadillo2-practical-cryptanalysis.pdf.'
+    references/[2011][armadillo][][armadillo2+cryptanalysis].pdf, references/[2012][armadillo][][armadillo2+practical+cryptanalysis].pdf.'
   instances:
   - id: armadillo_default
     name: ARMADILLO
@@ -14399,7 +14400,7 @@ primitive_families:
     feed-forward over a keyed permutation) is captioned only as "Generation of i-th block of Dasta" (Figure 2) --
     the paper gives it no separate name; modeled here as a compression-function-shaped primitive since it feeds
     forward the permutation output onto its own input. No round constants are used. Local copy:
-    references/2020-dasta.pdf.'
+    references/[2020][dasta][][].pdf.'
   instances:
   - id: dasta_default
     name: Dasta
@@ -14440,7 +14441,7 @@ primitive_families:
     (pi = B o G, G(x)=x^(2^32+1) a cheap "Gold exponent" power map, B a sparse F_2-linearized affine polynomial) ->
     3x3 MDS matrix over F_(2^63) -> subkey XOR. A preprint-version affine polynomial B was broken by a "Coefficient
     Grouping" attack (Liu, Anand, Wang, Meier, Isobe); the published CCS 2022 version fixes B to guarantee
-    exponential algebraic-degree growth. Local copy: references/2022-chagri.pdf.'
+    exponential algebraic-degree growth. Local copy: references/[2022][chaghri][][chagri].pdf.'
   instances:
   - id: chaghri_default
     name: Chaghri
@@ -14487,7 +14488,7 @@ primitive_families:
     and adds it to each retained output word -- the sole element making Rubato "noisy" rather than deterministic.
     The single name "Rubato" is used, confirmed directly, for both the fixed-length keyed transform and the overall
     counter-mode stream/transciphering scheme -- no separate name for either (the mode-tier wrapper is not
-    separately modeled here). Local copy: references/2022-rubato.pdf.'
+    separately modeled here). Local copy: references/[2022][rubato][][].pdf.'
   instances:
   - id: rubato_default
     name: Rubato
@@ -14530,7 +14531,7 @@ primitive_families:
   notes: 'A self-described Standard Specification (SoK), not a peer-reviewed research contribution -- "no scientific
     novelty is claimed." Round structure identical in shape to Rescue (forward power map, MDS matrix, constants,
     inverse power map, MDS matrix, constants) but reordered so the STARK "folding" arithmetization technique applies
-    uniformly across the whole permutation. Local copy: references/2020-rescue_prime.pdf.'
+    uniformly across the whole permutation. Local copy: references/[2020][rescue_prime][][].pdf.'
   instances:
   - id: rescue_prime_default
     name: Rescue-Prime
@@ -14565,7 +14566,7 @@ primitive_families:
     Unlinkability (indistinguishability of addresses derived by different spending authorities), reduced to the
     Decisional Diffie-Hellman assumption on the curve''s prime-order subgroup -- NOT collision resistance, unlike
     Sinsemilla/PedersenHash. No local PDF copy kept for the living spec URL; local copy of this pinned snapshot:
-    references/2026-zcash_protocol_primitives_spec.pdf.'
+    references/[2026][diversify_hash+pedersen_hash_zcash+sinsemilla][][zcash_protocol_primitives_spec].pdf.'
   instances:
   - id: diversify_hash_sapling
     name: DiversifyHashSapling

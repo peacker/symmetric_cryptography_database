@@ -201,23 +201,23 @@ Which is the first AndRX cipher? Simon for now
 - In the symmetric cryptography database: add BLAKE3
   include relations with its predecessors
 
-- In the symmetric cryptography database: WARP (i already added the pdf 2020-warp.pdf)
+- In the symmetric cryptography database: WARP (i already added the pdf [2020][warp][][].pdf)
 
-- In the symmetric cryptography database: FORRO (i already added the pdf 2022-forro.pdf)
+- In the symmetric cryptography database: FORRO (i already added the pdf [2022][forro][][].pdf)
   include relations with its predecessors
 
 
 - In the symmetric cryptography database:
   Fix the references for
   MD2: Published in 1989 by Ronald Rivest as a checksum algorithm, which was later adopted for Public Key Infrastructures.
-       Added 1989-rsamd2-rfc1115.txt, specs as source code in Section 4.2.
+       Added [1989][md2][rfc][rsamd2].txt, specs as source code in Section 4.2.
        Not a proper Merkle–Damgård construction.
   MD4: Published in 1990 at the CRYPTO conference. It was created by Rivest as a much faster alternative to MD2.
   MD5: Published in 1992 as IETF RFC 1321, replacing MD4 after potential security weaknesses were identified in the older algorithm.
   HAVAL: Introduced in 1992 at the AUSCRYPT conference by Yuliang Zheng, Josef Pieprzyk, and Jennifer Seberry.
   Note: I have added the two references:
-  symmetric_cryptography_database/references/1989-rsamd2-rfc1115.txt
-  symmetric_cryptography_database/references/1990-md4-crypto.pdf
+  symmetric_cryptography_database/references/[1989][md2][rfc][rsamd2].txt
+  symmetric_cryptography_database/references/[1990][md4+md4_hash][][crypto].pdf
 
 - Move the About tab to be the left most, followed by Glossary, then add a "Disclaimer" tab; group the
   tabs into Views / Tables / Documentation.
@@ -406,7 +406,7 @@ Other relations (verify them by reading the corresponding pdf):
 
 - add Subterranean
   url can be found here: https://www.researchgate.net/profile/Luc-Claesen/publication/3601817_Subterranean_A_600_Mbitsec_cryptographic_VLSI_chip/links/00b495350dba879660000000/Subterranean-A-600-Mbit-sec-cryptographic-VLSI-chip.pdf
-  I have added the pdf: 1993-subterranean.pdf
+  I have added the pdf: [1993][subterranean+subterranean_hash+subterranean_stream][][].pdf
   Notice that the 2019 Subterranean v2 paper intro gives many relations to be included:
   Subterranean is a cryptographic primitive to be used both for hashing and as a stream
 cipher and dates back to 1992 [17,18]. With some imagination its mode can be seen as a

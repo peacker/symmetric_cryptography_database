@@ -2709,11 +2709,11 @@ rounds:
       word_bits: 32
   notes: 'LEA ARX round: 32-bit modular add, XOR, and fixed rotations on four 32-bit
     words. Retagged from the generic/unspecified generalized_feistel leaf to
-    type3_generalized_feistel: confirmed directly against the LEA paper (2013-lea.pdf)
+    type3_generalized_feistel: confirmed directly against the LEA paper ([2013][lea][][].pdf)
     that it never calls its own structure "Feistel" or "generalized" anywhere (the
     word "Feistel" appears only once, describing TEA/XTEA for comparison, not LEA
     itself) and against Hoang-Rogaway''s "On Generalized Feistel Networks"
-    (2010-generalized_feistel.pdf, Fig. 1) that LEA''s round matches the Type-3 GFN
+    ([2010][bear_lion+cast256+mars+rc6+skipjack][][generalized_feistel].pdf, Fig. 1) that LEA''s round matches the Type-3 GFN
     shape by structural inspection, not by citation: three of the four 32-bit words
     are each replaced by a keyed, rotated combination of two adjacent input words
     (X_{i+1}[0]=ROL_a((X_i[0]^RK0)+(X_i[1]^RK1)), and similarly for words 1 and 2),

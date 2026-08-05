@@ -225,7 +225,13 @@ def copy_reference_pdfs() -> None:
     are the actual documents the family-PDF map above points at.
     """
     dest = SITE_DIR / "references"
-    dest.mkdir(parents=True, exist_ok=True)
+    if dest.exists():
+        # Wipe and recopy rather than layering on top of a previous build --
+        # a file renamed/removed from references/ since the last build
+        # would otherwise linger here indefinitely (a stale copy under its
+        # old name is silently never cleaned up by a plain copy loop).
+        shutil.rmtree(dest)
+    dest.mkdir(parents=True)
     for src in REFERENCES_DIR.iterdir():
         if src.is_file() and src.suffix.lower() in {".pdf", ".txt"}:
             shutil.copy2(src, dest / src.name)

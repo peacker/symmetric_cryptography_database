@@ -15,7 +15,7 @@ references:
   url: https://tosc.iacr.org/index.php/ToSC/article/view/13006/12584
   notes: 'Defines the uKNIT framework and its concrete uKNIT-BC block cipher. DOI:
     10.46586/tosc.a0zo-4njsuvm. Implementation and test vectors: https://github.com/syllab-ntu/UKNIT.
-    Local copy: references/2026-uknitbc.pdf.'
+    Local copy: references/[2026][uknit_bc][][].pdf.'
 - id: nist_1993_fips180_sha0
   kind: standard
   title: 'Secure Hash Standard (SHS), FIPS PUB 180'
@@ -28,7 +28,7 @@ references:
   url: https://csrc.nist.gov/pubs/fips/180/final
   notes: 'Original Secure Hash Standard, now conventionally called SHA-0. It was
     superseded by FIPS 180-1 in 1995 after a change to the message schedule. Local
-    copy: references/1993-sha0-fips180.pdf.'
+    copy: references/[1993][sha0+sha0_hash][fips][].pdf.'
 - id: briceno_goldberg_wagner_1999_a5
   kind: technical_report
   title: A pedagogical implementation of A5/1
@@ -63,7 +63,7 @@ references:
   venue: Cryptology ePrint Archive 2012/208 / arXiv 1204.4535
   url: https://arxiv.org/abs/1204.4535
   notes: 'Contains a detailed A5/1 description and attack. The filename uses the
-    cipher''s 1987 design year, not this paper''s year. Local copy: references/1987-a5_1-[original_not_available_extracted_from_2012_publication].pdf.'
+    cipher''s 1987 design year, not this paper''s year. Local copy: references/[1987][a5_1][][original not available extracted from 2012 publication].pdf.'
 - id: barkan_biham_keller_2003_gsm
   kind: paper
   title: Instant Ciphertext-Only Cryptanalysis of GSM Encrypted Communication
@@ -89,7 +89,7 @@ references:
   publisher: Springer
   url: https://doi.org/10.1007/s00145-007-9001-y
   notes: 'Expanded journal version of the CRYPTO 2003 work, including A5/2 details.
-    The filename uses the cipher''s 1993 completion year. Local copy: references/1993-a5_2-[original_not_available_extracted_from_2008_publication].pdf.'
+    The filename uses the cipher''s 1993 completion year. Local copy: references/[1993][a5_2][][original not available extracted from 2008 publication].pdf.'
 - id: 3gpp_ts_55_216_a5_3
   kind: standard
   title: '3GPP TS 55.216: A5/3 and GEA3 Specification Wrapper'
@@ -125,7 +125,7 @@ references:
   publisher: Springer
   url: https://doi.org/10.1007/BFb0052342
   notes: 'Introduces tCAST and tLOKI, deliberately trapdoored variants of CAST-family
-    and LOKI91 round functions. Local copy: references/1997-tcast_tloki.pdf.'
+    and LOKI91 round functions. Local copy: references/[1997][tcast+tloki][][tcast_tloki].pdf.'
 - id: wu_bao_deng_ye_1998_trapdoor_cryptanalysis
   kind: paper
   title: Cryptanalysis of Rijmen–Preneel Trapdoor Ciphers
@@ -141,7 +141,7 @@ references:
   notes: >-
     Shows how to recover and exploit the concealed trapdoor structure without
     knowing the original secret trapdoor parameters. Local author copy:
-    references/1998-rijmen-preneel-trapdoor-cryptanalysis.pdf.
+    references/[1998][a5_1+tcast+tloki][][rijmen+preneel+trapdoor+cryptanalysis].pdf.
 - id: paterson_1999_imprimitive_trapdoor
   kind: paper
   title: Imprimitive Permutation Groups and Trapdoors in Iterated Block Ciphers
@@ -154,7 +154,7 @@ references:
   notes: >-
     Defines a concrete 64-bit, 32-round, 80-bit-key DES-like cipher whose
     round functions preserve a hidden block system. Local copy:
-    references/1999-paterson-trapdoor-cipher.pdf.
+    references/[1999][paterson_trapdoor_cipher][][paterson+trapdoor+cipher].pdf.
 - id: angelova_borissov_2013_parity_check_des
   kind: paper
   title: Plaintext Recovery in DES-like Cryptosystems Based on S-boxes with Embedded
@@ -169,7 +169,7 @@ references:
     Constructs modified DES and Triple-DES variants whose non-surjective
     S-box outputs lie in affine parity-check subspaces, enabling ciphertext-only
     plaintext recovery. Local publisher copy:
-    references/2013-parity-check-des-like.pdf.
+    references/[2013][parity_check_des_variants][][parity+check+des+like].pdf.
 - id: bannier_filiol_2017_partition_trapdoor
   kind: book_chapter
   title: Partition-Based Trapdoor Ciphers
@@ -183,7 +183,7 @@ references:
   notes: >-
     Develops the partition-based trapdoor framework and gives the full BEA-1
     construction and cryptanalysis. Local open-access book copy:
-    references/2017-partition-trapdoor-ciphers.pdf.
+    references/[2017][bea1][][partition+trapdoor+ciphers].pdf.
 - id: bannier_filiol_2017_bea1
   kind: paper
   title: Mathematical Backdoors in Symmetric Encryption Systems — Proposal for
@@ -197,7 +197,7 @@ references:
   url: https://arxiv.org/abs/1702.06475
   notes: 'Defines BEA-1 for research into partition-based mathematical backdoors.
     The supplied local copy is the 12-page arXiv manuscript dated 21 February
-    2017: references/2017-bea1.pdf. The cipher is explicitly unsuitable for protecting
+    2017: references/[2017][bea1][][].pdf. The cipher is explicitly unsuitable for protecting
     information. Conference DOI: 10.5220/0006244406220631.'
 - id: koo_et_al_2018_cham
   kind: paper
@@ -213,7 +213,7 @@ references:
   venue: Information Security and Cryptology – ICISC 2017, LNCS 10779, pp. 3–25
   publisher: Springer
   url: https://doi.org/10.1007/978-3-319-78556-1_1
-  notes: 'Original CHAM family publication. Local copy: references/2018-cham.pdf.'
+  notes: 'Original CHAM family publication. Local copy: references/[2018][cham][][].pdf.'
 - id: roh_et_al_2020_cham_revised
   kind: paper
   title: Revised Version of Block Cipher CHAM
@@ -229,7 +229,7 @@ references:
   venue: Information Security and Cryptology – ICISC 2019, LNCS 11975, pp. 1–19
   publisher: Springer
   url: https://doi.org/10.1007/978-3-030-40921-0_1
-  notes: 'Revised CHAM specification increasing the round counts. Local copy: references/2020-cham-revised.pdf.'
+  notes: 'Revised CHAM specification increasing the round counts. Local copy: references/[2020][cham+cham_revised][][revised].pdf.'
 - id: shin_et_al_2025_saecham
   kind: article
   title: 'SAECHAM: Secure and Efficient Lightweight Block Cipher CHAM Variant'
@@ -246,7 +246,7 @@ references:
   venue: IEEE Internet of Things Journal, vol. 12, no. 15, pp. 29989–30002
   publisher: IEEE
   url: https://doi.org/10.1109/JIOT.2025.3569746
-  notes: 'SAECHAM publication (IEEE document 11003085). Local copy: references/2025-saecham.pdf.'
+  notes: 'SAECHAM publication (IEEE document 11003085). Local copy: references/[2025][saecham][][].pdf.'
 - id: cryptopp_cham
   kind: documentation
   title: CHAM
@@ -289,7 +289,7 @@ references:
   year: 2005
   venue: Snuffle 2005 specification
   url: https://cr.yp.to/snuffle/spec.pdf
-  notes: 'Complete definition dated 2005-04-27. Local copy: references/2005-salsa20.pdf.'
+  notes: 'Complete definition dated 2005-04-27. Local copy: references/[2005][salsa20+salsa20_stream][][].pdf.'
 - id: bernstein_2007_salsa20_family
   kind: article
   title: The Salsa20 Family of Stream Ciphers
@@ -298,7 +298,7 @@ references:
   year: 2007
   venue: Manuscript dated 2007-12-25
   url: https://cr.yp.to/snuffle/salsafamily-20071225.pdf
-  notes: 'Author manuscript dated 2007-12-25. Local copy: references/2007-salsa20-stream_cipher.pdf.'
+  notes: 'Author manuscript dated 2007-12-25. Local copy: references/[2007][salsa20+salsa20_stream][][stream_cipher].pdf.'
 - id: bernstein_2008_salsa20_family_published
   kind: article
   title: The Salsa20 Family of Stream Ciphers
@@ -308,7 +308,7 @@ references:
   venue: New Stream Cipher Designs, LNCS 4986, pp. 84–97
   url: https://doi.org/10.1007/978-3-540-68351-3_8
   notes: 'Published book chapter based on the manuscript dated 2007-12-25. Local copy:
-    references/2008-salsa20-stream_cipher.pdf.'
+    references/[2008][salsa20+salsa20_stream][][stream_cipher].pdf.'
 - id: bernstein_2011_xsalsa20
   kind: specification
   title: Extending the Salsa20 nonce
@@ -317,7 +317,7 @@ references:
   year: 2011
   venue: XSalsa20 specification, revision dated 2011-02-04
   url: https://cr.yp.to/snuffle/xsalsa-20110204.pdf
-  notes: 'Defines XSalsa20 and supersedes the 2008-11-28 version. Local copy: references/2011-xsalsa20.pdf.'
+  notes: 'Defines XSalsa20 and supersedes the 2008-11-28 version. Local copy: references/[2011][salsa20_stream][][xsalsa20].pdf.'
 - id: bernstein_2008_chacha
   kind: article
   title: ChaCha, a variant of Salsa20
@@ -326,7 +326,7 @@ references:
   year: 2008
   venue: Workshop Record of SASC 2008
   url: https://cr.yp.to/chacha.html
-  notes: 'Original ChaCha specification. Local copy: references/2008-chacha.pdf.'
+  notes: 'Original ChaCha specification. Local copy: references/[2008][chacha+chacha_stream][][].pdf.'
 - id: rfc_7539
   kind: standard
   title: 'RFC 7539: ChaCha20 and Poly1305 for IETF Protocols'
@@ -340,7 +340,7 @@ references:
   url: https://www.rfc-editor.org/info/rfc7539
   notes: 'First stable CFRG specification of the IETF ChaCha20 profile, its block
     function, Poly1305, and their AEAD construction; obsoleted by RFC 8439. Local
-    PDF rendered from the official RFC text: references/2015-chacha20-rfc7539.pdf.'
+    PDF rendered from the official RFC text: references/[2015][chacha+chacha20_poly1305+chacha_stream][rfc][chacha20].pdf.'
 - id: bogdanov_2007_present
   kind: article
   title: 'PRESENT: An Ultra-Lightweight Block Cipher'
@@ -407,7 +407,7 @@ references:
   status: active
   url: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-232.pdf
   notes: 'Specifies Ascon-AEAD128, Ascon-Hash256, Ascon-XOF128, Ascon-CXOF128, and
-    the underlying Ascon-p permutation. Local copy: references/2025-ascon-nist_sp_800-232.pdf.'
+    the underlying Ascon-p permutation. Local copy: references/[2025][ascon+ascon_aead+ascon_hash+ascon_xof][][nist_sp_800+232].pdf.'
 - id: iso_iec_18033_3_2010
   kind: standard
   title: 'ISO/IEC 18033-3:2010 — Encryption algorithms — Part 3: Block ciphers'
@@ -433,7 +433,7 @@ references:
   organization: IETF
   status: informational
   url: https://www.rfc-editor.org/rfc/rfc2994
-  notes: 'Local copy: references/2000-misty1-rfc2994.txt. The mislabeled references/2000-misty1.pdf (a 1-page NESSIE
+  notes: 'Local copy: references/[2000][misty1][rfc][].txt. The mislabeled references/2000-misty1.pdf (a 1-page NESSIE
     submission cover sheet, not this specification) has been removed.'
 - id: fleischmann_2009_sha3_classification
   kind: article
@@ -456,7 +456,7 @@ references:
   status: withdrawn
   url: https://csrc.nist.gov/pubs/fips/46-3/final
   notes: Reaffirmed 1999-10-25; specifies DES and Triple DES (TDEA); withdrawn 2005-05-19;
-    local copy references/1999-des-fips46-3.pdf.
+    local copy references/[1999][des+three_key_triple_des+two_key_triple_des][fips][3].pdf.
 - id: ansi_x9_52_1998_tdea
   kind: standard
   title: 'ANSI X9.52-1998: Triple Data Encryption Algorithm Modes of Operation'
@@ -468,7 +468,7 @@ references:
   notes: Defines TDEA keying option 1 with three independent keys and keying option
     2 with K3 equal to K1; cited by NIST as ANSI X9.52-1998. The ANSI publication
     is paywalled; the supporting official NIST validation document is archived as
-    references/2000-nist_sp800-20-tmovs.pdf.
+    references/[2000][three_key_triple_des+two_key_triple_des][nist_sp][20+tmovs].pdf.
 - id: fips_46_1977_des
   kind: standard
   title: 'FIPS 46: Data Encryption Standard (DES)'
@@ -479,7 +479,7 @@ references:
   status: withdrawn
   url: https://csrc.nist.gov/pubs/fips/46/final
   notes: Original DES standard, January 15 1977; withdrawn January 22 1988 (superseded
-    by FIPS 46-1); local copy references/1977-des-fips46.pdf.
+    by FIPS 46-1); local copy references/[1977][des][fips][].pdf.
 - id: schneier_1994_blowfish
   kind: article
   title: Description of a New Variable-Length Key, 64-Bit Block Cipher (Blowfish)
@@ -497,8 +497,8 @@ references:
   year: 1991
   venue: EUROCRYPT 1990
   url: https://doi.org/10.1007/3-540-46877-3_35
-  notes: 'Primary PES paper from the authors'' ETH archive: references/1991-pes.pdf.
-    The repository also retains references/1991-idea.pdf, a later chapter describing
+  notes: 'Primary PES paper from the authors'' ETH archive: references/[1991][idea+pes][][].pdf.
+    The repository also retains references/[1991][idea][][].pdf, a later chapter describing
     IDEA as the differential-cryptanalysis-resistant improvement of PES.'
 - id: needham_wheeler_1994_tea
   kind: article
@@ -533,7 +533,7 @@ references:
     Primary Raiden design paper; proposes the cipher as a compact alternative
     retaining TEA's implementation advantages while evolving a new round function
     and key schedule through genetic programming. Local copy:
-    references/2008-raiden.pdf.
+    references/[2008][raiden][][].pdf.
 - id: schneier_et_al_1998_twofish
   kind: article
   title: 'Twofish: A 128-Bit Block Cipher'
@@ -580,7 +580,7 @@ references:
   year: 2011
   venue: CHES 2011, LNCS 6917, 342-357
   url: https://www.iacr.org/archive/ches2011/69170343/69170343.pdf
-  notes: 'Local copy: references/2011-piccolo.pdf.'
+  notes: 'Local copy: references/[2011][piccolo][][].pdf.'
 - id: beaulieu_et_al_2013_simon_speck
   kind: article
   title: The SIMON and SPECK Families of Lightweight Block Ciphers
@@ -652,7 +652,7 @@ references:
   year: 2009
   venue: CHES 2009
   url: https://www.iacr.org/archive/ches2009/57470001/57470001.pdf
-  notes: 'KATAN and KTANTAN share this single specification; local copy references/2009-katan_ktantan.pdf.
+  notes: 'KATAN and KTANTAN share this single specification; local copy references/[2009][katan+ktantan][][katan_ktantan].pdf.
     (references/2009-katan.pdf is an unrelated mislabeled AES-GCM paper — do not use.)'
 - id: adams_1997_cast128
   kind: standard
@@ -680,7 +680,7 @@ references:
   venue: Fast Software Encryption (FSE 1994), LNCS 1008
   notes: 'Original RC5 design paper, first presented at FSE 1994 (Leuven). Defines
     the parameterized RC5-w/r/b family, its data-dependent rotations, and the
-    P/Q magic-constant key schedule. Local copy references/1994-rc5.pdf is the
+    P/Q magic-constant key schedule. Local copy references/[1994][rc5][][].pdf is the
     author''s revised March 1997 version of the same paper (text and reference
     implementation unchanged in substance from the 1994 original).'
 - id: baldwin_rivest_1996_rc5
@@ -736,7 +736,7 @@ references:
   organization: SAC
   status: active
   url: http://www.gmbz.org.cn/upload/2018-04-04/1522788048733065051.pdf
-  notes: 'Local English translation/specification copy: references/2016-sm4.pdf.'
+  notes: 'Local English translation/specification copy: references/[2016][sm4][][].pdf.'
 - id: gb_15629_11_2003_sms4
   kind: standard
   title: 'GB 15629.11-2003: Wireless LAN Medium Access Control and Physical Layer Specifications'
@@ -815,7 +815,7 @@ references:
   venue: 3GPP
   organization: 3GPP
   status: active
-  notes: 'Local copy: references/2001-kasumi-ts35202.pdf.'
+  notes: 'Local copy: references/[2001][kasumi+kasumi_stream][3gpp_ts][].pdf.'
   url: https://www.3gpp.org/ftp/Specs/archive/35_series/35.202/
 - id: katagi_moriai_2011_clefia
   kind: standard
@@ -826,7 +826,7 @@ references:
   year: 2011
   venue: RFC 6114
   url: https://www.rfc-editor.org/rfc/rfc6114
-  notes: 'Local copy: references/2011-clefia-rfc6114.txt.'
+  notes: 'Local copy: references/[2011][clefia][rfc][].txt.'
 - id: suzaki_et_al_2012_twine
   kind: article
   title: The TWINE Family of Lightweight Block Ciphers
@@ -838,7 +838,7 @@ references:
   year: 2012
   venue: FSE 2012
   url: https://doi.org/10.1007/978-3-642-34047-5_13
-  notes: 'Local copy: references/2012-twine-sac-full.pdf (full version after SAC
+  notes: 'Local copy: references/[2012][twine][conference_slides][full].pdf (full version after SAC
     2012, via web.archive.org mirror of jpn.nec.com).'
 - id: wu_zhang_2011_lblock
   kind: article
@@ -849,7 +849,7 @@ references:
   year: 2011
   venue: ACNS 2011
   url: https://doi.org/10.1007/978-3-642-21554-4_19
-  notes: 'Local copy: references/2011-lblock.pdf.'
+  notes: 'Local copy: references/[2011][lblock][][].pdf.'
 - id: lim_1998_crypton
   kind: article
   title: 'CRYPTON: A New 128-bit Block Cipher'
@@ -943,7 +943,7 @@ references:
   year: 2021
   venue: IACR Transactions on Symmetric Cryptology, 2021(1), pp. 78-129
   url: https://tosc.iacr.org/index.php/ToSC/article/view/8834
-  notes: 'Local copy: references/2021-moe.pdf. DOI 10.46586/tosc.v2021.i1.78-129, open access under CC-BY 4.0. Cited in
+  notes: 'Local copy: references/[2021][moe][][].pdf. DOI 10.46586/tosc.v2021.i1.78-129, open access under CC-BY 4.0. Cited in
     MSX''s related-work section (Minematsu et al., "MSX," IACR CiC 2026) alongside IDEA and RC6 as prior uses of multiplication
     as a nonlinearity source.'
 - id: burwick_et_al_1999_mars
@@ -1047,7 +1047,7 @@ references:
   year: 2025
   venue: IACR Communications in Cryptology
   url: https://cic.iacr.org/p/1/4/25
-  notes: 'Local copy: references/2025-ulbc-cic.pdf.'
+  notes: 'Local copy: references/[2025][ulbc][][cic].pdf.'
 - id: wang_et_al_2025_blink
   kind: article
   title: 'THF: Designing Low-Latency Tweakable Block Ciphers'
@@ -1092,7 +1092,7 @@ references:
   year: 2026
   venue: IACR Communications in Cryptology
   url: https://cic.iacr.org/p/2/4/32
-  notes: 'Local copy: references/2026-msx-cic.pdf.'
+  notes: 'Local copy: references/[2026][msx][][cic].pdf.'
 - id: rfc_8439
   kind: standard
   title: 'RFC 8439: ChaCha20 and Poly1305 for IETF Protocols'
@@ -1105,7 +1105,7 @@ references:
   status: current
   url: https://www.rfc-editor.org/info/rfc8439
   notes: 'Updates RFC 7539 by incorporating errata and additional security-considerations
-    text. Local PDF rendered from the official RFC text: references/2018-chacha20-rfc8439.pdf.'
+    text. Local PDF rendered from the official RFC text: references/[2018][chacha+chacha20_poly1305+chacha_stream+poly1305][rfc][chacha20].pdf.'
 - id: rivest_1987_rc4
   kind: article
   title: 'RC4: A Stream Cipher'
@@ -1116,8 +1116,8 @@ references:
   url: https://en.wikipedia.org/wiki/RC4
   notes: 'No original publication exists — RC4 was an unpublished RSA trade secret
     anonymously leaked to the Cypherpunks mailing list in 1994. Local supporting
-    analysis PDFs covering RC4 and its variants: references/2004-rc4drop.pdf,
-    references/2007-rc4drop.pdf, references/2007-rc4a_distinguishing_attacks.pdf.'
+    analysis PDFs covering RC4 and its variants: references/[2004][rc4][][rc4drop].pdf,
+    references/[2007][rc4+rc4drop][][].pdf, references/[2007][rc4+rc4a][][rc4a_distinguishing_attacks].pdf.'
 - id: ascon_caesar_submission_2016
   kind: article
   title: Ascon v1.2
@@ -1170,7 +1170,7 @@ references:
   url: https://eprint.iacr.org/2023/799.pdf
   notes: 'Primary Gaston design paper; defines the 320-bit permutation and compares
     its three-round differential and linear trail weights with Ascon. Local copy:
-    references/2023-gaston.pdf.'
+    references/[2023][gaston][][].pdf.'
 - id: skinny_2016
   kind: article
   title: The SKINNY Family of Block Ciphers and its Low-Latency Variant MANTIS
@@ -1237,7 +1237,7 @@ references:
   venue: CRYPTO 2011, LNCS 6841, pp. 222-239
   publisher: Springer
   url: https://eprint.iacr.org/2011/609
-  notes: 'Original PHOTON design paper. Local copy: references/2011-photon.pdf.'
+  notes: 'Original PHOTON design paper. Local copy: references/[2011][photon][][].pdf.'
 - id: photon_beetle_2021
   kind: article
   title: PHOTON-Beetle Authenticated Encryption and Hashing
@@ -1306,7 +1306,7 @@ references:
   year: 2022
   venue: NIST Lightweight Cryptography Winner (NIST SP 800-232)
   url: https://csrc.nist.gov/projects/lightweight-cryptography
-  notes: 'NIST lightweight cryptography standard finalist. Local copy: references/2022-grain128aead.pdf.'
+  notes: 'NIST lightweight cryptography standard finalist. Local copy: references/[2022][grain_128][][grain128aead].pdf.'
 - id: gimli_2017
   kind: article
   title: 'Gimli : a cross-platform permutation'
@@ -1335,7 +1335,7 @@ references:
   year: 2019
   venue: NIST LWC Round 1 Submission
   url: https://csrc.nist.gov/projects/lightweight-cryptography
-  notes: 'Local copy: references/2019-subterranean_v2.pdf.'
+  notes: 'Local copy: references/[2019][subterranean+subterranean_2_0][][v2].pdf.'
 - id: claesen_daemen_genoe_peeters_1993_subterranean
   kind: paper
   title: 'Subterranean: A 600 Mbit/sec Cryptographic VLSI Chip'
@@ -1351,7 +1351,7 @@ references:
   notes: >-
     Defines the original 257-bit Subterranean state update and its Substream
     and Subhash modes. The design dates to 1992; this paper appeared in 1993.
-    Local copy supplied by the user: references/1993-subterranean.pdf.
+    Local copy supplied by the user: references/[1993][subterranean+subterranean_hash+subterranean_stream][][].pdf.
 - id: daemen_clapp_1998_panama
   kind: paper
   title: Fast Hashing and Stream Encryption with PANAMA
@@ -1385,7 +1385,7 @@ references:
   venue: EUROCRYPT 1990, LNCS 473, pp. 389-404
   publisher: Springer
   url: https://doi.org/10.1007/3-540-46877-3_35
-  notes: 'Local copy: references/1991-pes.pdf.'
+  notes: 'Local copy: references/[1991][idea+pes][][].pdf.'
 - id: zhang_et_al_2014_rectangle
   kind: paper
   title: 'RECTANGLE: A Bit-slice Lightweight Block Cipher Suitable for Multiple Platforms'
@@ -1400,7 +1400,7 @@ references:
   venue: IACR ePrint 2014/084; journal version Science China Information Sciences 58(12),
     2015
   url: https://eprint.iacr.org/2014/084
-  notes: 'Local copy: references/2014-rectangle.pdf.'
+  notes: 'Local copy: references/[2014][rectangle][][].pdf.'
 - id: bogdanov_et_al_2011_spongent
   kind: paper
   title: 'spongent: A Lightweight Hash Function'
@@ -1415,7 +1415,7 @@ references:
   venue: CHES 2011, LNCS 6917, pp. 312-325
   publisher: Springer
   url: https://eprint.iacr.org/2011/697
-  notes: 'Local copy: references/2011-spongent.pdf.'
+  notes: 'Local copy: references/[2011][spongent+spongent_hash][][].pdf.'
 - id: altawy_et_al_2017_sliscp
   kind: paper
   title: 'sLiSCP: Simeck-based Permutations for Lightweight Sponge Cryptographic Primitives'
@@ -1430,7 +1430,7 @@ references:
   venue: SAC 2017, LNCS 10719, pp. 129-150
   publisher: Springer
   url: https://eprint.iacr.org/2017/747
-  notes: 'Local copy: references/2017-sliscp.pdf.'
+  notes: 'Local copy: references/[2017][sliscp][][].pdf.'
 - id: altawy_et_al_2018_sliscp_light
   kind: paper
   title: 'sLiSCP-light: Towards Lighter Sponge-specific Cryptographic Permutations'
@@ -1444,7 +1444,7 @@ references:
   year: 2018
   venue: ACM Transactions on Embedded Computing Systems 17(4)
   url: https://cacr.uwaterloo.ca/techreports/2018/cacr2018-01.pdf
-  notes: 'Local copy: references/2018-sliscp_light.pdf.'
+  notes: 'Local copy: references/[2018][sliscp_light][][].pdf.'
 - id: aumasson_et_al_2016_norx
   kind: specification
   title: NORX v3.0
@@ -1455,7 +1455,7 @@ references:
   year: 2016
   venue: CAESAR competition submission
   url: https://competitions.cr.yp.to/round3/norxv30.pdf
-  notes: 'Local copy: references/2016-norx.pdf.'
+  notes: 'Local copy: references/[2016][norx+norx_aead][][].pdf.'
 - id: dinu_et_al_2016_sparx
   kind: paper
   title: 'Design Strategies for ARX with Provable Bounds: SPARX and LAX'
@@ -1470,7 +1470,7 @@ references:
   venue: ASIACRYPT 2016, LNCS 10031, pp. 484-513
   publisher: Springer
   url: https://eprint.iacr.org/2016/984
-  notes: 'Local copy: references/2016-sparx.pdf.'
+  notes: 'Local copy: references/[2016][lax+marx2+sparx][][].pdf.'
 - id: biryukov_velichkov_lecorre_2016_arx_trails_speck
   kind: paper
   title: 'Automatic Search for the Best Trails in ARX: Application to Block Cipher Speck'
@@ -1495,7 +1495,7 @@ references:
   year: 2005
   venue: ECRYPT Stream Cipher Project Report 2005/033
   url: https://cr.yp.to/streamciphers/wg/desc.pdf
-  notes: 'Local copy: references/2005-wg.pdf.'
+  notes: 'Local copy: references/[2005][wg][][].pdf.'
 - id: albrecht_et_al_2015_lowmc
   kind: paper
   title: Ciphers for MPC and FHE
@@ -1509,7 +1509,7 @@ references:
   venue: EUROCRYPT 2015, LNCS 9056, pp. 430-454
   publisher: Springer
   url: https://eprint.iacr.org/2016/687
-  notes: 'Local copy: references/2015-lowmc.pdf.'
+  notes: 'Local copy: references/[2015][lowmc][][].pdf.'
 - id: driscoll_2002_beepbeep
   kind: paper
   title: 'BeepBeep: Embedded Real-Time Encryption'
@@ -1519,7 +1519,7 @@ references:
   venue: FSE 2002, LNCS 2365, pp. 164-178
   publisher: Springer
   url: https://www.iacr.org/archive/fse2002/23650166/23650166.pdf
-  notes: 'Local copy: references/2002-beepbeep.pdf.'
+  notes: 'Local copy: references/[2002][beepbeep][][].pdf.'
 - id: berger_et_al_2015_cube
   kind: presentation
   title: 'CUBE Cipher: A Family of Quasi-Involutive Block Ciphers Easy to Mask (slides)'
@@ -1533,7 +1533,7 @@ references:
   url: https://doi.org/10.1007/978-3-319-18681-8_8
   notes: 'The C2SI 2015 conference paper (Springer, DOI above) is paywalled; these seminar
     slides cover the full design (round function, all three instantiations, key schedule,
-    security analysis) and are used as the local copy: references/2015-cube-presentation.pdf.'
+    security analysis) and are used as the local copy: references/[2015][cube_cipher][presentation][cube].pdf.'
 - id: bertoni_et_al_2006_radiogatun
   kind: paper
   title: 'RadioGatún, a Belt-and-Mill Hash Function'
@@ -1547,7 +1547,7 @@ references:
   url: https://radiogatun.noekeon.org/RadioGatun.pdf
   notes: >-
     Defines the RadioGatún belt-and-mill family. Local copy:
-    references/2006-radiogatun.pdf.
+    references/[2006][radiogatun][][].pdf.
 - id: bertoni_et_al_2007_sponge_functions
   kind: presentation
   title: Sponge Functions
@@ -1561,7 +1561,7 @@ references:
   url: https://keccak.team/files/SpongeFunctions.pdf
   notes: >-
     Introduces the sponge construction formalizing separate absorbing and
-    squeezing phases. Local presentation copy: references/2007-sponge-functions.pdf.
+    squeezing phases. Local presentation copy: references/[2007][subterranean][][sponge+functions].pdf.
 - id: drygascon_2019
   kind: article
   title: DryGASCON - Submission to NIST Lightweight Cryptography
@@ -1572,7 +1572,7 @@ references:
   url: https://csrc.nist.gov/projects/lightweight-cryptography
   notes: >-
     The submission specifies the GASCON permutation family used by DryGASCON.
-    Local copy: references/2019-drygascon.pdf.
+    Local copy: references/[2019][drygascon_aead+drygascon_hash+gascon][][drygascon].pdf.
 - id: sneik_2019
   kind: article
   title: SNEIK - Submission to NIST Lightweight Cryptography
@@ -1591,7 +1591,7 @@ references:
   year: 2019
   venue: NIST LWC Round 1 Submission
   url: https://csrc.nist.gov/projects/lightweight-cryptography
-  notes: 'Local copy: references/2019-sycon.pdf.'
+  notes: 'Local copy: references/[2019][sycon+sycon_aead+sycon_hash][][].pdf.'
 - id: spix_2019
   kind: article
   title: SPIX - Submission to NIST Lightweight Cryptography
@@ -1653,7 +1653,7 @@ references:
   year: 2019
   venue: NIST LWC Round 1 Submission
   url: https://csrc.nist.gov/projects/lightweight-cryptography
-  notes: 'Local copy: references/2019-knot.pdf.'
+  notes: 'Local copy: references/[2019][knot+knot_aead+knot_hash][][].pdf.'
 - id: pyjamask_2019
   kind: article
   title: Pyjamask - Submission to NIST Lightweight Cryptography
@@ -1729,7 +1729,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography (Round 1) Submission
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ace-spec.pdf
-  notes: 'ACE specification and parameter set (ACE-AE-128, ACE-H-256, 320-bit permutation). Local copy: references/2019-ace.pdf.'
+  notes: 'ACE specification and parameter set (ACE-AE-128, ACE-H-256, 320-bit permutation). Local copy: references/[2019][ace+ace_aead+ace_hash][][].pdf.'
 - id: alvarez_et_al_1996_akelarre
   kind: paper
   title: 'Akelarre: A New Block Cipher Algorithm'
@@ -1742,7 +1742,7 @@ references:
   venue: Selected Areas in Cryptography (SAC 1996)
   organization: SAC
   url: https://sacworkshop.org/proc/SAC_96_002.pdf
-  notes: 'PDF page 3-16. Derived from symmetric_cryptography_database/references/1996-akelarre.pdf.'
+  notes: 'PDF page 3-16. Derived from symmetric_cryptography_database/references/[1996][akelarre][][].pdf.'
 - id: leech_1996_crisp
   kind: paper
   title: 'CRISP: A Feistel Cipher with Hardened Key-Scheduling'
@@ -1752,7 +1752,7 @@ references:
   venue: Selected Areas in Cryptography (SAC 1996)
   organization: SAC
   url: https://sacworkshop.org/proc/SAC_96_002.pdf
-  notes: 'PDF page 17-31. Derived from symmetric_cryptography_database/references/1996-crisp.pdf.'
+  notes: 'PDF page 17-31. Derived from symmetric_cryptography_database/references/[1996][crisp][][].pdf.'
 - id: ant_ref
   kind: paper
   title: ANT系列分组密码算法
@@ -1801,7 +1801,7 @@ references:
   venue: Fast Software Encryption (FSE 1996)
   url: https://www.cl.cam.ac.uk/archive/rja14/Papers/bear-lion.pdf
   notes: Primary source paper describing BEAR and LION as block-cipher constructions
-    from a stream cipher and a hash function; local copy is references/1996-bear-lion-lioness.pdf.
+    from a stream cipher and a hash function; local copy is references/[1996][bear_lion][][bear+lion+lioness].pdf.
 - id: belt_ref
   kind: standard
   title: 'STB 34.101.31-2020: BelT Block Cipher'
@@ -1809,7 +1809,7 @@ references:
   venue: State Standard of the Republic of Belarus (STB 34.101.31)
   url: https://eprint.iacr.org/2012/148.pdf
   notes: 'Belarusian national block cipher standard. 128-bit block, 256-bit key, 8-round
-    SPN. Local copy: references/2012-belt.pdf.'
+    SPN. Local copy: references/[2012][belt][][].pdf.'
 - id: bleep64_ref
   kind: paper
   title: Bleep64
@@ -1839,7 +1839,7 @@ references:
   year: 2014
   venue: Selected Areas in Cryptography (SAC 2014), full version
   url: https://eprint.iacr.org/2014/386
-  notes: Derived from references/2014-chaskey_eprint.pdf.
+  notes: Derived from references/[2014][chaskey][][chaskey_eprint].pdf.
 - id: cilipadi_ref
   kind: paper
   title: CiliPadi
@@ -1852,7 +1852,7 @@ references:
   venue: CRYPTREC Candidate / NEC
   url: https://www.cryptrec.go.jp/cryptrec_03_spec_cypherlist_files/PDF/05_01spec.pdf
   notes: 'NEC''s 128-bit block cipher submitted as a CRYPTREC candidate. Local copy:
-    references/2000-cipherunicorn_a.pdf.'
+    references/[2000][cipherunicorn_a][][].pdf.'
 - id: cipherunicorn_e_ref
   kind: paper
   title: 'CIPHERUNICORN-E: A 64-Bit Block Cipher'
@@ -1860,7 +1860,7 @@ references:
   venue: CRYPTREC Candidate / NEC
   url: https://www.cryptrec.go.jp/cryptrec_03_spec_cypherlist_files/PDF/04_01spec.pdf
   notes: 'NEC''s 64-bit block cipher submitted as a CRYPTREC candidate. Local copy:
-    references/1998-cipherunicorn_e.pdf.'
+    references/[1998][cipherunicorn_e][][].pdf.'
 - id: clae_ref
   kind: paper
   title: CLAE
@@ -1894,7 +1894,7 @@ references:
   organization: École Normale Supérieure — CNRS
   url: https://link.springer.com/chapter/10.1007/3-540-69710-1_13
   notes: 'CS-Cipher is a 64-bit block cipher (not a stream cipher -- the paper''s own abstract opens with "This paper
-    presents a new block cipher"). Local copy: references/1998-cs-cipher.pdf (16 pages: full specification, design
+    presents a new block cipher"). Local copy: references/[1998][cs_cipher][][cs+cipher].pdf (16 pages: full specification, design
     rationale, and implementation figures).'
 - id: deoxys_ref
   kind: paper
@@ -1903,7 +1903,7 @@ references:
   venue: CAESAR Competition Final Portfolio Submission
   url: https://competitions.cr.yp.to/caesar-submissions/deoxys-v1.41.pdf
   notes: 'Tweakable block cipher by Jean et al. CAESAR finalist (Portfolio 1). Local
-    copy: references/2016-deoxys.pdf.'
+    copy: references/[2016][deoxys][][].pdf.'
 - id: desx_ref
   kind: paper
   title: How to Protect DES Against Exhaustive Key Search
@@ -1913,7 +1913,7 @@ references:
   year: 1996
   venue: CRYPTO 1996
   url: https://doi.org/10.1007/3-540-68697-5_9
-  notes: Derived from references/1996-desx.pdf.
+  notes: Derived from references/[1996][desx][][].pdf.
 - id: enocoro_128v2_ref
   kind: paper
   title: Enocoro-128v2
@@ -1921,7 +1921,7 @@ references:
   venue: CRYPTREC Candidate / Hitachi
   url: https://www.cryptrec.go.jp/cryptrec_03_spec_cypherlist_files/PDF/10_05spec.pdf
   notes: 'Hitachi''s eSTREAM-profile stream cipher, CRYPTREC recommended. Local copy:
-    references/2010-enocoro128v2.pdf.'
+    references/[2010][enocoro_128v2][][].pdf.'
 - id: estate_ref
   kind: paper
   title: ESTATE
@@ -1982,7 +1982,7 @@ references:
   kind: paper
   title: GAGE and InGAGE v1
   year: 2019
-  notes: 'NIST LWC Round 1 submission. Local copy: references/2019-gage_ingaege.pdf.'
+  notes: 'NIST LWC Round 1 submission. Local copy: references/[2019][gage+gage_hash+ingage_aead][][gage_ingaege].pdf.'
   authors:
   - Danilo Gligoroski
   - Hristina Mihajloska
@@ -1998,7 +1998,7 @@ references:
   year: 1989
   venue: GOST 28147-89 standard
   url: https://datatracker.ietf.org/doc/html/rfc5830
-  notes: Derived from references/1989-gost_28147_89.pdf.
+  notes: Derived from references/[1989][gost_28147_89][][].pdf.
 - id: grand_cru_ref
   kind: paper
   title: Grand Cru
@@ -2013,7 +2013,7 @@ references:
   venue: NIST Lightweight Cryptography Competition Round 1
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/HERN-HERON-spec.pdf
   notes: 'Lightweight block cipher pair for constrained environments. Local copy:
-    references/2019-hern_heron.pdf.'
+    references/[2019][hern_and_heron][][hern_heron].pdf.'
 - id: hight_ref
   kind: paper
   title: 'HIGHT: A New Block Cipher Suitable for Low-Resource Device'
@@ -2021,7 +2021,7 @@ references:
   venue: CHES 2006
   url: https://eprint.iacr.org/2006/350.pdf
   notes: 'Korean lightweight 64-bit block cipher with 128-bit key, 32-round GFN. Local
-    copy: references/2006-hight.pdf.'
+    copy: references/[2006][hight][][].pdf.'
 - id: hyena_ref
   kind: paper
   title: HyENA
@@ -2035,7 +2035,7 @@ references:
   year: 1997
   venue: Fast Software Encryption 1997
   url: https://doi.org/10.1007/BFb0052346
-  notes: Derived from references/1997-ice.pdf.
+  notes: Derived from references/[1997][ice][][].pdf.
 - id: isaac_ref
   kind: paper
   title: ISAAC
@@ -2068,7 +2068,7 @@ references:
   year: 2011
   venue: RFIDSec 2011
   url: https://eprint.iacr.org/2011/576.pdf
-  notes: 'Lightweight block cipher targeting RFID. Local copy: references/2011-klein.pdf.'
+  notes: 'Lightweight block cipher targeting RFID. Local copy: references/[2011][klein][][].pdf.'
 - id: kuznyechik_ref
   kind: standard
   title: 'RFC 7801: GOST R 34.12-2015: Block Cipher "Kuznyechik"'
@@ -2078,9 +2078,7 @@ references:
   venue: IETF RFC 7801 (Informational, Independent Submission)
   url: https://www.rfc-editor.org/rfc/rfc7801
   notes: 'Russian national block cipher standard (GOST R 34.12-2015). 128-bit block,
-    256-bit key, 10-round SPN. Local copy references/2015-kuznyechik.txt.
-    (The file "2019-kuznyechik.pdf" in that directory is an unrelated, mislabeled
-    PUF-hardness-amplification paper — do not use.)'
+    256-bit key, 10-round SPN. Local copy references/[2015][kuznyechik][][].txt.'
 - id: streebog_ref
   kind: standard
   title: 'RFC 6986: GOST R 34.11-2012: Hash Function'
@@ -2091,7 +2089,7 @@ references:
   venue: IETF RFC 6986 (Informational, Independent Submission)
   url: https://www.rfc-editor.org/rfc/rfc6986
   notes: 'Russian national hash function standard (GOST R 34.11-2012, "Streebog"). 512-bit internal state, 256- and
-    512-bit output variants. Local copy references/2013-streebog-rfc6986.txt. Defines the same 8-bit nonlinear
+    512-bit output variants. Local copy references/[2013][streebog+streebog_hash][rfc][].txt. Defines the same 8-bit nonlinear
     substitution Pi as RFC 7801''s Kuznyechik (byte-for-byte identical -- confirmed by direct comparison of the two
     RFCs'' own published S-box tables).'
 - id: laem_ref
@@ -2113,7 +2111,7 @@ references:
   venue: Information Security Applications (WISA) 2013, LNCS 8267
   url: https://doi.org/10.1007/978-3-319-05149-9_1
   notes: Korean lightweight block cipher with a 128-bit block and 128-, 192-, or 256-bit
-    keys. Local copy references/2013-lea.pdf.
+    keys. Local copy references/[2013][lea][][].pdf.
 - id: leviathan_ref
   kind: paper
   title: LEVIATHAN - The Leviathan Authenticated Encryption Mode
@@ -2133,7 +2131,7 @@ references:
   year: 2000
   venue: NESSIE Submission
   organization: Queensland University of Technology / University of Belgrade
-  notes: 'Local copy: references/2000-lili-128.pdf (renamed from the stale references/2000-lili_128.pdf, which held a
+  notes: 'Local copy: references/[2000][lili_128][][lili+128].pdf (renamed from the stale references/2000-lili_128.pdf, which held a
     1-page NESSIE cover sheet, not this paper). Clock-controlled nonlinear-filter LFSR stream cipher. The paper''s own
     related-work discussion lists ORYX and SOBER together only as prior examples combining nonlinear filtering with
     irregular clocking (no single one singled out as an adopted basis), and states its stop-and-go-free clocking was
@@ -2159,7 +2157,7 @@ references:
   title: LOKI — A Cryptographic Primitive for Authentication and Secrecy Applications
   year: 1990
   notes: 'Original LOKI89 paper. LOKI91 revision published 1991 to address weak-key
-    vulnerabilities. Local copy: references/1990-loki.pdf. (2-page AUSCRYPT ''90 extended
+    vulnerabilities. Local copy: references/[1990][loki][][].pdf. (2-page AUSCRYPT ''90 extended
     abstract, LNCS 453 pp. 229-236; open-access author copy via University of Wollongong
     Research Online, https://ro.uow.edu.au/infopapers/1047/, MD5 45f3da4f53a211de89dd61c933386d40.)
     Confirms: 64-bit block, 64-bit key, DEA-1(DES)-resembling Feistel structure (P/S/E
@@ -2183,7 +2181,7 @@ references:
   venue: CRYPTO 2016
   url: https://eprint.iacr.org/2016/660.pdf
   notes: 'MANTIS is the low-latency tweakable variant; shares paper with SKINNY. Local
-    copy: references/2016-skinny_mantis.pdf.'
+    copy: references/[2016][mantis+skinny][][skinny_mantis].pdf.'
 - id: mcrypton_ref
   kind: paper
   title: mCrypton — A Lightweight Block Cipher for Security of Low-Cost RFID Tags
@@ -2216,7 +2214,7 @@ references:
   year: 2015
   venue: ASIACRYPT 2015
   url: https://eprint.iacr.org/2015/1142.pdf
-  notes: 'Energy-efficient block cipher. 64- and 128-bit variants. Local copy: references/2015-midori.pdf.'
+  notes: 'Energy-efficient block cipher. 64- and 128-bit variants. Local copy: references/[2015][midori][][].pdf.'
 - id: misty1_ref
   kind: paper
   title: 'MISTY1: A 64-Bit Block Cipher with High Nonlinearity'
@@ -2258,14 +2256,14 @@ references:
   year: 2002
   venue: IEICE Transactions on Fundamentals / CRYPTREC
   url: https://eprint.iacr.org/2002/189.pdf
-  notes: 'Japanese stream cipher, CRYPTREC recommended. Local copy: references/2002-mugi.pdf.'
+  notes: 'Japanese stream cipher, CRYPTREC recommended. Local copy: references/[2002][mugi][][].pdf.'
 - id: multi_s01_ref
   kind: paper
   title: 'MULTI-S01: Pseudorandom Number Generator'
   year: 2001
   venue: CRYPTREC Candidate / Hitachi
   url: https://www.cryptrec.go.jp/cryptrec_03_spec_cypherlist_files/PDF/10_03spec.pdf
-  notes: 'Japanese stream cipher, CRYPTREC candidate. Local copy: references/2001-multi_s01.pdf.'
+  notes: 'Japanese stream cipher, CRYPTREC candidate. Local copy: references/[2001][multi_s01][][].pdf.'
 - id: multi2_patent_us_4982429
   kind: patent
   title: Encipher Method and Decipher Method (US Patent 4,982,429)
@@ -2277,7 +2275,7 @@ references:
   organization: Hitachi, Ltd. / Hitachi Control Systems, Inc.
   status: granted
   url: https://patents.google.com/patent/US4982429A/en
-  notes: 'Local copy: references/1988-multi2-patent_US-4982429-A.pdf. Filed 1989-04-27 (Japan priority application
+  notes: 'Local copy: references/[1988][multi2][patent][4982429+A].pdf. Filed 1989-04-27 (Japan priority application
     63-103919, 1988-04-28), granted 1991-01-01. This is the original design document for what became MULTI2, describing
     the substitution-transformation (P1-P4) / permutation-transformation (R1-R3) encipher method. The prior "multi2_ref"
     entry (a purported Miyaguchi paper "MULTI2: An Encryption Algorithm for Satellite Broadcasting," CRYPTO 1988, LNCS
@@ -2296,7 +2294,7 @@ references:
   year: 1994
   organization: ISO/IEC (registration sponsored by Japan IPA; requested by Hitachi, Ltd.)
   status: registered
-  notes: 'Local copy: references/1994-multi2-ISO_IEC_9979-version.pdf. Registered 1994-11-14. States "MULTI2 is a
+  notes: 'Local copy: references/[1994][multi2][][ISO_IEC_9979+version].pdf. Registered 1994-11-14. States "MULTI2 is a
     symmetric block cipher algorithm based on the permutation-substitution calculation like DES" and lists both US
     patents (4,982,429 and 5,103,479) plus a Japanese patent application as license restrictions. Confirms the 64-bit
     block / 64-bit data key / 256-bit system key / configurable-round parameters used by the multi2 family entry.'
@@ -2326,7 +2324,7 @@ references:
   - Alexander Volchkov
   year: 2000
   venue: NESSIE Submission
-  notes: 'Software-optimized block cipher for performance. Local copy: references/2000-nush.pdf -- the full NESSIE
+  notes: 'Software-optimized block cipher for performance. Local copy: references/[2000][nush][][].pdf -- the full NESSIE
     submission specification (block cipher NUSH plus the related NUSH Stream, NUSH Self-Synchro, NUSH MAC, NUSH Hash,
     NUSH PRF constructions built on the same primitive, and asymmetric NUSH PKCode/NUSH Sign schemes out of scope for
     this database). No design-rationale or related-work section is present, so no predecessor-cipher influence claim
@@ -2370,14 +2368,14 @@ references:
   year: 2014
   venue: CRYPTO 2014
   url: https://eprint.iacr.org/2014/591.pdf
-  notes: '64-bit lightweight block cipher with ARX round function. Local copy: references/2014-pride.pdf.'
+  notes: '64-bit lightweight block cipher with ARX round function. Local copy: references/[2014][pride][][].pdf.'
 - id: princev2_ref
   kind: paper
   title: 'PRINCEv2: More Security for (Almost) No Overhead'
   year: 2020
   venue: Selected Areas in Cryptography (SAC) 2020
   url: https://eprint.iacr.org/2020/1269.pdf
-  notes: 'Tweakable low-latency block cipher update. Local copy: references/2020-princev2.pdf.'
+  notes: 'Tweakable low-latency block cipher update. Local copy: references/[2020][prince+princev2][][].pdf.'
 - id: q_ref
   kind: paper
   title: 'Q: A Proposal for NESSIE v2.00'
@@ -2386,7 +2384,7 @@ references:
   year: 2000
   venue: NESSIE Submission
   url: https://web.archive.org/web/20070205001927/http://www.cosic.esat.kuleuven.ac.be/nessie/
-  notes: Derived from references/2000-q.pdf.
+  notes: Derived from references/[2000][q][][].pdf.
 - id: quartet_ref
   kind: paper
   title: Quartet
@@ -2403,7 +2401,7 @@ references:
   year: 1998
   venue: Fast Software Encryption (FSE) 1998, LNCS 1372
   url: https://link.springer.com/chapter/10.1007/3-540-69710-1_21
-  notes: 'Security analysis and design rationale for RC2. Local copy: references/1998-rc2.pdf.'
+  notes: 'Security analysis and design rationale for RC2. Local copy: references/[1998][rc2][][].pdf.'
 - id: rc2_rfc2268_ref
   title: A Description of the RC2(r) Encryption Algorithm
   authors:
@@ -2414,7 +2412,7 @@ references:
   kind: standard
   notes: 'Public specification of the RC2 cipher algorithm, published as an informational
     RFC in 1998. The algorithm had been confidential since its 1989 design; its specification
-    leaked to sci.crypt in 1996 before this formal publication. Local copy: references/1998-rc2-rfc2268.txt.'
+    leaked to sci.crypt in 1996 before this formal publication. Local copy: references/[1998][rc2][rfc][].txt.'
 - id: rc2_1989_ref
   title: RC2 — Original Design (Confidential Internal Report)
   authors:
@@ -2446,7 +2444,7 @@ references:
   venue: IACR ePrint 2007/070
   url: https://eprint.iacr.org/2007/070
   notes: This paper analyzes RC4A and cites its original FSE 2004 introduction by
-    Paul and Preneel; derived from references/2007-rc4a_distinguishing_attacks.pdf.
+    Paul and Preneel; derived from references/[2007][rc4+rc4a][][rc4a_distinguishing_attacks].pdf.
 - id: remus_ref
   kind: paper
   title: 'Duel of the Titans: The Romulus and Remus Families of Lightweight AEAD Algorithms'
@@ -2458,7 +2456,20 @@ references:
   year: 2019
   venue: IACR ePrint 2019/992
   url: https://eprint.iacr.org/2019/992
-  notes: Derived from references/2019-remus_romulus.pdf.
+  notes: Derived from references/[2019][remus+romulus][][remus_romulus].pdf.
+- id: iwata_et_al_2019_remus_v1_nist_lwc
+  kind: report
+  title: 'Remus v1.0'
+  authors:
+  - Tetsu Iwata
+  - Mustafa Khairallah
+  - Kazuhiko Minematsu
+  - Thomas Peyrin
+  year: 2019
+  venue: NIST Lightweight Cryptography Round 1 submission
+  notes: 'Local copy: references/[2019][remus][][].pdf. The original standalone NIST-LWC round-1 submission spec, distinct
+    from remus_ref (the later, combined Romulus+Remus academic paper) -- found orphaned/unlinked in this
+    database''s local references directory; relinked during the references/ filename cleanup pass.'
 - id: saeaes_ref
   kind: paper
   title: SAEAES
@@ -2468,8 +2479,8 @@ references:
   kind: paper
   title: 'SAFER K-64: A Byte-Oriented Block-Ciphering Algorithm'
   year: 1993
-  notes: 'Original SAFER K-64 paper. Local copies: references/1993-safer-k64.pdf and
-    references/1994-safer-k128.pdf.'
+  notes: 'Original SAFER K-64 paper. Local copies: references/[1993][safer+safer_plus+saferpp][][k64].pdf and
+    references/[1994][safer+safer_plus+saferpp][][k128].pdf.'
   authors:
   - James L. Massey
   venue: Fast Software Encryption (FSE) 1993, LNCS 809
@@ -2499,7 +2510,7 @@ references:
   - Hidema Tanaka
   year: 2001
   venue: FSE 2001, LNCS 2355, pp. 312-327 (Springer, 2002)
-  notes: 'Local copy: references/2000-sc2000.pdf -- the actual FSE 2001 design paper (previously this filename held
+  notes: 'Local copy: references/[2000][sc2000][][].pdf -- the actual FSE 2001 design paper (previously this filename held
     a 1-page Fujitsu IP/patent statement with no algorithm description; that has been replaced). The cipher pairs a
     Feistel-structured R layer with an SPN-structured B layer per round. Its references section cites Square, Rijndael,
     Twofish, and a SAC''98 fast-Boolean-functions paper together for the generic MDS-diffusion-matrix technique, and
@@ -2516,7 +2527,7 @@ references:
   year: 2000
   venue: NESSIE Submission
   url: https://en.wikipedia.org/wiki/SHACAL
-  notes: SHACAL-1 specification era reference; SHA baseline PDF is stored in references/2002-sha_fips180-2.pdf.
+  notes: SHACAL-1 specification era reference; SHA baseline PDF is stored in references/[2002][sha1_hash+sha1_sha2+sha2+sha2_hash+shacal+shacal2][][sha_fips180+2].pdf.
 - id: shacal2_ref
   kind: paper
   title: SHACAL2
@@ -2526,7 +2537,7 @@ references:
   year: 2001
   venue: NESSIE Submission
   url: https://en.wikipedia.org/wiki/SHACAL
-  notes: SHACAL-2 specification era reference; SHA baseline PDF is stored in references/2002-sha_fips180-2.pdf.
+  notes: SHACAL-2 specification era reference; SHA baseline PDF is stored in references/[2002][sha1_hash+sha1_sha2+sha2+sha2_hash+shacal+shacal2][][sha_fips180+2].pdf.
 - id: shamash_and_shamashash_ref
   kind: paper
   title: Shamash & Shamashash
@@ -2544,7 +2555,7 @@ references:
   year: 1996
   venue: Fast Software Encryption
   url: https://doi.org/10.1007/3-540-68697-5_11
-  notes: Derived from references/1996-shark.pdf.
+  notes: Derived from references/[1996][shark][][].pdf.
 - id: skipjack_ref
   kind: standard
   title: SKIPJACK and KEA Algorithm Specifications
@@ -2553,7 +2564,7 @@ references:
   year: 1998
   venue: NIST declassification package
   url: https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub185.pdf
-  notes: Derived from references/1998-skipjack.pdf.
+  notes: Derived from references/[1998][skipjack][][].pdf.
 - id: snow_ref
   kind: paper
   title: SNOW - a new stream cipher?
@@ -2563,7 +2574,7 @@ references:
   year: 2001
   venue: IETF SASC workshop contribution
   url: https://web.archive.org/web/20201017161826/http://www.madchat.fr/crypto/hash-lib-algo/snow/snow10.pdf
-  notes: Derived from references/2001-snow10.pdf.
+  notes: Derived from references/[2001][snow][][snow10].pdf.
 - id: snow_2_0_ref
   kind: paper
   title: A New Version of the Stream Cipher SNOW
@@ -2573,7 +2584,7 @@ references:
   year: 2002
   venue: FSE 2002
   url: https://link.springer.com/chapter/10.1007/3-540-36563-X_24
-  notes: Primary bibliographic pointer for SNOW 2.0; local supporting PDF is references/2012-snow2_snow3g_sliding.pdf.
+  notes: Primary bibliographic pointer for SNOW 2.0; local supporting PDF is references/[2012][snow_2_0][][snow2_snow3g_sliding].pdf.
 - id: snow_3g_ref
   kind: standard
   title: Specification of the 3GPP Confidentiality and Integrity Algorithms UEA2 &
@@ -2583,7 +2594,7 @@ references:
   year: 2006
   venue: 3GPP TS 35.216
   url: https://web.archive.org/web/20200822072535/https://www.gsma.com/aboutus/wp-content/uploads/2014/12/snow3gspec.pdf
-  notes: Derived from references/2006-snow3gspec.pdf.
+  notes: Derived from references/[2006][snow_3g][][snow3gspec].pdf.
 - id: sober_t16_ref
   kind: paper
   title: Primitive Specification and Supporting Documentation for SOBER-t16 Submission
@@ -2595,7 +2606,7 @@ references:
   venue: NESSIE submission
   url: https://web.archive.org/web/20110812013604/https://www.cosic.esat.kuleuven.be/nessie/workshop/submissions/sober-t16.zip
   notes: Primary source is the archived NESSIE submission package; supporting analysis
-    PDF is in references/2002-sober-t16_t32-distinguishing.pdf.
+    PDF is in references/[2002][sober_t16][][sober+t16_t32+distinguishing].pdf.
 - id: sober_t32_ref
   kind: paper
   title: Primitive Specification and Supporting Documentation for SOBER-t32 Submission
@@ -2607,7 +2618,7 @@ references:
   venue: NESSIE submission
   url: https://web.archive.org/web/20110812013604/https://www.cosic.esat.kuleuven.be/nessie/workshop/submissions/sober-t32.zip
   notes: Primary source is the archived NESSIE submission package; supporting analysis
-    PDF is in references/2004-sober-t16_t32-algebraic.pdf.
+    PDF is in references/[2004][sober_t32][][sober+t16_t32+algebraic].pdf.
 - id: sosemanuk1_ref
   kind: paper
   title: SOSEMANUK, a Fast Software-Oriented Stream Cipher
@@ -2628,7 +2639,7 @@ references:
   venue: eSTREAM report 2005/027
   url: https://web.archive.org/web/20120414020956/http://www.ecrypt.eu.org/stream/sosemanukpf.html
   notes: Primary source is the archived eSTREAM profile page; source paper PDF is
-    in references/2005-sosemanuk_p3.pdf.
+    in references/[2005][sosemanuk1][][sosemanuk_p3].pdf.
 - id: speckey_ref
   kind: paper
   title: 'Design Strategies for ARX with Provable Bounds: Sparx and LAX'
@@ -2655,7 +2666,7 @@ references:
   year: 2021
   venue: IACR Transactions on Cryptographic Hardware and Embedded Systems
   url: https://doi.org/10.46586/tches.v2021.i4.510-545
-  notes: Derived from references/2021-speedy_tches.pdf.
+  notes: Derived from references/[2021][speedy][][speedy_tches].pdf.
 - id: spritz_ref
   kind: paper
   title: Spritz-a spongy RC4-like stream cipher and hash function
@@ -2665,7 +2676,7 @@ references:
   year: 2014
   venue: MIT CSAIL / AIST technical report
   url: https://people.csail.mit.edu/rivest/pubs/RS14.pdf
-  notes: Derived from references/2014-spritz.pdf.
+  notes: Derived from references/[2014][spritz][][].pdf.
 - id: square_ref
   kind: paper
   title: SQUARE
@@ -2677,7 +2688,7 @@ references:
   venue: Fast Software Encryption (FSE 1997), LNCS 1267
   url: https://link.springer.com/chapter/10.1007/BFb0052343
   publisher: Springer
-  notes: Derived from symmetric_cryptography_database/references/1997-square.pdf.
+  notes: Derived from symmetric_cryptography_database/references/[1997][square][][].pdf.
 - id: daemen_rijmen_1998_bksq
   kind: paper
   title: The Block Cipher BKSQ
@@ -2690,7 +2701,7 @@ references:
   url: https://cs.ru.nl/~joan/papers/JDA_VRI_BKSQ_2000.pdf
   notes: 'DBLP records this as CARDIS 1998 (key DaemenR98); the LNCS 1820 proceedings volume itself was not printed
     until 2000, which is why some tertiary sources (and the filename of the pre-existing local copy) date it 2000 --
-    1998 is used here as the conference/DBLP year. Local copy: references/1998-bksq.pdf (byte-identical duplicate
+    1998 is used here as the conference/DBLP year. Local copy: references/[1998][bksq][][].pdf (byte-identical duplicate
     references/2000-bksq.pdf removed). Confirmed direct quotes: "We present a new 96-bit block cipher called
     BKSQ... The structure of the cipher is a generalisation of the Square cipher structure [3]... BKSQ is especially
     suited to be implemented on a smart card." Key length 96, 144, or 192 bits.'
@@ -2706,8 +2717,8 @@ references:
   venue: Fast Software Encryption (FSE 2007), LNCS 4593, pp. 196-210
   publisher: Springer
   url: https://link.springer.com/chapter/10.1007/978-3-540-74619-5_13
-  notes: 'Local copy: references/2007-desl,desxl.pdf (the FSE 2007 camera-ready paper; previously only the authors''
-    conference slides were available, references/2007-desl_desxl_slides.pdf, iacr.org/workshops/fse2007/slides/desl.pdf,
+  notes: 'Local copy: references/[2007][desl+desxl][][].pdf (the FSE 2007 camera-ready paper; previously only the authors''
+    conference slides were available, references/[2007][desl+desxl][][desl_desxl_slides].pdf, iacr.org/workshops/fse2007/slides/desl.pdf,
     now kept only as a supplementary source). The paper confirms DESL replaces DES''s eight distinct S-boxes with a
     single redesigned S-box (Table 2) satisfying Kim et al.''s linear/differential/Davies-Murphy design criteria, and
     also omits DES''s Initial Permutation IP and its inverse IP^-1 entirely (they cost wiring but add no cryptographic
@@ -2722,7 +2733,7 @@ references:
   year: 2007
   venue: 25º Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos (SBRC 2007)
   url: https://web.archive.org/web/20120113150243/https://www.larc.usp.br/~mjunior/files/en/Curupira1-extended.pdf
-  notes: 'Local copy: references/2007-curupira1.pdf (recovered via the Wayback Machine; the paper''s own original
+  notes: 'Local copy: references/[2007][curupira][][curupira1].pdf (recovered via the Wayback Machine; the paper''s own original
     host, larc.usp.br, is offline). This is the extended version with full proofs and analysis, superseding the
     earlier reliance in this database on the Curupira-2 paper''s secondary reproduction of the Curupira-1 spec
     (simplicio_barreto_carvalho_margi_naslund_2008_curupira2, still held locally and still a valid cross-check, since
@@ -2740,7 +2751,7 @@ references:
   venue: 'CEUR Workshop Proceedings, Vol-397 -- 1st Workshop on Privacy in Location-Based Applications (PiLBA), co-located
     with ESORICS 2008'
   url: https://ceur-ws.org/Vol-397/paper8.pdf
-  notes: 'Local copy: references/2008-curupira2.pdf. Section 3 ("Overview of the Curupira-1 structure") reproduces the
+  notes: 'Local copy: references/[2008][curupira][][curupira2].pdf. Section 3 ("Overview of the Curupira-1 structure") reproduces the
     original Curupira-1 specification in detail, including its four self-inverse round transforms (nonlinear layer
     using an S-box "identical to that used in Anubis and Khazad", MDS linear diffusion layer, byte permutation layer,
     key addition layer) and its cyclical key schedule; also states "the cipher round structure is similar to the one
@@ -2759,7 +2770,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography Standardization Process Round 1 Candidate
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TGIF-spec.pdf
-  notes: Derived from references/2019-tgif-spec.pdf.
+  notes: Derived from references/[2019][thank_goodness_it_s_friday][spec][tgif].pdf.
 - id: three_key_triple_des_ref
   kind: standard
   title: 'NIST Special Publication 800-67 Rev. 2: Recommendation for the Triple Data
@@ -2768,7 +2779,7 @@ references:
   status: withdrawn
   notes: 'Second revision of the NIST TDEA recommendation, not the algorithm’s first
     standardization; withdrawn 2024-01-01. TDEA was standardized in FIPS 46-3 in 1999.
-    Local copy: references/2017-nist_sp800_67r2_3des.pdf.'
+    Local copy: references/[2017][three_key_triple_des][nist_sp][].pdf.'
   venue: NIST SP 800-67r2
   url: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-67r2.pdf
 - id: threefish_ref
@@ -2786,7 +2797,7 @@ references:
   year: 2010
   venue: Skein specification v1.3
   url: https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf
-  notes: Threefish is the underlying block cipher in Skein; derived from references/2010-skein_threefish.pdf.
+  notes: Threefish is the underlying block cipher in Skein; derived from references/[2010][helix+helix_aead+phelix+phelix_aead+skein+threefish][][skein_threefish].pdf.
 - id: treyfer_ref
   kind: paper
   title: A Related-Key Attack on TREYFER
@@ -2796,7 +2807,7 @@ references:
   year: 2008
   venue: SECURWARE 2008
   url: https://users.encs.concordia.ca/~youssef/Publications/Papers/A%20Related-Key%20Attack%20on%20TREYFER.pdf
-  notes: Derived from references/2009-treyfer_related_key_attack.pdf; includes the
+  notes: Derived from references/[2009][treyfer][][treyfer_related_key_attack].pdf; includes the
     original TREYFER context (FSE 1997).
 - id: triad_ref
   kind: paper
@@ -2810,7 +2821,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography Standardization Process Round 1 Candidate
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/TRIAD-spec.pdf
-  notes: Derived from references/2019-triad-spec.pdf.
+  notes: Derived from references/[2019][triad][spec][].pdf.
 - id: trivium_ref
   kind: paper
   title: Trivium
@@ -2820,7 +2831,7 @@ references:
   year: 2006
   venue: eSTREAM submission
   url: https://web.archive.org/web/20180828163734/http://www.ecrypt.eu.org/stream/p3ciphers/trivium/trivium_p3.pdf
-  notes: Derived from references/2006-trivium.pdf.
+  notes: Derived from references/[2006][trivium][][].pdf.
 - id: ublock_ref
   kind: paper
   title: 分组密码uBlock
@@ -2882,7 +2893,7 @@ references:
   year: 1998
   venue: University of Cambridge Computer Laboratory note
   url: https://www.cix.co.uk/~klockstone/xxtea.pdf
-  notes: Derived from references/1998-xxtea.pdf.
+  notes: Derived from references/[1998][xxtea][][].pdf.
 - id: yarara_and_coral_ref
   kind: paper
   title: Yarara and Coral
@@ -2983,7 +2994,7 @@ references:
     McGrew and Viega, are credited in the standard''s own acknowledgments and introduction ("They submitted GCM to
     NIST... and they discuss in detail its security and performance") rather than as document authors. Authenticated
     encryption mode for block ciphers; defines the GHASH universal hash (Sec. 6.4) and GCTR (CTR-mode variant, Sec. 6.5)
-    that together form GCM. Local copy: references/2007-nist-sp800-38d-gcm.pdf.'
+    that together form GCM. Local copy: references/[2007][aes_gcm+ghash][][nist+sp800+38d+gcm].pdf.'
 - id: cbc_ref
   kind: standard
   title: Recommendation for Block Cipher Modes of Operation
@@ -3069,7 +3080,7 @@ references:
   venue: Cryptologia, Vol. 8, No. 1
   url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/lucifer.pdf
   notes: 'Detailed specification of the Lucifer cipher (128-bit block, 128-bit key,
-    16 rounds); local copy references/1973-lucifer.pdf (note: file is named after
+    16 rounds); local copy references/[1973][lucifer][][].pdf (note: file is named after
     the cipher''s design era, but this paper is from 1983).'
 - id: maximov_2002_mir1
   kind: article
@@ -3236,7 +3247,7 @@ references:
   year: 1992
   venue: Advances in Cryptology — AUSCRYPT'92, LNCS 718, Springer-Verlag, pp. 83-104
   url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/hash/specs/haval.pdf
-  notes: 'Original HAVAL publication. Local copy: references/1992-haval.pdf.'
+  notes: 'Original HAVAL publication. Local copy: references/[1992][haval+haval_hash][][].pdf.'
 - id: linn_1989_rsa_md2
   kind: standard
   title: 'Privacy Enhancement for Internet Electronic Mail: Part III — Algorithms, Modes, and Identifiers'
@@ -3245,7 +3256,7 @@ references:
   year: 1989
   venue: RFC 1115, Internet Engineering Task Force (IETF)
   url: https://www.rfc-editor.org/rfc/rfc1115
-  notes: 'Section 4.2 defines RSA-MD2 through a C reference implementation supplied by Ronald Rivest of RSA Data Security for privacy-enhanced electronic mail. This is the earliest published MD2 specification in the database. Local copy: references/1989-rsamd2-rfc1115.txt.'
+  notes: 'Section 4.2 defines RSA-MD2 through a C reference implementation supplied by Ronald Rivest of RSA Data Security for privacy-enhanced electronic mail. This is the earliest published MD2 specification in the database. Local copy: references/[1989][md2][rfc][rsamd2].txt.'
 - id: kaliski_1992_md2
   kind: standard
   title: The MD2 Message-Digest Algorithm
@@ -3254,7 +3265,7 @@ references:
   year: 1992
   venue: RFC 1319, Internet Engineering Task Force (IETF)
   url: https://www.rfc-editor.org/rfc/rfc1319
-  notes: 'Later standalone MD2 specification. Local copy: references/1992-md2.pdf.'
+  notes: 'Later standalone MD2 specification. Local copy: references/[1992][md2][][].pdf.'
 - id: rivest_1990_md4
   kind: article
   title: The MD4 Message-Digest Algorithm
@@ -3263,7 +3274,20 @@ references:
   year: 1990
   venue: Advances in Cryptology — CRYPTO '90, LNCS 537, Springer-Verlag, pp. 303-311
   url: https://doi.org/10.1007/3-540-38424-3_22
-  notes: 'Original MD4 conference publication; the proceedings appeared in 1991. Local copy: references/1990-md4-crypto.pdf.'
+  notes: 'Original MD4 conference publication; the proceedings appeared in 1991. Local copy: references/[1990][md4+md4_hash][][crypto].pdf.'
+- id: rivest_1992_rfc1320_md4
+  kind: standard
+  title: 'RFC 1320: The MD4 Message-Digest Algorithm'
+  authors:
+  - Ronald L. Rivest
+  year: 1992
+  venue: IETF RFC 1320 (Informational), obsoletes RFC 1186
+  url: https://www.rfc-editor.org/rfc/rfc1320
+  notes: 'The formal IETF spec (with reference C implementation, Appendix A), distinct from the original 1990
+    CRYPTO conference paper (rivest_1990_md4). Found orphaned/unlinked in this database''s local references
+    directory under a misdated filename (year given as 1990, matching the algorithm''s original conference paper,
+    not this RFC''s own April 1992 date); relinked and renamed to the correct year during the references/ filename
+    cleanup pass.'
 - id: rivest_1992_md5
   kind: standard
   title: The MD5 Message-Digest Algorithm
@@ -3272,7 +3296,7 @@ references:
   year: 1992
   venue: RFC 1321, Internet Engineering Task Force (IETF)
   url: https://www.rfc-editor.org/rfc/rfc1321
-  notes: 'Introduces MD5 as a more conservative successor to MD4 following indications that MD4 was likely too fast for adequate security. Local copy: references/1992-md5.pdf.'
+  notes: 'Introduces MD5 as a more conservative successor to MD4 following indications that MD4 was likely too fast for adequate security. Local copy: references/[1992][md5+md5_hash][][].pdf.'
 - id: dobbertin_1996_ripemd160
   kind: article
   title: 'RIPEMD-160: A Strengthened Version of RIPEMD'
@@ -3318,7 +3342,7 @@ references:
   organization: NIST
   status: superseded
   url: https://csrc.nist.gov/publications/detail/fips/180/2/archive/2002-08-01
-  notes: 'First FIPS to specify SHA-256, SHA-384, SHA-512. Local copy: references/2002-sha_fips180-2.pdf.
+  notes: 'First FIPS to specify SHA-256, SHA-384, SHA-512. Local copy: references/[2002][sha1_hash+sha1_sha2+sha2+sha2_hash+shacal+shacal2][][sha_fips180+2].pdf.
     Superseded by FIPS 180-4 (2015).'
 - id: penazzi_2019_shamash
   kind: article
@@ -3378,7 +3402,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography (Round 1 submission)
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/CLAE-spec.pdf
-  notes: 'Local copy: references/2019-clae.pdf.'
+  notes: 'Local copy: references/[2019][clae+clae_aead][][].pdf.'
 - id: gueron_2019_comet
   kind: report
   title: 'COMET: COunter Mode Encryption with authentication Tag'
@@ -3472,7 +3496,7 @@ references:
   venue: IACR Transactions on Symmetric Cryptology, 2021(2):1–30
   publisher: IACR
   url: https://tosc.iacr.org/index.php/ToSC/article/view/9852
-  notes: 'Updated and extended version of the Rocca paper. Local copy: references/2022-rocca.pdf.'
+  notes: 'Updated and extended version of the Rocca paper. Local copy: references/[2022][rocca+rocca_aead][][].pdf.'
 - id: sui_2019_laem
   kind: report
   title: 'LAEM: Lightweight Authentication Encryption Mode'
@@ -3541,7 +3565,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography (Round 1 submission)
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/ORANGE-spec.pdf
-  notes: 'Local copy: references/2019-orange.pdf.'
+  notes: 'Local copy: references/[2019][orange+orange_hash][][].pdf.'
 - id: bhattacharjee_2019_oribatida
   kind: report
   title: The Oribatida Family of Lightweight Authenticated Encryption Schemes
@@ -3636,7 +3660,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography (Round 1 submission)
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/subterranean-spec.pdf
-  notes: 'Local copy: references/2019-subterranean_v2.pdf.'
+  notes: 'Local copy: references/[2019][subterranean+subterranean_2_0][][v2].pdf.'
 - id: banik_2019_sundae_gift
   kind: report
   title: SUNDAE-GIFT v1.0
@@ -3664,7 +3688,7 @@ references:
   year: 2019
   venue: NIST Lightweight Cryptography (Round 1 submission)
   url: https://csrc.nist.gov/CSRC/media/Projects/Lightweight-Cryptography/documents/round-1/spec-doc/WAGE-spec.pdf
-  notes: 'Local copy: references/2019-wage.pdf.'
+  notes: 'Local copy: references/[2019][wage+wage_aead][][].pdf.'
 - id: daemen_2019_xoodyak
   kind: report
   title: Xoodyak, a lightweight cryptographic scheme
@@ -3699,7 +3723,7 @@ references:
   venue: New Stream Cipher Designs, LNCS 4986, pp. 57–68
   url: https://link.springer.com/chapter/10.1007/978-3-540-68351-3_6
   notes: NLSv2 is a synchronous stream cipher in the SOBER family using NLFSR + nonlinear
-    filter; 128-bit key; eSTREAM profile 1A; local copy references/2004-nlsv2.pdf.
+    filter; 128-bit key; eSTREAM profile 1A; local copy references/[2004][nlsv2][][].pdf.
 - id: matsumoto_et_al_2008_cryptmt3
   kind: article
   title: CryptMT3 Stream Cipher
@@ -3713,7 +3737,7 @@ references:
   url: https://link.springer.com/chapter/10.1007/978-3-540-68351-3_2
   notes: CryptMT3 combines a large LFSR (Mersenne Twister, period ≥ 2^19937−1) with
     a nonlinear filter using integer multiplication; 1241-dimensionally equidistributed;
-    fast with SIMD; eSTREAM submission; local copy references/2008-cryptmt3.pdf.
+    fast with SIMD; eSTREAM submission; local copy references/[2008][cryptmt3][][].pdf.
 - id: dawson_et_al_2008_dragon
   kind: article
   title: 'The Dragon Stream Cipher: Design, Analysis, and Implementation Issues'
@@ -3726,8 +3750,8 @@ references:
   url: https://link.springer.com/chapter/10.1007/978-3-540-68351-3_3
   notes: 'Dragon is a word-based stream cipher using a 1024-bit NLFSR + 64-bit memory
     (1088-bit state); 128-bit or 256-bit key/IV; outputs 64 bits per clock; eSTREAM
-    Phase 3. references/2008-dragon.pdf is a 2-page truncated extract; use
-    references/2005-dragon.pdf (the complete original eSTREAM submission "Dragon:
+    Phase 3. references/[2008][dragon][][].pdf is a 2-page truncated extract; use
+    references/[2005][dragon][][].pdf (the complete original eSTREAM submission "Dragon:
     A Fast Word Based Stream Cipher") as the local copy instead.'
 - id: wu_2008_hc128
   kind: article
@@ -3739,7 +3763,7 @@ references:
   url: https://link.springer.com/chapter/10.1007/978-3-540-68351-3_4
   notes: HC-128 is a simplified version of HC-256 for 128-bit security; two 512-entry
     32-bit tables P and Q; 128-bit key and 128-bit IV; eSTREAM Phase 3; local copy
-    references/2008-hc-128.pdf.
+    references/[2008][hc_128][][hc+128].pdf.
 - id: biryukov_2008_lex
   kind: article
   title: Design of a New Stream Cipher—LEX
@@ -3750,7 +3774,7 @@ references:
   url: https://link.springer.com/chapter/10.1007/978-3-540-68351-3_5
   notes: LEX (Leak EXtraction) is an AES-based stream cipher that leaks 4 bytes from
     each AES round; 128-bit key, 128-bit IV; ~2.5× faster than AES encryption; eSTREAM
-    submission; local copy references/2008-lex.pdf.
+    submission; local copy references/[2008][lex][][].pdf.
 - id: biryukov_et_al_2015_argon_argon2
   kind: report
   title: Argon and Argon2
@@ -3764,7 +3788,7 @@ references:
   notes: 'Joint primary specification. Argon is the original PHC submission and
     uses five-round AES-128 with a fixed key as its memory permutation and
     BLAKE2b for initial/final hashing; Argon2 is the streamlined successor. Local
-    copy: references/2015-argon-argon2.pdf.'
+    copy: references/[2015][argon+argon2][][].pdf.'
 - id: biryukov_et_al_2015_argon2_v12
   kind: report
   title: Argon2 (Version 1.2)
@@ -3777,7 +3801,7 @@ references:
   url: https://www.cryptolux.org/index.php/Argon2
   notes: 'Argon2 v1.2 specification, July 8 2015; memory-hard password hashing function;
     uses compression function G based on permutation P (Blake2-derived); three variants:
-    Argon2d, Argon2i; local copy references/2015-argon2-v1.2.pdf.'
+    Argon2d, Argon2i; local copy references/[2015][argon2][][v1.2].pdf.'
 - id: biryukov_et_al_2017_argon2_v13
   kind: report
   title: 'Argon2: the memory-hard function for password hashing and other applications
@@ -3790,7 +3814,7 @@ references:
   venue: Password Hashing Competition (PHC) Release
   url: https://github.com/P-H-C/phc-winner-argon2
   notes: Argon2 v1.3 (PHC release), March 24 2017; PHC winner; adds Argon2id variant;
-    local copy references/2017-argon2-v1.3.pdf.
+    local copy references/[2017][argon2][][v1.3].pdf.
 - id: rfc_9106_argon2
   kind: standard
   title: 'RFC 9106: Argon2 Memory-Hard Function for Password Hashing and Proof-of-Work
@@ -3807,7 +3831,7 @@ references:
   url: https://www.rfc-editor.org/rfc/rfc9106
   notes: Informational RFC (IRTF CFRG); specifies Argon2d, Argon2i, Argon2id; uses
     BLAKE2b hash and compression function G; Argon2id is the primary recommended variant;
-    local copy references/2021-argon2-rfc9106.pdf.
+    local copy references/[2021][argon2][rfc][].pdf.
 - id: durmuth_zimmermann_2014_antcrypt
   kind: report
   title: AntCrypt
@@ -4028,7 +4052,7 @@ references:
   year: 1999
   venue: Proceedings of the FREENIX Track, 1999 USENIX Annual Technical Conference
   url: https://www.usenix.org/legacy/events/usenix99/provos/provos.pdf
-  notes: 'Local copy: references/1999-bcrypt.pdf.'
+  notes: 'Local copy: references/[1999][bcrypt][][].pdf.'
 - id: percival_2009_scrypt
   kind: article
   title: Stronger Key Derivation via Sequential Memory-Hard Functions
@@ -4037,7 +4061,7 @@ references:
   year: 2009
   venue: BSDCan 2009
   url: http://www.tarsnap.com/scrypt/scrypt.pdf
-  notes: 'Local copy: references/2009-scrypt.pdf.'
+  notes: 'Local copy: references/[2009][scrypt][][].pdf.'
 - id: nist_2015_fips180_4
   kind: standard
   title: Secure Hash Standard (SHS), FIPS PUB 180-4
@@ -4048,7 +4072,7 @@ references:
   organization: NIST
   status: active
   url: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
-  notes: 'Current SHA standard (supersedes 180-2). Local copy: references/2015-fips180-4.pdf.'
+  notes: 'Current SHA standard (supersedes 180-2). Local copy: references/[2015][sha2+sha2_hash][fips][4].pdf.'
 - id: nist_2015_fips202_sha3
   kind: standard
   title: 'FIPS PUB 202: SHA-3 Fixed-Output Hash Functions (Sections 5 and 6.1)'
@@ -4059,7 +4083,7 @@ references:
   organization: NIST
   status: active
   url: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
-  notes: 'Defines SHA3-224, SHA3-256, SHA3-384, and SHA3-512. Local copy: references/2015-sha3-fips202.pdf.'
+  notes: 'Defines SHA3-224, SHA3-256, SHA3-384, and SHA3-512. Local copy: references/[2015][sha3][fips][].pdf.'
 - id: nist_2015_fips202_shake
   kind: standard
   title: 'FIPS PUB 202: SHAKE Extendable-Output Functions (Sections 5 and 6.2)'
@@ -4070,7 +4094,7 @@ references:
   organization: NIST
   status: active
   url: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
-  notes: 'Defines SHAKE128 and SHAKE256. Local copy: references/2015-shake-fips202.pdf.'
+  notes: 'Defines SHAKE128 and SHAKE256. Local copy: references/[2015][shake][fips][].pdf.'
 - id: aumasson_2010_blake
   kind: paper
   title: 'SHA-3 proposal: BLAKE (version 1.4)'
@@ -4082,7 +4106,7 @@ references:
   year: 2010
   venue: SHA-3 Competition Round 3 Submission
   url: https://www.aumasson.jp/blake/blake.pdf
-  notes: 'BLAKE Round 3 specification. Local copy: references/2008-blake_sha3.pdf.'
+  notes: 'BLAKE Round 3 specification. Local copy: references/[2008][blake+blake_hash][][blake_sha3].pdf.'
 - id: aumasson_et_al_2013_blake2
   kind: paper
   title: 'BLAKE2: Simpler, Smaller, Fast as MD5'
@@ -4094,7 +4118,7 @@ references:
   year: 2013
   venue: Applied Cryptography and Network Security (ACNS 2013)
   url: https://eprint.iacr.org/2013/322
-  notes: Original BLAKE2 specification; local copy references/2013-blake2.pdf.
+  notes: Original BLAKE2 specification; local copy references/[2013][blake2+blake2_hash][][].pdf.
 - id: rfc_7693_blake2
   kind: standard
   title: 'RFC 7693: The BLAKE2 Cryptographic Hash and Message Authentication Code'
@@ -4106,7 +4130,7 @@ references:
   organization: RFC Editor
   status: informational
   url: https://www.rfc-editor.org/rfc/rfc7693
-  notes: Local copy references/2015-blake2-rfc7693.pdf.
+  notes: Local copy references/[2015][blake2+blake2_hash][rfc][].pdf.
 - id: gauravaram_2009_groestl
   kind: paper
   title: Grøstl – a SHA-3 candidate
@@ -4121,7 +4145,7 @@ references:
   year: 2009
   venue: SHA-3 Competition Round 2 Submission
   url: https://www.groestl.info/Groestl.pdf
-  notes: 'Grøstl specification (updated for Round 3). Local copy: references/2008-groestl_sha3.pdf.'
+  notes: 'Grøstl specification (updated for Round 3). Local copy: references/[2008][groestl+groestl_hash][][groestl_sha3].pdf.'
 - id: wu_2011_jh
   kind: paper
   title: The Hash Function JH (Round 3 Submission)
@@ -4130,7 +4154,7 @@ references:
   year: 2011
   venue: SHA-3 Competition Round 3 Submission
   url: https://www3.ntu.edu.sg/home/wuhj/research/jh/jh_round3.pdf
-  notes: 'JH Round 3 specification. Local copy: references/2008-jh_sha3.pdf.'
+  notes: 'JH Round 3 specification. Local copy: references/[2008][jh][][jh_sha3].pdf.'
 - id: bertoni_2011_keccak
   kind: paper
   title: The Keccak reference (Version 3.0)
@@ -4142,7 +4166,7 @@ references:
   year: 2011
   venue: SHA-3 Competition Round 3 Submission
   url: https://keccak.team/files/Keccak-submission-3.pdf
-  notes: 'Keccak Round 3 specification. Local copy: references/2008-keccak_sha3.pdf.'
+  notes: 'Keccak Round 3 specification. Local copy: references/[2008][keccak][][keccak_sha3].pdf.'
 - id: ferguson_2010_skein
   kind: paper
   title: The Skein Hash Function Family (Version 1.3)
@@ -4158,7 +4182,7 @@ references:
   year: 2010
   venue: SHA-3 Competition Round 3 Submission
   url: https://www.schneier.com/wp-content/uploads/2015/01/skein.pdf
-  notes: 'Skein/Threefish Round 3 specification. Local copy: references/2010-skein_threefish.pdf.'
+  notes: 'Skein/Threefish Round 3 specification. Local copy: references/[2010][helix+helix_aead+phelix+phelix_aead+skein+threefish][][skein_threefish].pdf.'
 - id: ferguson_et_al_2003_helix
   kind: paper
   title: 'Helix: Fast Encryption and Authentication in a Single Cryptographic Primitive'
@@ -4172,7 +4196,7 @@ references:
   year: 2003
   venue: FSE 2003, LNCS 2887
   publisher: Springer
-  notes: 'No local copy. Cited as reference [37] in the Skein/Threefish spec (references/2010-skein_threefish.pdf, Sect.
+  notes: 'Local copy: references/[2003][helix+helix_aead][][].pdf. Cited as reference [37] in the Skein/Threefish spec (references/[2010][helix+helix_aead+phelix+phelix_aead+skein+threefish][][skein_threefish].pdf, Sect.
     8.3, "MIX function"): "Threefish''s MIX function is derived from Helix and Phelix."'
 - id: whiting_et_al_2005_phelix
   kind: paper
@@ -4184,7 +4208,7 @@ references:
   - Frederic Muller
   year: 2005
   venue: ECRYPT Stream Cipher Project Report 2005/027
-  notes: 'No local copy. Cited as reference [108] in the Skein/Threefish spec (references/2010-skein_threefish.pdf, Sect.
+  notes: 'Local copy: references/[2004][phelix+phelix_aead][][].pdf. Cited as reference [108] in the Skein/Threefish spec (references/[2010][helix+helix_aead+phelix+phelix_aead+skein+threefish][][skein_threefish].pdf, Sect.
     8.3, "MIX function"): "Threefish''s MIX function is derived from Helix and Phelix." An improved/faster successor
     to Helix by an overlapping author team; later shown vulnerable to differential attacks (Wu and Preneel, 2007),
     which is why it was not selected as an eSTREAM finalist.'
@@ -4197,7 +4221,7 @@ references:
   venue: eStream candidate drop modifications / cryptospecs
   url: https://raw.githubusercontent.com/stamparm/cryptospecs/master/symmetrical/specs/rc4drop.pdf
   notes: 'RC4 variant that drops first 768 bytes of keystream to avoid WEP-style biases.
-    Local copy: references/2007-rc4drop.pdf.'
+    Local copy: references/[2007][rc4+rc4drop][][].pdf.'
 - id: newdes_ref
   kind: paper
   title: Wide-Open Encryption Design Offers Flexible Implementations
@@ -4221,7 +4245,7 @@ references:
   venue: Public-domain C source (based on the author's March 1988 8086 assembly version), distributed via the
     RPEM package
   url: https://www.nic.funet.fi/pub/crypt/cryptography/rpem/rpem/newdes.c
-  notes: 'Local copy: references/1990-newdes-reference-implementation.txt. Explicitly cites Robert Scott''s
+  notes: 'Local copy: references/[1990][newdes][][reference+implementation].txt. Explicitly cites Robert Scott''s
     "Wide-open Encryption Design Offers Flexible Implementations," Cryptologia 9(1), Jan 1985, pp. 75-90 (the
     paper behind newdes_ref, which is itself paywalled with no free copy found) as its source. Used here to
     confirm NewDES''s exact round structure byte-for-byte where the paper itself is unavailable -- see
@@ -4314,7 +4338,7 @@ references:
   kind: paper
   notes: 'English-language adapted specification of the Kalyna block cipher (DSTU
     7624:2014). Describes all five Kalyna-l/k variants, S-boxes, MDS matrix, key schedule,
-    and security analysis. Local copy: references/2015-kalyna.pdf.'
+    and security analysis. Local copy: references/[2015][kalyna+kalyna_dstu][][].pdf.'
 - id: dstu_7624_2014
   title: DSTU 7624:2014 — Information Technology. Cryptographic Data Security. Symmetric
     Block Transformation Algorithm
@@ -4343,7 +4367,7 @@ references:
   kind: paper
   notes: 'Overview of all five candidates (Kalyna, Mukhomor, ADE, Labyrinth, RSB)
     submitted to the Ukrainian national competition, and security analysis results
-    leading to Kalyna''s selection. Local copy: references/2015-ukranian_competition-[kalyna,mukhomor,ade,labirinth,rsb].pdf.'
+    leading to Kalyna''s selection. Local copy: references/[2015][ade+kalyna+mukhomor+rsb][][ukranian_competition+labirinth].pdf.'
 - id: gerard_et_al_2013_zorro
   kind: paper
   title: 'Block Ciphers that are Easier to Mask: How Far Can We Go?'
@@ -4351,7 +4375,7 @@ references:
   year: 2013
   venue: CHES 2013, LNCS 8086, pp. 383-399
   url: https://doi.org/10.1007/978-3-642-40349-1_22
-  notes: 'Introduces the masking-oriented ZORRO block cipher. Local copy: references/2013-zorro.pdf.'
+  notes: 'Introduces the masking-oriented ZORRO block cipher. Local copy: references/[2013][zorro][][].pdf.'
 - id: jean_nikolic_peyrin_2014_joltik
   kind: specification
   title: Joltik Authenticated Encryption and Joltik-BC
@@ -4359,7 +4383,7 @@ references:
   year: 2014
   venue: CAESAR Round 1 submission
   url: https://competitions.cr.yp.to/round1/joltikv1.pdf
-  notes: 'Defines the Joltik authenticated-encryption modes and their internal tweakable block cipher Joltik-BC. Local copy: references/2014-joltik.pdf.'
+  notes: 'Defines the Joltik authenticated-encryption modes and their internal tweakable block cipher Joltik-BC. Local copy: references/[2014][joltik_bc][][joltik].pdf.'
 - id: grosso_et_al_2015_scream
   kind: specification
   title: 'SCREAM: Side-Channel Resistant Authenticated Encryption with Masking'
@@ -4367,7 +4391,7 @@ references:
   year: 2015
   venue: CAESAR Round 2 specification, version 3
   url: https://competitions.cr.yp.to/round2/screamv3.pdf
-  notes: 'Defines SCREAM and its internal 128-bit tweakable LS-design, Scream. Local copy: references/2015-scream.pdf.'
+  notes: 'Defines SCREAM and its internal 128-bit tweakable LS-design, Scream. Local copy: references/[2015][scream_tbc][][scream].pdf.'
 - id: oconnor_et_al_2020_blake3
   kind: specification
   title: 'BLAKE3: One Function, Fast Everywhere'
@@ -4375,7 +4399,7 @@ references:
   year: 2020
   venue: BLAKE3 specification
   url: https://github.com/BLAKE3-team/BLAKE3-specs/blob/master/blake3.pdf
-  notes: 'Defines BLAKE3''s seven-round BLAKE2s-derived compression function and binary tree mode. Local copy: references/2020-blake3.pdf.'
+  notes: 'Defines BLAKE3''s seven-round BLAKE2s-derived compression function and binary tree mode. Local copy: references/[2020][blake3+blake3_hash][][].pdf.'
 - id: banik_et_al_2020_warp
   kind: paper
   title: 'WARP: Revisiting GFN for Lightweight 128-bit Block Cipher'
@@ -4383,7 +4407,7 @@ references:
   year: 2020
   venue: Selected Areas in Cryptography (SAC) 2020
   url: https://eprint.iacr.org/2020/1320
-  notes: 'Original WARP paper. Local copy: references/2020-warp.pdf.'
+  notes: 'Original WARP paper. Local copy: references/[2020][warp][][].pdf.'
 - id: coutinho_et_al_2022_forro
   kind: paper
   title: 'Latin Dances Reloaded: Improved Cryptanalysis Against Salsa and ChaCha, and the Proposal of Forró'
@@ -4391,7 +4415,7 @@ references:
   year: 2022
   venue: ASIACRYPT 2022, LNCS 13791, pp. 256-286
   url: https://doi.org/10.1007/978-3-031-22963-3_9
-  notes: 'Introduces the Forró ARX stream cipher. Local copy: references/2022-forro.pdf.'
+  notes: 'Introduces the Forró ARX stream cipher. Local copy: references/[2022][forro][][].pdf.'
 - id: hoang_rogaway_2010_generalized_feistel
   kind: paper
   title: On Generalized Feistel Networks
@@ -4403,7 +4427,7 @@ references:
   notes: 'Survey and provable-security unification of generalized Feistel network variants: unbalanced, alternating,
     type-1/2/3 (attributed to Zheng-Matsumoto-Imai, CRYPTO ''89), and their numeric (format-preserving) counterparts.
     The 2018-07-09 revision additionally defines Type-4 and Type-5 Feistel networks (its Fig. 6) as proof devices for
-    characterizing the inverses of Type-1 and Type-3 respectively. Local copy: references/2010-generalized_feistel.pdf.'
+    characterizing the inverses of Type-1 and Type-3 respectively. Local copy: references/[2010][bear_lion+cast256+mars+rc6+skipjack][][generalized_feistel].pdf.'
 
 - id: canteaut_et_al_2020_stark_survey
   kind: paper
@@ -4425,7 +4449,7 @@ references:
   url: https://eprint.iacr.org/2020/948
   notes: 'Secondary source: a detailed technical survey of GMiMC, HadesMiMC/Starkad/Poseidon, and MARVELlous (Jarvis/Friday,
     Vision/Rescue), used to cross-check and supplement primary-paper details in this database. Local copy:
-    references/2020-stark_friendly_hash_survey.pdf.'
+    references/[2020][stark_friendly_hash_survey][][].pdf.'
 
 - id: niu_et_al_2025_fhe_sok
   kind: paper
@@ -4444,7 +4468,7 @@ references:
   url: https://tches.iacr.org/index.php/TCHES/article/view/12228
   notes: 'Secondary source: a systematization-of-knowledge survey of FHE-friendly symmetric ciphers (Kreyvium, FLIP/FiLIP,
     Rasta/Dasta/Agrasta, Masta/Pasta, HERA, Rubato, Chaghri, Elisabeth) and transciphering methods, used to cross-check
-    and supplement primary-paper details in this database. Local copy: references/2025-fhe_friendly_ciphers_sok.pdf.'
+    and supplement primary-paper details in this database. Local copy: references/[2025][fhe_friendly_ciphers_sok][][].pdf.'
 
 - id: albrecht_et_al_2016_mimc
   kind: paper
@@ -4459,7 +4483,7 @@ references:
   venue: ASIACRYPT 2016, LNCS 10031, pp. 191-219
   publisher: Springer
   url: https://eprint.iacr.org/2016/492
-  notes: 'Local copy: references/2016-mimc.pdf.'
+  notes: 'Local copy: references/[2016][mimc][][].pdf.'
 
 - id: albrecht_et_al_2019_gmimc
   kind: paper
@@ -4477,7 +4501,7 @@ references:
   venue: ESORICS 2019, LNCS 11736, pp. 151-171
   publisher: Springer
   url: https://eprint.iacr.org/2019/397
-  notes: 'Local copy: references/2019-gmimc.pdf. Confirmed directly: generalizes MiMC''s cube-map round function
+  notes: 'Local copy: references/[2019][gmimc][][].pdf. Confirmed directly: generalizes MiMC''s cube-map round function
     (Nyberg-Knudsen-style x^3 Feistel round) to prime fields and multiple field elements at once, in four concrete
     variants -- GMiMC_crf (contracting), GMiMC_erf (expanding, used for GMiMCHash''s sponge permutation), GMiMC_Nyb
     (Nyberg''s GFN), and GMiMC_mrf (new "Multi-Rotating" construction).'
@@ -4495,7 +4519,7 @@ references:
   venue: EUROCRYPT 2020, LNCS 12106, pp. 674-704
   publisher: Springer
   url: https://doi.org/10.1007/978-3-030-45724-2_23
-  notes: 'Local copy: references/2019-hades_hadesmimc.pdf (an updated version differing from the EUROCRYPT 2020
+  notes: 'Local copy: references/[2019][hadesmimc][][hades_hadesmimc].pdf (an updated version differing from the EUROCRYPT 2020
     proceedings version). The general full/partial-round SPN strategy paper; confirmed directly: R_F full-S-box-layer
     rounds (split R_f at the start, R_f at the end) sandwich R_P partial-S-box-layer (1 S-box/round) rounds in the
     middle; HadesMiMC is its concrete block-cipher instantiation over F_p^t with S-box x^alpha (alpha the smallest
@@ -4519,7 +4543,7 @@ references:
     Functions for Zero Knowledge Proof Systems," which split the design into the block cipher HadesMiMC and the hash
     function Poseidon (native GF(p)) -- its GF(2^n) sibling Starkad is dropped from this final version ("we advise
     against using them") but is modeled separately in this database (see starkad, mode_families.yaml) from the
-    original eprint version (grassi_et_al_2019_starkad_poseidon). Local copy: references/2021-poseidon_usenix.pdf.'
+    original eprint version (grassi_et_al_2019_starkad_poseidon). Local copy: references/[2021][hadesmimc+poseidon][][poseidon_usenix].pdf.'
 - id: grassi_et_al_2019_starkad_poseidon
   kind: paper
   title: 'Starkad and Poseidon: New Hash Functions for Zero Knowledge Proof Systems'
@@ -4539,7 +4563,7 @@ references:
     original combined design paper, before Starkad was dropped in the final published Poseidon paper
     (grassi_et_al_2021_poseidon) -- the only located source giving Starkad''s own construction and concrete
     parameters (e.g. "x3 - Starkad"-Permutation in F_2^n with p(x) = x^63+x+1, n=63, t=24, RF=8, RP=48, N=1512, per
-    Table 2 / Section 5). Local copy: references/2019-starkad_and_poseidon.pdf.'
+    Table 2 / Section 5). Local copy: references/[2019][hadesmimc+starkad][][starkad_and_poseidon].pdf.'
 
 - id: aly_et_al_2020_marvellous
   kind: paper
@@ -4558,7 +4582,7 @@ references:
     S-box); also documents the break of the authors'' own earlier Jarvis/Friday design (eprint 2018/1098) by Albrecht,
     Cid, Grassi, Khovratovich, Luftenegger, Rechberger, and Schofnegger ("Algebraic Cryptanalysis of STARK-Friendly
     Designs: Application to MARVELlous and MiMC", ASIACRYPT 2019, eprint 2019/419), which motivated Vision/Rescue as
-    their replacement. Local copy: references/2019-vision_rescue_marvellous.pdf.'
+    their replacement. Local copy: references/[2019][jarvis+rescue+vision][][vision_rescue_marvellous].pdf.'
 
 - id: roy_et_al_2023_arion
   kind: paper
@@ -4571,7 +4595,7 @@ references:
   venue: arXiv:2303.04639
   url: https://arxiv.org/abs/2303.04639
   notes: 'Identifies three generations of arithmetization-oriented primitives (Gen I: LowMC, MiMC; Gen II: HADES/Poseidon,
-    GMiMC, Rescue-Prime; Gen III: Reinforced Concrete, Griffin, Anemoi, Arion). Local copy: references/2023-arion.pdf.'
+    GMiMC, Rescue-Prime; Gen III: Reinforced Concrete, Griffin, Anemoi, Arion). Local copy: references/[2023][arion][][].pdf.'
 
 - id: canteaut_et_al_2018_kreyvium
   kind: paper
@@ -4589,7 +4613,7 @@ references:
   publisher: Springer
   url: https://eprint.iacr.org/2015/113
   notes: 'Introduces Kreyvium, a 128-bit-security variant of the 80-bit-security eSTREAM finalist Trivium, for efficient
-    FHE transciphering. Local copy: references/2016-kreyvium_stream_ciphers_he_compression.pdf.'
+    FHE transciphering. Local copy: references/[2016][kreyvium][][kreyvium_stream_ciphers_he_compression].pdf.'
 
 - id: dobraunig_et_al_2018_rasta
   kind: paper
@@ -4607,7 +4631,7 @@ references:
   venue: CRYPTO 2018, LNCS 10991, pp. 662-692
   publisher: Springer
   url: https://eprint.iacr.org/2018/181
-  notes: 'Local copy: references/2018-rasta_agrasta.pdf. A twist on the classical ASASA topology (Biryukov and
+  notes: 'Local copy: references/[2018][rasta][][rasta_agrasta].pdf. A twist on the classical ASASA topology (Biryukov and
     Shamir, "Structural Cryptanalysis of SASAS," EUROCRYPT 2001, cited directly in the paper''s own related work):
     a full-state chi-transformation (quoted as "previously used in Keccak and ASASA") alternated with affine layers
     freshly derived per round from a public nonce and counter rather than from the secret key. The aggressive
@@ -4625,7 +4649,7 @@ references:
   venue: EUROCRYPT 2016, LNCS 9665, pp. 311-343
   publisher: Springer
   url: https://eprint.iacr.org/2016/254
-  notes: 'Local copy: references/2016-flip.pdf. Confirmed directly: introduces the "filter permutator" construction
+  notes: 'Local copy: references/[2016][flip][][].pdf. Confirmed directly: introduces the "filter permutator" construction
     ("we introduce a new stream cipher construction, next denoted as a filter permutator (by analogy with filter
     generators). Its main design principle is to filter a constant key register with a variable (public) bit
     permutation") -- register + PRNG-driven bit-permutation generator + a fixed Boolean filter built as a direct sum
@@ -4648,7 +4672,7 @@ references:
   venue: IEEE Access, 8, pp. 194741-194751
   publisher: IEEE
   url: https://ieeexplore.ieee.org/document/9245538
-  notes: 'Local copy: references/2020-masta.pdf. Confirmed directly from the paper: "we propose a new variant of
+  notes: 'Local copy: references/[2020][masta][][].pdf. Confirmed directly from the paper: "we propose a new variant of
     Rasta, dubbed Masta," using modular (Fp) arithmetic and replacing Rasta''s fully random affine layer with a
     cheaper one built from finite-field multiplication by a random nonzero element (O(log M) random bits per
     encryption vs. Rasta''s O(log^2 M)). This paper predates Pasta (2021) and does not mention it.'
@@ -4669,7 +4693,7 @@ references:
   venue: ASIACRYPT 2021, LNCS 13092, pp. 640-669
   publisher: Springer
   url: https://eprint.iacr.org/2020/1335
-  notes: 'Local copy: references/2020-hera.pdf. Introduces the HERA cipher alongside the RtF
+  notes: 'Local copy: references/[2020][hera][][].pdf. Introduces the HERA cipher alongside the RtF
     (Real-to-Finite-field) transciphering framework. Confirmed directly: the same name "HERA" is used for both the
     fixed-length keyed permutation and the overall counter-mode stream cipher (no separate name for either). Its
     novelty is a randomized key schedule (ARK[k,nc,i](x) = x + k*rc_i, a fresh random nonzero multiplier per round
@@ -4686,7 +4710,7 @@ references:
   publisher: Springer
   organization: Microsoft Research
   notes: 'Original TREYFER design paper (the family was previously only referenced via a secondary 2009 related-key-attack
-    paper). Local copy: references/1997-treyfer.pdf.'
+    paper). Local copy: references/[1997][treyfer][][].pdf.'
 - id: knudsen_et_al_2010_printcipher
   kind: paper
   title: 'PRINTcipher: A Block Cipher for IC-Printing'
@@ -4698,7 +4722,7 @@ references:
   year: 2010
   venue: CHES 2010, LNCS 6225, pp. 16-32
   publisher: Springer
-  notes: 'Local copy: references/2010-printcipher.pdf.'
+  notes: 'Local copy: references/[2010][printcipher][][].pdf.'
 - id: standaert_et_al_2005_sea
   kind: paper
   title: 'SEA: a Scalable Encryption Algorithm for Small Embedded Applications'
@@ -4710,7 +4734,7 @@ references:
   year: 2006
   venue: CARDIS 2006, LNCS 3928, pp. 222-236
   publisher: Springer
-  notes: 'Local copy is dated references/2005-sea.pdf (earlier draft/workshop dating); the canonical citation (per
+  notes: 'Local copy is dated references/[2005][sea][][].pdf (earlier draft/workshop dating); the canonical citation (per
     PRINTcipher''s own bibliography, cross-checked in this database) is CARDIS 2006.'
 - id: robshaw_2006_cgen
   kind: paper
@@ -4721,7 +4745,7 @@ references:
   venue: VIETCRYPT 2006, LNCS 4341, pp. 37-49
   publisher: Springer
   organization: France Telecom Research and Development
-  notes: 'The local copy (references/2006-cgen.pdf) contains only pp. 37-38 (abstract and start of the introduction);
+  notes: 'The local copy (references/[2006][cgen][][].pdf) contains only pp. 37-38 (abstract and start of the introduction);
     Sections 2-5 with the actual algorithm specification, the mCrypton comparison of Sections 2.2/3.2, and test vectors
     are not present locally. The cgen mode_families.yaml entry is therefore necessarily partial.'
 - id: standaert_et_al_2004_iceberg
@@ -4737,7 +4761,7 @@ references:
   venue: FSE 2004, LNCS 3017, pp. 279-299
   publisher: Springer
   organization: UCL Crypto Group, Université Catholique de Louvain
-  notes: 'Local copy: references/2004-iceberg.pdf.'
+  notes: 'Local copy: references/[2004][iceberg][][].pdf.'
 - id: beyne_chen_2022_reflection_ciphers
   kind: paper
   title: Provably Secure Reflection Ciphers
@@ -4771,7 +4795,7 @@ references:
   venue: IEEE Transactions on Computers (early access)
   publisher: IEEE
   url: https://ieeexplore.ieee.org/document/11501825
-  notes: 'DOI 10.1109/TC.2026.3689069. Local copy: references/2026-splight.pdf.'
+  notes: 'DOI 10.1109/TC.2026.3689069. Local copy: references/[2026][splight][][].pdf.'
 - id: berbain_gilbert_patarin_2006_quad
   kind: paper
   title: 'QUAD: a Practical Stream Cipher with Provable Security'
@@ -4783,7 +4807,7 @@ references:
   venue: EUROCRYPT 2006, LNCS 4004, pp. 109-128
   publisher: Springer
   url: https://crypto.orange-labs.fr/papers/eurocrypt2006-109.pdf
-  notes: 'Local copy: references/2006-quad.pdf.'
+  notes: 'Local copy: references/[2006][quad][][].pdf.'
 - id: bernstein_2005_poly1305
   kind: paper
   title: The Poly1305-AES Message-Authentication Code
@@ -4795,7 +4819,7 @@ references:
   url: https://iacr.org/archive/fse2005/35570033/35570033.pdf
   notes: 'No local copy. Poly1305''s original design paper; the algorithm itself is fully and precisely specified
     (with worked test vectors) in RFC 8439 Sec. 2.5, which is used as the primary source for this database''s
-    poly1305 entry via the local copy references/2018-chacha20-rfc8439.pdf. Bernstein''s own words on genericizing
+    poly1305 entry via the local copy references/[2018][chacha+chacha20_poly1305+chacha_stream+poly1305][rfc][chacha20].pdf. Bernstein''s own words on genericizing
     the original AES-keyed nonce encryption: "There is nothing special about AES here. One can replace AES with an
     arbitrary keyed function from an arbitrary set of nonces to 16-byte strings" -- the basis for Poly1305 being
     reused with ChaCha20 (RFC 8439) rather than only AES.'
@@ -4839,7 +4863,7 @@ references:
   venue: Progress in Cryptology - AFRICACRYPT 2023, Springer LNCS
   publisher: Springer
   url: https://eprint.iacr.org/2023/323
-  notes: 'Local copy: references/2023-poseidon2.pdf. Decreases multiplications in the linear layer by up to 90% and
+  notes: 'Local copy: references/[2023][poseidon2][][].pdf. Decreases multiplications in the linear layer by up to 90% and
     Plonk-circuit constraints by up to 70% versus the original Poseidon; can be used as either a sponge or a
     compression function. Confirmed directly: R_F=8 full/external rounds always, R_P (internal/partial rounds) set
     per instance (e.g. 14-56 depending on field/width -- Table 1); three concrete changes vs. Poseidon: "(1) an
@@ -4862,7 +4886,7 @@ references:
   url: https://eprint.iacr.org/2025/1893
   notes: 'Also eprint 2025/1893 (received Oct 2025); the CiC journal version is dated January 2026 and is used here
     as the year of record. Binary-extension-field analogues of Poseidon/Poseidon2 for use with binary-field proving
-    systems such as Binius; benchmarked against Vision-32b and Anemoi. Local copy: references/2026-poseidon2b.pdf
+    systems such as Binius; benchmarked against Vision-32b and Anemoi. Local copy: references/[2026][poseidon2b][][].pdf
     (downloaded from cic.iacr.org, not eprint).'
 - id: grassi_onofri_pedicini_sozzi_2022_neptune
   kind: paper
@@ -4879,7 +4903,7 @@ references:
   notes: 'Also eprint 2021/1695. Proves a quadratic-map S-box over F_p^n (m=2) is never invertible for n >= 3 (and
     for n >= 5 when m=3), then proposes Neptune -- explicitly stated as "a variant of the sponge hash function
     Poseidon, whose non-linear layer is designed by taking into account the results presented in this paper" -- as
-    a concrete application, reducing multiplications relative to Poseidon. Local copy: references/2022-neptune.pdf
+    a concrete application, reducing multiplications relative to Poseidon. Local copy: references/[2022][neptune][][].pdf
     (downloaded from tosc.iacr.org, not eprint).'
 - id: szepieniec_2021_grendel
   kind: paper
@@ -4890,7 +4914,7 @@ references:
   venue: IACR Cryptology ePrint Archive, Paper 2021/984
   publisher: IACR
   url: https://eprint.iacr.org/2021/984
-  notes: 'Local copy: references/2021-grendel.pdf. No peer-reviewed conference/journal venue was located beyond the
+  notes: 'Local copy: references/[2021][grendel+grendelhash][][].pdf. No peer-reviewed conference/journal venue was located beyond the
     ePrint listing. Introduces the Grendel S-box S(x) = x^d * chi_p(x) (chi_p the Legendre/quadratic-character symbol
     of F_p), combined with a SHARK-strategy-style linear layer. Confirmed directly: "the GCD attack does not apply to
     Grendel because it is not a block cipher with an unknown key; instead it is a permutation with no secrets"; the
@@ -4909,7 +4933,7 @@ references:
   venue: Advances in Cryptology - CRYPTO 2023, Springer LNCS 14083, pp. 573-606
   publisher: Springer
   url: https://eprint.iacr.org/2022/403
-  notes: 'Local copy: references/2022-griffin.pdf. Also eprint 2022/403. Introduces "Horst," a Feistel-style update
+  notes: 'Local copy: references/[2022][griffin+griffin_sponge][][].pdf. Also eprint 2022/403. Introduces "Horst," a Feistel-style update
     extended with a multiplication, (x,y) -> (y*G(x)+F(x), x), combined with an SPN-style "Fluid-SPN" layer over
     prime fields using invertible low-degree power maps. Confirmed directly: the paper itself names and defines all
     three of GRIFFIN-pi (the permutation), GRIFFIN-Sponge, and GRIFFIN-Compression ("GRIFFIN-Sponge and
@@ -4932,7 +4956,7 @@ references:
   venue: Advances in Cryptology - CRYPTO 2023, Springer
   publisher: Springer
   url: https://eprint.iacr.org/2022/840
-  notes: 'Local copy: references/2022-anemoi_jive.pdf. Also eprint 2022/840. Introduces the "Flystel" S-box (a
+  notes: 'Local copy: references/[2022][anemoi][][anemoi_jive].pdf. Also eprint 2022/840. Introduces the "Flystel" S-box (a
     3-round-Feistel-based butterfly construction, open/closed variants CCZ-equivalent) inside a classical SPN, plus a
     companion compression mode "Jive" -- confirmed directly as inspired by "the ''Latin dance'' symmetric algorithms
     (Salsa, ChaCha and derivatives)," named "after another Latin dance." Operates over both prime fields GF(p) and
@@ -4951,7 +4975,7 @@ references:
   venue: 'ACM SIGSAC Conference on Computer and Communications Security (CCS ''22), pp. 1323-1335'
   publisher: ACM
   url: https://eprint.iacr.org/2021/1038
-  notes: 'Local copy: references/2021-reinforced_concrete.pdf. Also eprint 2021/1038 (first posted 2021). A sponge
+  notes: 'Local copy: references/[2021][reinforced_concrete][][].pdf. Also eprint 2021/1038 (first posted 2021). A sponge
     over F_p^3 using three named round components, confirmed directly: Bricks(x1,x2,x3) = (x1^d, x2*(x1^2+a1*x1+b1),
     x3*(x2^2+a2*x2+b2)) (degree-5 non-linear diffusion); Concrete = multiply by MDS matrix circ(2,1,1) + round
     constants; Bars = Comp o SBox o Decomp, a lookup-table nonlinear layer with no low-degree polynomial description
@@ -4970,7 +4994,7 @@ references:
   venue: IACR Cryptology ePrint Archive, Paper 2023/107
   publisher: IACR
   url: https://eprint.iacr.org/2023/107
-  notes: 'Local copy: references/2023-tip5.pdf. ePrint-only technical report tied to the Neptune/Triton VM project;
+  notes: 'Local copy: references/[2023][tip5][][].pdf. ePrint-only technical report tied to the Neptune/Triton VM project;
     no separate conference/journal publication located. Confirmed directly (Table 1): field p = 2^64-2^32+1, N=5
     rounds, state m=16, rate r=10, capacity c=6, digest d=5, power-map exponent alpha=7, s=4 split-and-lookup calls
     per round; round = S-box layer (4 split-and-lookup S, 12 power-map T) -> 16x16 circulant MDS matrix -> round
@@ -4984,7 +5008,7 @@ references:
   venue: Toposware, Inc. technical note
   publisher: Toposware
   url: https://toposware.com/paper_tip5.pdf
-  notes: 'Local copy: references/2023-tip4_tip4prime_toposware.pdf. Defines Tip4 (state width 16, rate 12, capacity 4,
+  notes: 'Local copy: references/[2023][tip5][][tip4_tip4prime_toposware].pdf. Defines Tip4 (state width 16, rate 12, capacity 4,
     128-bit security) and Tip4'' (state width 12, rate 8, capacity 4, 128-bit security, fewer power maps per round)
     as named variants of Szepieniec et al.''s Tip5 construction (szepieniec_et_al_2023_tip5) -- these two variants do
     not appear in the original Tip5 paper itself.'
@@ -5002,7 +5026,7 @@ references:
   venue: 'IACR Transactions on Symmetric Cryptology, Vol. 2024, No. 3, pp. 44-83'
   publisher: IACR
   url: https://eprint.iacr.org/2023/1025
-  notes: 'Also eprint 2023/1025 (first posted 2023). Local copy: references/2023-monolith.pdf (downloaded from
+  notes: 'Also eprint 2023/1025 (first posted 2023). Local copy: references/[2023][monolith][][].pdf (downloaded from
     tosc.iacr.org, not eprint). Introduces the "Kintsugi" nonlinear-layer strategy, explicitly described as improving
     on Reinforced Concrete and Tip5''s Bars construction; round = c + Concrete(Bricks(Bars(state))), Bricks a
     Feistel-Type-3 squaring map (degree 2), Concrete an MDS matrix, uniformly 6 rounds. Two field families: Goldilocks
@@ -5022,7 +5046,7 @@ references:
   venue: 'IACR Transactions on Cryptographic Hardware and Embedded Systems, Vol. 2025, No. 2, pp. 743-780'
   publisher: IACR
   url: https://eprint.iacr.org/2025/058
-  notes: 'Local copy: references/2025-skyscraper.pdf (downloaded from tches.iacr.org, not eprint) -- this is the
+  notes: 'Local copy: references/[2025][skyscraper][][].pdf (downloaded from tches.iacr.org, not eprint) -- this is the
     original TCHES-published design (135ns to hash two 256-bit BLS12-381-scalar-field elements). A later eprint
     revision under the title "Skyscraper-v2: Fast Hashing on Big Primes" (same eprint 2025/058) adds rounds at the
     start/end of the permutation to address a subsequent cryptanalysis result, reporting 256ns for the same benchmark;
@@ -5043,7 +5067,7 @@ references:
   venue: Advances in Cryptology - EUROCRYPT 2025, Springer LNCS, pp. 303-332
   publisher: Springer
   url: https://eprint.iacr.org/2025/926
-  notes: 'Local copy: references/2025-polocolo.pdf. Name derives from "power residue for lower cost table lookup."
+  notes: 'Local copy: references/[2025][polocolo][][].pdf. Name derives from "power residue for lower cost table lookup."
     S-box S(x) = x^(-1) * T[(x/p)_m] (field inverse multiplied by a small lookup table indexed by x''s
     m-th-power-residue class), with a new MDS linear layer, targeting the Plonkup lookup argument. Confirmed directly
     (Table 1): state widths t in {3,4,5,6,7,8}; round counts R=6 for t=3, R=5 for t in {4,...,8} (a tighter variant
@@ -5060,7 +5084,7 @@ references:
   venue: Advances in Cryptology - EUROCRYPT 2021, pp. 3-34
   publisher: Springer
   url: https://eprint.iacr.org/2021/267
-  notes: 'Local copy: references/2021-ciminion.pdf. Also eprint 2021/267. Confirmed directly: Ciminion is "a
+  notes: 'Local copy: references/[2021][ciminion+ciminion_permutation][][].pdf. Also eprint 2021/267. Confirmed directly: Ciminion is "a
     nonce-based stream-encryption scheme" (mode-tier) built from two named permutations of F_q^3, "p_C" (a one-time
     setup/absorbing permutation deriving a secret intermediate state from a nonce+key) and "p_E" (the repeatedly
     applied keystream-generating permutation), each built from the Toffoli gate. Explicitly, per its own section
@@ -5079,7 +5103,7 @@ references:
   venue: Advances in Cryptology - EUROCRYPT 2023
   publisher: Springer
   url: https://eprint.iacr.org/2022/342
-  notes: 'Local copy: references/2022-hydra.pdf. Also eprint 2022/342. Confirmed directly (Abstract): "Megafono is a
+  notes: 'Local copy: references/[2022][hydra][][].pdf. Also eprint 2022/342. Confirmed directly (Abstract): "Megafono is a
     keyed extendable PRF, expanding a fixed-length input to an arbitrary-length output. Similar to Farfalle, an
     initial keyed permutation is applied to the input, followed by an expansion layer, involving the parallel
     application of keyed ciphers." The concrete instantiation Hydra uses the HADES strategy (alternating full/partial
@@ -5100,7 +5124,7 @@ references:
   venue: 'Theory of Cryptography Conference (TCC 2018), Part II'
   publisher: Springer
   url: https://eprint.iacr.org/2018/1218
-  notes: 'Local copy: references/2018-cryptodarkmatter.pdf. Also eprint 2018/1218. A general TECHNIQUE ("mixing
+  notes: 'Local copy: references/[2018][cryptodarkmatter][][].pdf. Also eprint 2018/1218. A general TECHNIQUE ("mixing
     linear functions over different small moduli"), not one single named PRF -- confirmed directly, the paper
     presents multiple distinctly-named candidates: the main/basic weak PRF (Construction 3.1, F_A(x):=map(Ax), the
     "mod-2/mod-3" case, depth-2 ACC0[2,3]) and its general mod-p/mod-q form (Remark 3.2); an alternative weak PRF
@@ -5160,7 +5184,7 @@ references:
   venue: IACR Transactions on Symmetric Cryptology (ToSC), Vol. 2020, No. 1, pp. 313-330
   publisher: Ruhr-University Bochum
   url: https://eprint.iacr.org/2019/1357
-  notes: 'Local copy: references/2020-legendre_prf_cryptanalysis.pdf (a presentation/slide deck version; the
+  notes: 'Local copy: references/[2020][legendre_prf][][legendre_prf_cryptanalysis].pdf (a presentation/slide deck version; the
     eprint/ToSC paper itself was not separately fetched -- eprint.iacr.org blocks automated fetching in this
     environment, and tosc.iacr.org''s own copy was not retrieved this session, but the slide deck quotes the
     formal definition and key results directly). Confirms L_k(x)=((x+k)/p) in {-1,0,1} is "a pseudorandom function
@@ -5183,7 +5207,7 @@ references:
   venue: ACM SIGSAC Conference on Computer and Communications Security (CCS 2022)
   publisher: ACM
   url: https://eprint.iacr.org/2021/692
-  notes: 'Local copy: references/2021-rain.pdf. Also eprint 2021/692 (first posted 2021). Introduces the one-way
+  notes: 'Local copy: references/[2021][rain][][].pdf. Also eprint 2021/692 (first posted 2021). Introduces the one-way
     function Rain and, combining it with a Banquet-like MPC-in-the-head proof system, the signature scheme Rainier --
     "the first MPCitH-based signature scheme which can produce signatures that are less than 5 KB in size" (quoted).
     Confirmed directly: Rain is a keyed permutation over F_2^n, S(x)=x^(2^n-2)=x^(-1) (field inversion), a
@@ -5209,7 +5233,7 @@ references:
   venue: ACM SIGSAC Conference on Computer and Communications Security (CCS 2023)
   publisher: ACM
   url: https://eprint.iacr.org/2022/1387
-  notes: 'Local copy: references/2023-aim.pdf (downloaded from aimer-signature.org, not eprint). Also eprint 2022/1387.
+  notes: 'Local copy: references/[2023][aim][][].pdf (downloaded from aimer-signature.org, not eprint). Also eprint 2022/1387.
     Proposes AIM, an MPCitH-friendly one-way function with high resistance to algebraic attacks, positioned against
     "recent MPCitH-friendly ciphers ... designed using simple algebraic S-boxes operating on a large field" (quoted);
     combined with the BN++ proof system to yield the signature scheme AIMer. AIM''s exact S-box form (reported
@@ -5231,7 +5255,7 @@ references:
   venue: ACM SIGSAC Conference on Computer and Communications Security (CCS 2017)
   publisher: ACM
   url: https://eprint.iacr.org/2017/279
-  notes: 'Local copy: references/2017-picnic.pdf (downloaded from microsoft.github.io, not eprint). Also eprint
+  notes: 'Local copy: references/[2017][lowmc][][picnic].pdf (downloaded from microsoft.github.io, not eprint). Also eprint
     2017/279. The Picnic post-quantum signature scheme: the public key is y = f(x) for a one-way function f and secret
     x, and a signature is a non-interactive zero-knowledge (MPC-in-the-head) proof of knowledge of x; the concrete
     scheme instantiates f with LowMC (lowmc family). One of the NIST PQC alternate third-round candidates.'
@@ -5251,7 +5275,7 @@ references:
   venue: Advances in Cryptology - ASIACRYPT 2024
   publisher: Springer
   url: https://eprint.iacr.org/2024/490
-  notes: 'Local copy: references/2024-mandarain_one_tree_to_rule_them_all.pdf (downloaded from a NIST CSRC mirror, not
+  notes: 'Local copy: references/[2024][rain][][mandarain_one_tree_to_rule_them_all].pdf (downloaded from a NIST CSRC mirror, not
     eprint). Also eprint 2024/490. Proposes VOLE-in-the-head (VOLEitH) improvements over MPCitH and three concrete
     signature schemes built on them -- FAESTER (AES), KuMQuat (MQ), and MandaRain, the last "based on ... Rain" (the
     same one-way function as dobraunig_kales_rechberger_schofnegger_zaverucha_2022_rain).'
@@ -5302,7 +5326,7 @@ references:
   venue: 'IACR Transactions on Cryptographic Hardware and Embedded Systems, Vol. 2023, No. 3, pp. 30-73'
   publisher: IACR
   url: https://eprint.iacr.org/2021/731
-  notes: 'Local copy: references/2021-pasta.pdf (downloaded from a Semantic Scholar mirror; eprint.iacr.org is behind
+  notes: 'Local copy: references/[2021][pasta+pasta_pi][][].pdf (downloaded from a Semantic Scholar mirror; eprint.iacr.org is behind
     a Cloudflare challenge that blocked automated fetching). Also eprint 2021/731. Defines the Pasta-pi permutation
     over F_p (prime field) and the Pasta family of stream ciphers built on it. Explicitly frames the concurrent
     Masta design as independent work, not a predecessor -- Pasta''s own lineage is the Rasta strategy adapted to F_p
@@ -5323,7 +5347,7 @@ references:
   venue: Cryptographic Hardware and Embedded Systems (CHES 2010), LNCS 6225, pp. 398-412
   publisher: Springer
   url: https://doi.org/10.1007/978-3-642-15031-9_27
-  notes: 'Local copy: references/2010-armadillo.pdf (downloaded from the EPFL Infoscience institutional repository,
+  notes: 'Local copy: references/[2010][armadillo][][].pdf (downloaded from the EPFL Infoscience institutional repository,
     not Springer). Nonlinearity comes entirely from data-dependent bit transposition (permutation) of the whole
     state -- selecting between two fixed permutations bit-by-bit from the data itself, related to the Zemor-Tillich
     group-based hash construction -- with no algebraic S-box at all. Genuinely multi-purpose: FIL-MAC, hashing/signatures
@@ -5339,7 +5363,7 @@ references:
   venue: IACR Cryptology ePrint Archive, Report 2018/1098
   publisher: IACR
   url: https://eprint.iacr.org/2018/1098
-  notes: 'Local copy: references/2018-jarvis_friday.pdf. Introduces Jarvis (a Rijndael-inspired block cipher over
+  notes: 'Local copy: references/[2018][friday_hash+jarvis][][jarvis_friday].pdf. Introduces Jarvis (a Rijndael-inspired block cipher over
     GF(2^n): inversion S-box x -> x^(2^n-2) + affine layer + round-key XOR) and Friday, confirmed directly: "Friday
     is a Merkle-Damgard based hash function instantiated with Jarvis as its compression function" -- precisely,
     Jarvis is first turned into a compression function via Miyaguchi-Preneel mode (H_i = E_{H_{i-1}}(m_i) xor
@@ -5358,7 +5382,7 @@ references:
   venue: Nervos Foundation / imec-COSIC KU Leuven / TU Eindhoven (no peer-reviewed venue; self-described SoK)
   publisher: ''
   url: ''
-  notes: 'Local copy: references/2020-rescue_prime.pdf. Confirmed directly: "based on the original Rescue proposal...
+  notes: 'Local copy: references/[2020][rescue_prime][][].pdf. Confirmed directly: "based on the original Rescue proposal...
     No scientific novelty is claimed... we do make use of the opportunity to apply three simplifications": (1) the
     order of the forward (x^alpha) and inverse (x^(1/alpha)) S-box steps within a round is flipped relative to
     original Rescue; (2) round constants are generated directly from a SHAKE-256-expanded seed string rather than via
@@ -5377,7 +5401,7 @@ references:
   venue: 'IACR Transactions on Symmetric Cryptology, Vol. 2020, No. 3, pp. 46-86'
   publisher: IACR
   url: https://doi.org/10.13154/tosc.v2020.i3.46-86
-  notes: 'Local copy: references/2020-dasta.pdf. Confirmed directly: keeps Rasta''s full-state chi non-linear layer
+  notes: 'Local copy: references/[2020][dasta][][].pdf. Confirmed directly: keeps Rasta''s full-state chi non-linear layer
     but splits the linear layer into a fixed linear transformation L (from a binary BCH-based code, giving a
     guaranteed branch number) and a small parameterized family of bit permutations P selected by the block counter,
     replacing Rasta''s freshly-generated random invertible matrix per round. The fixed-length building block
@@ -5397,7 +5421,7 @@ references:
   venue: 'ACM SIGSAC Conference on Computer and Communications Security (CCS ''22), pp. 139-150'
   publisher: ACM
   url: https://doi.org/10.1145/3548606.3559364
-  notes: 'Local copy: references/2022-chagri.pdf. Confirmed directly: an SPN block cipher over F_(2^63)^3 (189-bit
+  notes: 'Local copy: references/[2022][chaghri][][chagri].pdf. Confirmed directly: an SPN block cipher over F_(2^63)^3 (189-bit
     block), 8 rounds x 2 identical steps, each step S-box (pi = B o G, G(x)=x^(2^32+1) a cheap "Gold exponent" power
     map, B a sparse F_2-linearized affine polynomial) -> 3x3 MDS matrix over F_(2^63) -> subkey XOR. Explicitly
     derived from the Marvellous/Vision design strategy, NOT from Rasta: "Chaghri takes Vision as a starting point,
@@ -5419,7 +5443,7 @@ references:
   venue: Advances in Cryptology - EUROCRYPT 2022 (full version, KAIST / Samsung SDS)
   publisher: Springer
   url: https://eprint.iacr.org/2022/537
-  notes: 'Local copy: references/2022-rubato.pdf. Confirmed directly: the paper''s own name for its construction
+  notes: 'Local copy: references/[2022][rubato][][].pdf. Confirmed directly: the paper''s own name for its construction
     category is "Noisy Ciphers" (title: "Rubato: Noisy Ciphers for Approximate Homomorphic Encryption"; abstract:
     "we propose a family of noisy ciphers, dubbed Rubato"). "Rubato" names both the fixed-length keyed transform
     (AGN o Fin o RF o ... o ARK, RF = ARK o Feistel o MixRows o MixColumns, Feistel(x)=(x1,x2+x1^2,...) reusing
@@ -5440,7 +5464,7 @@ references:
   venue: Advances in Cryptology - ASIACRYPT 2022, Part III, LNCS 13793, pp. 32-67
   publisher: Springer
   url: https://eprint.iacr.org/2022/180
-  notes: 'Local copy: references/2022-elisabeth.pdf. Confirmed directly: generalizes FiLIP''s Improved Filter
+  notes: 'Local copy: references/[2022][elisabeth][][].pdf. Confirmed directly: generalizes FiLIP''s Improved Filter
     Permutator (IFP, defined over F_2) to any group G, calling the result a "Group Filter Permutator" (GFP; "The XOR
     is replaced by the addition of G and the Boolean function by a function from G^n to G"). Elisabeth instantiates
     GFP over G = Z_16, motivated by TFHE''s native 4-bit negacyclic-LUT bootstrapping. Its filter is a direct sum of
@@ -5460,7 +5484,7 @@ references:
   venue: IACR Cryptology ePrint Archive (2023; venue not printed on the PDF itself)
   publisher: IACR
   url: ''
-  notes: 'Local copy: references/2023-margrethe.pdf. Responds to Gilbert et al.''s linearization attack on
+  notes: 'Local copy: references/[2023][margrethe][][].pdf. Responds to Gilbert et al.''s linearization attack on
     Elisabeth-4 (exploiting the small monomial count created by NLUTs + mod-16 addition) with three fixes; the
     headline one, Margrethe, introduces a new "Mixed Filter Permutator" (MFP) paradigm, confirmed directly: "The MFP
     paradigm differs from the GFP by the use of two (potentially) different groups" -- key elements are individual
@@ -5482,7 +5506,7 @@ references:
   venue: INDOCRYPT 2019, LNCS 11898, pp. 68-91
   publisher: Springer
   url: https://eprint.iacr.org/2019/483
-  notes: 'Local copy: references/2019-filip.pdf. Confirmed directly: introduces the "Improved Filter Permutator"
+  notes: 'Local copy: references/[2019][filip][][].pdf. Confirmed directly: introduces the "Improved Filter Permutator"
     (IFP) paradigm, an explicit generalization of FLIP''s filter permutator (meaux_et_al_2016_flip) -- "we first
     introduce improved filter permutators that allow better security analyses, instances and implementations than
     the previously proposed FLIP family of stream ciphers." Adds a larger key register relative to the filter''s
@@ -5504,7 +5528,7 @@ references:
   venue: 'IACR Transactions on Symmetric Cryptology, 2017(4)'
   publisher: IACR
   url: https://eprint.iacr.org/2016/1188
-  notes: 'Local copy: references/2016-farfalle.pdf. Confirmed directly: "Farfalle... has a compression layer and an
+  notes: 'Local copy: references/[2016][kravatte][][farfalle].pdf. Confirmed directly: "Farfalle... has a compression layer and an
     expansion layer, each involving the parallel application of a permutation," building a PRF (keyed, arbitrary
     input/output length) rather than inverting the permutation (same never-inverted pattern as a sponge). Kravatte is
     Farfalle instantiated with Keccak-p[1600, nr=6] ("KRAVATTE is Farfalle[pb,pc,pd,pe,rollc,rolle] with
@@ -5527,7 +5551,7 @@ references:
   venue: Selected Areas in Cryptography (SAC 2022)
   publisher: Springer
   url: ''
-  notes: 'Local copy: references/2022-farasha.pdf. Confirmed directly: "Farasha can be seen as a simple and provable
+  notes: 'Local copy: references/[2022][farasha][][].pdf. Confirmed directly: "Farasha can be seen as a simple and provable
     Farfalle-like construction where the rolling functions in the compression and expansion phases of Farfalle are
     replaced by a uniform almost xor universal (AXU) function and a simple counter, respectively," with Farfalle''s
     intermediate permutations p_b/p_d removed. Analyzed in the random-permutation model (no single fixed concrete
@@ -5548,7 +5572,7 @@ references:
   venue: IACR Cryptology ePrint Archive, Report 2025/058 (minor revision of the TCHES 2025 publication)
   publisher: IACR
   url: https://eprint.iacr.org/2025/058
-  notes: 'Local copy: references/2025-skyscraper_v2.pdf. Confirmed directly: "This document describes the updated
+  notes: 'Local copy: references/[2025][skyscraper][][v2].pdf. Confirmed directly: "This document describes the updated
     version of the Skyscraper permutation published at CHES 2025, dubbed Skyscraper-v2. The update has been prompted
     by the recently published rebound distinguisher by Antoine Bak." Round count raised from 10 (bouvier_et_al_2025_skyscraper)
     to 18 -- "we update the round number from 10 to 18, introducing 4 additional square rounds at the beginning and
@@ -5569,7 +5593,7 @@ references:
   venue: 'Version v2026.7.0-89-gc5d14d [NU6.2], sections 5.4.1.6 and 5.4.9.5/5.4.9.8'
   publisher: Electric Coin Company
   url: https://zips.z.cash/protocol/protocol.pdf
-  notes: 'Local copy of this pinned snapshot: references/2026-zcash_protocol_primitives_spec.pdf (the living spec
+  notes: 'Local copy of this pinned snapshot: references/[2026][diversify_hash+pedersen_hash_zcash+sinsemilla][][zcash_protocol_primitives_spec].pdf (the living spec
     at the URL above may have moved on since). DiversifyHashSapling/DiversifyHashOrchard hash a diversifier directly
     to a curve point (Jubjub / Pallas respectively) via the underlying GroupHash primitive (BLAKE2s-256 -> field
     element -> curve point via decompress-or-reject -> cofactor clear) -- a hash-to-curve mechanism, distinct from
@@ -5696,7 +5720,7 @@ references:
   venue: IACR Transactions on Symmetric Cryptology, Vol. 2021, No. 1, pp. 37-77
   url: https://tosc.iacr.org/index.php/ToSC/article/view/8833
   notes: 'Fetched directly from tosc.iacr.org (eprint.iacr.org/2021/390 blocks automated fetching). DOI
-    10.46586/tosc.v2021.i1.37-77. Local copy: references/2021-orthros.pdf.'
+    10.46586/tosc.v2021.i1.37-77. Local copy: references/[2021][orthros][][].pdf.'
 - id: blaze_1996_turtle
   kind: report
   title: 'Efficient Symmetric-Key Ciphers Based on an NP-Complete Subproblem (Extended Abstract)'
@@ -5711,7 +5735,7 @@ references:
     (now dead; mattblaze.org is the author''s own current mirror) as reference [1], "Efficient Symmetric-Key Ciphers
     Based on an NP Complete Subproblem" -- i.e. this document, not a separate peer-reviewed version, is the citable
     primary source. Describes two designs: Turtle (a recursively-structured, variable-block-length Feistel block
-    cipher) and Hare (a keystream generator built from the same primitive). Local copy: references/1996-turtle.pdf
+    cipher) and Hare (a keystream generator built from the same primitive). Local copy: references/[1996][turtle][][].pdf
     (OCR-extracted; the PDF uses Type 3 bitmap fonts with no embedded ToUnicode map, so pdftotext yields garbage --
     read via page-image OCR instead).'
 - id: matsumoto_nishimura_1998_mersenne_twister
@@ -5726,7 +5750,7 @@ references:
   notes: 'Fetched from the authors'' own hosted copy at Hiroshima University (Matsumoto''s current institutional
     mirror of the pre-camera-ready ACM TOMACS paper). Filename deliberately avoids the word "twister" on its own
     (see mt19937 in the filename instead) to avoid colliding with the unrelated Twister SHA-3-candidate hash
-    family''s reference-PDF fuzzy-matching. Local copy: references/1998-matsumoto-nishimura-mt19937.pdf.'
+    family''s reference-PDF fuzzy-matching. Local copy: references/[1998][mersenne_twister][][matsumoto+nishimura+mt19937].pdf.'
 - id: abdelraheem_et_al_2011_armadillo2_cryptanalysis
   kind: paper
   title: Cryptanalysis of ARMADILLO2
@@ -5744,7 +5768,7 @@ references:
     building block for a chosen public input given part of the output, yielding key-recovery attacks on the
     FIL-MAC and PRNG/stream-cipher modes and a (second)-preimage attack on the hash mode, all faster than
     exhaustive search (e.g. 2^208 time / 2^205 memory, or 2^249 time / 2^45 memory, for the 256-bit-output hash).
-    Local copy: references/2011-armadillo2-cryptanalysis.pdf.'
+    Local copy: references/[2011][armadillo][][armadillo2+cryptanalysis].pdf.'
 - id: naya_plasencia_peyrin_2012_armadillo2_practical_cryptanalysis
   kind: paper
   title: Practical Cryptanalysis of ARMADILLO2
@@ -5762,4 +5786,4 @@ references:
     practical semi-free-start collision attack on the hash function -- all experimentally verified, requiring "at
     most 2^10.2 operations for 256-bit output version and negligible memory," i.e. collisions found in under a
     second on ordinary hardware, plus a related-key recovery attack in the stream-cipher mode. Local copy:
-    references/2012-armadillo2-practical-cryptanalysis.pdf.'
+    references/[2012][armadillo][][armadillo2+practical+cryptanalysis].pdf.'

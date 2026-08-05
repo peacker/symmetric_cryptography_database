@@ -2716,6 +2716,7 @@ mode_families:
     - id: constant
   reference_ids:
   - remus_ref
+  - iwata_et_al_2019_remus_v1_nist_lwc
   process_participations:
   - process_id: lightweight_crypto_nist_2018_2023
     stage_ids: [round_1]
@@ -10498,7 +10499,7 @@ mode_families:
     and partial S-box SPN rounds with a power-map non-linearity and Cauchy MDS diffusion), designed to minimize R1CS/Plonk
     constraint counts for zero-knowledge proof systems. Its binary-extension-field sibling Starkad is documented in
     the same original design (see starkad, this file). Widely deployed in ZK-rollup and blockchain
-    proof systems. Local copy: references/2021-poseidon_usenix.pdf.'
+    proof systems. Local copy: references/[2021][hadesmimc+poseidon][][poseidon_usenix].pdf.'
   instances:
   - id: poseidon_default
     name: Poseidon
@@ -10555,7 +10556,7 @@ mode_families:
     plainly "we advice against using them" regarding Starkad and the x^-1 Poseidon variant -- this database records
     Starkad as originally specified rather than omitting it, since it is a real, citable, distinct design the
     authors themselves later walked back, not a fabricated one; see hadesmimc''s own notes (primitive_families.yaml)
-    for that dismissal''s exact wording and context. Local copy: references/2019-starkad_and_poseidon.pdf (fetched
+    for that dismissal''s exact wording and context. Local copy: references/[2019][hadesmimc+starkad][][starkad_and_poseidon].pdf (fetched
     via the Wayback Machine; eprint.iacr.org itself blocks automated fetching in this environment).'
   instances:
   - id: starkad_256
@@ -10602,7 +10603,7 @@ mode_families:
     FHE-ciphertext compression (transciphering). It reuses Trivium''s three-NLFSR keystream generator, adding two
     128-bit registers that continuously re-inject the key and IV so the internal state does not lose all key/IV
     dependence after the warm-up phase, unlike Trivium at 80-bit security. Local copy:
-    references/2016-kreyvium_stream_ciphers_he_compression.pdf.'
+    references/[2016][kreyvium][][kreyvium_stream_ciphers_he_compression].pdf.'
   instances:
   - id: kreyvium_v1
     name: Kreyvium
@@ -10641,7 +10642,7 @@ mode_families:
     2016), motivating the Improved Filter Permutator (IFP) and FiLIP cipher (Meaux, Carlet, Journault, and Standaert,
     INDOCRYPT 2019, not separately modeled in this database) and the later Elisabeth/Margrethe family targeting a
     larger plaintext domain. No local copy (eprint blocked, no alternate mirror found); described in detail in
-    references/2025-fhe_friendly_ciphers_sok.pdf.
+    references/[2025][fhe_friendly_ciphers_sok][][].pdf.
   instances:
   - id: flip_default
     name: FLIP
@@ -10730,7 +10731,7 @@ mode_families:
     function plus p_E repeatedly generate keystream. Explicitly, per its own section title "A Modified Version of
     Farfalle": "our mode of operation resembles the Farfalle construction... we slightly modify Farfalle." A
     Wegman-Carter MAC is proposed only as an optional appendix add-on, not part of the base scheme. Local copy:
-    references/2021-ciminion.pdf.'
+    references/[2021][ciminion+ciminion_permutation][][].pdf.'
   instances:
   - id: ciminion_default
     name: Ciminion
@@ -10773,7 +10774,7 @@ mode_families:
     own paper as only "1/2 x Farfalle"-like rather than a literal Farfalle leaf. No paper-given name exists for the
     initial keyed permutation separate from "Hydra" itself, so no separate primitive-tier entry is modeled for it.
     Exact S-box form, state width, and round counts were not confirmed from the sources read for this database.
-    Local copy: references/2022-hydra.pdf.'
+    Local copy: references/[2022][hydra][][].pdf.'
   instances:
   - id: hydra_default
     name: Hydra
@@ -10810,7 +10811,7 @@ mode_families:
     Kravatte-SAE (session-supporting AEAD), Kravatte-SIV (nonce-misuse-resistant SIV AEAD), Kravatte-WBC (a
     tweakable wide block cipher, a Feistel network of two Farfalle instances -- one of them the reduced
     SHORT-KRAVATTE, using pd=identity instead of Keccak-p[1600,nr=4]), and Kravatte-WBC-AE (AEAD atop the wide block
-    cipher). Local copy: references/2016-farfalle.pdf.'
+    cipher). Local copy: references/[2016][kravatte][][farfalle].pdf.'
   instances:
   - id: kravatte_sae
     name: Kravatte-SAE
@@ -10858,7 +10859,7 @@ mode_families:
     universal (AXU) function and a simple counter, respectively," with Farfalle''s intermediate permutations p_b/p_d
     removed entirely. Analyzed in the random-permutation model (no single fixed concrete permutation proposed); the
     concrete instance Farasha-wLFSR uses a word-based LFSR for the AXU rolling function. Local copy:
-    references/2022-farasha.pdf.'
+    references/[2022][farasha][][].pdf.'
   instances:
   - id: farasha_wlfsr
     name: Farasha-wLFSR
@@ -10893,7 +10894,7 @@ mode_families:
       lookup-table primitive underlies FiLIP any more than FLIP -- its filter remains a purely algebraic
       direct-sum-of-monomials or XOR-threshold/XOR-majority function over F_2.'
   notes: 'Introduces the "Improved Filter Permutator" (IFP) paradigm -- a larger key register relative to the filter''s
-    input size, plus an XOR whitening step before the filter, both new vs. FLIP. Local copy: references/2019-filip.pdf.'
+    input size, plus an XOR whitening step before the filter, both new vs. FLIP. Local copy: references/[2019][filip][][].pdf.'
   instances:
   - id: filip_1280
     name: FiLIP-1280
@@ -10931,7 +10932,7 @@ mode_families:
     5-to-1 inner function built from two layers of eight fixed Z_16->Z_16 4-bit lookup tables ("NLUTs") -- a genuine
     fixed-size S-box-like component, unlike FLIP/FiLIP''s purely algebraic filters (not separately modeled as its own
     primitive-tier entry here; see todo_manual.txt). Later broken (Elisabeth-4) by a linearization attack (Gilbert et
-    al., ASIACRYPT 2023); patched by Margrethe. Local copy: references/2022-elisabeth.pdf.'
+    al., ASIACRYPT 2023); patched by Margrethe. Local copy: references/[2022][elisabeth][][].pdf.'
   instances:
   - id: elisabeth_4
     name: Elisabeth-4
@@ -10969,7 +10970,7 @@ mode_families:
       key bits over F_2 rather than Elisabeth''s Z_16-keyed register.'
   notes: 'Its filter is 14 copies of a genuine fixed-size 18-to-4-bit lookup-table S-box (not negacyclicity-constrained,
     unlike Elisabeth''s NLUTs), summed with 4 extra raw key bits per copy (not separately modeled as its own
-    primitive-tier entry here; see todo_manual.txt). Local copy: references/2023-margrethe.pdf.'
+    primitive-tier entry here; see todo_manual.txt). Local copy: references/[2023][margrethe][][].pdf.'
   instances:
   - id: margrethe_18_4
     name: Margrethe-18-4
@@ -11004,7 +11005,7 @@ mode_families:
       mode (H_i = E_{H_{i-1}}(m_i) xor H_{i-1} xor m_i, E=Jarvis -- see the jarvis family''s miyaguchi_preneel
       construction tag), then iterated via Merkle-Damgard.'
   notes: 'Broken by the same Grobner-basis algebraic attack that broke Jarvis (Albrecht et al., ASIACRYPT 2019),
-    motivating the redesign as Vision/Rescue. Local copy: references/2018-jarvis_friday.pdf.'
+    motivating the redesign as Vision/Rescue. Local copy: references/[2018][friday_hash+jarvis][][jarvis_friday].pdf.'
   instances:
   - id: friday_default
     name: Friday
@@ -11037,7 +11038,7 @@ mode_families:
     note: 'Confirmed directly: "The Grendel hash function uses the Grendel sponge internally. The output length is
       fixed."'
   notes: 'A sponge construction wrapping the Grendel permutation, with a fixed output length and standard padding.
-    Local copy: references/2021-grendel.pdf.'
+    Local copy: references/[2021][grendel+grendelhash][][].pdf.'
   instances:
   - id: grendelhash_default
     name: GrendelHash
@@ -11089,7 +11090,7 @@ mode_families:
       tag_size_bits: 128
       block_size_bits: 256
       state_size_bits: 1024
-    notes: 'Rocca authenticated-encryption scheme from the 2021 ToSC paper (updated/extended local copy in references/2022-rocca.pdf).
+    notes: 'Rocca authenticated-encryption scheme from the 2021 ToSC paper (updated/extended local copy in references/[2022][rocca+rocca_aead][][].pdf).
       The paper also defines a raw encryption mode, but this entry models the AEAD construction.'
 - id: espresso
   name: Espresso

@@ -60,10 +60,12 @@ Manual follow-ups from the relations audit (2026-07-15)
 
 7. GENERAL: IF YOU GET ACCESS TO ANY OF THE ABOVE PAPERS
    ---------------------------------------------------------
-   Just drop the PDF/text into references/ with a sensible filename
-   (YYYY-cipher-name.ext) and tell me — I'll read it, verify the citation,
-   add the edge with a quoted note, update KNOWN_MISSING in
-   scripts/test_reference_pdf_coverage.py, run the test suite, and commit.
+   Just drop the PDF/text into references/ (any sensible filename -- I'll
+   rename it to the [YYYY][names][doctype][notes].ext convention myself,
+   see scripts/reference_pdfs.py's own docstring) and tell me — I'll read
+   it, verify the citation, add the edge with a quoted note, update
+   KNOWN_MISSING in scripts/test_reference_pdf_coverage.py, run the test
+   suite, and commit.
 
 Full website-vs-source verification pass (2026-07-16)
 ======================================================
@@ -87,7 +89,7 @@ items 1-6 is still open and unchanged:
    This wouldn't normally be a problem (it would just show up as
    KNOWN_MISSING like the other ~79 stubs), except scripts/reference_pdfs.py's
    fuzzy filename-matcher currently mis-resolves `loki` to
-   references/1998-loki97.pdf — the LOKI97 AES-candidate paper, a much later
+   references/[1998][loki97][][].pdf — the LOKI97 AES-candidate paper, a much later
    and structurally unrelated design by the same research lineage. Because of
    this false-positive match, `scripts/test_reference_pdf_coverage.py`
    currently believes `loki` already has adequate source coverage and it is
@@ -99,7 +101,7 @@ items 1-6 is still open and unchanged:
    weak keys) match well-established, uncontroversial crypto history and are
    not in question. Two independent things would resolve this fully:
      (a) fetch the actual 1990 LOKI89 paper (or the 1991 LOKI91 revision) and
-         add it as references/1990-loki.pdf or similar, or
+         add it as references/[1990][loki][][].pdf or similar, or
      (b) at minimum, tighten reference_pdfs.py's fuzzy-match logic (or add an
          explicit exclusion) so "loki" no longer silently matches "loki97"'s
          file, and add `loki` to KNOWN_MISSING in the interim so the gap is
@@ -209,10 +211,10 @@ reinforced_concrete, tip5 [+ tip4/tip4' instances], monolith, skyscraper,
 polocolo, ciminion, hydra, cryptodarkmatter, rain, aim, sinsemilla,
 pedersen_hash_zcash, pasta_pi, armadillo), 25 new references.yaml entries,
 and PDFs for 12 of them (see git diff of references/ for the full list --
-2026-poseidon2b.pdf, 2022-neptune.pdf, 2023-monolith.pdf, 2025-skyscraper.pdf,
-2023-tip4_tip4prime_toposware.pdf, 2020-legendre_prf_cryptanalysis.pdf,
-2023-aim.pdf, 2017-picnic.pdf, 2024-mandarain_one_tree_to_rule_them_all.pdf,
-2021-pasta.pdf, 2010-armadillo.pdf; plus the pre-existing 2023-arion.pdf
+[2026][poseidon2b][][].pdf, [2022][neptune][][].pdf, [2023][monolith][][].pdf, [2025][skyscraper][][].pdf,
+[2023][tip5][][tip4_tip4prime_toposware].pdf, [2020][legendre_prf][][legendre_prf_cryptanalysis].pdf,
+[2023][aim][][].pdf, [2017][lowmc][][picnic].pdf, [2024][rain][][mandarain_one_tree_to_rule_them_all].pdf,
+[2021][pasta+pasta_pi][][].pdf, [2010][armadillo][][].pdf; plus the pre-existing [2023][arion][][].pdf
 lineage). All of `make validate`, the full `make test` CI suite, and
 `make build-db` pass.
 
@@ -247,7 +249,7 @@ guessed, not silently dropped):
     2016/542, no PDF obtainable; and Beullens/Beyne/Udovenko/Vitto,
     "Cryptanalysis of the Legendre PRF and Generalizations," ToSC 2020(1) /
     eprint 2019/1357, PDF already sitting at
-    references/2020-legendre_prf_cryptanalysis.pdf but currently orphaned --
+    references/[2020][legendre_prf][][legendre_prf_cryptanalysis].pdf but currently orphaned --
     no references.yaml entry or family cites it yet). Not added as a family:
     it doesn't fit primitive_types.yaml's vocabulary (block_cipher /
     tweakable_block_cipher / permutation / compression_function /
@@ -260,8 +262,8 @@ guessed, not silently dropped):
     *signature schemes* (asymmetric protocols), correctly out of scope for
     this *symmetric*-primitive database per its own README -- cited from
     lowmc's and rain's notes/reference_ids instead, with PDFs already
-    downloaded (references/2017-picnic.pdf,
-    references/2024-mandarain_one_tree_to_rule_them_all.pdf). Not a gap,
+    downloaded (references/[2017][lowmc][][picnic].pdf,
+    references/[2024][rain][][mandarain_one_tree_to_rule_them_all].pdf). Not a gap,
     just flagging the scope call explicitly.
 
 13. Pasta (the mode-tier stream-cipher family) -- only the underlying
@@ -269,7 +271,7 @@ guessed, not silently dropped):
     wrapper itself needs mode_constructions.yaml touched the same way
     primitive_constructions.yaml was this session; deferred for the same
     tier-duplication reason as LegendrePRF. All facts needed are already in
-    references/2021-pasta.pdf.
+    references/[2021][pasta+pasta_pi][][].pdf.
 
 14. Sinsemilla / Pedersen hash -- deliberately no local PDF kept: both are
     specified in the living, continuously-updated Zcash Protocol
@@ -470,13 +472,13 @@ Then worked through todo_manual_revised.txt's open list, in order, resolving eve
 optional Zcash spec archival, and the broad "verify unconfirmed facts" sweep -- none touched this
 session). Summary of what changed, by task:
 
-- **LEA construction retag**: confirmed directly against 2013-lea.pdf that the paper never calls its
+- **LEA construction retag**: confirmed directly against [2013][lea][][].pdf that the paper never calls its
   own structure "Feistel" or "generalized" (the word "Feistel" appears exactly once, describing
   TEA/XTEA for comparison) -- matching what you'd already found. Retagged from the generic
   generalized_feistel leaf to type3_generalized_feistel: LEA's round (three of four 32-bit words each
   replaced by a keyed, rotated combination of two adjacent input words; the fourth just carried over)
   matches Type-3 GFN's "shift branches, combine an adjacent pair into a new branch" skeleton by
-  structural inspection against Hoang-Rogaway's Fig. 1 (2010-generalized_feistel.pdf), not by
+  structural inspection against Hoang-Rogaway's Fig. 1 ([2010][bear_lion+cast256+mars+rc6+skipjack][][generalized_feistel].pdf), not by
   citation. One flagged difference from the strict original definition: LEA's "F" step combines a
   *pair* of branches via keyed addition rather than transforming one branch and XORing it into the
   next, so this is a generalization of the shape, not a byte-for-byte instance. Full comparison in
@@ -495,12 +497,12 @@ session). Summary of what changed, by task:
   bit_permutation_linear_layer (confirmed there is no bit-level permutation anywhere in NewDES, only
   byte-level XOR/substitution); left spn/full_sbox_layer as a flagged approximation rather than
   forcing a cleaner-but-unsupported taxonomy fit. Saved the reference implementation locally
-  (references/1990-newdes-reference-implementation.txt) and added a references.yaml entry for it,
+  (references/[1990][newdes][][reference+implementation].txt) and added a references.yaml entry for it,
   distinct from the still-unavailable original paper's own entry.
 
 - **LOKI89/91 primary paper**: found and downloaded via the University of Wollongong's Figshare-backed
   repository (the HTML landing page 403s a plain fetch, but its Figshare API endpoint gives a direct
-  PDF download URL) -- references/1990-loki.pdf, MD5-verified. Confirms the existing loki family notes
+  PDF download URL) -- references/[1990][loki][][].pdf, MD5-verified. Confirms the existing loki family notes
   (64-bit block/key, 16-round Feistel, GF(2^8) S-boxes) were already accurate.
 
 - **LOKI/LOKI97 reference_pdfs.py bug**: fixed the fuzzy-matcher bug you'd flagged (loki was silently
@@ -554,7 +556,7 @@ session). Summary of what changed, by task:
 
 - **LegendrePRF and Pasta tier decisions**: both resolved without needing any new mode_constructions.yaml
   taxonomy, contrary to what earlier sessions assumed. Pasta: read the actual paper's "Pasta
-  Specification" section directly (references/2021-pasta.pdf, already local) -- its keystream
+  Specification" section directly (references/[2021][pasta+pasta_pi][][].pdf, already local) -- its keystream
   generation (apply the Pasta-pi permutation to key+nonce+counter, truncate, add to plaintext) is
   exactly Counter Mode's own shape, just over F_p with field addition instead of XOR, so it reuses the
   existing ctr_mode leaf (same pattern aes_ctr itself already uses) rather than needing a new one.
@@ -583,10 +585,67 @@ session). Summary of what changed, by task:
 All of `make validate` and the full `make test` suite (validate, process_alignment, family_coverage,
 reference_pdf_coverage, influences_acyclic, influences_chronological, derived_construction_relations)
 pass on the combined result: 494 families (257 primitive, 237 mode), 746 instances, 1386 influence/
-derived edges. `make build-site` also passes cleanly. No commits made; everything is sitting in the
-working tree for review. One minor, harmless leftover noticed during review: references/
-2019-poseidon_starkad.pdf (fetched in an earlier session, from 2026-08-01) is now effectively an
+derived edges. `make build-site` also passes cleanly. One minor, harmless leftover noticed during
+review: references/2019-poseidon_starkad.pdf (fetched in an earlier session, from 2026-08-01) was an
 orphaned duplicate of references/2019-starkad_and_poseidon.pdf (fetched fresh this session, from a
-different mirror, different bytes) -- neither collides with or breaks anything, just redundant disk
-space; safe to delete the older one if you want to tidy it up, not done here since it wasn't part of
-the requested work.
+different mirror) -- since removed, see the references/ renaming pass entry below.
+
+references/ filename convention refactor + duplicate/mislabeled-file cleanup (2026-08-05)
+======================================================================
+
+You'd flagged (todo.txt) that the ad hoc "YYYY-name[-suffix].ext" filename convention was
+inconsistent -- hyphen used as the general separator, but also appearing inside cipher names
+themselves (e.g. "cast-128", "a5-1"), and sometimes rewritten to underscore instead, so the same kind
+of separator meant two different things depending on position. You asked for something like
+"[year][cipher names][doctype][notes]" with brackets, empty fields clearly marked.
+
+Adopted `[YYYY][name1+name2+...][doctype][notes].ext` (see scripts/reference_pdfs.py's own docstring
+for the full spec) and renamed all 370 git-tracked files under references/ to it (the one untouched
+file, 1990-n-hash-extract_p12-16.pdf, is an untracked file you dropped in yourself for the not-yet-
+started N-hash task, deliberately left alone). Field separators (`[`/`]` around each field, `+`
+between multiple names within the names field) never appear inside an individual name, so there's no
+longer any ambiguity to resolve by hyphen-vs-underscore guessing.
+
+Names are, wherever resolvable, this database's own family ids exactly -- not a paraphrase -- so a
+family now resolves to its backing document(s) by exact string match instead of the old fuzzy prefix/
+substring heuristic. That old heuristic was a real, demonstrated bug source: besides the
+already-known loki/loki97 false match, this pass also found (via the same explicit-local-copy note
+parser) that "2007-desl,desxl.pdf"'s own bare comma silently broke the old regex that was supposed to
+read its "Local copy:" note, leaving it completely unresolved despite being explicitly pinned in the
+YAML text. Rewrote scripts/reference_pdfs.py from scratch around this -- deleted the old ~150-line
+compact()/strip_year_prefix()/raw_tokens()/fuzzy_match()/explicit_local_copies() machinery entirely,
+replaced with a single regex parse of the deterministic format. Confirmed zero regressions: the exact
+same 82 families are unresolved (KNOWN_MISSING) before and after, byte-for-byte the same set.
+
+Also found and fixed, while triaging which files legitimately had no family association yet (the
+kind of gap the old fuzzy matcher could hide):
+  - Deleted 4 confirmed byte-identical duplicate PDFs (verified via MD5 first): the older
+    2019-poseidon_starkad.pdf (dupe of this session's own 2019-starkad_and_poseidon.pdf),
+    2023-pasta-tosc.pdf (dupe of 2021-pasta.pdf -- Pasta's real TCHES publication year is 2023, not
+    2021, which the already-linked file's own reference id already reflected;
+    dobraunig_et_al_2023_pasta; only the filename was misdated), 2025-skyscraper-tches.pdf (dupe of
+    2025-skyscraper.pdf), and one of two byte-identical copies of the NIST SP 800-67r2 3DES spec that
+    differed only in hyphen vs. underscore (exactly the kind of duplicate the old convention invited).
+  - Deleted 2019-kuznyechik.pdf, which kuznyechik_ref's own notes already flagged by hand as "an
+    unrelated, mislabeled PUF-hardness-amplification paper -- do not use" (confirmed by reading it).
+  - Relinked 4 files that were sitting in references/ correctly but completely unlinked from any
+    reference entry: 2003-helix.pdf and 2004-phelix.pdf (both genuinely the right papers, confirmed
+    by reading each; their reference entries said "No local copy" despite the file existing already),
+    1990-md4.pdf (confirmed to actually be RFC 1320, the formal MD4 spec -- a real, distinct document
+    from the 1990 CRYPTO paper already linked, not a duplicate; misdated 1990 instead of RFC 1320's
+    own 1992 date, now both fixed and given its own new reference entry, rivest_1992_rfc1320_md4),
+    and 2019-remus.pdf (confirmed to be the standalone "Remus v1.0" NIST-LWC submission spec, distinct
+    from the combined Romulus+Remus academic paper already linked as remus_ref; given its own new
+    reference entry, iwata_et_al_2019_remus_v1_nist_lwc).
+  - Removed a stray .DS_Store file from references/ (macOS artifact, never should have been there).
+
+`make validate` and the full `make test` suite pass on the result (still 494 families -- the two new
+reference entries above, RFC 1320 and Remus v1.0, are references, not new families). `make build-site`
+also fixed along the way: its reference-PDF-copy
+step was layering new builds on top of old ones without ever clearing stale files first, so a renamed/
+removed file would linger in build/site/references/ under its old name indefinitely -- now wipes and
+recopies every build. Verified the "Open PDF" viewer itself end-to-end in a real headless-Chromium
+session against the new bracket filenames (`[`/`]`/`+` unencoded in the URL path): a direct in-page
+`fetch()` against the rendered iframe src returned the correct PDF content-type and exact expected
+byte length, confirming the unencoded bracket characters resolve correctly over HTTP with no server-
+or browser-side path-encoding issues.
