@@ -434,6 +434,19 @@ body.spdb-fullscreen .page { width: 100vw; max-width: 100vw; padding: 0; margin:
   font-size: 0.82rem;
 }
 
+/* In fullscreen, the Hide/Show-filters/Fullscreen buttons become their own
+   top-right floating overlay (see .view-panel.is-fullscreen .view-header-row
+   above), occupying the same corner this toggle/panel normally floats in --
+   push both down below that row so "Tune layout" doesn't sit on top of
+   (and swallow clicks meant for) "Exit fullscreen". */
+.view-panel.is-fullscreen .gen-params-toggle {
+  top: 3.3rem;
+}
+
+.view-panel.is-fullscreen .gen-params-panel {
+  top: 5.2rem;
+}
+
 /* The "common" group reuses the top toolbar's .viz-name-section/.viz-name-mode
    pattern (Names, Number of Chars, Font size, Plot zoom) -- force it to wrap
    here since the panel is much narrower than the toolbar it was moved from. */

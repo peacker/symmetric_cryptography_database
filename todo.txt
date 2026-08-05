@@ -108,6 +108,31 @@ TODO:
 
 DONE:
 
+- Three fullscreen UI bugs (Timelines + Genealogy tabs), reported directly rather than filed here first:
+  1. Timelines fullscreen: the years axis didn't stretch to match the plot width, losing alignment with
+     the vertical gridlines. Root cause: nothing listened for a native window `resize` event while a
+     panel was in our CSS-overlay "fullscreen" mode -- our own Fullscreen button re-fits correctly, but
+     the browser's real fullscreen (F11) or simply resizing/maximizing the window *after* toggling it
+     never re-triggered the fit, so the plot/axis SVGs stayed stuck at whatever width they were last fit
+     to. Added a debounced window resize listener that re-fits whichever panel is currently fullscreen.
+  2. Genealogy fullscreen: the plot didn't stretch all the way down, leaving a beige gap at the bottom.
+     Root cause: genFrame's height is fit to window.innerHeight with a fullscreen-vs-normal ratio, but
+     that calculation only ran inside the full layout functions (drawSugiyama/drawRadial), not inside
+     the zoom-refit path (ensureGenFit/applyGenZoom) that the Fullscreen button actually triggers -- so
+     toggling fullscreen resized the plot's zoom but never grew the frame around it. Timelines already
+     got this right (vizFrame's height is recomputed inside applyZoom every time); ported the same
+     pattern to Genealogy via a shared recomputeGenFrameHeight() call from applyGenZoom, drawSugiyama,
+     and drawRadial.
+  3. Both tabs: the "Tune layout" button overlapped "Exit fullscreen" (both float in the same top-right
+     corner in fullscreen -- .view-header-row at top:0.6rem/right:0.6rem, .gen-params-toggle at
+     top:0.7rem/right:0.7rem -- and the toggle's higher z-index put it in front, intercepting clicks
+     meant for Exit fullscreen). Pushed .gen-params-toggle/.gen-params-panel down below the header row
+     specifically in fullscreen mode.
+  Verified via Playwright: no bounding-box overlap on either tab, a real (non-force) click on Exit
+  fullscreen now works, axis/plot widths match after a simulated window resize while fullscreen, and
+  genFrame's height now fills ~97% of viewport height instead of staying stuck at its pre-fullscreen
+  size. make test and a full build-site pass; no console errors.
+
 - add N-hash https://en.wikipedia.org/wiki/N-hash
   add new construction type described by the wikipedia page
   Added: no official spec is online, so modeled directly from the primary source you provided

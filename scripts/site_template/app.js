@@ -385,6 +385,23 @@
       triggerViewRefresh(viewName, true);
     });
 
+    // The fullscreen overlay is sized off window.innerHeight/innerWidth at
+    // the moment it's entered (see ensureFit/ensureGenFit); toggling our
+    // button never fires a native resize, but the browser's own real
+    // fullscreen (F11) or a maximize/monitor change happening *while*
+    // already in our overlay does, and nothing was re-fitting the plot to
+    // the new size -- the axis/plot stayed stuck at whatever width/height
+    // they were last fit to. Re-fit whichever panel is currently fullscreen.
+    let fullscreenResizeTimer = null;
+    window.addEventListener("resize", () => {
+      const openPanel = document.querySelector(".view-panel.is-fullscreen");
+      if (!openPanel) return;
+      clearTimeout(fullscreenResizeTimer);
+      fullscreenResizeTimer = setTimeout(() => {
+        triggerViewRefresh(openPanel.getAttribute("data-view"), true);
+      }, 120);
+    });
+
     document.querySelectorAll("[data-toggle-filters]").forEach((btn) => {
       const key = btn.getAttribute("data-toggle-filters");
       const wrap = document.getElementById(`${key}ControlsWrap`);
@@ -2639,6 +2656,23 @@
     const GEN_ZOOM_FACTOR = 1.2;
     let genZoomScale = GEN_BASE_ZOOM;
     let genHasAutoFit = false;
+    // genFrame's own height (as opposed to genPlot's zoom-scaled height) is
+    // fit to window.innerHeight with a fullscreen-vs-normal ratio, set by
+    // whichever layout last ran (drawSugiyama/drawRadial -- see
+    // recomputeGenFrameHeight()'s callers). Toggling fullscreen doesn't
+    // re-run either of those (only ensureGenFit's zoom-refit), so without
+    // re-deriving it here too, genFrame stayed stuck at its pre-fullscreen
+    // height -- the plot itself would resize but the frame around it
+    // wouldn't grow to fill the newly-available viewport height, leaving a
+    // gap below it.
+    let lastGenFrameSizing = null;
+    function recomputeGenFrameHeight() {
+      if (!lastGenFrameSizing) return;
+      const { naturalH, minH, ratioNormal } = lastGenFrameSizing;
+      const isFullscreen = document.body.classList.contains("spdb-fullscreen");
+      const ratio = isFullscreen ? 0.97 : ratioNormal;
+      genFrame.style.height = `${Math.max(minH, Math.min(Math.round(window.innerHeight * ratio), naturalH + 8))}px`;
+    }
 
     function clampGenZoom(next) {
       return Math.min(GEN_MAX_ZOOM, Math.max(GEN_MIN_ZOOM, next));
@@ -2650,6 +2684,7 @@
       if (!naturalW || !naturalH) return;
       genPlot.style.width = `${Math.round(naturalW * genZoomScale)}px`;
       genPlot.style.height = `${Math.round(naturalH * genZoomScale)}px`;
+      recomputeGenFrameHeight();
       if (genZoomValue) genZoomValue.textContent = `${Math.round(genZoomScale * 100)}%`;
     }
 
@@ -3187,8 +3222,8 @@
       genPlot.setAttribute("viewBox", `0 0 ${canvasW} ${canvasH}`);
       genPlot.setAttribute("width", String(canvasW));
       genPlot.setAttribute("height", String(canvasH));
-      const sugiyamaHRatio = document.body.classList.contains("spdb-fullscreen") ? 0.97 : 0.70;
-      genFrame.style.height = `${Math.max(220, Math.min(Math.round(window.innerHeight * sugiyamaHRatio), canvasH + 8))}px`;
+      lastGenFrameSizing = { naturalH: canvasH, minH: 220, ratioNormal: 0.70 };
+      recomputeGenFrameHeight();
 
       if (dagNodes.length) {
         const shift = (canvasW - dagW) / 2 - dagMinX;
@@ -3566,8 +3601,8 @@
       genPlot.setAttribute("width", String(diam));
       genPlot.setAttribute("height", String(diam));
       genPlot.style.display = "block"; genPlot.style.margin = "0 auto";
-      const radialHRatio = document.body.classList.contains("spdb-fullscreen") ? 0.97 : 0.82;
-      genFrame.style.height = `${Math.max(320, Math.min(Math.round(window.innerHeight * radialHRatio), diam + 8))}px`;
+      lastGenFrameSizing = { naturalH: diam, minH: 320, ratioNormal: 0.82 };
+      recomputeGenFrameHeight();
 
       // Concentric guide rings (per-year + decade in year mode, per-gen in gen mode)
       ringLabels.forEach(({ r, label, minor }) => {
