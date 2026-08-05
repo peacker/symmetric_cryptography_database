@@ -402,6 +402,33 @@
       }, 120);
     });
 
+    // Dragging the browser window from one monitor to another with a
+    // different display scale factor (e.g. a HiDPI laptop panel to a
+    // "normal"-DPI wide external monitor) changes window.devicePixelRatio
+    // without necessarily changing window.innerWidth/innerHeight -- the OS
+    // commonly keeps the window's *logical* (CSS-pixel) size the same
+    // across the move, so no `resize` event fires at all, yet the fit-to-
+    // width math re-scales against the same numbers while the browser's
+    // device-pixel rounding underneath it changed, which is exactly the
+    // kind of thing that can knock two independently-set pixel widths out
+    // of sync at high zoom multipliers (see the ResizeObserver comment
+    // above). There's no native "devicePixelRatio changed" event; the
+    // standard workaround is a matchMedia query pinned to the *current*
+    // ratio, which stops matching (fires "change") the instant it isn't
+    // current anymore -- then re-arm it for whatever the new ratio is.
+    function watchDevicePixelRatio(onChange) {
+      if (typeof matchMedia !== "function") return;
+      function arm() {
+        const mql = matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+        mql.addEventListener("change", () => { onChange(); arm(); }, { once: true });
+      }
+      arm();
+    }
+    watchDevicePixelRatio(() => {
+      triggerViewRefresh("visualizations", true);
+      triggerViewRefresh("genealogy", true);
+    });
+
     document.querySelectorAll("[data-toggle-filters]").forEach((btn) => {
       const key = btn.getAttribute("data-toggle-filters");
       const wrap = document.getElementById(`${key}ControlsWrap`);
@@ -1502,13 +1529,21 @@
     // (a container-specific scrollbar reducing one pane's available width
     // but not the other's, a layout recalculation neither resize listener
     // nor fit-to-container call happens to run for, ...), mirroring
-    // xAxisSvg's width directly off of plotSvg's *actual rendered* width
-    // guarantees they can never visibly disagree, without having to keep
-    // chasing every possible root cause individually.
+    // xAxisSvg's width directly off of plotSvg guarantees they can never
+    // visibly disagree, without having to keep chasing every possible root
+    // cause individually. Deliberately copies plotSvg.style.width (the exact
+    // CSS text applyZoom() already set) rather than re-measuring via
+    // getBoundingClientRect(): the latter returns layout-precision
+    // (sub-pixel) floats that can differ by a fraction of a CSS pixel from
+    // what was actually *set*, once ancestor grid-track distribution and
+    // device-pixel-ratio rounding are involved -- copying the two elements
+    // to a *different* value than each other, which at extreme zoom (a very
+    // wide monitor's fit-to-width can be a large multiplier) gets visibly
+    // amplified toward the right edge. Copying the exact string sidesteps
+    // that arithmetic entirely.
     if (typeof ResizeObserver !== "undefined") {
       const axisWidthSync = new ResizeObserver(() => {
-        const w = plotSvg.getBoundingClientRect().width;
-        if (w > 0) xAxisSvg.style.width = `${w}px`;
+        if (plotSvg.style.width) xAxisSvg.style.width = plotSvg.style.width;
       });
       axisWidthSync.observe(plotSvg);
     }
@@ -2856,28 +2891,100 @@
       const set = new Set(a);
       return b.every((el) => set.has(el));
     }
-    let hotShown = null;   // { edgeEls, nodeEls } currently CSS-classed
-    let hotPinned = null;  // { edgeEls, nodeEls } the user clicked -- survives mouseleave
+    function uniqueEls(list) { return [...new Set(list)]; }
+
+    // A bold font-weight alone didn't read well against the plot's busy
+    // background, so a highlighted label instead gets a small opaque
+    // backdrop rect (fixed, high-contrast colors -- see .gen-label-backdrop
+    // in styles.css) inserted directly behind it. One reusable rect per
+    // label (tracked here rather than recreated every time) since the same
+    // label can enter/leave the highlighted set repeatedly as the mouse
+    // moves. svgEl() is defined further down but this only ever *runs* on
+    // user interaction, long after it's hoisted and available.
+    const labelBackdrops = new WeakMap(); // text element -> its backdrop rect
+    function showLabelBackdrop(textEl) {
+      let rect = labelBackdrops.get(textEl);
+      if (!rect) {
+        rect = svgEl("rect", { class: "gen-label-backdrop" });
+        labelBackdrops.set(textEl, rect);
+      }
+      let bbox;
+      try { bbox = textEl.getBBox(); } catch { return; }
+      const pad = 1.5;
+      rect.setAttribute("x", String(bbox.x - pad));
+      rect.setAttribute("y", String(bbox.y - pad));
+      rect.setAttribute("width", String(bbox.width + pad * 2));
+      rect.setAttribute("height", String(bbox.height + pad * 2));
+      // Radial labels carry their own rotate() transform; mirror it so the
+      // backdrop stays aligned with the (possibly rotated) text.
+      const t = textEl.getAttribute("transform");
+      if (t) rect.setAttribute("transform", t); else rect.removeAttribute("transform");
+      if (rect.parentNode !== textEl.parentNode || rect.nextSibling !== textEl) {
+        textEl.parentNode.insertBefore(rect, textEl);
+      }
+    }
+    function hideLabelBackdrop(textEl) {
+      const rect = labelBackdrops.get(textEl);
+      if (rect && rect.parentNode) rect.parentNode.removeChild(rect);
+    }
+
+    let hotShown = null;   // { edgeEls, nodeEls } currently CSS-classed/backdropped
     function clearHotClasses() {
       if (!hotShown) return;
-      hotShown.edgeEls.forEach((el) => el.classList.remove("gen-edge-hot"));
-      hotShown.nodeEls.forEach((el) => el.classList.remove("gen-node-hot"));
+      hotShown.edgeEls.forEach((el) => {
+        el.classList.remove("gen-edge-hot");
+        el.setAttribute("opacity", String(layoutParams.edgeOpacity));
+      });
+      hotShown.nodeEls.forEach((el) => {
+        el.classList.remove("gen-node-hot");
+        if (el.tagName === "text") hideLabelBackdrop(el);
+      });
       hotShown = null;
     }
     function applyHotClasses(edgeEls, nodeEls) {
-      if (hotShown && sameEls(hotShown.edgeEls, edgeEls) && sameEls(hotShown.nodeEls, nodeEls)) return;
+      const dedupedEdges = uniqueEls(edgeEls);
+      const dedupedNodes = uniqueEls(nodeEls);
+      if (hotShown && sameEls(hotShown.edgeEls, dedupedEdges) && sameEls(hotShown.nodeEls, dedupedNodes)) return;
       clearHotClasses();
-      edgeEls.forEach((el) => el.classList.add("gen-edge-hot"));
-      nodeEls.forEach((el) => el.classList.add("gen-node-hot"));
-      hotShown = { edgeEls, nodeEls };
+      // A highlighted edge forced to full opacity buried the labels under a
+      // wall of opaque lines on dense graphs -- bump the *current* opacity
+      // by 10 points (capped at 100%) instead, so it's clearly more visible
+      // than an unhighlighted edge without overpowering everything else.
+      // The extra stroke-width (see .gen-edge-hot) still does most of the
+      // "this one's highlighted" work.
+      const hotOpacity = Math.min(1, layoutParams.edgeOpacity + 0.1);
+      dedupedEdges.forEach((el) => {
+        el.classList.add("gen-edge-hot");
+        el.setAttribute("opacity", String(hotOpacity));
+      });
+      dedupedNodes.forEach((el) => {
+        el.classList.add("gen-node-hot");
+        if (el.tagName === "text") showLabelBackdrop(el);
+      });
+      hotShown = { edgeEls: dedupedEdges, nodeEls: dedupedNodes };
+    }
+
+    // hotPinned is set by a click and, unlike a hover, is *not* cleared by
+    // moving the mouse elsewhere -- only by clicking the same edge/node
+    // again. Whatever's live-hovered is shown *in addition to* the pin
+    // (their union), so hovering around while something is pinned keeps
+    // previewing other relations without losing the pinned one; mouseleave
+    // (or hovering empty space) just drops back to showing the pin alone.
+    let hotPinned = null; // { edgeEls, nodeEls }
+    function unionWithPin(liveEdgeEls, liveNodeEls) {
+      if (!hotPinned) return { edgeEls: liveEdgeEls, nodeEls: liveNodeEls };
+      return {
+        edgeEls: [...hotPinned.edgeEls, ...liveEdgeEls],
+        nodeEls: [...hotPinned.nodeEls, ...liveNodeEls],
+      };
     }
     // Registered once (not per-render): genPlot itself is never replaced,
     // only its children, so a listener here keeps working across every
     // re-render via normal DOM event delegation.
     genPlot.addEventListener("mousemove", (ev) => {
-      const { edgeEls, nodeEls } = hitsAtPoint(ev.clientX, ev.clientY);
+      const hover = hitsAtPoint(ev.clientX, ev.clientY);
+      const { edgeEls, nodeEls } = unionWithPin(hover.edgeEls, hover.nodeEls);
       if (edgeEls.length || nodeEls.length) applyHotClasses(edgeEls, nodeEls);
-      else if (hotPinned) applyHotClasses(hotPinned.edgeEls, hotPinned.nodeEls);
       else clearHotClasses();
     });
     genPlot.addEventListener("mouseleave", () => {
@@ -2888,14 +2995,14 @@
     // element, for the text info box) calls stopPropagation(), which would
     // otherwise stop this delegated listener from ever seeing the click.
     genPlot.addEventListener("click", (ev) => {
-      const { edgeEls, nodeEls } = hitsAtPoint(ev.clientX, ev.clientY);
-      if (!edgeEls.length && !nodeEls.length) return;
-      if (hotPinned && sameEls(hotPinned.edgeEls, edgeEls) && sameEls(hotPinned.nodeEls, nodeEls)) {
+      const hits = hitsAtPoint(ev.clientX, ev.clientY);
+      if (!hits.edgeEls.length && !hits.nodeEls.length) return;
+      if (hotPinned && sameEls(hotPinned.edgeEls, hits.edgeEls) && sameEls(hotPinned.nodeEls, hits.nodeEls)) {
         hotPinned = null;
       } else {
-        hotPinned = { edgeEls, nodeEls };
+        hotPinned = hits;
       }
-      applyHotClasses(edgeEls, nodeEls);
+      applyHotClasses(hits.edgeEls, hits.nodeEls);
     }, true);
     function renderHighlightChecklist() {
       if (!genHighlightValues) return;

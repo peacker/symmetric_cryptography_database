@@ -108,6 +108,38 @@ TODO:
 
 DONE:
 
+- Second follow-up round, reported directly rather than filed here first:
+  1. Timelines axis, root cause finally identified: you narrowed it to moving the browser window from a
+     laptop's screen to a wide external monitor -- a different-DPI monitor switch, which commonly keeps
+     the window's *logical* size the same (no `resize` event fires) while changing devicePixelRatio, and
+     also raised a real bug in my own previous ResizeObserver fix: it re-measured plotSvg's width via
+     getBoundingClientRect() (a layout-precision float that can differ from the exact CSS text applyZoom()
+     set, once device-pixel rounding is involved) and copied that float onto xAxisSvg, which at the very
+     large fit-to-width zoom multiplier a wide monitor produces amplified a fractional-pixel difference
+     into a visible drift toward the right edge. Fixed by copying plotSvg.style.width's exact string
+     instead of re-measuring, and added a devicePixelRatio-change watcher (the standard matchMedia-based
+     technique, since there's no native event for it) that re-fits both Timelines and Genealogy whenever
+     the effective DPI changes, resize event or not.
+  2. Reworked the pin/hover interaction again: hovering something else while a relation is pinned now
+     shows *both* highlighted at once (a union), instead of the hover replacing the pin -- so the pin
+     genuinely only goes away via a second click on the same edge/node, never by hovering or moving the
+     mouse away, while hover previews still work throughout.
+  3. Highlighted labels: bold text alone didn't read well against the busy plot background. Replaced it
+     with a small opaque backdrop rect (fixed high-contrast color pair, not derived from the legend)
+     inserted directly behind the label, positioned via getBBox() and mirroring the label's own rotation
+     transform for radial mode.
+  4. Highlighted-edge opacity was forced to 100%, which buried labels under a wall of opaque lines on
+     dense graphs. Changed to current opacity (the Edge opacity slider's value) + 10 percentage points,
+     capped at 100% -- the extra stroke-width already does most of the "this one's highlighted" work, so
+     full opacity was never actually necessary.
+  Also answered (no code change): construction_sharing_edges is the *stored output* of the automatic
+  derivation rule (compute_construction_sharing_edges), not separate hand-curated data it duplicates --
+  actively read by Genealogy for the shared-construction star-topology edges, kept as-is per your call.
+  Verified via Playwright (fixed-coordinate synthetic events, since a real mouse hover over a dense
+  overlapping-edge point isn't reproducible otherwise -- careful this time not to scroll the container
+  between measurements, which produced a false "unpin didn't work" result during testing). make test and
+  a full build-site pass; no console errors.
+
 - Follow-up round on the Timelines/Genealogy work above, reported directly rather than filed here first:
   1. Timelines axis, still misaligned after the offsetWidth fix: added a ResizeObserver that mirrors
      xAxisSvg's width directly off plotSvg's actual rendered width, so they can never visibly disagree

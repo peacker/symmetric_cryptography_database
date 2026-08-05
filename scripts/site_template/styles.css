@@ -1010,13 +1010,17 @@ pre {
 
 /* Genealogy: hovering (or clicking, which pins it) a relation edge's
    invisible hit-area bolds that edge and its two endpoint nodes -- see
-   setHotHighlight()/clearHotHighlight() in app.js. !important is needed
-   because the base stroke-width/opacity/font-weight are set as SVG
-   presentation attributes (rect, path) or inline style (text label), both
-   of which a plain class rule wouldn't otherwise outrank. */
+   applyHotClasses()/clearHotClasses() in app.js. !important is needed
+   because the base stroke-width/font-weight are set as SVG presentation
+   attributes (rect, path) or inline style (text label), both of which a
+   plain class rule wouldn't otherwise outrank. Opacity is deliberately
+   *not* set here: it's set directly as an element attribute in JS (current
+   layoutParams.edgeOpacity + 10 points, capped at 100%) rather than forced
+   to a fixed value, since forcing full opacity on every highlighted edge
+   made dense graphs unreadable -- the labels disappeared under a wall of
+   opaque lines. */
 .gen-edge-hot {
   stroke-width: 3.6px !important;
-  opacity: 1 !important;
 }
 
 rect.gen-node-hot {
@@ -1024,8 +1028,20 @@ rect.gen-node-hot {
   stroke-width: 3px !important;
 }
 
+/* A bold font-weight alone read poorly against the plot's busy background;
+   a small high-contrast backdrop behind the label (see .gen-label-backdrop,
+   inserted/positioned by showLabelBackdrop() in app.js) reads much better
+   and doesn't depend on the label's own (legend-driven) fill color. */
 text.gen-node-hot {
+  fill: #1a1a1a !important;
   font-weight: 800 !important;
+}
+
+.gen-label-backdrop {
+  fill: #ffd23f;
+  stroke: #ad7a00;
+  stroke-width: 0.6px;
+  pointer-events: none;
 }
 
 circle.gen-node-hot {
