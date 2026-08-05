@@ -1497,6 +1497,22 @@
     const relationInfoBox = document.getElementById("vizRelationInfo");
     if (!plotSvg || !xAxisSvg || !yAxisSvg || !plotScroll || !xAxisTrack || !yAxisTrack || !cornerPane || !vizFrame || !groupBy || !hideDots || !nameModeOff || !nameModeClip || !nameModeWrap || !nameModeFull || !colorByProcess || !processLegend || !fontMinus || !fontPlus || !fontReset || !fontValue || !zoomOut || !zoomIn || !zoomReset || !zoomFit || !zoomValue || !colMinus || !colPlus || !colReset || !colSpacingValue || !familySearch || !collapseGroups || !collapseCount || !yearStart || !yearEnd || !yearReset || !yearRangeValue || !relationInfoBox) return;
 
+    // Safety net on top of applyZoom() setting both SVGs' width from the same
+    // expression: whatever the actual cause of a divergence turns out to be
+    // (a container-specific scrollbar reducing one pane's available width
+    // but not the other's, a layout recalculation neither resize listener
+    // nor fit-to-container call happens to run for, ...), mirroring
+    // xAxisSvg's width directly off of plotSvg's *actual rendered* width
+    // guarantees they can never visibly disagree, without having to keep
+    // chasing every possible root cause individually.
+    if (typeof ResizeObserver !== "undefined") {
+      const axisWidthSync = new ResizeObserver(() => {
+        const w = plotSvg.getBoundingClientRect().width;
+        if (w > 0) xAxisSvg.style.width = `${w}px`;
+      });
+      axisWidthSync.observe(plotSvg);
+    }
+
     const BASE_FONT = 12;
     const BASE_ZOOM = 1;
     const BASE_COL_BONUS = 0;
@@ -2520,7 +2536,7 @@
       layeredNodeHMult: 1.85,     // layered: node box height (× font size)
       layeredColGap: 10,          // layered: horizontal gap between sibling nodes (px)
       layeredIsoWMult: 7.5,       // layered: width of isolated-node columns (× font size)
-      edgeOpacity: 0.5,           // relation edges: below 100% by default so overlapping edges don't bury family labels
+      edgeOpacity: 0.1,           // relation edges: low by default -- large plots have hundreds of overlapping edges that would otherwise bury family labels
     };
     function loadLayoutParams() {
       const out = { ...DEFAULT_LAYOUT_PARAMS };
@@ -2796,29 +2812,91 @@
     }
     function highlightOpacity(fid) { return isHighlighted(fid) ? 1 : 0.15; }
 
-    // ── Edge/node hover-click highlight: hovering (or clicking, which pins
-    // it through the next hover) a relation edge's hit-area bolds that edge
-    // and its two endpoint nodes so they're easy to trace visually even when
-    // many overlapping, semi-transparent edges make that hard otherwise.
-    // Reset to null at the top of render() below since each render rebuilds
-    // the plot's DOM from scratch, so any previously-highlighted elements no
-    // longer exist.
-    let hotHighlight = null; // { edgeEls: Element[], nodeEls: Element[], pinned: boolean }
-    function clearHotHighlight() {
-      if (!hotHighlight) return;
-      hotHighlight.edgeEls.forEach((el) => el.classList.remove("gen-edge-hot"));
-      hotHighlight.nodeEls.forEach((el) => el.classList.remove("gen-node-hot"));
-      hotHighlight = null;
+    // ── Edge/node hover-click highlight ──────────────────────────────
+    // Hovering (or clicking, which pins it -- click the same thing again to
+    // unpin) a relation edge or a family node bolds it and whatever it's
+    // connected to (an edge's two endpoints; a node's own box/label plus
+    // every edge touching it and *their* other endpoints).
+    //
+    // This is driven by a single delegated mousemove/click pair on genPlot
+    // (registered once, further below) using elementsFromPoint() instead of
+    // per-element listeners, for two reasons:
+    //  1. With 1000+ overlapping edge hit-areas, a plain per-element
+    //     mouseenter only ever reaches whichever one happens to be topmost
+    //     in paint order at a given pixel -- anything underneath it was
+    //     silently, permanently unreachable. elementsFromPoint() collects
+    //     every hit-area actually under the cursor, so overlapping edges
+    //     highlight (and pin) together instead of only the top one ever
+    //     responding.
+    //  2. It lets node hover reuse the exact same code path as edge hover:
+    //     nodes register into the same edgeHitData map (see the node-drawing
+    //     loops in drawSugiyama/drawRadial), so hitsAtPoint() doesn't care
+    //     which kind of element it found.
+    //
+    // edgeHitData values may hold either a plain array or a zero-arg
+    // function returning one, because an edge's node endpoints aren't known
+    // yet at the point the edge itself is drawn (nodes are drawn after
+    // edges) -- a function defers that lookup until it's actually read,
+    // which only happens later on user interaction, by which point the
+    // node-drawing loop has long since finished.
+    const edgeHitData = new WeakMap(); // hit element -> { edgeEls, nodeEls } (each may be an array or a () => array)
+    function resolveHitList(value) { return typeof value === "function" ? value() : value; }
+    function hitsAtPoint(clientX, clientY) {
+      const edgeEls = []; const nodeEls = [];
+      document.elementsFromPoint(clientX, clientY).forEach((el) => {
+        const data = edgeHitData.get(el);
+        if (!data) return;
+        edgeEls.push(...resolveHitList(data.edgeEls));
+        nodeEls.push(...resolveHitList(data.nodeEls));
+      });
+      return { edgeEls, nodeEls };
     }
-    function setHotHighlight(edgeEls, nodeEls, pinned) {
-      // A hover shouldn't steal a highlight the user deliberately pinned by
-      // clicking -- only another click (or clearHotHighlight()) can do that.
-      if (hotHighlight && hotHighlight.pinned && !pinned) return;
-      clearHotHighlight();
+    function sameEls(a, b) {
+      if (a.length !== b.length) return false;
+      const set = new Set(a);
+      return b.every((el) => set.has(el));
+    }
+    let hotShown = null;   // { edgeEls, nodeEls } currently CSS-classed
+    let hotPinned = null;  // { edgeEls, nodeEls } the user clicked -- survives mouseleave
+    function clearHotClasses() {
+      if (!hotShown) return;
+      hotShown.edgeEls.forEach((el) => el.classList.remove("gen-edge-hot"));
+      hotShown.nodeEls.forEach((el) => el.classList.remove("gen-node-hot"));
+      hotShown = null;
+    }
+    function applyHotClasses(edgeEls, nodeEls) {
+      if (hotShown && sameEls(hotShown.edgeEls, edgeEls) && sameEls(hotShown.nodeEls, nodeEls)) return;
+      clearHotClasses();
       edgeEls.forEach((el) => el.classList.add("gen-edge-hot"));
       nodeEls.forEach((el) => el.classList.add("gen-node-hot"));
-      hotHighlight = { edgeEls, nodeEls, pinned };
+      hotShown = { edgeEls, nodeEls };
     }
+    // Registered once (not per-render): genPlot itself is never replaced,
+    // only its children, so a listener here keeps working across every
+    // re-render via normal DOM event delegation.
+    genPlot.addEventListener("mousemove", (ev) => {
+      const { edgeEls, nodeEls } = hitsAtPoint(ev.clientX, ev.clientY);
+      if (edgeEls.length || nodeEls.length) applyHotClasses(edgeEls, nodeEls);
+      else if (hotPinned) applyHotClasses(hotPinned.edgeEls, hotPinned.nodeEls);
+      else clearHotClasses();
+    });
+    genPlot.addEventListener("mouseleave", () => {
+      if (hotPinned) applyHotClasses(hotPinned.edgeEls, hotPinned.nodeEls);
+      else clearHotClasses();
+    });
+    // Capture phase: attach()'s own click listener (below, per edge/node
+    // element, for the text info box) calls stopPropagation(), which would
+    // otherwise stop this delegated listener from ever seeing the click.
+    genPlot.addEventListener("click", (ev) => {
+      const { edgeEls, nodeEls } = hitsAtPoint(ev.clientX, ev.clientY);
+      if (!edgeEls.length && !nodeEls.length) return;
+      if (hotPinned && sameEls(hotPinned.edgeEls, edgeEls) && sameEls(hotPinned.nodeEls, nodeEls)) {
+        hotPinned = null;
+      } else {
+        hotPinned = { edgeEls, nodeEls };
+      }
+      applyHotClasses(edgeEls, nodeEls);
+    }, true);
     function renderHighlightChecklist() {
       if (!genHighlightValues) return;
       if (genHighlightDim === "none") { genHighlightValues.hidden = true; genHighlightValues.innerHTML = ""; return; }
@@ -3179,6 +3257,11 @@
 
       const hoverPaths = [];
       const nodeElsByFamily = new Map();
+      const edgesByFamily = new Map(); // fid -> [{ edgeEls, otherFid }]
+      function addEdgeFamily(fid, entry) {
+        if (!edgesByFamily.has(fid)) edgesByFamily.set(fid, []);
+        edgesByFamily.get(fid).push(entry);
+      }
       visEdges.forEach((e) => {
         const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
         if (!posX.has(src) || !posX.has(tgt)) return;
@@ -3208,16 +3291,11 @@
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([{ fid: src, name: srcName }, { fid: tgt, name: tgtName }]));
         // nodeElsByFamily is only fully populated once the node loop below
-        // runs, but these listeners fire later (on user interaction), by
-        // which point the whole render() call -- and this closure's read of
-        // it -- has already completed.
-        const hotNodes = () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])];
-        hp.addEventListener("mouseenter", () => setHotHighlight(edgeEls, hotNodes(), false));
-        hp.addEventListener("mouseleave", () => { if (!hotHighlight || !hotHighlight.pinned) clearHotHighlight(); });
-        hp.addEventListener("click", () => {
-          if (hotHighlight && hotHighlight.pinned && hotHighlight.edgeEls === edgeEls) clearHotHighlight();
-          else setHotHighlight(edgeEls, hotNodes(), true);
-        });
+        // runs, but this getter is only called later (on user interaction),
+        // by which point the whole render() call has long since completed.
+        edgeHitData.set(hp, { edgeEls, nodeEls: () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])] });
+        addEdgeFamily(src, { edgeEls, otherFid: tgt });
+        addEdgeFamily(tgt, { edgeEls, otherFid: src });
         hoverPaths.push(hp);
       });
       // Append edge hit-areas before nodes/labels so nodes/labels paint (and
@@ -3251,6 +3329,23 @@
         lbl.textContent = disp;
         genPlot.appendChild(lbl);
         nodeElsByFamily.set(fid, [rect, lbl]);
+      });
+
+      // Third pass: now that every node's elements are known, register each
+      // node's own rect as an edgeHitData hit target too, so hovering/
+      // clicking a node highlights itself plus every edge touching it and
+      // those edges' other endpoints -- the same interaction edges already
+      // get, just triggered from the node side. (The label itself doesn't
+      // need its own entry: it has pointer-events:none, so it's invisible
+      // to elementsFromPoint() anyway, and its rect already covers the same
+      // area.)
+      [...dagNodes, ...isoNodes].forEach((fid) => {
+        const ownEls = nodeElsByFamily.get(fid);
+        if (!ownEls) return;
+        const related = edgesByFamily.get(fid) || [];
+        const edgeEls = related.flatMap((r) => r.edgeEls);
+        const nodeEls = [...ownEls, ...related.flatMap((r) => nodeElsByFamily.get(r.otherFid) || [])];
+        edgeHitData.set(ownEls[0], { edgeEls, nodeEls });
       });
     }
 
@@ -3559,6 +3654,11 @@
       // multi-relation edges retain a visible stripe for each relation type.
       const hoverPaths = [];
       const nodeElsByFamily = new Map();
+      const edgesByFamily = new Map(); // fid -> [{ edgeEls, otherFid }]
+      function addEdgeFamily(fid, entry) {
+        if (!edgesByFamily.has(fid)) edgesByFamily.set(fid, []);
+        edgesByFamily.get(fid).push(entry);
+      }
       visEdges.forEach((e) => {
         const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
         if (!angleOf.has(src) || !angleOf.has(tgt)) return;
@@ -3582,14 +3682,11 @@
           { fid: tgt, name: String((genFamById.get(tgt) || {}).name || tgt) },
         ]));
         // See the matching comment in drawSugiyama: nodeElsByFamily is
-        // populated by the node loop below, but these fire later.
-        const hotNodes = () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])];
-        hp.addEventListener("mouseenter", () => setHotHighlight(edgeEls, hotNodes(), false));
-        hp.addEventListener("mouseleave", () => { if (!hotHighlight || !hotHighlight.pinned) clearHotHighlight(); });
-        hp.addEventListener("click", () => {
-          if (hotHighlight && hotHighlight.pinned && hotHighlight.edgeEls === edgeEls) clearHotHighlight();
-          else setHotHighlight(edgeEls, hotNodes(), true);
-        });
+        // populated by the node loop below, but this getter is only called
+        // later, on user interaction.
+        edgeHitData.set(hp, { edgeEls, nodeEls: () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])] });
+        addEdgeFamily(src, { edgeEls, otherFid: tgt });
+        addEdgeFamily(tgt, { edgeEls, otherFid: src });
         hoverPaths.push(hp);
       });
       // Append edge hit-areas before nodes/labels so nodes/labels paint (and
@@ -3633,26 +3730,45 @@
         const textRot = isRight ? (deg - 90) : (deg + 90);
         const maxLabelCh = genNumChars;
         const labelFill = showBullets ? (isStd ? "#162022" : "#1a2a2e") : color;
-        const radStyle = `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:${labelFill};pointer-events:${showBullets ? "none" : "all"};font-weight:${isStd ? 700 : 400};opacity:${hlOpacity}`;
+        // Always hit-testable (not just when there's no bullet): the label
+        // text is often the larger, easier-to-hit target of the two, and
+        // hovering/clicking it should highlight the node like hovering the
+        // bullet already does.
+        const radStyle = `font-size:${genFontPx}px;font-family:"IBM Plex Mono",monospace;fill:${labelFill};pointer-events:all;font-weight:${isStd ? 700 : 400};opacity:${hlOpacity}`;
         const anchor = isRight ? "start" : "end";
         const disp = genNameMode === "full" ? name : (name.length <= maxLabelCh ? name : name.slice(0, Math.max(2, maxLabelCh - 1)) + "…");
         const lbl = svgEl("text", { x: String(lx.toFixed(1)), y: String(ly.toFixed(1)), "text-anchor": anchor,
           transform: `rotate(${textRot.toFixed(1)},${lx.toFixed(1)},${ly.toFixed(1)})`, style: radStyle });
         lbl.textContent = disp;
-        if (!showBullets) {
-          const lt = svgEl("title", {}); lt.textContent = tip; lbl.appendChild(lt);
-          edgeTip.attach(lbl, tip, () => pdfEntriesForFamilies([{ fid, name }]));
-          attachFamilyContextMenu(lbl, name, genFamilySearch, render);
-        }
+        const lt = svgEl("title", {}); lt.textContent = tip; lbl.appendChild(lt);
+        edgeTip.attach(lbl, tip, () => pdfEntriesForFamilies([{ fid, name }]));
+        attachFamilyContextMenu(lbl, name, genFamilySearch, render);
         genPlot.appendChild(lbl);
         nodeElsByFamily.set(fid, circEl ? [circEl, lbl] : [lbl]);
+      });
+
+      // Third pass: register each node's own elements (bullet and/or label)
+      // as edgeHitData hit targets -- see the matching comment at the end
+      // of drawSugiyama. (Radial doesn't render isoNodes at all -- only
+      // dagNodes get drawn above -- so there's nothing to register for them.)
+      dagNodes.forEach((fid) => {
+        const ownEls = nodeElsByFamily.get(fid);
+        if (!ownEls) return;
+        const related = edgesByFamily.get(fid) || [];
+        const edgeEls = related.flatMap((r) => r.edgeEls);
+        const nodeEls = [...ownEls, ...related.flatMap((r) => nodeElsByFamily.get(r.otherFid) || [])];
+        ownEls.forEach((el) => edgeHitData.set(el, { edgeEls, nodeEls }));
       });
     }
 
     // ── Render dispatcher ─────────────────────────────────────────────
     function render() {
       updateYrLbl();
-      hotHighlight = null; // the DOM elements it referenced are about to be discarded
+      // The DOM elements these referenced are about to be discarded; a pin
+      // can't meaningfully survive a full re-render (different filters can
+      // remove the pinned edge/node entirely), so it resets too.
+      hotShown = null;
+      hotPinned = null;
       while (genPlot.firstChild) genPlot.removeChild(genPlot.firstChild);
 
       const eligibleIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVis(fid, true));
