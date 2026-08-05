@@ -393,6 +393,43 @@ body.spdb-fullscreen .page { width: 100vw; max-width: 100vw; padding: 0; margin:
   font-size: 0.78rem;
 }
 
+/* Declutter toggle: the zoom controls, Tune Layout, and (in fullscreen) the
+   Hide filters/Filters on top/Exit fullscreen row all float over the plot's
+   corners and can end up sitting on top of family labels, especially in
+   Genealogy's layered mode. This lives in the one corner none of those
+   occupy (top-left) and is never itself hidden, so there's always a way
+   back; toggling it adds/removes .controls-hidden on the enclosing
+   .view-panel, which the rules below hide every other floating control
+   under. */
+.frame-controls-hide-toggle {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: absolute;
+  top: 0.7rem;
+  left: 0.7rem;
+  z-index: 17;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #08323d;
+  background: rgba(234, 246, 248, 0.55);
+  border: 1px solid rgba(184, 216, 222, 0.55);
+  border-radius: 6px;
+  backdrop-filter: blur(3px);
+}
+
+.frame-controls-hide-toggle:hover {
+  background: rgba(215, 238, 242, 0.85);
+}
+
+.view-panel.controls-hidden .view-header-row,
+.view-panel.controls-hidden .gen-params-toggle,
+.view-panel.controls-hidden .gen-params-panel,
+.view-panel.controls-hidden .fullscreen-zoom-controls {
+  display: none;
+}
+
 /* Layout-tuning panel: floats over the plot's top-right corner (mirroring the
    zoom controls' bottom-right float) so the sliders live with the plot they
    affect, stay out of the way until opened, and can show only the group of

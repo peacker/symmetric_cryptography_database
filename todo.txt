@@ -108,6 +108,20 @@ TODO:
 
 DONE:
 
+- Fourth follow-up round, reported directly rather than filed here first:
+  1. Edge hover hit-area still too generous after the previous round's fix (tracking visible thickness +3
+     units of tolerance) -- reduced the tolerance to +0.5, close to "a dot" as requested.
+  2. Genealogy/Timelines: the floating overlay buttons (Hide filters/Filters on top/Exit fullscreen in
+     fullscreen; Tune Layout always; the -/+/Fit zoom controls always) sit in the plot's corners and can
+     cover family labels there, especially in layered mode. Added a small semi-transparent "Hide UI"
+     toggle in the one corner none of them occupy (top-left, never itself hidden) that hides every other
+     floating control at once; click again ("Show UI") to bring them back. Chose an explicit click toggle
+     over a hover-to-reveal one specifically because hover-to-reveal would have made labels underneath the
+     buttons unselectable exactly when you'd want to reach them.
+  Verified via Playwright: the hide toggle correctly hides/restores all three control groups in both
+  fullscreen and normal mode on both tabs; edge hover still finds edges correctly at the tighter hit-area
+  width. make test and a full build-site pass; no console errors.
+
 - Third follow-up round, reported directly rather than filed here first:
   1. Timelines axis, ACTUAL root cause finally found (all previous fixes were treating symptoms): you
      suggested directly measuring the screen-pixel distance between consecutive axis ticks vs consecutive

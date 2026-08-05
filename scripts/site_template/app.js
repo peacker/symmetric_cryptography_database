@@ -429,6 +429,21 @@
       triggerViewRefresh("genealogy", true);
     });
 
+    // Declutter toggle: hides every floating button overlaying the plot
+    // (zoom controls, Tune Layout, and in fullscreen the Hide filters/
+    // Filters on top/Exit fullscreen row) except this toggle itself, since
+    // they can cover family labels -- especially Genealogy's layered mode.
+    document.querySelectorAll("[data-toggle-frame-controls]").forEach((btn) => {
+      const panel = btn.closest(".view-panel");
+      if (!panel) return;
+      btn.addEventListener("click", () => {
+        const hidden = panel.classList.toggle("controls-hidden");
+        btn.setAttribute("aria-pressed", String(hidden));
+        btn.textContent = hidden ? "Show UI" : "Hide UI";
+        btn.title = hidden ? "Show the floating buttons overlaying the plot" : "Hide the floating buttons overlaying the plot";
+      });
+    });
+
     document.querySelectorAll("[data-toggle-filters]").forEach((btn) => {
       const key = btn.getAttribute("data-toggle-filters");
       const wrap = document.getElementById(`${key}ControlsWrap`);
@@ -3436,7 +3451,7 @@
         // match several unrelated edges at once. Tracking the visible width
         // keeps the hit-area just forgiving enough for mouse imprecision.
         const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
-        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(maxStrokeW + 3), fill: "none", "pointer-events": "all" });
+        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(maxStrokeW + 0.5), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([{ fid: src, name: srcName }, { fid: tgt, name: tgtName }]));
         // nodeElsByFamily is only fully populated once the node loop below
@@ -3829,7 +3844,7 @@
         // crowded spot with several close but distinct lines doesn't match
         // several unrelated edges at once.
         const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
-        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(maxStrokeW + 3), fill: "none", "pointer-events": "all" });
+        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(maxStrokeW + 0.5), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([
           { fid: src, name: String((genFamById.get(src) || {}).name || src) },
