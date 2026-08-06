@@ -112,18 +112,20 @@ DONE:
   existing edge-hit-area one -- draws the actual small tolerance ring hitsAtPoint() samples around the
   cursor (a plain fixed-position HTML circle, since the sampling itself works in screen/client pixels,
   not the plot's viewBox units, so no coordinate conversion is needed for it to line up exactly).
-  On the specific report (cursor visually in white space, several relations highlighted, no click
-  involved): the hover-text tooltip that showed for one specific relation there is driven by a *native*
-  browser mouseenter on that edge's own invisible hit-path, not by hitsAtPoint()'s pointer-radius
-  sampling at all -- meaning a real edge's hit-path genuinely does pass through that exact point. The
-  most likely explanation is the Edge opacity default (10%, lowered two rounds ago specifically so dense
-  graphs wouldn't bury labels): at that opacity a thin curve is nearly invisible against a white
-  background, especially where several such faint curves cross, which can look empty at a glance while
-  several genuinely different relations' curves -- and hence hit-paths -- are actually right there. The
-  two debug views together make this directly checkable: enabling "Show hit-areas" should show visible
-  red lines passing through spots that look empty in the normal (10%-opacity) view.
-  Verified via Playwright that the marker correctly tracks the cursor and toggles with the checkbox.
-  make test and a full build-site pass; no console errors.
+  First hypothesis on the report (cursor visually in white space, several relations highlighted, no
+  click involved) was wrong -- guessed low edge opacity (10%) was making genuine nearby lines invisible.
+  You followed up with a zoomed screenshot showing the cursor marker in *clearly* empty space with no
+  hit-area lines anywhere near it, which ruled that out and pointed at something structural instead.
+  ACTUAL cause, confirmed by direct measurement: scrolling/panning genPlotScroll, or zooming (the
+  toolbar +/-/Fit/Reset buttons especially, since unlike Ctrl+wheel they don't re-center on the cursor)
+  moves plot content underneath a cursor that never fired its own mousemove -- nothing re-checked what
+  was actually there afterward. Reproduced directly: hover a dense hub (52 edges), pan the container a
+  few hundred px with the mouse held still, and the *same* 52 edges stayed classed hot while a fresh
+  hit-test at that exact screen position found only 17 actually there anymore. Fixed by tracking the
+  last known pointer position and re-running the same hit-test from genPlotScroll's scroll handler and
+  from applyGenZoom() (the common path for every zoom operation) -- confirmed the stale-vs-actual counts
+  now match (19 vs 17) after the same pan, and similarly after zooming via both Ctrl+wheel and the
+  toolbar buttons. make test and a full build-site pass; no console errors.
 
 - Sixth follow-up round: clarified that hover-precision tolerance belongs on the *pointer*, not the line
   -- an edge's hit-area should match its visible width exactly, with a small extra allowance sampled

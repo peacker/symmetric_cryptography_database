@@ -2683,6 +2683,11 @@
       genPlot.style.height = `${Math.round(naturalH * genZoomScale)}px`;
       recomputeGenFrameHeight();
       if (genZoomValue) genZoomValue.textContent = `${Math.round(genZoomScale * 100)}%`;
+      // Re-scaling moves plot content underneath a cursor that never fired
+      // its own mousemove -- see the comment by lastPointerClientPos further
+      // down for why this matters (defined later in the file, but hoisted:
+      // this function is itself only ever called after user interaction).
+      if (typeof refreshHoverAtPointer === "function") refreshHoverAtPointer();
     }
 
     // Zooms while keeping a chosen anchor point visually fixed on screen --
@@ -3050,25 +3055,50 @@
         nodeEls: [...hotPinned.nodeEls, ...liveNodeEls],
       };
     }
+    // The mouse staying physically still is not the same thing as nothing
+    // under it changing: scrolling/panning genPlotScroll, or zooming (which
+    // re-scales genPlot's content around some anchor other than the
+    // cursor -- the toolbar +/-/Fit/Reset buttons, in particular), both
+    // move plot content underneath a cursor that never fired a mousemove
+    // of its own. Without re-checking, whatever was hot before stayed
+    // classed as hot -- confirmed directly: hovering a dense hub, then
+    // panning the container by a few hundred px with the mouse held still,
+    // left the *same* ~50 edges classed hot while a fresh hit-test at that
+    // same screen position found a completely different, much smaller set
+    // actually there. lastPointerClientPos plus refreshHoverAtPointer()
+    // lets scroll/zoom handlers re-run the same check the mouse itself
+    // would have triggered, using wherever the pointer last actually was.
+    let lastPointerClientPos = null;
+    function refreshHoverAtPointer() {
+      if (!lastPointerClientPos) return;
+      const hover = hitsAtPoint(lastPointerClientPos.x, lastPointerClientPos.y);
+      const { edgeEls, nodeEls } = unionWithPin(hover.edgeEls, hover.nodeEls);
+      if (edgeEls.length || nodeEls.length) applyHotClasses(edgeEls, nodeEls);
+      else clearHotClasses();
+    }
     // Registered once (not per-render): genPlot itself is never replaced,
     // only its children, so a listener here keeps working across every
     // re-render via normal DOM event delegation.
     genPlot.addEventListener("mousemove", (ev) => {
+      lastPointerClientPos = { x: ev.clientX, y: ev.clientY };
       if (genDebugPointerMarker && genDebugPointerArea && genDebugPointerArea.checked) {
         genDebugPointerMarker.hidden = false;
         genDebugPointerMarker.style.left = `${ev.clientX}px`;
         genDebugPointerMarker.style.top = `${ev.clientY}px`;
       }
-      const hover = hitsAtPoint(ev.clientX, ev.clientY);
-      const { edgeEls, nodeEls } = unionWithPin(hover.edgeEls, hover.nodeEls);
-      if (edgeEls.length || nodeEls.length) applyHotClasses(edgeEls, nodeEls);
-      else clearHotClasses();
+      refreshHoverAtPointer();
     });
     genPlot.addEventListener("mouseleave", () => {
+      lastPointerClientPos = null;
       if (genDebugPointerMarker) genDebugPointerMarker.hidden = true;
       if (hotPinned) applyHotClasses(hotPinned.edgeEls, hotPinned.nodeEls);
       else clearHotClasses();
     });
+    // Panning (scrolling genPlotScroll without necessarily moving the
+    // mouse -- a trackpad two-finger swipe held under a still cursor is the
+    // easy way to do this) moves content underneath the pointer exactly
+    // like the zoom handlers below do; same fix.
+    genPlotScroll.addEventListener("scroll", refreshHoverAtPointer);
     // Capture phase: attach()'s own click listener (below, per edge/node
     // element, for the text info box) calls stopPropagation(), which would
     // otherwise stop this delegated listener from ever seeing the click.
