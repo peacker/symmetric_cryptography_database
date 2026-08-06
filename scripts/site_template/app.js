@@ -2571,6 +2571,8 @@
     const genDebugNodeHitAreas = document.getElementById("genDebugNodeHitAreas");
     const genDebugPointerArea = document.getElementById("genDebugPointerArea");
     const genDebugPointerMarker = document.getElementById("genDebugPointerMarker");
+    const genDebugReadout = document.getElementById("genDebugReadout");
+    const genPinnedBanner = document.getElementById("genPinnedBanner");
     const genNameClip = document.getElementById("genNameClip");
     const genNameFull = document.getElementById("genNameFull");
     const genZoomOut = document.getElementById("genZoomOut");
@@ -2946,6 +2948,15 @@
     const POINTER_HIT_SAMPLES = 6;
     function hitsAtPoint(clientX, clientY) {
       const edgeEls = []; const nodeEls = [];
+      // The elements actually found by elementsFromPoint() (an edge's hp
+      // path, or a node's own rect/circle/text) -- as opposed to edgeEls/
+      // nodeEls above, which are what those hits *expand to* (an edge's
+      // visible colored line(s); a node's connected edges and their other
+      // endpoints). Kept separately because only the raw hit carries its
+      // own <title>/label text for the debug readout -- the expanded
+      // elements don't (a colored edge line has no title of its own, only
+      // its hp sibling does).
+      const rawHits = [];
       const seen = new Set();
       function checkPoint(x, y) {
         document.elementsFromPoint(x, y).forEach((el) => {
@@ -2953,6 +2964,7 @@
           const data = edgeHitData.get(el);
           if (!data) return;
           seen.add(el);
+          rawHits.push(el);
           edgeEls.push(...resolveHitList(data.edgeEls));
           nodeEls.push(...resolveHitList(data.nodeEls));
         });
@@ -2962,7 +2974,7 @@
         const angle = (i / POINTER_HIT_SAMPLES) * 2 * Math.PI;
         checkPoint(clientX + POINTER_HIT_RADIUS_PX * Math.cos(angle), clientY + POINTER_HIT_RADIUS_PX * Math.sin(angle));
       }
-      return { edgeEls, nodeEls };
+      return { edgeEls, nodeEls, rawHits };
     }
     function sameEls(a, b) {
       if (a.length !== b.length) return false;
@@ -3077,13 +3089,58 @@
     // (their union), so hovering around while something is pinned keeps
     // previewing other relations without losing the pinned one; mouseleave
     // (or hovering empty space) just drops back to showing the pin alone.
+    // A pin looks *identical* to a fresh hover otherwise (same classes),
+    // which reads as "stuck"/buggy if it's not obvious something was
+    // deliberately pinned earlier -- genPinnedBanner makes that state
+    // visible regardless of where the cursor currently is.
     let hotPinned = null; // { edgeEls, nodeEls }
+    function setHotPinned(value) {
+      hotPinned = value;
+      if (genPinnedBanner) genPinnedBanner.hidden = !value;
+    }
     function unionWithPin(liveEdgeEls, liveNodeEls) {
       if (!hotPinned) return { edgeEls: liveEdgeEls, nodeEls: liveNodeEls };
       return {
         edgeEls: [...hotPinned.edgeEls, ...liveEdgeEls],
         nodeEls: [...hotPinned.nodeEls, ...liveNodeEls],
       };
+    }
+    // Debug aid: a short, unambiguous label for one matched element, read
+    // from the same <title> text (or, for a label with no title of its
+    // own, its displayed name) already used for the hover tooltip --
+    // avoids having to eyeball a screenshot to guess whether a given pixel
+    // is really inside a thin edge's hit-area or a label's hit box.
+    function describeHitEl(el) {
+      const titleEl = el.querySelector && el.querySelector("title");
+      if (titleEl && titleEl.textContent) return titleEl.textContent.split("\n")[0];
+      if (el.tagName === "text") return el.textContent;
+      return el.tagName;
+    }
+    function updateDebugReadout(hover) {
+      if (!genDebugReadout) return;
+      if (!(genDebugPointerArea && genDebugPointerArea.checked)) {
+        genDebugReadout.hidden = true;
+        return;
+      }
+      genDebugReadout.hidden = false;
+      // rawHits, not edgeEls/nodeEls: those are what a hit *expands to*
+      // (an edge's visible colored line(s); a node's connected edges/other
+      // endpoints), which don't carry their own title/label text -- only
+      // the actually-matched element (an edge's hp path, or a node's own
+      // rect/circle/text) does. Edges are always <path>; nodes are
+      // rect/circle/text -- reliable since that's exactly how the two are
+      // told apart when registering them into edgeHitData in the first
+      // place.
+      const edgeHits = hover.rawHits.filter((el) => el.tagName === "path");
+      const nodeHits = hover.rawHits.filter((el) => el.tagName !== "path");
+      const MAX_LISTED = 8;
+      const lines = [`Live hit-test at cursor: ${edgeHits.length} edge(s), ${nodeHits.length} node element(s)`];
+      edgeHits.slice(0, MAX_LISTED).forEach((el) => lines.push(`  edge: ${describeHitEl(el)}`));
+      if (edgeHits.length > MAX_LISTED) lines.push(`  ...+${edgeHits.length - MAX_LISTED} more edges`);
+      nodeHits.slice(0, MAX_LISTED).forEach((el) => lines.push(`  node: ${describeHitEl(el)}`));
+      if (nodeHits.length > MAX_LISTED) lines.push(`  ...+${nodeHits.length - MAX_LISTED} more nodes`);
+      if (!edgeHits.length && !nodeHits.length) lines.push("  (nothing under the pointer or its tolerance ring)");
+      genDebugReadout.textContent = lines.join("\n");
     }
     // The mouse staying physically still is not the same thing as nothing
     // under it changing: scrolling/panning genPlotScroll, or zooming (which
@@ -3102,6 +3159,7 @@
     function refreshHoverAtPointer() {
       if (!lastPointerClientPos) return;
       const hover = hitsAtPoint(lastPointerClientPos.x, lastPointerClientPos.y);
+      updateDebugReadout(hover);
       const { edgeEls, nodeEls } = unionWithPin(hover.edgeEls, hover.nodeEls);
       if (edgeEls.length || nodeEls.length) applyHotClasses(edgeEls, nodeEls);
       else clearHotClasses();
@@ -3121,6 +3179,7 @@
     genPlot.addEventListener("mouseleave", () => {
       lastPointerClientPos = null;
       if (genDebugPointerMarker) genDebugPointerMarker.hidden = true;
+      if (genDebugReadout) genDebugReadout.hidden = true;
       if (hotPinned) applyHotClasses(hotPinned.edgeEls, hotPinned.nodeEls);
       else clearHotClasses();
     });
@@ -3143,13 +3202,13 @@
         // is a common "dismiss" gesture elsewhere in this UI already (see
         // createPinnableInfoBox's own pinned-text dismissal) and gives an
         // obvious way out without having to relocate the original spot.
-        if (hotPinned) { hotPinned = null; clearHotClasses(); }
+        if (hotPinned) { setHotPinned(null); clearHotClasses(); }
         return;
       }
       if (hotPinned && sameEls(hotPinned.edgeEls, hits.edgeEls) && sameEls(hotPinned.nodeEls, hits.nodeEls)) {
-        hotPinned = null;
+        setHotPinned(null);
       } else {
-        hotPinned = hits;
+        setHotPinned(hits);
       }
       applyHotClasses(hits.edgeEls, hits.nodeEls);
     }, true);
@@ -3163,7 +3222,7 @@
     // way to be dismissed by clicking elsewhere on the page.
     document.addEventListener("click", (ev) => {
       if (!hotPinned || genPlot.contains(ev.target)) return;
-      hotPinned = null;
+      setHotPinned(null);
       clearHotClasses();
     });
     function renderHighlightChecklist() {
@@ -4062,7 +4121,7 @@
       // can't meaningfully survive a full re-render (different filters can
       // remove the pinned edge/node entirely), so it resets too.
       hotShown = null;
-      hotPinned = null;
+      setHotPinned(null);
       while (genPlot.firstChild) genPlot.removeChild(genPlot.firstChild);
 
       const eligibleIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVis(fid, true));

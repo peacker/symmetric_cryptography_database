@@ -1,5 +1,7 @@
 TODO:
 
+- add pbkfd2 pdf
+
 - when two relation lines are overlapping, the tip for overing with the mouse should show all relations descriptions.
   when clicking it, it should let you choose which relation description to display.
 
@@ -107,6 +109,23 @@ TODO:
 
 
 DONE:
+
+- Eighth follow-up round: still saw "cursor over visible white space, but a relation/label highlights"
+  after the scroll/zoom staleness fix. Ruled out a stale pin (you confirmed no click happened) and ruled
+  out eyeballing a screenshot as a reliable way to verify the node-hit-area debug outlines actually line
+  up with what hitsAtPoint() finds, so built the two things that make this directly, unambiguously
+  checkable instead of guessable from an image:
+  1. A live debug readout (bottom-left of the frame, shown with "Show pointer hit-area (debug)") that
+     lists in real time exactly what hitsAtPoint() finds at the current cursor position -- edge/node
+     counts plus each match's actual label text (e.g. "Poly1305 -> AES-GCM: shares construction..."),
+     not just a screenshot of colored outlines that still requires guessing what they refer to.
+  2. A "📌 Something is pinned" banner shown whenever hotPinned is set, regardless of where the cursor
+     currently is -- a pin looks identical to a fresh hover otherwise, which is easy to mistake for a
+     stuck/buggy highlight if you don't realize something was pinned earlier (ruled out for the specific
+     report here, but worth having permanently either way).
+  make test and a full build-site pass; no console errors. Next step is for you to check the live
+  readout yourself against what you're seeing, since I can no longer usefully speculate further from a
+  screenshot alone.
 
 - Seventh follow-up round: added a second debug checkbox, "Show pointer hit-area (debug)", next to the
   existing edge-hit-area one -- draws the actual small tolerance ring hitsAtPoint() samples around the
