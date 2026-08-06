@@ -2,20 +2,6 @@ TODO:
 
 - add pbkfd2 pdf
 
-- in the layered layout of the genaology tab, when multiple ciphers are aligned vertically,
-  there is one relation above the other that does not allow to select the underlying relation lines.
-  how could this be solved? 
-  maybe, in the point in which the mouse is hovering, 
-  a temporary multiple choice button could appear to select which relation to click
-
-
-- when two relation lines are overlapping, the tip for overing with the mouse should show all relations descriptions.
-  when clicking it, it should let you choose which relation description to display.
-
-- when the "find family" is focused on a cipher, and 
-  when increasing the relation degree from 1 to 2 or above, 
-  only the predecessors and successor that eventually connect to the cipher should be displayed,
-  not also the first or second degree relations of the ciphers that are not the focused cipher.
 
 - Proposed visualizations (requested: "propose other interesting visualizations"; see DONE section for the
   request itself). None of these are implemented yet -- flagging as new tasks per the request:
@@ -116,6 +102,15 @@ TODO:
 
 
 DONE:
+
+- Twelfth follow-up round: you liked the new corner-triangle declutter toggle and asked to move it from
+  top-left to top-right on both frames. Moved it (position: top:0;right:0) and mirrored the CSS border
+  triangle itself (border-width: 18px 0 0 18px instead of 18px 18px 0 0) so its right-angle vertex still
+  points into the actual corner rather than away from it. Checked the one real risk of this move --
+  top-right is also where the "Tune layout" button already floats -- via a Playwright screenshot and a
+  getBoundingClientRect() overlap check: the two boxes touch by ~7x7px right at Tune layout's own rounded
+  corner, which reads as a hairline graze rather than a real visual clash and doesn't cover any text.
+  Verified the toggle's click/hide-restore behavior still works (CSS-only change). make test all green.
 
 - Eleventh follow-up round: three small UI polish requests after confirming the hover/pin fixes work.
   1. Removed the "📌 Something is pinned" banner (genPinnedBanner) entirely -- you found it unnecessary

@@ -396,26 +396,27 @@ body.spdb-fullscreen .page { width: 100vw; max-width: 100vw; padding: 0; margin:
 /* Declutter toggle: the zoom controls, Tune Layout, and (in fullscreen) the
    Hide filters/Filters on top/Exit fullscreen row all float over the plot's
    corners and can end up sitting on top of family labels, especially in
-   Genealogy's layered mode. This lives in the one corner none of those
-   occupy (top-left) and is never itself hidden, so there's always a way
-   back; toggling it adds/removes .controls-hidden on the enclosing
+   Genealogy's layered mode. It is never itself hidden, so there's always a
+   way back; toggling it adds/removes .controls-hidden on the enclosing
    .view-panel, which the rules below hide every other floating control
    under. Drawn as a small folded-corner triangle (a plain CSS border
    triangle, not a text button) so it stays out of the way of labels too --
    it flips to the opposite diagonal when pressed as a lightweight visual
-   cue that it now "unfolds" the hidden controls back. */
+   cue that it now "unfolds" the hidden controls back. Lives in the
+   top-right corner (a higher z-index than .gen-params-toggle, which sits
+   just below it at a small inset, so the two don't fight for clicks). */
 .frame-controls-hide-toggle {
   all: unset;
   box-sizing: border-box;
   cursor: pointer;
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
   z-index: 17;
   width: 0;
   height: 0;
   border-style: solid;
-  border-width: 18px 18px 0 0;
+  border-width: 18px 0 0 18px;
   border-color: rgba(184, 216, 222, 0.8) transparent transparent transparent;
   transition: border-color 0.15s, transform 0.15s;
 }
