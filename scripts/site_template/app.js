@@ -2568,6 +2568,8 @@
     const genShowBullets = document.getElementById("genShowBullets");
     const genCollapseEdges = document.getElementById("genCollapseEdges");
     const genDebugHitAreas = document.getElementById("genDebugHitAreas");
+    const genDebugPointerArea = document.getElementById("genDebugPointerArea");
+    const genDebugPointerMarker = document.getElementById("genDebugPointerMarker");
     const genNameClip = document.getElementById("genNameClip");
     const genNameFull = document.getElementById("genNameFull");
     const genZoomOut = document.getElementById("genZoomOut");
@@ -3052,12 +3054,18 @@
     // only its children, so a listener here keeps working across every
     // re-render via normal DOM event delegation.
     genPlot.addEventListener("mousemove", (ev) => {
+      if (genDebugPointerMarker && genDebugPointerArea && genDebugPointerArea.checked) {
+        genDebugPointerMarker.hidden = false;
+        genDebugPointerMarker.style.left = `${ev.clientX}px`;
+        genDebugPointerMarker.style.top = `${ev.clientY}px`;
+      }
       const hover = hitsAtPoint(ev.clientX, ev.clientY);
       const { edgeEls, nodeEls } = unionWithPin(hover.edgeEls, hover.nodeEls);
       if (edgeEls.length || nodeEls.length) applyHotClasses(edgeEls, nodeEls);
       else clearHotClasses();
     });
     genPlot.addEventListener("mouseleave", () => {
+      if (genDebugPointerMarker) genDebugPointerMarker.hidden = true;
       if (hotPinned) applyHotClasses(hotPinned.edgeEls, hotPinned.nodeEls);
       else clearHotClasses();
     });
@@ -4079,6 +4087,9 @@
     if (genShowBullets) genShowBullets.addEventListener("change", render);
     if (genCollapseEdges) genCollapseEdges.addEventListener("change", render);
     if (genDebugHitAreas) genDebugHitAreas.addEventListener("change", render);
+    if (genDebugPointerArea) genDebugPointerArea.addEventListener("change", () => {
+      if (!genDebugPointerArea.checked && genDebugPointerMarker) genDebugPointerMarker.hidden = true;
+    });
     genFamilySearch.addEventListener("input", render);
     genFamilySearch.addEventListener("change", render);
     if (genFamilySearchExact) genFamilySearchExact.addEventListener("change", render);

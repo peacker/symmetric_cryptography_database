@@ -108,6 +108,23 @@ TODO:
 
 DONE:
 
+- Seventh follow-up round: added a second debug checkbox, "Show pointer hit-area (debug)", next to the
+  existing edge-hit-area one -- draws the actual small tolerance ring hitsAtPoint() samples around the
+  cursor (a plain fixed-position HTML circle, since the sampling itself works in screen/client pixels,
+  not the plot's viewBox units, so no coordinate conversion is needed for it to line up exactly).
+  On the specific report (cursor visually in white space, several relations highlighted, no click
+  involved): the hover-text tooltip that showed for one specific relation there is driven by a *native*
+  browser mouseenter on that edge's own invisible hit-path, not by hitsAtPoint()'s pointer-radius
+  sampling at all -- meaning a real edge's hit-path genuinely does pass through that exact point. The
+  most likely explanation is the Edge opacity default (10%, lowered two rounds ago specifically so dense
+  graphs wouldn't bury labels): at that opacity a thin curve is nearly invisible against a white
+  background, especially where several such faint curves cross, which can look empty at a glance while
+  several genuinely different relations' curves -- and hence hit-paths -- are actually right there. The
+  two debug views together make this directly checkable: enabling "Show hit-areas" should show visible
+  red lines passing through spots that look empty in the normal (10%-opacity) view.
+  Verified via Playwright that the marker correctly tracks the cursor and toggles with the checkbox.
+  make test and a full build-site pass; no console errors.
+
 - Sixth follow-up round: clarified that hover-precision tolerance belongs on the *pointer*, not the line
   -- an edge's hit-area should match its visible width exactly, with a small extra allowance sampled
   around the actual cursor position instead. Implemented: hp path stroke-width is now exactly the edge's

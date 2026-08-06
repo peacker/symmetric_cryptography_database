@@ -1081,6 +1081,24 @@ text.gen-node-hot {
   pointer-events: none;
 }
 
+/* Debug aid: the actual tolerance ring hitsAtPoint() samples around the
+   cursor (see POINTER_HIT_RADIUS_PX in app.js) -- a plain fixed-position
+   HTML circle rather than an SVG element, since the sampling itself works
+   in screen/client pixels, not the plot's viewBox units, so this needs no
+   coordinate conversion to line up with it exactly. Diameter must match
+   2 * POINTER_HIT_RADIUS_PX if that constant ever changes. */
+.gen-debug-pointer-marker {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  border: 1px solid #e0221a;
+  background: rgba(224, 34, 26, 0.15);
+  pointer-events: none;
+  z-index: 9999;
+}
+
 circle.gen-node-hot {
   stroke: #ff8a00 !important;
   stroke-width: 2.4px !important;
