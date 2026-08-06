@@ -4059,20 +4059,41 @@
           familyNameMatches((genFamById.get(fid) || {}).name || fid, needle, exactWord)));
         const rawDegree = genFamilySearchDegree ? parseInt(genFamilySearchDegree.value, 10) : 1;
         const degree = Number.isFinite(rawDegree) ? Math.max(0, rawDegree) : 1;
-        // BFS outward from the matched set, one relation "hop" per round, so a
-        // degree of 1 (the default) keeps the original direct-neighbors-only
-        // behavior and a higher degree pulls in more distant relations.
-        let frontier = matched;
+        // Two independent directional BFS chains -- ancestors-of-ancestors and
+        // descendants-of-descendants -- rather than one undirected BFS. An
+        // undirected walk would, at degree 2, also reach a matched family's
+        // *sibling* (e.g. C <- A -> B: B is 2 undirected hops from C but is
+        // never actually on a predecessor/successor chain through C, it's a
+        // sibling reached by backtracking through A and forking the other
+        // way). Keeping the two directions separate means a node only shows
+        // up if it's a genuine ancestor or descendant of the matched family
+        // within `degree` hops; the influence graph is acyclic (enforced by
+        // test_influences_acyclic.py), so a node can never be both, and the
+        // two chains never need to cross. When the search matches more than
+        // one family, `matched` seeds both frontiers with all of them at
+        // once -- a multi-source BFS like that is equivalent to the union of
+        // each matched family's own ancestor/descendant chains, so degree N
+        // is applied per focused family, not just to the group as a whole.
         const expanded = new Set(matched);
-        for (let hop = 0; hop < degree && frontier.size; hop++) {
+        let ancestorFrontier = matched;
+        for (let hop = 0; hop < degree && ancestorFrontier.size; hop++) {
           const next = new Set();
           relVisibleInfluences.forEach((e) => {
             const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
-            if (frontier.has(src) && eligibleSet.has(tgt) && !expanded.has(tgt)) next.add(tgt);
-            if (frontier.has(tgt) && eligibleSet.has(src) && !expanded.has(src)) next.add(src);
+            if (ancestorFrontier.has(tgt) && eligibleSet.has(src) && !expanded.has(src)) next.add(src);
           });
           next.forEach((fid) => expanded.add(fid));
-          frontier = next;
+          ancestorFrontier = next;
+        }
+        let descendantFrontier = matched;
+        for (let hop = 0; hop < degree && descendantFrontier.size; hop++) {
+          const next = new Set();
+          relVisibleInfluences.forEach((e) => {
+            const src = String(e.source_family_id || ""); const tgt = String(e.target_family_id || "");
+            if (descendantFrontier.has(src) && eligibleSet.has(tgt) && !expanded.has(tgt)) next.add(tgt);
+          });
+          next.forEach((fid) => expanded.add(fid));
+          descendantFrontier = next;
         }
         visIds = eligibleIds.filter((fid) => expanded.has(fid));
       }

@@ -103,6 +103,27 @@ TODO:
 
 DONE:
 
+- Thirteenth follow-up round: fixed the "find family" relation-degree filter (was in the TODO section as
+  "only the predecessors and successor that eventually connect to the cipher should be displayed, not also
+  the first or second degree relations of the ciphers that are not the focused cipher"). Root cause: at
+  degree N, the old code did one *undirected* BFS N hops out from the matched family, which meant a node 2
+  undirected hops away could be a genuine grandchild/grandparent OR a *sibling* reached by walking backward
+  to a shared parent and forking the other way (e.g. focused=C, A->B, A->C: at degree 2 the old code showed
+  B even though B has no predecessor/successor relationship with C at all, it's A's other child). Confirmed
+  the exact failure with a worked example the user gave (A->B, A->C, C->D, D->E, D->F, G->F; focus=C,
+  degree=2 should show A,C,D,E,F but not B or G) and reproduced/fixed it with a standalone Node repro before
+  touching the real code. Fix: two independent directional BFS chains (ancestors-of-ancestors,
+  descendants-of-descendants) unioned with the matched set, instead of one undirected walk -- safe because
+  the influence graph is acyclic (test_influences_acyclic.py), so a node can never be both an ancestor and a
+  descendant and the two chains never cross. Confirmed by the user that this should apply per matched
+  family when the search text matches more than one (e.g. "SKINNY" exact-word-matches both "SKINNY" and
+  "SKINNY-AEAD" since the hyphen counts as a word boundary) -- already correct as implemented, since seeding
+  both frontiers with the whole matched set at once is mathematically the union of each match's own
+  ancestor/descendant chains. Verified against the synthetic example (exact match) and against real data
+  (Piccolo -> {SKINNY, Splight}; focusing SKINNY at degree 2 correctly excludes Splight while including
+  REMUS via Romulus; focusing Piccolo directly correctly includes Splight, since it's Piccolo's own child,
+  not a sibling). make test all green.
+
 - Twelfth follow-up round: you liked the new corner-triangle declutter toggle and asked to move it from
   top-left to top-right on both frames. Moved it (position: top:0;right:0) and mirrored the CSS border
   triangle itself (border-width: 18px 0 0 18px instead of 18px 18px 0 0) so its right-angle vertex still
