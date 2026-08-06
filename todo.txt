@@ -108,6 +108,18 @@ TODO:
 
 DONE:
 
+- Sixth follow-up round: clarified that hover-precision tolerance belongs on the *pointer*, not the line
+  -- an edge's hit-area should match its visible width exactly, with a small extra allowance sampled
+  around the actual cursor position instead. Implemented: hp path stroke-width is now exactly the edge's
+  own thickest visible stroke (no added tolerance at all), and hitsAtPoint() now checks a ring of 6 sample
+  points at a 3px screen-pixel radius around the cursor (elementsFromPoint() at each, deduped by element)
+  in addition to the exact cursor position. This also fixes a real inconsistency the old approach had:
+  a viewBox-unit-based line-fattening tolerance scales with zoom (ballooning at high zoom, shrinking at
+  low zoom), where a screen-pixel-based pointer radius stays a constant, predictable size regardless of
+  zoom level. Verified via the hit-area debug view (visibly thinner, tracking each line's own width) and
+  by checking a 2px cursor offset still hits the same edge while a 30px offset doesn't. make test and a
+  full build-site pass; no console errors.
+
 - Fifth follow-up round, reported directly rather than filed here first: you asked to *see* the edge
   hit-areas to investigate "many relations stay highlighted after the cursor passed and left."
   1. Added a permanent "Show hit-areas (debug)" checkbox to Genealogy's Tune Layout panel (draws each

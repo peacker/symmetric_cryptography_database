@@ -2926,14 +2926,34 @@
     // node-drawing loop has long since finished.
     const edgeHitData = new WeakMap(); // hit element -> { edgeEls, nodeEls } (each may be an array or a () => array)
     function resolveHitList(value) { return typeof value === "function" ? value() : value; }
+    // Mouse/touch imprecision tolerance lives here, on the *pointer's* side,
+    // rather than in each edge's own hit-area width (see the comment by the
+    // hp path elements in drawSugiyama/drawRadial for why). A small ring of
+    // sample points around the actual cursor position -- checked with
+    // elementsFromPoint() same as the center point -- gives a tolerance zone
+    // that's centered on the cursor and a fixed size in *screen* pixels at
+    // any zoom level, instead of one that balloons at high zoom and shrinks
+    // at low zoom the way a viewBox-unit-based line fattening would.
+    const POINTER_HIT_RADIUS_PX = 3;
+    const POINTER_HIT_SAMPLES = 6;
     function hitsAtPoint(clientX, clientY) {
       const edgeEls = []; const nodeEls = [];
-      document.elementsFromPoint(clientX, clientY).forEach((el) => {
-        const data = edgeHitData.get(el);
-        if (!data) return;
-        edgeEls.push(...resolveHitList(data.edgeEls));
-        nodeEls.push(...resolveHitList(data.nodeEls));
-      });
+      const seen = new Set();
+      function checkPoint(x, y) {
+        document.elementsFromPoint(x, y).forEach((el) => {
+          if (seen.has(el)) return;
+          const data = edgeHitData.get(el);
+          if (!data) return;
+          seen.add(el);
+          edgeEls.push(...resolveHitList(data.edgeEls));
+          nodeEls.push(...resolveHitList(data.nodeEls));
+        });
+      }
+      checkPoint(clientX, clientY);
+      for (let i = 0; i < POINTER_HIT_SAMPLES; i++) {
+        const angle = (i / POINTER_HIT_SAMPLES) * 2 * Math.PI;
+        checkPoint(clientX + POINTER_HIT_RADIUS_PX * Math.cos(angle), clientY + POINTER_HIT_RADIUS_PX * Math.sin(angle));
+      }
       return { edgeEls, nodeEls };
     }
     function sameEls(a, b) {
@@ -3468,16 +3488,23 @@
             edgeEls.push(genPlot.appendChild(svgEl("path", attrs)));
           });
         }
-        // Hit-area tolerance beyond the edge's own thickest visible stroke,
-        // not a flat generous minimum: a wide fixed hit-width let elements
-        // hitsAtPoint() would happily find (a real fix, elsewhere) drown out
-        // *precision* instead -- in a crowded spot with several close but
-        // distinct lines, a fat hit-area made nearly any point among them
-        // match several unrelated edges at once. Tracking the visible width
-        // keeps the hit-area just forgiving enough for mouse imprecision.
+        // Hit-area matches the edge's own thickest visible stroke exactly --
+        // no added tolerance here. A wide (or even slightly padded) fixed
+        // hit-width let hitsAtPoint() would happily find (a real fix,
+        // elsewhere) drown out *precision* instead: in a crowded spot with
+        // several close but distinct lines, a fat hit-area made nearly any
+        // point among them match several unrelated edges at once, and
+        // adjacent lines' fattened areas could overlap even where the
+        // visible lines themselves don't. Mouse/touch imprecision tolerance
+        // instead comes from the *pointer's* side -- hitsAtPoint() samples a
+        // small, constant-screen-pixel radius around the actual cursor
+        // position (see hitsAtPoint()) rather than from fattening the line,
+        // which keeps the tolerance zone centered on the cursor and a fixed
+        // size on screen regardless of zoom, instead of a per-edge zone that
+        // balloons at high zoom and shrinks at low zoom.
         const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
         const hitAreaStroke = (genDebugHitAreas && genDebugHitAreas.checked) ? "rgba(255,0,0,0.35)" : "rgba(0,0,0,0.001)";
-        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW + 0.5), fill: "none", "pointer-events": "all" });
+        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([{ fid: src, name: srcName }, { fid: tgt, name: tgtName }]));
         // nodeElsByFamily is only fully populated once the node loop below
@@ -3865,13 +3892,12 @@
             edgeEls.push(genPlot.appendChild(svgEl("path", { d: pd, stroke: relationColorMap.get(relation), "stroke-width": String(strokeW), fill: "none", opacity: String(layoutParams.edgeOpacity) })));
           });
         }
-        // See the matching comment in drawSugiyama: tracks the edge's own
-        // visible thickness rather than a flat generous minimum, so a
-        // crowded spot with several close but distinct lines doesn't match
-        // several unrelated edges at once.
+        // See the matching comment in drawSugiyama: hit-area matches the
+        // edge's own visible thickness exactly; pointer tolerance instead
+        // comes from hitsAtPoint()'s own small screen-pixel sampling radius.
         const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
         const hitAreaStroke = (genDebugHitAreas && genDebugHitAreas.checked) ? "rgba(255,0,0,0.35)" : "rgba(0,0,0,0.001)";
-        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW + 0.5), fill: "none", "pointer-events": "all" });
+        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW), fill: "none", "pointer-events": "all" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([
           { fid: src, name: String((genFamById.get(src) || {}).name || src) },
