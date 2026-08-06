@@ -3631,7 +3631,18 @@
         // balloons at high zoom and shrinks at low zoom.
         const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
         const hitAreaStroke = (genDebugHitAreas && genDebugHitAreas.checked) ? "rgba(255,0,0,0.35)" : "rgba(0,0,0,0.001)";
-        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW), fill: "none", "pointer-events": "all" });
+        // pointer-events MUST be "visibleStroke", not "all": "all" hit-tests
+        // the path's fill/interior *regardless of the fill property's
+        // actual value* -- for an open (unclosed) curve, the browser
+        // computes that interior by implicitly closing the path with a
+        // straight line back to the start, so a curve that bulges away from
+        // a straight line between its endpoints (a wide S-curve, e.g.) had
+        // its entire enclosed area hit-testable, not just the stroked
+        // line -- confirmed directly: a point sitting on the straight
+        // chord between an edge's two endpoints, hundreds of viewBox units
+        // from the actual visible curve, registered as a hit. "fill: none"
+        // alone does not opt out of this -- pointer-events has to.
+        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW), fill: "none", "pointer-events": "visibleStroke" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([{ fid: src, name: srcName }, { fid: tgt, name: tgtName }]));
         // nodeElsByFamily is only fully populated once the node loop below
@@ -4025,7 +4036,18 @@
         // comes from hitsAtPoint()'s own small screen-pixel sampling radius.
         const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
         const hitAreaStroke = (genDebugHitAreas && genDebugHitAreas.checked) ? "rgba(255,0,0,0.35)" : "rgba(0,0,0,0.001)";
-        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW), fill: "none", "pointer-events": "all" });
+        // pointer-events MUST be "visibleStroke", not "all": "all" hit-tests
+        // the path's fill/interior *regardless of the fill property's
+        // actual value* -- for an open (unclosed) curve, the browser
+        // computes that interior by implicitly closing the path with a
+        // straight line back to the start, so a curve that bulges away from
+        // a straight line between its endpoints (a wide S-curve, e.g.) had
+        // its entire enclosed area hit-testable, not just the stroked
+        // line -- confirmed directly: a point sitting on the straight
+        // chord between an edge's two endpoints, hundreds of viewBox units
+        // from the actual visible curve, registered as a hit. "fill: none"
+        // alone does not opt out of this -- pointer-events has to.
+        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW), fill: "none", "pointer-events": "visibleStroke" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([
           { fid: src, name: String((genFamById.get(src) || {}).name || src) },

@@ -110,6 +110,24 @@ TODO:
 
 DONE:
 
+- Ninth follow-up round: ACTUAL root cause of the whole "cursor is over visible white space, but a
+  relation is highlighted" saga, found because you correctly guessed the shape of the bug from watching
+  it happen -- the area between a curved relation line and the straight ("shortest") line connecting its
+  two endpoints was the thing getting hit-tested. Confirmed exactly right: every edge hit-area path (hp)
+  was created with pointer-events:"all", which -- despite fill:"none" -- still hit-tests the path's
+  geometric *interior*, computed by implicitly closing the (open, unclosed) curve back to its start with
+  a straight line. A wide S-curve bulging far from that implicit closing line had its *entire enclosed
+  area* hit-testable, not just the stroked line itself. Confirmed directly: a point sitting on the
+  straight chord between an edge's two endpoints, ~334 viewBox units from the actual visible curve,
+  registered as a hit before the fix and correctly stopped after it. This also fully explains the
+  "52 edges hot at a hub, only 17 really there" measurement from the scroll-staleness round -- re-ran
+  the identical hub hover after this fix and got 2 genuine hits instead of 52, meaning most of that
+  discrepancy was never staleness at all, it was this. Fixed by using pointer-events:"visibleStroke"
+  instead of "all" for the hp paths (fill:"none" alone does not opt out of the interior-hit-testing
+  behavor -- pointer-events has to). Verified the fix doesn't break genuine on-curve interaction:
+  hovering/clicking an exact point on a curve's stroke still fires the native tooltip, highlights, and
+  pins correctly. make test and a full build-site pass; no console errors.
+
 - Eighth follow-up round: still saw "cursor over visible white space, but a relation/label highlights"
   after the scroll/zoom staleness fix. Ruled out a stale pin (you confirmed no click happened) and ruled
   out eyeballing a screenshot as a reliable way to verify the node-hit-area debug outlines actually line
