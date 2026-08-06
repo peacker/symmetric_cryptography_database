@@ -2568,6 +2568,7 @@
     const genShowBullets = document.getElementById("genShowBullets");
     const genCollapseEdges = document.getElementById("genCollapseEdges");
     const genDebugHitAreas = document.getElementById("genDebugHitAreas");
+    const genDebugNodeHitAreas = document.getElementById("genDebugNodeHitAreas");
     const genDebugPointerArea = document.getElementById("genDebugPointerArea");
     const genDebugPointerMarker = document.getElementById("genDebugPointerMarker");
     const genNameClip = document.getElementById("genNameClip");
@@ -3003,6 +3004,35 @@
     function hideLabelBackdrop(textEl) {
       const rect = labelBackdrops.get(textEl);
       if (rect && rect.parentNode) rect.parentNode.removeChild(rect);
+    }
+
+    // Debug aid (same "Show hit-areas" checkbox as the red edge hit-area
+    // lines): outlines a *node's* actual hit-testable geometry -- its own
+    // rect/circle, but also its label text, which is registered into
+    // edgeHitData too (radial labels are always pointer-events:all now, not
+    // just when there's no bullet -- see the node-drawing loops) and can be
+    // significantly wider than the visible glyphs suggest once its own
+    // rotate() transform is applied, especially for long family names. The
+    // edge hit-area lines alone don't explain "the cursor isn't touching
+    // anything but a relation still lit up" if what it's actually near is a
+    // node's hit box instead of an edge's line.
+    function debugOutlineNodeHitArea(el) {
+      let box;
+      try { box = el.getBBox(); } catch { return; }
+      const pad = 0.5;
+      const outline = svgEl("rect", {
+        x: String(box.x - pad),
+        y: String(box.y - pad),
+        width: String(box.width + pad * 2),
+        height: String(box.height + pad * 2),
+        fill: "rgba(30, 100, 255, 0.18)",
+        stroke: "rgba(20, 60, 200, 0.9)",
+        "stroke-width": "0.6",
+        "pointer-events": "none",
+      });
+      const t = el.getAttribute("transform");
+      if (t) outline.setAttribute("transform", t);
+      genPlot.appendChild(outline);
     }
 
     let hotShown = null;   // { edgeEls, nodeEls } currently CSS-classed/backdropped
@@ -3601,6 +3631,7 @@
         const edgeEls = related.flatMap((r) => r.edgeEls);
         const nodeEls = [...ownEls, ...related.flatMap((r) => nodeElsByFamily.get(r.otherFid) || [])];
         edgeHitData.set(ownEls[0], { edgeEls, nodeEls });
+        if (genDebugNodeHitAreas && genDebugNodeHitAreas.checked) debugOutlineNodeHitArea(ownEls[0]);
       });
     }
 
@@ -4017,7 +4048,10 @@
         const related = edgesByFamily.get(fid) || [];
         const edgeEls = related.flatMap((r) => r.edgeEls);
         const nodeEls = [...ownEls, ...related.flatMap((r) => nodeElsByFamily.get(r.otherFid) || [])];
-        ownEls.forEach((el) => edgeHitData.set(el, { edgeEls, nodeEls }));
+        ownEls.forEach((el) => {
+          edgeHitData.set(el, { edgeEls, nodeEls });
+          if (genDebugNodeHitAreas && genDebugNodeHitAreas.checked) debugOutlineNodeHitArea(el);
+        });
       });
     }
 
@@ -4117,6 +4151,7 @@
     if (genShowBullets) genShowBullets.addEventListener("change", render);
     if (genCollapseEdges) genCollapseEdges.addEventListener("change", render);
     if (genDebugHitAreas) genDebugHitAreas.addEventListener("change", render);
+    if (genDebugNodeHitAreas) genDebugNodeHitAreas.addEventListener("change", render);
     if (genDebugPointerArea) genDebugPointerArea.addEventListener("change", () => {
       if (!genDebugPointerArea.checked && genDebugPointerMarker) genDebugPointerMarker.hidden = true;
     });

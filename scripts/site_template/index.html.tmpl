@@ -294,8 +294,9 @@
               </div>
               <label class="inline-check"><input id="genShowBullets" type="checkbox" /> Show bullets</label>
               <label class="inline-check"><input id="genCollapseEdges" type="checkbox" /> Collapse edges</label>
-              <label class="inline-check" title="Debug aid: draws each edge's invisible hover/click hit-area in solid red so its actual size and overlap with neighboring edges is visible"><input id="genDebugHitAreas" type="checkbox" /> Show hit-areas (debug)</label>
-              <label class="inline-check" title="Debug aid: draws the small tolerance ring hitsAtPoint() samples around the actual cursor position, so it's visible whether a highlighted edge really passes under the pointer or under that ring"><input id="genDebugPointerArea" type="checkbox" /> Show pointer hit-area (debug)</label>
+              <label class="inline-check" title="Debug aid: draws each edge's invisible hover/click hit-area in solid red so its actual size and overlap with neighboring edges is visible"><input id="genDebugHitAreas" type="checkbox" /> Show edge hit-areas (debug)</label>
+              <label class="inline-check" title="Debug aid: outlines each node's actual hit-testable area in blue -- its own box/bullet, but also its label text, whose real hit region is the full font-metric bounding box (ascent/descent included), not just the visible ink -- so it's checkable whether the pointer is really over a label's hit region or not"><input id="genDebugNodeHitAreas" type="checkbox" /> Show node/label hit-areas (debug)</label>
+              <label class="inline-check" title="Debug aid: draws the small tolerance ring hitsAtPoint() samples around the actual cursor position, so it's visible whether a highlighted edge/node really is under the pointer or under that ring"><input id="genDebugPointerArea" type="checkbox" /> Show pointer hit-area (debug)</label>
               <div class="gen-params-row">
                 <span class="gen-params-label" title="Relation edges default to less than fully opaque so overlapping edges don't bury family labels; hovering or clicking an edge always shows it at full strength regardless of this setting">Edge opacity</span>
                 <input id="genParamEdgeOpacity" type="range" min="10" max="100" step="5" />
