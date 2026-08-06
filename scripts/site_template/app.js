@@ -2943,6 +2943,14 @@
     const POINTER_HIT_SAMPLES = 6;
     function hitsAtPoint(clientX, clientY) {
       const edgeEls = []; const nodeEls = [];
+      // Each distinct hp (relation-line hit-area) hit at this point becomes
+      // one entry here -- used to offer a picker when a click lands on a
+      // spot where more than one relation line overlaps (common in the
+      // layered layout when several ciphers stack vertically), so a single
+      // relation can be selected instead of always pinning the whole
+      // overlapping bundle together. Only edge hits carry a `label` (node
+      // hits don't represent a single relation, so they're excluded).
+      const edgeCandidates = [];
       const seen = new Set();
       function checkPoint(x, y) {
         document.elementsFromPoint(x, y).forEach((el) => {
@@ -2950,8 +2958,11 @@
           const data = edgeHitData.get(el);
           if (!data) return;
           seen.add(el);
-          edgeEls.push(...resolveHitList(data.edgeEls));
-          nodeEls.push(...resolveHitList(data.nodeEls));
+          const resolvedEdgeEls = resolveHitList(data.edgeEls);
+          const resolvedNodeEls = resolveHitList(data.nodeEls);
+          edgeEls.push(...resolvedEdgeEls);
+          nodeEls.push(...resolvedNodeEls);
+          if (data.label) edgeCandidates.push({ label: data.label, edgeEls: resolvedEdgeEls, nodeEls: resolvedNodeEls });
         });
       }
       checkPoint(clientX, clientY);
@@ -2959,7 +2970,7 @@
         const angle = (i / POINTER_HIT_SAMPLES) * 2 * Math.PI;
         checkPoint(clientX + POINTER_HIT_RADIUS_PX * Math.cos(angle), clientY + POINTER_HIT_RADIUS_PX * Math.sin(angle));
       }
-      return { edgeEls, nodeEls };
+      return { edgeEls, nodeEls, edgeCandidates };
     }
     function sameEls(a, b) {
       if (a.length !== b.length) return false;
@@ -3091,6 +3102,53 @@
     // easy way to do this) moves content underneath the pointer exactly
     // like the zoom handlers below do; same fix.
     genPlotScroll.addEventListener("scroll", refreshHoverAtPointer);
+    // In the layered layout especially, several relation lines can stack on
+    // top of each other where two ciphers happen to align vertically --
+    // hitsAtPoint()'s pointer-tolerance ring then matches more than one
+    // distinct relation at once. Rather than always pinning the whole
+    // overlapping bundle together (which makes the individual relations
+    // impossible to tell apart or select on their own), a click on such a
+    // spot opens this small picker instead, listing each candidate by its
+    // own hover text so one specific relation can be chosen.
+    let dismissRelationPicker = null; // current picker's cleanup fn, or null
+    function showRelationPicker(clientX, clientY, candidates, onPick) {
+      if (dismissRelationPicker) dismissRelationPicker();
+      const box = document.createElement("div");
+      box.className = "gen-relation-picker";
+      candidates.forEach((cand) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "gen-relation-picker-item";
+        btn.textContent = cand.label;
+        btn.title = cand.label;
+        btn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          cleanup();
+          onPick(cand);
+        });
+        box.appendChild(btn);
+      });
+      document.body.appendChild(box);
+      const rect = box.getBoundingClientRect();
+      box.style.left = `${Math.max(8, Math.min(clientX, window.innerWidth - rect.width - 8))}px`;
+      box.style.top = `${Math.max(8, Math.min(clientY, window.innerHeight - rect.height - 8))}px`;
+      function onOutsideClick(ev) { if (!box.contains(ev.target)) cleanup(); }
+      function onKeydown(ev) { if (ev.key === "Escape") cleanup(); }
+      function cleanup() {
+        box.remove();
+        document.removeEventListener("click", onOutsideClick);
+        document.removeEventListener("keydown", onKeydown);
+        if (dismissRelationPicker === cleanup) dismissRelationPicker = null;
+      }
+      dismissRelationPicker = cleanup;
+      // Deferred a tick: the click that opened the picker is still bubbling
+      // up to document right now, and would otherwise immediately dismiss
+      // the picker this same listener is meant to protect.
+      setTimeout(() => {
+        document.addEventListener("click", onOutsideClick);
+        document.addEventListener("keydown", onKeydown);
+      }, 0);
+    }
     // Capture phase: attach()'s own click listener (below, per edge/node
     // element, for the text info box) calls stopPropagation(), which would
     // otherwise stop this delegated listener from ever seeing the click.
@@ -3105,9 +3163,23 @@
         // is a common "dismiss" gesture elsewhere in this UI already (see
         // createPinnableInfoBox's own pinned-text dismissal) and gives an
         // obvious way out without having to relocate the original spot.
+        if (dismissRelationPicker) dismissRelationPicker();
         if (hotPinned) { hotPinned = null; clearHotClasses(); }
         return;
       }
+      if (hits.edgeCandidates.length > 1) {
+        showRelationPicker(ev.clientX, ev.clientY, hits.edgeCandidates, (cand) => {
+          if (hotPinned && sameEls(hotPinned.edgeEls, cand.edgeEls) && sameEls(hotPinned.nodeEls, cand.nodeEls)) {
+            hotPinned = null;
+            clearHotClasses();
+          } else {
+            hotPinned = { edgeEls: cand.edgeEls, nodeEls: cand.nodeEls };
+            applyHotClasses(hotPinned.edgeEls, hotPinned.nodeEls);
+          }
+        });
+        return;
+      }
+      if (dismissRelationPicker) dismissRelationPicker();
       if (hotPinned && sameEls(hotPinned.edgeEls, hits.edgeEls) && sameEls(hotPinned.nodeEls, hits.nodeEls)) {
         hotPinned = null;
       } else {
@@ -3550,7 +3622,7 @@
         // nodeElsByFamily is only fully populated once the node loop below
         // runs, but this getter is only called later (on user interaction),
         // by which point the whole render() call has long since completed.
-        edgeHitData.set(hp, { edgeEls, nodeEls: () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])] });
+        edgeHitData.set(hp, { edgeEls, nodeEls: () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])], label: hoverTxt });
         addEdgeFamily(src, { edgeEls, otherFid: tgt });
         addEdgeFamily(tgt, { edgeEls, otherFid: src });
         hoverPaths.push(hp);
@@ -3956,7 +4028,7 @@
         // See the matching comment in drawSugiyama: nodeElsByFamily is
         // populated by the node loop below, but this getter is only called
         // later, on user interaction.
-        edgeHitData.set(hp, { edgeEls, nodeEls: () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])] });
+        edgeHitData.set(hp, { edgeEls, nodeEls: () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])], label: hoverTxt });
         addEdgeFamily(src, { edgeEls, otherFid: tgt });
         addEdgeFamily(tgt, { edgeEls, otherFid: src });
         hoverPaths.push(hp);
@@ -4043,6 +4115,7 @@
       // remove the pinned edge/node entirely), so it resets too.
       hotShown = null;
       hotPinned = null;
+      if (dismissRelationPicker) dismissRelationPicker();
       while (genPlot.firstChild) genPlot.removeChild(genPlot.firstChild);
 
       const eligibleIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVis(fid, true));

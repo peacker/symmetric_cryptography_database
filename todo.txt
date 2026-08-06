@@ -103,6 +103,29 @@ TODO:
 
 DONE:
 
+- Fourteenth follow-up round: implemented the "overlapping relation lines" TODO item (in the layered
+  layout, when ciphers align vertically, one relation line can sit on top of another, making the one
+  underneath unselectable by a normal click). Confirmed the interaction model first (click-triggered
+  picker, not hover-triggered, so the existing hover-preview behavior stays untouched) before building
+  anything. Each edge hit-area path (hp) now carries its own hover-text label in edgeHitData, and
+  hitsAtPoint() collects the distinct labeled edges actually hit (edgeCandidates) alongside its existing
+  edgeEls/nodeEls union. genPlot's click handler now checks edgeCandidates.length: if there's only one
+  (the common case), behavior is unchanged (pin it directly, click again to unpin); if there's more than
+  one, a small floating picker (showRelationPicker(), positioned at the click point, clamped to the
+  viewport, dismissed by clicking outside it or Escape) lists each one by its own relation text, and
+  picking an item pins just that one relation and its two endpoint families (with the same click-same-
+  item-again-to-unpin symmetry as a direct click). Verified against real data with Playwright: found an
+  actual 8-relation overlap point in the layered layout (NewDES's shared-construction fan-out) where the
+  picker correctly lists every distinct relation and picking one pins only that pair; confirmed clicking a
+  genuinely unambiguous single relation still pins directly with no picker; confirmed dismiss-by-clicking-
+  elsewhere and the picker's own listeners don't fight with the existing pin/unpin document-click handler
+  (via stopPropagation on picker items and a deferred outside-click listener so the opening click itself
+  doesn't immediately close it). Noted for you: at NewDES's exact busiest hub the sampled point actually
+  turned up 54 overlapping candidates (the pointer-tolerance ring picks up more than what's under the
+  single center pixel) -- the picker scrolls rather than breaking, but that's a genuinely crowded case
+  worth knowing about if a future refinement (e.g. grouping multiple construction-sharing reasons for the
+  same src/tgt pair into one entry) turns out to be wanted. make test all green.
+
 - Thirteenth follow-up round: fixed the "find family" relation-degree filter (was in the TODO section as
   "only the predecessors and successor that eventually connect to the cipher should be displayed, not also
   the first or second degree relations of the ciphers that are not the focused cipher"). Root cause: at
