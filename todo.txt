@@ -2,6 +2,13 @@ TODO:
 
 - add pbkfd2 pdf
 
+- in the layered layout of the genaology tab, when multiple ciphers are aligned vertically,
+  there is one relation above the other that does not allow to select the underlying relation lines.
+  how could this be solved? 
+  maybe, in the point in which the mouse is hovering, 
+  a temporary multiple choice button could appear to select which relation to click
+
+
 - when two relation lines are overlapping, the tip for overing with the mouse should show all relations descriptions.
   when clicking it, it should let you choose which relation description to display.
 
@@ -109,6 +116,23 @@ TODO:
 
 
 DONE:
+
+- Tenth follow-up round: you confirmed the pointer-events:"all" fix actually works live, and asked to
+  remove all the debugging-only tooling that had accumulated across this investigation (the three "Show
+  edge/node/pointer hit-area (debug)" checkboxes, the pointer hit-area marker, the live debug readout, and
+  debugOutlineNodeHitArea()) now that it's no longer needed. Removed all of it from app.js,
+  index.html.tmpl, and styles.css (grep for "genDebug", "debugOutlineNodeHitArea", "describeHitEl",
+  "updateDebugReadout", "rawHits", and "hitAreaStroke" across all three files now returns nothing), while
+  keeping the two permanent fixes those tools were built to verify: pointer-events:"visibleStroke" on the
+  edge hit-area paths (with its explanatory comment intact) and the scroll/zoom hover-refresh logic.
+  Deliberately kept the "📌 Something is pinned" banner even though it was introduced during this same
+  debugging round -- it's a genuine, permanent UX affordance (a pin looks identical to a live hover
+  otherwise, so without it a pinned relation can look like a stuck/buggy highlight), not diagnostic
+  tooling, so it wasn't in scope for removal. Rebuilt the site and verified with Playwright against the
+  rebuilt static site: hovering an on-curve point highlights correctly, clicking pins it (banner appears)
+  and the highlight survives moving the mouse far away, clicking empty space unpins it (banner
+  disappears), the straight-chord interior-hit-testing bug stays fixed (0 hits at the chord midpoint of
+  the most-bulging curve), and there are zero console errors. make test all green.
 
 - Ninth follow-up round: ACTUAL root cause of the whole "cursor is over visible white space, but a
   relation is highlighted" saga, found because you correctly guessed the shape of the bug from watching

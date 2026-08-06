@@ -2567,11 +2567,6 @@
     const genByGeneration = document.getElementById("genByGeneration");
     const genShowBullets = document.getElementById("genShowBullets");
     const genCollapseEdges = document.getElementById("genCollapseEdges");
-    const genDebugHitAreas = document.getElementById("genDebugHitAreas");
-    const genDebugNodeHitAreas = document.getElementById("genDebugNodeHitAreas");
-    const genDebugPointerArea = document.getElementById("genDebugPointerArea");
-    const genDebugPointerMarker = document.getElementById("genDebugPointerMarker");
-    const genDebugReadout = document.getElementById("genDebugReadout");
     const genPinnedBanner = document.getElementById("genPinnedBanner");
     const genNameClip = document.getElementById("genNameClip");
     const genNameFull = document.getElementById("genNameFull");
@@ -2948,15 +2943,6 @@
     const POINTER_HIT_SAMPLES = 6;
     function hitsAtPoint(clientX, clientY) {
       const edgeEls = []; const nodeEls = [];
-      // The elements actually found by elementsFromPoint() (an edge's hp
-      // path, or a node's own rect/circle/text) -- as opposed to edgeEls/
-      // nodeEls above, which are what those hits *expand to* (an edge's
-      // visible colored line(s); a node's connected edges and their other
-      // endpoints). Kept separately because only the raw hit carries its
-      // own <title>/label text for the debug readout -- the expanded
-      // elements don't (a colored edge line has no title of its own, only
-      // its hp sibling does).
-      const rawHits = [];
       const seen = new Set();
       function checkPoint(x, y) {
         document.elementsFromPoint(x, y).forEach((el) => {
@@ -2964,7 +2950,6 @@
           const data = edgeHitData.get(el);
           if (!data) return;
           seen.add(el);
-          rawHits.push(el);
           edgeEls.push(...resolveHitList(data.edgeEls));
           nodeEls.push(...resolveHitList(data.nodeEls));
         });
@@ -2974,7 +2959,7 @@
         const angle = (i / POINTER_HIT_SAMPLES) * 2 * Math.PI;
         checkPoint(clientX + POINTER_HIT_RADIUS_PX * Math.cos(angle), clientY + POINTER_HIT_RADIUS_PX * Math.sin(angle));
       }
-      return { edgeEls, nodeEls, rawHits };
+      return { edgeEls, nodeEls };
     }
     function sameEls(a, b) {
       if (a.length !== b.length) return false;
@@ -3016,35 +3001,6 @@
     function hideLabelBackdrop(textEl) {
       const rect = labelBackdrops.get(textEl);
       if (rect && rect.parentNode) rect.parentNode.removeChild(rect);
-    }
-
-    // Debug aid (same "Show hit-areas" checkbox as the red edge hit-area
-    // lines): outlines a *node's* actual hit-testable geometry -- its own
-    // rect/circle, but also its label text, which is registered into
-    // edgeHitData too (radial labels are always pointer-events:all now, not
-    // just when there's no bullet -- see the node-drawing loops) and can be
-    // significantly wider than the visible glyphs suggest once its own
-    // rotate() transform is applied, especially for long family names. The
-    // edge hit-area lines alone don't explain "the cursor isn't touching
-    // anything but a relation still lit up" if what it's actually near is a
-    // node's hit box instead of an edge's line.
-    function debugOutlineNodeHitArea(el) {
-      let box;
-      try { box = el.getBBox(); } catch { return; }
-      const pad = 0.5;
-      const outline = svgEl("rect", {
-        x: String(box.x - pad),
-        y: String(box.y - pad),
-        width: String(box.width + pad * 2),
-        height: String(box.height + pad * 2),
-        fill: "rgba(30, 100, 255, 0.18)",
-        stroke: "rgba(20, 60, 200, 0.9)",
-        "stroke-width": "0.6",
-        "pointer-events": "none",
-      });
-      const t = el.getAttribute("transform");
-      if (t) outline.setAttribute("transform", t);
-      genPlot.appendChild(outline);
     }
 
     let hotShown = null;   // { edgeEls, nodeEls } currently CSS-classed/backdropped
@@ -3105,43 +3061,6 @@
         nodeEls: [...hotPinned.nodeEls, ...liveNodeEls],
       };
     }
-    // Debug aid: a short, unambiguous label for one matched element, read
-    // from the same <title> text (or, for a label with no title of its
-    // own, its displayed name) already used for the hover tooltip --
-    // avoids having to eyeball a screenshot to guess whether a given pixel
-    // is really inside a thin edge's hit-area or a label's hit box.
-    function describeHitEl(el) {
-      const titleEl = el.querySelector && el.querySelector("title");
-      if (titleEl && titleEl.textContent) return titleEl.textContent.split("\n")[0];
-      if (el.tagName === "text") return el.textContent;
-      return el.tagName;
-    }
-    function updateDebugReadout(hover) {
-      if (!genDebugReadout) return;
-      if (!(genDebugPointerArea && genDebugPointerArea.checked)) {
-        genDebugReadout.hidden = true;
-        return;
-      }
-      genDebugReadout.hidden = false;
-      // rawHits, not edgeEls/nodeEls: those are what a hit *expands to*
-      // (an edge's visible colored line(s); a node's connected edges/other
-      // endpoints), which don't carry their own title/label text -- only
-      // the actually-matched element (an edge's hp path, or a node's own
-      // rect/circle/text) does. Edges are always <path>; nodes are
-      // rect/circle/text -- reliable since that's exactly how the two are
-      // told apart when registering them into edgeHitData in the first
-      // place.
-      const edgeHits = hover.rawHits.filter((el) => el.tagName === "path");
-      const nodeHits = hover.rawHits.filter((el) => el.tagName !== "path");
-      const MAX_LISTED = 8;
-      const lines = [`Live hit-test at cursor: ${edgeHits.length} edge(s), ${nodeHits.length} node element(s)`];
-      edgeHits.slice(0, MAX_LISTED).forEach((el) => lines.push(`  edge: ${describeHitEl(el)}`));
-      if (edgeHits.length > MAX_LISTED) lines.push(`  ...+${edgeHits.length - MAX_LISTED} more edges`);
-      nodeHits.slice(0, MAX_LISTED).forEach((el) => lines.push(`  node: ${describeHitEl(el)}`));
-      if (nodeHits.length > MAX_LISTED) lines.push(`  ...+${nodeHits.length - MAX_LISTED} more nodes`);
-      if (!edgeHits.length && !nodeHits.length) lines.push("  (nothing under the pointer or its tolerance ring)");
-      genDebugReadout.textContent = lines.join("\n");
-    }
     // The mouse staying physically still is not the same thing as nothing
     // under it changing: scrolling/panning genPlotScroll, or zooming (which
     // re-scales genPlot's content around some anchor other than the
@@ -3159,7 +3078,6 @@
     function refreshHoverAtPointer() {
       if (!lastPointerClientPos) return;
       const hover = hitsAtPoint(lastPointerClientPos.x, lastPointerClientPos.y);
-      updateDebugReadout(hover);
       const { edgeEls, nodeEls } = unionWithPin(hover.edgeEls, hover.nodeEls);
       if (edgeEls.length || nodeEls.length) applyHotClasses(edgeEls, nodeEls);
       else clearHotClasses();
@@ -3169,17 +3087,10 @@
     // re-render via normal DOM event delegation.
     genPlot.addEventListener("mousemove", (ev) => {
       lastPointerClientPos = { x: ev.clientX, y: ev.clientY };
-      if (genDebugPointerMarker && genDebugPointerArea && genDebugPointerArea.checked) {
-        genDebugPointerMarker.hidden = false;
-        genDebugPointerMarker.style.left = `${ev.clientX}px`;
-        genDebugPointerMarker.style.top = `${ev.clientY}px`;
-      }
       refreshHoverAtPointer();
     });
     genPlot.addEventListener("mouseleave", () => {
       lastPointerClientPos = null;
-      if (genDebugPointerMarker) genDebugPointerMarker.hidden = true;
-      if (genDebugReadout) genDebugReadout.hidden = true;
       if (hotPinned) applyHotClasses(hotPinned.edgeEls, hotPinned.nodeEls);
       else clearHotClasses();
     });
@@ -3630,7 +3541,6 @@
         // size on screen regardless of zoom, instead of a per-edge zone that
         // balloons at high zoom and shrinks at low zoom.
         const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
-        const hitAreaStroke = (genDebugHitAreas && genDebugHitAreas.checked) ? "rgba(255,0,0,0.35)" : "rgba(0,0,0,0.001)";
         // pointer-events MUST be "visibleStroke", not "all": "all" hit-tests
         // the path's fill/interior *regardless of the fill property's
         // actual value* -- for an open (unclosed) curve, the browser
@@ -3642,7 +3552,7 @@
         // chord between an edge's two endpoints, hundreds of viewBox units
         // from the actual visible curve, registered as a hit. "fill: none"
         // alone does not opt out of this -- pointer-events has to.
-        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW), fill: "none", "pointer-events": "visibleStroke" });
+        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(maxStrokeW), fill: "none", "pointer-events": "visibleStroke" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([{ fid: src, name: srcName }, { fid: tgt, name: tgtName }]));
         // nodeElsByFamily is only fully populated once the node loop below
@@ -3701,7 +3611,6 @@
         const edgeEls = related.flatMap((r) => r.edgeEls);
         const nodeEls = [...ownEls, ...related.flatMap((r) => nodeElsByFamily.get(r.otherFid) || [])];
         edgeHitData.set(ownEls[0], { edgeEls, nodeEls });
-        if (genDebugNodeHitAreas && genDebugNodeHitAreas.checked) debugOutlineNodeHitArea(ownEls[0]);
       });
     }
 
@@ -4035,7 +3944,6 @@
         // edge's own visible thickness exactly; pointer tolerance instead
         // comes from hitsAtPoint()'s own small screen-pixel sampling radius.
         const maxStrokeW = 0.8 + Math.max(0, rels.length - 1) * 1.3;
-        const hitAreaStroke = (genDebugHitAreas && genDebugHitAreas.checked) ? "rgba(255,0,0,0.35)" : "rgba(0,0,0,0.001)";
         // pointer-events MUST be "visibleStroke", not "all": "all" hit-tests
         // the path's fill/interior *regardless of the fill property's
         // actual value* -- for an open (unclosed) curve, the browser
@@ -4047,7 +3955,7 @@
         // chord between an edge's two endpoints, hundreds of viewBox units
         // from the actual visible curve, registered as a hit. "fill: none"
         // alone does not opt out of this -- pointer-events has to.
-        const hp = svgEl("path", { d: pd, stroke: hitAreaStroke, "stroke-width": String(maxStrokeW), fill: "none", "pointer-events": "visibleStroke" });
+        const hp = svgEl("path", { d: pd, stroke: "rgba(0,0,0,0.001)", "stroke-width": String(maxStrokeW), fill: "none", "pointer-events": "visibleStroke" });
         const hpT = svgEl("title", {}); hpT.textContent = hoverTxt; hp.appendChild(hpT);
         edgeTip.attach(hp, hoverTxt, () => pdfEntriesForFamilies([
           { fid: src, name: String((genFamById.get(src) || {}).name || src) },
@@ -4131,7 +4039,6 @@
         const nodeEls = [...ownEls, ...related.flatMap((r) => nodeElsByFamily.get(r.otherFid) || [])];
         ownEls.forEach((el) => {
           edgeHitData.set(el, { edgeEls, nodeEls });
-          if (genDebugNodeHitAreas && genDebugNodeHitAreas.checked) debugOutlineNodeHitArea(el);
         });
       });
     }
@@ -4231,11 +4138,6 @@
     if (genByGeneration) genByGeneration.addEventListener("change", render);
     if (genShowBullets) genShowBullets.addEventListener("change", render);
     if (genCollapseEdges) genCollapseEdges.addEventListener("change", render);
-    if (genDebugHitAreas) genDebugHitAreas.addEventListener("change", render);
-    if (genDebugNodeHitAreas) genDebugNodeHitAreas.addEventListener("change", render);
-    if (genDebugPointerArea) genDebugPointerArea.addEventListener("change", () => {
-      if (!genDebugPointerArea.checked && genDebugPointerMarker) genDebugPointerMarker.hidden = true;
-    });
     genFamilySearch.addEventListener("input", render);
     genFamilySearch.addEventListener("change", render);
     if (genFamilySearchExact) genFamilySearchExact.addEventListener("change", render);
