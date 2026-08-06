@@ -439,8 +439,9 @@
       btn.addEventListener("click", () => {
         const hidden = panel.classList.toggle("controls-hidden");
         btn.setAttribute("aria-pressed", String(hidden));
-        btn.textContent = hidden ? "Show UI" : "Hide UI";
-        btn.title = hidden ? "Show the floating buttons overlaying the plot" : "Hide the floating buttons overlaying the plot";
+        const label = hidden ? "Show the floating buttons overlaying the plot" : "Hide the floating buttons overlaying the plot";
+        btn.setAttribute("aria-label", label);
+        btn.title = label;
       });
     });
 
@@ -2567,7 +2568,6 @@
     const genByGeneration = document.getElementById("genByGeneration");
     const genShowBullets = document.getElementById("genShowBullets");
     const genCollapseEdges = document.getElementById("genCollapseEdges");
-    const genPinnedBanner = document.getElementById("genPinnedBanner");
     const genNameClip = document.getElementById("genNameClip");
     const genNameFull = document.getElementById("genNameFull");
     const genZoomOut = document.getElementById("genZoomOut");
@@ -3027,7 +3027,7 @@
       // than an unhighlighted edge without overpowering everything else.
       // The extra stroke-width (see .gen-edge-hot) still does most of the
       // "this one's highlighted" work.
-      const hotOpacity = Math.min(1, layoutParams.edgeOpacity + 0.1);
+      const hotOpacity = Math.min(1, layoutParams.edgeOpacity + 0.2);
       dedupedEdges.forEach((el) => {
         el.classList.add("gen-edge-hot");
         el.setAttribute("opacity", String(hotOpacity));
@@ -3045,15 +3045,7 @@
     // (their union), so hovering around while something is pinned keeps
     // previewing other relations without losing the pinned one; mouseleave
     // (or hovering empty space) just drops back to showing the pin alone.
-    // A pin looks *identical* to a fresh hover otherwise (same classes),
-    // which reads as "stuck"/buggy if it's not obvious something was
-    // deliberately pinned earlier -- genPinnedBanner makes that state
-    // visible regardless of where the cursor currently is.
     let hotPinned = null; // { edgeEls, nodeEls }
-    function setHotPinned(value) {
-      hotPinned = value;
-      if (genPinnedBanner) genPinnedBanner.hidden = !value;
-    }
     function unionWithPin(liveEdgeEls, liveNodeEls) {
       if (!hotPinned) return { edgeEls: liveEdgeEls, nodeEls: liveNodeEls };
       return {
@@ -3113,13 +3105,13 @@
         // is a common "dismiss" gesture elsewhere in this UI already (see
         // createPinnableInfoBox's own pinned-text dismissal) and gives an
         // obvious way out without having to relocate the original spot.
-        if (hotPinned) { setHotPinned(null); clearHotClasses(); }
+        if (hotPinned) { hotPinned = null; clearHotClasses(); }
         return;
       }
       if (hotPinned && sameEls(hotPinned.edgeEls, hits.edgeEls) && sameEls(hotPinned.nodeEls, hits.nodeEls)) {
-        setHotPinned(null);
+        hotPinned = null;
       } else {
-        setHotPinned(hits);
+        hotPinned = hits;
       }
       applyHotClasses(hits.edgeEls, hits.nodeEls);
     }, true);
@@ -3133,7 +3125,7 @@
     // way to be dismissed by clicking elsewhere on the page.
     document.addEventListener("click", (ev) => {
       if (!hotPinned || genPlot.contains(ev.target)) return;
-      setHotPinned(null);
+      hotPinned = null;
       clearHotClasses();
     });
     function renderHighlightChecklist() {
@@ -4050,7 +4042,7 @@
       // can't meaningfully survive a full re-render (different filters can
       // remove the pinned edge/node entirely), so it resets too.
       hotShown = null;
-      setHotPinned(null);
+      hotPinned = null;
       while (genPlot.firstChild) genPlot.removeChild(genPlot.firstChild);
 
       const eligibleIds = families.map((f) => String(f.id || "")).filter((fid) => fid && isVis(fid, true));

@@ -400,27 +400,33 @@ body.spdb-fullscreen .page { width: 100vw; max-width: 100vw; padding: 0; margin:
    occupy (top-left) and is never itself hidden, so there's always a way
    back; toggling it adds/removes .controls-hidden on the enclosing
    .view-panel, which the rules below hide every other floating control
-   under. */
+   under. Drawn as a small folded-corner triangle (a plain CSS border
+   triangle, not a text button) so it stays out of the way of labels too --
+   it flips to the opposite diagonal when pressed as a lightweight visual
+   cue that it now "unfolds" the hidden controls back. */
 .frame-controls-hide-toggle {
   all: unset;
   box-sizing: border-box;
   cursor: pointer;
   position: absolute;
-  top: 0.7rem;
-  left: 0.7rem;
+  top: 0;
+  left: 0;
   z-index: 17;
-  padding: 0.3rem 0.6rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #08323d;
-  background: rgba(234, 246, 248, 0.55);
-  border: 1px solid rgba(184, 216, 222, 0.55);
-  border-radius: 6px;
-  backdrop-filter: blur(3px);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 18px 18px 0 0;
+  border-color: rgba(184, 216, 222, 0.8) transparent transparent transparent;
+  transition: border-color 0.15s, transform 0.15s;
 }
 
 .frame-controls-hide-toggle:hover {
-  background: rgba(215, 238, 242, 0.85);
+  border-color: rgba(120, 190, 205, 0.95) transparent transparent transparent;
+}
+
+.frame-controls-hide-toggle[aria-pressed="true"] {
+  border-color: rgba(255, 210, 63, 0.9) transparent transparent transparent;
+  transform: rotate(180deg);
 }
 
 .view-panel.controls-hidden .view-header-row,
@@ -1079,28 +1085,6 @@ text.gen-node-hot {
   stroke: #ad7a00;
   stroke-width: 0.6px;
   pointer-events: none;
-}
-
-/* Reminder banner: a pin (from clicking a relation) intentionally survives
-   hovering elsewhere or moving the mouse away entirely -- otherwise
-   identical-looking to a live hover, which can look like a stuck/buggy
-   highlight if it's not obvious something is deliberately pinned right
-   now. */
-.gen-pinned-banner {
-  position: absolute;
-  top: 0.7rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 18;
-  max-width: min(26rem, calc(100% - 1.4rem));
-  padding: 0.4rem 0.7rem;
-  border-radius: 8px;
-  background: rgba(255, 210, 63, 0.95);
-  border: 1px solid #ad7a00;
-  color: #1a1a1a;
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-align: center;
 }
 
 circle.gen-node-hot {

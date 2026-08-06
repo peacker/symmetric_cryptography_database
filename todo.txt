@@ -117,6 +117,23 @@ TODO:
 
 DONE:
 
+- Eleventh follow-up round: three small UI polish requests after confirming the hover/pin fixes work.
+  1. Removed the "📌 Something is pinned" banner (genPinnedBanner) entirely -- you found it unnecessary
+     since pinning/unpinning is already obvious. Collapsed the now-pointless setHotPinned() wrapper back
+     into plain `hotPinned = ...` assignments at each call site.
+  2. Increased the hover/pin highlight's opacity boost from +0.1 to +0.2 over the base edge opacity
+     (layoutParams.edgeOpacity, 0.1 by default) for a more visible highlight.
+  3. Replaced the "Hide UI" / "Show UI" text button (which was itself another floating button sitting over
+     the plot's top-left corner -- the exact thing it was meant to declutter) with a small folded-corner
+     CSS triangle (18px legs, no text) tucked flush into the corner, with the same aria-pressed/aria-label
+     toggle behavior; it flips to the opposite diagonal when pressed as a lightweight visual cue. Applied
+     to both the Genealogy and Timelines frames, since they share the same toggle.
+  Also found and reran a failed "Deploy GitHub Pages" run for the prior debug-cleanup commit (a transient
+  "Service Unavailable" resolving a GitHub Action, not a code issue). Rebuilt the site and verified with
+  Playwright: no genPinnedBanner anywhere, Tune Layout panel free of debug checkboxes, hover sets
+  opacity="0.3" (0.1 + 0.2) on hot edges, click-to-pin/click-elsewhere-to-unpin still work, and the new
+  triangle toggle correctly hides/restores the floating controls. make test all green, no console errors.
+
 - Tenth follow-up round: you confirmed the pointer-events:"all" fix actually works live, and asked to
   remove all the debugging-only tooling that had accumulated across this investigation (the three "Show
   edge/node/pointer hit-area (debug)" checkboxes, the pointer hit-area marker, the live debug readout, and
