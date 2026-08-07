@@ -5948,3 +5948,77 @@ references:
     references/[2014][colm][][caesar_round3_v1_final].pdf (2016.09.15, round 3/final, plus an addendum). The
     filename uses COLM''s 2014 CAESAR-process-entry year (via its AES-COPA/ELmD predecessors'' round-1
     submissions), not the file''s own later date.'
+- id: minematsu_2016_aes_otr_v3_1
+  kind: paper
+  title: AES-OTR v3.1
+  authors:
+  - Kazuhiko Minematsu
+  year: 2016
+  venue: CAESAR submission, third round
+  url: https://competitions.cr.yp.to/round3/aesotrv31.pdf
+  notes: 'CAESAR round-3 finalist (not selected for the final portfolio). OTR ("Offset Two-Round") processes
+    plaintext in block pairs through two AES calls with GF(2^128) doubling-based offsets (Rogaway-style masking,
+    as in OCB), giving a parallelizable, fully nonce-respecting-secure AEAD mode -- distinct from OCB in using
+    two ordinary block-cipher calls per block pair rather than one masked call per single block. Local copies of
+    all four submitted versions: references/[2014][aes_otr][][caesar_round1_v1].pdf (2014, round 1),
+    references/[2014][aes_otr][][caesar_round2_v2].pdf and references/[2014][aes_otr][][caesar_round2_v3].pdf
+    (2015, round 2), and references/[2014][aes_otr][][caesar_round3_v3.1_final].pdf (2016.09.01, round 3/final).
+    The filename uses AES-OTR''s 2014 round-1 submission year, not each file''s own later revision date.'
+- id: hoang_krovetz_rogaway_2017_aez_v5
+  kind: paper
+  title: 'AEZ v5: Authenticated Encryption by Enciphering'
+  authors:
+  - Viet Tung Hoang
+  - Ted Krovetz
+  - Phillip Rogaway
+  year: 2017
+  venue: CAESAR submission, third round
+  url: http://web.cs.ucdavis.edu/~rogaway/aez/AEZv5.pdf
+  notes: 'CAESAR round-3 finalist (not selected for the final portfolio). Local copies of all five submitted
+    versions: references/[2014][aez][][caesar_round1_v1].pdf (2014, round 1),
+    references/[2014][aez][][caesar_round2_v4].pdf and references/[2014][aez][][caesar_round2_v4.1].pdf (2015,
+    round 2), references/[2014][aez][][caesar_round3_v4.2].pdf (2016, round 3), and
+    references/[2014][aez,aez_aes4][][caesar_round3_v5_final].pdf (2017.03.21, final revision, hosted on the
+    designers'' own site rather than competitions.cr.yp.to; also the source for the aez_aes4 primitive family,
+    since AES4/AES10 are specified within this same document rather than a separate one). The filename uses
+    AEZ''s 2014 round-1 submission year, not each file''s own later revision date; v2/v3 were skipped in the
+    submission''s own version numbering.'
+- id: iwata_et_al_2016_cloc_silc_v3
+  kind: paper
+  title: CLOC and SILC v3
+  authors:
+  - Tetsu Iwata
+  - Kazuhiko Minematsu
+  - Jian Guo
+  - Sumio Morioka
+  - Eita Kobayashi
+  year: 2016
+  venue: CAESAR submission, third round
+  url: https://competitions.cr.yp.to/round3/clocsilcv3.pdf
+  notes: 'CAESAR round-3 finalist (not selected for the final portfolio). CLOC (Compact Low-Overhead CFB) and
+    SILC (SImple Lightweight CFB) are both CFB-based block-cipher AEAD modes; SILC is built directly on CLOC,
+    optimized further for hardware cost. Both are instantiated over AES-128 (16-byte block) as well as
+    lighter-weight 8-byte-block ciphers (TWINE for CLOC; PRESENT or LED for SILC). Local copies of all five
+    submitted versions: references/[2014][cloc][][caesar_round1_v1].pdf and
+    references/[2014][silc][][caesar_round1_v1].pdf (2014, round 1, submitted as two separate documents),
+    references/[2014][cloc][][caesar_round2_v2].pdf and references/[2014][silc][][caesar_round2_v2].pdf (2015,
+    round 2, still separate), and references/[2014][cloc,silc][][caesar_round3_v3_final].pdf (2016.09.15, round
+    3/final, merged into one combined document). The filename uses CLOC/SILC''s 2014 round-1 submission year, not
+    each file''s own later revision date.'
+- id: wu_huang_2016_jambu_v2_1
+  kind: paper
+  title: The JAMBU Lightweight Authentication Encryption Mode (v2.1)
+  authors:
+  - Hongjun Wu
+  - Tao Huang
+  year: 2016
+  venue: CAESAR submission, third round
+  url: https://competitions.cr.yp.to/round3/jambuv21.pdf
+  notes: 'CAESAR round-3 finalist (not selected for the final portfolio). A lightweight block-cipher AEAD mode
+    with a compact state (roughly 1.5x-2x the block size), instantiated as SIMON-JAMBU (the submission''s primary
+    recommendation, several SIMON block/key-size profiles) or AES-JAMBU (simpler to describe, 128-bit key). Local
+    copies of all three submitted versions: references/[2014][jambu][][caesar_round1_v1].pdf (2014, round 1,
+    "AES-JAMBU" only), references/[2014][jambu][][caesar_round2_v2].pdf (2015, round 2, still "AES-JAMBU" only),
+    and references/[2014][jambu][][caesar_round3_v2.1_final].pdf (2016.09.15, round 3/final, renamed to plain
+    "JAMBU" and adding the SIMON-JAMBU variants as the new primary recommendation). The filename uses JAMBU''s
+    2014 round-1 submission year, not each file''s own later revision date.'

@@ -798,6 +798,70 @@ primitive_families:
       rounds: 14
       block_size_bits: 128
       output_size_bits: 128
+- id: aez_aes4
+  name: AES4
+  notes: 'AEZ''s core building block: 4 (AES4) or 10 (AES10) rounds of the AES round function (aesenc: SubBytes,
+    ShiftRows, MixColumns, AddRoundKey), each round independently keyed. Unlike standard AES, the final round''s
+    MixColumns is NOT omitted -- the same "keep MixColumns in the last round" tweak independently used by
+    AES''-128/128 (see mixfeed) for mixFeed. Not itself a standardized AES variant (bespoke to AEZ), hence a
+    separate family from aes/rijndael rather than an instance of either.'
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - rijndael_aes_round
+  target_applications:
+  - software
+  characteristics:
+    block_size_bits: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - hoang_krovetz_rogaway_2017_aez_v5
+  process_participations: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - variant_of
+    note: AES4/AES10 reuse the unmodified AES round function (SubBytes/ShiftRows/MixColumns/AddRoundKey), just
+      with a different round count and, unlike AES, without omitting the final round's MixColumns.
+  instances:
+  - id: aes4
+    name: AES4
+    type: block_cipher
+    reference_ids:
+    - hoang_krovetz_rogaway_2017_aez_v5
+    characteristics:
+      key_size_bits: 640
+      rounds: 4
+      block_size_bits: 128
+      output_size_bits: 128
+    notes: 4 rounds, 5 independent round-key blocks; AEZ-tiny's Feistel round function and one of the two calls
+      forming AEZ-core's per-block-pair enciphering step.
+  - id: aes10
+    name: AES10
+    type: block_cipher
+    reference_ids:
+    - hoang_krovetz_rogaway_2017_aez_v5
+    characteristics:
+      key_size_bits: 1408
+      rounds: 10
+      block_size_bits: 128
+      output_size_bits: 128
+    notes: AES4 composed end-to-end to full AES-like round count (10 rounds), used where AEZ needs a
+      stronger/slower enciphering step.
 - id: salsa20
   name: Salsa20 Update Function
   notes: 'Bernstein''s 2005 specification formally defines three functions built up from bottom to top: the "Salsa20 hash

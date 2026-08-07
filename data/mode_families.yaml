@@ -11721,3 +11721,302 @@ mode_families:
       nonce_size_bits: 128
       tag_size_bits: 128
     notes: CAESAR final-portfolio second choice for use case 3 (defense in depth).
+- id: aes_otr
+  name: AES-OTR
+  notes: 'AES-OTR instantiates Minematsu''s OTR ("Offset Two-Round") blockcipher AEAD mode with AES. Plaintext is
+    processed in pairs of 128-bit blocks; each pair is encrypted with two ordinary AES calls masked by
+    GF(2^128)-doubling-derived offsets (the same Rogaway-style masking technique OCB uses), giving a fully
+    parallelizable mode that, unlike OCB, needs no block-cipher inverse for decryption. Supports parallel or
+    serial associated-data processing as a configurable parameter. Reached CAESAR round 3 but was not selected
+    for the final portfolio.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - minematsu_2016_aes_otr_v3_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    status: finalist
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: AES-OTR's two masked block-cipher calls per block pair are unmodified AES-128/192/256.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: aes128otrpv1
+    name: aes128otrpv1
+    type: aead
+    reference_ids:
+    - minematsu_2016_aes_otr_v3_1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 128
+    notes: Primary recommended parameter set (AES-128, 12-byte nonce, 16-byte tag, parallel associated-data
+      processing).
+- id: aez
+  name: AEZ
+  notes: 'AEZ ("Authenticated Encryption by Enciphering") builds a misuse-resistant AEAD by defining a
+    tweakable, arbitrary-input-length "enciphering" scheme (a wide-block tweakable PRP keyed and tweaked by the
+    nonce/associated-data/requested-expansion) and encrypting the plaintext concatenated with a fixed
+    authentication block under it -- decryption failure (bad tag) is then simply "the deciphered redundancy
+    block doesn''t match", giving automatic misuse resistance and arbitrary, user-selectable ciphertext expansion
+    (including zero). Small messages use AEZ-tiny, a balanced-Feistel scheme; larger ones use an AES4-based
+    enciphering core (AES4 = 4 rounds of the AES round function, chained; see the aez_aes4 family''s aes4/aes10
+    instances) -- about 10 AES rounds per consecutive block pair, keeping AEZ''s cost close to AES-CTR. Reached
+    CAESAR round 3 but was not selected for the final portfolio.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - hoang_krovetz_rogaway_2017_aez_v5
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    status: finalist
+  influences:
+  - source_family_id: aez_aes4
+    relations:
+    - used_by
+    note: AEZ's enciphering core is built from AES4/AES10 -- 4- and 10-round variants of the AES round function
+      that, unlike standard AES, keep the final round's MixColumns.
+  underlying_primitive_ids:
+  - aes4
+  - aes10
+  instances:
+  - id: aez_v5
+    name: AEZ v5
+    type: aead
+    reference_ids:
+    - hoang_krovetz_rogaway_2017_aez_v5
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+    notes: Ciphertext expansion (effectively the tag length) is an arbitrary, user-selectable parameter rather
+      than fixed, including zero.
+- id: cloc
+  name: CLOC
+  notes: 'CLOC ("Compact Low-Overhead CFB") is a CFB-based block-cipher AEAD mode targeting low implementation
+    overhead, low precomputation cost, and efficient handling of short messages -- built to improve on CCM/EAX
+    while avoiding finite-field multiplication. Instantiated over AES-128 (16-byte block, the primary variant)
+    or TWINE-80 (8-byte block, for more constrained settings). SILC (see silc) is built directly on top of CLOC.
+    Reached CAESAR round 3 but was not selected for the final portfolio.'
+  construction_ids:
+  - block_cipher_based
+  - cfb_mode
+  target_applications:
+  - software
+  - hardware
+  - iot
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - iwata_et_al_2016_cloc_silc_v3
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    status: finalist
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: CLOC's primary instantiation uses unmodified AES-128 as its underlying block cipher.
+  - source_family_id: twine
+    relations:
+    - used_by
+    note: CLOC's lightweight instantiation uses TWINE-80 (8-byte block) instead of AES-128.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: cloc_aes128
+    name: CLOC[AES-128]
+    type: aead
+    reference_ids:
+    - iwata_et_al_2016_cloc_silc_v3
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 128
+    notes: Nonce length is configurable (64/96/112 bits) and tag length is configurable (32/64/96/128 bits) for
+      the AES-128 instantiation; 96-bit nonce and 128-bit tag shown as representative values.
+- id: silc
+  name: SILC
+  notes: 'SILC ("SImple Lightweight CFB") is built directly on top of CLOC''s CFB-based block-cipher AEAD design,
+    with further changes specifically to reduce hardware implementation cost while keeping the same
+    provable-security basis (pseudorandomness of the underlying block cipher). Instantiated over AES-128
+    (16-byte block) or PRESENT-80/LED-80 (8-byte block, for constrained hardware). Reached CAESAR round 3 but
+    was not selected for the final portfolio.'
+  construction_ids:
+  - block_cipher_based
+  - cfb_mode
+  target_applications:
+  - hardware
+  - iot
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - iwata_et_al_2016_cloc_silc_v3
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    status: finalist
+  influences:
+  - source_family_id: cloc
+    relations:
+    - variant_of
+    note: 'SILC''s own paper: "SILC is built upon CLOC" -- same CFB-based AEAD structure, further optimized for
+      hardware implementation cost.'
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: SILC's primary instantiation uses unmodified AES-128 as its underlying block cipher.
+  - source_family_id: present
+    relations:
+    - used_by
+    note: SILC's lightweight instantiation uses PRESENT-80 (8-byte block) instead of AES-128.
+  - source_family_id: led
+    relations:
+    - used_by
+    note: SILC's lightweight instantiation can alternatively use LED-80 (8-byte block) instead of AES-128.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: silc_aes128
+    name: SILC[AES-128]
+    type: aead
+    reference_ids:
+    - iwata_et_al_2016_cloc_silc_v3
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 128
+    notes: Nonce length is configurable (64/96/112 bits) and tag length is configurable (32/64/96/128 bits) for
+      the AES-128 instantiation; 96-bit nonce and 128-bit tag shown as representative values.
+- id: jambu
+  name: JAMBU
+  notes: 'JAMBU is a lightweight block-cipher AEAD mode keeping a compact state (roughly 1.5-2x the block cipher''s
+    own block size) by chaining block-cipher calls with an XOR-feedback path shared between the encryption and
+    authentication steps, so no separate large state is needed for the tag. The submission''s own primary
+    recommendation is SIMON-JAMBU (several SIMON block/key-size profiles, e.g. SIMON-JAMBU96/96: 96-bit key,
+    48-bit nonce, 144-bit state, 48-bit tag); AES-JAMBU (128-bit key, 64-bit nonce, 192-bit state, 64-bit tag) is
+    offered as a simpler-to-analyze alternative "when authenticated encryption is needed together with other
+    AES-based functionalities". Reached CAESAR round 3 but was not selected for the final portfolio.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - iot
+  - hardware
+  characteristics:
+    components:
+    - id: xor
+  reference_ids:
+  - wu_huang_2016_jambu_v2_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    status: finalist
+  influences:
+  - source_family_id: simon
+    relations:
+    - used_by
+    note: JAMBU's own primary recommendation (SIMON-JAMBU) chains SIMON block-cipher calls with the JAMBU
+      feedback path; this database's simon family currently only carries 64- and 128-bit-block instances, not
+      the 96-bit-block profile SIMON-JAMBU96/96 itself recommends.
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: AES-JAMBU chains unmodified AES-128 calls with the same JAMBU feedback path, offered as a
+      simpler-to-analyze alternative to SIMON-JAMBU.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: aes_jambu
+    name: AES-JAMBU
+    type: aead
+    reference_ids:
+    - wu_huang_2016_jambu_v2_1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      nonce_size_bits: 64
+      tag_size_bits: 64
+      state_size_bits: 192

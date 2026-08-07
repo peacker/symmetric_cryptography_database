@@ -408,13 +408,19 @@ processes:
     - name: Silver
     - name: Wheesht
     - name: YAES
-    - name: AES-OTR
-    - name: AEZ
-    - name: CLOC
+    - family_id: aes_otr
+      name: AES-OTR
+    - family_id: aez
+      name: AEZ
+    - family_id: cloc
+      name: CLOC
+    - family_id: silc
+      name: SILC
     - name: Deoxys-I
     - family_id: deoxys
       name: Deoxys-II
-    - name: JAMBU
+    - family_id: jambu
+      name: JAMBU
     - name: Ketje
     - name: Keyak
     - family_id: norx
@@ -456,15 +462,21 @@ processes:
     label: Round 2 (Second Round)
     kind: round
     participants:
-    - name: AES-OTR
-    - name: AEZ
-    - name: CLOC and SILC
+    - family_id: aes_otr
+      name: AES-OTR
+    - family_id: aez
+      name: AEZ
+    - family_id: cloc
+      name: CLOC
+    - family_id: silc
+      name: SILC
     - name: Deoxys-I
     - family_id: deoxys
       name: Deoxys-II
     - name: HS1-SIV
     - name: ICEPOLE
-    - name: JAMBU
+    - family_id: jambu
+      name: JAMBU
     - family_id: joltik_bc
       name: Joltik
     - name: Ketje
@@ -508,13 +520,19 @@ processes:
     label: Round 3 (Third Round)
     kind: round
     participants:
-    - name: AES-OTR
-    - name: AEZ
-    - name: CLOC and SILC
+    - family_id: aes_otr
+      name: AES-OTR
+    - family_id: aez
+      name: AEZ
+    - family_id: cloc
+      name: CLOC
+    - family_id: silc
+      name: SILC
     - name: Deoxys-I
     - family_id: deoxys
       name: Deoxys-II
-    - name: JAMBU
+    - family_id: jambu
+      name: JAMBU
     - name: Ketje
     - name: Keyak
     - family_id: norx
