@@ -412,11 +412,13 @@ processes:
     - name: AEZ
     - name: CLOC
     - name: Deoxys-I
-    - name: Deoxys-II
+    - family_id: deoxys
+      name: Deoxys-II
     - name: JAMBU
     - name: Ketje
     - name: Keyak
-    - name: NORX
+    - family_id: norx
+      name: NORX
     - name: Tiaoxin
     - name: HS1-SIV
     - name: ICEPOLE
@@ -450,7 +452,8 @@ processes:
     - name: AEZ
     - name: CLOC and SILC
     - name: Deoxys-I
-    - name: Deoxys-II
+    - family_id: deoxys
+      name: Deoxys-II
     - name: HS1-SIV
     - name: ICEPOLE
     - name: JAMBU
@@ -474,12 +477,14 @@ processes:
     - name: ACORN
     - name: AEGIS-128
     - name: OCB
-    - name: Deoxys-II
+    - family_id: deoxys
+      name: Deoxys-II
     - name: COLM
     - name: AEGIS-128L
     - name: AEGIS-256
     - name: MORUS
-    - name: NORX
+    - family_id: norx
+      name: NORX
     - name: Tiaoxin
   - id: round_3
     label: Round 3 (Third Round)
@@ -489,11 +494,13 @@ processes:
     - name: AEZ
     - name: CLOC and SILC
     - name: Deoxys-I
-    - name: Deoxys-II
+    - family_id: deoxys
+      name: Deoxys-II
     - name: JAMBU
     - name: Ketje
     - name: Keyak
-    - name: NORX
+    - family_id: norx
+      name: NORX
     - name: Tiaoxin
     - family_id: ascon
       name: Ascon
@@ -526,7 +533,8 @@ processes:
     label: Final Portfolio – Use Case 3 (Defense in depth)
     kind: portfolio
     participants:
-    - name: Deoxys-II
+    - family_id: deoxys
+      name: Deoxys-II
       note: First choice
     - name: COLM
       note: Second choice

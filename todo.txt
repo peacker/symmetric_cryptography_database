@@ -2,6 +2,13 @@ TODO:
 
 - add pbkfd2 pdf
 
+- consider adding the ~20 CAESAR competition participants that don't exist as families yet: ACORN, the AEGIS
+  family (128/128L/256), OCB, Keyak, Ketje, MORUS, COLM, AEZ, Minalpher, PAEQ, POET, PRIMATEs, STRIBOB, Tiaoxin,
+  TriviA-ck, HS1-SIV, ICEPOLE, JAMBU, AES-OTR, and others (see the caesar_competition_nist_2013_2019 process's
+  full participant list in data/processes.yaml for the complete round-1 roster). Found while investigating why
+  only Joltik/SCREAM showed as CAESAR on the Timeline (see DONE section, nineteenth follow-up round) -- NORX and
+  Deoxys existed but were missing their process link (now fixed); these ~20 don't exist as families at all.
+
 
 - Proposed visualizations (requested: "propose other interesting visualizations"; see DONE section for the
   request itself). None of these are implemented yet -- flagging as new tasks per the request:
@@ -102,6 +109,29 @@ TODO:
 
 
 DONE:
+
+- Nineteenth follow-up round: you asked why the Timeline only shows Joltik and SCREAM as CAESAR Competition
+  participants when far more ciphers actually competed. Investigated both directions:
+  1. Explained the Joltik/SCREAM-only discrepancy you found in process_stage_participants: Ascon's family_id was
+     actually already linked there too (3 families, not 2) -- it just doesn't show as CAESAR on the Timeline
+     because each family gets exactly ONE "primary" process for display purposes (family_process_map in
+     build_static_site.py, ranked winner > recommended > ... > finalist > ... > portfolio > ...), and Ascon's
+     NIST LWC "winner" status outranks its CAESAR "portfolio" status. Not a bug -- confirmed by design.
+  2. Cross-referenced all 60 distinct CAESAR participant names logged in data/processes.yaml against every
+     existing family (by name, id, and instance name) to find real gaps. Found two: NORX and Deoxys both already
+     exist as families here, and Deoxys's own notes even already say "CAESAR finalist, 2016" and NORX's own notes
+     say "submitted to the CAESAR competition" -- but neither had process_participations set, so neither ever
+     showed as a CAESAR family anywhere in the app. Fixed both (NORX: round_1-3, status finalist -- reached the
+     last round but wasn't selected for a final portfolio; Deoxys: round_1-3 plus final_portfolio_uc3, status
+     portfolio, matching how Ascon's own "First choice" UC1 pick was recorded -- Deoxys-II was UC3's "First
+     choice"), and added the matching family_id back-references in processes.yaml's own participant lists for
+     both, mirroring the existing joltik_bc/scream_tbc/ascon pattern. Verified in the rebuilt data.js that
+     norx/deoxys/joltik_bc/scream_tbc now all map to CAESAR as their primary process (Ascon correctly still maps
+     to NIST LWC). make test all green (497 families, unchanged -- no new families added, just filled in existing
+     ones' data).
+  About two dozen other well-known CAESAR participants (ACORN, the AEGIS family, OCB, Keyak/Ketje, MORUS, COLM,
+  AEZ, and more) genuinely don't exist as families in this database at all yet -- flagged for you, not started,
+  since adding ~20 new cipher families is a much bigger scope than this fix and deserves its own explicit go-ahead.
 
 - Eighteenth follow-up round: you noticed the AES'-128/128 (mixFeed's underlying block cipher) node tooltip in
   the Genealogy tab showed only Type/Construction/Process, missing the crucial "MixColumns also applied in the

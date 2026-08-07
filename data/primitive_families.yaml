@@ -4687,7 +4687,13 @@ primitive_families:
     - id: constant
   reference_ids:
   - aumasson_et_al_2016_norx
-  process_participations: []
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    status: finalist
   influences:
   - source_family_id: chacha
     relations:
@@ -7033,7 +7039,14 @@ primitive_families:
     - id: xor
   reference_ids:
   - deoxys_ref
-  process_participations: []
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    - final_portfolio_uc3
+    status: portfolio
   influences:
   - source_family_id: aes
     relations:
