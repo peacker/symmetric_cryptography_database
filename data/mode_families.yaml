@@ -13623,3 +13623,437 @@ mode_families:
       key_size_bits: 128
       nonce_size_bits: 127
       tag_size_bits: 128
+- id: aes_cobra
+  name: AES-COBRA
+  notes: 'AES-COBRA, by Andreeva, Bogdanov, Lauridsen, Luykx, Mennink, Tischhauser, and Yasuda, is a fully
+    parallelizable, single-pass, rate-1 AEAD mode of operation built on AES (COBRA = COmBining block-cipher-based
+    RAndomized encryption with authentication). It supports 128/192/256-bit keys (matching AES), an optional
+    0-128-bit nonce, and a 64-128-bit tag. Withdrawn from CAESAR on 2014.03.28, weeks after submission, after
+    Mridul Nandi found a forging attack against the scheme''s security proof; the designers judged fixing it would
+    cost too much efficiency to remain competitive and withdrew rather than revise.'
+  construction_ids:
+  - block_cipher_based
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: xor
+  reference_ids:
+  - andreeva_et_al_2014_aes_cobra_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  underlying_primitive_ids:
+  - aes_128
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: AES-COBRA is a mode of operation built directly on the AES block cipher (in its 128/192/256-bit key
+      variants), its sole underlying primitive.
+  instances:
+  - id: aes_cobra_v1
+    name: AES-COBRA v1
+    type: aead
+    reference_ids:
+    - andreeva_et_al_2014_aes_cobra_v1
+    characteristics:
+      key_size_bits: 128
+      tag_size_bits: 128
+- id: calico
+  name: Calico
+  notes: 'Calico, by independent designer Christopher Taylor, is a lightweight AEAD scheme combining three
+    pre-existing, unmodified primitives designed by others: ChaCha-14 (a non-standard-round-count ChaCha variant,
+    plus ChaCha-20 for key derivation) for encryption, SipHash-2-4 for fast internal MAC operations, and BLAKE2 as
+    a keyed hash for the final authentication tag. Three parameter sets were specified (Reference, Datagram,
+    Stream), tuned respectively for the CAESAR competition, UDP-style, and TCP-style full-duplex usage. 256-bit
+    key, 256-bit tag (Reference mode). Withdrawn from CAESAR round 1 (2014.09.13) for non-technical reasons, not a
+    discovered attack.'
+  construction_ids:
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: xor
+    - id: add_mod
+    - id: rotation_fixed
+  reference_ids:
+  - taylor_2014_calico_v8
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  underlying_primitive_ids:
+  - chacha14_block_function
+  - siphash_2_4
+  - blake2s_compression
+  influences:
+  - source_family_id: chacha
+    relations:
+    - used_by
+    note: Calico uses unmodified ChaCha-14 (a non-standard round count) for its core stream encryption and ChaCha-20
+      for key derivation.
+  - source_family_id: siphash
+    relations:
+    - used_by
+    note: Calico uses unmodified SipHash-2-4 internally as a fast MAC.
+  - source_family_id: blake2
+    relations:
+    - used_by
+    note: Calico uses BLAKE2, keyed, as its final authentication-tag hash.
+  instances:
+  - id: calico_reference_v8
+    name: Calico (Reference parameter set) v8
+    type: aead
+    reference_ids:
+    - taylor_2014_calico_v8
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 64
+      tag_size_bits: 256
+- id: cbeam
+  name: CBEAM
+  notes: 'CBEAM, by Markku-Juhani O. Saarinen, is a sponge-based AEAD scheme (the BLNK sponge mode, shared with the
+    author''s separate STRIBOB submission) built on pi = mx^6, a 256-bit permutation of entirely original design
+    based on rotation-invariant nonlinear phi functions and "feeble Boolean one-wayness" -- described by the author
+    as geared toward lightweight, limited-resource applications, in contrast to STRIBOB''s AES/Whirlpool-derived,
+    high-security-oriented permutation (the two submissions share only the BLNK padding/mode layer, not any
+    permutation design). Withdrawn from CAESAR round 1 (2014.04.03) after Brice Minaud found a simple attack
+    against the Pi permutation.'
+  construction_ids:
+  - duplex_construction
+  target_applications:
+  - hardware
+  - software
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: xor
+    - id: rotation_fixed
+    - id: nonlinear_filter
+  reference_ids:
+  - saarinen_2014_cbeam_r1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: stribob
+    relations:
+    - related_to
+    note: CBEAM and STRIBOB, both by Saarinen, share only the BLNK sponge padding/mode layer -- their internal
+      permutations are unrelated, original designs (CBEAM's Pi is based on rotation-invariant phi functions;
+      STRIBOB's is derived from Whirlpool).
+  instances:
+  - id: cbeam128r1
+    name: cbeam128r1
+    type: aead
+    reference_ids:
+    - saarinen_2014_cbeam_r1
+    characteristics:
+      state_size_bits: 256
+      key_size_bits: 128
+- id: faser
+  name: FASER
+  notes: 'FASER, by Chaza, McDonald, and Avanzi, is a family of two authenticated stream ciphers, FASER128 and
+    FASER256, built around a custom feedback shift register (FSR) composed of several coprime-length sub-FSRs
+    (8 for FASER128, 12 for FASER256) each updating a distinct region of one of two parallel same-size state
+    registers -- one dedicated to encryption, one to authentication (accumulator). FASER128 uses 256-bit encryption
+    and authentication registers (80/128-bit key); FASER256 uses 384-bit registers (192/256-bit key). Withdrawn
+    from CAESAR round 1 (2014.04.11), a month after submission, following Xiutao Feng''s realtime key-recovery
+    attack on FASER128.'
+  construction_ids:
+  - native_keystream_generator
+  target_applications:
+  - hardware
+  - software
+  characteristics:
+    components:
+    - id: fcsr
+    - id: xor
+  reference_ids:
+  - chaza_et_al_2014_faser_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  instances:
+  - id: faser128
+    name: FASER128
+    type: aead
+    reference_ids:
+    - chaza_et_al_2014_faser_v1
+    characteristics:
+      state_size_bits: 256
+      key_size_bits: 128
+      tag_size_bits: 128
+  - id: faser256
+    name: FASER256
+    type: aead
+    reference_ids:
+    - chaza_et_al_2014_faser_v1
+    characteristics:
+      state_size_bits: 384
+      key_size_bits: 256
+      tag_size_bits: 128
+- id: hkc
+  name: HKC
+  notes: 'HKC, by Henricksen, Kiyomoto, and Lu, is a "encrypt-then-MAC" stream-cipher-based AEAD scheme built by
+    extending Hongjun Wu''s HC-256 (an eSTREAM software-portfolio cipher): a 512-element table W generates
+    keystream as in HC-256, while a separate 4-element register M accumulates a MAC over the ciphertext (and
+    optionally associated data) using the same update functions, adding built-in authentication that plain
+    HC-256 lacks. 256-bit key, 256-bit IV, 256-bit MAC/tag. Withdrawn from CAESAR round 1 (2014.04.08) by its own
+    designers to reconsider the MAC generation, not due to a published attack.'
+  construction_ids:
+  - native_keystream_generator
+  target_applications:
+  - software
+  characteristics:
+    state_size_bits: 33024
+    components:
+    - id: lookup_table
+      params:
+        count: 2
+        entries_per_table: 256
+        entry_size_bits: 64
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - henricksen_et_al_2014_hkc_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: hc_256
+    relations:
+    - variant_of
+    note: HKC directly extends HC-256's table-based keystream generator (same 512-element table structure and
+      update functions), adding a second, dedicated 4-element MAC-accumulation register to provide built-in
+      authentication.
+  instances:
+  - id: hkc_v1
+    name: HKC v1
+    type: aead
+    reference_ids:
+    - henricksen_et_al_2014_hkc_v1
+    characteristics:
+      state_size_bits: 33024
+      key_size_bits: 256
+      nonce_size_bits: 256
+      tag_size_bits: 256
+- id: marble
+  name: Marble
+  notes: 'Marble, by Jian Guo, is an authenticated cipher built from three parallel 4-round-reduced AES ciphers
+    E1, E2, E3 (each keyed with a distinct third of the 11 AES-128 round-key schedule, with no final key
+    whitening), combined with a GF(2^128) chaining/mixing layer (TRANS(x,y) = (x+y, 3x+y)) reminiscent of
+    AEGIS-style AES-round-function-based AEAD. 128-bit key, 128-bit tag; no nonce is required, and repeated
+    associated data is explicitly allowed. Withdrawn from CAESAR round 1 (2015.01.23) after Peyrin, Leurent, and
+    Suder found a forgery attack breaking the claimed birthday-bound security.'
+  construction_ids:
+  - block_cipher_based
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+        note: AES S-box
+    - id: bit_permutation
+      params:
+        note: AES ShiftRows
+    - id: mix_columns
+      params:
+        note: AES MixColumns over GF(2^8)
+    - id: field_matrix_mul
+    - id: xor
+  reference_ids:
+  - guo_2014_marble_v11
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: Marble's three parallel round functions E1, E2, E3 are each 4 rounds of the unmodified AES round
+      function, keyed from distinct thirds of the standard AES-128 key schedule.
+  instances:
+  - id: marble_v11
+    name: Marble v1.1
+    type: aead
+    reference_ids:
+    - guo_2014_marble_v11
+    characteristics:
+      key_size_bits: 128
+      tag_size_bits: 128
+      rounds: 4
+- id: mcmambo
+  name: McMambo
+  notes: 'McMambo, by Watson Ladd, is an online AEAD mode built on the bespoke Mambo tweakable block cipher: an
+    OFB-like chaining construction where each block''s ciphertext feeds forward as the tweak for the next Mambo
+    invocation, processing associated data first, then a nonce-derived checksum, then the message, with a final
+    Mambo call producing the tag. 256-bit key, 512-bit tag. Withdrawn from CAESAR round 1 (2014.05.16) by the
+    designer after a large differential probability producing a forgery was found shortly after submission.'
+  construction_ids:
+  - block_cipher_based
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: xor
+  reference_ids:
+  - ladd_2014_mcmambo_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  underlying_primitive_ids:
+  - mambo_512_256
+  influences:
+  - source_family_id: mambo
+    relations:
+    - used_by
+    note: McMambo's chaining mode uses the Mambo tweakable block cipher, submitted alongside it in the same
+      document, as its sole underlying primitive.
+  instances:
+  - id: mcmambo_v1
+    name: McMambo v1
+    type: aead
+    reference_ids:
+    - ladd_2014_mcmambo_v1
+    characteristics:
+      key_size_bits: 256
+      tag_size_bits: 512
+- id: paes
+  name: PAES
+  notes: 'PAES, by Ye, Wang, Hu, Wang, Xie, Sun, and Wang (Chinese Academy of Sciences), is a family of two
+    AEGIS-inspired, AES-round-function-based AEAD schemes: PAES-4 (4-block, 512-bit state) and PAES-8 (8-block,
+    1024-bit state), each block being a 128-bit AES round-function application. PAES-8 trades a larger state for
+    extra robustness against nonce reuse compared to PAES-4/AEGIS-128. 128-bit key, 128-bit nonce, 128-bit tag.
+    Withdrawn from CAESAR round 1 (2014.05.13), together with the same team''s PANDA submission, after
+    accumulated cryptanalysis pushed both designs "far from [the designers''] original vision."'
+  construction_ids:
+  - block_cipher_based
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+        note: AES S-box
+    - id: bit_permutation
+      params:
+        note: AES ShiftRows
+    - id: mix_columns
+      params:
+        note: AES MixColumns over GF(2^8)
+    - id: xor
+  reference_ids:
+  - ye_et_al_2014_paes_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: PAES-4/PAES-8 update their multi-block state using single unmodified AES rounds (SubBytes, ShiftRows,
+      MixColumns) applied per block.
+  - source_family_id: aegis
+    relations:
+    - inspired_by
+    note: PAES's own introduction frames it explicitly as motivated by AEGIS's AES-round-function-based
+      parallel-block state design, aiming to preserve AEGIS's speed while addressing its nonce-reuse fragility.
+  instances:
+  - id: paes_4
+    name: PAES-4
+    type: aead
+    reference_ids:
+    - ye_et_al_2014_paes_v1
+    characteristics:
+      state_size_bits: 512
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+  - id: paes_8
+    name: PAES-8
+    type: aead
+    reference_ids:
+    - ye_et_al_2014_paes_v1
+    characteristics:
+      state_size_bits: 1024
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+- id: panda
+  name: PANDA
+  notes: 'PANDA, by the same team as PAES (Ye, Wang, Hu, Wang, Xie, Sun, and Wang), is a family of two AEAD
+    schemes, PANDA-s and PANDA-b, built from an entirely original (not AES-derived) round function that applies
+    4-bit S-boxes (SubNibbles) and a linear transformation in parallel across the state, rather than the usual
+    serial SPN layering -- chosen so the round function and its inverse share components efficiently. PANDA-s
+    mixes a stream cipher with a MAC in a sponge-like fashion; PANDA-b uses a 14-round permutation as an online
+    cipher, structurally similar to APE. 128-bit key, 128-bit nonce, 128-bit tag. Withdrawn from CAESAR round 1
+    (2014.05.13), together with the same team''s PAES submission, after accumulated cryptanalysis pushed both
+    designs "far from [the designers''] original vision."'
+  construction_ids:
+  - native_keystream_generator
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: linear_transform
+    - id: xor
+  reference_ids:
+  - ye_et_al_2014_panda_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  instances:
+  - id: panda_s
+    name: PANDA-s
+    type: aead
+    reference_ids:
+    - ye_et_al_2014_panda_v1
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+  - id: panda_b
+    name: PANDA-b
+    type: aead
+    reference_ids:
+    - ye_et_al_2014_panda_v1
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      rounds: 14

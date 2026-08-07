@@ -384,21 +384,26 @@ processes:
       name: ++AE
     - family_id: aes_cmcc
       name: AES-CMCC
-    - name: AES-COBRA
+    - family_id: aes_cobra
+      name: AES-COBRA
     - family_id: aes_cpfb
       name: AES-CPFB
     - family_id: artemia
       name: Artemia
     - family_id: avalanche
       name: AVALANCHE
-    - name: Calico
+    - family_id: calico
+      name: Calico
     - family_id: cba
       name: CBA
-    - name: CBEAM
+    - family_id: cbeam
+      name: CBEAM
     - family_id: enchilada
       name: Enchilada
-    - name: FASER
-    - name: HKC
+    - family_id: faser
+      name: FASER
+    - family_id: hkc
+      name: HKC
     - family_id: ifeed_aes
       name: iFeed[AES]
     - family_id: iscream
@@ -409,10 +414,14 @@ processes:
       name: KIASU
     - family_id: lac
       name: LAC
-    - name: Marble
-    - name: McMambo
-    - name: PAES
-    - name: PANDA
+    - family_id: marble
+      name: Marble
+    - family_id: mcmambo
+      name: McMambo
+    - family_id: paes
+      name: PAES
+    - family_id: panda
+      name: PANDA
     - family_id: polawis
       name: POLAWIS
     - family_id: proest

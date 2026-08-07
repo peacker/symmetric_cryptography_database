@@ -5762,3 +5762,22 @@ rounds:
     paired LFSR+NLFSR structure, Espresso uses a single register whose Galois-configuration feedback is
     constructed (per Dubrova''s prior transformation methodology) to be equivalent to a maximum-length LFSR,
     guaranteeing period 2^256-1.'
+- id: mambo_round
+  name: Mambo Round
+  kind: full_round
+  spec:
+    state_model:
+      layout: 4x4_words
+      word_bits: 32
+      state_bits: 512
+    component_flow:
+    - component_id: and
+    - component_id: or
+    - component_id: xor
+    - component_id: rotation_fixed
+    constant_injection: round_counter
+  notes: 'The Mambo round applies the nonlinear bijection Q(x0,x1,x2,x3) -- built from AND, OR, NAND, NOR, XOR,
+    and fixed rotations -- to each row and then each column of the 4x4 32-bit-word state, followed by a
+    checkerboard-pattern key/round-counter XOR injection.
+
+    '

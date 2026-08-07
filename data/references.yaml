@@ -6518,3 +6518,129 @@ references:
     references/[2014][yaes][][caesar_round1_v1].pdf (2014.03.15) and
     references/[2014][yaes][][caesar_round1_v2].pdf (2014.05.14, corrected the GF(2^128) bit-ordering convention
     and generalized the round-key start index of the AES128[r]Rounds subroutine).'
+- id: andreeva_et_al_2014_aes_cobra_v1
+  kind: paper
+  title: AES-COBRA v1
+  authors:
+  - Elena Andreeva
+  - Andrey Bogdanov
+  - Martin M. Lauridsen
+  - Atul Luykx
+  - Bart Mennink
+  - Elmar Tischhauser
+  - Kan Yasuda
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/aescobrav1.pdf
+  notes: 'CAESAR round-1 candidate; withdrawn on 2014.03.28 (a few weeks after submission) after Mridul Nandi found
+    a forging attack against COBRA''s underlying proof. Local copy of the sole submitted version:
+    references/[2014][aes_cobra][][caesar_round1_v1].pdf. The withdrawal e-mail is preserved separately in the
+    project''s CAESAR working notes and is not itself a technical specification.'
+- id: taylor_2014_calico_v8
+  kind: paper
+  title: The Calico Family of Authenticated Ciphers (Version 8)
+  authors:
+  - Christopher Taylor
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/calicov8.pdf
+  notes: 'CAESAR round-1 candidate; withdrawn on 2014.09.13 for non-technical reasons (the designer cited a demanding
+    new job leaving no time to maintain the submission), not due to any discovered attack. Local copy of the latest
+    (v8, the only one archived on the CAESAR site) submitted version:
+    references/[2014][calico][][caesar_round1_v8].pdf.'
+- id: saarinen_2014_cbeam_r1
+  kind: paper
+  title: The CBEAMr1 Authenticated Encryption Algorithm
+  authors:
+  - Markku-Juhani O. Saarinen
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/cbeamr1.pdf
+  notes: 'CAESAR round-1 candidate; withdrawn on 2014.04.03 after Brice Minaud found a simple attack against the
+    CBEAM Pi permutation. Local copy of the sole submitted version:
+    references/[2014][cbeam][][caesar_round1_v1].pdf.'
+- id: chaza_et_al_2014_faser_v1
+  kind: paper
+  title: 'FASER v1: Authenticated Encryption in a Feedback Shift Register'
+  authors:
+  - Faith Chaza
+  - Cameron McDonald
+  - Roberto Avanzi
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/faserv1.pdf
+  notes: 'CAESAR round-1 candidate; withdrawn on 2014.04.11 after Xiutao Feng found a realtime key-recovery attack
+    on FASER128. Local copy of the sole submitted version:
+    references/[2014][faser][][caesar_round1_v1].pdf.'
+- id: henricksen_et_al_2014_hkc_v1
+  kind: paper
+  title: The HKC authenticated stream cipher (Ver.1)
+  authors:
+  - Matt Henricksen
+  - Shinsaku Kiyomoto
+  - Jiqiang Lu
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/hkcv1.pdf
+  notes: 'CAESAR round-1 candidate; withdrawn on 2014.04.08 by the designers themselves to reconsider the MAC
+    generation part, not due to a published break. Local copy of the sole submitted version:
+    references/[2014][hkc][][caesar_round1_v1].pdf.'
+- id: guo_2014_marble_v11
+  kind: paper
+  title: Marble Specification (Version 1.1)
+  authors:
+  - Jian Guo
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/marblev11.pdf
+  notes: 'CAESAR round-1 candidate; withdrawn on 2015.01.23 after Thomas Peyrin, Gaetan Leurent, and Valentin
+    Suder found a birthday-bound-breaking forgery attack. Local copies of both submitted versions:
+    references/[2014][marble][][caesar_round1_v1.0].pdf (2014.03.15, round 1) and
+    references/[2014][marble][][caesar_round1_v1.1_final].pdf (2014.03.26, minor revision, final).'
+- id: ladd_2014_mcmambo_v1
+  kind: paper
+  title: 'McMambo v1: A New Kind of Latin Dance'
+  authors:
+  - Watson Ladd
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/mcmambov1.pdf
+  notes: 'CAESAR round-1 candidate; withdrawn on 2014.05.16 by the designer after a large differential probability
+    producing a forgery was found shortly after submission. Local copy of the sole submitted version (covering
+    both the Mambo block cipher and the McMambo AEAD mode):
+    references/[2014][mambo,mcmambo][][caesar_round1_v1].pdf.'
+- id: ye_et_al_2014_paes_v1
+  kind: paper
+  title: 'PAES v1: Parallelizable Authenticated Encryption Schemes based on AES Round Function'
+  authors:
+  - Dingfeng Ye
+  - Peng Wang
+  - Lei Hu
+  - Liping Wang
+  - Yonghong Xie
+  - Siwei Sun
+  - Ping Wang
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/paesv1.pdf
+  notes: 'CAESAR round-1 candidate; withdrawn together with the same team''s PANDA submission on 2014.05.13,
+    citing accumulated attacks (from Jean, Nikolic, Sasaki, L. Wang, Feng, Zhang, H. Wang, and Sui) that had
+    pushed both designs "far from our original vision." Local copy of the sole submitted version:
+    references/[2014][paes][][caesar_round1_v1].pdf.'
+- id: ye_et_al_2014_panda_v1
+  kind: paper
+  title: PANDA v1
+  authors:
+  - Dingfeng Ye
+  - Peng Wang
+  - Lei Hu
+  - Liping Wang
+  - Yonghong Xie
+  - Siwei Sun
+  - Ping Wang
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/pandav1.pdf
+  notes: 'CAESAR round-1 candidate; withdrawn together with the same team''s PAES submission on 2014.05.13,
+    citing accumulated attacks that had pushed both designs "far from our original vision." Local copy of the
+    sole submitted version: references/[2014][panda][][caesar_round1_v1].pdf.'

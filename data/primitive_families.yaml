@@ -1024,6 +1024,23 @@ primitive_families:
       output_size_bits: 512
     notes: Bernstein's original (2008) 8-round ChaCha block function, with a 64-bit nonce and 64-bit block counter matching
       Salsa20's layout, usable with a 128- or 256-bit key.
+  - id: chacha14_block_function
+    name: ChaCha14 Block Function
+    type: update_function
+    reference_ids:
+    - bernstein_2008_chacha
+    - taylor_2014_calico_v8
+    characteristics:
+      key_size_bits_min: 128
+      key_size_bits_max: 256
+      nonce_size_bits: 64
+      block_count_bits: 64
+      state_size_bits: 512
+      rounds: 14
+      block_size_bits: 512
+      output_size_bits: 512
+    notes: A non-standard round count between Bernstein's original ChaCha12 and ChaCha20, not defined in Bernstein's
+      own paper; adopted by the Calico AEAD family as its key-derivation and stream-generation primitive.
   - id: chacha12_block_function
     name: ChaCha12 Block Function
     type: update_function
@@ -15276,3 +15293,39 @@ primitive_families:
       block_size_bits: 512
       state_size_bits: 512
       output_size_bits: 512
+- id: mambo
+  name: Mambo
+  notes: 'Mambo, by Watson Ladd, is a bespoke tweakable block cipher operating on a 16-word (512-bit) state of
+    32-bit words arranged in a 4x4 square, with an 8-word (256-bit) key and a 16-word (512-bit) tweak. Each round
+    applies a substitution-permutation-like layer Q (built from XOR, AND, OR, NAND, NOR, and fixed rotation) to
+    every row and then every column of the state, interleaved with key- and round-counter-dependent XOR
+    additions; the tweak is XORed in once, midway through the round sequence. Designed as the core primitive of
+    the McMambo AEAD mode for the same CAESAR submission.'
+  construction_ids:
+  - spn
+  round_ids:
+  - mambo_round
+  target_applications:
+  - software
+  characteristics:
+    block_size_bits: 512
+    key_size_bits: 256
+    components:
+    - id: xor
+    - id: and
+    - id: or
+    - id: rotation_fixed
+  reference_ids:
+  - ladd_2014_mcmambo_v1
+  process_participations: []
+  influences: []
+  instances:
+  - id: mambo_512_256
+    name: Mambo
+    type: tweakable_block_cipher
+    reference_ids:
+    - ladd_2014_mcmambo_v1
+    characteristics:
+      block_size_bits: 512
+      key_size_bits: 256
+      tweak_size_bits: 512
