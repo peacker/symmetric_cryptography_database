@@ -12020,3 +12020,199 @@ mode_families:
       nonce_size_bits: 64
       tag_size_bits: 64
       state_size_bits: 192
+- id: ketje
+  name: Ketje
+  notes: 'Ketje, by the Keccak team, is a family of four lightweight permutation-based AEAD schemes -- Ketje Jr,
+    Sr, Minor, and Major -- built on round-reduced, "twisted" Keccak-p permutations of widths 200, 400, 800, and
+    1600 bits respectively (the twist conjugates the standard Keccak-p permutation by a fixed bit-relabeling
+    step mapping, cryptographically equivalent to the original permutation applied to a relabeled state, not a
+    structural change). The construction is MonkeyDuplex, a duplex-construction variant supporting calls that
+    invoke the permutation with different (aggressively reduced) round counts for a speed/security trade-off
+    that requires nonce uniqueness; the AEAD mode on top, MonkeyWrap, is functionally equivalent to SpongeWrap.
+    Recommended key length is 128 bits. Reached CAESAR round 3 but was not selected for the final portfolio.'
+  construction_ids:
+  - duplex_construction
+  - monkey_duplex
+  target_applications:
+  - iot
+  - hardware
+  characteristics:
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - bertoni_et_al_2016_ketje_v2
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    status: finalist
+  influences:
+  - source_family_id: keccak
+    relations:
+    - used_by
+    note: Each Ketje variant twists (conjugates by a fixed bit-relabeling step mapping) a round-reduced Keccak-p
+      permutation -- Ketje Sr specifically reuses Keccak-p[400] (see that instance of the keccak family).
+  underlying_primitive_ids:
+  - keccak_p400
+  instances:
+  - id: ketje_sr
+    name: Ketje Sr
+    type: aead
+    reference_ids:
+    - bertoni_et_al_2016_ketje_v2
+    characteristics:
+      state_size_bits: 400
+      key_size_bits: 128
+      tag_size_bits: 128
+    notes: Built on twisted Keccak-p*[400].
+- id: keyak
+  name: Keyak
+  notes: 'Keyak, by the Keccak team, is a permutation-based AEAD scheme built on the "Motorist" mode -- a
+    full-state keyed duplex construction (unlike a standard duplex, the full permutation output, not just a
+    rate portion, can be used, layered as Piston/Engine/Motorist) supporting associated data and multi-message
+    sessions. Five named instances share nr=12 rounds, c=256-bit capacity, and a 128-bit tag but vary in state
+    width and parallelism: River Keyak (b=800, 1x), Lake Keyak (b=1600, 1x, the primary recommendation), Sea
+    Keyak (b=1600, 2x parallel, SIMD-128), Ocean Keyak (b=1600, 4x parallel, SIMD-256), and Lunar Keyak (b=1600,
+    8x parallel, SIMD-512). Unlike Ketje''s twisted permutation, Keyak uses unmodified Keccak-p. Reached CAESAR
+    round 3 but was not selected for the final portfolio.'
+  construction_ids:
+  - duplex_construction
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - bertoni_et_al_2016_keyak_v2_2
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    status: finalist
+  influences:
+  - source_family_id: keccak
+    relations:
+    - used_by
+    note: All five Keyak instances run the Motorist mode over unmodified, 12-round Keccak-p (Lake/Sea/Ocean/Lunar
+      Keyak use Keccak-p[1600,12], see that instance of the keccak family; River Keyak uses Keccak-p[800,12]).
+  underlying_primitive_ids:
+  - keccak_p1600_12
+  instances:
+  - id: lake_keyak
+    name: Lake Keyak
+    type: aead
+    reference_ids:
+    - bertoni_et_al_2016_keyak_v2_2
+    characteristics:
+      state_size_bits: 1600
+      key_size_bits: 128
+      tag_size_bits: 128
+    notes: The primary recommendation among Keyak's five named instances; b=1600, single (non-parallel)
+      permutation calls.
+- id: tiaoxin
+  name: Tiaoxin-346
+  notes: 'Tiaoxin-346, by Ivica Nikolić (also SCREAM/iSCREAM''s designer), drives three parallel state arrays
+    (named for their word counts: 3, 4, and 6 128-bit words) directly with the AES encryption round function --
+    only 3 AES round calls per 16-byte message block (6 per 32-byte block), all fully parallelizable, reused as
+    a building block rather than invoking full AES as a black box, the same pattern AEGIS uses. 128-bit key,
+    128-bit nonce, up to 128-bit tag. Reached CAESAR round 3 but was not selected for the final portfolio.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+  reference_ids:
+  - nikolic_2016_tiaoxin_v2_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    status: finalist
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: Tiaoxin-346 drives its three state arrays directly with the unmodified AES encryption round function,
+      the same "reuse the AES round as a building block" pattern AEGIS uses.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: tiaoxin_346_v2_1
+    name: Tiaoxin-346 v2.1
+    type: aead
+    reference_ids:
+    - nikolic_2016_tiaoxin_v2_1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+- id: morus
+  name: MORUS
+  notes: 'MORUS, by Hongjun Wu and Tao Huang (also JAMBU''s designers), is a nonlinear-state-array authenticated
+    stream cipher: 5 parallel registers (128-bit words for MORUS-640, 256-bit words for MORUS-1280) updated each
+    step via rotation, AND, and XOR -- no block-cipher round function involved, unlike AEGIS/Tiaoxin. 128-bit
+    key (or 256-bit for MORUS-1280-256), 128-bit nonce, 128-bit tag. A CAESAR additional finalist for use case 2
+    (high-performance), but not selected for the final portfolio (unlike AEGIS-128/128L and OCB, which were).'
+  construction_ids:
+  - native_keystream_generator
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: nlfsr
+      params:
+        count: 5
+    - id: rotation_fixed
+    - id: xor
+    - id: and
+  reference_ids:
+  - wu_huang_2016_morus_v2
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    status: finalist
+  influences: []
+  instances:
+  - id: morus_640_128
+    name: MORUS-640-128
+    type: aead
+    reference_ids:
+    - wu_huang_2016_morus_v2
+    characteristics:
+      state_size_bits: 640
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+    notes: Primary recommended parameter set.

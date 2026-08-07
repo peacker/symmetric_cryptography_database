@@ -6022,3 +6022,66 @@ references:
     and references/[2014][jambu][][caesar_round3_v2.1_final].pdf (2016.09.15, round 3/final, renamed to plain
     "JAMBU" and adding the SIMON-JAMBU variants as the new primary recommendation). The filename uses JAMBU''s
     2014 round-1 submission year, not each file''s own later revision date.'
+- id: bertoni_et_al_2016_ketje_v2
+  kind: paper
+  title: 'CAESAR submission: Ketje v2'
+  authors:
+  - Guido Bertoni
+  - Joan Daemen
+  - Michael Peeters
+  - Gilles Van Assche
+  - Ronny Van Keer
+  year: 2016
+  venue: CAESAR submission, third round
+  url: https://competitions.cr.yp.to/round3/ketjev2.pdf
+  notes: 'CAESAR round-3 finalist (not selected for the final portfolio), by the Keccak team. Local copies of
+    both submitted versions: references/[2014][ketje][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][ketje][][caesar_round3_v2_final].pdf (2016.09.15, round 3/final; an "extendeddoc" round-1
+    addendum was also published but is not separately retained here). The filename uses Ketje''s 2014 round-1
+    submission year, not the file''s own later revision date.'
+- id: bertoni_et_al_2016_keyak_v2_2
+  kind: paper
+  title: 'CAESAR submission: Keyak v2'
+  authors:
+  - Guido Bertoni
+  - Joan Daemen
+  - Michael Peeters
+  - Gilles Van Assche
+  - Ronny Van Keer
+  year: 2016
+  venue: CAESAR submission, third round
+  url: https://competitions.cr.yp.to/round3/keyakv22.pdf
+  notes: 'CAESAR round-3 finalist (not selected for the final portfolio), by the Keccak team. Local copies of
+    all three submitted versions: references/[2014][keyak][][caesar_round1_v1].pdf (2014, round 1),
+    references/[2014][keyak][][caesar_round2_v2].pdf (2015, round 2), and
+    references/[2014][keyak][][caesar_round3_v2.2_final].pdf (2016.09.15, round 3/final). The filename uses
+    Keyak''s 2014 round-1 submission year, not each file''s own later revision date.'
+- id: nikolic_2016_tiaoxin_v2_1
+  kind: paper
+  title: Tiaoxin - 346 (v2.1)
+  authors:
+  - Ivica Nikolić
+  year: 2016
+  venue: CAESAR submission, third round
+  url: https://competitions.cr.yp.to/round3/tiaoxinv21.pdf
+  notes: 'CAESAR round-3 finalist (not selected for the final portfolio). Local copies of all three submitted
+    versions: references/[2014][tiaoxin][][caesar_round1_v1.0].pdf (2014, round 1),
+    references/[2014][tiaoxin][][caesar_round2_v2.0].pdf (2015, round 2, functionally identical to v1.0), and
+    references/[2014][tiaoxin][][caesar_round3_v2.1_final].pdf (2016.09.19, round 3/final, adds CAESAR use-case
+    designation only). The filename uses Tiaoxin''s 2014 round-1 submission year, not each file''s own later
+    revision date.'
+- id: wu_huang_2016_morus_v2
+  kind: paper
+  title: The Authenticated Cipher MORUS (v2)
+  authors:
+  - Hongjun Wu
+  - Tao Huang
+  year: 2016
+  venue: CAESAR submission, third round
+  url: https://competitions.cr.yp.to/round3/morusv2.pdf
+  notes: 'CAESAR additional finalist for use case 2 (high-performance), alongside the final-portfolio picks
+    AEGIS-128/128L/OCB, but not itself selected for the portfolio. Local copies of all three submitted versions:
+    references/[2014][morus][][caesar_round1_v1].pdf (2014, round 1),
+    references/[2014][morus][][caesar_round2_v1.1].pdf (2015, round 2), and
+    references/[2014][morus][][caesar_round3_v2_final].pdf (2016.09.15, round 3/final). The filename uses
+    MORUS''s 2014 round-1 submission year, not each file''s own later revision date.'

@@ -11538,6 +11538,18 @@ primitive_families:
       rounds: 18
     notes: The smallest instance of the Keccak-f permutation family (25 8-bit lanes), reused unmodified as the masked
       permutation in Elephant's Delirium AEAD instance.
+  - id: keccak_p1600_12
+    name: Keccak-p[1600,12]
+    type: permutation
+    reference_ids:
+    - bertoni_et_al_2016_keyak_v2_2
+    characteristics:
+      block_size_bits: 1600
+      state_size_bits: 1600
+      output_size_bits: 1600
+      rounds: 12
+    notes: A round-reduced (12 of the full 24 rounds), unmodified Keccak-p[1600] used by Lake/Sea/Ocean/Lunar
+      Keyak (Bertoni, Daemen, Peeters, Van Assche, Van Keer's CAESAR submission Keyak).
 - id: blake
   name: BLAKE Compression Functions
   construction_ids:

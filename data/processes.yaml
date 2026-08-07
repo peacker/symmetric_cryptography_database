@@ -421,11 +421,14 @@ processes:
       name: Deoxys-II
     - family_id: jambu
       name: JAMBU
-    - name: Ketje
-    - name: Keyak
+    - family_id: ketje
+      name: Ketje
+    - family_id: keyak
+      name: Keyak
     - family_id: norx
       name: NORX
-    - name: Tiaoxin
+    - family_id: tiaoxin
+      name: Tiaoxin
     - name: HS1-SIV
     - name: ICEPOLE
     - family_id: joltik_bc
@@ -457,7 +460,8 @@ processes:
       name: AEGIS-128L
     - family_id: aegis
       name: AEGIS-256
-    - name: MORUS
+    - family_id: morus
+      name: MORUS
   - id: round_2
     label: Round 2 (Second Round)
     kind: round
@@ -479,8 +483,10 @@ processes:
       name: JAMBU
     - family_id: joltik_bc
       name: Joltik
-    - name: Ketje
-    - name: Keyak
+    - family_id: ketje
+      name: Ketje
+    - family_id: keyak
+      name: Keyak
     - name: Minalpher
     - name: OMD
     - name: PAEQ
@@ -512,10 +518,12 @@ processes:
       name: AEGIS-128L
     - family_id: aegis
       name: AEGIS-256
-    - name: MORUS
+    - family_id: morus
+      name: MORUS
     - family_id: norx
       name: NORX
-    - name: Tiaoxin
+    - family_id: tiaoxin
+      name: Tiaoxin
   - id: round_3
     label: Round 3 (Third Round)
     kind: round
@@ -533,11 +541,14 @@ processes:
       name: Deoxys-II
     - family_id: jambu
       name: JAMBU
-    - name: Ketje
-    - name: Keyak
+    - family_id: ketje
+      name: Ketje
+    - family_id: keyak
+      name: Keyak
     - family_id: norx
       name: NORX
-    - name: Tiaoxin
+    - family_id: tiaoxin
+      name: Tiaoxin
     - family_id: ascon
       name: Ascon
     - family_id: acorn
@@ -552,7 +563,8 @@ processes:
       name: AEGIS-128L
     - family_id: aegis
       name: AEGIS-256
-    - name: MORUS
+    - family_id: morus
+      name: MORUS
   - id: final_portfolio_uc1
     label: Final Portfolio – Use Case 1 (Lightweight)
     kind: portfolio
@@ -575,7 +587,8 @@ processes:
       name: AEGIS-128L
     - family_id: aegis
       name: AEGIS-256
-    - name: MORUS
+    - family_id: morus
+      name: MORUS
   - id: final_portfolio_uc3
     label: Final Portfolio – Use Case 3 (Defense in depth)
     kind: portfolio
