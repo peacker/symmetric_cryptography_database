@@ -15042,3 +15042,43 @@ primitive_families:
       state_size_bits: 512
       output_size_bits: 512
       rounds: 20
+- id: primate_permutation
+  name: PRIMATE Permutation
+  notes: 'The PRIMATE permutation is a 5-bit-S-box substitution-permutation network, in 200-bit and 280-bit state
+    widths (for 80- and 120-bit security targets respectively), each with 4 round-count variants (p1-p4)
+    trading security margin for speed at different points in the AEAD construction.'
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  round_ids:
+  - keccak_round
+  target_applications:
+  - hardware
+  - iot
+  characteristics:
+    state_size_bits: 200
+    components:
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+    - id: binary_matrix_mul
+    - id: word_permutation
+      params:
+        word_size_bits: 5
+    - id: xor
+  reference_ids:
+  - andreeva_et_al_2014_primates_v1_02
+  process_participations: []
+  influences: []
+  instances:
+  - id: primate_200
+    name: PRIMATE-200
+    type: permutation
+    reference_ids:
+    - andreeva_et_al_2014_primates_v1_02
+    characteristics:
+      block_size_bits: 200
+      state_size_bits: 200
+      output_size_bits: 200
+    notes: 80-bit security target; PRIMATEs also defines a 280-bit-state sibling for a 120-bit security target.

@@ -12542,3 +12542,253 @@ mode_families:
     characteristics:
       key_size_bits: 128
     notes: 32-bit-word variant targeting 128-bit security, the representative parameter set.
+- id: poet
+  name: POET
+  notes: 'POET is an online, nonce-misuse-resistant block-cipher AEAD mode: a plaintext block cipher layer (ECB
+    mode) is chained together by two epsilon-AXU (almost-XOR-universal) hash layers, one before and one after,
+    rather than the masked-block-cipher-pair approach AES-COPA/ELmD/COLM use. Its recommended instance uses
+    full 10-round AES-128 for the block-cipher layer and a faster 4-round AES-128 for the two hashing layers.
+    Reached CAESAR round 2 but was not selected for round 3.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - abed_et_al_2015_poet_v2_0
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: POET's recommended instance uses full 10-round AES-128 for its ECB block-cipher layer and a faster
+      4-round-reduced AES-128 for its two epsilon-AXU hashing layers.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: poet_aes128
+    name: POET-AES-128
+    type: aead
+    reference_ids:
+    - abed_et_al_2015_poet_v2_0
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      tag_size_bits: 128
+    notes: Recommended instance -- full AES-128 for the ECB layer, 4-round AES-128 for hashing.
+- id: primates
+  name: PRIMATEs
+  notes: 'PRIMATEs is a family of three permutation-based AEAD/hash schemes -- HANUMAN (nonce-based AEAD), GIBBON
+    (nonce-based AEAD, sponge-like), and APE (Authenticated Permutation-based Encryption, nonce-misuse-resistant
+    since it needs no nonce at all) -- all built on the same underlying PRIMATE permutation (see
+    primate_permutation). Reached CAESAR round 2 but was not selected for round 3.'
+  construction_ids:
+  - duplex_construction
+  target_applications:
+  - hardware
+  - iot
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+    - id: binary_matrix_mul
+    - id: word_permutation
+      params:
+        word_size_bits: 5
+    - id: xor
+  reference_ids:
+  - andreeva_et_al_2014_primates_v1_02
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: primate_permutation
+    relations:
+    - used_by
+    note: All three PRIMATEs schemes (HANUMAN, GIBBON, APE) are built on the same underlying PRIMATE permutation.
+  underlying_primitive_ids:
+  - primate_200
+  instances:
+  - id: hanuman_80
+    name: HANUMAN-80
+    type: aead
+    reference_ids:
+    - andreeva_et_al_2014_primates_v1_02
+    characteristics:
+      state_size_bits: 200
+      key_size_bits: 80
+      tag_size_bits: 80
+    notes: 80-bit-security nonce-based instance built on PRIMATE-200.
+- id: shell
+  name: SHELL
+  notes: 'SHELL is a block-cipher AEAD mode layering four components: a CENC-style PRP layer keying the nonce,
+    a universal-hash layer (PX-MAC) for associated data, a further universal-hash layer (PX-Enc) for plaintext
+    encryption, and a parallel-XEX PRP layer over the ciphertext. Recommended over AES (denoted SHELL-AES).
+    Reached CAESAR round 2 but was not selected for round 3.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+  reference_ids:
+  - wang_2015_shell_v2_0
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: SHELL's recommended instantiation, SHELL-AES, uses unmodified AES as the underlying block cipher for
+      all four of its layers.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: shell_aes
+    name: SHELL-AES
+    type: aead
+    reference_ids:
+    - wang_2015_shell_v2_0
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+- id: stribob
+  name: STRIBOB
+  notes: 'STRIBOB is a sponge-based AEAD scheme (the BLNK sponge mode) built on a 512-bit permutation pi;
+    STRIBOBr2 ("WHIRLBOB") re-derives pi directly from the Whirlpool hash function''s internal round structure
+    and key schedule (same SubBytes/ShiftColumns/MixRows layers, renamed S/P/L), extended to 12 rounds (from
+    Whirlpool''s own 10) for a larger security margin as an unkeyed permutation. Designed to share
+    implementation resources with existing Whirlpool deployments. Reached CAESAR round 2 but was not selected
+    for round 3.'
+  construction_ids:
+  - duplex_construction
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    state_size_bits: 512
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - saarinen_brumley_2015_stribob_r2
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: whirlpool
+    relations:
+    - variant_of
+    note: STRIBOBr2's pi permutation directly reuses Whirlpool's internal round structure and key schedule (same
+      SubBytes/ShiftColumns/MixRows layers, renamed S/P/L), extended from 10 to 12 rounds since it's now used
+      unkeyed as a sponge permutation rather than as Whirlpool's own Miyaguchi-Preneel compression function.
+  instances:
+  - id: stribob_r2
+    name: STRIBOBr2
+    type: aead
+    reference_ids:
+    - saarinen_brumley_2015_stribob_r2
+    characteristics:
+      state_size_bits: 512
+      key_size_bits: 192
+      tag_size_bits: 128
+      rounds: 12
+- id: trivia_ck
+  name: TriviA-ck
+  notes: 'TriviA-ck wraps Trivia-SC, the designers'' own "extended version of Trivium" (same three NLFSR
+    structure, with added nonlinearity in the feedback specifically to close a state-recovery weakness the
+    plain Trivium construction has), in an AEAD mode with MAC generation. 128-bit key, 128-bit nonce, 384-bit
+    internal state, 128-bit tag. Reached CAESAR round 2 but was not selected for round 3.'
+  construction_ids:
+  - native_keystream_generator
+  target_applications:
+  - hardware
+  - software
+  characteristics:
+    state_size_bits: 384
+    components:
+    - id: nlfsr
+      params:
+        count: 3
+    - id: xor
+    - id: and
+  reference_ids:
+  - chakraborti_nandi_2015_trivia_ck_v2
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: trivium
+    relations:
+    - variant_of
+    - improvement_of
+    note: TriviA-ck's core stream cipher, Trivia-SC, is the designers' own "extended version of Trivium" -- the
+      same three-NLFSR structure, with added nonlinearity in the feedback to close a state-recovery weakness
+      plain Trivium has.
+  instances:
+  - id: trivia_ck_v2
+    name: TriviA-ck-v2
+    type: aead
+    reference_ids:
+    - chakraborti_nandi_2015_trivia_ck_v2
+    characteristics:
+      state_size_bits: 384
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128

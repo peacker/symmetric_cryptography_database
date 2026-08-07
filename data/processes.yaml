@@ -445,13 +445,18 @@ processes:
       name: PAEQ
     - family_id: pi_cipher
       name: π-Cipher
-    - name: POET
-    - name: PRIMATEs
+    - family_id: poet
+      name: POET
+    - family_id: primates
+      name: PRIMATEs
     - family_id: scream_tbc
       name: SCREAM
-    - name: SHELL
-    - name: STRIBOB
-    - name: TriviA-ck
+    - family_id: shell
+      name: SHELL
+    - family_id: stribob
+      name: STRIBOB
+    - family_id: trivia_ck
+      name: TriviA-ck
     - family_id: ascon
       name: Ascon
     - family_id: acorn
@@ -507,13 +512,18 @@ processes:
       name: PAEQ
     - family_id: pi_cipher
       name: π-Cipher
-    - name: POET
-    - name: PRIMATEs
+    - family_id: poet
+      name: POET
+    - family_id: primates
+      name: PRIMATEs
     - family_id: scream_tbc
       name: SCREAM
-    - name: SHELL
-    - name: STRIBOB
-    - name: TriviA-ck
+    - family_id: shell
+      name: SHELL
+    - family_id: stribob
+      name: STRIBOB
+    - family_id: trivia_ck
+      name: TriviA-ck
     - family_id: ascon
       name: Ascon
     - family_id: acorn

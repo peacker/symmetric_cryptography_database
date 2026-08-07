@@ -6203,3 +6203,83 @@ references:
     references/[2014][pi_cipher][][caesar_round2_v2.0_final].pdf (2015.08.29, round 2/final, reduced round
     count and a padding-rule tweak). The filename uses pi-Cipher''s 2014 round-1 submission year, not the
     file''s own later revision date.'
+- id: abed_et_al_2015_poet_v2_0
+  kind: paper
+  title: The POET Family of On-Line Authenticated Encryption Schemes (v2.0)
+  authors:
+  - Farzaneh Abed
+  - Scott Fluhrer
+  - John Foley
+  - Christian Forler
+  - Eik List
+  - Stefan Lucks
+  - David McGrew
+  - Jakob Wenzel
+  year: 2015
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/poetv20.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
+    references/[2014][poet][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][poet][][caesar_round2_v2.0_final].pdf (2015.08.29, round 2/final). The filename uses
+    POET''s 2014 round-1 submission year, not the file''s own later revision date.'
+- id: andreeva_et_al_2014_primates_v1_02
+  kind: paper
+  title: PRIMATEs v1.02
+  authors:
+  - Elena Andreeva
+  - Begul Bilgin
+  - Andrey Bogdanov
+  - Atul Luykx
+  - Florian Mendel
+  - Bart Mennink
+  - Nicky Mouha
+  - Qingju Wang
+  - Kan Yasuda
+  year: 2014
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/primatesv102.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
+    references/[2014][primates,primate_permutation][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][primates,primate_permutation][][caesar_round2_v1.02_final].pdf (2014.09.08, round
+    2/final; only clarifications, no algorithmic changes from v1.0). The filename uses PRIMATEs'' 2014 round-1
+    submission year for both. Also the source for the primate_permutation primitive family, specified within
+    this same document.'
+- id: wang_2015_shell_v2_0
+  kind: paper
+  title: SHELL v2.0
+  authors:
+  - Lei Wang
+  year: 2015
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/shellv20.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
+    references/[2014][shell][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][shell][][caesar_round2_v2.0_final].pdf (2015.08.29, round 2/final). The filename uses
+    SHELL''s 2014 round-1 submission year, not the file''s own later revision date.'
+- id: saarinen_brumley_2015_stribob_r2
+  kind: paper
+  title: 'STRIBOBr2: "WHIRLBOB"'
+  authors:
+  - Markku-Juhani O. Saarinen
+  - Billy B. Brumley
+  year: 2015
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/stribobr2.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3), nicknamed "WHIRLBOB" for round 2 after its
+    permutation was re-derived directly from Whirlpool. Local copies of both submitted versions:
+    references/[2014][stribob][][caesar_round1_v1].pdf (2014, round 1, STRIBOBr1) and
+    references/[2014][stribob][][caesar_round2_v2_final].pdf (2015.08.28, round 2/final, STRIBOBr2/WHIRLBOB).
+    The filename uses STRIBOB''s 2014 round-1 submission year, not the file''s own later revision date.'
+- id: chakraborti_nandi_2015_trivia_ck_v2
+  kind: paper
+  title: TriviA-ck-v2
+  authors:
+  - Avik Chakraborti
+  - Mridul Nandi
+  year: 2015
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/triviackv2.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
+    references/[2014][trivia_ck][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][trivia_ck][][caesar_round2_v2_final].pdf (2015.08.28, round 2/final). The filename uses
+    TriviA-ck''s 2014 round-1 submission year, not the file''s own later revision date.'
