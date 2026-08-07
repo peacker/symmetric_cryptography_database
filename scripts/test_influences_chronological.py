@@ -50,13 +50,6 @@ KNOWN_EXCEPTIONS = {
     # (grosso_et_al_2015_scream), since it went on to round 2/3 while iSCREAM
     # was dropped after round 1 and only ever has its original 2014 reference.
     ("iscream_tbc", "scream_tbc"),
-    # CBEAM and STRIBOB were both submitted by Saarinen in the same CAESAR
-    # round-1 wave (March 2014) and share only the BLNK sponge mode layer.
-    # STRIBOB's own family year (2015) reflects its later STRIBOBr2/WHIRLBOB
-    # reference (saarinen_brumley_2015_stribob_r2), since it went on to round 2
-    # while CBEAM was withdrawn after round 1 and only ever has its original
-    # 2014 reference.
-    ("cbeam", "stribob"),
     # PAES (2014) cites AEGIS explicitly as its structural inspiration; AEGIS
     # itself was first published at DIAC 2013, predating PAES. Our aegis
     # family year (2016) reflects a later revised/standardized reference, not

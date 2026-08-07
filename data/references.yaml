@@ -6644,3 +6644,325 @@ references:
   notes: 'CAESAR round-1 candidate; withdrawn together with the same team''s PAES submission on 2014.05.13,
     citing accumulated attacks that had pushed both designs "far from our original vision." Local copy of the
     sole submitted version: references/[2014][panda,panda_round_func][][caesar_round1_v1].pdf.'
+- id: wu_2014_acorn_v1
+  kind: paper
+  title: 'ACORN: A Lightweight Authenticated Cipher (v1)'
+  authors:
+  - Hongjun Wu
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/acornv1.pdf
+  notes: ACORN's original CAESAR round-1 submission. Added alongside wu_2016_acorn_v3 (which cites the full local
+    version history and remains the primary/most-authoritative reference) specifically so the family's earliest-
+    reference-year proxy reflects ACORN's true 2014 debut rather than its 2016 final revision.
+- id: krovetz_rogaway_2014_ocb_v1
+  kind: paper
+  title: OCB (v1)
+  authors:
+  - Ted Krovetz
+  - Phillip Rogaway
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/ocbv1.pdf
+  notes: OCB's original CAESAR round-1 submission. Added alongside krovetz_rogaway_2016_ocb_v1_1 (which cites the
+    full local version history and remains the primary/most-authoritative reference) specifically so the family's
+    earliest-reference-year proxy reflects OCB's true 2014 CAESAR debut rather than its 2016 final revision.
+- id: andreeva_et_al_2014_aes_copa_v1
+  kind: paper
+  title: 'AES-COPA v1: Submission to CAESAR'
+  authors:
+  - Elena Andreeva
+  - Andrey Bogdanov
+  - Atul Luykx
+  - Bart Mennink
+  - Elmar Tischhauser
+  - Kan Yasuda
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/aescopav1.pdf
+  notes: AES-COPA's original CAESAR round-1 submission. Added alongside andreeva_et_al_2015_aes_copa_v2 (which
+    cites the full local version history and remains the primary/most-authoritative reference) specifically so
+    the family's earliest-reference-year proxy reflects AES-COPA's true 2014 debut rather than its 2015 revision.
+- id: datta_nandi_2014_elmd_v1_0
+  kind: paper
+  title: Proposal of ELmD v1.0
+  authors:
+  - Nilanjan Datta
+  - Mridul Nandi
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/elmdv10.pdf
+  notes: ELmD's original CAESAR round-1 submission. Added alongside datta_nandi_2016_elmd_v2_1 (which cites the
+    full local version history and remains the primary/most-authoritative reference) specifically so the family's
+    earliest-reference-year proxy reflects ELmD's true 2014 debut rather than its 2016 final revision.
+- id: minematsu_2014_aes_otr_v1
+  kind: paper
+  title: AES-OTR v1
+  authors:
+  - Kazuhiko Minematsu
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/aesotrv1.pdf
+  notes: AES-OTR's original CAESAR round-1 submission. Added alongside minematsu_2016_aes_otr_v3_1 (which cites
+    the full local version history and remains the primary/most-authoritative reference) specifically so the
+    family's earliest-reference-year proxy reflects AES-OTR's true 2014 debut rather than its 2016 final revision.
+- id: hoang_krovetz_rogaway_2014_aez_v1
+  kind: paper
+  title: 'AEZ v1: Authenticated Encryption by Enciphering'
+  authors:
+  - Viet Tung Hoang
+  - Ted Krovetz
+  - Phillip Rogaway
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/aezv1.pdf
+  notes: AEZ's original CAESAR round-1 submission. Added alongside hoang_krovetz_rogaway_2017_aez_v5 (which cites
+    the full local version history and remains the primary/most-authoritative reference) specifically so the
+    family's earliest-reference-year proxy reflects AEZ's true 2014 debut rather than its 2017 final revision.
+- id: iwata_et_al_2014_cloc_v1
+  kind: paper
+  title: CLOC v1
+  authors:
+  - Tetsu Iwata
+  - Kazuhiko Minematsu
+  - Jian Guo
+  - Sumio Morioka
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/clocv1.pdf
+  notes: CLOC's original CAESAR round-1 submission (published separately from SILC; the two were only merged into
+    a single "CLOC and SILC" document from round 3 onward). Added alongside iwata_et_al_2016_cloc_silc_v3 (which
+    cites the full local version history and remains the primary/most-authoritative reference) specifically so
+    the family's earliest-reference-year proxy reflects CLOC's true 2014 debut rather than its 2016 final revision.
+- id: iwata_et_al_2014_silc_v1
+  kind: paper
+  title: SILC v1
+  authors:
+  - Tetsu Iwata
+  - Kazuhiko Minematsu
+  - Jian Guo
+  - Sumio Morioka
+  - Eita Kobayashi
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/silcv1.pdf
+  notes: SILC's original CAESAR round-1 submission (published separately from CLOC; the two were only merged into
+    a single "CLOC and SILC" document from round 3 onward). Added alongside iwata_et_al_2016_cloc_silc_v3 (which
+    cites the full local version history and remains the primary/most-authoritative reference) specifically so
+    the family's earliest-reference-year proxy reflects SILC's true 2014 debut rather than its 2016 final revision.
+- id: wu_huang_2014_aes_jambu_v1
+  kind: paper
+  title: JAMBU Lightweight Authenticated Encryption Mode and AES-JAMBU (v1)
+  authors:
+  - Hongjun Wu
+  - Tao Huang
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/aesjambuv1.pdf
+  notes: JAMBU's original CAESAR round-1 submission, under the name "AES-JAMBU" (the mode was renamed to plain
+    JAMBU, with SIMON-JAMBU added as the primary recommendation, only from round 3 onward). Added alongside
+    wu_huang_2016_jambu_v2_1 (which cites the full local version history and remains the primary/most-
+    authoritative reference) specifically so the family's earliest-reference-year proxy reflects JAMBU's true
+    2014 debut rather than its 2016 final revision.
+- id: bertoni_et_al_2014_ketje_v1
+  kind: paper
+  title: 'CAESAR submission: Ketje v1'
+  authors:
+  - Guido Bertoni
+  - Joan Daemen
+  - Michael Peeters
+  - Gilles Van Assche
+  - Ronny Van Keer
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/ketjev1.pdf
+  notes: Ketje's original CAESAR round-1 submission, by the Keccak team. Added alongside
+    bertoni_et_al_2016_ketje_v2 (which cites the full local version history and remains the primary/most-
+    authoritative reference) specifically so the family's earliest-reference-year proxy reflects Ketje's true
+    2014 debut rather than its 2016 final revision.
+- id: bertoni_et_al_2014_keyak_v1
+  kind: paper
+  title: 'CAESAR submission: Keyak v1'
+  authors:
+  - Guido Bertoni
+  - Joan Daemen
+  - Michael Peeters
+  - Gilles Van Assche
+  - Ronny Van Keer
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/keyakv1.pdf
+  notes: Keyak's original CAESAR round-1 submission, by the Keccak team. Added alongside
+    bertoni_et_al_2016_keyak_v2_2 (which cites the full local version history and remains the primary/most-
+    authoritative reference) specifically so the family's earliest-reference-year proxy reflects Keyak's true
+    2014 debut rather than its 2016 final revision.
+- id: nikolic_2014_tiaoxin_v1_0
+  kind: paper
+  title: Tiaoxin - 346 (v1.0)
+  authors:
+  - Ivica Nikolić
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/tiaoxinv1.pdf
+  notes: Tiaoxin's original CAESAR round-1 submission. Added alongside nikolic_2016_tiaoxin_v2_1 (which cites the
+    full local version history and remains the primary/most-authoritative reference) specifically so the family's
+    earliest-reference-year proxy reflects Tiaoxin's true 2014 debut rather than its 2016 final revision.
+- id: wu_huang_2014_morus_v1
+  kind: paper
+  title: The Authenticated Cipher MORUS (v1)
+  authors:
+  - Hongjun Wu
+  - Tao Huang
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/morusv1.pdf
+  notes: MORUS's original CAESAR round-1 submission. Added alongside wu_huang_2016_morus_v2 (which cites the full
+    local version history and remains the primary/most-authoritative reference) specifically so the family's
+    earliest-reference-year proxy reflects MORUS's true 2014 debut rather than its 2016 final revision.
+- id: krovetz_2014_hs1_siv_v1
+  kind: paper
+  title: HS1-SIV (v1)
+  authors:
+  - Ted Krovetz
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/hs1sivv1.pdf
+  notes: HS1-SIV's original CAESAR round-1 submission. Added alongside krovetz_2015_hs1_siv_v2 (which cites the
+    full local version history and remains the primary/most-authoritative reference) specifically so the family's
+    earliest-reference-year proxy reflects HS1-SIV's true 2014 debut rather than its 2015 revision.
+- id: morawiecki_et_al_2014_icepole_v1
+  kind: paper
+  title: ICEPOLE v1
+  authors:
+  - Pawel Morawiecki
+  - Kris Gaj
+  - Ekawat Homsirikamol
+  - Krystian Matusiewicz
+  - Josef Pieprzyk
+  - Marcin Rogawski
+  - Marian Srebrny
+  - Marcin Wojcik
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/icepolev1.pdf
+  notes: ICEPOLE's original CAESAR round-1 submission. Added alongside morawiecki_et_al_2015_icepole_v2 (which
+    cites the full local version history and remains the primary/most-authoritative reference) specifically so
+    the family's earliest-reference-year proxy reflects ICEPOLE's true 2014 debut rather than its 2015 revision.
+- id: jean_nikolic_peyrin_2014_joltik_v1
+  kind: paper
+  title: Joltik v1
+  authors:
+  - Jeremy Jean
+  - Ivica Nikolic
+  - Thomas Peyrin
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/joltikv1.pdf
+  notes: Joltik's original CAESAR round-1 submission. Added alongside jean_nikolic_peyrin_2015_joltik_v1_3 (which
+    cites the full local version history and remains the primary/most-authoritative reference) specifically so
+    the family's earliest-reference-year proxy reflects Joltik's true 2014 debut rather than its 2015 revision.
+- id: sasaki_et_al_2014_minalpher_v1
+  kind: paper
+  title: Minalpher v1
+  authors:
+  - Yu Sasaki
+  - Yosuke Todo
+  - Kazumaro Aoki
+  - Yusuke Naito
+  - Takeshi Sugawara
+  - Yumiko Murakami
+  - Mitsuru Matsui
+  - Shoichi Hirose
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/minalpherv1.pdf
+  notes: Minalpher's original CAESAR round-1 submission. Added alongside sasaki_et_al_2015_minalpher_v1_1 (which
+    cites the full local version history and remains the primary/most-authoritative reference) specifically so
+    the family's earliest-reference-year proxy reflects Minalpher's true 2014 debut rather than its 2015 revision.
+- id: cogliani_et_al_2014_omd_v1_0
+  kind: paper
+  title: Offset Merkle-Damgard (OMD) version 1.0
+  authors:
+  - Simon Cogliani
+  - Diana Maimut
+  - David Naccache
+  - Rodrigo Portella
+  - Reza Reyhanitabar
+  - Serge Vaudenay
+  - Damian Vizar
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/omdv10.pdf
+  notes: OMD's original CAESAR round-1 submission. Added alongside cogliani_et_al_2015_omd_v2_0 (which cites the
+    full local version history and remains the primary/most-authoritative reference) specifically so the family's
+    earliest-reference-year proxy reflects OMD's true 2014 debut rather than its 2015 revision.
+- id: gligoroski_et_al_2014_pi_cipher_v1
+  kind: paper
+  title: π-Cipher v1
+  authors:
+  - Danilo Gligoroski
+  - Hristina Mihajloska
+  - Simona Samardjiska
+  - Hakon Jacobsen
+  - Mohamed El-Hadedy
+  - Rune Erlend Jensen
+  - Daniel Otte
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/picipherv1.pdf
+  notes: pi-Cipher's original CAESAR round-1 submission. Added alongside gligoroski_et_al_2015_pi_cipher_v2_0
+    (which cites the full local version history and remains the primary/most-authoritative reference) specifically
+    so the family's earliest-reference-year proxy reflects pi-Cipher's true 2014 debut rather than its 2015 revision.
+- id: abed_et_al_2014_poet_v1_01
+  kind: paper
+  title: The POET Family of On-Line Authenticated Encryption Schemes (v1.01)
+  authors:
+  - Farzaneh Abed
+  - Scott Fluhrer
+  - John Foley
+  - Christian Forler
+  - Eik List
+  - Stefan Lucks
+  - David McGrew
+  - Jakob Wenzel
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/poetv101.pdf
+  notes: POET's original CAESAR round-1 submission. Added alongside abed_et_al_2015_poet_v2_0 (which cites the
+    full local version history and remains the primary/most-authoritative reference) specifically so the family's
+    earliest-reference-year proxy reflects POET's true 2014 debut rather than its 2015 revision.
+- id: wang_2014_shell_v1
+  kind: paper
+  title: SHELL v1
+  authors:
+  - Lei Wang
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/shellv1.pdf
+  notes: SHELL's original CAESAR round-1 submission. Added alongside wang_2015_shell_v2_0 (which cites the full
+    local version history and remains the primary/most-authoritative reference) specifically so the family's
+    earliest-reference-year proxy reflects SHELL's true 2014 debut rather than its 2015 revision.
+- id: saarinen_2014_stribob_r1
+  kind: paper
+  title: The STRIBOBr1 Authenticated Encryption Algorithm
+  authors:
+  - Markku-Juhani O. Saarinen
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/stribobr1.pdf
+  notes: STRIBOB's original CAESAR round-1 submission (STRIBOBr1), solely by Saarinen -- Brumley joined as
+    co-author only for the round-2 STRIBOBr2/WHIRLBOB revision. Added alongside saarinen_brumley_2015_stribob_r2
+    (which cites the full local version history and remains the primary/most-authoritative reference) specifically
+    so the family's earliest-reference-year proxy reflects STRIBOB's true 2014 debut rather than its 2015 revision.
+- id: chakraborti_nandi_2014_trivia_ck_v1
+  kind: paper
+  title: TriviA-ck-v1
+  authors:
+  - Avik Chakraborti
+  - Mridul Nandi
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/triviackv1.pdf
+  notes: TriviA-ck's original CAESAR round-1 submission. Added alongside chakraborti_nandi_2015_trivia_ck_v2
+    (which cites the full local version history and remains the primary/most-authoritative reference) specifically
+    so the family's earliest-reference-year proxy reflects TriviA-ck's true 2014 debut rather than its 2015 revision.

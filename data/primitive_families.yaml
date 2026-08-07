@@ -829,6 +829,7 @@ primitive_families:
     - id: xor
     - id: constant
   reference_ids:
+  - hoang_krovetz_rogaway_2014_aez_v1
   - hoang_krovetz_rogaway_2017_aez_v5
   process_participations: []
   influences:
@@ -14960,6 +14961,7 @@ primitive_families:
     - id: rotation_fixed
     - id: constant
   reference_ids:
+  - morawiecki_et_al_2014_icepole_v1
   - morawiecki_et_al_2015_icepole_v2
   process_participations: []
   influences:
@@ -15007,6 +15009,7 @@ primitive_families:
         word_size_bits: 4
     - id: xor
   reference_ids:
+  - sasaki_et_al_2014_minalpher_v1
   - sasaki_et_al_2015_minalpher_v1_1
   process_participations: []
   influences: []
@@ -15360,6 +15363,7 @@ primitive_families:
     - id: xor
     - id: constant
   reference_ids:
+  - saarinen_2014_stribob_r1
   - saarinen_brumley_2015_stribob_r2
   process_participations: []
   influences:
@@ -15429,6 +15433,7 @@ primitive_families:
     - id: rotation_fixed
     - id: constant
   reference_ids:
+  - gligoroski_et_al_2014_pi_cipher_v1
   - gligoroski_et_al_2015_pi_cipher_v2_0
   process_participations: []
   influences: []

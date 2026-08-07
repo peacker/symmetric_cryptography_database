@@ -11382,6 +11382,7 @@ mode_families:
     - id: and
     - id: not
   reference_ids:
+  - wu_2014_acorn_v1
   - wu_2016_acorn_v3
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -11521,6 +11522,7 @@ mode_families:
     - id: xor
     - id: constant
   reference_ids:
+  - krovetz_rogaway_2014_ocb_v1
   - krovetz_rogaway_2016_ocb_v1_1
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -11577,6 +11579,7 @@ mode_families:
     - id: xor
     - id: constant
   reference_ids:
+  - andreeva_et_al_2014_aes_copa_v1
   - andreeva_et_al_2015_aes_copa_v2
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -11631,6 +11634,7 @@ mode_families:
     - id: xor
     - id: constant
   reference_ids:
+  - datta_nandi_2014_elmd_v1_0
   - datta_nandi_2016_elmd_v2_1
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -11750,6 +11754,7 @@ mode_families:
     - id: xor
     - id: constant
   reference_ids:
+  - minematsu_2014_aes_otr_v1
   - minematsu_2016_aes_otr_v3_1
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -11809,6 +11814,7 @@ mode_families:
     - id: xor
     - id: constant
   reference_ids:
+  - hoang_krovetz_rogaway_2014_aez_v1
   - hoang_krovetz_rogaway_2017_aez_v5
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -11866,6 +11872,7 @@ mode_families:
     - id: xor
     - id: constant
   reference_ids:
+  - iwata_et_al_2014_cloc_v1
   - iwata_et_al_2016_cloc_silc_v3
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -11926,6 +11933,7 @@ mode_families:
     - id: xor
     - id: constant
   reference_ids:
+  - iwata_et_al_2014_silc_v1
   - iwata_et_al_2016_cloc_silc_v3
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -11986,6 +11994,7 @@ mode_families:
     components:
     - id: xor
   reference_ids:
+  - wu_huang_2014_aes_jambu_v1
   - wu_huang_2016_jambu_v2_1
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12044,6 +12053,7 @@ mode_families:
     - id: rotation_fixed
     - id: constant
   reference_ids:
+  - bertoni_et_al_2014_ketje_v1
   - bertoni_et_al_2016_ketje_v2
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12094,6 +12104,7 @@ mode_families:
     - id: rotation_fixed
     - id: constant
   reference_ids:
+  - bertoni_et_al_2014_keyak_v1
   - bertoni_et_al_2016_keyak_v2_2
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12148,6 +12159,7 @@ mode_families:
         word_size_bits: 8
     - id: xor
   reference_ids:
+  - nikolic_2014_tiaoxin_v1_0
   - nikolic_2016_tiaoxin_v2_1
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12195,6 +12207,7 @@ mode_families:
     - id: xor
     - id: and
   reference_ids:
+  - wu_huang_2014_morus_v1
   - wu_huang_2016_morus_v2
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12237,6 +12250,7 @@ mode_families:
     - id: rotation_fixed
     - id: constant
   reference_ids:
+  - krovetz_2014_hs1_siv_v1
   - krovetz_2015_hs1_siv_v2
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12282,6 +12296,7 @@ mode_families:
     - id: rotation_fixed
     - id: constant
   reference_ids:
+  - morawiecki_et_al_2014_icepole_v1
   - morawiecki_et_al_2015_icepole_v2
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12336,6 +12351,7 @@ mode_families:
         word_size_bits: 4
     - id: xor
   reference_ids:
+  - jean_nikolic_peyrin_2014_joltik_v1
   - jean_nikolic_peyrin_2015_joltik_v1_3
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12387,6 +12403,7 @@ mode_families:
         word_size_bits: 4
     - id: xor
   reference_ids:
+  - sasaki_et_al_2014_minalpher_v1
   - sasaki_et_al_2015_minalpher_v1_1
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12433,6 +12450,7 @@ mode_families:
     - id: rotation_fixed
     - id: constant
   reference_ids:
+  - cogliani_et_al_2014_omd_v1_0
   - cogliani_et_al_2015_omd_v2_0
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12522,6 +12540,7 @@ mode_families:
     components:
     - id: xor
   reference_ids:
+  - gligoroski_et_al_2014_pi_cipher_v1
   - gligoroski_et_al_2015_pi_cipher_v2_0
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12573,6 +12592,7 @@ mode_families:
     - id: xor
     - id: constant
   reference_ids:
+  - abed_et_al_2014_poet_v1_01
   - abed_et_al_2015_poet_v2_0
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12672,6 +12692,7 @@ mode_families:
         word_size_bits: 8
     - id: xor
   reference_ids:
+  - wang_2014_shell_v1
   - wang_2015_shell_v2_0
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12714,6 +12735,7 @@ mode_families:
     components:
     - id: xor
   reference_ids:
+  - saarinen_2014_stribob_r1
   - saarinen_brumley_2015_stribob_r2
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
@@ -12760,6 +12782,7 @@ mode_families:
     - id: xor
     - id: and
   reference_ids:
+  - chakraborti_nandi_2014_trivia_ck_v1
   - chakraborti_nandi_2015_trivia_ck_v2
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
