@@ -13152,3 +13152,179 @@ mode_families:
     characteristics:
       state_size_bits: 512
       key_size_bits: 256
+- id: avalanche
+  name: AVALANCHE
+  notes: AVALANCHE combines PCMAC (a single-pass authenticated cipher, using a counter derived from the
+    key/nonce-length difference) for the plaintext with a separate MAC, RMAC, for associated data, both built
+    over AES. Reached CAESAR round 1 but was not selected for round 2.
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+  reference_ids:
+  - alomair_2014_avalanche_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: Both AVALANCHE's PCMAC (plaintext) and RMAC (associated data) algorithms are built over unmodified AES.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: avalanche_v1
+    name: AVALANCHEv1
+    type: aead
+    reference_ids:
+    - alomair_2014_avalanche_v1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      nonce_size_bits: 80
+      tag_size_bits: 128
+- id: cba
+  name: CBA
+  notes: CBA (Code-Book Authentication) is a generic, single-pass, single-key block-cipher AEAD mode positioned
+    as an improvement on OCB, saving up to one block-cipher call to encrypt and authenticate the plaintext.
+    Reached CAESAR round 1 but was not selected for round 2.
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: xor
+  reference_ids:
+  - hosseini_khazaei_2014_cba_v1_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  instances:
+  - id: cba_v1_1
+    name: CBA v1-1
+    type: aead
+    reference_ids:
+    - hosseini_khazaei_2014_cba_v1_1
+    characteristics: {}
+    notes: Generic mode -- block/key sizes depend on the chosen underlying block cipher.
+- id: enchilada
+  name: Enchilada
+  notes: 'Enchilada is a hybrid stream-cipher-plus-block-cipher AEAD design, combining ChaCha and Rijndael/AES
+    (Enchilada-128: 12-round ChaCha with 10-round, 128-bit-block Rijndael identical to AES-128 encryption but
+    with a changed key schedule and added whitening; Enchilada-256: 20-round ChaCha with 14-round, 256-bit-block
+    Rijndael) with a GCM-style Galois-field construction for authentication, aiming to remain secure even if
+    either underlying primitive turns out weak. Reached CAESAR round 1 but was not selected for round 2.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - harris_2014_enchilada_v1_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: chacha
+    relations:
+    - used_by
+    note: Enchilada-128 uses 12-round ChaCha, Enchilada-256 uses 20-round (full) ChaCha, combined with Rijndael.
+  - source_family_id: rijndael
+    relations:
+    - used_by
+    note: Enchilada-128 uses 10-round, 128-bit-block Rijndael (an AES-128-equivalent encryption transform with a
+      changed key schedule); Enchilada-256 uses 14-round, 256-bit-block Rijndael.
+  instances:
+  - id: enchilada_128
+    name: Enchilada-128
+    type: aead
+    reference_ids:
+    - harris_2014_enchilada_v1_1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 256
+- id: ifeed_aes
+  name: iFeed[AES]
+  notes: iFeed is a generic feedback-based AEAD mode of operation that can use either a block cipher or a
+    compression function as its underlying primitive; this submission instantiates it as iFeed[AES] over
+    AES-128, paired with a PMAC-like Mac[AES] mode for associated-data integrity. Reached CAESAR round 1 but was
+    not selected for round 2.
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+  reference_ids:
+  - zhang_et_al_2014_ifeed_aes_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: iFeed[AES] instantiates the generic iFeed mode over unmodified AES-128.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: ifeed_aes_v1
+    name: iFeed[AES] v1
+    type: aead
+    reference_ids:
+    - zhang_et_al_2014_ifeed_aes_v1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128

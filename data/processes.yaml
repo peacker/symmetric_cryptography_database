@@ -389,14 +389,18 @@ processes:
       name: AES-CPFB
     - family_id: artemia
       name: Artemia
-    - name: AVALANCHE
+    - family_id: avalanche
+      name: AVALANCHE
     - name: Calico
-    - name: CBA
+    - family_id: cba
+      name: CBA
     - name: CBEAM
-    - name: Enchilada
+    - family_id: enchilada
+      name: Enchilada
     - name: FASER
     - name: HKC
-    - name: iFeed[AES]
+    - family_id: ifeed_aes
+      name: iFeed[AES]
     - family_id: iscream
       name: iSCREAM
     - name: Julius

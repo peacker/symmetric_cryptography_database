@@ -6393,3 +6393,49 @@ references:
     references/[2014][artemia,artemia_permutation][][caesar_round1_v1].pdf and
     references/[2014][artemia,artemia_permutation][][caesar_round1_v1.1_final].pdf (both 2014, round 1). Also
     the source for the artemia_permutation primitive family, specified within this same document.'
+- id: alomair_2014_avalanche_v1
+  kind: paper
+  title: AVALANCHEv1
+  authors:
+  - Basel Alomair
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/avalanchev1.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][avalanche][][caesar_round1_v1].pdf.'
+- id: hosseini_khazaei_2014_cba_v1_1
+  kind: paper
+  title: CBA Mode (v1-1)
+  authors:
+  - Hossein Hosseini
+  - Shahram Khazaei
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/cbav11.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copies of both submitted versions:
+    references/[2014][cba][][caesar_round1_v1].pdf and references/[2014][cba][][caesar_round1_v1.1_final].pdf
+    (both 2014, round 1).'
+- id: harris_2014_enchilada_v1_1
+  kind: paper
+  title: The Enchilada authenticated ciphers v1.1
+  authors:
+  - Sandy Harris
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/enchiladav11.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copies of both submitted versions:
+    references/[2014][enchilada][][caesar_round1_v1].pdf and
+    references/[2014][enchilada][][caesar_round1_v1.1_final].pdf (both 2014, round 1).'
+- id: zhang_et_al_2014_ifeed_aes_v1
+  kind: paper
+  title: iFeed[AES] v1
+  authors:
+  - Liting Zhang
+  - Wenling Wu
+  - Han Sui
+  - Peng Wang
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/ifeedaesv1.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][ifeed_aes][][caesar_round1_v1].pdf.'
