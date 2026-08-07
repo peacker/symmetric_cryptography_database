@@ -44,6 +44,12 @@ KNOWN_EXCEPTIONS = {
     # same final-venue-year convention used elsewhere in this database), which
     # makes the year-proxy check see it as later than Rubato.
     ("rubato", "pasta_pi"),
+    # iScream and Scream were both introduced together in the same 2014
+    # round-1 CAESAR document (screamv1.pdf) -- true contemporaries. Scream's
+    # own family year (2015) reflects its later round-3 reference
+    # (grosso_et_al_2015_scream), since it went on to round 2/3 while iSCREAM
+    # was dropped after round 1 and only ever has its original 2014 reference.
+    ("iscream_tbc", "scream_tbc"),
 }
 
 

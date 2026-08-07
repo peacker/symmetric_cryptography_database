@@ -6283,3 +6283,67 @@ references:
     references/[2014][trivia_ck][][caesar_round1_v1].pdf (2014, round 1) and
     references/[2014][trivia_ck][][caesar_round2_v2_final].pdf (2015.08.28, round 2/final). The filename uses
     TriviA-ck''s 2014 round-1 submission year, not the file''s own later revision date.'
+- id: jean_nikolic_peyrin_2014_kiasu_v1
+  kind: paper
+  title: KIASU v1
+  authors:
+  - Jeremy Jean
+  - Ivica Nikolic
+  - Thomas Peyrin
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/kiasuv1.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][kiasu,kiasu_bc][][caesar_round1_v1].pdf. Also the source for the kiasu_bc primitive
+    family, specified within this same document.'
+- id: grosso_et_al_2014_iscream_v1
+  kind: paper
+  title: 'SCREAM & iSCREAM v1'
+  authors:
+  - Vincent Grosso
+  - Gaetan Leurent
+  - Francois-Xavier Standaert
+  - Kerem Varici
+  - Anthony Journault
+  - Francois Durvaux
+  - Lubos Gaspar
+  - Stephanie Kerckhof
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/screamv1.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2 -- unlike its sibling SCREAM, which did advance;
+    see scream_tbc/grosso_et_al_2015_scream). Local copy: references/[2014][iscream,iscream_tbc][][caesar_round1_v1_only].pdf.
+    iSCREAM does not appear at all in the round-2/round-3 SCREAM documents, confirming it was dropped after
+    round 1.'
+- id: kavun_et_al_2014_proest_v1_1
+  kind: paper
+  title: Prøst v1.1
+  authors:
+  - Elif Bilge Kavun
+  - Martin M. Lauridsen
+  - Gregor Leander
+  - Christian Rechberger
+  - Peter Schwabe
+  - Tolga Yalcin
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/proestv11.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copies of both submitted versions:
+    references/[2014][proest,proest_permutation][][caesar_round1_v1].pdf and
+    references/[2014][proest,proest_permutation][][caesar_round1_v1.1_final].pdf (both 2014, round 1). Also the
+    source for the proest_permutation primitive family, specified within this same document.'
+- id: zhang_et_al_2014_lac_v1
+  kind: paper
+  title: 'LAC: A Lightweight Authenticated Encryption Cipher (v1)'
+  authors:
+  - Lei Zhang
+  - Wenling Wu
+  - Yanfeng Wang
+  - Shengbao Wu
+  - Jian Zhang
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/lacv1.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][lac,lblock_s][][caesar_round1_v1].pdf. Also the source for the lblock_s instance of the
+    lblock primitive family, specified within this same document.'

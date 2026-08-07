@@ -2940,6 +2940,17 @@ primitive_families:
       rounds: 32
       output_size_bits: 64
     notes: Original ACNS 2011 LBlock instance with a 64-bit block, 80-bit key, variant-Feistel structure, and 32 rounds.
+  - id: lblock_s
+    name: LBlock-s
+    type: block_cipher
+    reference_ids:
+    - zhang_et_al_2014_lac_v1
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 80
+      rounds: 16
+    notes: A tweaked variant of LBlock (revised key schedule and round-constant handling) used, round-reduced to
+      16 rounds, as LAC's underlying cipher; a full 32-round version is also defined.
 - id: crypton
   name: CRYPTON
   notes: CRYPTON is a 12-round, 128-bit AES candidate whose SPN uses byte substitutions and transposition-oriented diffusion,
@@ -15082,3 +15093,148 @@ primitive_families:
       state_size_bits: 200
       output_size_bits: 200
     notes: 80-bit security target; PRIMATEs also defines a 280-bit-state sibling for a 120-bit security target.
+- id: kiasu_bc
+  name: KIASU-BC
+  notes: KIASU-BC is, by its own authors' description, "the first attempt to build an ad-hoc tweakable AES" --
+    the plain, unmodified AES round function reused as-is, with a 64-bit tweak XORed into the subkey before
+    every AddRoundKey step across all 10 rounds. Backward-compatible with plain AES-128 (using an all-zero
+    tweak reproduces standard AES exactly).
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - rijndael_aes_round
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    block_size_bits: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - jean_nikolic_peyrin_2014_kiasu_v1
+  process_participations: []
+  influences:
+  - source_family_id: aes
+    relations:
+    - variant_of
+    note: KIASU-BC reuses the unmodified AES-128 round function unchanged, adding only a 64-bit tweak XORed
+      into the subkey before each round's AddRoundKey; an all-zero tweak reproduces standard AES-128 exactly.
+  instances:
+  - id: kiasu_bc_128_64
+    name: KIASU-BC-128-64
+    type: tweakable_block_cipher
+    reference_ids:
+    - jean_nikolic_peyrin_2014_kiasu_v1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      tweak_size_bits: 64
+      rounds: 10
+- id: iscream_tbc
+  name: iScream
+  notes: 'iScream is an involutive-component sibling of Scream (see scream_tbc): the same tweakable LS-design
+    structure, but built entirely from involutive S-boxes and an involutive linear layer (L-box) so that
+    encryption and decryption share almost all of their circuitry "approximately for free" -- at the cost of a
+    weaker differential trail bound (an involutive L-box permits 2-round trails with only 8 active S-boxes,
+    versus Scream''s non-involutive L-box).'
+  construction_ids:
+  - tweakable_spn
+  round_ids:
+  - scream_tbc_round
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    block_size_bits: 128
+    state_size_bits: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: binary_matrix_mul
+    - id: xor
+    - id: constant
+  reference_ids:
+  - grosso_et_al_2014_iscream_v1
+  process_participations: []
+  influences:
+  - source_family_id: scream_tbc
+    relations:
+    - related_to
+    note: iScream is Scream's involutive-component sibling, sharing the same tweakable LS-design structure but
+      replacing Scream's S-box and linear layer with involutive counterparts so decryption reuses almost all of
+      encryption's circuitry.
+  instances:
+  - id: iscream_v1
+    name: iScream
+    type: tweakable_block_cipher
+    reference_ids:
+    - grosso_et_al_2014_iscream_v1
+    characteristics:
+      block_size_bits: 128
+      state_size_bits: 128
+- id: proest_permutation
+  name: Proest Permutation
+  notes: A dedicated SPN permutation designed to instantiate three different existing AEAD modes of operation
+    (COPA, OTR, and PRIMATEs' APE) as a drop-in replacement for their usual block-cipher primitive, either
+    directly or via the single-key Even-Mansour construction. Two state sizes are defined -- Proest-128 (256
+    bits, 16 rounds, 128-bit security) and Proest-256 (512 bits, 18 rounds, 256-bit security).
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  round_ids:
+  - keccak_round
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: word_permutation
+      params:
+        word_size_bits: 4
+    - id: xor
+    - id: constant
+  reference_ids:
+  - kavun_et_al_2014_proest_v1_1
+  process_participations: []
+  influences: []
+  instances:
+  - id: proest_128
+    name: Proest-128
+    type: permutation
+    reference_ids:
+    - kavun_et_al_2014_proest_v1_1
+    characteristics:
+      block_size_bits: 256
+      state_size_bits: 256
+      output_size_bits: 256
+      rounds: 16
+  - id: proest_256
+    name: Proest-256
+    type: permutation
+    reference_ids:
+    - kavun_et_al_2014_proest_v1_1
+    characteristics:
+      block_size_bits: 512
+      state_size_bits: 512
+      output_size_bits: 512
+      rounds: 18

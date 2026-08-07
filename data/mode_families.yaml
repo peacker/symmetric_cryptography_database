@@ -12792,3 +12792,191 @@ mode_families:
       key_size_bits: 128
       nonce_size_bits: 128
       tag_size_bits: 128
+- id: kiasu
+  name: KIASU
+  notes: 'KIASU plugs KIASU-BC (see kiasu_bc), an ad-hoc tweakable version of AES, into two AEAD modes inspired
+    by OCB3 and AES-COPA respectively (KIASU!= nonce-respecting, KIASU= nonce-misuse resistant), needing only
+    m+1 block-cipher calls for an m-block message. Reached CAESAR round 1 but was not selected for round 2.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - jean_nikolic_peyrin_2014_kiasu_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: kiasu_bc
+    relations:
+    - used_by
+    note: Both KIASU AEAD modes are built directly on the KIASU-BC-128-64 tweakable block cipher.
+  underlying_primitive_ids:
+  - kiasu_bc_128_64
+  instances:
+  - id: kiasu_ne
+    name: KIASU!=
+    type: aead
+    reference_ids:
+    - jean_nikolic_peyrin_2014_kiasu_v1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+- id: iscream
+  name: iSCREAM
+  notes: 'iSCREAM applies the same Tweakable Authenticated Encryption (TAE) mode as SCREAM (see scream_tbc), but
+    over iScream (see iscream_tbc), the involutive-component sibling of the Scream tweakable block cipher,
+    enabling compact combined encryption/decryption implementations. Reached CAESAR round 1 but, unlike SCREAM,
+    was not selected for round 2.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: binary_matrix_mul
+    - id: xor
+    - id: constant
+  reference_ids:
+  - grosso_et_al_2014_iscream_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: iscream_tbc
+    relations:
+    - used_by
+    note: iSCREAM is the TAE mode of operation applied to the iScream tweakable block cipher.
+  underlying_primitive_ids:
+  - iscream_v1
+  instances:
+  - id: iscream_aead
+    name: iSCREAM
+    type: aead
+    reference_ids:
+    - grosso_et_al_2014_iscream_v1
+    characteristics:
+      block_size_bits: 128
+- id: proest
+  name: Proest
+  notes: 'Proest instantiates three existing AEAD modes of operation -- COPA (see encrypt_mix_encrypt), OTR, and
+    PRIMATEs'' APE -- with its own dedicated permutation (see proest_permutation) in place of their usual
+    block-cipher primitive, either directly or via the single-key Even-Mansour construction, giving six named
+    CAESAR candidates: Prost-COPA-n, Prost-OTR-n, and Prost-APE-n for n in {128, 256}. Reached CAESAR round 1
+    but was not selected for round 2.'
+  construction_ids:
+  - encrypt_mix_encrypt
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: word_permutation
+      params:
+        word_size_bits: 4
+    - id: xor
+    - id: constant
+  reference_ids:
+  - kavun_et_al_2014_proest_v1_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: proest_permutation
+    relations:
+    - used_by
+    note: All six Proest candidates (COPA/OTR/APE modes, each at two security levels) are built on the Proest
+      permutation via the single-key Even-Mansour construction.
+  underlying_primitive_ids:
+  - proest_128
+  instances:
+  - id: proest_copa_128
+    name: Proest-COPA-128
+    type: aead
+    reference_ids:
+    - kavun_et_al_2014_proest_v1_1
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 128
+- id: lac
+  name: LAC
+  notes: 'LAC is a lightweight authenticated encryption cipher structurally similar to ALE, built on LBlock-s
+    (see the lblock family), a revised, round-reduced (16-round) variant of the LBlock lightweight block cipher.
+    80-bit key, 64-bit nonce (public message number), 64-bit tag. Reached CAESAR round 1 but was not selected
+    for round 2.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - constrained_hardware
+  - iot
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: xor
+    - id: rotation_fixed
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: word_permutation
+      params:
+        word_size_bits: 4
+    - id: constant
+  reference_ids:
+  - zhang_et_al_2014_lac_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: lblock
+    relations:
+    - used_by
+    note: LAC is built on LBlock-s (see that instance of the lblock family), a revised, round-reduced variant of
+      LBlock.
+  underlying_primitive_ids:
+  - lblock_s
+  instances:
+  - id: lac_v1
+    name: LAC v1
+    type: aead
+    reference_ids:
+    - zhang_et_al_2014_lac_v1
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 80
+      nonce_size_bits: 64
+      tag_size_bits: 64

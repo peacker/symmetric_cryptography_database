@@ -393,16 +393,20 @@ processes:
     - name: FASER
     - name: HKC
     - name: iFeed[AES]
-    - name: iSCREAM
+    - family_id: iscream
+      name: iSCREAM
     - name: Julius
-    - name: KIASU
-    - name: LAC
+    - family_id: kiasu
+      name: KIASU
+    - family_id: lac
+      name: LAC
     - name: Marble
     - name: McMambo
     - name: PAES
     - name: PANDA
     - name: POLAWIS
-    - name: Prøst
+    - family_id: proest
+      name: Prøst
     - name: Raviyoyla
     - name: Sablier
     - name: Silver
