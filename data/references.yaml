@@ -6347,3 +6347,49 @@ references:
   notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
     references/[2014][lac,lblock_s][][caesar_round1_v1].pdf. Also the source for the lblock_s instance of the
     lblock primitive family, specified within this same document.'
+- id: recacha_2014_plusplus_ae_v1_0
+  kind: paper
+  title: ++AE v1.0
+  authors:
+  - Francisco Recacha
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/aev10.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][plusplus_ae][][caesar_round1_v1.0].pdf.'
+- id: trostle_2014_aes_cmcc_v1_1
+  kind: paper
+  title: AES-CMCC v1.1
+  authors:
+  - Jonathan Trostle
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/aescmccv11.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copies of both submitted versions:
+    references/[2014][aes_cmcc][][caesar_round1_v1].pdf and
+    references/[2014][aes_cmcc][][caesar_round1_v1.1_final].pdf (both 2014, round 1).'
+- id: montes_penazzi_2014_aes_cpfb_v1
+  kind: paper
+  title: AES-CPFB v1
+  authors:
+  - Miguel Montes
+  - Daniel Penazzi
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/aescpfbv1.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][aes_cpfb][][caesar_round1_v1].pdf.'
+- id: alizadeh_et_al_2014_artemia_v1_1
+  kind: paper
+  title: Artemia v1.1
+  authors:
+  - Javad Alizadeh
+  - Mohammad Reza Aref
+  - Nasour Bagheri
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/artemiav11.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copies of both submitted versions:
+    references/[2014][artemia,artemia_permutation][][caesar_round1_v1].pdf and
+    references/[2014][artemia,artemia_permutation][][caesar_round1_v1.1_final].pdf (both 2014, round 1). Also
+    the source for the artemia_permutation primitive family, specified within this same document.'

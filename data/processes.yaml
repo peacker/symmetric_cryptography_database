@@ -380,11 +380,15 @@ processes:
     label: Round 1 (First Round)
     kind: round
     participants:
-    - name: ++AE
-    - name: AES-CMCC
+    - family_id: plusplus_ae
+      name: ++AE
+    - family_id: aes_cmcc
+      name: AES-CMCC
     - name: AES-COBRA
-    - name: AES-CPFB
-    - name: Artemia
+    - family_id: aes_cpfb
+      name: AES-CPFB
+    - family_id: artemia
+      name: Artemia
     - name: AVALANCHE
     - name: Calico
     - name: CBA

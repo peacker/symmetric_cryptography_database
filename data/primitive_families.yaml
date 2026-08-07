@@ -15238,3 +15238,41 @@ primitive_families:
       state_size_bits: 512
       output_size_bits: 512
       rounds: 18
+- id: artemia_permutation
+  name: Artemia Permutation
+  notes: A dedicated permutation family in two widths -- Artemia-512 and Artemia-256 -- designed as the
+    underlying primitive for the JHAE permutation-based AEAD mode, with claimed resistance to differential and
+    linear cryptanalysis.
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  round_ids:
+  - keccak_round
+  target_applications:
+  - software
+  characteristics:
+    state_size_bits: 512
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - alizadeh_et_al_2014_artemia_v1_1
+  process_participations: []
+  influences: []
+  instances:
+  - id: artemia_512
+    name: Artemia-512
+    type: permutation
+    reference_ids:
+    - alizadeh_et_al_2014_artemia_v1_1
+    characteristics:
+      block_size_bits: 512
+      state_size_bits: 512
+      output_size_bits: 512

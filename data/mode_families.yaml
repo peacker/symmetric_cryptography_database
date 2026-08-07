@@ -12980,3 +12980,175 @@ mode_families:
       key_size_bits: 80
       nonce_size_bits: 64
       tag_size_bits: 64
+- id: plusplus_ae
+  name: ++AE
+  notes: '++AE (read "plusplusae") is a generic, block-cipher-agnostic AEAD mode by independent designer
+    Francisco Recacha, extending his own earlier IOBC/IOC modes'' "encrypt with chained redundancy" paradigm
+    (combining XOR and modular-addition sums in the chaining path) with parallelizable computation and optional
+    associated-data authentication. Works with any block cipher and arbitrary block/key sizes. Reached CAESAR
+    round 1 but was not selected for round 2.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+  reference_ids:
+  - recacha_2014_plusplus_ae_v1_0
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  instances:
+  - id: plusplus_ae_v1
+    name: ++AE v1.0
+    type: aead
+    reference_ids:
+    - recacha_2014_plusplus_ae_v1_0
+    characteristics: {}
+    notes: Generic mode -- block/key sizes depend on the chosen underlying block cipher, left unspecified by the
+      submission itself.
+- id: aes_cmcc
+  name: AES-CMCC
+  notes: 'AES-CMCC builds authenticated encryption from AES combined with a pluggable MAC algorithm (AES-CMAC in
+    the recommended parameter sets) for its internal verification value V, in both stateful and stateless
+    variants. Reached CAESAR round 1 but was not selected for round 2.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+  reference_ids:
+  - trostle_2014_aes_cmcc_v1_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: AES-CMCC's recommended parameter sets use unmodified AES-128, with AES-CMAC as the pluggable internal
+      MAC algorithm.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: aes_cmcc_v1_1
+    name: AES-CMCC v1.1
+    type: aead
+    reference_ids:
+    - trostle_2014_aes_cmcc_v1_1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+- id: aes_cpfb
+  name: AES-CPFB
+  notes: AES-CPFB (Counter/Plaintext-Feedback) combines counter mode with plaintext feedback over AES used as a
+    black box, giving privacy equivalent to plain CTR mode plus authenticity. Reached CAESAR round 1 but was not
+    selected for round 2.
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+  reference_ids:
+  - montes_penazzi_2014_aes_cpfb_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: AES-CPFB uses unmodified AES as a black box.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: aes_cpfb_v1
+    name: AES-CPFB v1
+    type: aead
+    reference_ids:
+    - montes_penazzi_2014_aes_cpfb_v1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+- id: artemia
+  name: Artemia
+  notes: Artemia is an online, nonce-based AEAD scheme built on the permutation-based JHAE mode (provably secure
+    in the ideal-permutation model), instantiated with the dedicated Artemia permutation (see
+    artemia_permutation) in 512-bit (Artemia-256 AEAD) or 256-bit (Artemia-128 AEAD) widths. Reached CAESAR
+    round 1 but was not selected for round 2.
+  construction_ids:
+  - duplex_construction
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - alizadeh_et_al_2014_artemia_v1_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: artemia_permutation
+    relations:
+    - used_by
+    note: Artemia's JHAE mode is instantiated with the Artemia permutation.
+  underlying_primitive_ids:
+  - artemia_512
+  instances:
+  - id: artemia_256_aead
+    name: Artemia-256
+    type: aead
+    reference_ids:
+    - alizadeh_et_al_2014_artemia_v1_1
+    characteristics:
+      state_size_bits: 512
+      key_size_bits: 256
