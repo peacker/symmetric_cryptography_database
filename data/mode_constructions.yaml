@@ -176,6 +176,33 @@ mode_constructions:
   placeholder_family_names:
   - AES-GCM
   notes: A block-cipher AEAD mode combining CTR-mode encryption with a GHASH polynomial-evaluation MAC over GF(2^128).
+- id: ocb_mode
+  name: Offset Codebook Mode (OCB)
+  special_case_of: block_cipher_based
+  typical_primitive_types:
+  - aead
+  placeholder_family_names:
+  - OCB
+  notes: A single-pass, fully parallelizable block-cipher AEAD mode (Rogaway et al.; RFC 7253) that XORs each
+    plaintext block with a per-block "offset" (derived from the nonce via a Gray-code-indexed sequence of
+    doublings in GF(2^128)) before and after a single block-cipher encryption call ("whitened codebook" -- one
+    block-cipher call per block does both encryption and authentication, unlike encrypt-then-MAC composites),
+    then XORs a checksum of the plaintext blocks with a further offset and encrypts it once more to form the tag.
+- id: encrypt_mix_encrypt
+  name: Encrypt-mix-Encrypt Online AEAD
+  special_case_of: block_cipher_based
+  typical_primitive_types:
+  - aead
+  placeholder_family_names:
+  - AES-COPA
+  - ELmD
+  - COLM
+  notes: An online, nonce-misuse-resistant block-cipher AEAD mode processing each plaintext block through two
+    masked block-cipher calls with an intermediate linear mixing step between them (mix the first layer's
+    outputs, e.g. via a running XOR chain, before the second encryption layer) -- as opposed to OCB's single
+    masked call per block. Two block-cipher calls per block trade OCB's raw speed for resistance to nonce
+    reuse/misuse and full parallelizability. The AES-COPA/ELmD/COLM lineage (Andreeva, Bogdanov, Datta, Luykx,
+    Mennink, Nandi, Tischhauser, Yasuda) is the canonical example, with COLM merging both predecessors.
 - id: block_cipher_based_stream
   name: Block-Cipher-Based Stream Cipher (Other)
   special_case_of: block_cipher_based

@@ -11355,3 +11355,369 @@ mode_families:
     notes: Rate/capacity split and concrete parameters not confirmed from the sources read for this database --
       see griffin's own instance table (Table 2 of the paper) for the underlying permutation's confirmed
       state-width/round-count options, which this hash mode's own parameters would be chosen from.
+- id: acorn
+  name: ACORN
+  notes: 'ACORN-128 is a bit-oriented NLFSR-based authenticated stream cipher: six concatenated LFSRs (293 bits
+    total state) cross-feed into a nonlinear overall feedback bit (via maj/ch Boolean combining functions, the
+    same nonlinear combiners used in SHA-1/SHA-2) and a nonlinear keystream/output-filter bit, so the individually
+    linear shift registers are driven nonlinearly overall -- CAESAR''s own final-portfolio report for use case 1
+    picked it as the lightweight second choice (after Ascon) specifically for its very low hardware footprint.
+    128-bit key, 128-bit nonce, up to 128-bit tag (128 recommended). Encryption, associated-data absorption, and
+    tag generation are all just further steps of the same single state-update function, driven by two control
+    bits (ca/cb) that select which phase (AD/plaintext/finalization) is active at each step.'
+  construction_ids:
+  - native_keystream_generator
+  target_applications:
+  - iot
+  - hardware
+  - software
+  characteristics:
+    state_size_bits: 293
+    components:
+    - id: lfsr
+      params:
+        count: 6
+    - id: nlfsr
+    - id: xor
+    - id: and
+    - id: not
+  reference_ids:
+  - wu_2016_acorn_v3
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    - final_portfolio_uc1
+    status: portfolio
+  influences: []
+  instances:
+  - id: acorn_128
+    name: ACORN-128
+    type: aead
+    reference_ids:
+    - wu_2016_acorn_v3
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      state_size_bits: 293
+- id: aegis
+  name: AEGIS
+  notes: 'AEGIS drives an array of 128-bit state words directly with the AES encryption round function (SubBytes
+    + ShiftRows + MixColumns + round-key XOR, minus the final-round MixColumns omission -- i.e. the same
+    aes_round used to build a full AES instance, reused here as a keyed-permutation building block rather than
+    invoking full 10/14-round AES as a black box) applied in parallel across the state each step, XORing in the
+    message/associated-data block each step -- authentication and encryption share the same state update, so
+    there is no separate MAC pass. AEGIS-128 keeps a 5-word (640-bit) state updated by 5 parallel AES rounds per
+    16-byte block; AEGIS-256 a 6-word (768-bit) state via 6 AES rounds per 16-byte block, keyed with a 256-bit
+    key for a higher security target; AEGIS-128L an 8-word (1024-bit) state via 8 AES rounds per 32-byte block, roughly doubling
+    throughput at the cost of a larger state. CAESAR''s own final-portfolio report picked AEGIS-128 and AEGIS-128L
+    for use case 2 (high-performance), with AEGIS-256 as an additional finalist for the same use case.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: binary_matrix_mul
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+  reference_ids:
+  - wu_preneel_2016_aegis_v1_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    - final_portfolio_uc2
+    status: portfolio
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: Every AEGIS variant drives its state array directly with the unkeyed-schedule AES encryption round
+      function (SubBytes/ShiftRows/MixColumns/round-key XOR) applied in parallel across state words each step,
+      reusing the round transformation itself as a building block rather than invoking full AES as a black box.
+  instances:
+  - id: aegis_128
+    name: AEGIS-128
+    type: aead
+    reference_ids:
+    - wu_preneel_2016_aegis_v1_1
+    characteristics:
+      state_size_bits: 640
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      rounds: 5
+    notes: 5x 128-bit state words, one parallel AES round applied per word each step (5 AES rounds/step); CAESAR
+      final-portfolio pick for use case 2.
+  - id: aegis_128l
+    name: AEGIS-128L
+    type: aead
+    reference_ids:
+    - wu_preneel_2016_aegis_v1_1
+    characteristics:
+      state_size_bits: 1024
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      rounds: 8
+    notes: 8x 128-bit state words processing a 32-byte block per step (8 AES rounds/step); roughly doubles
+      AEGIS-128's throughput at the cost of a larger state. CAESAR final-portfolio pick for use case 2.
+  - id: aegis_256
+    name: AEGIS-256
+    type: aead
+    reference_ids:
+    - wu_preneel_2016_aegis_v1_1
+    characteristics:
+      state_size_bits: 768
+      key_size_bits: 256
+      nonce_size_bits: 256
+      tag_size_bits: 128
+      rounds: 6
+    notes: 6x 128-bit state words, 6 parallel AES rounds/step; 256-bit key for a higher security target than
+      AEGIS-128. CAESAR additional finalist for use case 2 (not itself a final-portfolio pick).
+- id: ocb
+  name: OCB
+  notes: 'OCB (Offset Codebook Mode) is a single-pass, fully parallelizable, rate-1 block-cipher AEAD mode: a
+    per-block "offset" -- derived from an encrypted nonce via a Gray-code-indexed sequence of doublings in
+    GF(2^128) -- is XORed into a plaintext block both before and after a single block-cipher encryption call, so
+    one block-cipher invocation per block provides both encryption and (via a running plaintext checksum,
+    similarly offset-masked and encrypted once more) authentication, unlike a generic encrypt-then-MAC composite
+    which needs two passes. Predates CAESAR by over a decade (Rogaway, Bellare, Black, Krovetz, 2001; refined
+    through OCB1/OCB2/OCB3) and was already independently standardized as RFC 7253 before its CAESAR submission,
+    which is essentially a thin wrapper attaching that RFC. CAESAR''s own final-portfolio report picked it
+    (alongside AEGIS-128/128L) for use case 2 (high-performance).'
+  construction_ids:
+  - block_cipher_based
+  - ocb_mode
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - krovetz_rogaway_2016_ocb_v1_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    - round_3
+    - final_portfolio_uc2
+    status: portfolio
+  influences:
+  - source_family_id: aes
+    relations:
+    - related_to
+    note: OCB is a generic block-cipher mode; its CAESAR submission and RFC 7253 both specify it primarily over
+      unmodified AES-128/192/256 as the underlying block cipher.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: ocb3_aes128_tag128
+    name: AEAD_AES_128_OCB_TAGLEN128
+    type: aead
+    reference_ids:
+    - krovetz_rogaway_2016_ocb_v1_1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      tag_size_bits: 128
+    notes: RFC 7253's primary named instantiation (OCB3); other RFC-defined variants pair AES-128/192/256 with
+      128/96/64-bit tags.
+- id: aes_copa
+  name: AES-COPA
+  notes: 'AES-COPA ("Chain on Permutation/Additive" -- online AEAD mode) processes each 128-bit plaintext block
+    through two masked AES-128 calls with an intermediate XOR-chained linear mixing step, giving online,
+    nonce-misuse-resistant, fully parallelizable authenticated encryption (two block-cipher calls per block,
+    trading OCB''s speed for misuse resistance). Superseded by COLM (see colm) for CAESAR round 3, which merges
+    AES-COPA''s design with ELmD''s.'
+  construction_ids:
+  - block_cipher_based
+  - encrypt_mix_encrypt
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - andreeva_et_al_2015_aes_copa_v2
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: AES-COPA's two masked block-cipher calls per block are both unmodified AES (128/192/256-bit key sizes
+      matching AES's own).
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: aes_copa_128_128
+    name: AES-COPA-128/128
+    type: aead
+    reference_ids:
+    - andreeva_et_al_2015_aes_copa_v2
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+    notes: Recommended parameter set (128-bit key, 128-bit tag); tag length is otherwise adjustable from 64 to
+      128 bits.
+- id: elmd
+  name: ELmD
+  notes: 'ELmD ("Encrypt-Linear mix-Decrypt") is an online, nonce-misuse-resistant block-cipher AEAD mode built
+    from AES, structurally parallel to AES-COPA (two masked block-cipher calls per block around a linear mixing
+    step) but developed independently by a different two-author team. Superseded by COLM (see colm) for CAESAR
+    round 3, which merges ELmD''s design with AES-COPA''s.'
+  construction_ids:
+  - block_cipher_based
+  - encrypt_mix_encrypt
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - datta_nandi_2016_elmd_v2_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: ELmD's masked block-cipher calls are unmodified AES.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: elmd_v2_1
+    name: ELmD v2.1
+    type: aead
+    reference_ids:
+    - datta_nandi_2016_elmd_v2_1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      tag_size_bits: 128
+- id: colm
+  name: COLM
+  notes: 'COLM ("Encrypt-Linear mix-Encrypt") merges AES-COPA and ELmD -- its eight authors are the union of both
+    predecessors'' author lists. Like both, it processes each 128-bit block through two masked AES-128 calls
+    around an intermediate linear mixing step, giving online, fully parallelizable authenticated encryption with
+    strong resistance to blockwise-adaptive and nonce-misuse adversaries. CAESAR''s own final-portfolio report
+    picked it as the second choice (after Deoxys-II) for use case 3 (defense in depth).'
+  construction_ids:
+  - block_cipher_based
+  - encrypt_mix_encrypt
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - andreeva_et_al_2016_colm_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_2
+    - round_3
+    - final_portfolio_uc3
+    status: portfolio
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: COLM's two masked block-cipher calls per block are unmodified AES-128.
+  - source_family_id: aes_copa
+    relations:
+    - variant_of
+    - improvement_of
+    note: COLM directly continues AES-COPA's Encrypt-mix-Encrypt online AEAD structure (six of AES-COPA's eight
+      authors are also COLM co-authors); CAESAR's committee had COLM formally supersede AES-COPA for round 3.
+  - source_family_id: elmd
+    relations:
+    - variant_of
+    - improvement_of
+    note: COLM also directly continues ELmD's Encrypt-Linear-mix-Decrypt structure (both of ELmD's authors are
+      also COLM co-authors); CAESAR's committee had COLM formally supersede ELmD for round 3.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: colm_v1
+    name: COLM v1
+    type: aead
+    reference_ids:
+    - andreeva_et_al_2016_colm_v1
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+    notes: CAESAR final-portfolio second choice for use case 3 (defense in depth).

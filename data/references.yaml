@@ -5844,3 +5844,107 @@ references:
     most 2^10.2 operations for 256-bit output version and negligible memory," i.e. collisions found in under a
     second on ordinary hardware, plus a related-key recovery attack in the stream-cipher mode. Local copy:
     references/[2012][armadillo][][armadillo2+practical+cryptanalysis].pdf.'
+- id: wu_2016_acorn_v3
+  kind: paper
+  title: 'ACORN: A Lightweight Authenticated Cipher (v3)'
+  authors:
+  - Hongjun Wu
+  year: 2016
+  venue: CAESAR submission, third round
+  url: https://competitions.cr.yp.to/round3/acornv3.pdf
+  notes: 'CAESAR final-portfolio second choice for use case 1 (lightweight). Local copies of all three submitted
+    versions: references/[2014][acorn][][caesar_round1_v1].pdf (2014.03.15, round 1),
+    references/[2014][acorn][][caesar_round2_v2].pdf (2015.08.29, round 2, lengthened initialization/associated-data/
+    finalization steps and widened key-bit use during initialization against nonce-reuse attacks), and
+    references/[2014][acorn][][caesar_round3_v3_final].pdf (2016.09.15, round 3/final, moved the ch() nonlinear term
+    from the feedback function to the output filter for a larger guess-and-determine security margin). The filename
+    uses ACORN''s 2014 round-1 submission year throughout, not each file''s own later revision date.'
+- id: wu_preneel_2016_aegis_v1_1
+  kind: paper
+  title: 'AEGIS: A Fast Authenticated Encryption Algorithm (v1.1)'
+  authors:
+  - Hongjun Wu
+  - Bart Preneel
+  year: 2016
+  venue: CAESAR submission, third round
+  url: https://competitions.cr.yp.to/round3/aegisv11.pdf
+  notes: 'CAESAR final-portfolio pick for use case 2 (high-performance): AEGIS-128 and AEGIS-128L directly, plus
+    AEGIS-256 as an additional finalist. Local copies of both submitted versions:
+    references/[2014][aegis][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][aegis][][caesar_round3_v1.1_final].pdf (2016.09.15, round 3/final). The filename uses
+    AEGIS''s 2014 round-1 submission year, not each file''s own later revision date.'
+- id: krovetz_rogaway_2016_ocb_v1_1
+  kind: paper
+  title: OCB (v1.1)
+  authors:
+  - Ted Krovetz
+  - Phillip Rogaway
+  year: 2016
+  venue: CAESAR submission, third round (wrapping RFC 7253)
+  url: https://competitions.cr.yp.to/round3/ocbv11.pdf
+  notes: 'CAESAR final-portfolio pick for use case 2 (high-performance). The submission itself is a thin wrapper
+    around the pre-existing RFC 7253 specification (OCB was already a mature, independently standardized mode
+    predating CAESAR). Local copies of both submitted versions:
+    references/[2014][ocb][][caesar_round1_v1].pdf (2014, round 1, attaching the then-pending RFC 7253
+    Internet-Draft and the FSE 2011 paper it was based on) and
+    references/[2014][ocb][][caesar_round3_v1.1_final].pdf (2016.09.15, round 3/final, attaching the by-then-published
+    RFC 7253). The filename uses OCB''s 2014 CAESAR round-1 submission year, not the file''s own later revision date
+    or OCB''s own earlier (2001+) design history.'
+- id: andreeva_et_al_2015_aes_copa_v2
+  kind: paper
+  title: 'AES-COPA v2: Submission to CAESAR'
+  authors:
+  - Elena Andreeva
+  - Andrey Bogdanov
+  - Atul Luykx
+  - Bart Mennink
+  - Elmar Tischhauser
+  - Kan Yasuda
+  year: 2015
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/aescopav2.pdf
+  notes: 'CAESAR round-1/2 candidate; superseded by COLM (see colm_ref) for round 3, which merges AES-COPA''s
+    "Encrypt-Mix-Encrypt" nonce-misuse-resistant online AEAD structure with ideas from ELmD (six of AES-COPA''s
+    eight authors are also COLM co-authors). Local copies of both submitted versions:
+    references/[2014][aes_copa][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][aes_copa][][caesar_round2_v2_final].pdf (2015, round 2/final). The filename uses AES-COPA''s
+    2014 round-1 submission year, not each file''s own later revision date.'
+- id: datta_nandi_2016_elmd_v2_1
+  kind: paper
+  title: Proposal of ELmD v2.1
+  authors:
+  - Nilanjan Datta
+  - Mridul Nandi
+  year: 2016
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/elmdv21.pdf
+  notes: 'CAESAR round-1/2 candidate ("Encrypt-Linear mix-Decrypt", an online AEAD mode built from AES);
+    superseded by COLM (see colm_ref) for round 3, which merges ELmD''s ideas with AES-COPA''s (both of ELmD''s
+    authors are also COLM co-authors). Local copies of all three submitted versions:
+    references/[2014][elmd][][caesar_round1_v1.0].pdf (2014, round 1),
+    references/[2014][elmd][][caesar_round2_v2.0].pdf (2015, round 2), and
+    references/[2014][elmd][][caesar_round2_v2.1_final].pdf (2016, a small round-2 masking fix strengthening
+    last-block privacy under nonce misuse). The filename uses ELmD''s 2014 round-1 submission year, not each
+    file''s own later revision date.'
+- id: andreeva_et_al_2016_colm_v1
+  kind: paper
+  title: COLM v1
+  authors:
+  - Elena Andreeva
+  - Andrey Bogdanov
+  - Nilanjan Datta
+  - Atul Luykx
+  - Bart Mennink
+  - Mridul Nandi
+  - Elmar Tischhauser
+  - Kan Yasuda
+  year: 2016
+  venue: CAESAR submission, third round
+  url: https://competitions.cr.yp.to/round3/colmv1.pdf
+  notes: 'CAESAR final-portfolio second choice for use case 3 (defense in depth), superseding both AES-COPA (see
+    andreeva_et_al_2015_aes_copa_v2) and ELmD (see datta_nandi_2016_elmd_v2_1) -- COLM''s eight authors are the
+    union of both predecessors'' author lists. Local copies of both submitted versions:
+    references/[2014][colm][][caesar_round2_v1pre].pdf (2015, round 2, "v1pre") and
+    references/[2014][colm][][caesar_round3_v1_final].pdf (2016.09.15, round 3/final, plus an addendum). The
+    filename uses COLM''s 2014 CAESAR-process-entry year (via its AES-COPA/ELmD predecessors'' round-1
+    submissions), not the file''s own later date.'

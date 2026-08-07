@@ -437,12 +437,20 @@ processes:
     - name: TriviA-ck
     - family_id: ascon
       name: Ascon
-    - name: ACORN
-    - name: AEGIS-128
-    - name: OCB
-    - name: COLM
-    - name: AEGIS-128L
-    - name: AEGIS-256
+    - family_id: acorn
+      name: ACORN
+    - family_id: aegis
+      name: AEGIS-128
+    - family_id: ocb
+      name: OCB
+    - family_id: aes_copa
+      name: AES-COPA
+    - family_id: elmd
+      name: ELmD
+    - family_id: aegis
+      name: AEGIS-128L
+    - family_id: aegis
+      name: AEGIS-256
     - name: MORUS
   - id: round_2
     label: Round 2 (Second Round)
@@ -474,14 +482,24 @@ processes:
     - name: TriviA-ck
     - family_id: ascon
       name: Ascon
-    - name: ACORN
-    - name: AEGIS-128
-    - name: OCB
+    - family_id: acorn
+      name: ACORN
+    - family_id: aegis
+      name: AEGIS-128
+    - family_id: ocb
+      name: OCB
     - family_id: deoxys
       name: Deoxys-II
-    - name: COLM
-    - name: AEGIS-128L
-    - name: AEGIS-256
+    - family_id: colm
+      name: COLM
+    - family_id: aes_copa
+      name: AES-COPA
+    - family_id: elmd
+      name: ELmD
+    - family_id: aegis
+      name: AEGIS-128L
+    - family_id: aegis
+      name: AEGIS-256
     - name: MORUS
     - family_id: norx
       name: NORX
@@ -504,12 +522,18 @@ processes:
     - name: Tiaoxin
     - family_id: ascon
       name: Ascon
-    - name: ACORN
-    - name: AEGIS-128
-    - name: OCB
-    - name: COLM
-    - name: AEGIS-128L
-    - name: AEGIS-256
+    - family_id: acorn
+      name: ACORN
+    - family_id: aegis
+      name: AEGIS-128
+    - family_id: ocb
+      name: OCB
+    - family_id: colm
+      name: COLM
+    - family_id: aegis
+      name: AEGIS-128L
+    - family_id: aegis
+      name: AEGIS-256
     - name: MORUS
   - id: final_portfolio_uc1
     label: Final Portfolio – Use Case 1 (Lightweight)
@@ -518,16 +542,21 @@ processes:
     - family_id: ascon
       name: Ascon
       note: First choice
-    - name: ACORN
+    - family_id: acorn
+      name: ACORN
       note: Second choice
   - id: final_portfolio_uc2
     label: Final Portfolio – Use Case 2 (High-performance)
     kind: portfolio
     participants:
-    - name: AEGIS-128
-    - name: OCB
-    - name: AEGIS-128L
-    - name: AEGIS-256
+    - family_id: aegis
+      name: AEGIS-128
+    - family_id: ocb
+      name: OCB
+    - family_id: aegis
+      name: AEGIS-128L
+    - family_id: aegis
+      name: AEGIS-256
     - name: MORUS
   - id: final_portfolio_uc3
     label: Final Portfolio – Use Case 3 (Defense in depth)
@@ -536,7 +565,8 @@ processes:
     - family_id: deoxys
       name: Deoxys-II
       note: First choice
-    - name: COLM
+    - family_id: colm
+      name: COLM
       note: Second choice
 - id: phc_competition_nist_2013_2015
   name: PHC Competition
