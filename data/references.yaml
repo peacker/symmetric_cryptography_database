@@ -5854,8 +5854,9 @@ references:
   url: https://competitions.cr.yp.to/round3/acornv3.pdf
   notes: 'CAESAR final-portfolio second choice for use case 1 (lightweight). Local copies of all three submitted
     versions: references/[2014][acorn][][caesar_round1_v1].pdf (2014.03.15, round 1),
-    references/[2014][acorn][][caesar_round2_v2].pdf (2015.08.29, round 2, lengthened initialization/associated-data/
-    finalization steps and widened key-bit use during initialization against nonce-reuse attacks), and
+    references/[2014][acorn][][caesar_round2_v2].pdf (2015.08.29, round 2, lengthened the initialization and
+    finalization steps while shortening the associated-data and plaintext padding steps, and widened key-bit use
+    during initialization against nonce-reuse attacks), and
     references/[2014][acorn][][caesar_round3_v3_final].pdf (2016.09.15, round 3/final, moved the ch() nonlinear term
     from the feedback function to the output filter for a larger guess-and-determine security margin). The filename
     uses ACORN''s 2014 round-1 submission year throughout, not each file''s own later revision date.'
@@ -5909,13 +5910,13 @@ references:
     references/[2014][aes_copa][][caesar_round1_v1].pdf (2014, round 1) and
     references/[2014][aes_copa][][caesar_round2_v2_final].pdf (2015, round 2/final). The filename uses AES-COPA''s
     2014 round-1 submission year, not each file''s own later revision date.'
-- id: datta_nandi_2016_elmd_v2_1
+- id: datta_nandi_2015_elmd_v2_1
   kind: paper
   title: Proposal of ELmD v2.1
   authors:
   - Nilanjan Datta
   - Mridul Nandi
-  year: 2016
+  year: 2015
   venue: CAESAR submission, second round
   url: https://competitions.cr.yp.to/round2/elmdv21.pdf
   notes: 'CAESAR round-1/2 candidate ("Encrypt-Linear mix-Decrypt", an online AEAD mode built from AES);
@@ -5923,7 +5924,7 @@ references:
     authors are also COLM co-authors). Local copies of all three submitted versions:
     references/[2014][elmd][][caesar_round1_v1.0].pdf (2014, round 1),
     references/[2014][elmd][][caesar_round2_v2.0].pdf (2015, round 2), and
-    references/[2014][elmd][][caesar_round2_v2.1_final].pdf (2016, a small round-2 masking fix strengthening
+    references/[2014][elmd][][caesar_round2_v2.1_final].pdf (2015-10-12, a small round-2 masking fix strengthening
     last-block privacy under nonce misuse). The filename uses ELmD''s 2014 round-1 submission year, not each
     file''s own later revision date.'
 - id: andreeva_et_al_2016_colm_v1
@@ -5942,9 +5943,11 @@ references:
   venue: CAESAR submission, third round
   url: https://competitions.cr.yp.to/round3/colmv1.pdf
   notes: 'CAESAR final-portfolio second choice for use case 3 (defense in depth), superseding both AES-COPA (see
-    andreeva_et_al_2015_aes_copa_v2) and ELmD (see datta_nandi_2016_elmd_v2_1) -- COLM''s eight authors are the
-    union of both predecessors'' author lists. Local copies of both submitted versions:
-    references/[2014][colm][][caesar_round2_v1pre].pdf (2015, round 2, "v1pre") and
+    andreeva_et_al_2015_aes_copa_v2) and ELmD (see datta_nandi_2015_elmd_v2_1) -- COLM''s eight authors are the
+    union of both predecessors'' author lists. COLM itself only ever existed from round 3 onward (AES-COPA and
+    ELmD were the actual round-2 candidates that merged to form it); no genuine round-2 COLM document exists.
+    Local copies of both available documents: references/[2014][colm][][caesar_round3_v1pre_preliminary].pdf
+    (2016.05.12, a "Preliminary document" predating the formal round-3 submission by several months) and
     references/[2014][colm][][caesar_round3_v1_final].pdf (2016.09.15, round 3/final, plus an addendum). The
     filename uses COLM''s 2014 CAESAR-process-entry year (via its AES-COPA/ELmD predecessors'' round-1
     submissions), not the file''s own later date.'
@@ -5961,8 +5964,9 @@ references:
     as in OCB), giving a parallelizable, fully nonce-respecting-secure AEAD mode -- distinct from OCB in using
     two ordinary block-cipher calls per block pair rather than one masked call per single block. Local copies of
     all four submitted versions: references/[2014][aes_otr][][caesar_round1_v1].pdf (2014, round 1),
-    references/[2014][aes_otr][][caesar_round2_v2].pdf and references/[2014][aes_otr][][caesar_round2_v3].pdf
-    (2015, round 2), and references/[2014][aes_otr][][caesar_round3_v3.1_final].pdf (2016.09.01, round 3/final).
+    references/[2014][aes_otr][][caesar_round2_v2].pdf (2015.08.29, round 2) and
+    references/[2014][aes_otr][][caesar_round2_v3].pdf (2016.04.04, round 2), and
+    references/[2014][aes_otr][][caesar_round3_v3.1_final].pdf (2016.09.01, round 3/final).
     The filename uses AES-OTR''s 2014 round-1 submission year, not each file''s own later revision date.'
 - id: hoang_krovetz_rogaway_2017_aez_v5
   kind: paper
@@ -6170,8 +6174,9 @@ references:
   url: https://competitions.cr.yp.to/round2/omdv20.pdf
   notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
     references/[2014][omd][][caesar_round1_v1.0].pdf (2014, round 1) and
-    references/[2014][omd][][caesar_round2_v2.0_final].pdf (2015.08.25, round 2/final). The filename uses OMD''s
-    2014 round-1 submission year, not the file''s own later revision date.'
+    references/[2014][omd][][caesar_round2_v2.0_final].pdf (2015.08.25, round 2/final; a further non-parameter-
+    affecting pseudocode errata fix, dated 2016.05.11, was also published but is not separately retained here).
+    The filename uses OMD''s 2014 round-1 submission year, not the file''s own later revision date.'
 - id: biryukov_khovratovich_2014_paeq_v1
   kind: paper
   title: PAEQ v1
@@ -6304,7 +6309,6 @@ references:
   - Gaetan Leurent
   - Francois-Xavier Standaert
   - Kerem Varici
-  - Anthony Journault
   - Francois Durvaux
   - Lubos Gaspar
   - Stephanie Kerckhof
@@ -6347,16 +6351,19 @@ references:
   notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
     references/[2014][lac,lblock_s][][caesar_round1_v1].pdf. Also the source for the lblock_s instance of the
     lblock primitive family, specified within this same document.'
-- id: recacha_2014_plusplus_ae_v1_0
+- id: recacha_2014_plusplus_ae_v1_1
   kind: paper
-  title: ++AE v1.0
+  title: ++AE v1.1
   authors:
   - Francisco Recacha
   year: 2014
   venue: CAESAR submission, first round
-  url: https://competitions.cr.yp.to/round1/aev10.pdf
-  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
-    references/[2014][plusplus_ae][][caesar_round1_v1.0].pdf.'
+  url: https://competitions.cr.yp.to/round1/aev11.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). ++AE v1.1 (2014.04.15) is a genuine second version,
+    fixing padding weaknesses in v1.0''s associated-data and plaintext handling and adding an explicit
+    recommended parameter set (AES, 128-bit key, 128-bit tag) for CAESAR reference evaluation. Local copies of
+    both submitted versions: references/[2014][plusplus_ae][][caesar_round1_v1.0].pdf (2014.03.15, v1.0) and
+    references/[2014][plusplus_ae][][caesar_round1_v1.1].pdf (2014.04.15, v1.1, final).'
 - id: trostle_2014_aes_cmcc_v1_1
   kind: paper
   title: AES-CMCC v1.1
@@ -6393,16 +6400,19 @@ references:
     references/[2014][artemia,artemia_permutation][][caesar_round1_v1].pdf and
     references/[2014][artemia,artemia_permutation][][caesar_round1_v1.1_final].pdf (both 2014, round 1). Also
     the source for the artemia_permutation primitive family, specified within this same document.'
-- id: alomair_2014_avalanche_v1
+- id: alomair_2014_avalanche_v1_1
   kind: paper
-  title: AVALANCHEv1
+  title: AVALANCHEv1.1
   authors:
   - Basel Alomair
   year: 2014
   venue: CAESAR submission, first round
-  url: https://competitions.cr.yp.to/round1/avalanchev1.pdf
-  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
-    references/[2014][avalanche][][caesar_round1_v1].pdf.'
+  url: https://competitions.cr.yp.to/round1/avalanche-corr.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). AVALANCHEv1.1 (2014.04.07) is a genuine second
+    version, fixing a key-recovery attack against AVALANCHEv1 by doubling all key sizes (v1: 128/192/256-bit key
+    options; v1.1: 384/448/512-bit) and adding an explicit end-of-message marker. Local copies of both submitted
+    versions: references/[2014][avalanche][][caesar_round1_v1].pdf (2014.03.15, v1) and
+    references/[2014][avalanche][][caesar_round1_v1.1].pdf (2014.04.07, v1.1, final).'
 - id: hosseini_khazaei_2014_cba_v1_1
   kind: paper
   title: CBA Mode (v1-1)
@@ -6594,7 +6604,8 @@ references:
   venue: CAESAR submission, first round
   url: https://competitions.cr.yp.to/round1/marblev11.pdf
   notes: 'CAESAR round-1 candidate; withdrawn on 2015.01.23 after Thomas Peyrin, Gaetan Leurent, and Valentin
-    Suder found a birthday-bound-breaking forgery attack. Local copies of both submitted versions:
+    Suder found a forgery attack breaking Marble''s design goal of full n-bit (beyond-birthday-bound) security,
+    leaving only the weaker birthday-bound level. Local copies of both submitted versions:
     references/[2014][marble][][caesar_round1_v1.0].pdf (2014.03.15, round 1) and
     references/[2014][marble][][caesar_round1_v1.1_final].pdf (2014.03.26, minor revision, final).'
 - id: ladd_2014_mcmambo_v1
@@ -6692,7 +6703,7 @@ references:
   year: 2014
   venue: CAESAR submission, first round
   url: https://competitions.cr.yp.to/round1/elmdv10.pdf
-  notes: ELmD's original CAESAR round-1 submission. Added alongside datta_nandi_2016_elmd_v2_1 (which cites the
+  notes: ELmD's original CAESAR round-1 submission. Added alongside datta_nandi_2015_elmd_v2_1 (which cites the
     full local version history and remains the primary/most-authoritative reference) specifically so the family's
     earliest-reference-year proxy reflects ELmD's true 2014 debut rather than its 2016 final revision.
 - id: minematsu_2014_aes_otr_v1
@@ -6906,7 +6917,6 @@ references:
   - Hakon Jacobsen
   - Mohamed El-Hadedy
   - Rune Erlend Jensen
-  - Daniel Otte
   year: 2014
   venue: CAESAR submission, first round
   url: https://competitions.cr.yp.to/round1/picipherv1.pdf

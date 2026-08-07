@@ -2967,8 +2967,9 @@ primitive_families:
       block_size_bits: 64
       key_size_bits: 80
       rounds: 16
-    notes: A tweaked variant of LBlock (revised key schedule and round-constant handling) used, round-reduced to
-      16 rounds, as LAC's underlying cipher; a full 32-round version is also defined.
+    notes: A tweaked variant of LBlock (revised key schedule and round-constant handling); LAC uses this
+      16-round, round-reduced form for its main encryption/authentication processing, and the full 32-round
+      version for key/state initialization and tag finalization.
 - id: crypton
   name: CRYPTON
   notes: CRYPTON is a 12-round, 128-bit AES candidate whose SPN uses byte substitutions and transposition-oriented diffusion,
@@ -15024,6 +15025,7 @@ primitive_families:
       state_size_bits: 256
       output_size_bits: 256
       rounds: 17
+    notes: The spec states Minalpher-P has 17.5 rounds (17 full rounds plus a final half-round).
 - id: aesq
   name: AESQ
   notes: 'AESQ ("Quadrupled AES") is a 512-bit permutation viewed as four parallel 128-bit registers, each round
@@ -15113,6 +15115,16 @@ primitive_families:
       state_size_bits: 200
       output_size_bits: 200
     notes: 80-bit security target; PRIMATEs also defines a 280-bit-state sibling for a 120-bit security target.
+  - id: primate_280
+    name: PRIMATE-280
+    type: permutation
+    reference_ids:
+    - andreeva_et_al_2014_primates_v1_02
+    characteristics:
+      block_size_bits: 280
+      state_size_bits: 280
+      output_size_bits: 280
+    notes: 120-bit security target, used by the spec's own primary-recommended instance, APE-120.
 - id: kiasu_bc
   name: KIASU-BC
   notes: KIASU-BC is, by its own authors' description, "the first attempt to build an ad-hoc tweakable AES" --
@@ -15208,11 +15220,11 @@ primitive_families:
       block_size_bits: 128
       state_size_bits: 128
 - id: proest_permutation
-  name: Proest Permutation
+  name: Prøst Permutation
   notes: A dedicated SPN permutation designed to instantiate three different existing AEAD modes of operation
     (COPA, OTR, and PRIMATEs' APE) as a drop-in replacement for their usual block-cipher primitive, either
-    directly or via the single-key Even-Mansour construction. Two state sizes are defined -- Proest-128 (256
-    bits, 16 rounds, 128-bit security) and Proest-256 (512 bits, 18 rounds, 256-bit security).
+    directly or via the single-key Even-Mansour construction. Two state sizes are defined -- Prøst-128 (256
+    bits, 16 rounds, 128-bit security) and Prøst-256 (512 bits, 18 rounds, 256-bit security).
   construction_ids:
   - spn
   - full_sbox_layer
@@ -15239,7 +15251,7 @@ primitive_families:
   influences: []
   instances:
   - id: proest_128
-    name: Proest-128
+    name: Prøst-128
     type: permutation
     reference_ids:
     - kavun_et_al_2014_proest_v1_1
@@ -15249,7 +15261,7 @@ primitive_families:
       output_size_bits: 256
       rounds: 16
   - id: proest_256
-    name: Proest-256
+    name: Prøst-256
     type: permutation
     reference_ids:
     - kavun_et_al_2014_proest_v1_1
@@ -15296,6 +15308,16 @@ primitive_families:
       block_size_bits: 512
       state_size_bits: 512
       output_size_bits: 512
+  - id: artemia_256
+    name: Artemia-256
+    type: permutation
+    reference_ids:
+    - alizadeh_et_al_2014_artemia_v1_1
+    characteristics:
+      block_size_bits: 256
+      state_size_bits: 256
+      output_size_bits: 256
+    notes: Smaller-width sibling used by the Artemia-128 AEAD instance.
 - id: mambo
   name: Mambo
   notes: 'Mambo, by Watson Ladd, is a bespoke tweakable block cipher operating on a 16-word (512-bit) state of
@@ -15482,7 +15504,7 @@ primitive_families:
 - id: panda_round_func
   name: PANDA RoundFunc
   notes: 'PANDA''s RoundFunc, by Ye, Wang, Hu, Wang, Xie, Sun, and Wang, is an entirely original (not AES-derived)
-    round function operating on seven 128-bit state blocks (w, x, y, z, S0, S1, S2) plus a message block: four
+    round function operating on seven 64-bit state blocks (w, x, y, z, S0, S1, S2) plus a message block: four
     4-bit-nibble S-box (SubNibbles) applications run in parallel with a linear transformation across the state,
     rather than the usual serial SPN layering, so the round function and its inverse share components
     efficiently. Used as the sole underlying primitive of both the PANDA-s (stream-cipher-plus-MAC) and PANDA-b
@@ -15495,7 +15517,7 @@ primitive_families:
   - software
   - hardware
   characteristics:
-    block_size_bits: 896
+    block_size_bits: 448
     components:
     - id: sbox
       params:
@@ -15508,10 +15530,10 @@ primitive_families:
   process_participations: []
   influences: []
   instances:
-  - id: panda_round_func_896
+  - id: panda_round_func_448
     name: PANDA RoundFunc
     type: permutation
     reference_ids:
     - ye_et_al_2014_panda_v1
     characteristics:
-      block_size_bits: 896
+      block_size_bits: 448

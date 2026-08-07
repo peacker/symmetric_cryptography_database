@@ -562,8 +562,6 @@ processes:
       name: OCB
     - family_id: deoxys
       name: Deoxys-II
-    - family_id: colm
-      name: COLM
     - family_id: aes_copa
       name: AES-COPA
     - family_id: elmd
@@ -637,12 +635,6 @@ processes:
       name: AEGIS-128
     - family_id: ocb
       name: OCB
-    - family_id: aegis
-      name: AEGIS-128L
-    - family_id: aegis
-      name: AEGIS-256
-    - family_id: morus
-      name: MORUS
   - id: final_portfolio_uc3
     label: Final Portfolio – Use Case 3 (Defense in depth)
     kind: portfolio
