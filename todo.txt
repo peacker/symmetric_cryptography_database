@@ -103,6 +103,22 @@ TODO:
 
 DONE:
 
+- Fifteenth follow-up round: fixed a bug you found testing the new relation picker locally -- the picker
+  list itself was correct, but the bottom info/note box didn't update to reflect the newly picked
+  relation. Root cause: the note box is pinned by a *separate* mechanism from the picker -- each edge
+  hit-area path (hp) has its own click listener (attached via createPinnableInfoBox's attach(), from
+  before the picker existed) that unconditionally pins the box to *that specific element's* text whenever
+  it's the literal DOM click target. Opening the picker doesn't stop the click event from continuing on to
+  that target, so on every ambiguous click the box got immediately (and invisibly) pinned to whichever hp
+  happened to be topmost in z-order at that pixel -- completely independent of, and never revisited by,
+  whatever the user actually picked from the menu afterward. Fixed by: (1) calling ev.stopPropagation() in
+  the ambiguous-click branch so the topmost hp's own listener never fires in the first place, and (2)
+  exposing a pin(text, pdfEntries) method on createPinnableInfoBox's returned object (previously only
+  reachable internally as show()), called explicitly from the picker's onPick callback with the *chosen*
+  candidate's own text and PDF entries. Verified with Playwright: picking different items from the same
+  8-relation overlap now correctly shows each one's own distinct text (with its own "Open PDF" button)
+  in the note box, matching the picker selection every time. make test all green.
+
 - Fourteenth follow-up round: implemented the "overlapping relation lines" TODO item (in the layered
   layout, when ciphers align vertically, one relation line can sit on top of another, making the one
   underneath unselectable by a normal click). Confirmed the interaction model first (click-triggered

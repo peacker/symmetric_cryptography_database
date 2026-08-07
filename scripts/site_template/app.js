@@ -229,6 +229,7 @@
     }
     return {
       attach,
+      pin: show,
       reset,
       setBase: (text) => { baseText = text; if (!pinned) reset(); },
       isPinned: () => pinned,
@@ -2962,7 +2963,7 @@
           const resolvedNodeEls = resolveHitList(data.nodeEls);
           edgeEls.push(...resolvedEdgeEls);
           nodeEls.push(...resolvedNodeEls);
-          if (data.label) edgeCandidates.push({ label: data.label, edgeEls: resolvedEdgeEls, nodeEls: resolvedNodeEls });
+          if (data.label) edgeCandidates.push({ label: data.label, edgeEls: resolvedEdgeEls, nodeEls: resolvedNodeEls, pdfEntries: data.pdfEntries });
         });
       }
       checkPoint(clientX, clientY);
@@ -3168,6 +3169,13 @@
         return;
       }
       if (hits.edgeCandidates.length > 1) {
+        // Without this, the click would still continue on to whichever hp
+        // happens to be the literal DOM target (topmost in z-order at this
+        // exact pixel) -- its own click listener (attached via
+        // edgeTip.attach() when it was drawn) would immediately pin the
+        // bottom info box to *that* relation's text, regardless of which
+        // one is actually picked from the menu below.
+        ev.stopPropagation();
         showRelationPicker(ev.clientX, ev.clientY, hits.edgeCandidates, (cand) => {
           if (hotPinned && sameEls(hotPinned.edgeEls, cand.edgeEls) && sameEls(hotPinned.nodeEls, cand.nodeEls)) {
             hotPinned = null;
@@ -3176,6 +3184,7 @@
             hotPinned = { edgeEls: cand.edgeEls, nodeEls: cand.nodeEls };
             applyHotClasses(hotPinned.edgeEls, hotPinned.nodeEls);
           }
+          edgeTip.pin(cand.label, cand.pdfEntries ? cand.pdfEntries() : null);
         });
         return;
       }
@@ -3622,7 +3631,12 @@
         // nodeElsByFamily is only fully populated once the node loop below
         // runs, but this getter is only called later (on user interaction),
         // by which point the whole render() call has long since completed.
-        edgeHitData.set(hp, { edgeEls, nodeEls: () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])], label: hoverTxt });
+        edgeHitData.set(hp, {
+          edgeEls,
+          nodeEls: () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])],
+          label: hoverTxt,
+          pdfEntries: () => pdfEntriesForFamilies([{ fid: src, name: srcName }, { fid: tgt, name: tgtName }]),
+        });
         addEdgeFamily(src, { edgeEls, otherFid: tgt });
         addEdgeFamily(tgt, { edgeEls, otherFid: src });
         hoverPaths.push(hp);
@@ -4028,7 +4042,15 @@
         // See the matching comment in drawSugiyama: nodeElsByFamily is
         // populated by the node loop below, but this getter is only called
         // later, on user interaction.
-        edgeHitData.set(hp, { edgeEls, nodeEls: () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])], label: hoverTxt });
+        edgeHitData.set(hp, {
+          edgeEls,
+          nodeEls: () => [...(nodeElsByFamily.get(src) || []), ...(nodeElsByFamily.get(tgt) || [])],
+          label: hoverTxt,
+          pdfEntries: () => pdfEntriesForFamilies([
+            { fid: src, name: String((genFamById.get(src) || {}).name || src) },
+            { fid: tgt, name: String((genFamById.get(tgt) || {}).name || tgt) },
+          ]),
+        });
         addEdgeFamily(src, { edgeEls, otherFid: tgt });
         addEdgeFamily(tgt, { edgeEls, otherFid: src });
         hoverPaths.push(hp);
