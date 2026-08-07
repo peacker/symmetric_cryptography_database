@@ -4267,13 +4267,26 @@ references:
   venue: Public-domain C source (based on the author's March 1988 8086 assembly version), distributed via the
     RPEM package
   url: https://www.nic.funet.fi/pub/crypt/cryptography/rpem/rpem/newdes.c
-  notes: 'Local copy: references/[1990][newdes][][reference+implementation].txt. Explicitly cites Robert Scott''s
+  notes: 'The filename uses NewDES''s 1985 design year, not this file''s own 1990 date. Local copy:
+    references/[1985][newdes][][1990_reference+implementation].txt. Explicitly cites Robert Scott''s
     "Wide-open Encryption Design Offers Flexible Implementations," Cryptologia 9(1), Jan 1985, pp. 75-90 (the
     paper behind newdes_ref, which is itself paywalled with no free copy found) as its source. Used here to
     confirm NewDES''s exact round structure byte-for-byte where the paper itself is unavailable -- see
     newdes_round_forward/newdes_round_backward (data/rounds.yaml) for the resulting model. Also explicitly warns
     that a DIFFERENT algorithm circulates under the same "NewDES" name (plain DES with the initial/final
     permutations stripped) and that this is not that algorithm.'
+- id: connell_1990_newdes_analysis
+  kind: paper
+  title: 'An Analysis of NEWDES: A Modified Version of DES'
+  authors:
+  - Charles Connell
+  year: 1990
+  venue: Cryptologia, Vol. 14, No. 3, pp. 217-223
+  notes: 'Analyzes Robert Scott''s NEWDES (the paper behind newdes_ref), covering the design of its
+    f-function, its bit-distribution behavior, and a secondary-keys argument that the effective key
+    length for multi-block messages may be significantly below the nominal 120 bits. The filename uses
+    NewDES''s 1985 design year, not this paper''s own 1990 publication year. Local copy:
+    references/[1985][newdes][][1990_analysis_by_Connel].pdf.'
 - id: catfish_ref
   kind: paper
   title: 'Catfish: Password Hashing Scheme'

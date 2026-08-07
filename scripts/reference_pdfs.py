@@ -5,7 +5,16 @@ references/ filenames follow one fixed, deterministic format:
 
     [YYYY][name1,name2,...][doctype][notes].ext
 
-  - YYYY: the document's own year.
+  - YYYY: the cipher's own (design/birth) year, not necessarily the
+    document's own publication year -- e.g. a later reference implementation
+    or analysis paper for an older cipher still files under that cipher's
+    original year (see [1987][a5_1][][original not available extracted from
+    2012 publication].pdf or [1985][newdes][][1990_analysis_by_Connel].pdf).
+    When they diverge, the document's actual year belongs in the notes field
+    and/or the reference's own `year:` in data/references.yaml -- this field
+    exists so a family's whole reference set sorts and groups by the
+    cipher's own timeline, not by whenever someone happened to write about
+    it.
   - names: one or more identifiers, joined by "," when a single document
     covers more than one entry (e.g. a combined paper, a multi-cipher
     competition submission, or a primitive shared across tiers). Each name

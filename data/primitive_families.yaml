@@ -11946,6 +11946,7 @@ primitive_families:
   reference_ids:
   - newdes_ref
   - riordan_1990_newdes_reference_implementation
+  - connell_1990_newdes_analysis
   process_participations: []
   influences: []
   instances:
