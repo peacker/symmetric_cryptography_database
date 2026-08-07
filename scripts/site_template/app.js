@@ -4074,7 +4074,7 @@
         const famConstrs = Array.from(famToConstrs.get(fid) || []).map((c) => genDims.constructionNameById.get(c) || c).sort().join(", ") || "—";
         const pid = genFamilyProcessMap[fid]; const proc = pid ? genProcessList.find((p) => String(p.id) === pid) : null;
         const genLabel = useGen ? `Gen ${layerOf.get(fid) || 0}` : String(yr);
-        const tip = [`${String(fam.name || fid)} (${genLabel})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : [])].join("\n");
+        const tip = [`${String(fam.name || fid)} (${genLabel})`, `Type: ${famTypes}`, `Construction: ${famConstrs}`, ...(isStd ? ["Standard: yes"] : []), ...(proc ? [`Process: ${proc.name}`] : []), ...(fam.notes ? [fam.notes] : [])].join("\n");
         const showBullets = !genShowBullets || genShowBullets.checked;
         const nodeRad = isStd ? 4 : 3;
         const name = String(fam.name || fid);

@@ -103,6 +103,19 @@ TODO:
 
 DONE:
 
+- Eighteenth follow-up round: you noticed the AES'-128/128 (mixFeed's underlying block cipher) node tooltip in
+  the Genealogy tab showed only Type/Construction/Process, missing the crucial "MixColumns also applied in the
+  final round (unlike standard AES)" detail that actually explains what makes it a distinct cipher -- without it
+  the tooltip makes AES'-128/128 look like plain AES with a different name. The detail was already well
+  documented in the data (the family's own notes, its influences[].note back to aes, and the instance's own
+  notes), just not surfaced in this specific tooltip. Root cause: the Genealogy tab's node tooltip is built in
+  two near-duplicate places, one per layout (drawSugiyama, drawRadial) -- the layered layout's version already
+  appended the family's notes field, but the radial layout's (the default layout) never did, so any node's
+  notes were invisible unless you happened to switch to layered. Fixed by adding the same
+  `...(fam.notes ? [fam.notes] : [])` the layered version already had. Verified live: AES'-128/128's radial-view
+  tooltip now ends with "Chakraborty and Nandi 2019. AES'-128/128 (AES-128 with MixColumns added to the final
+  round) is the block cipher underlying the mixFeed AEAD mode...". make test all green.
+
 - Seventeenth follow-up round: added HKDF (the HMAC-based extract-then-expand key derivation function) as a new
   mode family, from two files you added -- Krawczyk's original CRYPTO 2010 paper (hkdf_ref) and its IETF
   standardization, RFC 5869 (krawczyk_eronen_2010_rfc5869). Modeled closely on the existing PBKDF2 entry: type
