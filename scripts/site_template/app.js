@@ -4453,11 +4453,30 @@
 
   }
 
-  setupNavigator();
+  // Must run before setupFamilyVisualization()/setupGenealogy()/
+  // setupBuilder(): it sets each view's default "Filters on left" side-layout
+  // class on a large landscape screen, which changes the width actually
+  // available to that view's own plot/graph container. Each view's own setup
+  // does an initial fit-to-container-width render synchronously as part of
+  // its own setup -- if that measurement happens before this class is
+  // applied, it fits to the wider *pre*-side-layout width, and nothing ever
+  // re-fits afterward (the default-layout branch below doesn't itself call
+  // triggerViewRefresh, only the button's own click handler does), leaving
+  // the plot permanently too wide for its actual (narrower, side-layout)
+  // container.
+  setupFullscreenAndFilterToggles();
   setupAllTablesBrowser();
   setupBuilder();
   setupFamilyVisualization();
   setupGenealogy();
-  setupFullscreenAndFilterToggles();
+  // Must run after setupFamilyVisualization()/setupGenealogy(): it
+  // immediately activates the default "visualizations" tab, which fits the
+  // plot to its container via viewRefreshHooks.visualizations -- if that
+  // hook isn't registered yet (it's assigned inside setupFamilyVisualization
+  // itself), triggerViewRefresh() silently no-ops, and nothing ever retries
+  // it since the tab is already active and no further tab click will fire
+  // for it. Confirmed as the cause of the Timelines plot not fitting its
+  // container on a fresh page load.
+  setupNavigator();
   setupPdfViewer();
 })();

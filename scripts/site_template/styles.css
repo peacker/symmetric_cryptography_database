@@ -1115,6 +1115,12 @@ text.gen-node-hot {
   box-sizing: border-box;
   cursor: pointer;
   display: block;
+  /* A dense hub (many families sharing a construction, say) can produce
+     dozens of candidates -- without flex-shrink:0, flex's default
+     flex-shrink:1 squeezes every row down to fit inside max-height instead
+     of letting the container's own overflow-y:auto do its job, collapsing
+     each row to a sliver and making the text overlap illegibly. */
+  flex-shrink: 0;
   width: 100%;
   padding: 0.35rem 0.5rem;
   border-radius: 5px;

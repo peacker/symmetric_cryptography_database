@@ -103,6 +103,36 @@ TODO:
 
 DONE:
 
+- Sixteenth follow-up round: two more bugs you found.
+  1. The relation picker's rows overlapped illegibly whenever a dense hub produced many candidates (a
+     screenshot showed ~20 rows of text bleeding into each other). Root cause: .gen-relation-picker is a
+     flex column with max-height + overflow-y:auto, but its items never got flex-shrink:0 -- with more
+     items than fit in max-height, flexbox's default flex-shrink:1 squeezes every row down to fit
+     *inside* the box instead of letting the box's own overflow-y:auto scroll, collapsing each row to
+     ~11px (measured) regardless of its actual text content. Fixed with flex-shrink:0 on
+     .gen-relation-picker-item; reproduced the exact 54-candidate NewDES hub from before and confirmed
+     each row is now a proper ~26px with the container correctly scrolling (256px visible of 1550px
+     total content) instead of squeezing.
+  2. The Timelines plot didn't fit its container by default on a fresh page load/refresh (confirmed via
+     screenshot and reproduced with Playwright: SVG rendered 1195px wide inside an 870px container).
+     Traced to *two* stacked initialization-order bugs, found by instrumenting the live fit/zoom
+     functions with console.log and tracing actual call order rather than guessing from static reading:
+     (a) setupNavigator() ran first and immediately activated the default "visualizations" tab, which
+     tries to fit the plot via viewRefreshHooks.visualizations -- but that hook isn't registered until
+     setupFamilyVisualization() runs, several calls later, so the very first (and only automatic) fit
+     attempt silently no-op'd forever. (b) once (a) was fixed, tracing revealed a second, previously-
+     masked bug: setupFullscreenAndFilterToggles() sets each view's default "Filters on left" side-layout
+     class on a large landscape screen, which narrows the plot's actual container width -- but
+     setupFamilyVisualization()'s own initial render() (which does its own fit-to-width, independent of
+     the navigator) was running *before* that class got applied, so it fit to the wider pre-side-layout
+     width, and nothing ever re-fit afterward (the default-layout branch doesn't call triggerViewRefresh,
+     only the button's own click handler does). Fixed by reordering init: setupFullscreenAndFilterToggles()
+     now runs first (so the side-layout class is settled before any view's own initial fit measures its
+     container), then the view setups, then setupNavigator() last (so its tab-activation trigger always
+     finds an already-registered hook). Verified on both a landscape (side-layout, 870px container -> 862px
+     SVG, no overflow) and a portrait (no side-layout, 641px container -> 633px SVG) viewport, plus
+     confirmed the Genealogy tab still renders without errors after the reorder. make test all green.
+
 - Fifteenth follow-up round: fixed a bug you found testing the new relation picker locally -- the picker
   list itself was correct, but the bottom info/note box didn't update to reflect the newly picked
   relation. Root cause: the note box is pinned by a *separate* mechanism from the picker -- each edge
