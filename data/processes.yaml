@@ -439,9 +439,12 @@ processes:
       name: Joltik
     - family_id: minalpher
       name: Minalpher
-    - name: OMD
-    - name: PAEQ
-    - name: π-Cipher
+    - family_id: omd
+      name: OMD
+    - family_id: paeq
+      name: PAEQ
+    - family_id: pi_cipher
+      name: π-Cipher
     - name: POET
     - name: PRIMATEs
     - family_id: scream_tbc
@@ -498,9 +501,12 @@ processes:
       name: Keyak
     - family_id: minalpher
       name: Minalpher
-    - name: OMD
-    - name: PAEQ
-    - name: π-Cipher
+    - family_id: omd
+      name: OMD
+    - family_id: paeq
+      name: PAEQ
+    - family_id: pi_cipher
+      name: π-Cipher
     - name: POET
     - name: PRIMATEs
     - family_id: scream_tbc

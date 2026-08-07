@@ -12409,3 +12409,136 @@ mode_families:
       block_size_bits: 256
       key_size_bits: 128
       tag_size_bits: 128
+- id: omd
+  name: OMD
+  notes: 'OMD ("Offset Merkle-Damgard") is an AEAD mode built from a keyed compression function (rather than a
+    block cipher or permutation, as most AEAD schemes use) -- security is proved in the standard model from just
+    the PRF assumption on the compression function, and Intel''s SHA-extension instructions make it
+    competitively fast despite the less common choice of primitive. Recommended instantiations key the
+    compression functions of standard SHA-256 (OMD-sha256, the main CAESAR recommendation, for 32-bit
+    platforms) or SHA-512 (OMD-sha512, for 64-bit platforms). Reached CAESAR round 2 but was not selected for
+    round 3.'
+  construction_ids:
+  - merkle_damgard
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - cogliani_et_al_2015_omd_v2_0
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: sha2
+    relations:
+    - used_by
+    note: OMD's main CAESAR recommendation, OMD-sha256, keys the SHA-256 compression function (see
+      sha256_compression) as its core PRF.
+  underlying_primitive_ids:
+  - sha256_compression
+  instances:
+  - id: omd_sha256
+    name: OMD-sha256
+    type: aead
+    reference_ids:
+    - cogliani_et_al_2015_omd_v2_0
+    characteristics:
+      output_size_bits: 256
+    notes: Main CAESAR recommendation, keying the SHA-256 compression function; intended for 32-bit platforms.
+- id: paeq
+  name: PAEQ
+  notes: 'PAEQ ("Parallelizable Authenticated Encryption based on Quadrupled AES") instantiates the generic
+    permutation-based PPAE mode of operation with the AESQ permutation (see aesq). Reached CAESAR round 2 but
+    was not selected for round 3; no updated spec version was published between rounds.'
+  construction_ids:
+  - duplex_construction
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - biryukov_khovratovich_2014_paeq_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: aesq
+    relations:
+    - used_by
+    note: PPAE (PAEQ's generic mode) is instantiated with the AESQ permutation.
+  underlying_primitive_ids:
+  - aesq_permutation
+  instances:
+  - id: paeq_128_128
+    name: PAEQ-128
+    type: aead
+    reference_ids:
+    - biryukov_khovratovich_2014_paeq_v1
+    characteristics:
+      state_size_bits: 512
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+- id: pi_cipher
+  name: pi-Cipher
+  notes: 'pi-Cipher (written as the Greek letter π) is a permutation-based AEAD scheme built on its own ARX-based
+    "pi function" permutation, via a duplex-sponge variant the designers call the "triplex" construction. Four
+    parameter sets vary the internal word size and target security level: Pi16Cipher096 (16-bit words, 96-bit
+    security), Pi32Cipher128 (32-bit words, 128-bit security, the representative variant), Pi64Cipher128
+    (64-bit words, 128-bit security), and Pi64Cipher256 (64-bit words, 256-bit security). Reached CAESAR round 2
+    but was not selected for round 3.'
+  construction_ids:
+  - duplex_construction
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - gligoroski_et_al_2015_pi_cipher_v2_0
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences: []
+  instances:
+  - id: pi32cipher128v2
+    name: Pi32Cipher128v2
+    type: aead
+    reference_ids:
+    - gligoroski_et_al_2015_pi_cipher_v2_0
+    characteristics:
+      key_size_bits: 128
+    notes: 32-bit-word variant targeting 128-bit security, the representative parameter set.

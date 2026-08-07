@@ -6154,3 +6154,52 @@ references:
     2/final, clarifications and corrections only; also the source for the minalpher_permutation primitive
     family, specified within this same document rather than a separate one). The filename uses Minalpher''s
     2014 round-1 submission year, not the file''s own later revision date.'
+- id: cogliani_et_al_2015_omd_v2_0
+  kind: paper
+  title: Offset Merkle-Damgard (OMD) version 2.0
+  authors:
+  - Simon Cogliani
+  - Diana Maimut
+  - David Naccache
+  - Rodrigo Portella
+  - Reza Reyhanitabar
+  - Serge Vaudenay
+  - Damian Vizar
+  year: 2015
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/omdv20.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
+    references/[2014][omd][][caesar_round1_v1.0].pdf (2014, round 1) and
+    references/[2014][omd][][caesar_round2_v2.0_final].pdf (2015.08.25, round 2/final). The filename uses OMD''s
+    2014 round-1 submission year, not the file''s own later revision date.'
+- id: biryukov_khovratovich_2014_paeq_v1
+  kind: paper
+  title: PAEQ v1
+  authors:
+  - Alex Biryukov
+  - Dmitry Khovratovich
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/paeqv1.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3); no updated spec version was published between
+    rounds. Local copy (only one version was ever submitted): references/[2014][paeq,aesq][][caesar_round1_v1].pdf.
+    Also the source for the aesq primitive family (AESQ, specified within this same document).'
+- id: gligoroski_et_al_2015_pi_cipher_v2_0
+  kind: paper
+  title: π-Cipher v2.01
+  authors:
+  - Danilo Gligoroski
+  - Hristina Mihajloska
+  - Simona Samardjiska
+  - Hakon Jacobsen
+  - Mohamed El-Hadedy
+  - Rune Erlend Jensen
+  - Daniel Otte
+  year: 2015
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/picipherv20.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
+    references/[2014][pi_cipher][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][pi_cipher][][caesar_round2_v2.0_final].pdf (2015.08.29, round 2/final, reduced round
+    count and a padding-rule tweak). The filename uses pi-Cipher''s 2014 round-1 submission year, not the
+    file''s own later revision date.'
