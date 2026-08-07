@@ -6439,3 +6439,82 @@ references:
   url: https://competitions.cr.yp.to/round1/ifeedaesv1.pdf
   notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
     references/[2014][ifeed_aes][][caesar_round1_v1].pdf.'
+- id: bahack_2014_julius_v1_0
+  kind: paper
+  title: 'Julius: Secure Mode of Operation for Authenticated Encryption Based on ECB and finite field multiplications'
+  authors:
+  - Lear Bahack
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/juliusv10.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][julius][][caesar_round1_v1.0].pdf.'
+- id: wysokinski_sikora_2014_polawis_v1
+  kind: paper
+  title: POLAWIS
+  authors:
+  - Arkadiusz Wysokinski
+  - Ireneusz Sikora
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/polawisv1.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][polawis][][caesar_round1_v1].pdf.'
+- id: vuckovac_2014_raviyoyla_v1
+  kind: paper
+  title: Raviyoyla v1
+  authors:
+  - Rade Vuckovac
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/raviyoylav1.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][raviyoyla][][caesar_round1_v1].pdf.'
+- id: zhang_et_al_2014_sablier_v1
+  kind: paper
+  title: Sablier v1
+  authors:
+  - Bin Zhang
+  - Zhenqing Shi
+  - Chao Xu
+  - Yuan Yao
+  - Zhenqi Li
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/sablierv1.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][sablier][][caesar_round1_v1].pdf.'
+- id: penazzi_montes_2014_silver_v1
+  kind: paper
+  title: Silver v.1
+  authors:
+  - Daniel Penazzi
+  - Miguel Montes
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/silverv1.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][silver][][caesar_round1_v1].pdf.'
+- id: maxwell_2014_wheesht_v03
+  kind: paper
+  title: 'Wheesht: an AEAD stream cipher (v0.3)'
+  authors:
+  - Peter Maxwell
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/wheeshtv03.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
+    references/[2014][wheesht][][caesar_round1_v0.3].pdf.'
+- id: bosselaers_vercauteren_2014_yaes_v2
+  kind: paper
+  title: 'YAES: Yet Another AES-based Authenticated Encryption Scheme (v2)'
+  authors:
+  - Antoon Bosselaers
+  - Fre Vercauteren
+  year: 2014
+  venue: CAESAR submission, first round
+  url: https://competitions.cr.yp.to/round1/yaesv2.pdf
+  notes: 'CAESAR round-1 candidate (not selected for round 2). Local copies of both submitted versions:
+    references/[2014][yaes][][caesar_round1_v1].pdf (2014.03.15) and
+    references/[2014][yaes][][caesar_round1_v2].pdf (2014.05.14, corrected the GF(2^128) bit-ordering convention
+    and generalized the round-key start index of the AES128[r]Rounds subroutine).'

@@ -403,7 +403,8 @@ processes:
       name: iFeed[AES]
     - family_id: iscream
       name: iSCREAM
-    - name: Julius
+    - family_id: julius
+      name: Julius
     - family_id: kiasu
       name: KIASU
     - family_id: lac
@@ -412,14 +413,20 @@ processes:
     - name: McMambo
     - name: PAES
     - name: PANDA
-    - name: POLAWIS
+    - family_id: polawis
+      name: POLAWIS
     - family_id: proest
       name: Prøst
-    - name: Raviyoyla
-    - name: Sablier
-    - name: Silver
-    - name: Wheesht
-    - name: YAES
+    - family_id: raviyoyla
+      name: Raviyoyla
+    - family_id: sablier
+      name: Sablier
+    - family_id: silver
+      name: Silver
+    - family_id: wheesht
+      name: Wheesht
+    - family_id: yaes
+      name: YAES
     - family_id: aes_otr
       name: AES-OTR
     - family_id: aez

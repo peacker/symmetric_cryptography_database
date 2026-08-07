@@ -13328,3 +13328,298 @@ mode_families:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
+- id: julius
+  name: Julius
+  notes: 'Julius proposes two GF(2^128)-multiplication-based AEAD modes -- Julius-CTR (combining ideas from GCM,
+    SIV, and unbalanced Feistel networks) and Julius-ECB (a new scheme) -- each in regular and compact variants,
+    instantiated with AES-128 into a family of eight concrete algorithms. Reached CAESAR round 1 but was not
+    selected for round 2.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+  reference_ids:
+  - bahack_2014_julius_v1_0
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: All eight concrete Julius algorithms instantiate the Julius-ECB/Julius-CTR modes with unmodified AES-128.
+  underlying_primitive_ids:
+  - aes_128
+  instances:
+  - id: julius_ctr_v1
+    name: Julius-CTR (regular)
+    type: aead
+    reference_ids:
+    - bahack_2014_julius_v1_0
+    characteristics:
+      block_size_bits: 128
+      key_size_bits: 128
+- id: polawis
+  name: POLAWIS
+  notes: 'POLAWIS is an unusual, non-bitwise design based on algebraic operations over a noncommutative
+    quaternion number field modulo a large prime p (p > 2^256), operating on 1536-bit blocks (six 256-bit
+    numbers) with a 4096-bit key -- structurally very different from the S-box/permutation/ARX operations
+    typical of this database''s other symmetric designs. Reached CAESAR round 1 but was not selected for round 2.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  characteristics:
+    components: []
+  reference_ids:
+  - wysokinski_sikora_2014_polawis_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  instances:
+  - id: polawis_v1
+    name: POLAWIS v1
+    type: aead
+    reference_ids:
+    - wysokinski_sikora_2014_polawis_v1
+    characteristics:
+      block_size_bits: 1536
+      key_size_bits: 4096
+- id: raviyoyla
+  name: Raviyoyla
+  notes: 'Raviyoyla, by independent designer Rade Vuckovac, is a stream-cipher-plus-keyed-hash AEAD scheme
+    described as an evolution of MAG v2 (an eSTREAM phase-1 candidate): a large 1028-element 64-bit state array
+    combines three independent streams (XORed together) for encryption and a fourth for the authentication tag.
+    256-bit key, 256-bit nonce, 512-bit tag. Reached CAESAR round 1 but was not selected for round 2.'
+  construction_ids:
+  - native_keystream_generator
+  target_applications:
+  - software
+  characteristics:
+    state_size_bits: 65792
+    components:
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - vuckovac_2014_raviyoyla_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  instances:
+  - id: raviyoyla_v1
+    name: Raviyoyla v1
+    type: aead
+    reference_ids:
+    - vuckovac_2014_raviyoyla_v1
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 256
+      tag_size_bits: 512
+- id: sablier
+  name: Sablier
+  notes: 'Sablier ("hourglass"), by Zhang, Shi, Xu, Yao, and Li (Chinese Academy of Sciences), is a hardware-efficient
+    stream cipher with built-in authentication. Its internal state is five registers of 16-bit words (total 208
+    bits) updated with only XOR, bitwise AND, and 16-bit rotation, using a nonlinear function chi borrowed from
+    Keccak (restricted to a 16-bit word) -- described by the designers as resembling sand mixing in an hourglass
+    or a shaken cocktail. 80-bit key, 80-bit nonce, 32-bit tag; 64-round (128-step) initialization. Reached CAESAR
+    round 1 but was not selected for round 2.'
+  construction_ids:
+  - native_keystream_generator
+  target_applications:
+  - hardware
+  characteristics:
+    state_size_bits: 208
+    components:
+    - id: xor
+    - id: and
+    - id: rotation_fixed
+  reference_ids:
+  - zhang_et_al_2014_sablier_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: keccak
+    relations:
+    - related_to
+    note: Sablier's nonlinear update function chi is borrowed from Keccak's chi function, restricted to a 16-bit word.
+  instances:
+  - id: sablier_v1
+    name: Sablier v1
+    type: aead
+    reference_ids:
+    - zhang_et_al_2014_sablier_v1
+    characteristics:
+      key_size_bits: 80
+      nonce_size_bits: 80
+      tag_size_bits: 32
+- id: silver
+  name: Silver
+  notes: 'Silver, by Penazzi and Montes, is an ECB-based, parallelizable, online AEAD scheme built entirely from AES
+    and modular arithmetic (mod 2^64) -- no separate MAC primitive. The nonce is first encrypted under AES to derive
+    a per-message secondary key kappa, which is then XORed and added into a modified AES key schedule ("MAES", using
+    the same round function as AES but round keys perturbed by kappa) to encrypt each plaintext block; the tag is
+    derived from a similarly MAES-keyed pass over the ciphertext and associated data. 128-bit key, nonce, and tag.
+    Reached CAESAR round 1 but was not selected for round 2.'
+  construction_ids:
+  - block_cipher_based
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: xor
+    - id: add_mod
+  reference_ids:
+  - penazzi_montes_2014_silver_v1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  underlying_primitive_ids:
+  - aes_128
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: Silver's block encryption and tag generation both use AES (with a modified, nonce/key-derived key schedule
+      called MAES) as their sole underlying primitive.
+  instances:
+  - id: silver_v1
+    name: Silver v1
+    type: aead
+    reference_ids:
+    - penazzi_montes_2014_silver_v1
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+- id: wheesht
+  name: Wheesht
+  notes: 'Wheesht, by independent designer Peter Maxwell, is an ARX-based authenticated stream cipher targeting
+    64-bit-word architectures, borrowing heavily from Salsa20''s round structure with additional inspiration from
+    SipHash''s compactness. Each 256-bit plaintext block is processed with a 512-bit internal state (split into
+    two 256-bit halves) using an add-rotate-xor PartRound/FullRound structure; rather than a separate finite-field
+    universal hash (as in GCM/Poly1305), authentication reuses the same round function as encryption, keeping code
+    size small and avoiding non-constant-time multiplication risks. 512-bit key (256 bits for encryption, 256 bits
+    for final authentication), 128-bit public message number, 128-bit optional secret message number, tag length
+    configurable (default 256 bits). Four parameter sets varying round counts were specified for CAESAR. Reached
+    CAESAR round 1 but was not selected for round 2.'
+  construction_ids:
+  - native_keystream_generator
+  target_applications:
+  - software
+  characteristics:
+    state_size_bits: 512
+    components:
+    - id: add_mod
+    - id: rotation_fixed
+    - id: xor
+  reference_ids:
+  - maxwell_2014_wheesht_v03
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: salsa20
+    relations:
+    - related_to
+    note: Wheesht's designer states the round structure "borrows heavily" from Bernstein's Salsa20.
+  - source_family_id: siphash
+    relations:
+    - related_to
+    note: Wheesht's designer cites "additional inspiration taken from the compactness and efficiency of ... SipHash."
+  instances:
+  - id: wheesht_3_1_128
+    name: Wheesht-3-1-128
+    type: aead
+    reference_ids:
+    - maxwell_2014_wheesht_v03
+    characteristics:
+      key_size_bits: 512
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      rounds: 4
+    notes: 3 main PartRound iterations plus 1 finalization round.
+  - id: wheesht_5_7_256
+    name: Wheesht-5-7-256
+    type: aead
+    reference_ids:
+    - maxwell_2014_wheesht_v03
+    characteristics:
+      key_size_bits: 512
+      nonce_size_bits: 128
+      tag_size_bits: 256
+      rounds: 12
+    notes: 5 main PartRound iterations plus 7 finalization rounds; the strongest of the four CAESAR parameter sets.
+- id: yaes
+  name: YAES
+  notes: 'YAES ("Yet Another AES-based Authenticated Encryption Scheme"), by Bosselaers and Vercauteren (KU Leuven),
+    is an online AEAD scheme built purely from AES-128 and GF(2^128) field arithmetic: a full AES-128 encryption of
+    the nonce derives a per-message mask L, blocks are then encrypted with an AES-128-based counter-like construction,
+    and a reduced-round (4-round) AES128 evaluation provides an almost-XOR-universal hash for the authentication tag
+    (mixed with a similarly reduced-round pass over the associated data). 128-bit key, up to 127-bit nonce, 64-128-bit
+    (configurable) tag. Reached CAESAR round 1 but was not selected for round 2.'
+  construction_ids:
+  - block_cipher_based
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: xor
+    - id: field_matrix_mul
+  reference_ids:
+  - bosselaers_vercauteren_2014_yaes_v2
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    status: candidate
+  underlying_primitive_ids:
+  - aes_128
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: YAES uses full AES-128 for nonce/mask derivation and encryption, and a 4-round-reduced AES-128 evaluation
+      as an almost-XOR-universal hash for authentication -- its sole underlying primitive.
+  instances:
+  - id: yaes128_v2
+    name: yaes128v2
+    type: aead
+    reference_ids:
+    - bosselaers_vercauteren_2014_yaes_v2
+    characteristics:
+      key_size_bits: 128
+      nonce_size_bits: 127
+      tag_size_bits: 128
