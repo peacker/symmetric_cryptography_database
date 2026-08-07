@@ -6085,3 +6085,72 @@ references:
     references/[2014][morus][][caesar_round2_v1.1].pdf (2015, round 2), and
     references/[2014][morus][][caesar_round3_v2_final].pdf (2016.09.15, round 3/final). The filename uses
     MORUS''s 2014 round-1 submission year, not each file''s own later revision date.'
+- id: krovetz_2015_hs1_siv_v2
+  kind: paper
+  title: HS1-SIV (v2)
+  authors:
+  - Ted Krovetz
+  year: 2015
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/hs1sivv2c.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
+    references/[2014][hs1_siv][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][hs1_siv][][caesar_round2_v2_corrected_final].pdf (2015.09.25, round 2, a correction to the
+    2015.07.27 v2). The filename uses HS1-SIV''s 2014 round-1 submission year, not each file''s own later
+    revision date.'
+- id: morawiecki_et_al_2015_icepole_v2
+  kind: paper
+  title: ICEPOLE v2
+  authors:
+  - Pawel Morawiecki
+  - Kris Gaj
+  - Ekawat Homsirikamol
+  - Krystian Matusiewicz
+  - Josef Pieprzyk
+  - Marcin Rogawski
+  - Marian Srebrny
+  - Marcin Wojcik
+  year: 2015
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/icepolev2.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
+    references/[2014][icepole][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][icepole,icepole_permutation][][caesar_round2_v2_final].pdf (2015.08.24, round 2/final;
+    also the source for the icepole_permutation primitive family, specified within this same document rather
+    than a separate one). The filename uses ICEPOLE''s 2014 round-1 submission year, not the file''s own later
+    revision date.'
+- id: jean_nikolic_peyrin_2015_joltik_v1_3
+  kind: paper
+  title: Joltik v1.3
+  authors:
+  - Jeremy Jean
+  - Ivica Nikolic
+  - Thomas Peyrin
+  year: 2015
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/joltikv13.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
+    references/[2014][joltik_aead][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][joltik_aead][][caesar_round2_v1.3_final].pdf (2015.08.28, round 2/final). The filename
+    uses Joltik''s 2014 round-1 submission year, not the file''s own later revision date.'
+- id: sasaki_et_al_2015_minalpher_v1_1
+  kind: paper
+  title: Minalpher v1.1
+  authors:
+  - Yu Sasaki
+  - Yosuke Todo
+  - Kazumaro Aoki
+  - Yusuke Naito
+  - Takeshi Sugawara
+  - Yumiko Murakami
+  - Mitsuru Matsui
+  - Shoichi Hirose
+  year: 2015
+  venue: CAESAR submission, second round
+  url: https://competitions.cr.yp.to/round2/minalpherv11.pdf
+  notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
+    references/[2014][minalpher][][caesar_round1_v1].pdf (2014, round 1) and
+    references/[2014][minalpher,minalpher_permutation][][caesar_round2_v1.1_final].pdf (2015.08.29, round
+    2/final, clarifications and corrections only; also the source for the minalpher_permutation primitive
+    family, specified within this same document rather than a separate one). The filename uses Minalpher''s
+    2014 round-1 submission year, not the file''s own later revision date.'

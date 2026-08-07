@@ -12216,3 +12216,196 @@ mode_families:
       nonce_size_bits: 128
       tag_size_bits: 128
     notes: Primary recommended parameter set.
+- id: hs1_siv
+  name: HS1-SIV
+  notes: 'HS1-SIV instantiates Rogaway and Shrimpton''s SIV (Synthetic IV) construction with a new PRF, HS1
+    ("Hash-Stream 1"): a bespoke almost-universal hash function (HS1-Hash) processes the associated data and
+    plaintext, and the hash result XORed into the key feeds Bernstein''s ChaCha stream cipher to generate both
+    the synthetic IV/tag and the output keystream. Fully deterministic and nonce-misuse-resistant by
+    construction (repeating a (key, AD, plaintext) triple always reproduces the same ciphertext, revealing only
+    that a repeat occurred). Reached CAESAR round 2 but was not selected for round 3.'
+  construction_ids:
+  - siv_mode
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - krovetz_2015_hs1_siv_v2
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: chacha
+    relations:
+    - used_by
+    note: HS1's second phase is Bernstein's ChaCha stream cipher, keyed with the XOR of the secret key and the
+      HS1-Hash universal-hash result over the associated data and plaintext.
+  instances:
+  - id: hs1_siv_v2
+    name: HS1-SIV v2
+    type: aead
+    reference_ids:
+    - krovetz_2015_hs1_siv_v2
+    characteristics:
+      key_size_bits: 256
+      nonce_size_bits: 96
+- id: icepole
+  name: ICEPOLE
+  notes: 'ICEPOLE is a permutation-based AEAD scheme built on its own 1280-bit permutation (see
+    icepole_permutation), designed for high-speed hardware implementations (particularly efficient on Intel''s
+    SHA extensions target and modern FPGAs) and offering some resistance to side-channel/state-recovery attacks
+    via nonce misuse. ICEPOLE128 is the primary recommendation (128-bit key/nonce/tag); ICEPOLE-128a and
+    ICEPOLE-256a add extra associated-data throughput and a 256-bit key option respectively. Reached CAESAR
+    round 2 but was not selected for round 3.'
+  construction_ids:
+  - duplex_construction
+  target_applications:
+  - hardware
+  - software
+  characteristics:
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - morawiecki_et_al_2015_icepole_v2
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: icepole_permutation
+    relations:
+    - used_by
+    note: ICEPOLE's AEAD mode is built directly on its own permutation P, alternating P6 (processing) and P12
+      (initialization/finalization) calls.
+  underlying_primitive_ids:
+  - icepole_p12
+  instances:
+  - id: icepole128
+    name: ICEPOLE128
+    type: aead
+    reference_ids:
+    - morawiecki_et_al_2015_icepole_v2
+    characteristics:
+      state_size_bits: 1280
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+    notes: Primary recommendation.
+- id: joltik_aead
+  name: Joltik
+  notes: 'Joltik pairs two fully parallel, provably secure AEAD modes -- Joltik!= (requiring a fresh nonce per
+    message) and Joltik= (nonce-misuse resistant, full MRAE security) -- with the lightweight tweakable block
+    cipher Joltik-BC (see joltik_bc), needing only m+1 block-cipher calls for an m-block message and no
+    precomputation, making it well suited to very short messages (e.g. a 96-bit Electronic Product Code). Both
+    modes target a 64-bit security level (matching Joltik-BC''s 64-bit block), a deliberately lower bound than
+    AES-GCM/OCB''s 128-bit birthday bound, in exchange for a much smaller hardware footprint. Reached CAESAR
+    round 2 but was not selected for round 3.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - hardware
+  - iot
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: binary_matrix_mul
+    - id: word_permutation
+      params:
+        word_size_bits: 4
+    - id: xor
+  reference_ids:
+  - jean_nikolic_peyrin_2015_joltik_v1_3
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: joltik_bc
+    relations:
+    - used_by
+    note: Both Joltik AEAD modes are built directly on the Joltik-BC-128 tweakable block cipher (64-bit block,
+      cumulative 128-bit key+tweak).
+  underlying_primitive_ids:
+  - joltik_bc_64_64
+  instances:
+  - id: joltik_ne_64_64
+    name: Joltik!=-64-64
+    type: aead
+    reference_ids:
+    - jean_nikolic_peyrin_2015_joltik_v1_3
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 64
+      tweak_size_bits: 64
+    notes: The nonce-respecting-only mode (higher throughput than Joltik=); "64-64" names the k=64-bit key and
+      t=64-bit tweak split of Joltik-BC-128's 128-bit total tweakey space.
+- id: minalpher
+  name: Minalpher
+  notes: 'Minalpher builds a tweakable Even-Mansour block cipher (Kurosawa''s tweaked generalization of the
+    Even-Mansour permutation-based cipher: E(x) = P(x XOR k1) XOR k2, with a tweak folded in) from its own
+    dedicated 256-bit permutation Minalpher-P, then wraps it in OCB/PMAC-inspired AEAD and MAC modes. Reached
+    CAESAR round 2 but was not selected for round 3.'
+  construction_ids:
+  - block_cipher_based
+  - block_cipher_based_stream
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: binary_matrix_mul
+    - id: word_permutation
+      params:
+        word_size_bits: 4
+    - id: xor
+  reference_ids:
+  - sasaki_et_al_2015_minalpher_v1_1
+  process_participations:
+  - process_id: caesar_competition_nist_2013_2019
+    stage_ids:
+    - round_1
+    - round_2
+    status: candidate
+  influences:
+  - source_family_id: minalpher_permutation
+    relations:
+    - used_by
+    note: Minalpher's AEAD/MAC modes are built on a tweakable Even-Mansour block cipher keyed by Minalpher-P.
+  underlying_primitive_ids:
+  - minalpher_p
+  instances:
+  - id: minalpher_v1_1
+    name: Minalpher v1.1
+    type: aead
+    reference_ids:
+    - sasaki_et_al_2015_minalpher_v1_1
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 128
+      tag_size_bits: 128

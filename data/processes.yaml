@@ -429,11 +429,16 @@ processes:
       name: NORX
     - family_id: tiaoxin
       name: Tiaoxin
-    - name: HS1-SIV
-    - name: ICEPOLE
+    - family_id: hs1_siv
+      name: HS1-SIV
+    - family_id: icepole
+      name: ICEPOLE
     - family_id: joltik_bc
       name: Joltik
-    - name: Minalpher
+    - family_id: joltik_aead
+      name: Joltik
+    - family_id: minalpher
+      name: Minalpher
     - name: OMD
     - name: PAEQ
     - name: π-Cipher
@@ -477,17 +482,22 @@ processes:
     - name: Deoxys-I
     - family_id: deoxys
       name: Deoxys-II
-    - name: HS1-SIV
-    - name: ICEPOLE
+    - family_id: hs1_siv
+      name: HS1-SIV
+    - family_id: icepole
+      name: ICEPOLE
     - family_id: jambu
       name: JAMBU
     - family_id: joltik_bc
+      name: Joltik
+    - family_id: joltik_aead
       name: Joltik
     - family_id: ketje
       name: Ketje
     - family_id: keyak
       name: Keyak
-    - name: Minalpher
+    - family_id: minalpher
+      name: Minalpher
     - name: OMD
     - name: PAEQ
     - name: π-Cipher

@@ -14908,3 +14908,88 @@ primitive_families:
       rounds: 14
     notes: 512-bit-state variant keyed with a 256-bit key (256-bit security target). A 10-round short version is
       also defined.
+- id: icepole_permutation
+  name: ICEPOLE Permutation P
+  notes: 'ICEPOLE''s own 1280-bit permutation P, structurally "bit-oriented" like Keccak-f (the paper explicitly
+    draws on Keccak differential-cryptanalysis techniques given the structural similarity) but a distinct design
+    -- not a parametrization of Keccak-p itself. SHA-3''s own Keccak-f[1600] is used only once, to generate
+    ICEPOLE''s fixed initialization constant, not as part of the round function. Used in reduced-round calls: P6
+    (6 rounds, used repeatedly while absorbing/producing blocks) and P12 (12 rounds, used at
+    initialization/finalization).'
+  construction_ids:
+  - boolean_operator_network
+  round_ids:
+  - keccak_round
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    state_size_bits: 1280
+    components:
+    - id: xor
+    - id: and
+    - id: not
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - morawiecki_et_al_2015_icepole_v2
+  process_participations: []
+  influences:
+  - source_family_id: keccak
+    relations:
+    - inspired_by
+    note: ICEPOLE's permutation P is structurally "bit-oriented" like Keccak-f, and its own security analysis
+      directly reuses Keccak differential-cryptanalysis techniques given that similarity -- but P is a distinct
+      design, not a Keccak-p parametrization; Keccak-f[1600] itself is used only once, to generate ICEPOLE's
+      fixed initialization constant.
+  instances:
+  - id: icepole_p12
+    name: ICEPOLE P12
+    type: permutation
+    reference_ids:
+    - morawiecki_et_al_2015_icepole_v2
+    characteristics:
+      block_size_bits: 1280
+      state_size_bits: 1280
+      output_size_bits: 1280
+      rounds: 12
+    notes: Used at initialization and finalization; the P6 (6-round) variant is used repeatedly while processing
+      associated data/plaintext blocks.
+- id: minalpher_permutation
+  name: Minalpher-P
+  notes: A dedicated 256-bit nibble-oriented (4-bit) SPN-like permutation, 17 rounds, purpose-built as the public
+    permutation underlying Minalpher's tweakable Even-Mansour construction.
+  construction_ids:
+  - boolean_operator_network
+  round_ids:
+  - keccak_round
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: binary_matrix_mul
+    - id: word_permutation
+      params:
+        word_size_bits: 4
+    - id: xor
+  reference_ids:
+  - sasaki_et_al_2015_minalpher_v1_1
+  process_participations: []
+  influences: []
+  instances:
+  - id: minalpher_p
+    name: Minalpher-P
+    type: permutation
+    reference_ids:
+    - sasaki_et_al_2015_minalpher_v1_1
+    characteristics:
+      block_size_bits: 256
+      state_size_bits: 256
+      output_size_bits: 256
+      rounds: 17

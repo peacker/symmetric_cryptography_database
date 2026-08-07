@@ -188,6 +188,19 @@ mode_constructions:
     doublings in GF(2^128)) before and after a single block-cipher encryption call ("whitened codebook" -- one
     block-cipher call per block does both encryption and authentication, unlike encrypt-then-MAC composites),
     then XORs a checksum of the plaintext blocks with a further offset and encrypts it once more to form the tag.
+- id: siv_mode
+  name: Synthetic IV (SIV) Construction
+  typical_primitive_types:
+  - aead
+  placeholder_family_names:
+  - HS1-SIV
+  notes: 'Rogaway and Shrimpton''s deterministic, nonce-misuse-resistant AEAD construction: a PRF is first run
+    over the associated data and plaintext to derive a "synthetic IV" (SIV) deterministically from the message
+    itself, then that SIV seeds a second PRF/PRG pass that encrypts the plaintext. Because the SIV depends on the
+    full message, encrypting the same (key, AD, plaintext) twice always produces the same ciphertext (revealing
+    only that a repeat occurred, not the message contents) -- misuse resistance without requiring a fresh nonce.
+    Primitive-agnostic: the two PRF passes can be built from a block cipher (Rogaway/Shrimpton''s own CMAC/CTR
+    instantiation) or, as in HS1-SIV, from a universal hash paired with a stream cipher.'
 - id: encrypt_mix_encrypt
   name: Encrypt-mix-Encrypt Online AEAD
   special_case_of: block_cipher_based
