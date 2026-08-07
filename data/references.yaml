@@ -3036,6 +3036,28 @@ references:
   venue: RFC 2898
   url: https://tools.ietf.org/html/rfc2898
   notes: Key derivation function for password-based encryption.
+- id: hkdf_ref
+  kind: paper
+  title: 'Cryptographic Extraction and Key Derivation: The HKDF Scheme'
+  authors:
+  - Hugo Krawczyk
+  year: 2010
+  venue: CRYPTO 2010, LNCS 6223, pp. 631-648
+  url: https://eprint.iacr.org/2010/264
+  notes: 'Formalizes KDF security via computational extractors and specifies HKDF, the extract-then-expand HMAC-based
+    KDF: PRK = HMAC(salt, IKM) (extract), then K(i+1) = HMAC(PRK, K(i) || info || i) chained in feedback mode to expand
+    PRK to the requested output length (expand). Local copy: references/[2010][hkdf][][original_publication].pdf.'
+- id: krawczyk_eronen_2010_rfc5869
+  kind: standard
+  title: 'HMAC-based Extract-and-Expand Key Derivation Function (HKDF)'
+  authors:
+  - Hugo Krawczyk
+  - Pasi Eronen
+  year: 2010
+  venue: RFC 5869
+  url: https://www.rfc-editor.org/rfc/rfc5869
+  notes: 'IETF standardization of the HKDF scheme from hkdf_ref, with the same extract/expand steps plus official test
+    vectors (SHA-256 and SHA-1). Local copy: references/[2010][hkdf][][rfc5869].txt.'
 - id: daemen_1991_threeway
   kind: article
   title: 3-Way Block Cipher

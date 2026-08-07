@@ -103,6 +103,20 @@ TODO:
 
 DONE:
 
+- Seventeenth follow-up round: added HKDF (the HMAC-based extract-then-expand key derivation function) as a new
+  mode family, from two files you added -- Krawczyk's original CRYPTO 2010 paper (hkdf_ref) and its IETF
+  standardization, RFC 5869 (krawczyk_eronen_2010_rfc5869). Modeled closely on the existing PBKDF2 entry: type
+  kdf (not pbkdf, since HKDF has no deliberate password-cracking-resistance cost), construction_ids
+  [hmac_construction, iterated_hash_kdf] (both of HKDF's extract and expand phases are literally HMAC calls), an
+  influence edge to hmac_sha256 explaining that relationship, and underlying_primitive_ids: [sha256_v1] mirroring
+  how hmac_sha256/pbkdf2 both trace through to the raw hash rather than stopping at HMAC. instances[0]
+  characteristics use RFC 5869's own L <= 255*HashLen bound for the SHA-256 case (max 65280 bits). make test all
+  green (497 families, up from 496); verified in the browser that both reference PDFs resolve under the "hkdf"
+  family id and that searching "HKDF" at the default relation-degree of 1 correctly surfaces PBKDF2 too -- not a
+  BFS bug, PBKDF2 and HKDF are genuine *direct* neighbors via the auto-derived "shares construction:
+  iterated_hash_kdf" edge (both are iterated-hash KDFs), which is exactly the kind of direct relation degree=1
+  should show.
+
 - Sixteenth follow-up round: two more bugs you found.
   1. The relation picker's rows overlapped illegibly whenever a dense hub produced many candidates (a
      screenshot showed ~20 rows of text bleeding into each other). Root cause: .gen-relation-picker is a
