@@ -6200,7 +6200,7 @@ references:
   url: https://competitions.cr.yp.to/round2/picipherv20.pdf
   notes: 'CAESAR round-2 candidate (not selected for round 3). Local copies of both submitted versions:
     references/[2014][pi_cipher][][caesar_round1_v1].pdf (2014, round 1) and
-    references/[2014][pi_cipher][][caesar_round2_v2.0_final].pdf (2015.08.29, round 2/final, reduced round
+    references/[2014][pi_cipher,pi_function][][caesar_round2_v2.0_final].pdf (2015.08.29, round 2/final, reduced round
     count and a padding-rule tweak). The filename uses pi-Cipher''s 2014 round-1 submission year, not the
     file''s own later revision date.'
 - id: abed_et_al_2015_poet_v2_0
@@ -6268,7 +6268,7 @@ references:
   notes: 'CAESAR round-2 candidate (not selected for round 3), nicknamed "WHIRLBOB" for round 2 after its
     permutation was re-derived directly from Whirlpool. Local copies of both submitted versions:
     references/[2014][stribob][][caesar_round1_v1].pdf (2014, round 1, STRIBOBr1) and
-    references/[2014][stribob][][caesar_round2_v2_final].pdf (2015.08.28, round 2/final, STRIBOBr2/WHIRLBOB).
+    references/[2014][stribob,stribob_pi][][caesar_round2_v2_final].pdf (2015.08.28, round 2/final, STRIBOBr2/WHIRLBOB).
     The filename uses STRIBOB''s 2014 round-1 submission year, not the file''s own later revision date.'
 - id: chakraborti_nandi_2015_trivia_ck_v2
   kind: paper
@@ -6504,7 +6504,7 @@ references:
   venue: CAESAR submission, first round
   url: https://competitions.cr.yp.to/round1/wheeshtv03.pdf
   notes: 'CAESAR round-1 candidate (not selected for round 2). Local copy (only one version was submitted):
-    references/[2014][wheesht][][caesar_round1_v0.3].pdf.'
+    references/[2014][wheesht,wheesht_fullround][][caesar_round1_v0.3].pdf.'
 - id: bosselaers_vercauteren_2014_yaes_v2
   kind: paper
   title: 'YAES: Yet Another AES-based Authenticated Encryption Scheme (v2)'
@@ -6558,7 +6558,7 @@ references:
   url: https://competitions.cr.yp.to/round1/cbeamr1.pdf
   notes: 'CAESAR round-1 candidate; withdrawn on 2014.04.03 after Brice Minaud found a simple attack against the
     CBEAM Pi permutation. Local copy of the sole submitted version:
-    references/[2014][cbeam][][caesar_round1_v1].pdf.'
+    references/[2014][cbeam,cbeam_pi][][caesar_round1_v1].pdf.'
 - id: chaza_et_al_2014_faser_v1
   kind: paper
   title: 'FASER v1: Authenticated Encryption in a Feedback Shift Register'
@@ -6643,4 +6643,4 @@ references:
   url: https://competitions.cr.yp.to/round1/pandav1.pdf
   notes: 'CAESAR round-1 candidate; withdrawn together with the same team''s PAES submission on 2014.05.13,
     citing accumulated attacks that had pushed both designs "far from our original vision." Local copy of the
-    sole submitted version: references/[2014][panda][][caesar_round1_v1].pdf.'
+    sole submitted version: references/[2014][panda,panda_round_func][][caesar_round1_v1].pdf.'

@@ -15329,3 +15329,184 @@ primitive_families:
       block_size_bits: 512
       key_size_bits: 256
       tweak_size_bits: 512
+- id: stribob_pi
+  name: STRIBOBr2 pi Permutation
+  notes: 'STRIBOBr2 ("WHIRLBOB")''s 512-bit unkeyed permutation pi, re-derived directly from the Whirlpool hash
+    function''s internal round structure and key schedule (same SubBytes/ShiftColumns/MixRows layers, renamed
+    S/P/L), extended to 12 rounds (from Whirlpool''s own 10) for a larger security margin now that it is used
+    unkeyed as a sponge permutation rather than as Whirlpool''s own Miyaguchi-Preneel compression function.
+    Designed to share implementation resources with existing Whirlpool deployments. Used as the sole underlying
+    primitive of the STRIBOB AEAD mode.'
+  construction_ids:
+  - spn
+  round_ids:
+  - stribob_pi_round
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    block_size_bits: 512
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+      params:
+        field_size: 256
+    - id: word_permutation
+      params:
+        word_size_bits: 8
+    - id: xor
+    - id: constant
+  reference_ids:
+  - saarinen_brumley_2015_stribob_r2
+  process_participations: []
+  influences:
+  - source_family_id: whirlpool
+    relations:
+    - variant_of
+    note: STRIBOBr2's pi permutation directly reuses Whirlpool's internal round structure and key schedule (same
+      SubBytes/ShiftColumns/MixRows layers, renamed S/P/L), extended from 10 to 12 rounds.
+  instances:
+  - id: stribob_pi_512
+    name: STRIBOBr2 pi
+    type: permutation
+    reference_ids:
+    - saarinen_brumley_2015_stribob_r2
+    characteristics:
+      block_size_bits: 512
+      rounds: 12
+- id: cbeam_pi
+  name: CBEAM pi Permutation (mx^6)
+  notes: 'CBEAM''s 256-bit unkeyed permutation, pi = mx^6, of entirely original design by Markku-Juhani O. Saarinen,
+    based on rotation-invariant nonlinear phi functions and "feeble Boolean one-wayness" -- geared toward
+    lightweight, limited-resource applications. Used as the sole underlying primitive of the CBEAM AEAD mode.
+    Withdrawn after Brice Minaud found a simple attack against it.'
+  construction_ids:
+  - boolean_operator_network
+  round_ids:
+  - cbeam_mx_round
+  target_applications:
+  - hardware
+  - software
+  characteristics:
+    block_size_bits: 256
+    components:
+    - id: xor
+    - id: rotation_fixed
+    - id: nonlinear_filter
+  reference_ids:
+  - saarinen_2014_cbeam_r1
+  process_participations: []
+  influences: []
+  instances:
+  - id: cbeam_pi_256
+    name: pi = mx^6
+    type: permutation
+    reference_ids:
+    - saarinen_2014_cbeam_r1
+    characteristics:
+      block_size_bits: 256
+- id: pi_function
+  name: pi Function (pi-Cipher permutation)
+  notes: 'The ARX-based "pi function" permutation underlying pi-Cipher, by Gligoroski, Ødegård, Jensen, Sparr, and
+    Otte. Operates on an internal state of N=4 chunks of 4 ω-bit words each (16*omega bits total; 512 bits for
+    the representative 32-bit-word Pi32Cipher128 variant), using modular addition, XOR, and fixed rotation.'
+  construction_ids:
+  - arx_permutation_network
+  round_ids:
+  - pi_function_round
+  target_applications:
+  - software
+  characteristics:
+    block_size_bits: 512
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - gligoroski_et_al_2015_pi_cipher_v2_0
+  process_participations: []
+  influences: []
+  instances:
+  - id: pi_function_512
+    name: pi function (32-bit words)
+    type: permutation
+    reference_ids:
+    - gligoroski_et_al_2015_pi_cipher_v2_0
+    characteristics:
+      block_size_bits: 512
+- id: wheesht_fullround
+  name: Wheesht FullRound Permutation
+  notes: 'Wheesht''s FullRound permutation omega, an ARX (add-rotate-xor) transform of an 8-word (512-bit) state
+    built from two chained PartRound applications on 256-bit halves plus a word-interchange step, by independent
+    designer Peter Maxwell. The round structure borrows heavily from Bernstein''s Salsa20. Used as the sole
+    underlying primitive of the Wheesht AEAD stream cipher, for both keystream generation and authentication.'
+  construction_ids:
+  - arx_permutation_network
+  round_ids:
+  - wheesht_fullround
+  target_applications:
+  - software
+  characteristics:
+    block_size_bits: 512
+    components:
+    - id: add_mod
+    - id: rotation_fixed
+    - id: xor
+  reference_ids:
+  - maxwell_2014_wheesht_v03
+  process_participations: []
+  influences:
+  - source_family_id: salsa20
+    relations:
+    - related_to
+    note: Wheesht's designer states the round structure "borrows heavily" from Bernstein's Salsa20.
+  instances:
+  - id: wheesht_fullround_512
+    name: Wheesht FullRound
+    type: permutation
+    reference_ids:
+    - maxwell_2014_wheesht_v03
+    characteristics:
+      block_size_bits: 512
+- id: panda_round_func
+  name: PANDA RoundFunc
+  notes: 'PANDA''s RoundFunc, by Ye, Wang, Hu, Wang, Xie, Sun, and Wang, is an entirely original (not AES-derived)
+    round function operating on seven 128-bit state blocks (w, x, y, z, S0, S1, S2) plus a message block: four
+    4-bit-nibble S-box (SubNibbles) applications run in parallel with a linear transformation across the state,
+    rather than the usual serial SPN layering, so the round function and its inverse share components
+    efficiently. Used as the sole underlying primitive of both the PANDA-s (stream-cipher-plus-MAC) and PANDA-b
+    (14-round iterated permutation) AEAD schemes.'
+  construction_ids:
+  - spn
+  round_ids:
+  - panda_round_func
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    block_size_bits: 896
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: linear_transform
+    - id: xor
+  reference_ids:
+  - ye_et_al_2014_panda_v1
+  process_participations: []
+  influences: []
+  instances:
+  - id: panda_round_func_896
+    name: PANDA RoundFunc
+    type: permutation
+    reference_ids:
+    - ye_et_al_2014_panda_v1
+    characteristics:
+      block_size_bits: 896

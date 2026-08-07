@@ -12244,6 +12244,8 @@ mode_families:
     - round_1
     - round_2
     status: candidate
+  underlying_primitive_ids:
+  - chacha20_block_function
   influences:
   - source_family_id: chacha
     relations:
@@ -12507,23 +12509,18 @@ mode_families:
 - id: pi_cipher
   name: pi-Cipher
   notes: 'pi-Cipher (written as the Greek letter π) is a permutation-based AEAD scheme built on its own ARX-based
-    "pi function" permutation, via a duplex-sponge variant the designers call the "triplex" construction. Four
-    parameter sets vary the internal word size and target security level: Pi16Cipher096 (16-bit words, 96-bit
-    security), Pi32Cipher128 (32-bit words, 128-bit security, the representative variant), Pi64Cipher128
-    (64-bit words, 128-bit security), and Pi64Cipher256 (64-bit words, 256-bit security). Reached CAESAR round 2
-    but was not selected for round 3.'
+    "pi function" permutation (see pi_function), via a duplex-sponge variant the designers call the "triplex"
+    construction. Four parameter sets vary the internal word size and target security level: Pi16Cipher096
+    (16-bit words, 96-bit security), Pi32Cipher128 (32-bit words, 128-bit security, the representative variant),
+    Pi64Cipher128 (64-bit words, 128-bit security), and Pi64Cipher256 (64-bit words, 256-bit security). Reached
+    CAESAR round 2 but was not selected for round 3.'
   construction_ids:
   - duplex_construction
   target_applications:
   - software
   characteristics:
     components:
-    - id: add_mod
-      params:
-        modulus: 4294967296
     - id: xor
-    - id: rotation_fixed
-    - id: constant
   reference_ids:
   - gligoroski_et_al_2015_pi_cipher_v2_0
   process_participations:
@@ -12532,7 +12529,14 @@ mode_families:
     - round_1
     - round_2
     status: candidate
-  influences: []
+  underlying_primitive_ids:
+  - pi_function_512
+  influences:
+  - source_family_id: pi_function
+    relations:
+    - used_by
+    note: pi-Cipher's triplex construction is built directly on the pi function permutation, its sole underlying
+      primitive.
   instances:
   - id: pi32cipher128v2
     name: Pi32Cipher128v2
@@ -12694,12 +12698,12 @@ mode_families:
       key_size_bits: 128
 - id: stribob
   name: STRIBOB
-  notes: 'STRIBOB is a sponge-based AEAD scheme (the BLNK sponge mode) built on a 512-bit permutation pi;
-    STRIBOBr2 ("WHIRLBOB") re-derives pi directly from the Whirlpool hash function''s internal round structure
-    and key schedule (same SubBytes/ShiftColumns/MixRows layers, renamed S/P/L), extended to 12 rounds (from
-    Whirlpool''s own 10) for a larger security margin as an unkeyed permutation. Designed to share
-    implementation resources with existing Whirlpool deployments. Reached CAESAR round 2 but was not selected
-    for round 3.'
+  notes: 'STRIBOB is a sponge-based AEAD scheme (the BLNK sponge mode) built on a 512-bit permutation pi (see
+    stribob_pi); STRIBOBr2 ("WHIRLBOB")''s pi re-derives it directly from the Whirlpool hash function''s
+    internal round structure and key schedule (same SubBytes/ShiftColumns/MixRows layers, renamed S/P/L),
+    extended to 12 rounds (from Whirlpool''s own 10) for a larger security margin as an unkeyed permutation.
+    Designed to share implementation resources with existing Whirlpool deployments. Reached CAESAR round 2 but
+    was not selected for round 3.'
   construction_ids:
   - duplex_construction
   target_applications:
@@ -12708,18 +12712,7 @@ mode_families:
   characteristics:
     state_size_bits: 512
     components:
-    - id: sbox
-      params:
-        input_bits: 8
-        output_bits: 8
-    - id: field_matrix_mul
-      params:
-        field_size: 256
-    - id: word_permutation
-      params:
-        word_size_bits: 8
     - id: xor
-    - id: constant
   reference_ids:
   - saarinen_brumley_2015_stribob_r2
   process_participations:
@@ -12728,13 +12721,14 @@ mode_families:
     - round_1
     - round_2
     status: candidate
+  underlying_primitive_ids:
+  - stribob_pi_512
   influences:
-  - source_family_id: whirlpool
+  - source_family_id: stribob_pi
     relations:
-    - variant_of
-    note: STRIBOBr2's pi permutation directly reuses Whirlpool's internal round structure and key schedule (same
-      SubBytes/ShiftColumns/MixRows layers, renamed S/P/L), extended from 10 to 12 rounds since it's now used
-      unkeyed as a sponge permutation rather than as Whirlpool's own Miyaguchi-Preneel compression function.
+    - used_by
+    note: STRIBOB's BLNK sponge mode is built directly on the STRIBOBr2 pi permutation, its sole underlying
+      primitive.
   instances:
   - id: stribob_r2
     name: STRIBOBr2
@@ -13202,9 +13196,10 @@ mode_families:
       tag_size_bits: 128
 - id: cba
   name: CBA
-  notes: CBA (Code-Book Authentication) is a generic, single-pass, single-key block-cipher AEAD mode positioned
-    as an improvement on OCB, saving up to one block-cipher call to encrypt and authenticate the plaintext.
-    Reached CAESAR round 1 but was not selected for round 2.
+  notes: CBA (Code-Book Authentication) is a single-pass, single-key block-cipher AEAD mode positioned as an
+    improvement on OCB, saving up to one block-cipher call to encrypt and authenticate the plaintext. Presented
+    generically over an abstract block cipher, but all ten of its own recommended parameter sets instantiate it
+    with AES-128/192/256. Reached CAESAR round 1 but was not selected for round 2.
   construction_ids:
   - block_cipher_based
   - block_cipher_based_stream
@@ -13220,15 +13215,24 @@ mode_families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  underlying_primitive_ids:
+  - aes_128
+  influences:
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: CBA is presented generically over an abstract block cipher, but all ten of its own recommended
+      parameter sets instantiate it with AES-128, AES-192, or AES-256.
   instances:
   - id: cba_v1_1
     name: CBA v1-1
     type: aead
     reference_ids:
     - hosseini_khazaei_2014_cba_v1_1
-    characteristics: {}
-    notes: Generic mode -- block/key sizes depend on the chosen underlying block cipher.
+    characteristics:
+      key_size_bits: 128
+    notes: Recommended AES-128 parameter set (of ten specified); block/nonce/tag sizes vary with the chosen
+      underlying block cipher and parameters.
 - id: enchilada
   name: Enchilada
   notes: 'Enchilada is a hybrid stream-cipher-plus-block-cipher AEAD design, combining ChaCha and Rijndael/AES
@@ -13262,6 +13266,11 @@ mode_families:
     stage_ids:
     - round_1
     status: candidate
+  underlying_primitive_ids:
+  - chacha12_block_function
+  - chacha20_block_function_orig
+  - rijndael_128_128
+  - rijndael_256_256
   influences:
   - source_family_id: chacha
     relations:
@@ -13380,11 +13389,11 @@ mode_families:
   name: POLAWIS
   notes: 'POLAWIS is an unusual, non-bitwise design based on algebraic operations over a noncommutative
     quaternion number field modulo a large prime p (p > 2^256), operating on 1536-bit blocks (six 256-bit
-    numbers) with a 4096-bit key -- structurally very different from the S-box/permutation/ARX operations
-    typical of this database''s other symmetric designs. Reached CAESAR round 1 but was not selected for round 2.'
-  construction_ids:
-  - block_cipher_based
-  - block_cipher_based_stream
+    numbers) with a 4096-bit key -- structurally very different from the S-box/permutation/ARX/block-cipher
+    operations typical of this database''s other symmetric designs, with no underlying block cipher, permutation,
+    or compression function to link to (hence no construction tag from either catalogue fits). Reached CAESAR
+    round 1 but was not selected for round 2.'
+  construction_ids: []
   target_applications:
   - software
   characteristics:
@@ -13524,14 +13533,15 @@ mode_families:
 - id: wheesht
   name: Wheesht
   notes: 'Wheesht, by independent designer Peter Maxwell, is an ARX-based authenticated stream cipher targeting
-    64-bit-word architectures, borrowing heavily from Salsa20''s round structure with additional inspiration from
+    64-bit-word architectures, using its own add-rotate-xor PartRound/FullRound permutation (see
+    wheesht_fullround) borrowing heavily from Salsa20''s round structure, with additional inspiration from
     SipHash''s compactness. Each 256-bit plaintext block is processed with a 512-bit internal state (split into
-    two 256-bit halves) using an add-rotate-xor PartRound/FullRound structure; rather than a separate finite-field
-    universal hash (as in GCM/Poly1305), authentication reuses the same round function as encryption, keeping code
-    size small and avoiding non-constant-time multiplication risks. 512-bit key (256 bits for encryption, 256 bits
-    for final authentication), 128-bit public message number, 128-bit optional secret message number, tag length
-    configurable (default 256 bits). Four parameter sets varying round counts were specified for CAESAR. Reached
-    CAESAR round 1 but was not selected for round 2.'
+    two 256-bit halves); rather than a separate finite-field universal hash (as in GCM/Poly1305), authentication
+    reuses the same round function as encryption, keeping code size small and avoiding non-constant-time
+    multiplication risks. 512-bit key (256 bits for encryption, 256 bits for final authentication), 128-bit
+    public message number, 128-bit optional secret message number, tag length configurable (default 256 bits).
+    Four parameter sets varying round counts were specified for CAESAR. Reached CAESAR round 1 but was not
+    selected for round 2.'
   construction_ids:
   - native_keystream_generator
   target_applications:
@@ -13539,8 +13549,6 @@ mode_families:
   characteristics:
     state_size_bits: 512
     components:
-    - id: add_mod
-    - id: rotation_fixed
     - id: xor
   reference_ids:
   - maxwell_2014_wheesht_v03
@@ -13549,11 +13557,14 @@ mode_families:
     stage_ids:
     - round_1
     status: candidate
+  underlying_primitive_ids:
+  - wheesht_fullround_512
   influences:
-  - source_family_id: salsa20
+  - source_family_id: wheesht_fullround
     relations:
-    - related_to
-    note: Wheesht's designer states the round structure "borrows heavily" from Bernstein's Salsa20.
+    - used_by
+    note: Wheesht's stream generation and authentication both directly reuse the FullRound permutation, its sole
+      underlying primitive.
   - source_family_id: siphash
     relations:
     - related_to
@@ -13719,12 +13730,12 @@ mode_families:
 - id: cbeam
   name: CBEAM
   notes: 'CBEAM, by Markku-Juhani O. Saarinen, is a sponge-based AEAD scheme (the BLNK sponge mode, shared with the
-    author''s separate STRIBOB submission) built on pi = mx^6, a 256-bit permutation of entirely original design
-    based on rotation-invariant nonlinear phi functions and "feeble Boolean one-wayness" -- described by the author
-    as geared toward lightweight, limited-resource applications, in contrast to STRIBOB''s AES/Whirlpool-derived,
-    high-security-oriented permutation (the two submissions share only the BLNK padding/mode layer, not any
-    permutation design). Withdrawn from CAESAR round 1 (2014.04.03) after Brice Minaud found a simple attack
-    against the Pi permutation.'
+    author''s separate STRIBOB submission) built on pi = mx^6 (see cbeam_pi), a 256-bit permutation of entirely
+    original design based on rotation-invariant nonlinear phi functions and "feeble Boolean one-wayness" -- described
+    by the author as geared toward lightweight, limited-resource applications, in contrast to STRIBOB''s AES/
+    Whirlpool-derived, high-security-oriented permutation (the two submissions share only the BLNK padding/mode
+    layer, not any permutation design). Withdrawn from CAESAR round 1 (2014.04.03) after Brice Minaud found a
+    simple attack against the Pi permutation.'
   construction_ids:
   - duplex_construction
   target_applications:
@@ -13734,8 +13745,6 @@ mode_families:
     state_size_bits: 256
     components:
     - id: xor
-    - id: rotation_fixed
-    - id: nonlinear_filter
   reference_ids:
   - saarinen_2014_cbeam_r1
   process_participations:
@@ -13743,7 +13752,13 @@ mode_families:
     stage_ids:
     - round_1
     status: candidate
+  underlying_primitive_ids:
+  - cbeam_pi_256
   influences:
+  - source_family_id: cbeam_pi
+    relations:
+    - used_by
+    note: CBEAM's BLNK sponge mode is built directly on the cbeam_pi permutation, its sole underlying primitive.
   - source_family_id: stribob
     relations:
     - related_to
@@ -13887,6 +13902,8 @@ mode_families:
     stage_ids:
     - round_1
     status: candidate
+  underlying_primitive_ids:
+  - aes_128
   influences:
   - source_family_id: aes
     relations:
@@ -13974,6 +13991,8 @@ mode_families:
     stage_ids:
     - round_1
     status: candidate
+  underlying_primitive_ids:
+  - aes_128
   influences:
   - source_family_id: aes
     relations:
@@ -14009,13 +14028,13 @@ mode_families:
 - id: panda
   name: PANDA
   notes: 'PANDA, by the same team as PAES (Ye, Wang, Hu, Wang, Xie, Sun, and Wang), is a family of two AEAD
-    schemes, PANDA-s and PANDA-b, built from an entirely original (not AES-derived) round function that applies
-    4-bit S-boxes (SubNibbles) and a linear transformation in parallel across the state, rather than the usual
-    serial SPN layering -- chosen so the round function and its inverse share components efficiently. PANDA-s
-    mixes a stream cipher with a MAC in a sponge-like fashion; PANDA-b uses a 14-round permutation as an online
-    cipher, structurally similar to APE. 128-bit key, 128-bit nonce, 128-bit tag. Withdrawn from CAESAR round 1
-    (2014.05.13), together with the same team''s PAES submission, after accumulated cryptanalysis pushed both
-    designs "far from [the designers''] original vision."'
+    schemes, PANDA-s and PANDA-b, both built on the same entirely original (not AES-derived) RoundFunc (see
+    panda_round_func) that applies 4-bit S-boxes (SubNibbles) and a linear transformation in parallel across the
+    state, rather than the usual serial SPN layering -- chosen so the round function and its inverse share
+    components efficiently. PANDA-s mixes a stream cipher with a MAC in a sponge-like fashion; PANDA-b iterates
+    RoundFunc 14 times as a permutation used in an online cipher, structurally similar to APE. 128-bit key,
+    128-bit nonce, 128-bit tag. Withdrawn from CAESAR round 1 (2014.05.13), together with the same team''s PAES
+    submission, after accumulated cryptanalysis pushed both designs "far from [the designers''] original vision."'
   construction_ids:
   - native_keystream_generator
   target_applications:
@@ -14023,11 +14042,6 @@ mode_families:
   - hardware
   characteristics:
     components:
-    - id: sbox
-      params:
-        input_bits: 4
-        output_bits: 4
-    - id: linear_transform
     - id: xor
   reference_ids:
   - ye_et_al_2014_panda_v1
@@ -14036,7 +14050,14 @@ mode_families:
     stage_ids:
     - round_1
     status: candidate
-  influences: []
+  underlying_primitive_ids:
+  - panda_round_func_896
+  influences:
+  - source_family_id: panda_round_func
+    relations:
+    - used_by
+    note: Both PANDA-s and PANDA-b are built directly on the shared PANDA RoundFunc, their sole underlying
+      primitive, used respectively as a stream/MAC generator and as an iterated permutation.
   instances:
   - id: panda_s
     name: PANDA-s

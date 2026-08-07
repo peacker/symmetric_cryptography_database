@@ -5781,3 +5781,27 @@ rounds:
     checkerboard-pattern key/round-counter XOR injection.
 
     '
+- id: stribob_pi_round
+  name: STRIBOBr2 pi Round
+  kind: full_round
+  spec: {}
+  notes: 'Same SubBytes/ShiftColumns/MixRows layer structure as the Whirlpool cipher round (renamed S/P/L),
+    reused unkeyed as a sponge permutation.
+
+    '
+- id: cbeam_mx_round
+  name: CBEAM mx Round
+  kind: full_round
+  spec: {}
+- id: pi_function_round
+  name: pi-Cipher pi Function Round
+  kind: full_round
+  spec: {}
+- id: wheesht_fullround
+  name: Wheesht FullRound
+  kind: full_round
+  spec: {}
+- id: panda_round_func
+  name: PANDA RoundFunc
+  kind: full_round
+  spec: {}
