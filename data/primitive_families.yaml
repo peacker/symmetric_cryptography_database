@@ -12689,6 +12689,7 @@ primitive_families:
     - id: xor
   reference_ids:
   - jean_nikolic_peyrin_2014_joltik
+  - jean_nikolic_peyrin_2015_joltik_v1_3
   process_participations:
   - process_id: caesar_competition_nist_2013_2019
     stage_ids:
@@ -12700,6 +12701,10 @@ primitive_families:
     relations:
     - inspired_by
     note: Joltik-BC uses an AES-like SPN organization scaled to sixteen 4-bit cells and adds a dedicated tweakey schedule.
+  - source_family_id: piccolo
+    relations:
+    - used_by
+    note: 'Spec, verbatim: "The 4-bit S-Box S we use in Joltik-BC is the one selected for the Piccolo block cipher."'
   notes: Joltik-BC is the 64-bit internal tweakable block cipher of the CAESAR candidate Joltik. Variants use a combined key-and-tweak
     width of 64 or 128 bits and 24 or 32 rounds respectively.
   instances:
@@ -14961,6 +14966,9 @@ primitive_families:
     - id: not
     - id: rotation_fixed
     - id: constant
+    - id: field_matrix_mul
+      params:
+        field_size: 32
   reference_ids:
   - morawiecki_et_al_2014_icepole_v1
   - morawiecki_et_al_2015_icepole_v2
@@ -14993,7 +15001,7 @@ primitive_families:
   construction_ids:
   - boolean_operator_network
   round_ids:
-  - keccak_round
+  - minalpher_p_round
   target_applications:
   - software
   - hardware
@@ -15009,6 +15017,7 @@ primitive_families:
       params:
         word_size_bits: 4
     - id: xor
+    - id: constant
   reference_ids:
   - sasaki_et_al_2014_minalpher_v1
   - sasaki_et_al_2015_minalpher_v1_1
@@ -15079,12 +15088,14 @@ primitive_families:
   name: PRIMATE Permutation
   notes: 'The PRIMATE permutation is a 5-bit-S-box substitution-permutation network, in 200-bit and 280-bit state
     widths (for 80- and 120-bit security targets respectively), each with 4 round-count variants (p1-p4)
-    trading security margin for speed at different points in the AEAD construction.'
+    trading security margin for speed at different points in the AEAD construction. Its round is
+    ConstantAdd-MixColumns-ShiftRows-SboxLayer, explicitly modeled on the data-transform part of the Rijndael
+    block cipher (not on Keccak, despite superficial row/column/lane terminology borrowed from Keccak papers).'
   construction_ids:
   - spn
   - full_sbox_layer
   round_ids:
-  - keccak_round
+  - rijndael_aes_round
   target_applications:
   - hardware
   - iot
@@ -15095,7 +15106,9 @@ primitive_families:
       params:
         input_bits: 5
         output_bits: 5
-    - id: binary_matrix_mul
+    - id: field_matrix_mul
+      params:
+        field_size: 32
     - id: word_permutation
       params:
         word_size_bits: 5
@@ -15210,6 +15223,23 @@ primitive_families:
     note: iScream is Scream's involutive-component sibling, sharing the same tweakable LS-design structure but
       replacing Scream's S-box and linear layer with involutive counterparts so decryption reuses almost all of
       encryption's circuitry.
+  - source_family_id: fantomas_robin
+    relations:
+    - improvement_of
+    - variant_of
+    note: 'Spec, verbatim: "Scream and iScream are tweakable block ciphers derived from the LS-ciphers Fantomas
+      and Robin" -- the same Fantomas/Robin lineage recorded on the sibling scream_tbc family applies equally to
+      iScream.'
+  - source_family_id: picaro
+    relations:
+    - inspired_by
+    note: PICARO is an explicit predecessor in the line of block ciphers designed for efficient higher-order
+      masking, shared with sibling scream_tbc.
+  - source_family_id: led
+    relations:
+    - inspired_by
+    note: The specification describes its every-second-round tweakey injection as similar to LED's scheduling
+      strategy, shared with sibling scream_tbc.
   instances:
   - id: iscream_v1
     name: iScream
@@ -15219,6 +15249,8 @@ primitive_families:
     characteristics:
       block_size_bits: 128
       state_size_bits: 128
+      key_size_bits: 128
+      tweak_size_bits: 128
 - id: proest_permutation
   name: Prøst Permutation
   notes: A dedicated SPN permutation designed to instantiate three different existing AEAD modes of operation
@@ -15229,7 +15261,7 @@ primitive_families:
   - spn
   - full_sbox_layer
   round_ids:
-  - keccak_round
+  - proest_round
   target_applications:
   - software
   - hardware
@@ -15245,6 +15277,7 @@ primitive_families:
         word_size_bits: 4
     - id: xor
     - id: constant
+    - id: binary_matrix_mul
   reference_ids:
   - kavun_et_al_2014_proest_v1_1
   process_participations: []
@@ -15274,14 +15307,16 @@ primitive_families:
   name: Artemia Permutation
   notes: A dedicated permutation family in two widths -- Artemia-512 and Artemia-256 -- designed as the
     underlying primitive for the JHAE permutation-based AEAD mode, with claimed resistance to differential and
-    linear cryptanalysis.
+    linear cryptanalysis. Its round nests the AES S-box with a recursive-MDS diffusion layer (via XOR and shift)
+    in the style of PHOTON/LED's serial diffusion; six rounds total.
   construction_ids:
   - spn
   - full_sbox_layer
   round_ids:
-  - keccak_round
+  - artemia_round
   target_applications:
   - software
+  - hardware
   characteristics:
     state_size_bits: 512
     components:
@@ -15297,7 +15332,19 @@ primitive_families:
   reference_ids:
   - alizadeh_et_al_2014_artemia_v1_1
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: photon
+    relations:
+    - inspired_by
+    note: 'Spec, verbatim: "Such recursive (serial) MDS diffusion layers were first introduced in ... PHOTON."'
+  - source_family_id: led
+    relations:
+    - inspired_by
+    note: 'Spec, verbatim: "... and later also [used in] LED."'
+  - source_family_id: aes
+    relations:
+    - used_by
+    note: 'Spec, verbatim: the S-box is "identical to the SBox of AES."'
   instances:
   - id: artemia_512
     name: Artemia-512
@@ -15308,6 +15355,7 @@ primitive_families:
       block_size_bits: 512
       state_size_bits: 512
       output_size_bits: 512
+      rounds: 6
   - id: artemia_256
     name: Artemia-256
     type: permutation
@@ -15317,6 +15365,7 @@ primitive_families:
       block_size_bits: 256
       state_size_bits: 256
       output_size_bits: 256
+      rounds: 6
     notes: Smaller-width sibling used by the Artemia-128 AEAD instance.
 - id: mambo
   name: Mambo
@@ -15422,6 +15471,7 @@ primitive_families:
     - id: xor
     - id: rotation_fixed
     - id: nonlinear_filter
+    - id: constant
   reference_ids:
   - saarinen_2014_cbeam_r1
   process_participations: []
@@ -15434,6 +15484,8 @@ primitive_families:
     - saarinen_2014_cbeam_r1
     characteristics:
       block_size_bits: 256
+      rounds: 6
+    notes: '"Six rounds of mx make up mx^6 = pi."'
 - id: pi_function
   name: pi Function (pi-Cipher permutation)
   notes: 'The ARX-based "pi function" permutation underlying pi-Cipher, by Gligoroski, Ødegård, Jensen, Sparr, and
@@ -15445,6 +15497,7 @@ primitive_families:
   - pi_function_round
   target_applications:
   - software
+  - hardware
   characteristics:
     block_size_bits: 512
     components:
@@ -15467,6 +15520,8 @@ primitive_families:
     - gligoroski_et_al_2015_pi_cipher_v2_0
     characteristics:
       block_size_bits: 512
+      rounds: 3
+    notes: v2.0 reduced the round count from 4 (v1) to 3.
 - id: wheesht_fullround
   name: Wheesht FullRound Permutation
   notes: 'Wheesht''s FullRound permutation omega, an ARX (add-rotate-xor) transform of an 8-word (512-bit) state

@@ -55,6 +55,11 @@ KNOWN_EXCEPTIONS = {
     # family year (2016) reflects a later revised/standardized reference, not
     # the original 2013 design the PAES authors were responding to.
     ("paes", "aegis"),
+    # Same root cause as (paes, aegis) above: Tiaoxin-346 (2014) and MORUS
+    # (2014) both cite AEGIS (DIAC 2013) as a design inspiration, predating
+    # both, but our aegis family year (2016) reflects a later revision.
+    ("tiaoxin", "aegis"),
+    ("morus", "aegis"),
 }
 
 

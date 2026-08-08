@@ -11413,8 +11413,9 @@ mode_families:
     message/associated-data block each step -- authentication and encryption share the same state update, so
     there is no separate MAC pass. AEGIS-128 keeps a 5-word (640-bit) state updated by 5 parallel AES rounds per
     16-byte block; AEGIS-256 a 6-word (768-bit) state via 6 AES rounds per 16-byte block, keyed with a 256-bit
-    key for a higher security target; AEGIS-128L an 8-word (1024-bit) state via 8 AES rounds per 32-byte block, roughly doubling
-    throughput at the cost of a larger state. CAESAR''s own final-portfolio report picked only AEGIS-128 for use
+    key for a higher security target; AEGIS-128L an 8-word (1024-bit) state via 8 AES rounds per 32-byte block, about
+    1.3-1.6x AEGIS-128''s throughput per the submission''s own benchmarks (not quite the roughly-double figure a
+    naive per-block comparison would suggest). CAESAR''s own final-portfolio report picked only AEGIS-128 for use
     case 2 (high-performance), alongside OCB; AEGIS-128L and AEGIS-256 were both additional finalists for the
     same use case, not portfolio picks.'
   construction_ids:
@@ -11429,11 +11430,15 @@ mode_families:
       params:
         input_bits: 8
         output_bits: 8
-    - id: binary_matrix_mul
+    - id: field_matrix_mul
+      params:
+        field_size: 256
     - id: word_permutation
       params:
         word_size_bits: 8
     - id: xor
+    - id: and
+    - id: constant
   reference_ids:
   - wu_preneel_2016_aegis_v1_1
   process_participations:
@@ -11537,7 +11542,7 @@ mode_families:
   influences:
   - source_family_id: aes
     relations:
-    - related_to
+    - used_by
     note: OCB is a generic block-cipher mode; its CAESAR submission and RFC 7253 both specify it primarily over
       unmodified AES-128/192/256 as the underlying block cipher.
   underlying_primitive_ids:
@@ -11566,6 +11571,7 @@ mode_families:
   - encrypt_mix_encrypt
   target_applications:
   - software
+  - hardware
   characteristics:
     components:
     - id: sbox
@@ -11621,6 +11627,7 @@ mode_families:
   - encrypt_mix_encrypt
   target_applications:
   - software
+  - hardware
   characteristics:
     components:
     - id: sbox
@@ -11660,6 +11667,7 @@ mode_families:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
+      nonce_size_bits: 64
       tag_size_bits: 128
 - id: colm
   name: COLM
@@ -11981,13 +11989,14 @@ mode_families:
       parameter set ("aes128n12t8silcv3").
 - id: jambu
   name: JAMBU
-  notes: 'JAMBU is a lightweight block-cipher AEAD mode keeping a compact state (roughly 1.5-2x the block cipher''s
-    own block size) by chaining block-cipher calls with an XOR-feedback path shared between the encryption and
-    authentication steps, so no separate large state is needed for the tag. The submission''s own primary
-    recommendation is SIMON-JAMBU (several SIMON block/key-size profiles, e.g. SIMON-JAMBU96/96: 96-bit key,
-    48-bit nonce, 144-bit state, 48-bit tag); AES-JAMBU (128-bit key, 64-bit nonce, 192-bit state, 64-bit tag) is
-    offered as a simpler-to-analyze alternative "when authenticated encryption is needed together with other
-    AES-based functionalities". Reached CAESAR round 3 but was not selected for the final portfolio.'
+  notes: 'JAMBU is a lightweight block-cipher AEAD mode keeping a compact state (exactly 1.5x the block cipher''s
+    own block size, i.e. 3n bits for a 2n-bit block) by chaining block-cipher calls with an XOR-feedback path
+    shared between the encryption and authentication steps, so no separate large state is needed for the tag. The
+    submission''s own primary recommendation is SIMON-JAMBU (several SIMON block/key-size profiles, e.g.
+    SIMON-JAMBU96/96: 96-bit key, 48-bit nonce, 144-bit state, 48-bit tag); AES-JAMBU (128-bit key, 64-bit nonce,
+    192-bit state, 64-bit tag) is offered as a simpler-to-analyze alternative, taking advantage of AES''s existing
+    security analysis and fast AES-NI implementations. Reached CAESAR round 3 but was not selected for the final
+    portfolio.'
   construction_ids:
   - block_cipher_based
   - block_cipher_based_stream
@@ -12049,6 +12058,7 @@ mode_families:
   target_applications:
   - iot
   - hardware
+  - software
   characteristics:
     components:
     - id: xor
@@ -12162,6 +12172,8 @@ mode_families:
       params:
         word_size_bits: 8
     - id: xor
+    - id: and
+    - id: constant
   reference_ids:
   - nikolic_2014_tiaoxin_v1_0
   - nikolic_2016_tiaoxin_v2_1
@@ -12178,6 +12190,10 @@ mode_families:
     - used_by
     note: Tiaoxin-346 drives its three state arrays directly with the unmodified AES encryption round function,
       the same "reuse the AES round as a building block" pattern AEGIS uses.
+  - source_family_id: aegis
+    relations:
+    - related_to
+    note: Design Rationale states "parts of the design are inspired by AEGIS."
   underlying_primitive_ids:
   - aes_128
   instances:
@@ -12202,6 +12218,7 @@ mode_families:
   - native_keystream_generator
   target_applications:
   - software
+  - hardware
   characteristics:
     components:
     - id: nlfsr
@@ -12220,8 +12237,24 @@ mode_families:
     - round_2
     - round_3
     status: finalist
-  influences: []
+  influences:
+  - source_family_id: aegis
+    relations:
+    - related_to
+    note: MORUS's finalization step explicitly reuses AEGIS's method, mixing the associated-data/plaintext length
+      into the state as an extra message block over 8 update steps.
   instances:
+  - id: morus_1280_128
+    name: MORUS-1280-128
+    type: aead
+    reference_ids:
+    - wu_huang_2016_morus_v2
+    characteristics:
+      state_size_bits: 1280
+      key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
+    notes: 'Primary recommended parameter set ("Reason: high speed for both software and hardware applications").'
   - id: morus_640_128
     name: MORUS-640-128
     type: aead
@@ -12232,7 +12265,7 @@ mode_families:
       key_size_bits: 128
       nonce_size_bits: 128
       tag_size_bits: 128
-    notes: Primary recommended parameter set.
+    notes: 'Secondary recommended parameter set ("Reason: smaller state").'
 - id: hs1_siv
   name: HS1-SIV
   notes: 'HS1-SIV instantiates Rogaway and Shrimpton''s SIV (Synthetic IV) construction with a new PRF, HS1
@@ -12280,12 +12313,13 @@ mode_families:
     characteristics:
       key_size_bits: 256
       nonce_size_bits: 96
+      tag_size_bits: 128
 - id: icepole
   name: ICEPOLE
   notes: 'ICEPOLE is a permutation-based AEAD scheme built on its own 1280-bit permutation (see
-    icepole_permutation), designed for high-speed hardware implementations (particularly efficient on Intel''s
-    SHA extensions target and modern FPGAs) and offering some resistance to side-channel/state-recovery attacks
-    via nonce misuse. ICEPOLE128 is the primary recommendation (128-bit key/nonce/tag); ICEPOLE-128a and
+    icepole_permutation), designed for high-speed hardware implementations (particularly efficient on FPGAs,
+    e.g. Xilinx Virtex 6 and Altera Stratix IV) and offering some resistance to side-channel/state-recovery
+    attacks via nonce misuse. ICEPOLE128 is the primary recommendation (128-bit key/nonce/tag); ICEPOLE-128a and
     ICEPOLE-256a add extra associated-data throughput and a 256-bit key option respectively. Reached CAESAR
     round 2 but was not selected for round 3.'
   construction_ids:
@@ -12350,7 +12384,9 @@ mode_families:
       params:
         input_bits: 4
         output_bits: 4
-    - id: binary_matrix_mul
+    - id: field_matrix_mul
+      params:
+        field_size: 16
     - id: word_permutation
       params:
         word_size_bits: 4
@@ -12382,6 +12418,8 @@ mode_families:
       block_size_bits: 64
       key_size_bits: 64
       tweak_size_bits: 64
+      nonce_size_bits: 32
+      tag_size_bits: 64
     notes: The nonce-respecting-only mode (higher throughput than Joltik=); "64-64" names the k=64-bit key and
       t=64-bit tweak split of Joltik-BC-128's 128-bit total tweakey space.
 - id: minalpher
@@ -12407,6 +12445,7 @@ mode_families:
       params:
         word_size_bits: 4
     - id: xor
+    - id: constant
   reference_ids:
   - sasaki_et_al_2014_minalpher_v1
   - sasaki_et_al_2015_minalpher_v1_1
@@ -12421,6 +12460,10 @@ mode_families:
     relations:
     - used_by
     note: Minalpher's AEAD/MAC modes are built on a tweakable Even-Mansour block cipher keyed by Minalpher-P.
+  - source_family_id: ocb
+    relations:
+    - related_to
+    note: 'Spec, verbatim: "These modes are inspired by OCB and PMAC."'
   underlying_primitive_ids:
   - minalpher_p
   instances:
@@ -12432,6 +12475,7 @@ mode_families:
     characteristics:
       block_size_bits: 256
       key_size_bits: 128
+      nonce_size_bits: 104
       tag_size_bits: 128
 - id: omd
   name: OMD
@@ -12444,6 +12488,7 @@ mode_families:
     round 3.'
   construction_ids:
   - merkle_damgard
+  - ocb_mode
   target_applications:
   - software
   characteristics:
@@ -12469,6 +12514,11 @@ mode_families:
     - used_by
     note: OMD's main CAESAR recommendation, OMD-sha256, keys the SHA-256 compression function (see
       sha256_compression) as its core PRF.
+  - source_family_id: ocb
+    relations:
+    - related_to
+    note: 'Spec, verbatim: "We let OMD-F denote the OCB mode of operation using a keyed compression function";
+      OMD''s offset/masking scheme directly reuses the Krovetz-Rogaway OCB3 masking method.'
   underlying_primitive_ids:
   - sha256_compression
   instances:
@@ -12541,9 +12591,11 @@ mode_families:
   - duplex_construction
   target_applications:
   - software
+  - hardware
   characteristics:
     components:
     - id: xor
+    - id: add_mod
   reference_ids:
   - gligoroski_et_al_2014_pi_cipher_v1
   - gligoroski_et_al_2015_pi_cipher_v2_0
@@ -12560,7 +12612,9 @@ mode_families:
     relations:
     - used_by
     note: pi-Cipher's triplex construction is built directly on the pi function permutation, its sole underlying
-      primitive.
+      primitive. Tag combination uses componentwise modular addition rather than XOR ("instead of XOR operations
+      for the intermediate tag components we use componentwise additions"), specifically for tag-second-preimage
+      resistance.
   instances:
   - id: pi32cipher128v2
     name: Pi32Cipher128v2
@@ -12569,6 +12623,8 @@ mode_families:
     - gligoroski_et_al_2015_pi_cipher_v2_0
     characteristics:
       key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 256
     notes: 32-bit-word variant targeting 128-bit security, the representative parameter set.
 - id: poet
   name: POET
@@ -12622,11 +12678,12 @@ mode_families:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
+      nonce_size_bits: 128
       tag_size_bits: 128
     notes: Recommended instance -- full AES-128 for the ECB layer, 4-round AES-128 for hashing.
 - id: primates
   name: PRIMATEs
-  notes: 'PRIMATEs is a family of three permutation-based AEAD/hash schemes -- HANUMAN (nonce-based AEAD), GIBBON
+  notes: 'PRIMATEs is a family of three permutation-based AEAD schemes -- HANUMAN (nonce-based AEAD), GIBBON
     (nonce-based AEAD, sponge-like), and APE (Authenticated Permutation-based Encryption, nonce-misuse-resistant
     but still nonce-based -- it degrades gracefully under nonce reuse rather than dispensing with a nonce
     entirely) -- all built on the same underlying PRIMATE permutation (see primate_permutation). APE-120 is the
@@ -12642,7 +12699,9 @@ mode_families:
       params:
         input_bits: 5
         output_bits: 5
-    - id: binary_matrix_mul
+    - id: field_matrix_mul
+      params:
+        field_size: 32
     - id: word_permutation
       params:
         word_size_bits: 5
@@ -12684,14 +12743,15 @@ mode_families:
     characteristics:
       state_size_bits: 200
       key_size_bits: 80
+      nonce_size_bits: 80
       tag_size_bits: 80
     notes: 80-bit-security nonce-based instance built on PRIMATE-200.
 - id: shell
   name: SHELL
-  notes: 'SHELL is a block-cipher AEAD mode layering four components: a CENC-style PRP layer keying the nonce,
+  notes: 'SHELL is a block-cipher AEAD mode layering five steps: a CENC-style PRP layer keying the nonce,
     a universal-hash layer (PX-MAC) for associated data, a further universal-hash layer (PX-Enc) for plaintext
-    encryption, and a parallel-XEX PRP layer over the ciphertext. Recommended over AES (denoted SHELL-AES).
-    Reached CAESAR round 2 but was not selected for round 3.'
+    encryption, a parallel-XEX PRP layer over the ciphertext, and a final tag-generation step. Recommended over
+    AES (denoted SHELL-AES). Reached CAESAR round 2 but was not selected for round 3.'
   construction_ids:
   - block_cipher_based
   - block_cipher_based_stream
@@ -12723,9 +12783,9 @@ mode_families:
   - source_family_id: aes
     relations:
     - used_by
-    note: SHELL's recommended instantiation, SHELL-AES, uses unmodified AES for its nonce (CENC) and ciphertext
-      (parallel-XEX) layers; its two hash layers (PX-MAC and PX-Enc) instead use "auxiliary permutations,"
-      independently-keyed 4-round-reduced AES, not unmodified AES.
+    note: SHELL's recommended instantiation, SHELL-AES, uses unmodified AES for its nonce (CENC), ciphertext
+      (parallel-XEX), and tag-generation steps (3 of 5); its two hash layers (PX-MAC and PX-Enc) instead use
+      "auxiliary permutations," independently-keyed 4-round-reduced AES, not unmodified AES.
   underlying_primitive_ids:
   - aes_128
   instances:
@@ -12737,6 +12797,7 @@ mode_families:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
+      tag_size_bits: 128
 - id: stribob
   name: STRIBOB
   notes: 'STRIBOB is a sponge-based AEAD scheme (the BLNK sponge mode) built on a 512-bit permutation pi (see
@@ -12890,6 +12951,7 @@ mode_families:
   - block_cipher_based
   - block_cipher_based_stream
   target_applications:
+  - software
   - hardware
   characteristics:
     components:
@@ -12922,6 +12984,9 @@ mode_families:
     - grosso_et_al_2014_iscream_v1
     characteristics:
       block_size_bits: 128
+      key_size_bits: 128
+      nonce_size_bits: 96
+      tag_size_bits: 128
 - id: proest
   name: Prøst
   notes: 'Prøst instantiates three existing AEAD modes of operation -- COPA (see encrypt_mix_encrypt), OTR, and
@@ -12968,7 +13033,11 @@ mode_families:
     - kavun_et_al_2014_proest_v1_1
     characteristics:
       block_size_bits: 256
-      key_size_bits: 128
+      key_size_bits: 256
+      nonce_size_bits: 256
+      tag_size_bits: 256
+    notes: '"128" in the name denotes the security level, not the raw parameter sizes -- the single-key
+      Even-Mansour construction takes a 2n-bit key for an n-bit permutation (n=128 here).'
 - id: lac
   name: LAC
   notes: 'LAC is a lightweight authenticated encryption cipher structurally similar to ALE, built on LBlock-s
@@ -13037,7 +13106,7 @@ mode_families:
     components:
     - id: add_mod
       params:
-        modulus: 4294967296
+        modulus: 340282366920938463463374607431768211456
     - id: xor
   reference_ids:
   - recacha_2014_plusplus_ae_v1_1
@@ -13135,6 +13204,9 @@ mode_families:
       params:
         word_size_bits: 8
     - id: xor
+    - id: add_mod
+      params:
+        modulus: 4294967296
   reference_ids:
   - montes_penazzi_2014_aes_cpfb_v1
   process_participations:
@@ -13170,6 +13242,7 @@ mode_families:
   - duplex_construction
   target_applications:
   - software
+  - hardware
   characteristics:
     components:
     - id: sbox
@@ -13205,6 +13278,8 @@ mode_families:
     characteristics:
       state_size_bits: 512
       key_size_bits: 256
+      nonce_size_bits: 256
+      tag_size_bits: 256
   - id: artemia_128_aead
     name: Artemia-128
     type: aead
@@ -13213,6 +13288,8 @@ mode_families:
     characteristics:
       state_size_bits: 256
       key_size_bits: 128
+      nonce_size_bits: 128
+      tag_size_bits: 128
     notes: Smaller-width variant built on the 256-bit Artemia permutation.
 - id: avalanche
   name: AVALANCHE
@@ -13305,7 +13382,8 @@ mode_families:
       key_size_bits: 128
       nonce_size_bits: 96
     notes: Recommended AES-128 parameter set (of ten specified); block size (128 bits) and nonce size (96 bits)
-      are constant across all ten recommended parameter sets -- only tag length and key size vary.
+      are constant across all ten recommended parameter sets, while key size, tag length, and usage capacity
+      each vary independently.
 - id: enchilada
   name: Enchilada
   notes: 'Enchilada is a hybrid stream-cipher-plus-block-cipher AEAD design, combining ChaCha and Rijndael/AES
@@ -13363,6 +13441,8 @@ mode_families:
     characteristics:
       block_size_bits: 128
       key_size_bits: 256
+      nonce_size_bits: 64
+      tag_size_bits: 128
   - id: enchilada_256
     name: Enchilada-256
     type: aead
@@ -13371,7 +13451,11 @@ mode_families:
     characteristics:
       block_size_bits: 256
       key_size_bits: 256
-    notes: Higher-security variant using 20-round (full) ChaCha20 and 14-round, 256-bit-block Rijndael.
+      nonce_size_bits: 64
+      tag_size_bits: 128
+    notes: Higher-security variant using 20-round (full) ChaCha20 and 14-round, 256-bit-block Rijndael; nonce
+      (fixed 64-bit ChaCha nonce) and tag (128-bit AES-GCM-style code, even though the block is 256 bits) are
+      the same size as Enchilada-128's.
 - id: ifeed_aes
   name: iFeed[AES]
   notes: iFeed is a generic feedback-based AEAD mode of operation that can use either a block cipher or a
@@ -13421,6 +13505,8 @@ mode_families:
       key_size_bits: 128
       nonce_size_bits: 96
       tag_size_bits: 128
+    notes: First of the spec's two recommended parameter sets (12-byte/96-bit public message number); the
+      second uses a 13-byte/104-bit public message number, otherwise identical.
 - id: julius
   name: Julius
   notes: 'Julius proposes two GF(2^128)-multiplication-based AEAD modes -- Julius-CTR (combining ideas from GCM,
@@ -13469,6 +13555,7 @@ mode_families:
     characteristics:
       block_size_bits: 128
       key_size_bits: 128
+    notes: The spec's 8 recommended algorithms combine AES-128 with an 8-byte (64-bit) or 16-byte (128-bit) IV.
 - id: polawis
   name: POLAWIS
   notes: 'POLAWIS is an unusual, non-bitwise design based on algebraic operations over a noncommutative
@@ -13634,6 +13721,7 @@ mode_families:
     state_size_bits: 512
     components:
     - id: xor
+    - id: add_mod
   reference_ids:
   - maxwell_2014_wheesht_v03
   process_participations:
@@ -13748,8 +13836,9 @@ mode_families:
     Authenticated Online Cipher Without Block Cipher Inverse," FSE 2014). It supports 128/192/256-bit keys
     (matching AES), an optional 0-128-bit nonce, and a 64-128-bit tag. Withdrawn from CAESAR on 2014.03.28, weeks
     after submission, after Mridul Nandi found a forging attack against the scheme''s security proof; the
-    designers judged fixing it would cost too much efficiency to remain competitive and withdrew rather than
-    revise.'
+    designers found a fix but judged it fairer to withdraw than to submit a late revision ("we found a solution,
+    at the cost of efficiency, to this subtle oversight... we think it is fair to withdraw COBRA from the
+    competition").'
   construction_ids:
   - block_cipher_based
   target_applications:
@@ -13758,6 +13847,9 @@ mode_families:
   characteristics:
     components:
     - id: xor
+    - id: field_matrix_mul
+      params:
+        field_size: 256
   reference_ids:
   - andreeva_et_al_2014_aes_cobra_v1
   process_participations:
@@ -13781,13 +13873,15 @@ mode_families:
     - andreeva_et_al_2014_aes_cobra_v1
     characteristics:
       key_size_bits: 128
+      nonce_size_bits: 128
       tag_size_bits: 128
 - id: calico
   name: Calico
   notes: 'Calico, by independent designer Christopher Taylor, is a lightweight AEAD scheme combining three
-    pre-existing, unmodified primitives designed by others: ChaCha-14 (a non-standard-round-count ChaCha variant,
-    plus ChaCha-20 for key derivation) for encryption, SipHash-2-4 as the MAC that produces the authentication
-    tag, and BLAKE2b for ratcheting the key in the Datagram/Stream parameter sets (not used to compute any tag).
+    pre-existing primitives designed by others: unmodified ChaCha-14 (a non-standard-round-count ChaCha variant,
+    plus ChaCha-20 for key derivation) for encryption, a slightly modified SipHash-2-4 (the nonce is XORed into
+    one key word) as the MAC that produces the authentication tag, and unmodified BLAKE2b for ratcheting the key
+    in the Datagram/Stream parameter sets (not used to compute any tag).
     Three parameter sets were specified (Reference, Datagram, Stream), tuned respectively for the CAESAR
     competition, UDP-style, and TCP-style full-duplex usage. 256-bit key, 64-bit tag (Reference mode). Withdrawn
     from CAESAR round 1 (2014.09.13) for non-technical reasons, not a discovered attack.'
@@ -13820,7 +13914,9 @@ mode_families:
   - source_family_id: siphash
     relations:
     - used_by
-    note: Calico uses unmodified SipHash-2-4 as its MAC, producing the authentication tag.
+    note: 'Calico uses a slightly modified SipHash-2-4 as its MAC, producing the authentication tag -- per the
+      spec, "the only difference from normal SipHash-2-4" is that the nonce is XORed into one of the key words
+      (K0) before keying.'
   - source_family_id: blake2
     relations:
     - used_by
@@ -13883,6 +13979,8 @@ mode_families:
     characteristics:
       state_size_bits: 256
       key_size_bits: 128
+      nonce_size_bits: 64
+      tag_size_bits: 64
 - id: faser
   name: FASER
   notes: 'FASER, by Chaza, McDonald, and Avanzi, is a family of two authenticated stream ciphers, FASER128 and
@@ -13899,8 +13997,12 @@ mode_families:
   - software
   characteristics:
     components:
-    - id: fcsr
+    - id: lfsr
+    - id: nlfsr
     - id: xor
+    - id: and
+    - id: or
+    - id: rotation_fixed
   reference_ids:
   - chaza_et_al_2014_faser_v1
   process_participations:
@@ -13918,7 +14020,8 @@ mode_families:
     characteristics:
       state_size_bits: 256
       key_size_bits: 128
-      tag_size_bits: 128
+      nonce_size_bits: 64
+      tag_size_bits: 64
   - id: faser256
     name: FASER256
     type: aead
@@ -13927,7 +14030,8 @@ mode_families:
     characteristics:
       state_size_bits: 384
       key_size_bits: 256
-      tag_size_bits: 128
+      nonce_size_bits: 64
+      tag_size_bits: 64
 - id: hkc
   name: HKC
   notes: 'HKC, by Henricksen, Kiyomoto, and Lu, is a "encrypt-then-MAC" stream-cipher-based AEAD scheme built by
@@ -13962,9 +14066,11 @@ mode_families:
   - source_family_id: hc_256
     relations:
     - variant_of
-    note: HKC directly extends HC-256's table-based keystream generator (same 512-element table structure and
-      update functions), adding a second, dedicated 4-element MAC-accumulation register to provide built-in
-      authentication.
+    note: 'HKC modifies HC-256''s table-based keystream generator -- collapsing HC-256''s two 1024x32-bit tables
+      (P, Q) into a single 512x64-bit table and adjusting the f/g/h update functions'' rotation offsets (per the
+      spec, HKC "abolish[es] the Q table," and f/g/h "retain the spirit of HC, but with rotation offsets
+      modified") -- and adds a second, dedicated 4-element MAC-accumulation register to provide built-in
+      authentication.'
   instances:
   - id: hkc_v1
     name: HKC v1
@@ -14033,10 +14139,11 @@ mode_families:
 - id: mcmambo
   name: McMambo
   notes: 'McMambo, by Watson Ladd, is an online AEAD mode built on the bespoke Mambo tweakable block cipher: an
-    OFB-like chaining construction where each block''s ciphertext feeds forward as the tweak for the next Mambo
-    invocation, processing associated data first, then a nonce-derived checksum, then the message, with a final
-    Mambo call producing the tag. 256-bit key, 512-bit tag. Withdrawn from CAESAR round 1 (2014.05.16) by the
-    designer after a large differential probability producing a forgery was found shortly after submission.'
+    OFB-like chaining construction where each block''s ciphertext XORed with its plaintext (U_{i+1} = C_i XOR
+    M_i) feeds forward as the tweak for the next Mambo invocation, processing associated data first, then a
+    nonce-derived checksum, then the message, with a final Mambo call producing the tag. 256-bit key, 512-bit
+    nonce, 512-bit tag. Withdrawn from CAESAR round 1 (2014.05.16) by the designer after a large differential
+    probability producing a forgery was found shortly after submission.'
   construction_ids:
   - block_cipher_based
   target_applications:
@@ -14067,6 +14174,7 @@ mode_families:
     - ladd_2014_mcmambo_v1
     characteristics:
       key_size_bits: 256
+      nonce_size_bits: 512
       tag_size_bits: 512
 - id: paes
   name: PAES

@@ -5805,3 +5805,27 @@ rounds:
   name: PANDA RoundFunc
   kind: full_round
   spec: {}
+- id: proest_round
+  name: Prøst Round
+  kind: full_round
+  spec: {}
+  notes: 'AddConstants-ShiftPlanes-MixSlices-SubRows; borrows Keccak''s row/column/lane terminology but is a
+    distinct S-box-based SPN round, not a parametrization of Keccak''s theta/rho/pi/chi/iota.
+
+    '
+- id: artemia_round
+  name: Artemia Round
+  kind: full_round
+  spec: {}
+  notes: 'A nested SBox (the AES S-box) plus recursive-MDS diffusion layer (via XOR and shift, not field
+    multiplication), in the style of PHOTON/LED''s serial diffusion -- not a parametrization of Keccak''s round.
+
+    '
+- id: minalpher_p_round
+  name: Minalpher-P Round
+  kind: full_round
+  spec: {}
+  notes: 'A 4-bit-nibble SPN round (S-box layer, binary-matrix mixing, word permutation, round-constant XOR);
+    unrelated to Keccak''s round despite both being permutations.
+
+    '

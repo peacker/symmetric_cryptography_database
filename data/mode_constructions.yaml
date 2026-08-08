@@ -211,11 +211,14 @@ mode_constructions:
   - ELmD
   - COLM
   notes: An online, nonce-misuse-resistant block-cipher AEAD mode processing each plaintext block through two
-    masked block-cipher calls with an intermediate linear mixing step between them (mix the first layer's
-    outputs, e.g. via a running XOR chain, before the second encryption layer) -- as opposed to OCB's single
-    masked call per block. Two block-cipher calls per block trade OCB's raw speed for resistance to nonce
-    reuse/misuse and full parallelizability. The AES-COPA/ELmD/COLM lineage (Andreeva, Bogdanov, Datta, Luykx,
-    Mennink, Nandi, Tischhauser, Yasuda) is the canonical example, with COLM merging both predecessors.
+    masked block-cipher-keyed calls with an intermediate linear mixing step between them (mix the first layer's
+    outputs, e.g. via a running XOR chain, before the second layer) -- as opposed to OCB's single masked call per
+    block. Two block-cipher-keyed calls per block trade OCB's raw speed for resistance to nonce reuse/misuse and
+    full parallelizability. The AES-COPA/ELmD/COLM lineage (Andreeva, Bogdanov, Datta, Luykx, Mennink, Nandi,
+    Tischhauser, Yasuda) is the canonical example, with COLM merging both predecessors -- though ELmD specifically
+    uses the block cipher's *inverse* (decrypt) for its second layer rather than a second forward encryption
+    (hence "Encrypt-Linear mix-Decrypt"), for a smaller combined hardware footprint; AES-COPA and COLM both use
+    forward encryption for both layers.
 - id: block_cipher_based_stream
   name: Block-Cipher-Based Stream Cipher (Other)
   special_case_of: block_cipher_based
