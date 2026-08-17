@@ -1330,6 +1330,32 @@ references:
   year: 2017
   venue: CHES 2017
   url: https://gimli.cr.yp.to/
+- id: gimli_2019
+  kind: article
+  title: Gimli
+  authors:
+  - Daniel J. Bernstein
+  - Stefan Kolbl
+  - Stefan Lucks
+  - Pedro Maat Costa Massolino
+  - Florian Mendel
+  - Kashif Nawaz
+  - Tobias Schneider
+  - Peter Schwabe
+  - Francois-Xavier Standaert
+  - Yosuke Todo
+  - Benoit Viguier
+  year: 2019
+  venue: NIST Lightweight Cryptography, Round 2 submission (revision 2019-09-27)
+  url: https://csrc.nist.gov/projects/lightweight-cryptography
+  notes: 'Same 11 authors and unchanged Gimli permutation/round function as gimli_2017, but a substantially expanded
+    document: formalizes the two recommended parameter sets hash/gimli24v1 (Gimli-Hash, 256-bit output) and
+    aead/gimli24v1 (Gimli-Cipher, 256-bit key, 128-bit nonce, 128-bit tag), adds a bijectivity proof of the SP-box,
+    adds new cryptanalysis (optimal differential trails up to 8 rounds via SAT/SMT search, algebraic-degree bounds
+    up to 14 rounds via division property/MILP, a rebuttal of Hamburg''s "Cryptanalysis of 22 1/2 rounds of Gimli"
+    attack claim, and a citation of Liu-Isobe-Meier''s 2019 reduced-round Gimli-Hash preimage/collision attacks),
+    and adds extensive FPGA/ASIC synthesis results (vs. Ascon, Keccak-f[400], SPONGENT, Photon, C-Quark) and
+    software benchmarks across AVR ATmega, ARM Cortex-M0/M3/A8, and Intel Haswell.'
 - id: subterranean_2019
   kind: article
   title: Subterranean 2.0 - Submission to NIST Lightweight Cryptography

@@ -4709,11 +4709,25 @@ primitive_families:
       output_size_bits: 128
 - id: gimli
   name: Gimli
-  notes: Gimli is a 384-bit permutation operating on a 3x4x32 array of 32-bit words -- not ARX (no modular addition
-    anywhere), and not pure_and_rx either, since its T-function uses OR alongside AND (unlike Keccak/Ascon/Xoodoo's
+  notes: 'Gimli is a 384-bit permutation operating on a 3x4x32 array of 32-bit words -- not ARX (no modular addition
+    anywhere), and not pure_and_rx either, since its T-function uses OR alongside AND (unlike Keccak/Ascon/Xoodoo''s
     AND/NOT-only nonlinearity) -- so it carries the broader boolean_operator_network root plus the bitslice_friendly_spn
     facet, rather than the strict pure_and_rx child. Designed as a compact cross-platform foundation for hashing,
     authenticated encryption, and other modes.
+
+
+    gimli_2019 (the NIST LWC round-2 submission, revision 2019-09-27) leaves the permutation and round function
+    completely unchanged from gimli_2017 -- same 24-round Gimli-24 recommended instance, same SP-box, same
+    Small-Swap/Big-Swap linear layer, same round constant. What it adds is everything around the permutation:
+    formal recommended parameter sets hash/gimli24v1 (Gimli-Hash, sponge mode, 256-bit output, rate 16 bytes/capacity
+    32 bytes) and aead/gimli24v1 (Gimli-Cipher, duplex mode, 256-bit key, 128-bit nonce, 128-bit tag), a bijectivity
+    proof of the SP-box (Sect. 4.2.1), new cryptanalysis absent from the 2017 paper -- optimal differential trails up
+    to 8 rounds found by SAT/SMT search (weight 52 at 8 rounds), algebraic-degree bounds up to 14 rounds via
+    bit-based division property/MILP, an 11-round integral distinguisher, and a rebuttal of Hamburg''s "Cryptanalysis
+    of 22 1/2 rounds of Gimli" note (arguing the claimed 2^138.5-work/2^129-memory attack is worse than brute force
+    against the 192-bit key it targets) plus a citation of Liu-Isobe-Meier''s 2019 preimage/collision attacks on
+    reduced-round Gimli-Hash -- and extensive FPGA/ASIC synthesis results (compared against Ascon, Keccak-f[400],
+    SPONGENT, Photon, C-Quark) and software benchmarks across AVR ATmega, ARM Cortex-M0/M3/A8, and Intel Haswell.'
   construction_ids:
   - bitslice_friendly_spn
   - boolean_operator_network
@@ -4733,6 +4747,7 @@ primitive_families:
     - id: constant
   reference_ids:
   - gimli_2017
+  - gimli_2019
   process_participations:
   - process_id: lightweight_crypto_nist_2018_2023
     stage_ids:
