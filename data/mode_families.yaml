@@ -6850,6 +6850,7 @@ mode_families:
     - id: constant
   reference_ids:
   - daemen_2019_xoodyak
+  - xoodoo_2018
   process_participations:
   - process_id: lightweight_crypto_nist_2018_2023
     stage_ids:
@@ -6857,10 +6858,12 @@ mode_families:
     - round_2
     - finalist
     status: finalist
+  underlying_primitive_ids:
+  - xoodoo_p12
   influences:
   - source_family_id: xoodoo
     relations:
-    - inspired_by
+    - used_by
     note: Xoodyak is built directly on the Xoodoo permutation, using Xoodoo[12] unmodified as the state-transformation function
       inside its Cyclist duplex mode.
   - source_family_id: keccak
@@ -10929,6 +10932,92 @@ mode_families:
       key_size_bits: 128
     notes: AEAD built atop Kravatte-WBC, a tweakable wide block cipher formed from a Feistel network of two Farfalle
       instances (Kravatte and the reduced SHORT-KRAVATTE); tag length t=128, alignment unit length l=8.
+
+- id: xoofff
+  name: Xoofff
+  construction_ids:
+  - parallel_permutation_construction
+  - farfalle
+  round_ids:
+  - xoofff_round
+  target_applications:
+  - software
+  - hardware
+  - iot
+  underlying_primitive_ids:
+  - xoodoo_p6
+  characteristics:
+    components:
+    - id: and
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - daemen_et_al_2018_xoodoo_design
+  - xoodoo_2018
+  process_participations: []
+  influences:
+  - source_family_id: xoodoo
+    relations:
+    - used_by
+    note: 'Confirmed directly: "XOOFFF is Farfalle[pb,pc,pd,pe,rollc,rolle]" with pb=pc=pd=pe=Xoodoo[6] -- Xoodoo
+      reduced to 6 of its rounds, its sole underlying primitive.'
+  notes: 'Xoofff is a deck function (a keyed PRF taking a sequence of input strings and producing an arbitrary-length,
+    incrementally-computable output) obtained by instantiating Farfalle with Xoodoo[6] for all four internal
+    permutation calls (pb=pc=pd=pe), plus two dedicated rolling functions operating on the full 384-bit state:
+    rollXc (a lightweight invertible LINEAR maximal-order FSR, following Granger et al.''s construction, used to
+    roll the input masks) and rollXe (a lightweight invertible NONLINEAR FSR, used to roll the accumulator state
+    -- deliberately nonlinear specifically to resist the state-recovery attacks of Chaigneau et al. that apply
+    when the state-rolling function is linear). Security claim (Claim 1): distinguishing advantage bounded by
+    terms in key length kappa<384, ~192-bit accumulator/rolling-state recovery hardness, and ~128-bit collision
+    resistance in the accumulator, targeting an overall 128-bit security level. The suite built on top of Xoofff
+    includes Xoofff-SANE and Xoofff-SANSE (session authenticated encryption), a differential-uniformity variant
+    Xoofffie (identical parameters except pd=identity), and the tweakable wide block cipher Xoofff-WBC plus its
+    AEAD mode Xoofff-WBC-AE (both built from Xoofffie+Xoofff in a 4-round Feistel network via Farfalle-WBC/
+    Farfalle-WBC-AE).'
+  instances:
+  - id: xoofff_sane
+    name: Xoofff-SANE
+    type: aead
+    reference_ids:
+    - xoodoo_2018
+    characteristics:
+      state_size_bits: 384
+      tag_size_bits: 128
+    notes: 'Deck-SANE(Xoofff, t=128, l=8): session authenticated encryption relying on a user-provided nonce for
+      confidentiality (history initialized with the nonce, updated per-message with metadata/ciphertext). Fixes
+      a flaw the same authors found in their own earlier Farfalle-SAE mode, where sequences of messages with
+      empty plaintext/metadata could produce colliding tags (e.g. a message with metadata-only followed by one
+      with plaintext-only was indistinguishable in the history from a single combined message) -- fixed by
+      adding a 1-bit frame value that toggles on every (un)wrap call.'
+  - id: xoofff_sanse
+    name: Xoofff-SANSE
+    type: aead
+    reference_ids:
+    - xoodoo_2018
+    characteristics:
+      state_size_bits: 384
+      tag_size_bits: 256
+    notes: 'Deck-SANSE(Xoofff, t=256): nonce-misuse-resistant session authenticated encryption via a session-aware
+      generalization of the Synthetic IV method (the tag, computed over the full history including the current
+      message, is folded into keystream generation). 256-bit tag chosen for full 128-bit security against tag
+      collisions. Fixes a flaw Ted Krovetz reported in the same authors'' earlier Farfalle-SIV mode (repeating a
+      plaintext equal to a previous tag would leak keystream bits, since tag and keystream generation were not
+      domain-separated) -- fixed by enforcing domain separation between the two.'
+  - id: xoofff_wbc_ae
+    name: Xoofff-WBC-AE
+    type: aead
+    reference_ids:
+    - xoodoo_2018
+    characteristics:
+      state_size_bits: 384
+      tag_size_bits: 128
+    notes: 'Farfalle-WBC-AE[Xoofffie, Xoofff, l=8, t=128]: AEAD built atop Xoofff-WBC, a tweakable wide (arbitrary-length)
+      block cipher formed from a 4-round Feistel network combining Xoofff and Xoofffie (a dedicated
+      differential-uniformity variant of Xoofff with pd replaced by the identity function, used only in the
+      Feistel network''s first and last rounds). Wrapping appends 128 bits of zero redundancy to the plaintext
+      before Xoofff-WBC encipherment (with the metadata as tweak); unwrapping deciphers and checks that
+      redundancy is recovered as all-zero.'
 
 - id: farasha
   name: Farasha

@@ -4582,8 +4582,13 @@ primitive_families:
       output_size_bits: 128
 - id: xoodoo
   name: Xoodoo
-  notes: Xoodoo is a 384-bit, 12-round permutation arranged as three bit planes of four lanes; it is the permutation underlying
-    Xoodyak.
+  notes: 'Xoodoo[nr] is a family of 384-bit permutations parameterized by its round count nr (not a single fixed
+    round count), arranged as three planes of four 32-bit lanes each (128 columns of 3 bits). Different round
+    counts are used by different members of the Xoodoo suite: Xoofff/Xoofffie (the Farfalle-based deck function
+    and its differential-uniformity variant, see xoofff) use Xoodoo[6], while Xoodyak uses Xoodoo[12]. The
+    designers prove lower bounds on differential/linear trail weights (no 3-round trail below weight 36, none
+    found below weight 104 over 6 rounds) using a tree-search technique adapted from Mella et al.''s Keccak
+    analysis.'
   construction_ids:
   - boolean_operator_network
   - bitslice_friendly_spn
@@ -4632,14 +4637,31 @@ primitive_families:
     note: Xoodoo's 384-bit state width is explicitly stated to be dimensioned like Gimli for efficiency on low-end 32-bit
       processors.
   instances:
-  - id: xoodoo_permutation_384
-    name: Xoodoo Permutation (384-bit)
+  - id: xoodoo_p6
+    name: Xoodoo[6]
     type: permutation
+    reference_ids:
+    - xoodoo_2018
+    - daemen_et_al_2018_xoodoo_design
+    characteristics:
+      state_size_bits: 384
+      rounds: 6
+      block_size_bits: 384
+      output_size_bits: 384
+    notes: Used as pb=pc=pd=pe (the four internal permutation calls) in the Farfalle instantiation Xoofff, and
+      as pb=pc=pe in the differential-uniformity variant Xoofffie (which replaces pd with the identity function).
+  - id: xoodoo_p12
+    name: Xoodoo[12]
+    type: permutation
+    reference_ids:
+    - xoodoo_2018
+    - daemen_2019_xoodyak
     characteristics:
       state_size_bits: 384
       rounds: 12
       block_size_bits: 384
       output_size_bits: 384
+    notes: Used as the underlying permutation f of Xoodyak's Cyclist mode.
 - id: romulus
   name: Romulus
   notes: Romulus is a nonce-based AEAD family built around the SKINNY-128-256 tweakable block cipher, with modes tuned for

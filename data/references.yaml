@@ -1197,11 +1197,16 @@ references:
   authors:
   - Joan Daemen
   - Seth Hoffert
+  - Michaël Peeters
   - Gilles Van Assche
   - Ronny Van Keer
   year: 2018
-  venue: Cryptology ePrint Archive
-  url: https://keccak.team/xoodoo.html
+  venue: Cryptology ePrint Archive, report 2018/767
+  url: https://eprint.iacr.org/2018/767
+  notes: 'A "standing document" (updated over time as the Xoodoo suite grows), covering Xoodoo, Xoofff,
+    Xoofff-SANE, Xoofff-SANSE, Xoofff-WBC, Xoofff-WBC-AE, and (from the 2019-03-14 revision onward) Xoodyak.
+    Originally released 2018-08-25 without Xoodyak; the locally saved copy is the 2019-03-14 revision, which
+    added Section 7 (Xoodyak/Cyclist).'
 - id: daemen_et_al_2018_xoodoo_design
   kind: article
   title: The Design of Xoodoo and Xoofff

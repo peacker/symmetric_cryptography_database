@@ -379,14 +379,17 @@ mode_constructions:
   - enc
   placeholder_family_names:
   - Kravatte
+  - Xoofff
   - Ciminion
   notes: 'The specific Farfalle construction (mask derivation + compression layer + expansion layer, each a parallel
     application of a permutation, linked by rolling functions), as opposed to the broader parallel-permutation-based
     root: Kravatte is Farfalle instantiated with Keccak-p[1600, nr=6] ("KRAVATTE is Farfalle[pb,pc,pd,pe,rollc,rolle]
-    with pb=pc=pd=pe=KECCAK-p[1600,nr=6]"); Ciminion explicitly modifies it ("our mode of operation resembles the
-    Farfalle construction... we slightly modify Farfalle"); Hydra''s Megafono strategy is "inspired by Farfalle and
-    Ciminion" but diverges further (its own paper hedges it as only "1/2 x Farfalle"-like) and is tagged with the
-    parallel_permutation_construction root without this specific leaf.
+    with pb=pc=pd=pe=KECCAK-p[1600,nr=6]"); Xoofff is Farfalle instantiated with Xoodoo[6] by the same core author
+    team, designed specifically as a narrower-permutation alternative to Kravatte for low-end platforms
+    ("XOOFFF is Farfalle[pb,pc,pd,pe,rollc,rolle]" with pb=pc=pd=pe=Xoodoo[6]); Ciminion explicitly modifies it
+    ("our mode of operation resembles the Farfalle construction... we slightly modify Farfalle"); Hydra''s Megafono
+    strategy is "inspired by Farfalle and Ciminion" but diverges further (its own paper hedges it as only
+    "1/2 x Farfalle"-like) and is tagged with the parallel_permutation_construction root without this specific leaf.
 
     '
 - id: farasha

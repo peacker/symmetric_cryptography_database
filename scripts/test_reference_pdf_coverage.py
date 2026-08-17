@@ -36,7 +36,7 @@ KNOWN_MISSING = {
     "spectral_hash",
     "streamhash", "swifftx", "tangle_hash", "tib3", "twister_hash", "umac",
     "vistrutah", "vmpc", "vortex_hash", "wake", "wamm", "waterfall_hash",
-    "xchacha", "xoodoo", "zuc",
+    "xchacha", "zuc",
 }
 
 

@@ -5829,3 +5829,11 @@ rounds:
     unrelated to Keccak''s round despite both being permutations.
 
     '
+- id: xoofff_round
+  name: Xoofff round (Xoodoo[6])
+  kind: other
+  spec: {}
+  notes: Xoofff reuses the standard Xoodoo round function (see the xoodoo family's own round definition,
+    xoodoo_permutation_round), reduced to 6 of Xoodoo's rounds; no separate round definition is introduced here
+    to avoid duplicating that definition.
+
