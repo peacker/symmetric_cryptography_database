@@ -11602,6 +11602,19 @@ primitive_families:
       rounds: 12
     notes: A round-reduced (12 of the full 24 rounds), unmodified Keccak-p[1600] used by Lake/Sea/Ocean/Lunar
       Keyak (Bertoni, Daemen, Peeters, Van Assche, Van Keer's CAESAR submission Keyak).
+  - id: keccak_p1600_6
+    name: Keccak-p[1600,6]
+    type: permutation
+    reference_ids:
+    - bertoni_et_al_2017_farfalle
+    characteristics:
+      block_size_bits: 1600
+      state_size_bits: 1600
+      output_size_bits: 1600
+      rounds: 6
+    notes: 'A round-reduced (6 of the full 24 rounds), unmodified Keccak-p[1600] used as pb=pc=pd=pe in Kravatte,
+      the Farfalle instantiation by Bertoni, Daemen, Hoffert, Peeters, Van Assche, and Van Keer: "KRAVATTE is
+      Farfalle[pb,pc,pd,pe,rollc,rolle] with pb=pc=pd=pe=KECCAK-p[1600,nr=6]."'
 - id: blake
   name: BLAKE Compression Functions
   construction_ids:

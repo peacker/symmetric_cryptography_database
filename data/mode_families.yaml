@@ -10888,7 +10888,7 @@ mode_families:
   target_applications:
   - mpc
   underlying_primitive_ids:
-  - keccak_f1600
+  - keccak_p1600_6
   characteristics:
     components: []
   reference_ids:
@@ -10899,8 +10899,8 @@ mode_families:
     relations:
     - used_by
     note: 'Confirmed directly: "KRAVATTE is Farfalle[pb,pc,pd,pe,rollc,rolle] with pb=pc=pd=pe=KECCAK-p[1600,nr=6]"
-      -- Keccak-p[1600] reduced to 6 of its full 24 rounds (vs. the keccak family''s keccak_f1600 instance, the full
-      24-round variant).'
+      -- Keccak-p[1600] reduced to 6 of its full 24 rounds (see the keccak family''s keccak_p1600_6 instance,
+      not the full 24-round keccak_f1600).'
   notes: 'Farfalle instantiated with Keccak-p[1600,nr=6]. Named variants, all built from Kravatte, confirmed directly:
     Kravatte-SAE (session-supporting AEAD), Kravatte-SIV (nonce-misuse-resistant SIV AEAD), Kravatte-WBC (a
     tweakable wide block cipher, a Feistel network of two Farfalle instances -- one of them the reduced
