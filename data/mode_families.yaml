@@ -14386,3 +14386,113 @@ mode_families:
       nonce_size_bits: 128
       tag_size_bits: 128
       rounds: 14
+- id: gimli_hash
+  name: Gimli-Hash
+  construction_ids:
+  - sponge_construction
+  - standard_sponge
+  round_ids:
+  - gimli_permutation_round
+  target_applications:
+  - iot
+  - software
+  underlying_primitive_ids:
+  - gimli_permutation_384
+  characteristics:
+    state_size_bits: 384
+    components:
+    - id: xor
+    - id: and
+    - id: or
+    - id: rotation_fixed
+    - id: shift_fixed
+    - id: constant
+  reference_ids:
+  - gimli_2017
+  - gimli_2019
+  process_participations: []
+  influences:
+  - source_family_id: gimli
+    relations:
+    - used_by
+    note: Gimli-Hash is a standard fixed-rate sponge built directly on the unmodified 24-round Gimli permutation, with
+      no round reduction at any stage.
+  notes: 'Fixed-rate sponge hash over the 384-bit (48-byte) Gimli state: 16-byte rate (the top row of 4 words), 32-byte
+    capacity, giving a generic 2^128 security bound. Introduced in gimli_2017 (Sect. 2.10/App. B), which pads the final
+    (possibly empty) block by XORing 0x1F at the byte position right after the message bytes and XORing 0x80 into the
+    last byte of the RATE (byte 15) -- classic SHA-3-style multi-rate padding confined to the rate. gimli_2019 (the NIST
+    LWC round-2 spec) instead XORs 1 into the byte right after the message bytes and XORs 1 into the very last byte of
+    the full state (byte 47, deep in the capacity) -- domain-separating the final block using a capacity bit rather than
+    a second rate bit. This is a genuine padding-scheme revision between the two documents, not merely a change in
+    presentation. Both versions squeeze by outputting the 16-byte rate, applying the permutation, and outputting the
+    rate again for a 32-byte default output (also usable as an arbitrary-length XOF).'
+  instances:
+  - id: gimli_hash_v1
+    name: Gimli-Hash
+    type: hash
+    reference_ids:
+    - gimli_2017
+    - gimli_2019
+    characteristics:
+      state_size_bits: 384
+      block_size_bits: 128
+      output_size_bits: 256
+      rounds: 24
+    notes: 'NIST LWC round-2 parameter set hash/gimli24v1: Gimli-Hash with the full 24-round Gimli permutation and a
+      256-bit (32-byte) default output; also usable as an XOF for arbitrary-length output.'
+- id: gimli_cipher
+  name: Gimli-Cipher
+  construction_ids:
+  - duplex_construction
+  - standard_duplex
+  round_ids:
+  - gimli_permutation_round
+  target_applications:
+  - iot
+  - software
+  underlying_primitive_ids:
+  - gimli_permutation_384
+  characteristics:
+    state_size_bits: 384
+    components:
+    - id: xor
+    - id: and
+    - id: or
+    - id: rotation_fixed
+    - id: shift_fixed
+    - id: constant
+  reference_ids:
+  - gimli_2019
+  process_participations: []
+  influences:
+  - source_family_id: gimli
+    relations:
+    - used_by
+    note: Gimli-Cipher is a standard duplex AEAD built directly on the unmodified 24-round Gimli permutation, running
+      the full round count on every call (initialization, each associated-data/plaintext block, and finalization alike)
+      -- a plain (non-Monkey) duplex, unlike Ascon's or Ketje's reduced-round duplexing calls.
+  notes: 'Duplex-mode AEAD over the 384-bit Gimli state, first formally specified with concrete algorithms and a
+    recommended parameter set in gimli_2019 (the NIST LWC round-2 spec, Sect. 2.11-2.12, Algorithms 5-6); the original
+    gimli_2017 CHES paper only mentions that Gimli "can easily be used to build... authenticated ciphers" in general
+    terms and gives no concrete Gimli-Cipher algorithm, test vectors, or C code (unlike Gimli-Hash, which does get a
+    full C-code appendix and test vectors in gimli_2017). State is initialized to nonce||key (16+32 bytes), then
+    associated data and plaintext are each processed exactly like Gimli-Hash''s blocks (same 16-byte-block absorption
+    and same final-block domain-separation padding), except every plaintext byte XORed into the state is simultaneously
+    output as ciphertext; after the final plaintext block, the 16-byte rate is output as the authentication tag.'
+  instances:
+  - id: gimli_cipher_v1
+    name: Gimli-Cipher
+    type: aead
+    reference_ids:
+    - gimli_2019
+    characteristics:
+      state_size_bits: 384
+      key_size_bits: 256
+      nonce_size_bits: 128
+      tag_size_bits: 128
+      block_size_bits: 128
+      rounds: 24
+    notes: 'NIST LWC round-2 parameter set aead/gimli24v1: Gimli-Cipher with the full 24-round Gimli permutation,
+      256-bit key, 128-bit nonce, 128-bit tag. Opting for a 256-bit key was explicitly not a claim of 2^224-level
+      security; the designers state it was chosen to blunt multi-target and quantum-search margin concerns while still
+      only targeting a 2^128 single-key security level.'

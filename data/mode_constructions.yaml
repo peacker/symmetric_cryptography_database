@@ -29,6 +29,7 @@ mode_constructions:
   placeholder_family_names:
   - SHA-3
   - SHAKE
+  - Gimli-Hash
   notes: 'The classical rate/capacity sponge: a constant permutation-round count per call, absorbing into (and squeezing
     from) only the rate portion of the state, with the capacity portion never directly touched by input/output.
 
@@ -63,6 +64,7 @@ mode_constructions:
   - aead
   placeholder_family_names:
   - Keyak
+  - Gimli-Cipher
   notes: 'The classical duplex construction (Bertoni, Daemen, Peeters, Van Assche): every duplexing call runs the full permutation
     for the same, constant number of rounds, whether it is the initialization call or a later data-processing call.
 

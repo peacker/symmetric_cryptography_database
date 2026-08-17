@@ -1330,6 +1330,13 @@ references:
   year: 2017
   venue: CHES 2017
   url: https://gimli.cr.yp.to/
+  notes: 'The full self-hosted version (dated 2017-06-27, permanent ID 93eb34af666d7fa7264d94c21c18034a), not the
+    condensed proceedings chapter: includes a full C reference implementation of the permutation and of Gimli-Hash,
+    the AVR computation order, Gimli-Hash test vectors, avalanche-criterion tables, an SP-box bijectivity proof, and
+    full differential-cryptanalysis and division-property-degree appendices. Defines the Gimli permutation and
+    Gimli-Hash (sponge, 16-byte rate/32-byte capacity) in full; only mentions authenticated encryption as a generic
+    capability of the permutation, with no concrete Gimli-Cipher algorithm, parameter set, or test vectors -- that
+    first appears in gimli_2019.'
 - id: gimli_2019
   kind: article
   title: Gimli
