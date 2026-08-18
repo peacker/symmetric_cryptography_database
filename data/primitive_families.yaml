@@ -4269,6 +4269,13 @@ primitive_families:
     - inspired_by
     note: Ascon's paper states that its 5-bit substitution layer is an affine equivalent of Keccak's chi mapping. The affine
       input and output transforms raise Ascon's branch number, so the S-boxes are related but not identical.
+  - source_family_id: sha2
+    relations:
+    - inspired_by
+    note: 'Ascon''s paper states directly: "The rotation values of the linear diffusion layer in Ascon are chosen similar
+      to those of Σ in SHA-2." Σ0/Σ1 are SHA-2''s round-function rotation-XOR mixing functions (distinct from the σ0/σ1
+      message-schedule functions) -- a stated design-choice influence on Ascon''s own fixed rotation distances, not merely
+      a structural resemblance noted after the fact.'
   notes: 'Ascon-p is a 320-bit permutation operating on five 64-bit words, combining a 5-bit substitution layer with fixed
     linear rotations. It first appeared in the 2016 CAESAR submission and was carried forward, as the same mathematical transformation,
     into the 2021 NIST Lightweight Cryptography submission (both using big-endian bit/byte numbering and the original v1.2
