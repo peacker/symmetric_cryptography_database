@@ -6346,6 +6346,50 @@ mode_families:
       (Miyaguchi-Preneel).
 
       '
+- id: damgard_claw_free_hash
+  name: Damgård Claw-Free Hash
+  construction_ids:
+  - merkle_damgard
+  round_ids:
+  - damgard_claw_free_step
+  target_applications:
+  - software
+  underlying_primitive_ids:
+  - damgard_factoring_blob
+  characteristics:
+    components:
+    - id: mul_mod
+  reference_ids:
+  - damgard_1987_collision_free_hash
+  process_participations: []
+  influences:
+  - source_family_id: damgard_claw_free_permutation
+    relations:
+    - used_by
+    note: The hash of a message m is f_[m](I) = f_{m_1}(f_{m_2}(...f_{m_s}(I)...)) -- sequential composition of
+      unmodified claw-free family members chosen by successive message symbols, for a fixed public domain point I.
+  notes: 'Damgård (1987). Not classical Merkle-Damgard block-chaining in the strict sense (there is no separate
+    fixed-size compression function combining a running chaining value with a new message block via a shared,
+    symbol-independent function) -- instead, a prefix-free encoding [m] of the message selects, symbol by symbol,
+    which member of a public claw-free permutation family to compose next, starting from a fixed public point I.
+    Tagged merkle_damgard as the closest existing construction leaf regardless, since it is still a sequential,
+    iterated extension of a fixed-size primitive to arbitrary-length input with a formal proof that a hash
+    collision yields a claw in the underlying family (Theorem 2.4) -- the defining property both constructions
+    share. A purely theoretical paper: no concrete recommended modulus size or performance benchmark is given, only
+    asymptotic security/efficiency arguments (Sect. 2, message throughput of log_2(r) bits per r-permutation-family
+    evaluation).
+
+    '
+  instances:
+  - id: damgard_hash_v1
+    name: Damgård Claw-Free Hash
+    type: hash
+    reference_ids:
+    - damgard_1987_collision_free_hash
+    characteristics: {}
+    notes: Genuinely parameterized by the choice of underlying claw-free permutation family (see
+      damgard_claw_free_permutation's three instances) and family size r; the paper gives no single recommended
+      concrete parameter set the way VSH later does.
 - id: vsh_hash
   name: VSH
   construction_ids:

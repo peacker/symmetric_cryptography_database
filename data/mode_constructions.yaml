@@ -132,6 +132,63 @@ mode_constructions:
     those, every subtree can be hashed independently and in parallel.
 
     '
+- id: randomize_then_combine
+  name: Randomize-then-Combine Construction
+  placeholder_family_names:
+  - MuHASH
+  - AdHASH
+  - LtHASH
+  notes: 'Level-1 root, Bellare and Micciancio''s own name for their own paradigm ("The Randomize-then-combine
+    Paradigm"): each message block x_i (with its own block index i, to prevent block-reordering/swapping attacks)
+    is passed through a fixed, ideal randomizing function h to give y_i = h((i).x_i), and the y_i are then combined
+    via an associative operation of a group, y = y_1 (op) y_2 (op) ... (op) y_n -- explicitly NOT sequential like
+    Merkle-Damgard ("our construction is parallel rather than iterative"), and unlike Merkle-Damgard, this shape is
+    natively incremental (updating one block only requires undoing and redoing that one block''s group-operation
+    contribution) and parallelizable/hardware-friendly by construction. Distinct from binary_tree_hash above: no
+    tree structure or pairwise recombination is needed, since the group operation lets every block combine directly
+    into a single running accumulator in any order. The choice of group/operation determines both efficiency and
+    which number-theoretic hardness assumption the construction reduces to -- see
+    number_theoretic_hash_construction below for that orthogonal facet. The same paper explicitly breaks its own
+    XOR-combining variant, XHASH, in an appendix -- direct evidence that this shape does not work with an arbitrary
+    group and is not itself modeled as a family here.
+
+    '
+- id: number_theoretic_hash_construction
+  name: Number-Theoretic Hash Construction
+  typical_primitive_types:
+  - hash
+  placeholder_family_names:
+  - MuHASH
+  - AdHASH
+  - LtHASH
+  notes: 'Level-1 root: the mode-tier sibling of number_theoretic_construction in primitive_constructions.yaml,
+    for designs whose collision resistance is reduced to a number-theoretic hardness assumption but which have no
+    separate fixed-size primitive worth modeling of its own -- e.g. MuHASH/AdHASH/LtHASH''s "randomizing" step h is
+    explicitly just "a standard hash function, assumed ideal" (any existing generic hash, not a novel design in its
+    own right); the number theory lives entirely in how the per-block outputs are combined. Families are tagged
+    with a leaf below identifying the specific hardness assumption.
+
+    '
+- id: discrete_log_hardness_hash
+  name: Discrete-Log-Hardness Hash
+  special_case_of: number_theoretic_hash_construction
+  typical_primitive_types:
+  - hash
+  placeholder_family_names:
+  - MuHASH
+  notes: Collision resistance reduces to the hardness of the discrete logarithm problem in a group.
+- id: lattice_hardness_hash
+  name: Lattice-Hardness Hash
+  special_case_of: number_theoretic_hash_construction
+  typical_primitive_types:
+  - hash
+  placeholder_family_names:
+  - AdHASH
+  - LtHASH
+  notes: Collision resistance reduces to a lattice hardness assumption -- directly (LtHASH, following Ajtai''s
+    shortest-vector-approximation-based one-way function), or via an intermediate problem shown reducible to it
+    (AdHASH''s weighted subset-sum problem; the same paper notes both ultimately rest on the same underlying
+    lattice hardness).
 - id: block_cipher_based
   name: Block-Cipher-Based Mode
   notes: 'A mode of operation whose confidentiality/authentication mechanism is built directly by invoking an underlying

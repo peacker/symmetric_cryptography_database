@@ -3463,6 +3463,19 @@ references:
   year: 1995
   venue: Fast Software Encryption, LNCS 1039, Springer-Verlag
   url: https://www.cl.cam.ac.uk/~rja14/Papers/tiger.pdf
+- id: damgard_1987_collision_free_hash
+  kind: article
+  title: Collision Free Hash Functions and Public Key Signature Schemes
+  authors:
+  - Ivan Bjerre Damgård
+  year: 1987
+  venue: 'EUROCRYPT ''87, LNCS 304, pp. 203-216'
+  url: https://doi.org/10.1007/3-540-39118-5_19
+  notes: The theoretical foundation this database traces the VSH/MuHASH/AdHASH/LtHASH lineage back to. Defines the
+    generic "collision-free hash from a claw-free family of permutations" framework and proves collision resistance
+    reduces to the difficulty of finding a claw in the family, plus three concrete example claw-free families (a
+    general factoring-based one via quadratic residues and Jacobi symbols, a simpler factoring-based "blob"-inspired
+    variant, and a trapdoor-free discrete-log-based one) -- none individually given a standalone name in the paper.
 - id: contini_lenstra_steinfeld_2005_vsh
   kind: article
   title: 'VSH, an Efficient and Provable Collision-Resistant Hash Function'

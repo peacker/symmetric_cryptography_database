@@ -1260,25 +1260,51 @@ primitive_constructions:
     resistance.
 
     '
-- id: number_theoretic_hash
-  name: Number-Theoretic / Provable-Reduction Hash
-  abbreviation: NT hash
+- id: number_theoretic_construction
+  name: Number-Theoretic Construction
+  abbreviation: NT construction
   typical_primitive_types:
   - compression_function
   placeholder_family_names:
   - VSH
-  notes: 'Level-1 root, distinct from advanced_protocol_friendly_construction above: nonlinearity/mixing comes from
-    modular arithmetic over Z_n (n an RSA-type composite) or a prime field -- squaring and/or multiplying by
-    message-selected factors -- specifically because doing so lets the design''s collision resistance be formally
-    reduced to a classical number-theoretic hardness assumption (factoring, discrete log), the way a signature
-    scheme''s security reduces to RSA or discrete-log hardness. The design goal is a provable-security argument
-    against a well-studied assumption, not proof-system/circuit efficiency (contrast advanced_protocol_friendly_construction,
-    whose leaves are motivated by minimizing R1CS/AIR/Plonkish constraint count) and not literal keyed-block-cipher
-    reuse (contrast the sbl_block_cipher_compression root, whose PGV leaves all require an invertible E_k -- the
-    per-block step here is not generally invertible, e.g. VSH''s x^2 mod n loses the sign bit by design). No further
-    leaves defined yet given how few designs use this exact mechanism.
+  notes: 'Level-1 root: nonlinearity/mixing in a fixed-size compression-style step comes from modular arithmetic
+    (squaring, multiplying, or exponentiating by message-selected factors) over Z_n (n an RSA-type composite),
+    a prime field, or a claw-free permutation family built from either -- specifically because doing so lets the
+    design''s collision resistance be formally reduced to a classical number-theoretic hardness assumption, the
+    way a signature scheme''s security reduces to RSA or discrete-log hardness. The design goal is a
+    provable-security argument against a well-studied assumption, not proof-system/circuit efficiency (contrast
+    advanced_protocol_friendly_construction, whose leaves are motivated by minimizing R1CS/AIR/Plonkish constraint
+    count) and not literal keyed-block-cipher reuse (contrast the sbl_block_cipher_compression root, whose PGV
+    leaves all require an invertible E_k -- steps here are typically not invertible, e.g. VSH''s x^2 mod n loses
+    the sign bit by design). Families are tagged with a leaf below identifying the specific hardness assumption;
+    see number_theoretic_hash_construction in mode_constructions.yaml for the mode-tier (variable-length) sibling
+    of this same facet, used by designs with no separate fixed-size primitive worth modeling on its own.
 
     '
+- id: factoring_hardness_construction
+  name: Factoring-Hardness Construction
+  special_case_of: number_theoretic_construction
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - VSH
+  notes: Collision resistance reduces to the hardness of integer factorization (directly, or via an intermediate
+    problem -- e.g. VSSR for VSH -- itself argued reducible to factoring via the Number Field Sieve).
+- id: discrete_log_hardness_construction
+  name: Discrete-Log-Hardness Construction
+  special_case_of: number_theoretic_construction
+  typical_primitive_types:
+  - compression_function
+  notes: Collision resistance reduces to the hardness of the discrete logarithm problem in a group (a prime-order
+    subgroup of Z_p^*, or, more generally, any group in which discrete log is assumed hard).
+- id: lattice_hardness_construction
+  name: Lattice-Hardness Construction
+  special_case_of: number_theoretic_construction
+  typical_primitive_types:
+  - compression_function
+  notes: Collision resistance reduces to a lattice hardness assumption (typically the hardness of approximating
+    the length of the shortest vector in a lattice, following Ajtai), directly or via an intermediate problem
+    (e.g. the weighted subset-sum problem) shown reducible to it.
 - id: asasa
   name: ASASA (Affine-Substitution-Affine-Substitution-Affine)
   abbreviation: ASASA

@@ -5462,6 +5462,26 @@ rounds:
   notes: Targets the PlonKup lookup argument. Exact field/prime and round count were not confirmed from the sources
     read for this database; state widths t=3 and t=8 both appear in the paper's own efficiency comparisons.
 
+- id: damgard_claw_free_step
+  name: Damgård claw-free permutation step
+  kind: step
+  spec:
+    state_model:
+      domain: QR(n) or Z_p^*
+    component_flow:
+    - component_id: mul_mod
+      notes: 'I_{j+1} = f_{m_j}(I_j), where {f_0,...,f_{r-1}} is a claw-free family of permutations and m_j is the
+        j-th message symbol (over an alphabet of size r); each f_i is evaluable in one or two modular
+        multiplications depending on the concrete family chosen (see the damgard_claw_free_permutation family''s
+        instances).'
+  notes: 'A message m is prefix-free-encoded as a sequence of symbols [m]=m_1 m_2 ... m_s over an alphabet of size
+    r=2^t (larger r lets more message bits be processed per step, at the cost of a larger set of public permutations
+    to store/generate), and the hash of m is f_{[m]}(I) = f_{m_1}(f_{m_2}(...f_{m_s}(I)...)) for a fixed public
+    domain point I -- i.e. sequential composition of family members chosen by the message, rather than an
+    accumulator updated by repeated multiplication as in VSH''s vsh_compression_step. Collision resistance reduces
+    directly to the hardness of finding a claw (i, j, x, y) with i != j and f_i(x) = f_j(y) in the family.
+
+    '
 - id: vsh_compression_step
   name: VSH compression step
   kind: step

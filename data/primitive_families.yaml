@@ -12237,6 +12237,66 @@ primitive_families:
     notes: Fixed-length Miyaguchi-Preneel compression step (H_i = W[H_{i-1}](m_i) XOR H_{i-1} XOR m_i) mapping a 512-bit message
       block and 512-bit chaining value to a new 512-bit chaining value, using the dedicated 512-bit internal block cipher
       W (10 AES-inspired rounds). Iterated by the Whirlpool hash function.
+- id: damgard_claw_free_permutation
+  name: Damgård Claw-Free Permutation Family
+  notes: 'A claw-free family of permutations {f_0,...,f_{r-1}} of a common domain: given the family, it is
+    computationally infeasible to find a claw (i, j, x, y) with i != j and f_i(x) = f_j(y). Damgård''s paper proves
+    that if the a_i''s used to build a family are chosen randomly, verifying an "injective set" (needed for the
+    security reduction) does not itself leak the modulus factorization -- a technical result needed to make the
+    concrete constructions below actually usable. The paper gives no standalone brand name to either instance
+    below; ids/names here follow this database''s own naming-fallback convention. See damgard_claw_free_hash for
+    the iterated, variable-length hash function built by composing family members chosen by message symbols.'
+  construction_ids:
+  - number_theoretic_construction
+  - factoring_hardness_construction
+  - discrete_log_hardness_construction
+  round_ids:
+  - damgard_claw_free_step
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: mul_mod
+  reference_ids:
+  - damgard_1987_collision_free_hash
+  process_participations: []
+  influences: []
+  instances:
+  - id: damgard_factoring_blob
+    name: Damgård Factoring-Based Claw-Free Family (practical variant)
+    type: compression_function
+    reference_ids:
+    - damgard_1987_collision_free_hash
+    characteristics: {}
+    notes: 'The paper''s recommended practical construction: n a modulus with exactly 2 k-bit prime factors, each
+      congruent to 3 mod 4; a set A={a_1,...,a_{r-1}} subset of QR(n); f_i(x) = a_i*x^2 mod n for x in QR(n). One
+      squaring plus one multiplication per family-member evaluation. Explicitly credited as "inspired by a
+      construction of blobs" (cited to a separate paper, not independently added to this database). Faster by a
+      factor of O(log_2(k)) than the general injective-set construction below, at the cost of a weaker (though the
+      paper argues practically negligible) form of the security argument: a claw no longer *provably* implies
+      knowledge of a factor of n for any choice of A, only for a randomly-chosen one.'
+  - id: damgard_factoring_general
+    name: Damgård Factoring-Based Claw-Free Family (general/injective-set variant)
+    type: compression_function
+    reference_ids:
+    - damgard_1987_collision_free_hash
+    characteristics: {}
+    notes: 'n=p_1*p_2*...*p_t, a product of t k-bit primes each congruent to 3 mod 4; a public "injective set" of
+      values A={a_0,...,a_{r_k-1}} in Z_n^*, chosen so their Jacobi-symbol-vector images generate a large subgroup
+      of the +-1 t-tuple group; f_i(x) = (a_i*x)^2 mod n for x in QR(n). Two modular multiplications per family-member
+      evaluation. Provably reduces to factoring for *any* injective set (not just randomly-chosen ones, unlike the
+      blob variant), but requires more prime factors as the family size r_k grows, and a modulus with many small
+      prime factors is weaker against factoring methods like Lenstra''s elliptic-curve method.'
+  - id: damgard_dl
+    name: Damgård Discrete-Log-Based Claw-Free Family
+    type: compression_function
+    reference_ids:
+    - damgard_1987_collision_free_hash
+    characteristics: {}
+    notes: 'Trapdoor-free variant, "of no great practical use" per the paper''s own assessment (one permutation
+      evaluation needs a full modular exponentiation): a large prime p, generator g of Z_p^*, and a set
+      A={a_0,...,a_{r-1}} subset of Z_p^*; f_i(x) = a_i*g^x mod p for x in Z_p. Finding a claw requires computing a
+      discrete log of a quotient of elements of A.'
 - id: vsh
   name: VSH Compression Function
   notes: 'H(x,m) = x^2 * prod_{i=1}^k p_i^{m_i} mod n, for x in Z*_n and an k-bit message chunk m (p_i the i-th
@@ -12250,7 +12310,9 @@ primitive_families:
     to a problem the paper calls VSDL (Very Smooth number Discrete Log). See vsh_hash for the iterated,
     variable-length hash function.'
   construction_ids:
-  - number_theoretic_hash
+  - number_theoretic_construction
+  - factoring_hardness_construction
+  - discrete_log_hardness_construction
   round_ids:
   - vsh_compression_step
   target_applications:
@@ -12261,7 +12323,15 @@ primitive_families:
   reference_ids:
   - contini_lenstra_steinfeld_2005_vsh
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: damgard_claw_free_permutation
+    relations:
+    - improvement_of
+    note: 'VSH''s own related-work discussion positions itself as a direct efficiency improvement over Damgård''s
+      construction, citing its concrete throughput: "Improved provable algorithms exist [7] which require a
+      multiplication per O(log log n) message-bits, but beyond that it seems that so far all attempts to gain
+      efficiency came at the cost of losing provability... We propose a hash algorithm that uses a single
+      multiplication per Omega(log n) message-bits."'
   instances:
   - id: vsh_basic
     name: VSH
