@@ -581,6 +581,25 @@ references:
   venue: CHES 2011, LNCS 6917, 342-357
   url: https://www.iacr.org/archive/ches2011/69170343/69170343.pdf
   notes: 'Local copy: references/[2011][piccolo][][].pdf.'
+- id: beierle_et_al_2019_alzette
+  kind: article
+  title: 'Alzette: a 64-bit ARX-box (feat. CRAX and TRAX)'
+  authors:
+  - Christof Beierle
+  - Alex Biryukov
+  - Luan Cardoso dos Santos
+  - Johann Großschädl
+  - Léo Perrin
+  - Aleksei Udovenko
+  - Vesselin Velichkov
+  - Qingju Wang
+  year: 2019
+  venue: CRYPTO 2020 (extended version)
+  url: https://doi.org/10.1007/978-3-030-56877-1_15
+  notes: 'The locally saved PDF is the extended version ("(C) IACR 2020. This article is an extended version of the
+    paper that appeared at CRYPTO 2020"), which adds full differential/linear/algebraic analysis of Alzette plus
+    appendices (linear trails, algorithm pseudocode, ARM assembly, reference C implementations of Crax-S-10 and
+    Trax-L-17, and division-property analysis of the Trax structures) beyond the CRYPTO 2020 proceedings chapter.'
 - id: beaulieu_et_al_2013_simon_speck
   kind: article
   title: The SIMON and SPECK Families of Lightweight Block Ciphers

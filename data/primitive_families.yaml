@@ -4519,6 +4519,7 @@ primitive_families:
     - id: constant
   reference_ids:
   - sparkle_2020
+  - beierle_et_al_2019_alzette
   process_participations:
   - process_id: lightweight_crypto_nist_2018_2023
     stage_ids:
@@ -4541,6 +4542,11 @@ primitive_families:
     note: SPARKLE's spec benchmarks its ARX-box rotation constants directly against Speck's differential/linear bounds
       ("preferably at least as good as those of the round structure of the 64-bit block cipher Speck"), though it does
       not borrow Speck's structure directly.
+  - source_family_id: alzette
+    relations:
+    - used_by
+    note: SPARKLE's own spec (and the Alzette paper) confirms SPARKLE's step function calls the unmodified Alzette
+      ARX-box as its nonlinear layer, alternated with a linear branch-mixing layer.
   instances:
   - id: sparkle_384
     name: SPARKLE-384
@@ -4550,6 +4556,186 @@ primitive_families:
       rounds: 8
       block_size_bits: 384
       output_size_bits: 384
+- id: alzette
+  name: Alzette
+  notes: 'Alzette (A_c) is a 64-bit ARX-based S-box, a permutation of F_2^32 x F_2^32 parameterized by a 32-bit
+    constant c, consisting of 4 rounds of x <- x + (y >>> r_i); y <- y XOR (x >>> s_i); x <- x XOR c, using rotation
+    amounts (r0,r1,r2,r3,s0,s1,s2,s3) = (31,17,0,24,24,17,31,16), chosen by an exhaustive search over low-cost
+    rotation sets for the best provable differential/linear bounds. It evaluates in constant time using only 12
+    ARM instructions (or 78 on 8-bit AVR), and its 2-round differential/linear properties are comparable to those of
+    the AES S-box, with the 4-round (double) properties comparable to the AES super-S-box. It is the core S-box of
+    the SPARKLE permutation family (hence the SCHWAEMM AEAD and ESCH hash NIST LWC candidates), and this same paper
+    also uses it directly as the round function of two (tweakable) block ciphers, CRAX and TRAX.'
+  construction_ids:
+  - arx_permutation_network
+  - fixed_rotation_arx
+  - arx_with_round_constants
+  round_ids:
+  - alzette_round
+  target_applications:
+  - iot
+  - software
+  characteristics:
+    state_size_bits: 64
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: rotation_fixed
+    - id: xor
+    - id: constant
+  reference_ids:
+  - beierle_et_al_2019_alzette
+  process_participations: []
+  influences:
+  - source_family_id: sparx
+    relations:
+    - related_to
+    note: 'Alzette''s paper states it "satisfies a similar scope statement to that of the Sparx ARX-box" and lists
+      concrete advantages over "a scaled-up Sparx ARX-box": 32-bit rather than 16-bit operations, more efficient
+      rotation constants, and superior differential/linear properties. Not a structural derivation -- a deliberate,
+      stated improvement over Sparx''s own S-box design within the same long-trail-strategy family.'
+  - source_family_id: speck
+    relations:
+    - related_to
+    note: 'Alzette''s rotation amounts were chosen against an explicit Speck-shaped security target: "our target was
+      to obtain strong bounds, preferably at least as good as those of the round structure of the 64-bit block
+      cipher Speck, i.e., an 8-round differential bound of 2^-29 and an 8-round linear bound of 2^-17."'
+  instances:
+  - id: alzette_c
+    name: Alzette
+    type: permutation
+    characteristics:
+      state_size_bits: 64
+      rounds: 4
+      block_size_bits: 64
+      output_size_bits: 64
+    notes: 'Parameterized by a 32-bit constant c; the paper''s own analysis and its use in SPARKLE both fix c to
+      one of the 8 SPARKLE round constants c0..c7 = 0xb7e15162, 0xbf715880, 0x38b4da56, 0x324e7738, 0xbb1185eb,
+      0x4f7c7b57, 0xcfbfa1c8, 0xc2b3293d.'
+- id: crax
+  name: CRAX
+  notes: 'CRAX is the "S" (64-bit) instance of a generic Alzette-based (tweakable) block-cipher skeleton the same
+    paper introduces (alongside "M" 128-bit and "L" 256-bit skeletons, analyzed with a long-trail-strategy argument
+    borrowed from Sparx). The skeleton simply iterates single Alzette calls over the whole state, interleaved with
+    key XORs -- a keyed, iterated Even-Mansour-style construction around one public ARX permutation, not a Feistel
+    network (the entire 64-bit state passes through Alzette every step, not just one half).'
+  construction_ids:
+  - even_mansour
+  - arx_permutation_network
+  - fixed_rotation_arx
+  - arx_with_round_constants
+  round_ids:
+  - crax_step
+  target_applications:
+  - iot
+  - constrained_hardware
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: rotation_fixed
+    - id: xor
+    - id: constant
+  reference_ids:
+  - beierle_et_al_2019_alzette
+  process_participations: []
+  influences:
+  - source_family_id: alzette
+    relations:
+    - used_by
+    note: Crax-S iterates the unmodified Alzette permutation as its sole round function, with key material and a
+      step counter XORed into the state before each call.
+  - source_family_id: sparx
+    relations:
+    - inspired_by
+    note: 'The paper states directly: "Our approach relies on the long trail strategy pioneered by the designers
+      of Sparx... It is simple to adapt this framework to the design of Alzette-based block ciphers." The
+      round-count/security-bound methodology (not the round function itself) is inherited from Sparx.'
+  instances:
+  - id: crax_s_10
+    name: Crax-S-10
+    type: block_cipher
+    reference_ids:
+    - beierle_et_al_2019_alzette
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      rounds: 10
+      output_size_bits: 64
+    notes: 'Recommended instance of the "S" skeleton: 10 steps (chosen via H_eta = ceil(2*r_d + (1+eta)*r_e) with
+      security factor eta=0.2), claiming 128-bit single-key security. Key schedule is deliberately minimal --
+      k_i = K_{i mod 2} XOR i (no precomputation) -- and, to prevent slide properties given this simple schedule,
+      only 5 of Alzette''s 8 round constants are used, cycling mod 5. Presented as a software-efficiency-oriented
+      academic alternative to the NSA cipher Speck: beaten by Speck only for messages longer than 72 bytes, while
+      using less RAM (no precomputed round-key table) -- the mirror image of how SKINNY is positioned as a
+      hardware-oriented academic alternative to Simon.'
+- id: trax
+  name: TRAX
+  notes: 'TRAX is the "L" (256-bit) instance of the same Alzette-based (tweakable) block-cipher skeleton family
+    as CRAX (see crax); the paper also describes but does not name a concrete "M" (128-bit) skeleton instance,
+    which instead wraps a generalized Feistel round (x,y) -> (y XOR x, x) around pairs of Alzette calls.'
+  construction_ids:
+  - arx_based_spn
+  - arx_permutation_network
+  - fixed_rotation_arx
+  - arx_with_round_constants
+  round_ids:
+  - trax_l_step
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    block_size_bits: 256
+    components:
+    - id: add_mod
+      params:
+        modulus: 4294967296
+    - id: rotation_fixed
+    - id: xor
+    - id: constant
+  reference_ids:
+  - beierle_et_al_2019_alzette
+  process_participations: []
+  influences:
+  - source_family_id: alzette
+    relations:
+    - used_by
+    note: Trax-L runs 4 unmodified Alzette permutation calls in parallel each step, one per 64-bit branch of its
+      256-bit state.
+  - source_family_id: sparkle
+    relations:
+    - related_to
+    note: 'The paper states directly that Trax-L''s round function "is similar to the one of Sparkle: a lot of the
+      cryptanalysis performed for that algorithm directly carries over," reusing a Sparkle-256-style branch-mixing
+      linear layer (ELL rotation-XOR feedback plus a branch rotation) between the 4 parallel Alzette calls.'
+  - source_family_id: sparx
+    relations:
+    - inspired_by
+    note: Trax-L is built with the same long-trail-strategy skeleton (pioneered by Sparx''s designers) and round-count
+      heuristic as Crax-S; see crax's own sparx influence note for the direct quote.
+  instances:
+  - id: trax_l_17
+    name: Trax-L-17
+    type: tweakable_block_cipher
+    reference_ids:
+    - beierle_et_al_2019_alzette
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 256
+      tweak_size_bits: 128
+      rounds: 17
+      output_size_bits: 256
+    notes: 'Recommended instance of the "L" skeleton: 17 steps, claiming related-tweak security as long as the
+      total number of (plaintext, tweak) queries under a fixed key stays at most 2^128. The 128-bit tweak is XORed
+      into half the state, but only on odd-indexed steps (adding it every step was found to give worse differential
+      bounds). Key schedule is a generalized-Feistel-like update k_{i+1} = F_i(k_i) that rotates and mixes the
+      256-bit master key using per-step constants. Presented as a software-oriented, vectorizable alternative to
+      Threefish (the only other large tweakable block cipher the paper is aware of, used inside Skein) -- Trax-L
+      uses 32-bit words rather than Threefish''s 64-bit words, and, used in SCT mode, is reported to outperform the
+      NIST LWC candidate Saturnin by a factor of more than 2.2 on a Cortex-M3.'
 - id: tinyjambu
   name: TinyJambu
   notes: TinyJambu is a lightweight keyed state-update design with a 128-bit nonlinear feedback register; it underpins the

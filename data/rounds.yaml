@@ -1491,6 +1491,45 @@ rounds:
     used in the SCHWAEMM/ESCH suite.
 
     '
+- id: alzette_round
+  name: Alzette ARX Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+    component_flow:
+    - component_id: add_mod
+      params:
+        modulus: 4294967296
+    - component_id: rotation_fixed
+    - component_id: xor
+    - component_id: constant
+    constant_injection: round_constant
+  notes: 'One of Alzette''s 4 internal rounds: x <- x + (y >>> r_i); y <- y XOR (x >>> s_i); x <- x XOR c, with
+    per-round rotation amounts (r0,r1,r2,r3,s0,s1,s2,s3) = (31,17,0,24,24,17,31,16) and the SAME 32-bit constant c
+    injected on every round (the paper''s gamma_i^R is fixed at 0 for all i, so only gamma_i^L = c is ever nonzero).
+
+    '
+- id: crax_step
+  name: Crax-S Step
+  kind: other
+  spec: {}
+  notes: 'Reuses alzette_round unmodified as its nonlinear core -- not redefined here. Each Crax-S step XORs a
+    64-bit round-key word into the first (x) branch of the state (the step counter is XORed in separately to
+    prevent slide properties), then applies one full Alzette_c call to the whole 64-bit state.
+
+    '
+- id: trax_l_step
+  name: Trax-L Step
+  kind: other
+  spec: {}
+  notes: 'Reuses alzette_round unmodified as its nonlinear core (applied 4 times in parallel, one per 64-bit
+    branch) -- not redefined here. Each Trax-L step XORs subkey words into all 4 branches, applies 4 parallel
+    Alzette_c calls, then a Sparkle-256-style branch-mixing linear layer L4 (an ELL rotation-XOR feedback mix of
+    the branches'' second words, followed by a rotation of the 4 branches); the 128-bit tweak is XORed into two of
+    the branches, but only on odd-indexed steps.
+
+    '
 - id: gaston_permutation_round
   name: Gaston Permutation Round
   kind: full_round
