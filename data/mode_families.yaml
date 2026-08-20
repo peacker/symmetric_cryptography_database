@@ -6346,6 +6346,51 @@ mode_families:
       (Miyaguchi-Preneel).
 
       '
+- id: vsh_hash
+  name: VSH
+  construction_ids:
+  - merkle_damgard
+  round_ids:
+  - vsh_compression_step
+  target_applications:
+  - software
+  underlying_primitive_ids:
+  - vsh_basic
+  characteristics:
+    components:
+    - id: mul_mod
+  reference_ids:
+  - contini_lenstra_steinfeld_2005_vsh
+  process_participations: []
+  influences:
+  - source_family_id: vsh
+    relations:
+    - used_by
+    note: 'VSH iterates the unmodified compression function H over an arbitrary-length, padded message: "VSH applies
+      a variant of the Merkle-Damgard transformation... to extend H to arbitrarily long inputs."'
+  notes: 'Contini, Lenstra & Steinfeld (2005/2006). Message-length-suffixed Merkle-Damgard iteration of H over
+    k-bit blocks (k depending on the chosen modulus size), x_0=1, output = x_{L+1} mod n where L is the block count.
+    Provably (strongly) collision-resistant under the VSSR assumption (Theorem 1); strong collision resistance also
+    implies second-preimage resistance. Explicitly not a random-oracle substitute and not intended as a drop-in
+    replacement in constructions that assume one. Not a competition submission -- proposed as a general-purpose
+    provably-secure alternative to heuristically-designed hashes, and (Section 4) as the basis of a randomised
+    trapdoor hash function that speeds up Cramer-Shoup signature verification by about 50%.
+
+    '
+  instances:
+  - id: vsh_1024
+    name: VSH (S=1024)
+    type: hash
+    reference_ids:
+    - contini_lenstra_steinfeld_2005_vsh
+    characteristics:
+      output_size_bits: 1024
+      block_size_bits: 131
+    notes: 'The paper''s primary concrete example: 1024-bit RSA-type modulus n, k=131 (small primes p_1..p_131),
+      giving security "at least the security level obtained by 840-bit RSA and, given recent hash developments, by
+      SHA-1." A gmp-based reference implementation on a 1GHz Pentium III ran basic VSH at 0.355-0.419 MB/s and Fast
+      VSH (b=8) at 1.135 MB/s at this modulus size, roughly 25x slower than a contemporary SHA-1 implementation --
+      described as an acceptable price for provable (rather than heuristic) collision resistance.'
 - id: whirlwind_hash
   name: Whirlwind
   construction_ids:

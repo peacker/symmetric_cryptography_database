@@ -5462,6 +5462,27 @@ rounds:
   notes: Targets the PlonKup lookup argument. Exact field/prime and round count were not confirmed from the sources
     read for this database; state widths t=3 and t=8 both appear in the paper's own efficiency comparisons.
 
+- id: vsh_compression_step
+  name: VSH compression step
+  kind: step
+  spec:
+    state_model:
+      modulus_bits_options:
+      - 1024
+      - 2048
+    component_flow:
+    - component_id: mul_mod
+      notes: 'x_{j+1} = x_j^2 * prod_{i=1}^k p_i^{m_{j*k+i}} mod n: square the accumulator x_j, then multiply in
+        one factor of the i-th prime p_i (p_1=2, p_2=3, ...) for each set bit of the current k-bit message chunk --
+        both the squaring and the per-prime multiplications are plain modular multiplications.'
+  notes: 'k, the block length processed per step, is the largest integer such that the product of the first k
+    primes is < n. The final k-bit "block" is not message data: it encodes the message''s own bit-length in binary,
+    each bit selecting whether the corresponding prime is included -- appended (not prepended, per an earlier ePrint
+    revision the paper explicitly disavows) to prevent a padding-collision issue. Whether n is a hard-to-factor RSA-type
+    composite (basic VSH, reducing to VSSR/factoring) or a safe prime p (VSH-DL, reducing to a discrete-log-flavored
+    problem the paper calls VSDL) does not change this step''s shape, only the modulus and the hardness assumption.
+
+    '
 - id: sinsemilla_round
   name: Sinsemilla incremental step
   kind: step

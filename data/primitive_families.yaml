@@ -12237,6 +12237,57 @@ primitive_families:
     notes: Fixed-length Miyaguchi-Preneel compression step (H_i = W[H_{i-1}](m_i) XOR H_{i-1} XOR m_i) mapping a 512-bit message
       block and 512-bit chaining value to a new 512-bit chaining value, using the dedicated 512-bit internal block cipher
       W (10 AES-inspired rounds). Iterated by the Whirlpool hash function.
+- id: vsh
+  name: VSH Compression Function
+  notes: 'H(x,m) = x^2 * prod_{i=1}^k p_i^{m_i} mod n, for x in Z*_n and an k-bit message chunk m (p_i the i-th
+    prime, k the largest integer with prod_{i=1}^k p_i < n). Unlike a PGV block-cipher compression function, H is
+    not built from an invertible keyed cipher and is not itself collision-resistant in the usual sense -- the
+    paper states directly "our compression function H(x, m) = x^2 * prod p_i^{m_i} mod n is not strictly
+    collision-resistant (H(-x mod n, m) = H(x, m))" -- but is proved sufficient to make the iterated hash
+    collision-resistant, reducing to the paper''s own VSSR (Very Smooth number nontrivial modular Square Root)
+    hardness assumption, itself argued to be as hard as factoring n via the Number Field Sieve. VSH-DL is a
+    discrete-log-flavored sibling with no trapdoor: same H shape, but n replaced by a safe prime p, reducing instead
+    to a problem the paper calls VSDL (Very Smooth number Discrete Log). See vsh_hash for the iterated,
+    variable-length hash function.'
+  construction_ids:
+  - number_theoretic_hash
+  round_ids:
+  - vsh_compression_step
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: mul_mod
+  reference_ids:
+  - contini_lenstra_steinfeld_2005_vsh
+  process_participations: []
+  influences: []
+  instances:
+  - id: vsh_basic
+    name: VSH
+    type: compression_function
+    reference_ids:
+    - contini_lenstra_steinfeld_2005_vsh
+    characteristics:
+      output_size_bits: 1024
+    notes: 'Trapdoor variant: n is a hard-to-factor RSA-type composite (knowledge of its factorization lets its
+      owner create collisions at will, so widescale use of one modulus requires a trusted party or joint generation
+      -- see the paper''s repudiation discussion). Output size equals the modulus bit-length S, a free parameter;
+      the paper''s own concrete benchmarks use S=1024 (k=131 primes, >= 840-bit-RSA-equivalent security) and
+      S=2048. Also described: a cubing variant H''(x,m)=x^3*prod p_i^{m_i} mod n which, unlike H, is itself
+      collision-resistant (given gcd(3,phi(n))=1) at the cost of one more message-bit per multiplication; and "Fast
+      VSH," a pure implementation speedup (precomputed products of primes processing b bits/iteration) that changes
+      neither the security proof nor the modulus size needed for a given security level.'
+  - id: vsh_dl
+    name: VSH-DL
+    type: compression_function
+    reference_ids:
+    - contini_lenstra_steinfeld_2005_vsh
+    characteristics:
+      output_size_bits: 1024
+    notes: Trapdoor-free variant over a safe prime p=2q+1 in place of the composite n, reducing to the VSDL
+      assumption rather than VSSR/factoring; otherwise the same H(x,m) iteration shape and roughly the same
+      throughput as basic VSH.
 - id: whirlwind
   name: Whirlwind Compression Function
   notes: 'Wide-pipe compression function phi: a 1024-bit state (8x8 array of 16-bit GF(2^16) elements) is initialized

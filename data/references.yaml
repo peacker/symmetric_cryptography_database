@@ -3463,6 +3463,19 @@ references:
   year: 1995
   venue: Fast Software Encryption, LNCS 1039, Springer-Verlag
   url: https://www.cl.cam.ac.uk/~rja14/Papers/tiger.pdf
+- id: contini_lenstra_steinfeld_2005_vsh
+  kind: article
+  title: 'VSH, an Efficient and Provable Collision-Resistant Hash Function'
+  authors:
+  - Scott Contini
+  - Arjen K. Lenstra
+  - Ron Steinfeld
+  year: 2005
+  venue: Cryptology ePrint Archive, Report 2005/193 (also EUROCRYPT 2006)
+  url: https://eprint.iacr.org/2005/193/
+  notes: The local copy is the ePrint version (which supersedes an earlier ePrint revision that prepended the message
+    length rather than appending it -- the earlier prepend scheme is explicitly noted as collision-prone when combined
+    with simple zero-padding). Acknowledgments confirm this is the same work later published at EUROCRYPT 2006.
 - id: barreto_et_al_2010_whirlwind
   kind: article
   title: 'Whirlwind: a new cryptographic hash function'

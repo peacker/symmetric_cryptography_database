@@ -1260,6 +1260,25 @@ primitive_constructions:
     resistance.
 
     '
+- id: number_theoretic_hash
+  name: Number-Theoretic / Provable-Reduction Hash
+  abbreviation: NT hash
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - VSH
+  notes: 'Level-1 root, distinct from advanced_protocol_friendly_construction above: nonlinearity/mixing comes from
+    modular arithmetic over Z_n (n an RSA-type composite) or a prime field -- squaring and/or multiplying by
+    message-selected factors -- specifically because doing so lets the design''s collision resistance be formally
+    reduced to a classical number-theoretic hardness assumption (factoring, discrete log), the way a signature
+    scheme''s security reduces to RSA or discrete-log hardness. The design goal is a provable-security argument
+    against a well-studied assumption, not proof-system/circuit efficiency (contrast advanced_protocol_friendly_construction,
+    whose leaves are motivated by minimizing R1CS/AIR/Plonkish constraint count) and not literal keyed-block-cipher
+    reuse (contrast the sbl_block_cipher_compression root, whose PGV leaves all require an invertible E_k -- the
+    per-block step here is not generally invertible, e.g. VSH''s x^2 mod n loses the sign bit by design). No further
+    leaves defined yet given how few designs use this exact mechanism.
+
+    '
 - id: asasa
   name: ASASA (Affine-Substitution-Affine-Substitution-Affine)
   abbreviation: ASASA
