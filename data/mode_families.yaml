@@ -6346,6 +6346,48 @@ mode_families:
       (Miyaguchi-Preneel).
 
       '
+- id: adhash
+  name: AdHASH
+  construction_ids:
+  - randomize_then_combine
+  - number_theoretic_hash_construction
+  - lattice_hardness_hash
+  round_ids:
+  - randomize_then_combine_step
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: add_mod
+      params:
+        modulus: variable
+  reference_ids:
+  - bellare_micciancio_1997_muhash_adhash_lthash
+  process_participations: []
+  influences: []
+  notes: 'Bellare & Micciancio (1996/97). AdHASH_M^h(x_1...x_n) = sum_{i=1}^n h(<i>.x_i) mod M, for a k-bit integer
+    M -- the randomize-then-combine paradigm with addition modulo M as the combining operation instead of MuHASH''s
+    group multiplication. Much faster than MuHASH ("AdHASH is much faster than MuHASH since we are only adding,
+    not multiplying... k can be quite small, like a few hundred [bits]... the speed of AdHASH starts approaching
+    that of standard hash functions"), and incrementing now costs only one addition and one subtraction.
+    Collision-resistance reduces to the (k,q)-weighted knapsack problem (find weights w_1,...,w_q in {-1,0,+1}, not
+    all zero, with sum w_i*a_i = 0 mod M) -- itself a special case of the paper''s own general balance problem for
+    the additive group class {Z_M}. The paper additionally cites Ajtai''s result that this weighted knapsack
+    problem is hard given that lattice shortest-vector approximation is hard in the worst case -- the same
+    hardness assumption LtHASH relies on directly (see lthash), which the paper notes gives "important evidence in
+    favor of" AdHASH''s own knapsack-based security claim even though the reduction is not as direct as LtHASH''s.
+
+    '
+  instances:
+  - id: adhash_v1
+    name: AdHASH
+    type: hash
+    reference_ids:
+    - bellare_micciancio_1997_muhash_adhash_lthash
+    characteristics: {}
+    notes: Parameterized by the k-bit modulus M and block size b; the paper suggests k can be "quite small, like a
+      few hundred [bits]" since, unlike MuHASH, no discrete-log-hardness bit-length requirement applies -- but
+      gives no single fixed recommended parameter set.
 - id: muhash
   name: MuHASH
   construction_ids:
