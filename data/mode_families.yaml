@@ -6364,7 +6364,15 @@ mode_families:
   reference_ids:
   - bellare_micciancio_1997_muhash_adhash_lthash
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: lthash
+    relations:
+    - specializes
+    note: 'The paper''s own comparison, stated directly: "LtHASH is very similar to AdHASH. In fact it is just
+      AdHASH implemented over a different domain... Notice also that AdHASH can be considered a special case of
+      LtHASH, namely, the case k=1." A retrospective structural observation rather than a stated design derivation
+      (LtHASH''s own stated lineage is from the unrelated Ajtai-GGH function, see lthash''s notes), but a precise,
+      quotable special-case relationship in either direction.'
   notes: 'Bellare & Micciancio (1996/97). AdHASH_M^h(x_1...x_n) = sum_{i=1}^n h(<i>.x_i) mod M, for a k-bit integer
     M -- the randomize-then-combine paradigm with addition modulo M as the combining operation instead of MuHASH''s
     group multiplication. Much faster than MuHASH ("AdHASH is much faster than MuHASH since we are only adding,
@@ -6388,6 +6396,55 @@ mode_families:
     notes: Parameterized by the k-bit modulus M and block size b; the paper suggests k can be "quite small, like a
       few hundred [bits]" since, unlike MuHASH, no discrete-log-hardness bit-length requirement applies -- but
       gives no single fixed recommended parameter set.
+- id: lthash
+  name: LtHASH
+  construction_ids:
+  - randomize_then_combine
+  - number_theoretic_hash_construction
+  - lattice_hardness_hash
+  round_ids:
+  - randomize_then_combine_step
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: add_mod
+      params:
+        modulus: variable
+  reference_ids:
+  - bellare_micciancio_1997_muhash_adhash_lthash
+  process_participations: []
+  influences: []
+  notes: 'Bellare & Micciancio (1996/97), "lattice based hash": LtHASH_p^h(x_1...x_n) = sum_{i=1}^n h(<i>.x_i) mod p
+    (componentwise), where h now maps each augmented block to a k-entry column vector over Z_p (k a free
+    "dimension" parameter) rather than a single scalar -- the randomize-then-combine paradigm over the additive
+    group Z_p^k. The paper''s own stated lineage is not from AdHASH but from a *different* prior construction it
+    generalizes and speeds up: "Ajtai introduced a function... Goldreich, Goldwasser and Halevi observed that
+    Ajtai''s main lemma can be applied to show that the function is actually collision-free... We then use our
+    paradigm to derive a more practical version of this function" (smaller key size -- the Ajtai-GGH function''s
+    description grows with the number of bits to be hashed, an impractical property LtHASH avoids -- and no a
+    priori limit on input length). That direct predecessor (the "Ajtai-GGH function," H_{M,p}(x)=Mx mod p) is not
+    itself added to this database as its own family, since only LtHASH was in scope for this addition; see this
+    family''s reporting notes. Collision resistance reduces directly to the (k,q,s)-matrix-kernel problem (Theorem 7),
+    itself a special case of the balance problem for the group class {Z_p^k} -- a more direct tie to Ajtai''s
+    lattice shortest-vector-approximation hardness than AdHASH''s knapsack-problem reduction. The paper''s own
+    concrete suggested parameters: dimension k=500, |p|=110 bits (larger than the matrix p=110 needs, to allow up
+    to q=2^70 oracle queries) -- a larger per-operation cost than AdHASH but far fewer operations needed, since
+    block size b can still be made large. Also incremental (one addition and one subtraction to update a changed
+    block).
+
+    '
+  instances:
+  - id: lthash_v1
+    name: LtHASH
+    type: hash
+    reference_ids:
+    - bellare_micciancio_1997_muhash_adhash_lthash
+    characteristics:
+      output_size_bits: 55000
+    notes: 'The paper''s own concrete worked example: dimension k=500, modulus p an s=110-bit prime (output size =
+      k*s = 500*110 = 55000 bits before any optional final compression with a standard hash), sized to keep the
+      underlying matrix-kernel problem hard against up to q=2^70 oracle queries.'
 - id: muhash
   name: MuHASH
   construction_ids:
