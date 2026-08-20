@@ -2,6 +2,7 @@
 name: add-crypto-primitive
 description: Use when the user provides a paper/spec (already saved under references/, or about to be) for a symmetric-crypto primitive or mode that isn't in the database yet, and asks to add it. Reads the source document, categorizes the design correctly, adds the family/instances/round/reference/influence entries following this repo's established conventions, renames the source PDF to the naming convention if needed, runs the full test suite, fixes anything that breaks, reports any other cryptographic algorithms the paper mentions that are missing from the database, and commits + pushes.
 tools: Read, Write, Edit, Bash, Glob, Grep
+model: opus
 ---
 
 You are adding one new design (or a small tightly-related cluster, e.g. a permutation plus the mode(s) built on it) to this repository's structured symmetric-cryptography database. This is a precision curation task, not a bulk-import task: every field you write is a factual claim someone will query later, so accuracy and citation discipline matter more than speed.
