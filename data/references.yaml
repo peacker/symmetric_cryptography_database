@@ -3463,6 +3463,21 @@ references:
   year: 1995
   venue: Fast Software Encryption, LNCS 1039, Springer-Verlag
   url: https://www.cl.cam.ac.uk/~rja14/Papers/tiger.pdf
+- id: barreto_et_al_2010_whirlwind
+  kind: article
+  title: 'Whirlwind: a new cryptographic hash function'
+  authors:
+  - Paulo Barreto
+  - Ventzislav Nikov
+  - Svetla Nikova
+  - Vincent Rijmen
+  - Elmar Tischhauser
+  year: 2010
+  venue: 'Designs, Codes and Cryptography 56(2), 141-162'
+  url: https://doi.org/10.1007/s10623-010-9391-y
+  notes: Received August 2009, published online April 2010. Not a SHA-3 competition submission -- proposed
+    independently, one year into the competition, as an academic alternative incorporating lessons learned
+    from early SHA-3-candidate cryptanalysis (in particular the rebound attack).
 - id: barreto_2003_whirlpool
   kind: article
   title: The Whirlpool Hashing Function

@@ -4257,6 +4257,35 @@ rounds:
       state_words: 16
   notes: Each round applies eight G functions, first to columns and then diagonals;
     BLAKE2b uses 12 rounds and BLAKE2s uses 10.
+- id: whirlwind_round
+  name: Whirlwind Round Transformation
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 1024
+    component_flow:
+    - component_id: sbox
+      note: 'gamma: parallel multiplicative inversion over GF(2^16) on all 64 16-bit state elements (zero maps to
+        zero), computed via a tower-field decomposition GF(2^16) -> GF(2^8) -> GF(2^4) -> GF(2^2) -> GF(2) using
+        normal bases at each level rather than a stored lookup table'
+    - component_id: field_matrix_mul
+      note: 'theta: parallel multiplication of each row by one of two 8x8 dyadic (not circulant) matrices M0/M1
+        over GF(2^4), acting on the 4-bit sub-components of each 16-bit element'
+    - component_id: word_permutation
+      note: 'tau: transposition of the 8x8 array of 16-bit words (implementable without a literal transpose by
+        alternating theta between rows and columns on successive rounds)'
+    - component_id: constant
+      note: 'sigma_r: XOR of a round-dependent constant (itself gamma applied to a simple round-index sequence)
+        into the first row only, to break inter-position symmetry'
+    constant_injection: round_constant
+  notes: 'Whirlwind''s compression function phi applies this 4-map sequence (gamma, theta, tau, sigma_r) for 12
+    rounds to a 1024-bit state (an 8x8 array of 16-bit elements, holding a 512-bit chaining variable in the top
+    4 rows and a 512-bit message block in the bottom 4 rows). Designed per the Wide Trail strategy: theta''s
+    dyadic matrices were deliberately chosen over the circulant matrices used by Square/Rijndael/Whirlpool --
+    the paper proves any circulant-matrix diffusion layer of this shape admits "related differentials" (the
+    root cause of AES''s 4-round "plateau trail" weakness), a property dyadic matrices avoid.
+
+    '
 - id: groestl_round
   name: Grøstl Permutation Round (P/Q)
   kind: full_round

@@ -6302,6 +6302,8 @@ mode_families:
   round_ids:
   - whirlpool_cipher_round
   target_applications: []
+  underlying_primitive_ids:
+  - whirlpool_compression
   characteristics:
     block_size_bits: 512
     state_size_bits: 512
@@ -6344,6 +6346,75 @@ mode_families:
       (Miyaguchi-Preneel).
 
       '
+- id: whirlwind_hash
+  name: Whirlwind
+  construction_ids:
+  - merkle_damgard
+  round_ids:
+  - whirlwind_round
+  target_applications:
+  - software
+  underlying_primitive_ids:
+  - whirlwind_compression
+  characteristics:
+    block_size_bits: 512
+    state_size_bits: 1024
+    components:
+    - id: sbox
+      params:
+        input_bits: 16
+        output_bits: 16
+    - id: field_matrix_mul
+      params:
+        field: GF(2^4)
+        matrix: 8x8_dyadic
+    - id: word_permutation
+      params:
+        word_size_bits: 16
+    - id: xor
+    - id: constant
+  reference_ids:
+  - barreto_et_al_2010_whirlwind
+  process_participations: []
+  influences:
+  - source_family_id: whirlwind
+    relations:
+    - used_by
+    note: Whirlwind hash iterates the unmodified Whirlwind compression function phi over padded, arbitrary-length input,
+      plus an explicit output transformation (an extra phi call with an all-zero message block) specifically to prevent
+      length-extension attacks.
+  notes: 'Barreto, Nikov, Nikova, Rijmen & Tischhauser (2010). Merkle-Damgard-style iteration of the Whirlwind compression
+    function phi over 512-bit message blocks, padded with a 1-bit, zero-padding, and a 256-bit big-endian length field
+    (padded length always an odd multiple of 256 bits, so blocks are always a whole number of 512-bit blocks). Default
+    output is 512 bits; to support truncation to other digest sizes (e.g. 256 bits) safely against attacks that exploit
+    truncation, the initialization vector is itself derived from the target size N via h0 = phi(0, N) rather than being
+    a single fixed constant.
+
+    '
+  instances:
+  - id: whirlwind_512
+    name: Whirlwind-512
+    type: hash
+    reference_ids:
+    - barreto_et_al_2010_whirlwind
+    characteristics:
+      output_size_bits: 512
+      block_size_bits: 512
+      state_size_bits: 1024
+      rounds: 12
+    notes: Default/primary parameter set; digest = h(t+1) mod N with N = 2^512 (i.e. no reduction), IV h0 = phi(0, 2^512).
+  - id: whirlwind_256
+    name: Whirlwind-256
+    type: hash
+    reference_ids:
+    - barreto_et_al_2010_whirlwind
+    characteristics:
+      output_size_bits: 256
+      block_size_bits: 512
+      state_size_bits: 1024
+      rounds: 12
+    notes: Truncated-digest parameter set, given its own test vector in the paper's Table 1; IV h0 = phi(0, 2^256), computed
+      via the adjustable-IV mechanism rather than by simply truncating the 512-bit output of a fixed-IV run.
 - id: photon_beetle
   name: PHOTON-Beetle
   construction_ids:

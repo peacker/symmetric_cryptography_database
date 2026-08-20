@@ -12237,6 +12237,68 @@ primitive_families:
     notes: Fixed-length Miyaguchi-Preneel compression step (H_i = W[H_{i-1}](m_i) XOR H_{i-1} XOR m_i) mapping a 512-bit message
       block and 512-bit chaining value to a new 512-bit chaining value, using the dedicated 512-bit internal block cipher
       W (10 AES-inspired rounds). Iterated by the Whirlpool hash function.
+- id: whirlwind
+  name: Whirlwind Compression Function
+  notes: 'Wide-pipe compression function phi: a 1024-bit state (8x8 array of 16-bit GF(2^16) elements) is initialized
+    to the 512-bit chaining variable h (top 4 rows) concatenated with the 512-bit message block m (bottom 4 rows),
+    processed for 12 rounds by an unkeyed, block-cipher-like round transformation, then truncated to the top half
+    and fed forward against h: g = truncate(phi_rounds(h||m)) XOR h. Tagged davies_meyer (like Grøstl) as the closest
+    fit -- it is Davies-Meyer-shaped (permutation of the combined chaining-value/message input, chaining value fed
+    forward via XOR) but, like Grøstl and unlike Whirlpool, uses an unkeyed wide permutation rather than a literal
+    keyed block cipher with one input as key schedule. See whirlwind_hash for the iterated, variable-length hash
+    function.'
+  construction_ids:
+  - davies_meyer
+  round_ids:
+  - whirlwind_round
+  target_applications:
+  - software
+  characteristics:
+    state_size_bits: 1024
+    block_size_bits: 512
+    components:
+    - id: sbox
+      params:
+        input_bits: 16
+        output_bits: 16
+    - id: field_matrix_mul
+      params:
+        field: GF(2^4)
+        matrix: 8x8_dyadic
+    - id: word_permutation
+      params:
+        word_size_bits: 16
+    - id: xor
+    - id: constant
+  reference_ids:
+  - barreto_et_al_2010_whirlwind
+  process_participations: []
+  influences:
+  - source_family_id: whirlpool
+    relations:
+    - inspired_by
+    - improvement_of
+    note: 'Whirlwind''s own introduction states directly: "The design is inspired by the Whirlpool hash function. With
+      this new design, we want to provide a higher security, keeping the performance at the same level." Its conclusion
+      repeats this framing: "Whirlwind is a hash function based on and improving on the Whirlpool design." Concretely,
+      Whirlwind keeps Whirlpool''s wide-trail-strategy shape (S-box + linear diffusion + round-constant affine layer,
+      512-bit chaining variable) but replaces every one of Whirlpool''s concrete choices: a 16-bit GF(2^16) S-box instead
+      of Whirlpool''s 8-bit GF(2^8) one, dyadic diffusion matrices instead of Whirlpool''s circulant ones (see
+      whirlwind_round''s notes on why), and an unkeyed wide permutation instead of Whirlpool''s dedicated keyed block
+      cipher W.'
+  instances:
+  - id: whirlwind_compression
+    name: Whirlwind Compression Function
+    type: compression_function
+    reference_ids:
+    - barreto_et_al_2010_whirlwind
+    characteristics:
+      output_size_bits: 512
+      block_size_bits: 512
+      state_size_bits: 1024
+      rounds: 12
+    notes: g = truncate(phi_rounds(h||m)) XOR h, 12 rounds, mapping a 512-bit chaining value and 512-bit message block
+      to a new 512-bit chaining value. Iterated by the Whirlwind hash function.
 - id: two_key_triple_des
   name: Two-key Triple DES (2TDEA)
   notes: Two-key TDEA (keying option 2) applies DES three times with K3 equal to K1, using 112 effective key bits. ANSI X9.52
