@@ -3463,6 +3463,22 @@ references:
   year: 1995
   venue: Fast Software Encryption, LNCS 1039, Springer-Verlag
   url: https://www.cl.cam.ac.uk/~rja14/Papers/tiger.pdf
+- id: bellare_micciancio_1997_muhash_adhash_lthash
+  kind: article
+  title: 'A New Paradigm for Collision-Free Hashing: Incrementality at Reduced Cost'
+  authors:
+  - Mihir Bellare
+  - Daniele Micciancio
+  year: 1997
+  venue: 'EUROCRYPT ''97, LNCS 1233, pp. 163-192'
+  url: https://doi.org/10.1007/3-540-69053-0_13
+  notes: 'Cited as reference [1] in VSH''s own paper. Introduces the "randomize-then-combine" paradigm and three
+    concrete incremental, collision-free hash functions built on it -- MuHASH (multiplicative, discrete-log-hard),
+    AdHASH (additive, subset-sum/lattice-hard), and LtHASH (a more practical lattice-based variant) -- plus a fourth,
+    XOR-combining variant XHASH that the same paper''s own Appendix A breaks (not added to this database as a
+    primitive; it is presented as a cautionary negative result, not a working design). The November 1996 full
+    preprint (30 pages, matching the 30-page proceedings chapter in content and structure -- not a meaningfully
+    abridged version) is locally saved alongside the proceedings PDF as a Postscript file.'
 - id: damgard_1987_collision_free_hash
   kind: article
   title: Collision Free Hash Functions and Public Key Signature Schemes

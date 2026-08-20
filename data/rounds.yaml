@@ -5462,6 +5462,24 @@ rounds:
   notes: Targets the PlonKup lookup argument. Exact field/prime and round count were not confirmed from the sources
     read for this database; state widths t=3 and t=8 both appear in the paper's own efficiency comparisons.
 
+- id: randomize_then_combine_step
+  name: Randomize-then-combine step
+  kind: other
+  spec: {}
+  notes: 'Bellare-Micciancio''s shared per-block step, independent of which concrete family instantiates it: for
+    each block i (1<=i<=n) of a b-bit-block message x=x_1...x_n, form the augmented block x''_i = <i>.x_i (the
+    block index, as an lg(N)-bit binary string, concatenated to the block content -- required so that reordering
+    blocks changes the hash; without it the combining operation''s commutativity would make block order
+    irrelevant), then y_i = h(x''_i) where h is an ideal/random-oracle "randomizer" (in practice, a keyed derivation
+    from a standard hash such as SHA-1 -- not itself a novel primitive, so not separately modeled in this database).
+    The final hash is y = y_1 (op) y_2 (op) ... (op) y_n for an associative combining operation (op) of a group G.
+    Deliberately not committed to a specific component here since the choice of (op) is exactly what differentiates
+    the concrete families built on this step (see each family''s own characteristics.components: mul_mod for
+    MuHASH''s multiplicative group, add_mod for AdHASH/LtHASH''s additive groups) -- and, per the paper''s own
+    Appendix A, that choice is not free: their XOR-combining variant XHASH is broken by an explicit attack in the
+    same paper.
+
+    '
 - id: damgard_claw_free_step
   name: Damgård claw-free permutation step
   kind: step

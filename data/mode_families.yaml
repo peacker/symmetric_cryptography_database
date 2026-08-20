@@ -6346,6 +6346,54 @@ mode_families:
       (Miyaguchi-Preneel).
 
       '
+- id: muhash
+  name: MuHASH
+  construction_ids:
+  - randomize_then_combine
+  - number_theoretic_hash_construction
+  - discrete_log_hardness_hash
+  round_ids:
+  - randomize_then_combine_step
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: mul_mod
+  reference_ids:
+  - bellare_micciancio_1997_muhash_adhash_lthash
+  process_participations: []
+  influences:
+  - source_family_id: damgard_claw_free_permutation
+    relations:
+    - improvement_of
+    note: 'The paper''s own related-work discussion, directly by name: "all previous discrete logarithm or
+      factoring based hash functions which have a security that can be provably related to that of the underlying
+      number theoretic problem use at least one multiplication per bit of the message... (For example this is true
+      of the functions of [Da1] [i.e. Damgard 1987], which are based on claw-free permutations [GMR].) In contrast,
+      MuHASH uses one multiplication per b-bit block and can make b large to mitigate the cost of the
+      multiplication."'
+  notes: 'Bellare & Micciancio (1996/97). MuHASH_G^h(x_1...x_n) = prod_{i=1}^n h(<i>.x_i), the product taken in a
+    group G (typically Z_p^* for a prime p, or a hard-discrete-log subgroup thereof) where the discrete logarithm
+    problem is assumed hard. One group multiplication per b-bit block (b a free parameter -- larger blocks amortize
+    the multiplication cost further); an increment (updating one changed block) costs one group inverse plus two
+    multiplications plus two evaluations of h, independent of message length. Collision resistance is proven (not
+    just believed) reducible to the discrete-log hardness of G via the paper''s own "balance problem" (Theorem 3) --
+    "the only way to find collisions in MuHASH (assuming h is ideal) is to solve the discrete logarithm problem in
+    the underlying group," a *tight* reduction, unlike prior discrete-log/factoring-based incremental constructions
+    the paper cites. If |p| is large (512-1024 bits), the final group-element output can optionally be compressed
+    with a standard hash such as SHA-1.
+
+    '
+  instances:
+  - id: muhash_v1
+    name: MuHASH
+    type: hash
+    reference_ids:
+    - bellare_micciancio_1997_muhash_adhash_lthash
+    characteristics: {}
+    notes: Genuinely parameterized by the choice of group G (hence output length L=|G|) and block size b; the
+      paper gives no single fixed recommended parameter set, only concrete example group classes (e.g. G=Z_p^*
+      for a random k-bit prime p).
 - id: damgard_claw_free_hash
   name: Damgård Claw-Free Hash
   construction_ids:
