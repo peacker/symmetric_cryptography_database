@@ -12297,6 +12297,82 @@ primitive_families:
       evaluation needs a full modular exponentiation): a large prime p, generator g of Z_p^*, and a set
       A={a_0,...,a_{r-1}} subset of Z_p^*; f_i(x) = a_i*g^x mod p for x in Z_p. Finding a claw requires computing a
       discrete log of a quotient of elements of A.'
+- id: ajtai_ggh_hash
+  name: Ajtai-GGH Function
+  notes: 'h_M(s) = M*s mod q = sum_i s_i*M_i mod q, for a random n-by-m matrix M with entries in Z_q and s in
+    {0,1}^m (m > n*log(q), making the function compressing). Ajtai (1996) introduced this as a one-way function,
+    proving its average-case hardness reduces to the worst-case hardness of approximating the shortest vector in
+    an n-dimensional lattice (up to a polynomial factor). Goldreich, Goldwasser and Halevi (1996) then observed
+    that essentially the same construction is also collision-free, and gave a randomized, universal-and-collision-free
+    variant h_{M,r}(s) = M*s + r mod q for a random offset r in Z_q^n -- their paper''s own words: "We show that
+    essentially the same construction can also be used to obtain collision-free hashing." A serious practical
+    drawback both papers note: the description of M grows with the input length m, so a security parameter must
+    be fixed a priori (unlike VSH or the randomize-then-combine functions elsewhere in this database, whose key
+    size does not depend on message length). See lthash (in mode_families.yaml) for Bellare and Micciancio''s
+    later, more practical re-derivation of this same idea with a fixed-size key.'
+  construction_ids:
+  - number_theoretic_construction
+  - lattice_hardness_construction
+  round_ids:
+  - ajtai_ggh_step
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: mul_mod
+  reference_ids:
+  - ajtai_1996_lattice_hard_instances
+  - ggh_1996_collision_free_lattice_hash
+  process_participations: []
+  influences: []
+  instances:
+  - id: ajtai_ggh_v1
+    name: Ajtai-GGH Function
+    type: compression_function
+    reference_ids:
+    - ajtai_1996_lattice_hard_instances
+    - ggh_1996_collision_free_lattice_hash
+    characteristics: {}
+    notes: 'GGH''s own worked example parameters: n a security parameter, m=n^2, q=n^7 (satisfying the required
+      n*log(q) < m <= q/(2n^4)). No single fixed recommended concrete bit-length is given by either paper.'
+- id: pedersen_commitment
+  name: Pedersen Commitment
+  notes: 'E(s,t) = g^s * h^t mod p, for g,h generators of a prime-order subgroup G_q of Z_p^* such that nobody
+    knows log_g(h); the committer picks a random opening randomizer t in Z_q to commit to a value s in Z_q.
+    Unconditionally hiding (for any s, E(s,t) is uniformly distributed in G_q over the random choice of t) and
+    computationally binding under discrete-log hardness (opening a commitment to two different values s != s''
+    reveals log_g(h) = (s-s'')/(t''-t) mod q). Introduced within a paper about non-interactive verifiable secret
+    sharing (combining Shamir''s scheme with this commitment scheme), not as a standalone hash function -- the
+    paper''s own words: "This commitment scheme is a variant of a scheme proposed in [BCP]" (a separate paper, not
+    independently added to this database; not to be confused with Damgard''s own trapdoor-free discrete-log
+    claw-free construction, damgard_dl, which the same year range and hardness assumption make structurally
+    adjacent but which the paper does not cite). This is the classical construction the colloquial name "Pedersen
+    commitment"/"Pedersen hash" refers to; see pedersen_hash_zcash (a differently-derived, unrelated-by-citation
+    construction that borrows only the name) for the Zcash Sapling hash-to-curve function, and sinsemilla for its
+    Orchard successor.'
+  construction_ids:
+  - number_theoretic_construction
+  - discrete_log_hardness_construction
+  round_ids:
+  - pedersen_commitment_step
+  target_applications:
+  - software
+  characteristics:
+    components:
+    - id: mul_mod
+  reference_ids:
+  - pedersen_1991_vss
+  process_participations: []
+  influences: []
+  instances:
+  - id: pedersen_commitment_v1
+    name: Pedersen Commitment
+    type: compression_function
+    reference_ids:
+    - pedersen_1991_vss
+    characteristics: {}
+    notes: The paper gives no single fixed recommended concrete parameter set, only the general construction over
+      any prime-order subgroup G_q of Z_p^* with an unknown-discrete-log generator pair (g,h).
 - id: vsh
   name: VSH Compression Function
   notes: 'H(x,m) = x^2 * prod_{i=1}^k p_i^{m_i} mod n, for x in Z*_n and an k-bit message chunk m (p_i the i-th

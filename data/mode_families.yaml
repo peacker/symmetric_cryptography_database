@@ -6414,7 +6414,15 @@ mode_families:
   reference_ids:
   - bellare_micciancio_1997_muhash_adhash_lthash
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: ajtai_ggh_hash
+    relations:
+    - improvement_of
+    note: 'The paper''s own stated lineage, directly by name: "Ajtai introduced a function which he showed was
+      provably one-way if the problem of approximating... the shortest vector in a lattice is hard [Aj]... Goldreich,
+      Goldwasser and Halevi observed that Ajtai''s main lemma can be applied to show that the function is actually
+      collision-free, not just one-way [GGH]... We then use our paradigm to derive a more practical version of this
+      function (Our function is more efficient and has smaller key size)."'
   notes: 'Bellare & Micciancio (1996/97), "lattice based hash": LtHASH_p^h(x_1...x_n) = sum_{i=1}^n h(<i>.x_i) mod p
     (componentwise), where h now maps each augmented block to a k-entry column vector over Z_p (k a free
     "dimension" parameter) rather than a single scalar -- the randomize-then-combine paradigm over the additive
@@ -6423,9 +6431,9 @@ mode_families:
     Ajtai''s main lemma can be applied to show that the function is actually collision-free... We then use our
     paradigm to derive a more practical version of this function" (smaller key size -- the Ajtai-GGH function''s
     description grows with the number of bits to be hashed, an impractical property LtHASH avoids -- and no a
-    priori limit on input length). That direct predecessor (the "Ajtai-GGH function," H_{M,p}(x)=Mx mod p) is not
-    itself added to this database as its own family, since only LtHASH was in scope for this addition; see this
-    family''s reporting notes. Collision resistance reduces directly to the (k,q,s)-matrix-kernel problem (Theorem 7),
+    priori limit on input length). That direct predecessor (the "Ajtai-GGH function," H_{M,p}(x)=Mx mod p) is now
+    also modeled in this database, see ajtai_ggh_hash and this family''s own influences[] above. Collision
+    resistance reduces directly to the (k,q,s)-matrix-kernel problem (Theorem 7),
     itself a special case of the balance problem for the group class {Z_p^k} -- a more direct tie to Ajtai''s
     lattice shortest-vector-approximation hardness than AdHASH''s knapsack-problem reduction. The paper''s own
     concrete suggested parameters: dimension k=500, |p|=110 bits (larger than the matrix p=110 needs, to allow up

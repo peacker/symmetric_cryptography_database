@@ -5462,6 +5462,32 @@ rounds:
   notes: Targets the PlonKup lookup argument. Exact field/prime and round count were not confirmed from the sources
     read for this database; state widths t=3 and t=8 both appear in the paper's own efficiency comparisons.
 
+- id: ajtai_ggh_step
+  name: Ajtai-GGH matrix-vector step
+  kind: step
+  spec:
+    state_model:
+      domain: Z_q^n
+    component_flow:
+    - component_id: mul_mod
+      notes: 'h_M(s) = M*s mod q = sum_i s_i*M_i mod q, for a random n-by-m matrix M over Z_q and s in {0,1}^m --
+        summing the subset of M''s columns selected by the 1-bits of s. Optionally randomized (GGH''s "universal
+        and collision-free" modification) to h_{M,r}(s) = M*s + r mod q for a random offset vector r.'
+  notes: A single fixed-input-length (m-bit) evaluation; not iterated over blocks within this construction's own
+    paper (contrast LtHASH, which reuses this same shape as the per-block randomizer inside its own iterated
+    randomize-then-combine construction).
+- id: pedersen_commitment_step
+  name: Pedersen commitment step
+  kind: step
+  spec:
+    state_model:
+      domain: G_q (prime-order subgroup of Z_p^*)
+    component_flow:
+    - component_id: mul_mod
+      notes: 'E(s,t) = g^s * h^t mod p, for g,h generators of a prime-order subgroup G_q of Z_p^* with nobody
+        knowing log_g(h); s the committed value, t chosen uniformly at random as the opening randomness.'
+  notes: A single fixed-input-length evaluation (one scalar s, one randomizer t); not itself iterated over message
+    blocks within this construction's own paper, which uses it to commit to a single secret share value at a time.
 - id: randomize_then_combine_step
   name: Randomize-then-combine step
   kind: other

@@ -3463,6 +3463,32 @@ references:
   year: 1995
   venue: Fast Software Encryption, LNCS 1039, Springer-Verlag
   url: https://www.cl.cam.ac.uk/~rja14/Papers/tiger.pdf
+- id: ajtai_1996_lattice_hard_instances
+  kind: article
+  title: Generating Hard Instances of Lattice Problems (Extended Abstract)
+  authors:
+  - Miklós Ajtai
+  year: 1996
+  venue: 'STOC ''96 (also ECCC Report TR96-007)'
+  url: https://eccc.weizmann.ac.il/report/1996/007/
+  notes: Proves a worst-case-to-average-case reduction for approximate shortest-vector-style lattice problems and
+    uses it to build a one-way function h_M(s)=Ms mod q. Does not itself claim collision-freeness/hashing -- that
+    is Goldreich-Goldwasser-Halevi's contribution (ggh_1996_collision_free_lattice_hash). Cited jointly as [Aj,GGH]
+    by LtHASH's own paper for the function LtHASH explicitly derives from ("the Ajtai-GGH function").
+- id: ggh_1996_collision_free_lattice_hash
+  kind: article
+  title: Collision-Free Hashing from Lattice Problems
+  authors:
+  - Oded Goldreich
+  - Shafi Goldwasser
+  - Shai Halevi
+  year: 1996
+  venue: 'Theory of Cryptography Library 96-09 (also ECCC Report TR96-042); current revision self-hosted'
+  url: https://www.wisdom.weizmann.ac.il/~oded/COL/cfh.pdf
+  notes: 'Observes that Ajtai''s one-way function h_M(s)=Ms mod q (ajtai_1996_lattice_hard_instances) is also
+    collision-free, and gives a modified, universal-and-collision-free variant h_{M,r}(s)=Ms+r mod q. The locally
+    saved PDF is explicitly "intentionally minimal" per its own front matter -- Goldreich''s own later self-hosted
+    revision of the original TR96-042 report, "a self-contained proof sketch of Ajtai''s result."'
 - id: bellare_micciancio_1997_muhash_adhash_lthash
   kind: article
   title: 'A New Paradigm for Collision-Free Hashing: Incrementality at Reduced Cost'
@@ -5479,10 +5505,12 @@ references:
   venue: Advances in Cryptology - CRYPTO '91, LNCS 576, pp. 129-140
   publisher: Springer
   url: https://doi.org/10.1007/3-540-46766-1_9
-  notes: No local copy (Springer-paywalled, not attempted). The classical discrete-log-based commitment scheme
-    colloquially referenced by the name "Pedersen commitment"/"Pedersen hash" -- cited here for that generic concept
-    only. Zcash's own concrete PedersenHash construction is NOT sourced from this paper; see
-    zcash_protocol_specification_2026 for its actual documented lineage.
+  notes: Local copy now available (fetched from a Cornell course-materials mirror). The classical discrete-log-based
+    commitment scheme colloquially referenced by the name "Pedersen commitment"/"Pedersen hash" -- cited here for
+    that generic concept, and now also as the primary source of the standalone pedersen_commitment primitive
+    family that models the actual construction (Section 3 of the paper). Zcash's own concrete PedersenHash
+    construction is NOT sourced from this paper; see zcash_protocol_specification_2026 for its actual documented
+    lineage.
 - id: dobraunig_et_al_2023_pasta
   kind: paper
   title: 'Pasta: A Case for Hybrid Homomorphic Encryption'
