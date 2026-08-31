@@ -47,8 +47,32 @@ mode_constructions:
     state is updated each round by a fixed sequence of transformations (typically a nonlinear layer, a bit-transposition,
     and a linear diffusion layer), coupled to a much larger linear-feedback "belt" that both feeds taps into the mill and
     is fed back from it. PANAMA and RadioGatún (both by Daemen) are the direct architectural precursors to the Keccak sponge
-    construction, but are not themselves rate/capacity sponges. Level-1 root (families are tagged with this id directly;
-    no further leaves defined given how few designs use this exact architecture).
+    construction, but are not themselves rate/capacity sponges. Level-1 root; see ring_feedback_sbox_layer below for the
+    one leaf defined under it so far.
+
+    '
+- id: ring_feedback_sbox_layer
+  name: Shift-Invariant Ring-Feedback Nonlinear Layer
+  abbreviation: Ring-chi
+  special_case_of: belt_and_mill_construction
+  typical_primitive_types:
+  - hash_function
+  - stream_cipher
+  placeholder_family_names:
+  - PANAMA
+  - RadioGatún
+  notes: 'The mill''s gamma function in both PANAMA and RadioGatún is a shift-invariant, degree-2 GF(2) nonlinear
+    layer over the mill''s word-index ring -- RadioGatún''s own paper gives it as A[i] = A[i] XOR (NOT(A[i+1]) AND
+    A[i+2]), indices taken modulo the mill length (19 for RadioGatún, 17 for PANAMA), applied bitwise (hence
+    independently) across every bit position of the words -- structurally the exact same shape as Subterranean''s
+    chi (the "goes back to StepRightUp and Subterranean" lineage RadioGatún''s own paper credits, see this leaf''s
+    families'' influences[]) and, at the operation level, Keccak''s own chi row step. What distinguishes this leaf
+    from the classical primitive_constructions.yaml leaf huge_boolean_sbox_layer (which Subterranean itself is
+    tagged with) is scale, not shape: each independent per-bit slice here is only as wide as the mill''s word
+    count (17-19 bits), giving a DDT on the order of 2^34-2^38 entries -- large, but the same order of magnitude
+    as a design like Whirlwind''s 16-bit inversion S-box, not the astronomically infeasible 2^96/2^257 of
+    Gimli/Subterranean. So: ring-feedback shape kinship to Subterranean, but tabulability kinship to Whirlwind --
+    a genuine third case, not a smaller copy of either.
 
     '
 - id: duplex_construction

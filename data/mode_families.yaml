@@ -733,6 +733,7 @@ mode_families:
   name: PANAMA
   construction_ids:
   - belt_and_mill_construction
+  - ring_feedback_sbox_layer
   round_ids:
   - panama_round
   target_applications:
@@ -749,7 +750,17 @@ mode_families:
   reference_ids:
   - daemen_clapp_1998_panama
   process_participations: []
-  influences: []
+  influences:
+  - source_family_id: subterranean
+    relations:
+    - inspired_by
+    note: 'Stated by RadioGatun''s own paper (co-authored by Daemen, PANAMA''s own co-designer), describing
+      PANAMA''s lineage while introducing RadioGatun as PANAMA''s successor: "The design approach we present is
+      not new, but builds further on the one underlying Panama [4] that in turn goes back to StepRightUp [3] and
+      Subterranean [2, 3]." Confirmed structurally too: PANAMA''s own gamma nonlinear step (A[i] = A[i] XOR
+      (NOT(A[i+1]) AND A[i+2]), indices mod 17) is the same shift-invariant-ring-chi shape as Subterranean''s own
+      chi (see ring_feedback_sbox_layer / huge_boolean_sbox_layer). StepRightUp itself is not independently added
+      to this database (a separate, unread source).'
   notes: PANAMA is a combined stream cipher and hash function by Daemen and Clapp (FSE 1998) built from a 17-word (544-bit)
     nonlinear "state" updated each round by gamma (nonlinear), pi (bit-transposition), and theta (linear diffusion) transformations,
     coupled to a 32-stage, 8-word-per-stage linear feedback "buffer" that feeds taps into the state. It produces a 256-bit
@@ -913,6 +924,7 @@ mode_families:
   name: RadioGatún
   construction_ids:
   - belt_and_mill_construction
+  - ring_feedback_sbox_layer
   round_ids:
   - radiogatun_round
   target_applications:

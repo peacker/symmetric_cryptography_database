@@ -4924,6 +4924,7 @@ primitive_families:
   construction_ids:
   - bitslice_friendly_spn
   - boolean_operator_network
+  - huge_boolean_sbox_layer
   round_ids:
   - gimli_permutation_round
   target_applications:
@@ -5044,6 +5045,7 @@ primitive_families:
     the Substream pseudorandom stream generator and Subhash hash function, with a 256-bit key/input buffer.
   construction_ids:
   - stream_state_update_generator
+  - huge_boolean_sbox_layer
   round_ids:
   - subterranean_duplex_round
   target_applications:
@@ -5077,7 +5079,7 @@ primitive_families:
   instances:
   - id: subterranean_permutation_257
     name: Original Subterranean keyed state update
-    type: permutation
+    type: update_function
     reference_ids:
     - claesen_daemen_genoe_peeters_1993_subterranean
     characteristics:
@@ -5086,8 +5088,13 @@ primitive_families:
       rounds: 1
       block_size_bits: 257
       output_size_bits: 257
-    notes: One invertible update of the original 257-bit state for a fixed 256-bit key register; each clock emits 16 selected
-      state bits.
+    notes: 'Type corrected from "permutation" to "update_function": the original 1993 paper itself specifies this
+      as a keyed state-update step (it takes the 256-bit key register as part of its input, which the
+      update_function/permutation type split in this database''s own schema treats as disqualifying for
+      "permutation" -- see data/primitive_types.yaml, "Distinguished from a block_cipher by having no secret key
+      of its own"). One invertible update of the original 257-bit state for a fixed 256-bit key register; each
+      clock emits 16 selected
+      state bits.'
 - id: pes
   name: PES
   construction_ids:
@@ -6200,7 +6207,6 @@ primitive_families:
   name: SPRING
   construction_ids:
   - spn
-  - big_sbox_layer
   - bit_permutation_linear_layer
   round_ids:
   - spring_round
@@ -9171,7 +9177,6 @@ primitive_families:
   name: MMB
   construction_ids:
   - spn
-  - big_sbox_layer
   - near_mds_arx_linear_layer
   - modular_multiplication_network
   - modulo_2n_minus_1

@@ -142,6 +142,37 @@ primitive_constructions:
     S-boxes natively defined as a handful of gates.
 
     '
+- id: huge_boolean_sbox_layer
+  name: Huge/Non-Tabulable Boolean-Network S-box Layer
+  abbreviation: Huge Bool S-box
+  special_case_of: spn
+  typical_primitive_types:
+  - permutation
+  placeholder_family_names:
+  - Gimli
+  - Subterranean
+  notes: 'A fourth S-box-coverage-facet leaf, for the classical (non-protocol-motivated) tradition, as opposed to
+    big_sbox_layer above, which is the same width criterion but specifically for the ZK/MPC/proof-system-friendly
+    design tradition (special_case_of advanced_protocol_friendly_construction, not spn) -- the two are siblings
+    under different roots, not one another''s special case, distinguished purely by design motivation, not
+    mechanism. Here, the nonlinear layer is defined natively as a Boolean AND/OR/XOR/NOT circuit (degree 2 in
+    GF(2)) but spans a width so large that no differential distribution table could ever be built even in
+    principle -- Gimli''s SP-box T-function combines three full 32-bit lanes at once (96 bits: 2^96 x 2^96 is
+    astronomically infeasible), Subterranean''s chi (s_i <- s_i + (s_{i+1}+1)*s_{i+2}, chi: section 3.2.1 of the
+    Subterranean 2.0 spec) treats the entire 257-bit state as one cyclic ring (2^257 more so). Orthogonal to
+    bitslice_friendly_spn above, which is about gate-count-per-output-bit (both Gimli and Keccak are "simple" by
+    that measure -- a handful of gates per bit) rather than total combinatorial width; a design can be (and Gimli
+    is) simple-per-bit and yet enormous-in-total at the same time, since those are different axes. Also distinct
+    from ring_feedback_sbox_layer in mode_constructions.yaml (special_case_of belt_and_mill_construction): that
+    leaf shares Subterranean''s shift-invariant-ring shape but at a width small enough (17-19 bits, PANAMA/RadioGatun)
+    that a DDT is plausibly still buildable, closer in that one respect to a design like Whirlwind''s 16-bit
+    inversion S-box than to the two designs here. Membership itself is not a single uniform shape either: Gimli''s
+    T-function combines a small, fixed number of lanes (a wide multi-input combiner), while Subterranean''s chi is
+    a shift-invariant ring update over the whole state (structurally the same family as PANAMA/RadioGatun''s
+    gamma, just at non-tabulable scale) -- two different mechanisms that both clear the same width/tabulability
+    bar.
+
+    '
 - id: feistel
   name: Feistel Network
   abbreviation: FN
@@ -1228,11 +1259,24 @@ primitive_constructions:
   typical_primitive_types:
   - block_cipher
   - permutation
-  notes: One monolithic large nonlinear map over a wide n-bit word (n well beyond the 3-8-bit S-boxes of the classical
-    SPN tradition) forms the entire nonlinear layer for a round, rather than many small S-boxes applied in parallel across
-    the state -- an MPC/ZK-motivated alternative to the SPN full/partial-S-box-layer facets above, distinct from the
-    algebraic power-map mechanism of the zk_friendly_low_degree(_inverse)_map leaves. Membership pending source-confirmed
-    per-family verification; see todo_manual.txt for candidates under review.
+  notes: 'One monolithic large nonlinear map over a wide n-bit word (n well beyond the 3-8-bit S-boxes of the
+    classical SPN tradition) forms the entire nonlinear layer for a round, rather than many small S-boxes applied
+    in parallel across the state -- an MPC/ZK-motivated alternative to the SPN full/partial-S-box-layer facets,
+    distinct from the algebraic power-map mechanism of the zk_friendly_low_degree(_inverse)_map leaves, and
+    distinct from zk_friendly_lookup_table (that leaf is for S-boxes small enough to be a literal stored table
+    used with a proof system''s lookup argument -- this leaf is specifically for the case where the map is too
+    wide to ever be materialized as a table at all, and must be defined algebraically/by circuit instead).
+    Audited 2026-08: none of this database''s currently-modeled ZK/MPC/proof-system-friendly families ("hash zoo")
+    actually clear this bar as opposed to zk_friendly_lookup_table''s smaller, genuinely-storable tables (e.g.
+    Reinforced Concrete''s lookup-based Bricks are tagged zk_friendly_lookup_table, not here) -- current membership
+    is zero, not because the leaf is wrong, but because nothing yet modeled needs it; keep it rather than delete
+    it; a design like this would be a legitimate future addition. Two designs previously tagged here (MMB, SPRING)
+    were removed 2026-08: both structurally match this leaf''s plain wording (a wide nonlinear map replacing small
+    S-boxes) but predate the ZK/MPC-circuit-efficiency design tradition entirely and were never motivated by it --
+    see huge_boolean_sbox_layer for the classical, non-protocol-motivated sibling of this same width criterion,
+    which is where a Gimli/Subterranean-shaped design belongs instead (MMB/SPRING don''t fit that one either,
+    since their nonlinearity is a modular-multiplication/NLFSR mechanism already captured by their own dedicated
+    tags, not a Boolean AND/OR/XOR/NOT circuit).'
 - id: group_exponentiation_hash
   name: Group-Exponentiation / Discrete-Log-Based Hash
   abbreviation: Group-exp hash
