@@ -7007,10 +7007,12 @@ mode_families:
   name: Subterranean 2.0
   construction_ids:
   - duplex_construction
-  - monkey_duplex
+  - standard_duplex
   round_ids:
   - subterranean_2_0_round
   target_applications: []
+  underlying_primitive_ids:
+  - subterranean_permutation_2_0
   characteristics:
     state_size_bits: 257
     components:

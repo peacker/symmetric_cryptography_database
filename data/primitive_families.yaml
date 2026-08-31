@@ -5041,13 +5041,21 @@ primitive_families:
     notes: 32-bit-word instance; the NORX reference default rounds per call (R=4).
 - id: subterranean
   name: Subterranean
-  notes: The original Subterranean design dates to 1992 and was published in 1993. Its 257-bit keyed state machine supports
-    the Substream pseudorandom stream generator and Subhash hash function, with a 256-bit key/input buffer.
+  notes: 'The original Subterranean design dates to 1992 and was published in 1993. Its 257-bit state machine
+    supports the Substream pseudorandom stream generator and Subhash hash function; the 1993 round function F_s(A,K)
+    is genuinely keyed (256-bit key/input buffer, key injection built into the round formula itself -- see
+    subterranean_permutation_257, type block_cipher). Subterranean 2.0 (2019) keeps the same chi/iota/theta/pi shape
+    but redefines the round function R as a function of the state alone (input/key injected as a separate duplex-call
+    step around R, not inside it) -- explicitly called "the permutation f" by its own paper -- see
+    subterranean_permutation_2_0, type permutation. These are two distinct primitives sharing one family/lineage,
+    not two names for the same object; the "one of the first permutations"/Keccak-p-Xoodoo-lineage framing in this
+    family''s innovative_ideas below is accurate specifically for the 2019 unkeyed R, not the 1993 keyed F_s.'
   construction_ids:
   - stream_state_update_generator
   - huge_boolean_sbox_layer
   round_ids:
   - subterranean_duplex_round
+  - subterranean_2_0_round
   target_applications:
   - hardware
   characteristics:
@@ -5101,6 +5109,24 @@ primitive_families:
       fixed across many iterations of F_s during steady-state operation (both Substream and Subhash hold the key
       register constant while the state evolves), matching how a block cipher''s key parameterizes repeated use.
       Each clock emits 16 selected state bits.'
+  - id: subterranean_permutation_2_0
+    name: Subterranean 2.0 Permutation
+    type: permutation
+    reference_ids:
+    - daemen_2019_subterranean_v2
+    characteristics:
+      state_size_bits: 257
+      rounds: 1
+      block_size_bits: 257
+      output_size_bits: 257
+    notes: 'R = pi o theta o iota o chi, a genuinely unkeyed function of the state alone -- no key or input argument
+      anywhere in R''s own definition. The 2019 paper''s own words: "Loyal to the original Subterranean, we chose
+      for THE PERMUTATION f in duplex to have only one round..." Input/key material and output are injected/extracted
+      by the surrounding Subterranean 2.0 duplex object as a separate step applied before/after calling R, not as
+      part of R itself -- the same shape as Xoodyak/Ascon/Keccak-p''s own duplex constructions around an unkeyed
+      permutation, and the primitive the innovative_ideas note below (Keccak-p/Xoodoo lineage) actually describes.
+      "Rounds: 1" reflects the paper''s own choice to run R only once per duplex call ("we chose for the permutation
+      f in duplex to have only one round"), not a limitation of R''s own definition.'
 - id: pes
   name: PES
   construction_ids:

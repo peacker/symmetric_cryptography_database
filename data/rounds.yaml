@@ -1686,9 +1686,15 @@ rounds:
     - component_id: xor
     - component_id: bit_permutation
     constant_injection: key_register_bits
-  notes: The five steps are chi-style nonlinear cellular-automaton update; complement
-    state bit zero; theta mixing s_i XOR s_{i+3} XOR s_{i+8}; inject 256 key/input
-    register bits into state positions 1 through 256; and transpose s_i to s_{12i mod 257}.
+  notes: 'Despite its id, this is specifically the ORIGINAL 1993 F_s(A,K) round function (matching
+    subterranean_permutation_257''s type: block_cipher) -- key injection is step 4 of its own 5-step definition, not
+    an external duplex-call XOR. Not to be confused with subterranean_2_0_round below, Subterranean 2.0''s genuinely
+    unkeyed 4-step R, which the actual duplex construction (input/output injected as a separate step around calls
+    to R) is built from. The five steps here are chi-style nonlinear cellular-automaton update; complement state
+    bit zero; theta mixing s_i XOR s_{i+3} XOR s_{i+8}; inject 256 key/input register bits into state positions 1
+    through 256; and transpose s_i to s_{12i mod 257}. Not to be confused with subterranean_2_0_round (further
+    below in this file), Subterranean 2.0''s genuinely unkeyed 4-step R -- see that entry, and
+    subterranean_permutation_2_0 in primitive_families.yaml, for the corrected primitive-tier modeling of v2.'
 - id: panama_round
   name: PANAMA push/pull round
   kind: full_round

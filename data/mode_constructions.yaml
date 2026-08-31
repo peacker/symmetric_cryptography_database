@@ -89,8 +89,12 @@ mode_constructions:
   placeholder_family_names:
   - Keyak
   - Gimli-Cipher
+  - Subterranean 2.0
   notes: 'The classical duplex construction (Bertoni, Daemen, Peeters, Van Assche): every duplexing call runs the full permutation
     for the same, constant number of rounds, whether it is the initialization call or a later data-processing call.
+    Subterranean 2.0 is a degenerate/extreme case of this: "we chose for the permutation f in duplex to have only
+    one round," so there is no full-vs-reduced round-count distinction to even make (contrast monkey_duplex, which
+    requires one) -- every call, init or data, runs the same single round.
 
     '
 - id: monkey_duplex
