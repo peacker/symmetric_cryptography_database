@@ -5079,7 +5079,7 @@ primitive_families:
   instances:
   - id: subterranean_permutation_257
     name: Original Subterranean keyed state update
-    type: update_function
+    type: block_cipher
     reference_ids:
     - claesen_daemen_genoe_peeters_1993_subterranean
     characteristics:
@@ -5088,13 +5088,19 @@ primitive_families:
       rounds: 1
       block_size_bits: 257
       output_size_bits: 257
-    notes: 'Type corrected from "permutation" to "update_function": the original 1993 paper itself specifies this
-      as a keyed state-update step (it takes the 256-bit key register as part of its input, which the
-      update_function/permutation type split in this database''s own schema treats as disqualifying for
-      "permutation" -- see data/primitive_types.yaml, "Distinguished from a block_cipher by having no secret key
-      of its own"). One invertible update of the original 257-bit state for a fixed 256-bit key register; each
-      clock emits 16 selected
-      state bits.'
+    notes: 'Type settled at block_cipher (having briefly been changed to update_function, and before that
+      permutation) after checking the primary source directly. The 1993 paper defines the round function itself as
+      A^(t+1) = F_s(A^t, K^t) -- a function of both state AND key, not an unkeyed transform with key material XORed
+      in by a surrounding mode (contrast Xoodyak/Ascon-style duplex constructions, where the underlying permutation
+      genuinely has no key dependency of its own). Step 4 of F_s''s own 5-step definition is a_i = a_i XOR k_{i-1},
+      injecting key bits as an integral part of the round function''s formula. The paper''s own invertibility claim
+      is precise on this point: "The updating function is invertible with respect to the state. For a fixed key,
+      every state has exactly one predecessor" -- i.e. invertible given the key, exactly the block_cipher
+      definition in this database''s own schema (permutation requires no secret key of its own; block_cipher is "a
+      keyed, invertible transform... E_k is a permutation of {0,1}^n for each key k"). The key is genuinely held
+      fixed across many iterations of F_s during steady-state operation (both Substream and Subhash hold the key
+      register constant while the state evolves), matching how a block cipher''s key parameterizes repeated use.
+      Each clock emits 16 selected state bits.'
 - id: pes
   name: PES
   construction_ids:
@@ -13417,6 +13423,7 @@ primitive_families:
   - feistel
   - algebraic_feistel
   - zk_friendly_low_degree_map
+  - big_sbox_layer
   - mpc_sharing_friendly
   round_ids:
   - gmimc_round
@@ -13563,6 +13570,7 @@ primitive_families:
   - full_sbox_layer
   - mds_linear_layer
   - zk_friendly_low_degree_inverse_map
+  - big_sbox_layer
   round_ids:
   - vision_round
   target_applications:
@@ -13644,6 +13652,7 @@ primitive_families:
   construction_ids:
   - generalized_triangular_dynamical_system
   - zk_friendly_low_degree_inverse_map
+  - big_sbox_layer
   round_ids:
   - arion_round
   target_applications:
@@ -14291,6 +14300,7 @@ primitive_families:
   - mds_linear_layer
   - fluid_spn
   - zk_friendly_low_degree_inverse_map
+  - big_sbox_layer
   round_ids:
   - griffin_round
   target_applications:

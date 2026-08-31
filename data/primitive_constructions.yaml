@@ -148,6 +148,7 @@ primitive_constructions:
   special_case_of: spn
   typical_primitive_types:
   - permutation
+  - block_cipher
   placeholder_family_names:
   - Gimli
   - Subterranean
