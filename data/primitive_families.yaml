@@ -13359,6 +13359,7 @@ primitive_families:
   construction_ids:
   - even_mansour
   - zk_friendly_low_degree_map
+  - big_sbox_layer
   - mpc_sharing_friendly
   round_ids:
   - mimc_round
@@ -13460,6 +13461,7 @@ primitive_families:
   - alternating_full_partial_sbox_layer
   - mds_linear_layer
   - zk_friendly_low_degree_map
+  - big_sbox_layer
   - mpc_sharing_friendly
   round_ids:
   - hadesmimc_full_round
@@ -13518,6 +13520,7 @@ primitive_families:
   - full_sbox_layer
   - mds_linear_layer
   - zk_friendly_low_degree_inverse_map
+  - big_sbox_layer
   - miyaguchi_preneel
   round_ids:
   - vision_round
@@ -13600,6 +13603,7 @@ primitive_families:
   - full_sbox_layer
   - mds_linear_layer
   - zk_friendly_low_degree_inverse_map
+  - big_sbox_layer
   round_ids:
   - rescue_round
   target_applications:
@@ -14117,6 +14121,7 @@ primitive_families:
   - alternating_full_partial_sbox_layer
   - near_mds_arx_linear_layer
   - zk_friendly_low_degree_map
+  - big_sbox_layer
   round_ids:
   - poseidon2_round
   target_applications:
@@ -14160,6 +14165,7 @@ primitive_families:
   - alternating_full_partial_sbox_layer
   - near_mds_arx_linear_layer
   - zk_friendly_low_degree_map
+  - big_sbox_layer
   round_ids:
   - poseidon2b_round
   target_applications:
@@ -14198,6 +14204,7 @@ primitive_families:
   - alternating_full_partial_sbox_layer
   - mds_linear_layer
   - zk_friendly_low_degree_map
+  - big_sbox_layer
   round_ids:
   - neptune_round
   target_applications:
@@ -14241,6 +14248,7 @@ primitive_families:
   - full_sbox_layer
   - mds_linear_layer
   - zk_friendly_low_degree_inverse_map
+  - big_sbox_layer
   round_ids:
   - grendel_round
   target_applications:
@@ -14337,6 +14345,7 @@ primitive_families:
   - full_sbox_layer
   - near_mds_arx_linear_layer
   - zk_friendly_low_degree_inverse_map
+  - big_sbox_layer
   round_ids:
   - anemoi_round
   target_applications:
@@ -14375,6 +14384,7 @@ primitive_families:
   - full_sbox_layer
   - mds_linear_layer
   - zk_friendly_lookup_table
+  - big_sbox_layer
   round_ids:
   - reinforced_concrete_round
   target_applications:

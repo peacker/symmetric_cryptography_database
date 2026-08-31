@@ -1259,24 +1259,31 @@ primitive_constructions:
   typical_primitive_types:
   - block_cipher
   - permutation
-  notes: 'One monolithic large nonlinear map over a wide n-bit word (n well beyond the 3-8-bit S-boxes of the
-    classical SPN tradition) forms the entire nonlinear layer for a round, rather than many small S-boxes applied
-    in parallel across the state -- an MPC/ZK-motivated alternative to the SPN full/partial-S-box-layer facets,
-    distinct from the algebraic power-map mechanism of the zk_friendly_low_degree(_inverse)_map leaves, and
-    distinct from zk_friendly_lookup_table (that leaf is for S-boxes small enough to be a literal stored table
-    used with a proof system''s lookup argument -- this leaf is specifically for the case where the map is too
-    wide to ever be materialized as a table at all, and must be defined algebraically/by circuit instead).
-    Audited 2026-08: none of this database''s currently-modeled ZK/MPC/proof-system-friendly families ("hash zoo")
-    actually clear this bar as opposed to zk_friendly_lookup_table''s smaller, genuinely-storable tables (e.g.
-    Reinforced Concrete''s lookup-based Bricks are tagged zk_friendly_lookup_table, not here) -- current membership
-    is zero, not because the leaf is wrong, but because nothing yet modeled needs it; keep it rather than delete
-    it; a design like this would be a legitimate future addition. Two designs previously tagged here (MMB, SPRING)
-    were removed 2026-08: both structurally match this leaf''s plain wording (a wide nonlinear map replacing small
-    S-boxes) but predate the ZK/MPC-circuit-efficiency design tradition entirely and were never motivated by it --
-    see huge_boolean_sbox_layer for the classical, non-protocol-motivated sibling of this same width criterion,
-    which is where a Gimli/Subterranean-shaped design belongs instead (MMB/SPRING don''t fit that one either,
-    since their nonlinearity is a modular-multiplication/NLFSR mechanism already captured by their own dedicated
-    tags, not a Boolean AND/OR/XOR/NOT circuit).'
+  notes: 'The S-box IS a full field element (typically ~64-256 bits, chosen for security against Groebner-basis/
+    interpolation-style algebraic attacks rather than for a deliberate "non-tabulable width" design goal the way
+    huge_boolean_sbox_layer below is) -- n well beyond the 3-8-bit S-boxes of the classical SPN tradition, "n-to-n-bit"
+    in the literal sense the leaf is named for. This is an ADDITIVE width-coverage facet, not an alternative to the
+    mechanism-specific zk_friendly_low_degree(_inverse)_map / zk_friendly_lookup_table leaves -- a family is tagged
+    with this leaf alongside whichever of those describes HOW its wide S-box is computed (forward power map,
+    low-degree-inverse, or table), the same way full_sbox_layer/partial_sbox_layer coexist with mds_linear_layer
+    as two different facets of the same spn root. One of the maintainer''s own six originally requested leaves
+    in this root (2026-08-01), alongside the Type 1/2/3 and MPC/PQC-sig leaves -- the entire "algebraic/AO hash zoo"
+    (MiMC, Poseidon/Poseidon2, Rescue, Anemoi, Jarvis/Starkad (via hadesmimc), Grendel, Neptune, Reinforced Concrete,
+    and siblings GMiMC/Vision/Griffin/Arion) is what the leaf was created to describe, and gets it tagged alongside
+    its own Type 1/2/3 leaf. Distinct from huge_boolean_sbox_layer (primitive_constructions.yaml, special_case_of
+    spn directly, for the classical non-protocol-motivated tradition -- Gimli, Subterranean) and from
+    ring_feedback_sbox_layer (mode_constructions.yaml): those describe a genuinely different mechanism (a Boolean
+    AND/OR/XOR/NOT circuit spanning multiple state positions/lanes) rather than a single wide field-element
+    algebraic map, and their widths are typically far larger (astronomically non-tabulable, vs. this leaf''s
+    designs, whose field size is chosen for algebraic-attack resistance, not DDT infeasibility per se, even
+    though a 2^256 DDT is obviously just as infeasible in practice). Designs with only small/partial S-boxes over
+    part of the state (e.g. LowMC''s 3-bit S-boxes, applied to a handful of words per round) do not qualify even
+    though they share the same parent root via mpc_sharing_friendly/pqc_signature_friendly_owf -- membership here
+    is specifically about the width of one S-box call, not about the design''s broader protocol-friendliness goal.
+    MMB and SPRING were tagged here at one point and removed (2026-08): both structurally have a wide nonlinear
+    map (MMB''s modular multiplication mod 2^32-1; SPRING''s NLFSR feedback) but predate the ZK/MPC-circuit-efficiency
+    design tradition entirely and were never motivated by it -- this root''s scope is motivational as well as
+    structural, and neither mechanism is a field-element power map/inverse/lookup in any case.'
 - id: group_exponentiation_hash
   name: Group-Exponentiation / Discrete-Log-Based Hash
   abbreviation: Group-exp hash
