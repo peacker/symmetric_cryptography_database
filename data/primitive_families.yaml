@@ -9216,6 +9216,7 @@ primitive_families:
   round_ids:
   - mmb_round
   target_applications:
+  - hardware
   - software
   characteristics:
     block_size_bits: 128
@@ -9235,9 +9236,12 @@ primitive_families:
       as an improved replacement for IDEA, extending IDEA's word-multiplication idea from 16-bit words mod 2^16+1 to 32-bit
       words mod 2^32-1 and replacing IDEA's average-case differential/linear analysis with a worst-case security bound
       on the multiplication step.
-  notes: MMB (Modular Multiplication-Based Block cipher; Daemen et al., Eurocrypt 1993) is a 128-bit SPN block cipher with
-    a 128-bit key and 6 rounds. Its round function uses four 32-bit multiplication operations modulo 2^32-1 (a prime) and
-    XOR, serving as a precursor to the wide-trail strategy.
+  notes: 'MMB (Modular Multiplication-Based Block cipher; Daemen, Govaerts, Vandewalle, 1993) is a 128-bit SPN block cipher
+    with a 128-bit key and 6 rounds. Its round function f_r multiplies each of four 32-bit words by a fixed constant modulo
+    2^32-1 (composite, not prime; the gamma_i are chosen coprime to 2^32-1), then conditionally XORs a constant into two
+    of the words, then mixes the four words with a circulant XOR diffusion layer (x_i = x_{i-1} XOR x_i XOR x_{i+1}) --
+    serving as a precursor to the wide-trail strategy. No key schedule: the raw 128-bit key is reused cyclically as round
+    keys for both encryption and decryption.'
   instances:
   - id: mmb_v1
     name: MMB

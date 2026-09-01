@@ -2983,16 +2983,31 @@ rounds:
   spec:
     component_flow:
     - component_id: xor
+      notes: subkey XOR applied word-wise to all 4 32-bit words before f_r (k_i,k_{i+1},k_{i+2},k_{i+3}
+        cyclically across the 6 applications of f_r plus a final 7th whitening XOR)
     - component_id: mul_mod
       params:
         modulus: 4294967295
+      notes: 'f_r step 1: x_i = gamma_i * x_i mod (2^32-1) for 0<=i<4, with gamma_0=0x025F1CDB
+        and gamma_1,gamma_2,gamma_3 cyclic-shifted versions of gamma_0 (2^1x, 2^3x, 2^7x); x=2^32-1
+        maps to itself'
     - component_id: xor
+      notes: 'f_r step 2: conditionally XOR x_0 with delta=0x2AAAAAAA if lsb(x_0)=1, and x_3
+        with delta if lsb(x_3)=0 -- an involution, breaks the rotational symmetry of step 1'
+    - component_id: binary_matrix_mul
+      notes: 'f_r step 3: x_i = x_{i-1} XOR x_i XOR x_{i+1} (indices mod 4) for 0<=i<4 -- a
+        circulant GF(2) diffusion layer mixing the four words, the source of MMB''s near-MDS/ARX-like
+        linear layer classification; also an involution'
     constant_injection: subkey
     state_model:
       state_bits: 128
       word_bits: 32
-  notes: 'MMB round: key XOR, four 32-bit modular multiplications (mod 2^32-1), key
-    XOR.'
+  notes: 'MMB round: subkey XOR followed by the 3-step nonlinear round function f_r (modular
+    multiplication, conditional constant injection, diagonal XOR diffusion). f_r itself is
+    not an involution (unlike DES/IPES), though steps 2 and 3 individually are; step 1 is
+    inverted by multiplying by gamma_i^-1. Applied 6 times, alternating with 7 subkey XORs
+    (k_0,k_1,k_2,k_3,k_0,k_1,k_2) using the raw 128-bit key words directly -- no key schedule,
+    and decryption reuses the same round keys as encryption.'
 - id: moe_step
   name: MOE step
   kind: step

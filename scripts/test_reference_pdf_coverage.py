@@ -27,7 +27,7 @@ KNOWN_MISSING = {
     "fantomas_robin", "fsb", "fugue", "hamsi", "hmac_sha256", "hpc",
     "khichidi_1",
     "labyrinth", "lane", "lea_iso", "lesamnta", "luffa", "lux_hash",
-    "m3lcrypt", "mcrypton", "mcssha3", "md6", "meshhash", "mibs", "mmb",
+    "m3lcrypt", "mcrypton", "mcssha3", "md6", "meshhash", "mibs",
     "nasha", "oryx", "panama", "pbkdf2", "pea", "pholkos",
     "picaro",
     "polyval", "pufferfish", "rc4plus", "sandstorm",
