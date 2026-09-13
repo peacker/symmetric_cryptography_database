@@ -13,6 +13,26 @@ mode_constructions:
     while carrying a chaining value, with strengthening padding encoding the message length.
 
     '
+- id: array_folding_iterated_hash
+  name: Array-Folding Iterated Hash
+  special_case_of: merkle_damgard
+  typical_primitive_types:
+  - compression_function
+  placeholder_family_names:
+  - Snefru
+  notes: 'A Merkle-Damgard-family iteration whose running state is a small fixed-size *array* of chaining slots rather
+    than a single chaining variable: each message block is compressed on its own into the next free slot, and whenever
+    the array fills, the array itself is compressed -- by the same fixed-size function -- back into slot 0, after which
+    filling resumes from slot 1. Sits between merkle_damgard (one chaining value, updated once per message block, with
+    the message block and the chaining value entering the same compression call) and binary_tree_hash (independent
+    leaves recombined through a full tree): the leaves here are genuinely independent and could be computed in
+    parallel, but the recombination is a left-leaning k-ary fold into one running accumulator rather than a balanced
+    tree, so the iteration as a whole is still sequential and finalized by one last call. Snefru (Merkle, Xerox PARC,
+    1989) is the original example: a 4-slot array of 128-bit digests folded by HASH512, with a call counter passed in
+    as a parameter so no two of the roughly 16,000,000 invocations needed to hash a one-gigabyte file are the same
+    function.
+
+    '
 - id: sponge_construction
   name: Sponge Construction
   notes: 'A permutation-based mode that absorbs input into part of a fixed-size state (the rate, alongside an untouched

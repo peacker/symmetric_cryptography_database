@@ -454,6 +454,44 @@ rounds:
     the octet number before each such XOR.
 
     '
+- id: snefru_round
+  name: Snefru E512 Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 512
+      words: 16
+      word_bits: 32
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - component_id: xor
+    - component_id: rotation_fixed
+    constant_injection: parameter_xor_once_per_pass
+  notes: 'One round of Snefru''s internal 512-bit function E512 walks all sixteen
+    32-bit words of Block[0 .. 15] in sequence: the bottom byte of Block[i] indexes a
+    256-entry, 32-bit-wide public standard S-box and the selected entry is XORed into
+    BOTH neighbouring words -- "Block[next] := Block[next] XOR SBoxEntry; Block[last]
+    := Block[last] XOR SBoxEntry", with next = (i+1) MOD 16 and last = (i-1) MOD 16 --
+    after which every one of the sixteen words is rotated right by a single amount
+    taken from the 4-entry schedule [16,8,16,24] indexed by the round''s position
+    within its pass. Words are updated in place, so each lookup is chained onto the
+    preceding one (Block[i] was already modified as the "next" word of step i-1); this
+    is the sequential-lookup principle the report argues for over DES''s parallel
+    S-box layer. Four such rounds (byteInWord = 1 .. 4) make one pass, and each pass
+    opens by XORing the hash parameters into the first three words (Block[0] XOR
+    p64lower, Block[1] XOR p64upper, Block[2] XOR p32). Within a pass two S-boxes are
+    used alternately by word parity -- standardSBoxes[2*index-1 + (i MOD 2)] -- because
+    "using the S-boxes in this sequence prevents self cancellation if the same entry is
+    used twice". After the final pass the whole sixteen-word block is reversed end to
+    end. Unlike khufu_round the tables are fixed and public ("Fixed for all time"),
+    shared with Khafre, so they carry no key material; unlike khufu_round/khafre_round
+    the S-box output fans out to two words rather than one, and the rotation is applied
+    to the entire block at once rather than to a single half.
+
+    '
 - id: idea_round
   name: IDEA Round
   kind: full_round

@@ -5309,6 +5309,89 @@ mode_families:
       checksum appended. Output = X[0..15] (first 16 bytes = 128 bits). Deprecated.
 
       '
+- id: snefru_hash
+  name: Snefru
+  construction_ids:
+  - merkle_damgard
+  - array_folding_iterated_hash
+  round_ids:
+  - snefru_round
+  target_applications:
+  - software
+  underlying_primitive_ids:
+  - snefru_hash512
+  characteristics:
+    block_size_bits: 512
+    state_size_bits: 512
+    output_size_bits: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - merkle_1989_software_encryption_function
+  process_participations: []
+  influences:
+  - source_family_id: snefru
+    relations:
+    - used_by
+    note: 'Snefru the hash function is nothing but the iteration of the fixed-size Snefru compression functions over
+      arbitrary-length input: "If the argument is small, we use the appropriate fixed-size hash function for speed of
+      computation. If the argument is large, we use HASH512 repeatedly to reduce its size." The report derives the
+      whole design this way -- "in order to design a strong one-way hash function we need to design a fixed-size
+      strong one-way hash function F0, from which we can then build F" -- so every cryptographic operation performed
+      by this mode is a call to snefru_hash512/snefru_hash256/snefru_hash128.'
+  notes: 'Snefru (Ralph C. Merkle, Xerox PARC, 1989) is the one-way hash function published alongside the block
+    ciphers Khufu and Khafre in the same Xerox PARC report; it "is designed to rapidly reduce large blocks of data to
+    a small residue", is authentication-only ("Snefru will be used exclusively for authentication purposes and does
+    not provide secrecy"), and needs no pre-computation, so it applies efficiently to small arguments. HASH(p64, x)
+    dispatches on argument size: at most 128, 256 or 512 bits it is a single call to HASH128, HASH256 or HASH512
+    respectively (see the snefru primitive family for all three).
+
+    For larger arguments the report does NOT use the plain sequential chain it defines earlier in the same section
+    for exposition (result := F0(result, x[i])). Instead it keeps a four-slot array hashArray[0 .. 3] of 128-bit
+    digests: each successive 512-bit message block is hashed on its own into the next slot (hashArray[hashLoc] :=
+    HASH512(p64, p32, x[i])), and as soon as the fourth slot is filled the whole 512-bit array is itself hashed back
+    into slot 0 (hashArray[0] := HASH512(p64, p32, hashArray)) and filling resumes at slot 1; the final result is one
+    last HASH512 over the array. The four 128-bit slots are exactly one 512-bit HASH512 input block, which is what
+    makes the fold free. A 32-bit counter p32 is incremented on every single HASH512 call and passed in as a
+    parameter, so no two calls compute the same function -- the report''s stated reason being that hashing a
+    one-gigabyte file "will need some 16,000,000 usages of HASH512 -- if two of these uses produced the same result,
+    then we could simply delete the part of the file between them and produce a shortened file that would still
+    produce the same result". The separate 64-bit parameter p64 is the user-visible parameterization that turns HASH
+    into a family of hash functions, so that breaking one use gives no help against another. Padding is zero-fill
+    only; no Merkle-Damgard length-strengthening block is specified. This iteration shape is tagged
+    array_folding_iterated_hash (see data/mode_constructions.yaml), a Merkle-Damgard-family leaf: sequential and
+    accumulator-based like Merkle-Damgard, but with a multi-slot accumulator and independently compressed message
+    blocks, which is the tree-like element it shares with binary_tree_hash.
+
+    Caveat on provenance: this entry models the original July-1989 draft, the only version specified in the source
+    document. The widely cited Snefru of the later cryptanalytic literature is a hardened revision published after
+    Biham and Shamir broke the 2-pass version by differential cryptanalysis around 1990-91; later descriptions of
+    Snefru also generally present a plain single-chaining-variable iteration (a 128-bit chaining value carried into
+    each 512-bit compression call alongside 384 bits of message) rather than this draft''s four-slot array. Neither
+    that revision''s pass count nor its exact iteration shape can be verified from this document, so neither is
+    modeled here.'
+  instances:
+  - id: snefru_v1
+    name: Snefru
+    type: hash
+    reference_ids:
+    - merkle_1989_software_encryption_function
+    characteristics:
+      output_size_bits: 128
+      block_size_bits: 512
+      state_size_bits: 512
+    notes: 'The single configuration the source specifies: HASH returns an INT128, and "conceptually, the hash
+      functions all return 128 bits. If fewer bits are needed... then trailing bits are discarded." The report''s
+      introduction describes the target residue more loosely as "perhaps 128 or 256 bits", but only the 128-bit
+      return is specified. The 512-bit state recorded here is the four-slot, 4 x 128-bit hashArray accumulator, which
+      is also exactly one HASH512 input block. No pass/round count is recorded: the report states outright that the
+      analysis of Khafre and Snefru "have so far been less detailed" and that "we do not yet have recommendations on
+      the number of rounds that should be used with them".'
 - id: md4_hash
   name: MD4
   construction_ids:

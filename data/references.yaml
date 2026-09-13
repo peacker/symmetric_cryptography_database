@@ -502,7 +502,7 @@ references:
     posted by John Gilmore), the direct predecessor draft of the formally published
     CRYPTO''90 paper "Fast Software Encryption Functions" (LNCS 537, pp. 476-501).
     No URL is printed in the document itself. Local copy
-    references/[1989][khufu,khafre][][merkle_1989_a_software_encryption_function_sci.crypt_leak].txt.'
+    references/[1989][khufu,khafre,snefru,snefru_hash][][merkle_1989_a_software_encryption_function_sci.crypt_leak].txt.'
 - id: lai_massey_1991_idea
   kind: article
   title: A Proposal for a New Block Encryption Standard

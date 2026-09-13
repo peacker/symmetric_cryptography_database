@@ -1494,7 +1494,10 @@ primitive_families:
     post-whitening (L and R XORed with two 32-bit words before the first round and two more after the last), which
     the paper adopts partly to foil a chosen-ciphertext attack that would otherwise let a single guessed 32-bit
     S-box entry be confirmed. The expensive key setup makes Khufu unsuited to encrypting small amounts of data --
-    the sibling cipher Khafre exists for that case.'
+    the sibling cipher Khafre exists for that case. The same report also introduces the one-way hash function
+    Snefru, whose internal 512-bit function E512 widens this same encryption loop from two 32-bit halves to
+    sixteen ("we extend the design of Khufu by assuming a block size of 512 bits"); see the snefru and
+    snefru_hash families.'
   construction_ids:
   - feistel
   - balanced_feistel
@@ -1590,7 +1593,9 @@ primitive_families:
     amounts of data faster than Khufu, which needs the lengthy S-box pre-computation first, but "will probably
     require more rounds than Khufu to achieve a similar level of security because it uses a fixed S-box"; the
     report gives no recommended round count for it. Khafre''s S-boxes are NOT key-dependent, so unlike Khufu it is
-    not a key-dependent table network.'
+    not a key-dependent table network. The same standard S-box tables are reused by the third design in the report,
+    the one-way hash function Snefru -- "we also need a set of standard S-boxes to use in Khafre and Snefru during
+    the encryption process" -- which is recorded as an influence edge on the snefru family.'
   construction_ids:
   - feistel
   - balanced_feistel
@@ -11435,6 +11440,143 @@ primitive_families:
       key_size_bits: 128
       rounds: 16
       output_size_bits: 128
+- id: snefru
+  name: Snefru Compression Function
+  construction_ids:
+  - permutation_based_feedforward_compression
+  - davies_meyer_style_permutation_feedforward
+  round_ids:
+  - snefru_round
+  target_applications:
+  - software
+  characteristics:
+    block_size_bits: 512
+    state_size_bits: 512
+    output_size_bits: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - merkle_1989_software_encryption_function
+  process_participations: []
+  influences:
+  - source_family_id: khufu
+    relations:
+    - generalization_of
+    note: 'Snefru''s internal function E512 is Khufu''s encryption loop widened from two 32-bit halves to sixteen,
+      stated outright: "In essence, we extend the design of Khufu by assuming a block size of 512 bits (16 32-bit
+      words)", and "We modify the basic encryption loop for Khufu as follows: instead of two halves, L and R, we have
+      16 ''halves'' in an array. We designate this array as ''Block[0 .. 15]''." The report introduces Snefru on the
+      same footing -- "Snefru in particular uses many of the design principles used in Khufu and Khafre" -- and E512
+      keeps Khufu''s defining mechanism unchanged: one lookup in a 256-entry, 32-bit-wide S-box indexed by the bottom
+      byte of a word, the entry XORed into other word(s), followed by a fixed rotation, with the rotate schedule again
+      chosen so every byte of the block is used and rotations sum to 0 mod 32. What generalizes rather than copies:
+      each S-box entry is XORed into both of a word''s neighbours (Block[next] and Block[last]) instead of into a
+      single other half, the rotate schedule shrinks to the 4-entry [16,8,16,24] and is applied to all sixteen words
+      at once, and the block is reversed end to end after the last pass.'
+  - source_family_id: khafre
+    relations:
+    - used_by
+    note: 'Snefru derives no tables of its own: it uses the same public "standard S-boxes" specified for Khafre, which
+      the report introduces jointly -- "We also need a set of standard S-boxes to use in Khafre and Snefru during the
+      encryption process" -- and E512''s own pseudocode declares them "StandardSBoxes: ARRAY [1 .. enough/8] OF ARRAY
+      [0 .. 255] OF int32; -- Fixed for all time". Those tables are produced by running Khufu''s key-to-S-box
+      generation algorithm under the all-zero key, starting from an initial S-box built from the RAND Corporation''s
+      1955 "A Million Random Digits with 100,000 Normal Deviates". Snefru therefore inherits Khafre''s fixed,
+      publicly auditable table set rather than Khufu''s secret key-derived one, which is why -- exactly as for Khafre
+      -- it is not tagged key_dependent_table_network.'
+  notes: 'Snefru (Ralph C. Merkle, Xerox PARC, 1989) is the fixed-size one-way compression function underlying the
+    Snefru hash function; see snefru_hash for the variable-length iteration built on it. The report specifies it in
+    two layers. The outer layer is a feed-forward: "HASH512(p64, p32, x) = leading 128 bits of ( E512(p64, p32, 0, x)
+    XOR x)", an instance of the general shape the report states as "F0(x) is defined as: E(0, x) XOR x where E(key,
+    plaintext) is a ''good'' conventional block cipher". This is deliberately the reverse of the then-traditional
+    approach of feeding the message in as the key -- "if we treat x as the input to a block cipher then we can use a
+    fixed key, need do no key mixing, and can still provide excellent security" -- and the report credits the general
+    approach to earlier work (its references [12] Matyas/Meyer/Oseas and [23], an unnamed IBM proposal). Because the
+    key is fixed for all time, E512 has no key schedule and no secret key material at all, so this family is tagged
+    as a permutation feed-forward rather than as one of the keyed single-block-length (PGV/Matyas-Meyer-Oseas) modes.
+
+    The inner layer, E512, is Khufu widened to a 512-bit block held as sixteen 32-bit words Block[0 .. 15] (a size
+    chosen so "the entire 512-bit block being encrypted can be kept in registers" on a RISC machine). Each pass first
+    XORs the parameters into the first three words (Block[0] XOR p64lower, Block[1] XOR p64upper, Block[2] XOR p32),
+    then runs four rounds; in each round every word in turn has its bottom byte looked up in a 256-entry, 32-bit-wide
+    standard S-box and the entry XORed into BOTH of its neighbours, after which all sixteen words are rotated right
+    by one amount from the 4-entry schedule [16,8,16,24]. Two S-boxes alternate by word parity within a pass
+    (standardSBoxes[2*index-1 + (i MOD 2)]) so that "using the S-boxes in this sequence prevents self cancellation if
+    the same entry is used twice". After the last pass the sixteen words are reversed end to end; the result is then
+    XORed with the original input block and truncated to its leading 128 bits.
+
+    p64 and p32 are NOT key material. They are public parameters that make each use of the function a different member
+    of a family of one-way hash functions -- "if each use of HASH is parameterized with a different value, then the
+    interloper must attack each use of HASH as though it were an entirely different hash function" -- with p32 in
+    particular counting calls during the folding of a long message, so that none of the "some 16,000,000 usages of
+    HASH512" needed for a one-gigabyte file can collide or cancel with another. They are recorded here as a
+    tweak-sized public parameter, never as key_size_bits.
+
+    This entry models the original July-1989 Xerox PARC draft, which deliberately recommends no pass/round count for
+    Snefru: "The analysis of Khafre and Snefru have so far been less detailed -- as a consequence, we do not yet have
+    recommendations on the number of rounds that should be used with them." The pass loop is written in terms of the
+    same open ''enough'' security parameter Khufu and Khafre use ("FOR index := 1 to enough/blockSizeInBytes - 1" in
+    the transcribed text), with no value suggested, so no round count is recorded on any instance below. The
+    publicly known, widely cited Snefru is a later, hardened revision of this design: Biham and Shamir''s differential
+    cryptanalysis broke the 2-pass version around 1990-91, after which Merkle re-issued Snefru with more passes (8 is
+    the figure usually quoted). That revision''s exact parameters are not specified in this document and are
+    deliberately not invented here.'
+  instances:
+  - id: snefru_hash512
+    name: Snefru HASH512
+    type: compression_function
+    reference_ids:
+    - merkle_1989_software_encryption_function
+    characteristics:
+      block_size_bits: 512
+      state_size_bits: 512
+      output_size_bits: 128
+      tweak_size_bits: 96
+    notes: 'The largest of the three fixed-size functions and the only one used repeatedly when hashing large inputs
+      ("HASH512 -- the largest fixed-size one-way hash function and therefore the most efficient for hashing large
+      blocks of data"). Compresses a 512-bit input block to 128 bits as HASH512(p64, p32, x) = leading 128 bits of
+      (E512(p64, p32, 0, x) XOR x). The 96-bit parameter recorded in tweak_size_bits is the pair (p64, p32) --
+      "HASH, HASH128 and HASH256 accept a 64-bit parameter, while HASH512 accepts a 96-bit parameter" -- a public
+      domain-separation/counter input, not secret key material: E512''s block-cipher key is fixed at 0 and there is
+      no key schedule, so no key size is recorded. No round or pass count is given by the source, so the field is
+      omitted rather than guessed.'
+  - id: snefru_hash256
+    name: Snefru HASH256
+    type: compression_function
+    reference_ids:
+    - merkle_1989_software_encryption_function
+    characteristics:
+      block_size_bits: 256
+      state_size_bits: 256
+      output_size_bits: 128
+      tweak_size_bits: 64
+    notes: 'The 256-bit-block sibling, defined only by difference: HASH256 and HASH128 "are precisely the same as
+      HASH512 except that ''blockSize'' is changed from 512 bits to 256 or 128 bits as appropriate, and p32 (the
+      32-bit parameter) is always 0" -- hence the 64-bit parameter (p64 only). It exists purely for efficiency on
+      short arguments, since "if we wish to hash only 128 bits it is significantly more efficient to use a function
+      which accepts a 128 bit input than to use a function which accepts a 512 bit input and zero-pad the 128-bit
+      value out to 512 bits". As for HASH512, the source recommends no pass count.'
+  - id: snefru_hash128
+    name: Snefru HASH128
+    type: compression_function
+    reference_ids:
+    - merkle_1989_software_encryption_function
+    characteristics:
+      block_size_bits: 128
+      state_size_bits: 128
+      output_size_bits: 128
+      tweak_size_bits: 64
+    notes: 'The smallest sibling, again "precisely the same as HASH512" with blockSize reduced to 128 bits and p32
+      fixed at 0. At this size the function does not actually compress -- input and output are both 128 bits -- which
+      is consistent with the report''s framing that "conceptually, the hash functions all return 128 bits" and that a
+      fixed-size one-way function need not shrink its input when used as a one-way function rather than as a
+      compression step ("it is not necessary that we reduce the size of the input"). The outer HASH function calls it
+      directly for any argument of at most 128 bits. No pass count is recommended by the source.'
 - id: haval
   name: HAVAL Compression Functions
   construction_ids:
