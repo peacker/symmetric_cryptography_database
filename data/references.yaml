@@ -488,6 +488,21 @@ references:
   year: 1994
   venue: Fast Software Encryption 1993
   url: https://www.schneier.com/academic/blowfish/
+- id: merkle_1989_software_encryption_function
+  kind: technical_report
+  title: A Software Encryption Function
+  authors:
+  - Ralph C. Merkle
+  year: 1989
+  venue: Xerox PARC
+  institution: Xerox PARC
+  notes: 'Xerox PARC technical report introducing Khufu, Khafre, and the one-way
+    hash function Snefru together; the local copy is the full text of the July 13
+    1989 sci.crypt Usenet posting of the report (Message-ID <7982@hoptoad.uucp>,
+    posted by John Gilmore), the direct predecessor draft of the formally published
+    CRYPTO''90 paper "Fast Software Encryption Functions" (LNCS 537, pp. 476-501).
+    No URL is printed in the document itself. Local copy
+    references/[1989][khufu,khafre][][merkle_1989_a_software_encryption_function_sci.crypt_leak].txt.'
 - id: lai_massey_1991_idea
   kind: article
   title: A Proposal for a New Block Encryption Standard

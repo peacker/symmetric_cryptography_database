@@ -1451,6 +1451,23 @@ primitive_families:
     relations:
     - inspired_by
     note: Blowfish was proposed as a fast software-oriented DES replacement.
+  - source_family_id: khufu
+    relations:
+    - inspired_by
+    note: 'Schneier''s Blowfish paper names Khufu, unhedged and by itself, as the prior art for three mechanisms
+      Blowfish adopts concretely. S-box shape: "Khufu and REDOC III both use a 256-entry, 32-bit wide S-box" --
+      Blowfish''s four S-boxes are each 256 entries of 32 bits. Key-dependent substitution: "Key-dependent S-boxes.
+      While fixed S-boxes must be designed to be resistant to differential and linear cryptanalysis, key-dependent
+      S-boxes are much more resistant to these attacks. They are used in the Khufu algorithm", with the design-
+      decisions section adding that "Khufu has a large number of subkeys that are a one-way function of the key".
+      Outer whitening: "Khufu XORs the text block with key material at the beginning and the end of the algorithm"
+      -- Blowfish''s P17/P18. The mechanism is reused, not just cited: Blowfish''s subkeys "are calculated using the
+      Blowfish algorithm" itself, iterating the cipher 521 times to fill the P-array and the four S-boxes, which is
+      the same self-referential cipher-as-PRNG key setup by which Khufu derives its per-octet S-boxes (encrypting a
+      64-byte key-seeded block with Khufu under a fixed initial S-box, then shuffling). Contrast the hedged,
+      grouped GOST mention in the same paragraph ("Variable S-boxes, which could possibly be key dependent, are
+      used in GOST"), which is deliberately not recorded as an edge -- see the notes on the
+      key_dependent_table_network construction.'
   instances:
   - id: blowfish_128
     name: Blowfish-128
@@ -1460,6 +1477,188 @@ primitive_families:
       key_size_bits: 128
       rounds: 16
       output_size_bits: 64
+- id: khufu
+  name: Khufu
+  notes: 'Khufu (Ralph C. Merkle, Xerox PARC, 1989) is a 64-bit-block Feistel cipher designed for fast bulk
+    encryption in software on 32-bit register machines. Each round performs a single table lookup: the bottom
+    byte of L indexes a 256-entry, 32-bit-wide S-box whose entry is XORed into R, L is rotated right by a fixed
+    schedule [16,16,8,8,16,16,24,24], and the halves are swapped. The round count must be a multiple of 8 (one
+    "octet"), with 8 to 64 rounds possible and 16 the suggested default; a different S-box is used in each octet,
+    so that repeated index values cannot cancel and the second octet cannot compute the same function as the
+    first. All of the S-boxes are key material and are pre-computed from the user key -- "The S-boxes ARE most of
+    the key." The key initializes a 64-byte state block (which "effectively limits the key size to 512 bits");
+    that block is encrypted with Khufu itself in cipher block chaining mode, using a single fixed "initial" S-box
+    for all octets and auxiliary keys set to 0, producing a pseudo-random byte stream; the stream then drives the
+    Knuth Vol. II shuffle to turn each of the four one-byte columns of the initial S-box into a fresh permutation,
+    yielding one 256-entry 32-bit-wide S-box per octet. A separate 128-bit AuxiliaryKeys array supplies pre- and
+    post-whitening (L and R XORed with two 32-bit words before the first round and two more after the last), which
+    the paper adopts partly to foil a chosen-ciphertext attack that would otherwise let a single guessed 32-bit
+    S-box entry be confirmed. The expensive key setup makes Khufu unsuited to encrypting small amounts of data --
+    the sibling cipher Khafre exists for that case.'
+  construction_ids:
+  - feistel
+  - balanced_feistel
+  - key_dependent_table_network
+  round_ids:
+  - khufu_round
+  target_applications:
+  - software
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - merkle_1989_software_encryption_function
+  process_participations: []
+  influences:
+  - source_family_id: des
+    relations:
+    - improvement_of
+    note: 'Merkle''s report is an explicit design-decision-by-design-decision revision of DES for software:
+      "The basic design principles in DES seem sound. The fact that DES has not been publicly broken speaks in
+      their favor. However, upon examining specific design decisions in DES, we find that several should be
+      revised." Khufu retains DES''s structure -- "Khufu, like DES, is a multi-round encryption function in which
+      two 32-bit halves (called L and R for Left and Right) are used alternately in the computations. Each half is
+      used as input to a function F, whose output is XORed with the other half" -- and deliberately keeps DES''s
+      64-bit block so the new cipher "can be easily ''plugged in'' in place of the old". The differences are
+      targeted fixes to named DES design decisions: a larger key ("The selection of a 56 bit key size is too
+      small"); DES''s bit permutations dropped ("The extensive use of permutations is expensive in software, and
+      should be eliminated") and its initial/final permutations discarded as "cryptographically pointless"; one
+      large 256-entry 32-bit-wide S-box looked up once per round in place of eight parallel 6-to-4 S-boxes, so
+      lookups chain sequentially ("DES has a maximum circuit depth of 16 S-boxes, even though it has a total of
+      128 S-box lookups"); a heavier pre-computed key schedule answering the "mild criticism" of DES''s; and
+      public, documented S-box generation answering the fact that "the design criteria used for the DES S-boxes
+      were kept secret".'
+  innovative_ideas:
+  - id: khufu_cipher_derived_key_dependent_sboxes
+    name: Cipher-generated key-dependent S-boxes
+    note: 'Khufu derives its own substitution tables by running itself as a pseudo-random generator -- the user
+      key seeds a 64-byte block, Khufu encrypts that block in CBC mode under a fixed "initial" S-box to produce a
+      pseudo-random byte stream, and the stream drives a Knuth shuffle that turns each byte column of the initial
+      S-box into a fresh permutation, one 256x32-bit S-box per 8-round octet. The paper states the circularity
+      problem and its resolution outright: "We could generate a stream of pseudo-random bytes using an encryption
+      function -- but we have no S-box to use in such an encryption function! To circumvent this circularity
+      problem, we can assume the existence of a single ''initial'' S-box." Blowfish (1994) later used the same
+      self-referential key-setup technique to fill its P-array and S-boxes.'
+  instances:
+  - id: khufu_16
+    name: Khufu (16 rounds)
+    type: block_cipher
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 512
+      rounds: 16
+      output_size_bits: 64
+    notes: 'The paper''s suggested default ("the security parameter, default of 16 seems appropriate") and the
+      configuration its own analysis recommends for general commercial encryption; 8-round Khufu is shown to be
+      breakable by chosen-plaintext, cancellation, and chosen-ciphertext attacks, while "a 16-round Khufu has so
+      far resisted cryptanalysis" and produces statistically flat output. The 512-bit key size recorded here is the
+      maximum the design admits, not a fixed size: the user key initializes a 64-byte key block, "which effectively
+      limits the key size to 512 bits", and shorter (indeed "presumably short") keys are the expected case.'
+  - id: khufu_32
+    name: Khufu (32 rounds)
+    type: block_cipher
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 512
+      rounds: 32
+      output_size_bits: 64
+    notes: 'The high-security configuration named in the paper''s Summary -- "a 32-round Khufu can be used for
+      high security applications". Round counts must be multiples of 8; 8, 16, 24, 32, 40, 48, 56 and 64 are the
+      permitted values. As for the 16-round profile, the 512-bit key size recorded here is the design maximum
+      imposed by the 64-byte key block, not a fixed size.'
+- id: khafre
+  name: Khafre
+  notes: 'Khafre (Ralph C. Merkle, Xerox PARC, 1989) is the no-precomputation sibling of Khufu, published in the
+    same report: same 64-bit block, same single-lookup Feistel round (bottom byte of one half indexes a 256-entry,
+    32-bit-wide S-box, entry XORed into the other half, fixed rotation, swap), same rotate schedule
+    [16,16,8,8,16,16,24,24] and same 8-round "octet" structure. The difference is that Khafre''s S-boxes are public
+    and identical for every key: they are generated by Khufu''s own S-box-generation algorithm run under the
+    all-zero key, starting from an "initial" S-box built from the RAND Corporation''s 1955 "A Million Random Digits
+    with 100,000 Normal Deviates" -- a nothing-up-my-sleeve construction adopted explicitly so that, unlike DES,
+    both the S-boxes and the algorithm generating them can be publicly examined for trap doors. Because the tables
+    can no longer carry the key, key material is XORed into the 64-bit block directly: once before the first round
+    and again after every octet, with each 64-bit key word rotated right by the octet number before the XOR. The
+    key must be a multiple of 64 bits (64-bit and 128-bit keys are the expected commercial sizes, larger keys
+    allowed at a cost in speed) and the round count a multiple of 8, with the key length required to divide the
+    number of octets plus one so that decryption can start from the last key entry. Khafre therefore encrypts small
+    amounts of data faster than Khufu, which needs the lengthy S-box pre-computation first, but "will probably
+    require more rounds than Khufu to achieve a similar level of security because it uses a fixed S-box"; the
+    report gives no recommended round count for it. Khafre''s S-boxes are NOT key-dependent, so unlike Khufu it is
+    not a key-dependent table network.'
+  construction_ids:
+  - feistel
+  - balanced_feistel
+  round_ids:
+  - khafre_round
+  target_applications:
+  - software
+  characteristics:
+    block_size_bits: 64
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - id: xor
+    - id: rotation_fixed
+  reference_ids:
+  - merkle_1989_software_encryption_function
+  process_participations: []
+  influences:
+  - source_family_id: khufu
+    relations:
+    - variant_of
+    note: 'Stated outright in the source: "The design of Khafre is similar to the design of Khufu except that
+      Khafre does not pre-compute its S-box. Instead, Khafre uses a set of standard S-boxes." Khafre keeps Khufu''s
+      64-bit two-half Feistel round, its single 256-entry 32-bit-wide S-box lookup, its fixed rotate schedule
+      [16,16,8,8,16,16,24,24] and its 8-round octet structure unchanged. Its two changes follow from dropping the
+      pre-computation: the standard S-boxes are themselves produced by running Khufu''s own key-to-S-box generation
+      algorithm under the all-zero key, and a per-octet key XOR replaces the key material Khufu had carried inside
+      the tables ("some new mechanism of mixing in key material must be adopted because the standard S-boxes can
+      not serve as the key").'
+  - source_family_id: des
+    relations:
+    - inspired_by
+    note: 'Khafre is specified in the same report as Khufu and shares its DES-revision rationale: the report''s
+      "Basic Principles" section revises DES''s design decisions one by one for software ("The basic design
+      principles in DES seem sound... upon examining specific design decisions in DES, we find that several should
+      be revised"), and the report states that the two encryption functions "are optimized for somewhat different
+      tasks, but use very similar design principles". Khafre inherits from that the DES 64-bit, two-32-bit-half
+      Feistel skeleton with DES''s bit permutations dropped and its eight parallel 6-to-4 S-boxes replaced by one
+      sequential 256-entry 32-bit-wide lookup per round. Its public "nothing up my sleeve" standard S-boxes are a
+      direct answer to a DES concern the report names: "the design criteria used for the DES S-boxes were kept
+      secret... it would seem better if the criteria for S-box selection were made explicit, and some sort of
+      assurances provided that the S-boxes were actually chosen randomly in accordance with the published
+      criteria."'
+  instances:
+  - id: khafre_64
+    name: Khafre (64-bit key)
+    type: block_cipher
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 64
+      output_size_bits: 64
+    notes: 'One of the two key sizes the report expects in practice -- "it is expected that 64-bit and 128-bit key
+      sizes will typically be used in commercial applications". No round count is given, deliberately: the report
+      states that the analysis of Khafre is "less detailed" than Khufu''s and that "we do not yet have
+      recommendations on the number of rounds that should be used" with it, beyond the requirement that the round
+      count be a multiple of 8.'
+  - id: khafre_128
+    name: Khafre (128-bit key)
+    type: block_cipher
+    characteristics:
+      block_size_bits: 64
+      key_size_bits: 128
+      output_size_bits: 64
+    notes: The second expected commercial key size. As with the 64-bit profile, the report recommends no round
+      count for Khafre; it only requires the round count to be a multiple of 8 and the key length in 64-bit words
+      to divide the number of octets plus one, so that decryption can always start from the last key entry.
 - id: idea
   name: IDEA
   notes: IDEA is an 8.5-round, 64-bit Lai–Massey cipher whose round function mixes XOR, addition modulo 2^16, and multiplication

@@ -404,6 +404,56 @@ rounds:
   notes: 'Blowfish Feistel round using key-dependent S-boxes and ARX mixing in F.
 
     '
+- id: khufu_round
+  name: Khufu Feistel Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - component_id: xor
+    - component_id: rotation_fixed
+    constant_injection: none
+  notes: 'One Khufu round is a single lookup in a 256-entry, 32-bit-wide S-box indexed
+    by the bottom byte of L, XORed into R, followed by a fixed rotation of L and the
+    Feistel swap: "R := R XOR SBoxes[octet][L AND #FF]; L := RotateRight[L,
+    rotateSchedule[(round-1) mod 8 + 1]]; SWAP[L,R]". The rotation amounts come from
+    the fixed 8-entry schedule [16,16,8,8,16,16,24,24], so all 8 input bytes are used
+    within one octet and the rotations sum to 0 mod 32. No round key is injected inside
+    the loop -- the S-box entries themselves are the key material (a fresh key-derived
+    S-box per 8-round octet), and the 128 bits of AuxiliaryKeys are XORed only before
+    the first and after the last round.
+
+    '
+- id: khafre_round
+  name: Khafre Feistel Round
+  kind: full_round
+  spec:
+    state_model:
+      state_bits: 64
+      branch_bits: 32
+    component_flow:
+    - component_id: sbox
+      params:
+        input_bits: 8
+        output_bits: 32
+    - component_id: xor
+    - component_id: rotation_fixed
+    constant_injection: key_xor_every_eight_rounds
+  notes: 'Structurally the same single-lookup Feistel round as khufu_round (same
+    256-entry 32-bit-wide S-box, same fixed rotate schedule [16,16,8,8,16,16,24,24],
+    same swap), with two differences: the S-box is one of the public standard S-boxes
+    rather than a key-derived one, and key material therefore has to enter the data
+    path directly -- "key material is XORed with the 64-bit data block before the first
+    round and thereafter following every 8 rounds", with the key word rotated right by
+    the octet number before each such XOR.
+
+    '
 - id: idea_round
   name: IDEA Round
   kind: full_round
