@@ -2652,22 +2652,30 @@
     const GEN_ZOOM_FACTOR = 1.2;
     let genZoomScale = GEN_BASE_ZOOM;
     let genHasAutoFit = false;
-    // genFrame's own height (as opposed to genPlot's zoom-scaled height) is
-    // fit to window.innerHeight with a fullscreen-vs-normal ratio, set by
-    // whichever layout last ran (drawSugiyama/drawRadial -- see
-    // recomputeGenFrameHeight()'s callers). Toggling fullscreen doesn't
-    // re-run either of those (only ensureGenFit's zoom-refit), so without
-    // re-deriving it here too, genFrame stayed stuck at its pre-fullscreen
-    // height -- the plot itself would resize but the frame around it
-    // wouldn't grow to fill the newly-available viewport height, leaving a
-    // gap below it.
+    // genFrame's own height tracks genPlot's zoom-scaled height (mirroring
+    // vizFrame's sizing in applyZoom() above), fit to window.innerHeight
+    // with a fullscreen-vs-normal ratio, set by whichever layout last ran
+    // (drawSugiyama/drawRadial -- see recomputeGenFrameHeight()'s callers).
+    // It used to size off the plot's *unzoomed* naturalH instead: harmless
+    // at genZoomScale close to 1, but "Fit" on a small filtered graph (few
+    // nodes, small naturalW) picks a genZoomScale well above 1 to stretch
+    // it to the container's full width -- genPlot's own height grows by
+    // that same factor (see applyGenZoom()) while the frame around it
+    // stayed sized for the unzoomed height, clipping the now-taller plot
+    // and forcing a vertical scroll despite "Fit" having just run.
+    // Toggling fullscreen doesn't re-run either layout function (only
+    // ensureGenFit's zoom-refit), so without re-deriving it here too,
+    // genFrame stayed stuck at its pre-fullscreen height -- the plot itself
+    // would resize but the frame around it wouldn't grow to fill the
+    // newly-available viewport height, leaving a gap below it.
     let lastGenFrameSizing = null;
     function recomputeGenFrameHeight() {
       if (!lastGenFrameSizing) return;
       const { naturalH, minH, ratioNormal } = lastGenFrameSizing;
       const isFullscreen = document.body.classList.contains("spdb-fullscreen");
       const ratio = isFullscreen ? 0.97 : ratioNormal;
-      genFrame.style.height = `${Math.max(minH, Math.min(Math.round(window.innerHeight * ratio), naturalH + 8))}px`;
+      const scaledH = naturalH * genZoomScale;
+      genFrame.style.height = `${Math.max(minH, Math.min(Math.round(window.innerHeight * ratio), Math.round(scaledH) + 8))}px`;
     }
 
     function clampGenZoom(next) {
