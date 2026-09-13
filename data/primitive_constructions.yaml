@@ -721,7 +721,22 @@ primitive_constructions:
   placeholder_family_names:
   - FROG
   - HPC
-  notes: 'A construction where round behavior is driven by key-derived tables or key-dependent substitution/permutation components.
+  notes: 'A construction where round behavior is driven by key-derived tables or key-dependent substitution/permutation
+    components, derived once (typically at key setup) and then reused uniformly across rounds -- as opposed to
+    asasa, where the key-dependent affine/S-box layers are recomputed per round from round-key material, or
+    data_dependent_permutation_network, where the choice of which fixed permutation to apply is driven by data
+    rather than the key.
+
+    GOST 28147-89 is deliberately NOT tagged with this construction, despite Blowfish''s own paper (Schneier 1994)
+    citing it alongside Khufu as prior art for "key-dependent S-boxes": Blowfish''s citation is hedged ("Variable
+    S-boxes, which could possibly be key dependent, are used in GOST") and groups GOST with Khufu as two examples
+    of the same generic technique without singling either out as an adopted basis -- exactly the related-work
+    pattern the influence-edge standard (see family_common.schema.json) excludes, and Khufu itself (a stronger,
+    unhedged citation for this exact mechanism) has never been added to this construction either. More
+    fundamentally, GOST''s own spec (RFC 5830 / the 1989 standard) states the S-boxes are a secret parameter
+    distributed independently of the key ("Both the key K... and the tables of S (the S-boxes) are secret elements
+    of the algorithm") rather than a table derived from the key by an internal key schedule -- structurally
+    distinct from how Blowfish/FROG/HPC/CLAE/Twofish/CRISP/Lucifer actually generate their tables.
 
     '
 - id: data_dependent_permutation_network

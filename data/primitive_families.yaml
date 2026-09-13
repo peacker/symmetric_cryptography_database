@@ -1665,6 +1665,7 @@ primitive_families:
   construction_ids:
   - feistel
   - balanced_feistel
+  - key_dependent_table_network
   round_ids:
   - twofish_round
   target_applications:
@@ -6115,6 +6116,7 @@ primitive_families:
   construction_ids:
   - feistel
   - balanced_feistel
+  - key_dependent_table_network
   round_ids:
   - crisp_round
   target_applications:
@@ -11189,6 +11191,7 @@ primitive_families:
   construction_ids:
   - feistel
   - balanced_feistel
+  - key_dependent_table_network
   round_ids:
   - lucifer_round
   target_applications: []
