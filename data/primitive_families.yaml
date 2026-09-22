@@ -17901,3 +17901,55 @@ primitive_families:
       output_size_bits: 1920
       rounds: 12
     notes: Uses constant window q=60+5t+j (b=2). Called second in each IFS Step.
+- id: thunder_p
+  name: Thunder-p
+  construction_ids:
+  - boolean_operator_network
+  round_ids:
+  - thunder_p_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 1600
+    components:
+    - id: and
+    - id: not
+    - id: xor
+    - id: rotation_fixed
+    - id: word_permutation
+    - id: constant
+  reference_ids:
+  - niccs_2026_thunder_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: keccak
+    relations:
+    - related_to
+    note: '"organized as a 5x5x64 array of 64-bit lanes, the lane-based geometry that Keccak-f[1600] made
+      standard"; "Thunder-p keeps the 5x5x64 lane geometry of Keccak-f[1600]... The mixing layer departs from
+      it. Instead of the parity mixer of Keccak, whose... branch numbers are 4, Thunder-p uses a symmetric
+      circulant twin column-parity mixer... branch number 12." The nonlinear layer psi is also explicitly
+      contrasted with Keccak''s chi (acts along the y-axis for fixed (x,z), vs chi''s x-axis). State geometry
+      is shared; the round function is not.'
+  notes: 'A 1600-bit, 12-round permutation underlying Thunder Hash Family, a candidate in the NICCS 2026
+    cryptographic hash algorithm competition (Round 1), submitted by the same Shandong University team as
+    Dragon Hash Family. Round R = psi.pi.theta.rho.iota: iota (round constant from a 5-stage affine LFSR into
+    lane (0,0) only); rho (cyclic right-rotation of each lane by a lane-dependent offset); theta (a
+    "Symmetric Circulant Twin Column Parity Mixer" [LRL+24] -- parity-plane folding with two circulant shifts,
+    branch number 12; shared co-authors Hao Lei, Kai Hu, Meiqin Wang with the paper introducing it, so this is
+    a direct instantiation of a named prior technique, though [LRL+24] is not itself tracked as a family
+    here); pi (affine lane permutation); psi (the only nonlinear layer, a 5-bit S-box along the y-axis).'
+  instances:
+  - id: thunder_p_1600_12
+    name: Thunder-p
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_thunder_hash
+    characteristics:
+      state_size_bits: 1600
+      block_size_bits: 1600
+      output_size_bits: 1600
+      rounds: 12

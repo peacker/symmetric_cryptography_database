@@ -6490,4 +6490,23 @@ rounds:
       note: 'A_{b,t}: five 64-bit LFSR-derived constants into row 0 only; domain b selects the constant
         window (the only difference between the P1 and P2 calls).'
   notes: Used by P1920.
+- id: thunder_p_round
+  name: Thunder-p Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: constant
+      note: 'iota: LFSR-derived round constant into lane (0,0) only.'
+    - component_id: rotation_fixed
+      note: 'rho: cyclic right-rotation of each lane by a lane-dependent offset.'
+    - component_id: xor
+      note: 'theta: Symmetric Circulant Twin Column Parity Mixer -- parity-plane folding with two circulant
+        shifts.'
+    - component_id: word_permutation
+      note: 'pi: affine lane permutation.'
+    - component_id: and
+      note: 'psi: AND term of the 5-bit S-box, applied along the y-axis.'
+    - component_id: not
+      note: 'psi: NOT terms of the S-box.'
+  notes: Used by Thunder-p.
 
