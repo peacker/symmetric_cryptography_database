@@ -17359,3 +17359,74 @@ primitive_families:
       block_size_bits: 1536
       output_size_bits: 1536
       rounds: 18
+- id: megascon_p
+  name: Megascon Permutation
+  construction_ids:
+  - boolean_operator_network
+  round_ids:
+  - megascon_p_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 2048
+    components:
+    - id: and
+    - id: not
+    - id: xor
+    - id: rotation_fixed
+    - id: bit_permutation
+    - id: constant
+  reference_ids:
+  - niccs_2026_megascon_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: ascon
+    relations:
+    - inspired_by
+    note: '"MEGASCON is a permutation-based design inspired by the ASCON family"; the linear layer is
+      "inspired by Ascon''s diffusion strategy" but explicitly departs from Ascon''s 2-rotation/2-XOR-per-word
+      structure to a 4-rotation/4-XOR structure because the 2-rot version "proves insufficient" at 256-bit
+      row width.'
+  - source_family_id: keccak
+    relations:
+    - generalization_of
+    note: 'The 8-bit S-box "inherits its structure from Daemen''s chi transformation, while extending it to
+      even dimensions as introduced in CHILOW" (Belkheyar, Derbez, Ghosh, Leander, Mella, Perrin,
+      Rasoolzadeh, Stennes, Sun, Van Assche, Vizar, EUROCRYPT 2025) -- Patrick Derbez, a Megascon
+      co-submitter, co-authors that paper. Daemen''s chi is the nonlinear layer this database already tracks
+      as part of Keccak; CHILOW itself is not tracked as its own family here.'
+  notes: 'A 2048-bit permutation (8x256-bit bitslice matrix, each row split into four 64-bit words) underlying
+    Megascon, a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1), submitted by
+    the same author team as Mozi. Round p = pC.pL.ppi.pS: pS (256 parallel 8-bit S-boxes, column-wise across
+    the 8 rows -- the "chichi" extended-dimension chi transformation from CHILOW); ppi (fixed permutation of
+    the 8 rows); pL (per-row linear diffusion: each of the row''s four 64-bit words XORed with three rotated
+    copies of its neighbors); pC (a round-dependent 64-bit constant, SplitMix64-derived, XORed into one word
+    only). NOTE: Section 2.1 ("Notations") defines round-count parameters a=20, b=24, but the recommended
+    instances (Table 1) and the reference implementation both use 15/16 rounds -- likely a leftover draft
+    inconsistency; 15/16 is recorded here as the actually-instantiated value.'
+  instances:
+  - id: megascon_p_2048_15
+    name: Megascon Permutation (15 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_megascon_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 2048
+      output_size_bits: 2048
+      rounds: 15
+    notes: Used by the sponge instances (Megascon-384/512 and their XOFs).
+  - id: megascon_p_2048_16
+    name: Megascon Permutation (16 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_megascon_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 2048
+      output_size_bits: 2048
+      rounds: 16
+    notes: Used by the feed-forward-sponge instances (Megascon-768/1024).

@@ -6361,4 +6361,22 @@ rounds:
       note: Round constant (hex digits of pi) XORed into the first row of one slice only.
   notes: Used by Cube-p, and (via the ZIP construction, forward + inverse) by Cube-f, both underlying
     MasterCube.
+- id: megascon_p_round
+  name: Megascon Permutation Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: and
+      note: 'pS: AND term of the 8-bit "chichi" S-box, applied column-wise across the 8 rows.'
+    - component_id: not
+      note: 'pS: NOT term of the S-box.'
+    - component_id: xor
+      note: 'pS: XOR term of the S-box; pL: XOR of rotated word copies.'
+    - component_id: bit_permutation
+      note: 'ppi: fixed permutation of the 8 rows, pi=(1,7,5,2,4,6,0,3).'
+    - component_id: rotation_fixed
+      note: 'pL: each 64-bit word XORed with three rotated copies of its row neighbors.'
+    - component_id: constant
+      note: 'pC: SplitMix64-derived 64-bit constant XORed into one word only.'
+  notes: Used by the Megascon Permutation.
 
