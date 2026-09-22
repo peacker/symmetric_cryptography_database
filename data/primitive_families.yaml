@@ -16568,3 +16568,50 @@ primitive_families:
       output_size_bits: 1600
       rounds: 24
     notes: The g+h halves (12+12 rounds) of each Aligned-TrEDM call in AFS-TrEDM-1024.
+- id: c_engine
+  name: C-Engine
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  round_ids:
+  - c_engine_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 1536
+    block_size_bits: 1536
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: binary_matrix_mul
+    - id: xor
+    - id: constant
+  reference_ids:
+  - niccs_2026_c_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: 'A 1536-bit, 28-round permutation underlying C Hash, a candidate in the NICCS 2026 cryptographic hash
+    algorithm competition (Round 1). State is a 6x64 matrix of 4-bit nibbles. Each round applies an S-layer (64
+    parallel 24-bit "Super S-boxes" -- 4-bit S-box, 6x6 branch-4 binary matrix over GF(2^4), XOR a fixed 24-bit
+    constant, 4-bit S-box again -- one per column), an M-layer (a 64x64 binary matrix, branch number 18,
+    applied per row, built via a 4-round "extended Lai-Massey structure" of nibble-wise XORs and rotations --
+    a construction *technique* borrowed from the generic Lai-Massey method, not a reuse of any specific
+    Lai-Massey cipher such as IDEA, so no influences edge is recorded), and a K-layer (a 32-bit round constant,
+    from hex digits of pi, XORed into the first 8 nibbles of row 0 only). The spec presents this as an
+    original, from-scratch SPN and does not claim resemblance to any specific named permutation.'
+  instances:
+  - id: c_engine_1536_28
+    name: C-Engine
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_c_hash
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 1536
+      output_size_bits: 1536
+      rounds: 28

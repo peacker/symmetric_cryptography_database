@@ -15076,28 +15076,74 @@ mode_families:
 - id: c_hash
   name: "C Hash"
   construction_ids: []
+  round_ids:
+  - c_engine_round
   target_applications: []
+  characteristics:
+    state_size_bits: 1536
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: binary_matrix_mul
+    - id: xor
+    - id: constant
   reference_ids:
   - niccs_2026_c_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    C Hash is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Liting Zhang
+  - Ying Zhang
+  year: 2026
+  underlying_primitive_ids:
+  - c_engine_1536_28
+  influences:
+  - source_family_id: c_engine
+    relations:
+    - used_by
+    note: C Hash's Rocket-JH iteration is built directly on the C-Engine permutation, via two counter-multiplexed
+      domain-separated maps CTR-Perm/CTR-Func derived from it.
+  - source_family_id: jh
+    relations:
+    - generalization_of
+    - inspired_by
+    note: '"Building upon the JH iteration [20], the construction introduces a distinctive feature": a VIL
+      compress-then-FIL-finalize split the spec calls "Decohash," implemented as the Rocket-JH iteration of
+      a separate, contemporaneous paper (Zhang, Sui, Zhang, Wu, ePrint 2026/713) by an overlapping author
+      (submitter Liting Zhang).'
+  notes: 'C Hash is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Its
+    mode, Rocket-JH, is neither a sponge nor a classic Merkle-Damgard/HAIFA design: a variable-input-length
+    compression phase is composed with a fixed-input-length finalization phase, both built from C-Engine via
+    two domain-separated, counter-multiplexed maps -- CTR-Perm(x) = LMB(n, P(x||ctr)) and, with an added
+    feedforward, CTR-Func(x) = CTR-Perm(x) xor x. A mandatory short-message fast path, LDRH, XORs two
+    domain-separated CTR-Perm calls instead of iterating (an instance of the generic "XOR of Permutations"/
+    sum-of-PRPs paradigm from Lucks and Bhaumik et al., not modeled as a family here); an appendix XOF mode,
+    LDXOF, extends the same idea. Padding is standard 10* to a 736-bit rate (half of the 1472-bit effective
+    state, b-w for permutation width b=1536 and counter width w=64).'
   instances:
-  - id: c_hash_v1
-    name: "C Hash"
+  - id: c_hash_512
+    name: "C-Hash-512"
     type: hash
     reference_ids:
     - niccs_2026_c_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 736
+      output_size_bits: 512
+      rounds: 28
+    notes: Uses the CTR-Perm (non-feedforward) domain, LaneIDs 0x01/0x02/0x03.
+  - id: c_hash_1024
+    name: "C-Hash-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_c_hash
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 1472
+      output_size_bits: 1024
+      rounds: 28
+    notes: Uses the CTR-Func (feedforward) domain, LaneIDs 0x81/0x82/0x83.
 - id: champ_hash
   name: "CHAMP"
   construction_ids:

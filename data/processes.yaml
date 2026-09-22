@@ -962,7 +962,7 @@ processes:
     participants:
     - family_id: afs_p_s6
     - family_id: axis_hash
-    - family_id: c_hash
+    - family_id: c_engine
     - family_id: champ_hash
     - family_id: uhash
     - family_id: cuishen

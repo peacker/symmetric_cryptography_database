@@ -6130,4 +6130,25 @@ rounds:
     the six-direction rotating single-MDS structure," and that the nonlinear layer "replaces chi with a single
     AFS-64 call" -- the 1600-bit, 5x5x64-lane state shape and naming convention mirror Keccak-p[1600,nr], but
     the round function itself is a distinct, ARX-based design.'
+- id: c_engine_round
+  name: C-Engine Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: 'S-layer, first pass: a 4-bit S-box applied to each of the 6 nibbles in a column.'
+    - component_id: binary_matrix_mul
+      note: 'S-layer: a 6x6 binary matrix over GF(2^4) (branch number 4) mixing the 6 nibbles of the column.'
+    - component_id: constant
+      note: 'S-layer: fixed 24-bit constant 0xC908B2 (from sqrt(2)) XORed into the column.'
+    - component_id: sbox
+      note: 'S-layer, second pass: the same 4-bit S-box applied again to each nibble, completing the
+        SPS "Super S-box".'
+    - component_id: binary_matrix_mul
+      note: 'M-layer: a 64x64 binary matrix (branch number 18) applied per row, built via a 4-round extended
+        Lai-Massey structure of nibble-wise XORs and rotations.'
+    - component_id: constant
+      note: 'K-layer: a 32-bit round constant (from hex digits of pi) XORed into the first 8 nibbles of row 0
+        only.'
+  notes: Used by C-Engine, the 1536-bit permutation underlying C Hash.
 
