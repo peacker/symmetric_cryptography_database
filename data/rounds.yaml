@@ -6509,4 +6509,18 @@ rounds:
     - component_id: not
       note: 'psi: NOT terms of the S-box.'
   notes: Used by Thunder-p.
+- id: vedak_p_round
+  name: Vedak-p Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: 'nu: 16 parallel 4-bit S-boxes per 64-bit word.'
+    - component_id: binary_matrix_mul
+      note: 'lambda: fixed 10x10 binary matrix mixing the 10 words in each of 4 columns.'
+    - component_id: word_permutation
+      note: 'psi: per-row word permutation plus conditional half-word swaps.'
+    - component_id: constant
+      note: 'omega: 32-bit LFSR-derived round constant into the first 8 nibbles.'
+  notes: Used by Vedak-p.
 

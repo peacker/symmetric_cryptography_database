@@ -985,7 +985,7 @@ processes:
     - family_id: chacha_bahru
     - family_id: taichi_p1920
     - family_id: chime_p
-    - family_id: vedak_hash
+    - family_id: vedak_p
     - family_id: xrh_1
     - family_id: xrh_2
     - family_id: zc_dm_hash

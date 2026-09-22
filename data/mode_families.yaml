@@ -16958,29 +16958,77 @@ mode_families:
       state.
 - id: vedak_hash
   name: "Vedak Hash Function Family"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - standard_sponge
+  round_ids:
+  - vedak_p_round
   target_applications: []
+  characteristics:
+    state_size_bits: 2560
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: binary_matrix_mul
+    - id: word_permutation
+    - id: constant
   reference_ids:
   - niccs_2026_vedak_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    Vedak Hash Function Family is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Zhang Yu
+  - Zhang Yuhan
+  - Wei Shanpeng
+  - Gao Si
+  - Wu Wenling
+  year: 2026
+  underlying_primitive_ids:
+  - vedak_p_2560_40
+  influences:
+  - source_family_id: vedak_p
+    relations:
+    - used_by
+    note: All three Vedak instances iterate Vedak-p via a classic sponge.
+  notes: 'Vedak is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1),
+    "based on the Sponge construction" (Bertoni, Daemen, Peeters, Van Assche), with pad10*1 padding
+    structurally identical to Keccak/SHA-3''s. Rate *decreases* as digest length increases (512-bit digest
+    gets the largest rate) -- an inversion of the usual sponge-family pattern.'
   instances:
-  - id: vedak_hash_v1
-    name: "Vedak Hash Function Family"
+  - id: vedak_hash_512
+    name: "Vedak-512"
     type: hash
     reference_ids:
     - niccs_2026_vedak_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 2560
+      block_size_bits: 1536
+      output_size_bits: 512
+      rounds: 40
+    notes: Rate 1536, capacity 1024. Collision 2^256, preimage 2^512.
+  - id: vedak_hash_768
+    name: "Vedak-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_vedak_hash
+    characteristics:
+      state_size_bits: 2560
+      block_size_bits: 1024
+      output_size_bits: 768
+      rounds: 40
+    notes: Rate 1024, capacity 1536. Collision 2^384, preimage 2^768.
+  - id: vedak_hash_1024
+    name: "Vedak-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_vedak_hash
+    characteristics:
+      state_size_bits: 2560
+      block_size_bits: 512
+      output_size_bits: 1024
+      rounds: 40
+    notes: Rate 512, capacity 2048. Collision 2^512, preimage 2^1024.
 - id: xrh_1
   name: "XRH-1"
   construction_ids: []
