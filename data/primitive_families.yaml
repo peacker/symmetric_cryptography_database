@@ -16957,3 +16957,79 @@ primitive_families:
       block_size_bits: 1024
       output_size_bits: 1024
       rounds: 20
+- id: garnet_p
+  name: Garnet Permutation
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - garnet_p_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 2048
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+    - id: constant
+  reference_ids:
+  - niccs_2026_garnet_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - generalization_of
+    - inspired_by
+    note: '"We also generalize the original AES design methodology from bytewise to 128-bit words" (abstract);
+      SubWord applies a full keyless AES round (SubBytes/ShiftRows/MixColumns, via the AES-NI instruction
+      _mm_aesenc_si128) to each of the 16 128-bit state words in parallel -- literal reuse of AES''s round
+      function as the per-word nonlinear/diffusion step, at a coarser 128-bit-word granularity instead of
+      AES''s own 8-bit bytes.'
+  notes: 'A 2048-bit permutation (4x4 array of 128-bit words) underlying Garnet, a candidate in the NICCS 2026
+    cryptographic hash algorithm competition (Round 1). Round P = zeta.theta.rho.sigma: sigma (SubWord, an AES
+    round via AES-NI applied to each word); rho (MixColumn, a 4x4 MDS matrix T1 over GF(2^128) applied to each
+    of the 4 columns); theta (AddConstant, Fibonacci-sequence-generated constants XORed into only the last
+    column, 3 of 16 words); zeta (MixDiagonal, a second 4x4 MDS matrix T2 over a *different* GF(2^128) field
+    applied to each of the 4 diagonals -- deliberately using two distinct fields to break byte-alignment/column
+    symmetry). Round count is variant- and phase-dependent (14-16 rounds per phase; see instances).'
+  instances:
+  - id: garnet_p_2048_14
+    name: Garnet Permutation (14 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_garnet_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 2048
+      output_size_bits: 2048
+      rounds: 14
+    notes: Garnet-512's init/middle phases (P^14).
+  - id: garnet_p_2048_15
+    name: Garnet Permutation (15 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_garnet_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 2048
+      output_size_bits: 2048
+      rounds: 15
+    notes: Garnet-768's init/middle phases (P^15).
+  - id: garnet_p_2048_16
+    name: Garnet Permutation (16 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_garnet_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 2048
+      output_size_bits: 2048
+      rounds: 16
+    notes: Garnet-1024a's init/middle phases (P^16).

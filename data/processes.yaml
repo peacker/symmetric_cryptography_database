@@ -970,7 +970,7 @@ processes:
     - family_id: duet_f
     - family_id: eijen_pi
     - family_id: feilian_f
-    - family_id: garnet_hash
+    - family_id: garnet_p
     - family_id: iphe
     - family_id: juzihash
     - family_id: laurus_hash

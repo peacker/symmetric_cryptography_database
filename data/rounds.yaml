@@ -6254,4 +6254,20 @@ rounds:
         (fractional square roots of the first four primes) XORed into row 3.'
   notes: Used by FEILIAN-f. One "phase" is 4 of the 20 total rounds (R-xor then three R); the notes above
     describe one full phase.
+- id: garnet_p_round
+  name: Garnet Permutation Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: 'sigma (SubWord): a full keyless AES round (SubBytes/ShiftRows/MixColumns via AES-NI) applied to
+        each of the 16 128-bit words in parallel.'
+    - component_id: field_matrix_mul
+      note: 'rho (MixColumn): 4x4 MDS matrix T1 over GF(2^128), applied to each column.'
+    - component_id: constant
+      note: 'theta (AddConstant): Fibonacci-sequence constants XORed into the last column only.'
+    - component_id: field_matrix_mul
+      note: 'zeta (MixDiagonal): a second 4x4 MDS matrix T2 over a different GF(2^128) field, applied to
+        each diagonal.'
+  notes: Used by the Garnet Permutation.
 

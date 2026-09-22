@@ -7298,11 +7298,19 @@ references:
 - id: niccs_2026_garnet_hash
   kind: competition_submission
   title: "Garnet — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  authors:
+  - Bin Zhang
+  - Yingxin Li
+  - Zhenzhen Bao
+  - Wei Wang
+  - Rui Wang
+  - Jianhui Zhang
   year: 2026
   organization: Institute of Commercial Cryptography Standards
   venue: NICCS Cryptographic Hash Algorithms, Round 1
   url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101538925484527616.html
-  notes: "Official NICCS candidate page; the attached submission package is Garnet.zip."
+  notes: "Official NICCS candidate page; the attached submission package is Garnet.zip.
+    Local copy: references/[2026][garnet_p,garnet_hash][spec][niccs_round1_en].pdf."
 - id: niccs_2026_iphe
   kind: competition_submission
   title: "Iphe — NICCS Cryptographic Hash Algorithms Round 1 submission"
