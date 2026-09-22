@@ -979,7 +979,7 @@ processes:
     - family_id: megascon_p
     - family_id: mofang_bc
     - family_id: mozi_p
-    - family_id: neulaser
+    - family_id: neulaser_nlsr
     - family_id: pavelor
     - family_id: qilin_hash
     - family_id: quantasylva_hash

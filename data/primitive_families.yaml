@@ -17555,3 +17555,70 @@ primitive_families:
       output_size_bits: 2048
       rounds: 24
     notes: Used by MOZI-768/1024.
+- id: neulaser_nlsr
+  name: Coupled-NLSR PRNG
+  construction_ids:
+  - lfsr_nlfsr_register_network
+  round_ids:
+  - neulaser_nlsr_round
+  target_applications: []
+  characteristics:
+    components:
+    - id: nlfsr
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: constant
+  reference_ids:
+  - niccs_2026_neulaser
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: zuc
+    relations:
+    - inspired_by
+    note: '"the local update reuses ZUC-style word operations"; "The left half U and the right half V are
+      processed by two word-oriented linear transformations reused from ZUC [1]" (L1(X)=X xor rotl(X,2) xor
+      rotl(X,10) xor rotl(X,18) xor rotl(X,24); L2 similarly); "[the PRNG] inherits several conservative design
+      ideas from ZUC -- a long word-oriented register backbone, nonlinear word filtering, rotation-xor
+      diffusion, and inversion-based byte substitution."'
+  notes: 'A keyed pseudorandom number generator (not a permutation or classical compression function) underlying
+    Neulaser, a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1): mu in {3,4,5}
+    parallel 16-stage word-oriented NLSR modules over F_p (p=2^32-5), each 512 bits, seeded/keyed by a message
+    block. Per-module update combines a linear feedback term with a nonlinear word function F (reusing ZUC''s
+    L1/L2 linear layers plus an inversion-based 8-bit S-box, DU=4, nonlinearity 112, "a field polynomial and
+    affine layer different from AES, and its lookup table also different from the SM4 S-box"), cross-module
+    global confusion, and a shift-register update. Round count is not fixed: 32 blank rounds per PRNG
+    invocation, plus one state-update round per 32-bit output word needed.'
+  instances:
+  - id: neulaser_nlsr_3
+    name: Coupled-NLSR PRNG (mu=3)
+    type: block_function
+    reference_ids:
+    - niccs_2026_neulaser
+    characteristics:
+      state_size_bits: 1536
+    notes: Used by Neulaser-512.
+  - id: neulaser_nlsr_4
+    name: Coupled-NLSR PRNG (mu=4)
+    type: block_function
+    reference_ids:
+    - niccs_2026_neulaser
+    characteristics:
+      state_size_bits: 2048
+    notes: Used by Neulaser-768.
+  - id: neulaser_nlsr_5
+    name: Coupled-NLSR PRNG (mu=5)
+    type: block_function
+    reference_ids:
+    - niccs_2026_neulaser
+    characteristics:
+      state_size_bits: 2560
+    notes: Used by Neulaser-1024.

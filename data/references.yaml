@@ -7470,11 +7470,17 @@ references:
 - id: niccs_2026_neulaser
   kind: competition_submission
   title: "Neulaser — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  authors:
+  - Kexin Qiao
+  - Heng Chang
+  - Yaoling Ding
+  - Liehuang Zhu
   year: 2026
   organization: Institute of Commercial Cryptography Standards
   venue: NICCS Cryptographic Hash Algorithms, Round 1
   url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101536800629149696.html
-  notes: "Official NICCS candidate page; the attached submission package is Neulaser.zip."
+  notes: "Official NICCS candidate page; the attached submission package is Neulaser.zip.
+    Local copy (Chinese-language spec; no English version was published): references/[2026][neulaser_nlsr,neulaser][spec][niccs_round1_zh].pdf."
 - id: niccs_2026_pavelor
   kind: competition_submission
   title: "Pavelor — NICCS Cryptographic Hash Algorithms Round 1 submission"

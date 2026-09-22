@@ -16522,29 +16522,70 @@ mode_families:
     notes: Sponge. Capacity 1024, rate 1024. Arbitrary output length.
 - id: neulaser
   name: "Neulaser"
-  construction_ids: []
+  construction_ids:
+  - merkle_damgard
+  round_ids:
+  - neulaser_nlsr_round
   target_applications: []
   reference_ids:
   - niccs_2026_neulaser
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    Neulaser is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Kexin Qiao
+  - Heng Chang
+  - Yaoling Ding
+  - Liehuang Zhu
+  year: 2026
+  underlying_primitive_ids:
+  - neulaser_nlsr_3
+  - neulaser_nlsr_4
+  - neulaser_nlsr_5
+  influences:
+  - source_family_id: neulaser_nlsr
+    relations:
+    - used_by
+    note: Each padded message block seeds/keys the Coupled-NLSR PRNG; a disjoint prefix of its output stream
+      becomes the next chaining value, and (final block only) a further disjoint suffix becomes the digest.
+  notes: 'Neulaser is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Its
+    own term is a "PRNG-based iterated hash construction": rather than a fixed compression function, each
+    message block is fed as the seed/key to a full PRNG (the Coupled-NLSR primitive), and disjoint segments of
+    its output stream serve as chaining value and (on the final block) digest. The authors describe this as
+    "close to the Merkle-Damgard philosophy... in that it processes a padded message block by block and
+    maintains an explicit chaining value... a generalized MD-type construction," while also noting a partial,
+    proof-technique-only resemblance to sponge hashing that is not itself an influence ("Unlike the standard
+    sponge, the primitive interface is a PRNG oracle... rather than a public permutation"). Padding: M||1||0^z
+    ||len64(M) (prefix-free, 64-bit length field).'
   instances:
-  - id: neulaser_v1
-    name: "Neulaser"
+  - id: neulaser_512
+    name: "Neulaser-512"
     type: hash
     reference_ids:
     - niccs_2026_neulaser
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 960
+      output_size_bits: 512
+    notes: mu=3. Chaining length 576 bits.
+  - id: neulaser_768
+    name: "Neulaser-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_neulaser
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1216
+      output_size_bits: 768
+    notes: mu=4. Chaining length 832 bits.
+  - id: neulaser_1024
+    name: "Neulaser-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_neulaser
+    characteristics:
+      state_size_bits: 2560
+      block_size_bits: 1472
+      output_size_bits: 1024
+    notes: mu=5. Chaining length 1088 bits.
 - id: pavelor
   name: "Pavelor"
   construction_ids: []

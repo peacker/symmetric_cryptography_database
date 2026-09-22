@@ -18,7 +18,6 @@ from reference_pdfs import build_family_pdf_map
 
 KNOWN_MISSING = {
     # NICCS 2026 Round 1 hash submissions are published as online ZIP packages.
-    "neulaser",
     "pavelor", "qilin_hash", "quantasylva_hash", "taichi_hash",
     "thunder_hash", "uhash", "vedak_hash", "wchain_hash", "wish_hash",
     "xrh_1", "xrh_2", "zc_dm_hash", "zc_dmc_hash", "zc_edmc_hash",

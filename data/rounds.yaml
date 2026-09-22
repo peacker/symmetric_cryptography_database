@@ -6408,4 +6408,23 @@ rounds:
     - component_id: constant
       note: 8-bit round constant (hex digits of pi) XORed into one lane only.
   notes: Used by the Mozi Permutation.
+- id: neulaser_nlsr_round
+  name: Coupled-NLSR Module Update
+  kind: step
+  spec:
+    component_flow:
+    - component_id: add_mod
+      note: Linear feedback term combining fixed tapped stages of the 16-stage register, mod p=2^32-5.
+    - component_id: add_mod
+      note: 'Nonlinear word function F: A=(R0+R1) mod 2^32 on taps R0,R1.'
+    - component_id: xor
+      note: 'F: B=R2 xor R3; global cross-module confusion XORs words from other modules in, plus a
+        golden-ratio-derived round/module constant.'
+    - component_id: rotation_fixed
+      note: 'F: 64-bit rotate of A||B by 16, then the two ZUC-reused linear layers L1/L2 (each a 4-term
+        rotate-XOR) applied to the two halves.'
+    - component_id: sbox
+      note: 'F: an inversion-based 8-bit S-box applied per byte after L1/L2.'
+  notes: 'Used by the Coupled-NLSR PRNG underlying Neulaser. Not a fixed-count "round": 32 blank module
+    updates run per PRNG invocation, plus one further update per 32-bit output word needed.'
 
