@@ -16730,3 +16730,52 @@ primitive_families:
       key_size_bits: 1664
       rounds: 64
     notes: 8-word (A..H) state; rotations 18/21, 33/16, 47/20, 60/49 per round.
+- id: dragon_p
+  name: Dragon-p
+  construction_ids:
+  - arx_permutation_network
+  - fixed_rotation_arx
+  - arx_with_round_constants
+  round_ids:
+  - dragon_p_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 1600
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - niccs_2026_dragon_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: keccak
+    relations:
+    - related_to
+    note: '"Dragon-p follows a word-oriented design. Its 1600-bit state is organized as a 5x5 array of 64-bit
+      lanes... matching the state geometry of Keccak [D+15]. The main departure from Keccak lies in the
+      nonlinear layer" -- only the 5x5x64 lane geometry is shared; the round function (ARX Update, no S-box)
+      is an unrelated, from-scratch design.'
+  notes: 'A 1600-bit, 16-round ARX permutation underlying Dragon Hash Family, a candidate in the NICCS 2026
+    cryptographic hash algorithm competition (Round 1) submitted by the same Shandong University team as
+    Thunder Hash Family. Round: ι (XOR round constant RC_i=15(i+1) into lane [0][0] only) then φ=Col∘Diag
+    (the 5-word ARX Update transform -- b+=e; d=(d<<<r_d)^b; a+=d; c=(c<<<r_c)^a; e+=c; b=(b<<<r_b)^e; d+=b;
+    a=(a<<<r_a)^d; c+=a; e=(e<<<r_e)^c, rotations (1,10,24,33,49) -- applied first to the 5 cyclic diagonals,
+    then to the 5 columns). No S-box anywhere; modular addition is the only nonlinear operation. Full diffusion
+    in 2 rounds forward / 3 inverse.'
+  instances:
+  - id: dragon_p_1600_16
+    name: Dragon-p
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_dragon_hash
+    characteristics:
+      state_size_bits: 1600
+      block_size_bits: 1600
+      output_size_bits: 1600
+      rounds: 16

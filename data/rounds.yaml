@@ -6187,4 +6187,19 @@ rounds:
       note: Round constant (from pi for Octarx-256, e for Octarx-512) XORed into the branch containing the
         first state word only.
   notes: Used by both Octarx-256 and Octarx-512, differing only in word count (4 vs 8) and rotation amounts.
+- id: dragon_p_round
+  name: Dragon-p Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: constant
+      note: 'iota: RC_i = 15(i+1) XORed into lane [0][0] only.'
+    - component_id: add_mod
+      note: 'Update transform (the sole nonlinear step), applied to the 5 diagonals then the 5 columns:
+        modular addition mod 2^64 between adjacent words.'
+    - component_id: rotation_fixed
+      note: 'Update transform: fixed rotations (1,10,24,33,49) applied to words before XOR.'
+    - component_id: xor
+      note: 'Update transform: XOR of the rotated word into the next word in sequence.'
+  notes: Used by Dragon-p, the 1600-bit permutation underlying Dragon Hash Family.
 

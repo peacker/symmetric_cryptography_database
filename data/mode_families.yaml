@@ -15304,29 +15304,115 @@ mode_families:
       2^1024.
 - id: dragon_hash
   name: "Dragon Hash Family"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - dragon_p_round
   target_applications: []
+  characteristics:
+    state_size_bits: 1600
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
   reference_ids:
   - niccs_2026_dragon_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    Dragon Hash Family is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Meiqin Wang
+  - Kai Hu
+  - Zhuolong Zhang
+  - Yong Fu
+  - Yanhong Fan
+  - Lixuan Wu
+  - Shiyao Chen
+  - Jiamin Cui
+  - Qun Liu
+  - Chenhao Jia
+  - Longzheng Cui
+  - Zhongfeng Niu
+  year: 2026
+  underlying_primitive_ids:
+  - dragon_p_1600_16
+  influences:
+  - source_family_id: dragon_p
+    relations:
+    - used_by
+    note: All six Dragon instances iterate Dragon-p via the Sponge-F^{P,pd10*} feedforward sponge.
+  notes: 'Dragon Hash Family is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round
+    1), submitted by the same Shandong University team (Meiqin Wang, Kai Hu et al.) as Thunder Hash Family.
+    Its mode "instantiates our sponge-forward mode Sponge-F^{P,pd10*}" of Guo, Hu, Jiang, Fan, Fu, Preneel,
+    Wang (to appear CRYPTO 2026) -- the same feedforward_sponge construction tracked from AFS-TrEDM/CHIME --
+    with pd10* padding taken directly from Bertoni, Daemen, Peeters, Van Assche''s sponge functions paper.
+    NAME COLLISION NOTE: this 2026 hash design is unrelated to the pre-existing "dragon" family in this
+    database (Chen/Henricksen/Millan/Fuller/Simpson/Dawson/Wong''s 2005 eSTREAM stream cipher) -- different
+    design class, era, and team; no relationship, hence the "_hash" suffix on this family''s id.'
   instances:
-  - id: dragon_hash_v1
-    name: "Dragon Hash Family"
+  - id: dragon_hash_512
+    name: "Dragon-512"
     type: hash
     reference_ids:
     - niccs_2026_dragon_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1600
+      block_size_bits: 1024
+      output_size_bits: 512
+      rounds: 16
+    notes: Capacity 576, rate 1024. Preimage 512, collision 256.
+  - id: dragon_hash_768
+    name: "Dragon-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_dragon_hash
+    characteristics:
+      state_size_bits: 1600
+      block_size_bits: 768
+      output_size_bits: 768
+      rounds: 16
+    notes: Capacity 832, rate 768. Preimage 768, collision 384.
+  - id: dragon_hash_1024
+    name: "Dragon-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_dragon_hash
+    characteristics:
+      state_size_bits: 1600
+      block_size_bits: 512
+      output_size_bits: 1024
+      rounds: 16
+    notes: Capacity 1088, rate 512. Preimage 1024, collision 512.
+  - id: dragon_hash_xof_256
+    name: "Dragon-XOF-256"
+    type: xof
+    reference_ids:
+    - niccs_2026_dragon_hash
+    characteristics:
+      state_size_bits: 1600
+      block_size_bits: 1024
+      rounds: 16
+    notes: Capacity 576, rate 1024, squeeze rate 1280. Arbitrary output; min(256,v) preimage.
+  - id: dragon_hash_xof_384
+    name: "Dragon-XOF-384"
+    type: xof
+    reference_ids:
+    - niccs_2026_dragon_hash
+    characteristics:
+      state_size_bits: 1600
+      block_size_bits: 768
+      rounds: 16
+    notes: Capacity 832, rate 768, squeeze rate 1152. Arbitrary output; min(384,v) preimage.
+  - id: dragon_hash_xof_512
+    name: "Dragon-XOF-512"
+    type: xof
+    reference_ids:
+    - niccs_2026_dragon_hash
+    characteristics:
+      state_size_bits: 1600
+      block_size_bits: 512
+      rounds: 16
+    notes: Capacity 1088, rate 512, squeeze rate 1024. Arbitrary output; min(512,v) preimage.
 - id: duet_hash
   name: "Duet"
   construction_ids: []
