@@ -17270,29 +17270,70 @@ mode_families:
     notes: Capacity 1088. Arbitrary output.
 - id: wchain_hash
   name: "WChain"
-  construction_ids: []
+  construction_ids:
+  - merkle_damgard
+  round_ids:
+  - wchain_core_round
   target_applications: []
+  characteristics:
+    components:
+    - id: and
+    - id: not
+    - id: xor
+    - id: bit_permutation
+    - id: constant
   reference_ids:
   - niccs_2026_wchain_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    WChain is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Keting Jia
+  - Guoxiao Liu
+  - Qingliang Hou
+  - Zhuoqing Peng
+  - Yantian Shen
+  - Xiaoen Lin
+  - Zhengrong Lu
+  year: 2026
+  underlying_primitive_ids:
+  - wchain_core_576_18
+  - wchain_core_1152_24
+  influences:
+  - source_family_id: wchain_core
+    relations:
+    - used_by
+    note: FChain's compression function CF(V,B)=X_R xor B_hat_R xor V is a Davies-Meyer-style feedforward
+      call to the WChain permutation core.
+  notes: 'WChain is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Its
+    mode, FChain, is "designed as an enhanced Merkle-Damgard-style iteration": a two-step (order-2) feedback
+    recurrence H_i=CF(H_{i-1},M_i) xor H_{i-2}, plus a separate finalization step absorbing a checksum block
+    Sigma=M_1 xor ... xor M_l. Padding is a bare 10* rule with **no encoded length field** -- a deliberate
+    deviation from classical MD-strengthening, with weakened generic length-extension/multicollision/herding/
+    long-message-second-preimage bounds candidly derived as a consequence. The Sigma-checksum-plus-order-2-
+    feedback shape is structurally reminiscent of GOST R 34.11-2012 (Streebog)''s checksum-register
+    technique, but Streebog is never mentioned in the spec, so no influences edge is recorded for it.'
   instances:
-  - id: wchain_hash_v1
-    name: "WChain"
+  - id: wchain_hash_v1_512
+    name: "WChain Version I"
     type: hash
     reference_ids:
     - niccs_2026_wchain_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 576
+      block_size_bits: 1152
+      output_size_bits: 512
+      rounds: 18
+    notes: Block size mu=2b (twice the chaining-state width).
+  - id: wchain_hash_v2_1024
+    name: "WChain Version II"
+    type: hash
+    reference_ids:
+    - niccs_2026_wchain_hash
+    characteristics:
+      state_size_bits: 1152
+      block_size_bits: 2304
+      output_size_bits: 1024
+      rounds: 24
+    notes: Block size mu=2b (twice the chaining-state width).
 - id: wish_hash
   name: "Wish"
   construction_ids: []

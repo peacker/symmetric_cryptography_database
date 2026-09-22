@@ -6523,4 +6523,20 @@ rounds:
     - component_id: constant
       note: 'omega: 32-bit LFSR-derived round constant into the first 8 nibbles.'
   notes: Used by Vedak-p.
+- id: wchain_core_round
+  name: "WChain permutation core round"
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: constant
+      note: 'Iota_j: 16-bit constant (digits of pi-3) into all 9 lanes with lane-dependent rotation.'
+    - component_id: and
+      note: 'S ("NAND2/chi"): AND term.'
+    - component_id: not
+      note: 'S: NOT term.'
+    - component_id: xor
+      note: 'S: XOR term; L5w: XOR of 5 rotated input lanes per output lane.'
+    - component_id: bit_permutation
+      note: 'pi: fixed 9-bit wiring permutation.'
+  notes: Used by the WChain permutation core.
 

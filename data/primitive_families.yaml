@@ -18005,3 +18005,59 @@ primitive_families:
       block_size_bits: 2560
       output_size_bits: 2560
       rounds: 40
+- id: wchain_core
+  name: "WChain permutation core"
+  construction_ids:
+  - boolean_operator_network
+  round_ids:
+  - wchain_core_round
+  target_applications: []
+  characteristics:
+    components:
+    - id: and
+    - id: not
+    - id: xor
+    - id: bit_permutation
+    - id: constant
+  reference_ids:
+  - niccs_2026_wchain_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: 'An unnamed round transform ("the permutation core") underlying WChain, a candidate in the NICCS
+    2026 cryptographic hash algorithm competition (Round 1), submitted by a team overlapping Eijen. State: 9
+    lanes of 64 bits (V1, 576 bits) or 18 lanes (V2, 1152 bits, split state with a CrossSwap5 permutation and
+    asymmetric rotation tables). Round_j = L5w.pi.S.Iota_j: Iota_j (a 16-bit word from digits of pi-3,
+    injected into all 9 lanes with lane-dependent rotation); S (a self-labeled "NAND2/chi" 9-bit S-box,
+    b_i=a_i xor (NOT(a_{i+1}) AND a_{i+2}) mod 9 -- algebraically the same shape as Keccak''s chi generalized
+    from 5-bit rows to 9-bit columns, but the spec does not attribute this to Keccak anywhere, so no
+    influences edge is recorded); pi (a fixed 9-bit wiring permutation); L5w (each output lane = XOR of 5
+    rotated input lanes per an explicit table). Round constants "follow the invariant-aware design criterion
+    of Wei-Ye-Wu-Pasalic" (a technique paper, not tracked as its own family here).'
+  instances:
+  - id: wchain_core_576_18
+    name: "WChain core (V1)"
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_wchain_hash
+    characteristics:
+      state_size_bits: 576
+      block_size_bits: 576
+      output_size_bits: 576
+      rounds: 18
+    notes: Used by WChain Version I.
+  - id: wchain_core_1152_24
+    name: "WChain core (V2)"
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_wchain_hash
+    characteristics:
+      state_size_bits: 1152
+      block_size_bits: 1152
+      output_size_bits: 1152
+      rounds: 24
+    notes: Used by WChain Version II. Split (9x64)_L||(9x64)_R state, asymmetric right-half rotation table,
+      added CrossSwap5.
