@@ -18190,3 +18190,75 @@ primitive_families:
       block_size_bits: 1280
       output_size_bits: 1280
       rounds: 18
+- id: zud
+  name: "ZuD (ZC-1280/ZC-1536)"
+  construction_ids:
+  - boolean_operator_network
+  round_ids:
+  - zud_round
+  target_applications: []
+  characteristics:
+    components:
+    - id: and
+    - id: not
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - niccs_2026_zc_dm_hash
+  - niccs_2026_zc_dmc_hash
+  - niccs_2026_zc_edmc_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: xoodoo
+    relations:
+    - generalization_of
+    note: '"It is a generalization of the ''Xoodoo'' that allows for 3D structure"; "we adopt a 3D structure...
+      the theta step closely resembles that of Keccak and Xoodoo." Reference-implementation source comments
+      independently confirm this: "custom scaled-up Xoodoo-like permutation," "follows 5-step round structure
+      as Xoodoo: iota->chi->rho->theta->rho," "Round constants (derived from Xoodoo 32-bit constants,
+      zero-extended)."'
+  - source_family_id: keccak
+    relations:
+    - related_to
+    note: '"We adopt the chi mapping from the Keccak family due to its compact algebraic description and its
+      efficiency in bit-sliced implementations."'
+  notes: 'A permutation family (12 rounds, internally/in reference code named "ZuD") shared verbatim across
+    three NICCS 2026 cryptographic hash algorithm competition (Round 1) candidates by the same UCAS team
+    (Siwei Sun et al.): ZC-DM, ZC-DMC, and ZC-EDMC. Two sizes: ZC-1280 (5 planes x 4 lanes x 64 bits, 5-bit
+    columns) and ZC-1536 (3 planes x 8 lanes x 64 bits, 3-bit columns). Round p = rho.theta.rho.chi.iota: iota
+    (round constant into lane A0[0] only); chi (per-column nonlinear map y_i = x_i xor (NOT x_{i+1} AND
+    x_{i+2}), degree 2); rho (fixed per-plane lane rotations, A0 untouched); theta (column parity mixer:
+    parity plane P = XOR of all planes, effect plane E from two rotated copies of P, XORed into every plane);
+    rho again. Reference implementations use a shared internal codename "ZuD" and a relative include path
+    (lib/low/ZuD-1280/plain/ZuD1280-plain.h) implying a genuinely shared permutation library across all three
+    submissions, not just a textual description.'
+  instances:
+  - id: zud_1280_12
+    name: ZC-1280
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_zc_dm_hash
+    - niccs_2026_zc_dmc_hash
+    - niccs_2026_zc_edmc_hash
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 1280
+      output_size_bits: 1280
+      rounds: 12
+  - id: zud_1536_12
+    name: ZC-1536
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_zc_dm_hash
+    - niccs_2026_zc_dmc_hash
+    - niccs_2026_zc_edmc_hash
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 1536
+      output_size_bits: 1536
+      rounds: 12

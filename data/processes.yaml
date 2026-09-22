@@ -987,9 +987,7 @@ processes:
     - family_id: chime_p
     - family_id: vedak_p
     - family_id: xrh_p
-    - family_id: zc_dm_hash
-    - family_id: zc_dmc_hash
-    - family_id: zc_edmc_hash
+    - family_id: zud
     - family_id: thunder_p
     - family_id: wchain_core
     - family_id: wish_p_tau

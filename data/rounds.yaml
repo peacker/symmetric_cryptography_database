@@ -6576,4 +6576,21 @@ rounds:
     - component_id: constant
       note: 64-bit round constant (from pi) XORed into row 0.
   notes: Used by XRH-p.
+- id: zud_round
+  name: ZuD Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: constant
+      note: 'iota: round constant into lane A0[0] only.'
+    - component_id: and
+      note: 'chi: AND term, y_i=x_i xor (NOT x_{i+1} AND x_{i+2}), per column.'
+    - component_id: not
+      note: 'chi: NOT term.'
+    - component_id: xor
+      note: 'chi: XOR term; theta: parity-plane XOR of all planes, folded via two rotated copies into every
+        plane.'
+    - component_id: rotation_fixed
+      note: 'rho (applied twice per round): fixed per-plane lane rotations, A0 untouched.'
+  notes: Used by ZuD (ZC-1280/ZC-1536).
 

@@ -17194,79 +17194,314 @@ mode_families:
     notes: Rate 192, capacity 1088.
 - id: zc_dm_hash
   name: "ZC-DM"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - zud_round
   target_applications: []
   reference_ids:
   - niccs_2026_zc_dm_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    ZC-DM is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Siwei Sun
+  - Shun Li
+  - Zhiyu Zhang
+  - Fangyu Zheng
+  - Guozhen Liu
+  - Yong Liu
+  - Jianhua Wang
+  - Zhen Qin
+  - Ruixi Lv
+  year: 2026
+  underlying_primitive_ids:
+  - zud_1280_12
+  - zud_1536_12
+  influences:
+  - source_family_id: zud
+    relations:
+    - used_by
+    note: ZC-DM absorbs via a full-state Davies-Meyer feedforward, F(x)=f(x) xor x, over ZuD.
+  notes: 'ZC-DM is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1), sharing
+    the ZuD permutation with sibling candidates ZC-DMC and ZC-EDMC (same UCAS submitter team). Mode is
+    "based on the SPONGE-DM mode introduced in [1], to appear in IACR CRYPTO 2026" (Sun, Li, Zhang, Lefevre,
+    Mennink, Qin, Feng, ePrint 2025/963); the Davies-Meyer feedforward itself is explicitly "the Davies-Meyer
+    construction [5]" citing Matyas 1985. Padding: "01" suffix then multi-rate pad10*1. Six named instances
+    cross ZC-1280/ZC-1536 with n in {512,768,1024}, capacity c=n+64.'
   instances:
-  - id: zc_dm_hash_v1
-    name: "ZC-DM"
+  - id: zc_dm_hash_1280_512
+    name: "ZC-1280-DM[576,512]"
     type: hash
     reference_ids:
     - niccs_2026_zc_dm_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 704
+      output_size_bits: 512
+      rounds: 12
+    notes: Capacity 576, rate 704.
+  - id: zc_dm_hash_1536_512
+    name: "ZC-1536-DM[576,512]"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dm_hash
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 960
+      output_size_bits: 512
+      rounds: 12
+    notes: Capacity 576, rate 960.
+  - id: zc_dm_hash_1280_768
+    name: "ZC-1280-DM[832,768]"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dm_hash
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 448
+      output_size_bits: 768
+      rounds: 12
+    notes: Capacity 832, rate 448.
+  - id: zc_dm_hash_1536_768
+    name: "ZC-1536-DM[832,768]"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dm_hash
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 704
+      output_size_bits: 768
+      rounds: 12
+    notes: Capacity 832, rate 704.
+  - id: zc_dm_hash_1280_1024
+    name: "ZC-1280-DM[1088,1024]"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dm_hash
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 192
+      output_size_bits: 1024
+      rounds: 12
+    notes: Capacity 1088, rate 192.
+  - id: zc_dm_hash_1536_1024
+    name: "ZC-1536-DM[1088,1024]"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dm_hash
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 448
+      output_size_bits: 1024
+      rounds: 12
+    notes: Capacity 1088, rate 448.
 - id: zc_dmc_hash
   name: "ZC-DMC"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - zud_round
   target_applications: []
   reference_ids:
   - niccs_2026_zc_dmc_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    ZC-DMC is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Siwei Sun
+  - Shun Li
+  - Zhiyu Zhang
+  - Fangyu Zheng
+  - Guozhen Liu
+  - Yong Liu
+  - Jianhua Wang
+  - Zhen Qin
+  - Ruixi Lv
+  year: 2026
+  underlying_primitive_ids:
+  - zud_1280_12
+  - zud_1536_12
+  influences:
+  - source_family_id: zud
+    relations:
+    - used_by
+    note: ZC-DMC absorbs via a Davies-Meyer feedforward restricted to the capacity, F(x)=f(x) xor
+      (0^r||floor(x)^c) -- "a reduced feed-forward variant" relative to ZC-DM's full-state feedforward.
+  notes: 'ZC-DMC is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1), sharing
+    the ZuD permutation with sibling candidates ZC-DM and ZC-EDMC (same UCAS submitter team). Mode is "based
+    on the SPONGE-DM^c mode introduced in [1], to appear in IACR CRYPTO 2026" (the same ePrint 2025/963
+    paper). Reference-implementation directory naming (ZC-DMC-1280-1024, etc.) and pseudocode both label the
+    permutation "ZuD-1280"/"ZuD-1536" even though the running spec text says "ZC-1280"/"ZC-1536" --
+    confirming this is the shared internal codename.'
   instances:
-  - id: zc_dmc_hash_v1
-    name: "ZC-DMC"
+  - id: zc_dmc_hash_1280_512
+    name: "ZC-1280-DM^c[576,512,64]"
     type: hash
     reference_ids:
     - niccs_2026_zc_dmc_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1280
+      output_size_bits: 512
+      rounds: 12
+    notes: Capacity 576. Standard squeeze rate r'=64.
+  - id: zc_dmc_hash_1536_512
+    name: "ZC-1536-DM^c[576,512,64]"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dmc_hash
+    characteristics:
+      state_size_bits: 1536
+      output_size_bits: 512
+      rounds: 12
+    notes: Capacity 576. Standard squeeze rate r'=64.
+  - id: zc_dmc_hash_1280_768
+    name: "ZC-1280-DM^c[832,768,64]"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dmc_hash
+    characteristics:
+      state_size_bits: 1280
+      output_size_bits: 768
+      rounds: 12
+    notes: Capacity 832. Standard squeeze rate r'=64.
+  - id: zc_dmc_hash_1536_768
+    name: "ZC-1536-DM^c[832,768,64]"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dmc_hash
+    characteristics:
+      state_size_bits: 1536
+      output_size_bits: 768
+      rounds: 12
+    notes: Capacity 832. Standard squeeze rate r'=64.
+  - id: zc_dmc_hash_1280_1024
+    name: "ZC-1280-DM^c[1088,1024,64]"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dmc_hash
+    characteristics:
+      state_size_bits: 1280
+      output_size_bits: 1024
+      rounds: 12
+    notes: Capacity 1088. Standard squeeze rate r'=64.
+  - id: zc_dmc_hash_1536_1024
+    name: "ZC-1536-DM^c[1088,1024,64]"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dmc_hash
+    characteristics:
+      state_size_bits: 1536
+      output_size_bits: 1024
+      rounds: 12
+    notes: Capacity 1088. Standard squeeze rate r'=64.
 - id: zc_edmc_hash
   name: "ZC-EDMC"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - zud_round
   target_applications: []
   reference_ids:
   - niccs_2026_zc_edmc_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    ZC-EDMC is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Siwei Sun
+  - Shun Li
+  - Zhiyu Zhang
+  - Fangyu Zheng
+  - Guozhen Liu
+  - Yong Liu
+  - Jianhua Wang
+  - Zhen Qin
+  - Ruixi Lv
+  year: 2026
+  underlying_primitive_ids:
+  - zud_1280_12
+  - zud_1536_12
+  influences:
+  - source_family_id: zud
+    relations:
+    - used_by
+    note: ZC-EDMC splits ZuD into two 6-round halves g,h and absorbs via F(X)=h(g(X) xor (0^r||X_c)), an
+      "Encrypted Davies-Meyer" transform with full (a=c) capacity feed-forward.
+  - source_family_id: xrh_p
+    relations:
+    - related_to
+    note: ZC-EDMC's EDM absorption is the same construction as XRH-1's SPONGE-EDM^c (same paper, same
+      submitter team), applied to the ZuD permutation instead of XRH-p.
+  notes: 'ZC-EDMC is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1),
+    sharing the ZuD permutation with sibling candidates ZC-DM and ZC-DMC (same UCAS submitter team). Mode is
+    "based on the SPONGE-EDM^a mode introduced in [1]" (the same ePrint 2025/963 paper), specialized to a=c
+    ("EDM^c"); the absorption transform is explicitly "the Encrypted Davies-Meyer construction [5]," citing
+    Cogliati and Seurin''s EWCDM (CRYPTO 2016) -- a MAC construction, not a PGV/double-block-length cipher
+    mode. Section 5.1.3 of the spec describes a plain-DM absorption mode ZC-EDMC itself does not use, reading
+    as boilerplate shared across the ZC-DM/ZC-DMC/ZC-EDMC trio''s draft documents.'
   instances:
-  - id: zc_edmc_hash_v1
-    name: "ZC-EDMC"
+  - id: zc_edmc_hash_1280_512
+    name: "ZC-EDMC-1280-512"
     type: hash
     reference_ids:
     - niccs_2026_zc_edmc_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 704
+      output_size_bits: 512
+      rounds: 12
+    notes: Capacity 576, rate/squeeze-rate 704.
+  - id: zc_edmc_hash_1536_512
+    name: "ZC-EDMC-1536-512"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_edmc_hash
+    characteristics:
+      state_size_bits: 1536
+      output_size_bits: 512
+      rounds: 12
+    notes: Capacity 576.
+  - id: zc_edmc_hash_1280_768
+    name: "ZC-EDMC-1280-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_edmc_hash
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 448
+      output_size_bits: 768
+      rounds: 12
+    notes: Capacity 832, rate/squeeze-rate 448.
+  - id: zc_edmc_hash_1536_768
+    name: "ZC-EDMC-1536-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_edmc_hash
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 704
+      output_size_bits: 768
+      rounds: 12
+    notes: Capacity 832, rate/squeeze-rate 704.
+  - id: zc_edmc_hash_1280_1024
+    name: "ZC-EDMC-1280-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_edmc_hash
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 192
+      output_size_bits: 1024
+      rounds: 12
+    notes: Capacity 1088, rate/squeeze-rate 192.
+  - id: zc_edmc_hash_1536_1024
+    name: "ZC-EDMC-1536-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_edmc_hash
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 448
+      output_size_bits: 1024
+      rounds: 12
+    notes: Capacity 1088, rate/squeeze-rate 448.
 - id: thunder_hash
   name: "Thunder Hash Family"
   construction_ids:
