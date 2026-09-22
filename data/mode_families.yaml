@@ -17336,26 +17336,70 @@ mode_families:
     notes: Block size mu=2b (twice the chaining-state width).
 - id: wish_hash
   name: "Wish"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - wish_p_tau_round
   target_applications: []
+  characteristics:
+    tweak_size_bits: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+    - id: bit_permutation
+    - id: constant
   reference_ids:
   - niccs_2026_wish_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    Wish is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Shiyao Chen
+  - Wenjie Nan
+  - Meiqin Wang
+  - Tianyu Zhang
+  year: 2026
+  underlying_primitive_ids:
+  - wish_p_tau_1024_9
+  - wish_p_tau_2048_12
+  influences:
+  - source_family_id: wish_p_tau
+    relations:
+    - used_by
+    note: Wish instantiates the Sponge-F mode by Guo et al. [GHJ+25] over Wish-P-tau, using the tweak input
+      (a per-block counter) for domain separation instead of the usual capacity tax, so the rate need not
+      shrink.
+  notes: 'Wish is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1),
+    submitted by a team overlapping Dragon Hash Family/Thunder Hash Family (Meiqin Wang). Its mode is a
+    tweaked variant of Sponge-F (feedforward_sponge): r=c=h=n/2 for both instances, with a block counter
+    tau_i=enc64(i)||0^64 fed as the permutation''s public tweak for domain separation between absorption
+    positions, specifically engineered to avoid Sponge-F''s usual +64-bit capacity tax for second-preimage
+    security. A domain-separation constant theta=0^(c-1)1 (not the usual 0^c) is XORed into the capacity on
+    the final block.'
   instances:
-  - id: wish_hash_v1
-    name: "Wish"
+  - id: wish_hash_512
+    name: "Wish-512"
     type: hash
     reference_ids:
     - niccs_2026_wish_hash
-    characteristics: {}
+    characteristics:
+      tweak_size_bits: 128
+      state_size_bits: 1024
+      block_size_bits: 512
+      output_size_bits: 512
+      rounds: 18
+    notes: n=1024, 8 lanes, r=c=h=512.
+  - id: wish_hash_1024
+    name: "Wish-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_wish_hash
+    characteristics:
+      tweak_size_bits: 128
+      state_size_bits: 2048
+      block_size_bits: 1024
+      output_size_bits: 1024
+      rounds: 24
+    notes: n=2048, 16 lanes, r=c=h=1024.

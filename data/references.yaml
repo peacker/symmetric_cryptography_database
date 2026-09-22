@@ -7650,8 +7650,14 @@ references:
 - id: niccs_2026_wish_hash
   kind: competition_submission
   title: "Wish — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  authors:
+  - Shiyao Chen
+  - Wenjie Nan
+  - Meiqin Wang
+  - Tianyu Zhang
   year: 2026
   organization: Institute of Commercial Cryptography Standards
   venue: NICCS Cryptographic Hash Algorithms, Round 1
   url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101533368094642176.html
-  notes: "Official NICCS candidate page; the attached submission package is Wish.zip."
+  notes: "Official NICCS candidate page; the attached submission package is Wish.zip.
+    Local copy: references/[2026][wish_p_tau,wish_hash][spec][niccs_round1_en].pdf."

@@ -6539,4 +6539,21 @@ rounds:
     - component_id: bit_permutation
       note: 'pi: fixed 9-bit wiring permutation.'
   notes: Used by the WChain permutation core.
+- id: wish_p_tau_round
+  name: "Wish-P-tau Step"
+  kind: step
+  spec:
+    component_flow:
+    - component_id: constant
+      note: 'AddTweak: XOR a 128-bit tweak into lane L_{l/2}.'
+    - component_id: sbox
+      note: 'AESR (applied twice per Step): AES SubBytes on every lane in parallel.'
+    - component_id: field_matrix_mul
+      note: 'AESR: AES MixColumns.'
+    - component_id: bit_permutation
+      note: 'AESR: AES ShiftRows; Mix: Cooley-Tukey FFT butterfly of pairwise lane interleaves.'
+    - component_id: constant
+      note: 'AddConsts (applied twice per Step): LFSR-derived round constant (Skinny/Deoxys-style) into
+        lane L0 only.'
+  notes: Used by Wish-P-tau.
 

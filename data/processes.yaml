@@ -993,4 +993,4 @@ processes:
     - family_id: zc_edmc_hash
     - family_id: thunder_p
     - family_id: wchain_core
-    - family_id: wish_hash
+    - family_id: wish_p_tau

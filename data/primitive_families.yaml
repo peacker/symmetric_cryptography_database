@@ -18061,3 +18061,83 @@ primitive_families:
       rounds: 24
     notes: Used by WChain Version II. Split (9x64)_L||(9x64)_R state, asymmetric right-half rotation table,
       added CrossSwap5.
+- id: wish_p_tau
+  name: "Wish-P-tau"
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - wish_p_tau_round
+  target_applications: []
+  characteristics:
+    tweak_size_bits: 128
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+    - id: bit_permutation
+    - id: constant
+  reference_ids:
+  - niccs_2026_wish_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - inspired_by
+    note: '"We let AESR := MixColumns.ShiftRows.SubBytes denote one key-less AES round function" -- AES''s
+      round transformation is reused verbatim as the local per-lane nonlinear/diffusion unit, applied twice
+      per Step across all lanes in parallel.'
+  - source_family_id: skinny
+    relations:
+    - inspired_by
+    note: 'The round-constant LFSR "operates independently on each byte... it is defined as in Skinny
+      [BJK+16] and Deoxys [JNPS16]" -- the exact same constant-update LFSR is reused.'
+  - source_family_id: deoxys
+    relations:
+    - inspired_by
+    note: 'The round-constant LFSR "operates independently on each byte... it is defined as in Skinny
+      [BJK+16] and Deoxys [JNPS16]" -- the exact same constant-update LFSR is reused.'
+  notes: 'A tweakable, AES-round-based permutation family underlying Wish, a candidate in the NICCS 2026
+    cryptographic hash algorithm competition (Round 1), submitted by a team overlapping Dragon Hash Family/
+    Thunder Hash Family (Meiqin Wang). State: 1024 bits (Wish-512, 8 AES-standard 4x4-byte lanes) or 2048
+    bits (Wish-1024, 16 lanes). Step^j: AddTweak (XOR a 128-bit tweak into lane L_{l/2}); AESR (a keyless AES
+    round applied to every lane in parallel); AddConsts (XOR a round constant into lane L0 only); AESR again;
+    AddConsts again; Mix (a state-wide byte permutation for cross-lane diffusion, structured as a radix-2
+    Cooley-Tukey FFT butterfly of pairwise interleave operations -- a signal-processing algorithm, not a
+    prior cipher design, so not recorded as an influences edge). No key schedule/AddRoundKey at all -- a
+    keyless permutation family, not a block cipher. Modeled with type unkeyed_permutation despite taking a
+    public tweak, since primitive_types.yaml currently has no "tweakable, unkeyed, bijective" type (only the
+    keyed tweakable_block_cipher/tweakable_block_function pair) -- tweak_size_bits is recorded on the
+    characteristics regardless.'
+  instances:
+  - id: wish_p_tau_1024_9
+    name: "Wish-P-tau (l=8, t=9)"
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_wish_hash
+    characteristics:
+      tweak_size_bits: 128
+      state_size_bits: 1024
+      block_size_bits: 1024
+      output_size_bits: 1024
+      rounds: 18
+    notes: 9 steps = 18 AES rounds. Used by Wish-512.
+  - id: wish_p_tau_2048_12
+    name: "Wish-P-tau (l=16, t=12)"
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_wish_hash
+    characteristics:
+      tweak_size_bits: 128
+      state_size_bits: 2048
+      block_size_bits: 2048
+      output_size_bits: 2048
+      rounds: 24
+    notes: 12 steps = 24 AES rounds. Used by Wish-1024.
