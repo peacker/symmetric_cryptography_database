@@ -538,6 +538,37 @@ mode_constructions:
     digest from a bounded input rather than an unbounded keystream from a fixed key/nonce.
 
     '
+- id: block_cipher_based_hash
+  name: Block-Cipher-Based Hash Construction
+  typical_primitive_types:
+  - hash
+  placeholder_family_names:
+  - uHash
+  notes: 'Level-1 root: a hash construction whose iteration mechanism is built directly by invoking an underlying
+    block cipher as a black box (generalizing the PGV/Davies-Meyer feedforward pattern to hashing), rather than
+    absorbing into a dedicated permutation''s state (sponge_construction) or chaining a dedicated compression
+    function (merkle_damgard). Distinguished from the primitive-tier davies_meyer/pgv leaves, which classify a
+    single-call compression function AS the primitive itself when no independent block-cipher family exists
+    separately from it; here the block cipher is an independently defined primitive-tier family, and the
+    iteration/feedforward wrapping it is the mode-tier construction. Families are tagged with a leaf below.
+
+    '
+- id: counter_bdm
+  name: Counter-bDM
+  special_case_of: block_cipher_based_hash
+  typical_primitive_types:
+  - hash
+  placeholder_family_names:
+  - uHash
+  notes: 'Abed, Forler, List, Lucks, and Wenzel''s multi-branch generalization of Davies-Meyer (AFRICACRYPT 2014):
+    each iteration runs b parallel calls of a block cipher with fixed key length 4n bits (where n is the block
+    size), splitting the chaining value into b sub-branches and feeding the message into the block-cipher key
+    rather than its plaintext input, with counter-differentiated per-branch plaintexts (Counter-2DM/3DM/4DM for
+    b=2/3/4) providing domain separation between branches; output feeds forward via XOR against the chaining
+    value, as in ordinary Davies-Meyer. uHash uses a variant fixing b in {2,3,4} against one shared 1024-bit-key
+    block cipher (uBlock-1024) across its three digest-size variants.
+
+    '
 - id: native_keystream_generator
   name: Native Keystream Generator
   notes: A stream cipher whose keystream is produced directly by its own internal state-update generator, with no separable

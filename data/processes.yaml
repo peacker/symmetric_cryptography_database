@@ -964,7 +964,7 @@ processes:
     - family_id: axis_hash
     - family_id: c_engine
     - family_id: champ_hash
-    - family_id: uhash
+    - family_id: ublock_1024
     - family_id: octarx
     - family_id: dragon_p
     - family_id: duet_f

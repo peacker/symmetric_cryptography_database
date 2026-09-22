@@ -11122,6 +11122,60 @@ primitive_families:
       key_size_bits: 256
       rounds: 24
       output_size_bits: 256
+- id: ublock_1024
+  name: uBlock-1024
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - px_structure
+  round_ids:
+  - ublock_1024_round
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    state_size_bits: 256
+    components:
+    - id: sbox
+    - id: xor
+    - id: rotation_fixed
+    - id: word_permutation
+    - id: constant
+  reference_ids:
+  - niccs_2026_uhash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: ublock
+    relations:
+    - variant_of
+    note: '"The underlying block cipher uBlock-1024 is a variant of block cipher uBlock [uBlock-256] with 256-bit
+      block and 1024-bit key"; "uBlock-1024 retains the main design features of uBlock-256, while performing
+      targeted optimizations on the S-box, permutations (byte-wise to nibble-wise), and key schedule"; "the
+      linear transformation of the diffusion layer adopts the optimal binary matrix of uBlock-256."'
+  notes: 'uBlock-1024 is the 256-bit-block, 1024-bit-key block cipher underlying uHash (NICCS 2026 Round 1). State
+    X0||X1 (128 bits each); 52 rounds. Each round applies a 32x4-bit S-box layer (S32, no fixed points, differential/
+    linear probability 2^-2, algebraic degree 3) to X0 and X1 independently, then an internal Feistel-like mixing
+    network (X1^=X0; X0^=rot32(X1,4); X1^=rot32(X0,8); X0^=rot32(X1,8); X1^=rot32(X0,20); X0^=X1), then fixed
+    nibble-wise PX-structure permutations PL/PR applied to X0/X1 respectively. Key schedule: the 1024-bit key
+    splits into 8x128-bit words used directly as the first 4 round-key pairs, then extended via a Feistel-like
+    update network (permutations f,g plus 32-bit LFSR-derived round constants) over 12 stages to cover all 52
+    rounds. Always used at fixed 1024-bit key length across all three uHash digest-size variants (a deliberate
+    implementation-reuse choice, not parameterized by output size).'
+  instances:
+  - id: ublock_1024_256_1024
+    name: uBlock-1024
+    type: block_cipher
+    reference_ids:
+    - niccs_2026_uhash
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 1024
+      rounds: 52
+      output_size_bits: 256
 - id: wage
   name: WAGE
   construction_ids:

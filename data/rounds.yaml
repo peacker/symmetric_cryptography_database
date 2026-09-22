@@ -3731,6 +3731,22 @@ rounds:
     component_flow:
     - component_id: xor
   notes: Generic placeholder round entry pending full parameter extraction.
+- id: ublock_1024_round
+  name: uBlock-1024 round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: 32 parallel 4-bit S-boxes (S32) applied independently to X0 and X1.
+    - component_id: xor
+      note: Internal Feistel-like mixing of the two 128-bit halves (X1^=X0, X0^=rot(X1), X1^=rot(X0), X0^=rot(X1),
+        X1^=rot(X0), X0^=X1).
+    - component_id: rotation_fixed
+      note: Fixed 32-bit rotations (by 4/8/8/20) interleaved with the mixing XORs above.
+    - component_id: word_permutation
+      note: PX-structure fixed nibble-wise permutations PL/PR applied to X0/X1 respectively.
+  notes: uBlock-1024 round; a variant of the uBlock round with nibble-wise (rather than byte-wise) permutations
+    and an added two-branch mixing network absent from the original uBlock round.
 - id: ublock_round
   name: uBlock round
   kind: full_round
