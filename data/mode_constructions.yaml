@@ -13,6 +13,21 @@ mode_constructions:
     while carrying a chaining value, with strengthening padding encoding the message length.
 
     '
+- id: haifa
+  name: HAIFA (HAsh Iterative FrAmework)
+  abbreviation: HAIFA
+  special_case_of: merkle_damgard
+  typical_primitive_types:
+  - hash_function
+  placeholder_family_names:
+  - FEILIAN
+  notes: 'Biham and Dunkelman''s Merkle-Damgard variant (2006): each compression call additionally takes a bit counter
+    (running total of message bits processed so far) and an optional salt, both mixed into the round/constant-injection
+    schedule alongside the chaining value and message block -- closing the generic multicollision and long-message
+    second-preimage attacks that apply to plain Merkle-Damgard by making every call''s behavior depend on its position
+    in the message, not just its chaining-value input.
+
+    '
 - id: array_folding_iterated_hash
   name: Array-Folding Iterated Hash
   special_case_of: merkle_damgard

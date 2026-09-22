@@ -15585,29 +15585,76 @@ mode_families:
     notes: Capacity 1088, rate 960.
 - id: feilian
   name: "FEILIAN"
-  construction_ids: []
+  construction_ids:
+  - merkle_damgard
+  - haifa
+  round_ids:
+  - feilian_f_round
   target_applications: []
+  characteristics:
+    tweak_size_bits: 256
+    state_size_bits: 1024
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
   reference_ids:
   - niccs_2026_feilian
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    FEILIAN is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Lei Wang
+  - Ling Song
+  - Yaobin Shen
+  - Kaixuan Wang
+  - Zicheng Shi
+  - Xin Yi
+  year: 2026
+  underlying_primitive_ids:
+  - feilian_f_1024_20
+  influences:
+  - source_family_id: feilian_f
+    relations:
+    - used_by
+    note: FEILIAN's compression function is a Davies-Meyer feedforward call to FEILIAN-f (h' = v0_initial xor
+      v5_final).
+  notes: 'FEILIAN is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Its
+    mode "employs a customized HAIFA variant" ("FEILIAN employs a customized HAIFA variant," p.19) without a
+    salt, using only a 128-bit position counter and a final-block flag (both fed via the tweak input) in place
+    of a length field -- the spec frames this as invalidating Kelsey-Schneier expandable-message and Joux
+    multicollision-based second-preimage/herding attacks, since no padding-position ambiguity exists.
+    Compression is Davies-Meyer over FEILIAN-f.'
   instances:
-  - id: feilian_v1
-    name: "FEILIAN"
+  - id: feilian_512
+    name: "FEILIAN-512"
     type: hash
     reference_ids:
     - niccs_2026_feilian
-    characteristics: {}
+    characteristics:
+      tweak_size_bits: 256
+      state_size_bits: 1024
+      output_size_bits: 512
+      rounds: 20
+  - id: feilian_768
+    name: "FEILIAN-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_feilian
+    characteristics:
+      tweak_size_bits: 256
+      state_size_bits: 1024
+      output_size_bits: 768
+      rounds: 20
+  - id: feilian_1024
+    name: "FEILIAN-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_feilian
+    characteristics:
+      tweak_size_bits: 256
+      state_size_bits: 1024
+      output_size_bits: 1024
+      rounds: 20
 - id: garnet_hash
   name: "Garnet"
   construction_ids: []

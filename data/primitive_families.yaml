@@ -16886,3 +16886,74 @@ primitive_families:
       block_size_bits: 2048
       output_size_bits: 2048
       rounds: 16
+- id: feilian_f
+  name: FEILIAN-f
+  construction_ids:
+  - even_mansour
+  - spn
+  - full_sbox_layer
+  round_ids:
+  - feilian_f_round
+  target_applications: []
+  characteristics:
+    tweak_size_bits: 256
+    state_size_bits: 1024
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - niccs_2026_feilian
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - inspired_by
+    note: &feilian_blanket_ack 'A single blanket acknowledgment covers this and four sibling designs (plus SM3,
+      not tracked as its own family here): "We thank the designers of existing hash functions and symmetric-key
+      primitives more generally, in particular SHA-2, BLAKE, KECCACK, SM3, AES and Chacha, which inspired the
+      design of FEILIAN hash family. In a high-level view, we did not reinvent the mode or the structural
+      components." No per-component attribution is given (which specific element came from which design), so
+      this is recorded generically rather than as independently-justified edges.'
+  - source_family_id: sha2
+    relations:
+    - inspired_by
+    note: *feilian_blanket_ack
+  - source_family_id: blake
+    relations:
+    - inspired_by
+    note: *feilian_blanket_ack
+  - source_family_id: keccak
+    relations:
+    - inspired_by
+    note: *feilian_blanket_ack
+  - source_family_id: chacha
+    relations:
+    - inspired_by
+    note: *feilian_blanket_ack
+  notes: 'A tweakable, 1024-bit, 20-round "single-key Even-Mansour structure" underlying FEILIAN, a candidate
+    in the NICCS 2026 cryptographic hash algorithm competition (Round 1). State is a 4x4 matrix of 64-bit
+    words. Each "phase" (4 rounds) applies SubColumn (SC, tightly-coupled tweakable ARX S-boxes S0~/S1~ --
+    each feeds the other''s just-updated accumulator as its own tweak input, so they are not independent),
+    ShiftRow (SR, row i cyclically shifted left by i -- the same shape/naming as AES ShiftRows, though the
+    spec never explicitly attributes this specific choice to AES beyond the blanket acknowledgment above),
+    and AddConstant (AC, XORs the 256-bit tweak into row 1 and rotated fixed constants into row 3). One
+    message-absorbing round R-xor per phase additionally XORs message words into rows 0/2 before/after the
+    first SubColumn/ShiftRow pass.'
+  instances:
+  - id: feilian_f_1024_20
+    name: FEILIAN-f
+    type: tweakable_block_function
+    reference_ids:
+    - niccs_2026_feilian
+    characteristics:
+      tweak_size_bits: 256
+      state_size_bits: 1024
+      block_size_bits: 1024
+      output_size_bits: 1024
+      rounds: 20

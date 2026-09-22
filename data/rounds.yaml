@@ -6235,4 +6235,23 @@ rounds:
     - component_id: word_permutation
       note: 'PosPerm: fixed 32-word position permutation, applied both before and after AMix4.'
   notes: Used by Pi, the 2048-bit permutation underlying Eijen.
+- id: feilian_f_round
+  name: FEILIAN-f Phase (4 rounds)
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+      note: Message words XORed into rows 0/2 at the start of a message-absorbing phase.
+    - component_id: add_mod
+      note: 'SubColumn: modular additions inside the tweakable ARX S-boxes S0~/S1~.'
+    - component_id: rotation_fixed
+      note: 'SubColumn: fixed rotations inside S0~/S1~; each S-box feeds the other''s just-updated
+        accumulator as its own tweak input.'
+    - component_id: word_permutation
+      note: 'ShiftRow: row i cyclically left-shifted by i positions (AES-ShiftRows-shaped wiring).'
+    - component_id: constant
+      note: 'AddConstant: 256-bit tweak (version, flag, counter) XORed into row 1; fixed constants
+        (fractional square roots of the first four primes) XORed into row 3.'
+  notes: Used by FEILIAN-f. One "phase" is 4 of the 20 total rounds (R-xor then three R); the notes above
+    describe one full phase.
 
