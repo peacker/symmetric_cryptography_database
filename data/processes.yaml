@@ -973,8 +973,7 @@ processes:
     - family_id: garnet_p
     - family_id: iphe_f
     - family_id: juzihash_p
-    - family_id: laurus_hash
-    - family_id: litchi
+    - family_id: xingtang_p
     - family_id: llh
     - family_id: mastercube
     - family_id: megascon_hash

@@ -15875,54 +15875,173 @@ mode_families:
     notes: Bespoke full-state Davies-Meyer-like feedforward mode (not sponge).
 - id: laurus_hash
   name: "Laurus"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  round_ids:
+  - xingtang_p_round
   target_applications: []
+  characteristics:
+    state_size_bits: 1600
+    components:
+    - id: and
+    - id: xor
+    - id: rotation_fixed
+    - id: word_permutation
+    - id: constant
   reference_ids:
   - niccs_2026_laurus_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    Laurus is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Wenyi Jia
+  - Changlun Li
+  - Yupeng Liu
+  - Honggang Hu
+  - Liang Bai
+  - Yitong Liu
+  - Ye Peng
+  - Jiali Wu
+  year: 2026
+  underlying_primitive_ids:
+  - xingtang_p_1600_16
+  influences:
+  - source_family_id: xingtang_p
+    relations:
+    - used_by
+    note: All Laurus instances iterate the shared permutation P (also used, with a different mode, by Litchi).
+  notes: 'Laurus is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1),
+    submitted by the same Xingtang Telecommunications team as Litchi -- the two share the identical
+    permutation P (xingtang_p) but wrap it in different modes. Laurus''s own mode is "a variant of the VFB
+    structure [LLHL26]" (Li, Li, Hu, Liu, "Indifferentiability of the sponge hash family," ToSC 2026 --
+    Laurus co-designers Changlun Li and Honggang Hu are co-authors of that paper, so this is direct
+    shared-authorship lineage; not tracked as its own family here), additionally "drawing on the design
+    philosophy of the FWP structure" of Nandi and Paul ("an additional state is introduced to enhance security
+    without increasing the state size... the random function used in FWP is replaced by a random permutation"):
+    an extra internal state (via g0/g1 functions) is maintained alongside the sponge state, and squeezing is
+    parallel (each output block computed independently via a distinct counter) rather than sequential.'
   instances:
-  - id: laurus_hash_v1
-    name: "Laurus"
+  - id: laurus_hash_512
+    name: "Laurus-512"
     type: hash
     reference_ids:
     - niccs_2026_laurus_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1600
+      output_size_bits: 512
+      rounds: 16
+    notes: Capacity 512.
+  - id: laurus_hash_768
+    name: "Laurus-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_laurus_hash
+    characteristics:
+      state_size_bits: 1600
+      output_size_bits: 768
+      rounds: 16
+    notes: Capacity 768.
+  - id: laurus_hash_1024
+    name: "Laurus-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_laurus_hash
+    characteristics:
+      state_size_bits: 1600
+      output_size_bits: 1024
+      rounds: 16
+    notes: Capacity 1024.
+  - id: laurus_hash_xof
+    name: "Laurus-XOF"
+    type: xof
+    reference_ids:
+    - niccs_2026_laurus_hash
+    characteristics:
+      state_size_bits: 1600
+      rounds: 16
+    notes: Capacity 512, domain-separated from the fixed-digest instances via a function-id bit in the
+      initial state. Arbitrary output length.
 - id: litchi
   name: "Litchi"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - xingtang_p_round
   target_applications: []
+  characteristics:
+    state_size_bits: 1600
+    components:
+    - id: and
+    - id: xor
+    - id: rotation_fixed
+    - id: word_permutation
+    - id: constant
   reference_ids:
   - niccs_2026_litchi
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    Litchi is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Wenyi Jia
+  - Yupeng Liu
+  - Yitong Liu
+  - Ye Peng
+  - Jiali Wu
+  - Liang Bai
+  - Changlun Li
+  - Honggang Hu
+  year: 2026
+  underlying_primitive_ids:
+  - xingtang_p_1600_16
+  influences:
+  - source_family_id: xingtang_p
+    relations:
+    - used_by
+    note: All Litchi instances iterate the shared permutation P (also used, with a different mode, by Laurus).
+  notes: 'Litchi is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1),
+    submitted by the same Xingtang Telecommunications team as Laurus -- the two share the identical
+    permutation P (xingtang_p) but wrap it in different modes. Litchi''s own mode is "designed based on the
+    Sponge-F^{P,pd} structure proposed in [GHJ+25]" then modified into a bespoke "Litchi mode of operation":
+    the same feedforward_sponge construction tracked from AFS-TrEDM, with two acknowledged deltas -- (1) a
+    parallel, counter-based squeeze (each output block computed independently) rather than a serial one, and
+    (2) domain separation via a function-id bit baked into the initial state.'
   instances:
-  - id: litchi_v1
-    name: "Litchi"
+  - id: litchi_512
+    name: "Litchi-512"
     type: hash
     reference_ids:
     - niccs_2026_litchi
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1600
+      output_size_bits: 512
+      rounds: 16
+    notes: Capacity 576.
+  - id: litchi_768
+    name: "Litchi-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_litchi
+    characteristics:
+      state_size_bits: 1600
+      output_size_bits: 768
+      rounds: 16
+    notes: Capacity 832.
+  - id: litchi_1024
+    name: "Litchi-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_litchi
+    characteristics:
+      state_size_bits: 1600
+      output_size_bits: 1024
+      rounds: 16
+    notes: Capacity 1088.
+  - id: litchi_xof
+    name: "Litchi-XOF"
+    type: xof
+    reference_ids:
+    - niccs_2026_litchi
+    characteristics:
+      state_size_bits: 1600
+      rounds: 16
+    notes: Capacity 1024, domain-separated via a function-id bit. Arbitrary output length, less than 2^64 bits.
 - id: llh
   name: "LLH"
   construction_ids: []

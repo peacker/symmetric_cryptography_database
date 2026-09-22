@@ -6303,4 +6303,20 @@ rounds:
     - component_id: bit_permutation
       note: Byte permutation whose pattern depends on round index mod 3.
   notes: Used by P_2048^(24), the permutation underlying JuziHash.
+- id: xingtang_p_round
+  name: "P Round (Laurus/Litchi)"
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: constant
+      note: 'iota: RC_r XORed into lane A[0][0] only.'
+    - component_id: and
+      note: 'chi: 5-bit S-box, AND term of each output bit''s formula.'
+    - component_id: xor
+      note: 'chi: XOR terms; theta: each plane''s Theta[t0..t4] linear map is an XOR of rotated sub-words.'
+    - component_id: rotation_fixed
+      note: 'theta: per-plane rotation tuples (distinct for each of the 5 planes) inside Theta.'
+    - component_id: word_permutation
+      note: 'pi: GF(5)-matrix lane transposition (order 24), pure wiring.'
+  notes: Used by P, shared by Laurus and Litchi.
 
