@@ -16615,3 +16615,62 @@ primitive_families:
       block_size_bits: 1536
       output_size_bits: 1536
       rounds: 28
+- id: chime_p
+  name: CHIME Permutation P
+  construction_ids:
+  - boolean_operator_network
+  round_ids:
+  - chime_p_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 1536
+    components:
+    - id: and
+    - id: not
+    - id: xor
+    - id: word_permutation
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - niccs_2026_chime_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: 'An unnamed 1536-bit permutation (the spec calls it only "P") underlying CHIME, a candidate in the
+    NICCS 2026 cryptographic hash algorithm competition (Round 1). State is six 256-bit lanes (A0,A1,B0,B1,C0,C1)
+    in a 3x2 grid. Each round applies, in order: a linear layer (a fixed, non-commutative sequence of XOR-mixes
+    and intra-lane word permutations/rotations across all six lanes); a round-constant XOR into lane A0 only
+    (constant derived from a golden-ratio-based multiplier); a nonlinear layer (a bit-sliced 3-bit S-box, AND+NOT+XOR,
+    applied per bit-position across triples of lanes -- even rounds use (A0,B0,C0)/(A1,B1,C1), odd rounds use the
+    cross-triples (A0,B1,C1)/(A1,B0,C0)); and a lane permutation (alternating between two fixed patterns every 3
+    rounds). The spec makes no claim that P resembles any named permutation -- indeed it states the round function
+    "differs from SHA-3, [so] the linearization method [used to attack SHA-3] cannot directly be adopted." The
+    3-bit-S-box AND-NOT-XOR formula is algebraically the same shape as Keccak''s chi step generalized to 3-lane
+    triples rather than 5, but since the spec neither states nor acknowledges this, no influences edge is
+    recorded (per this database''s standard for observed-but-unclaimed resemblance).'
+  instances:
+  - id: chime_p_15
+    name: P (15 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_chime_hash
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 1536
+      output_size_bits: 1536
+      rounds: 15
+    notes: Used by CHIME-512 (classic sponge).
+  - id: chime_p_20
+    name: P (20 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_chime_hash
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 1536
+      output_size_bits: 1536
+      rounds: 20
+    notes: Used by CHIME-1024 (sponge-with-feeding-forward).

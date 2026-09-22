@@ -7371,11 +7371,15 @@ references:
 - id: niccs_2026_chime_hash
   kind: competition_submission
   title: "CHIME — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  authors:
+  - Gaoli Wang
+  - Tao Huang
   year: 2026
   organization: Institute of Commercial Cryptography Standards
   venue: NICCS Cryptographic Hash Algorithms, Round 1
   url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101535839617634304.html
-  notes: "Official NICCS candidate page; the attached submission package is CHIME.zip."
+  notes: "Official NICCS candidate page; the attached submission package is CHIME.zip.
+    Local copy (Chinese-language spec; no English version was published): references/[2026][chime_p,chime_hash][spec][niccs_round1_zh].pdf."
 - id: niccs_2026_vedak_hash
   kind: competition_submission
   title: "Vedak Hash Function Family — NICCS Cryptographic Hash Algorithms Round 1 submission"

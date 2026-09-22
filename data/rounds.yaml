@@ -6151,4 +6151,24 @@ rounds:
       note: 'K-layer: a 32-bit round constant (from hex digits of pi) XORed into the first 8 nibbles of row 0
         only.'
   notes: Used by C-Engine, the 1536-bit permutation underlying C Hash.
+- id: chime_p_round
+  name: CHIME Permutation P Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+      note: 'lambda: a fixed, non-commutative sequence of XOR-mixes between lanes.'
+    - component_id: word_permutation
+      note: 'lambda: intra-lane word permutations/rotations interleaved with the XOR-mixes.'
+    - component_id: constant
+      note: 'AC: round constant (golden-ratio-derived multiplier) XORed into lane A0 only.'
+    - component_id: and
+      note: 'chi: bit-sliced 3-bit S-box AND term, applied per bit-position across a triple of lanes.'
+    - component_id: not
+      note: 'chi: the S-box''s NOT term.'
+    - component_id: xor
+      note: 'chi: the S-box''s XOR term, completing y_i = x_i xor (NOT x_{i+1} AND x_{i+2}) per triple.'
+    - component_id: word_permutation
+      note: 'tau: lane permutation, alternating between two fixed patterns every 3 rounds.'
+  notes: Used by P, the 1536-bit permutation underlying CHIME.
 

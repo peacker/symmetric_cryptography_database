@@ -985,7 +985,7 @@ processes:
     - family_id: qilin_hash
     - family_id: quantasylva_hash
     - family_id: taichi_hash
-    - family_id: chime_hash
+    - family_id: chime_p
     - family_id: vedak_hash
     - family_id: xrh_1
     - family_id: xrh_2
