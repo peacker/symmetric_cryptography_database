@@ -965,7 +965,7 @@ processes:
     - family_id: c_engine
     - family_id: champ_hash
     - family_id: uhash
-    - family_id: cuishen
+    - family_id: octarx
     - family_id: dragon_hash
     - family_id: duet_hash
     - family_id: eijen

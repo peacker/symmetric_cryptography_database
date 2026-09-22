@@ -6171,4 +6171,20 @@ rounds:
     - component_id: word_permutation
       note: 'tau: lane permutation, alternating between two fixed patterns every 3 rounds.'
   notes: Used by P, the 1536-bit permutation underlying CHIME.
+- id: octarx_round
+  name: Octarx Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+      note: State words combined via XOR of adjacent branches before mixing.
+    - component_id: add_mod
+      note: Modular addition (mod 2^64) of rotated words into the running branches.
+    - component_id: rotation_fixed
+      note: Fixed rotations applied to words before each addition/XOR (7/20/31/56 for Octarx-256; 18/21,
+        33/16, 47/20, 60/49 for Octarx-512).
+    - component_id: constant
+      note: Round constant (from pi for Octarx-256, e for Octarx-512) XORed into the branch containing the
+        first state word only.
+  notes: Used by both Octarx-256 and Octarx-512, differing only in word count (4 vs 8) and rotation amounts.
 

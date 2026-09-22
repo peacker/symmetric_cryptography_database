@@ -226,6 +226,7 @@ combined to produce a larger, collision-resistant 2*n*-bit compressed output.
 | Abreast-DM (`abreast_dm`) | Two independent Davies-Meyer tracks run in parallel; the second track's key schedule is driven by a bitwise complement of the message, keeping the tracks independent enough for a secure 2n-bit space (Abreast-DM/AES-128 → 256-bit space). |
 | Tandem-DM (`tandem_dm`) | A two-stage cascade where the first block-cipher layer's intermediate output feeds into and modifies the second layer's key-schedule variables (Tandem-DM/AES-256 → 512-bit space). |
 | Hirose (`hirose_construction`) | Two parallel block-cipher calls sharing one key schedule (derived from the message), differing only by a fixed constant offset applied to the second track's plaintext input — avoids generating a second independent key schedule (Hirose-DM/AES-256). |
+| Naito (`naito_dbl`) | Yusuke Naito's DBL mode (SAC 2011 / ACISP 2017): the same same-key-schedule/plaintext-constant-offset shape as Hirose, but with a different indifferentiability proof and typically paired with an explicit running position counter plus a finalization step absorbing a residual/checksum block (Cuishen). |
 | MDC-2 / MDC-4 (`mdc2_mdc4`) | Legacy IBM designs that cross-interleave multiple block-cipher encryption steps per block, chaining two (MDC-2) or four (MDC-4) intermediate outputs into each other's next key/plaintext inputs (MDC2-DES maps 64-bit DES into a 128-bit compression space). |
 
 **Permutation-Based Constructions with Feed-Forward

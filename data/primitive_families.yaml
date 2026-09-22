@@ -16674,3 +16674,59 @@ primitive_families:
       output_size_bits: 1536
       rounds: 20
     notes: Used by CHIME-1024 (sponge-with-feeding-forward).
+- id: octarx
+  name: Octarx
+  construction_ids:
+  - arx_permutation_network
+  - fixed_rotation_arx
+  - arx_with_round_constants
+  - dbl_block_cipher_compression
+  - naito_dbl
+  round_ids:
+  - octarx_round
+  target_applications: []
+  characteristics:
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - niccs_2026_cuishen
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: 'A word-oriented, 64-bit-word ARX block cipher family underlying Cuishen, a candidate in the NICCS 2026
+    cryptographic hash algorithm competition (Round 1). Explicitly not designed to be a general-purpose block
+    cipher (only bound to Cuishen''s own very large, structured key format): "specifically designed for the hash
+    algorithm Cuishen" (spec). Round function (64 rounds, both variants): the state words are combined pairwise
+    via modular addition and XOR with rotated operands, in a generalized-Feistel-like pattern where each round''s
+    output word positions cyclically shift; a round constant (Octarx-256: digits of pi; Octarx-512: digits of e)
+    is injected only into the branch containing the first state word. Key schedule is tweakey-like: three
+    independently-updated parts (message-expansion, chaining-value, and counter) are XORed into round-key words.
+    The spec states only that this "adopts a variant of the generalized Feistel structure" -- no named prior
+    cipher is claimed as a direct basis.'
+  instances:
+  - id: octarx_256
+    name: Octarx-256
+    type: block_cipher
+    reference_ids:
+    - niccs_2026_cuishen
+    characteristics:
+      block_size_bits: 256
+      key_size_bits: 1408
+      rounds: 64
+    notes: 4-word (A,B,C,D) state; rotations 7/20/31/56 per round.
+  - id: octarx_512
+    name: Octarx-512
+    type: block_cipher
+    reference_ids:
+    - niccs_2026_cuishen
+    characteristics:
+      block_size_bits: 512
+      key_size_bits: 1664
+      rounds: 64
+    notes: 8-word (A..H) state; rotations 18/21, 33/16, 47/20, 60/49 per round.

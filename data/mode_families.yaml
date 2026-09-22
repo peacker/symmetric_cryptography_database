@@ -15224,29 +15224,84 @@ mode_families:
     characteristics: {}
 - id: cuishen
   name: "Cuishen"
-  construction_ids: []
+  construction_ids:
+  - merkle_damgard
+  round_ids:
+  - octarx_round
   target_applications: []
+  characteristics:
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
   reference_ids:
   - niccs_2026_cuishen
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    Cuishen is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Yaobin Shen
+  - Tingting Cui
+  - Zhe Liu
+  - Mingyang Chang
+  - Yan He
+  - Feng Li
+  - Tianhao Liu
+  year: 2026
+  underlying_primitive_ids:
+  - octarx_256
+  - octarx_512
+  influences:
+  - source_family_id: octarx
+    relations:
+    - used_by
+    note: Cuishen's double-block-length compression function calls the Octarx block cipher twice per message
+      block, both calls keyed by the same message-block-plus-chaining-value-plus-counter input.
+  notes: 'Cuishen is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Its mode
+    is "inspired by Naito''s scheme": "CF_DBL... is constructed based on the double-block scheme by Naito [8]...
+    Cuishen adopts the same iterative structure and a similar finalization mechanism" -- a double-block-length
+    Merkle-Damgard-style iteration with an explicit 128-bit running position counter (to improve second-preimage
+    resistance) and ZeroPadding (no length field; strengthening is provided by the counter instead). Compression
+    per block: t_i = E(K_i,P1) xor P1, b_i = E(K_i,P2) xor P2, with key K_i = m_i || b_{i-1} || Cnt_i. Finalization
+    encrypts fixed constants under a key built from the final chaining value, message, and counter to absorb the
+    residual block and prevent length-extension. IV constants use "Chen primes" (primes p>100 with p+2 semiprime)
+    chosen "to avoid overlap with the IV constants used in SHA-2" -- a differentiation, not a reuse, so no
+    influences edge to SHA-2 is recorded.'
   instances:
-  - id: cuishen_v1
-    name: "Cuishen"
+  - id: cuishen_512
+    name: "Cuishen-512"
     type: hash
     reference_ids:
     - niccs_2026_cuishen
-    characteristics: {}
+    characteristics:
+      key_size_bits: 1408
+      block_size_bits: 1024
+      output_size_bits: 512
+      rounds: 64
+    notes: Uses Octarx-256; full untruncated t||b output. Collision 2^256/preimage 2^512/2nd-preimage 2^512.
+  - id: cuishen_768
+    name: "Cuishen-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_cuishen
+    characteristics:
+      key_size_bits: 1664
+      block_size_bits: 1024
+      output_size_bits: 768
+      rounds: 64
+    notes: Uses Octarx-512; internal 1024-bit state truncated to leftmost 768 bits (wide-pipe). Collision
+      2^384/preimage 2^768/2nd-preimage 2^768.
+  - id: cuishen_1024
+    name: "Cuishen-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_cuishen
+    characteristics:
+      key_size_bits: 1664
+      block_size_bits: 1024
+      output_size_bits: 1024
+      rounds: 64
+    notes: Uses Octarx-512; full untruncated 1024-bit output. Collision 2^512/preimage 2^1024/2nd-preimage
+      2^1024.
 - id: dragon_hash
   name: "Dragon Hash Family"
   construction_ids: []

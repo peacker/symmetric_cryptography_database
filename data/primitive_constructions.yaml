@@ -527,6 +527,21 @@ primitive_constructions:
     it notably cheaper than Abreast-DM/Tandem-DM. Example: Hirose-DM instantiated with AES-256.
 
     '
+- id: naito_dbl
+  name: Naito Double-Block-Length Construction
+  special_case_of: dbl_block_cipher_compression
+  typical_primitive_types:
+  - unkeyed_function
+  placeholder_family_names:
+  - Cuishen
+  notes: 'Yusuke Naito''s DBL compression mode (SAC 2011 / ACISP 2017): two keyed block-cipher calls per block, both
+    keyed by the same message-block-plus-chaining-value input, whose plaintexts differ by a fixed public constant --
+    distinct from Hirose''s construction (also two same-key-schedule calls differing by a plaintext constant) in its
+    indifferentiability proof and in typically being paired with an explicit running position counter and a
+    finalization step that separately absorbs a residual/checksum block to block length-extension, rather than
+    Hirose''s plain truncated-output finalization.
+
+    '
 - id: mdc2_mdc4
   name: MDC-2 / MDC-4 (Modification Detection Codes)
   abbreviation: MDC
