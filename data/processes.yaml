@@ -977,7 +977,7 @@ processes:
     - family_id: llh_p
     - family_id: cube_p
     - family_id: megascon_p
-    - family_id: mofang_hash
+    - family_id: mofang_bc
     - family_id: mozi_hash
     - family_id: neulaser
     - family_id: pavelor

@@ -16323,29 +16323,92 @@ mode_families:
     notes: Sponge. Capacity 1024, rate 1024. Arbitrary output length.
 - id: mofang_hash
   name: "MoFang"
-  construction_ids: []
+  construction_ids:
+  - merkle_damgard
+  - mdp
+  round_ids:
+  - mofang_bc_round
   target_applications: []
+  characteristics:
+    block_size_bits: 576
+    components:
+    - id: sbox
+      params:
+        input_bits: 3
+        output_bits: 3
+    - id: field_matrix_mul
+    - id: rotation_variable
   reference_ids:
   - niccs_2026_mofang_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    MoFang is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Wenquan Bi
+  - Boxin Zhao
+  - Xiaoyang Dong
+  - Keting Jia
+  - Lingyue Qin
+  year: 2026
+  underlying_primitive_ids:
+  - mofang_bc_576_1152
+  - mofang_bc_576_1728
+  influences:
+  - source_family_id: mofang_bc
+    relations:
+    - used_by
+    note: MoFang-256/512 call MoFang-BC once per block (Davies-Meyer + MDP terminal permutation); MoFang-768/
+      1024 call it twice per block (MDPH, Hirose's double-block-length compression combined with MDP).
+  notes: 'MoFang is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Two
+    modes over the same block cipher: "the Davies-Meyer Hashing Mode integrated with MDP" (Hirose, Park, Yun''s
+    terminal-permutation MD variant) for MoFang-256/512; "MDPH which is based on Hirose''s Double-Block-Length
+    Hash Function and MDP" for MoFang-768/1024 (Hirose DBL + the same MDP terminal permutation). A novel XOF
+    extension, MDMP ("Merkle-Damgard with Multiple Permutations"), iterates the base hash''s compression and
+    permutation with no further message input to squeeze extra output -- claimed as "the first time
+    constructing XOFs with MDMP construction."'
   instances:
-  - id: mofang_hash_v1
-    name: "MoFang"
+  - id: mofang_hash_256
+    name: "MoFang-256"
     type: hash
     reference_ids:
     - niccs_2026_mofang_hash
-    characteristics: {}
+    characteristics:
+      key_size_bits: 1152
+      block_size_bits: 1152
+      output_size_bits: 256
+      rounds: 16
+    notes: DM+MDP, one MoFang-BC call per block.
+  - id: mofang_hash_512
+    name: "MoFang-512"
+    type: hash
+    reference_ids:
+    - niccs_2026_mofang_hash
+    characteristics:
+      key_size_bits: 1152
+      block_size_bits: 1152
+      output_size_bits: 512
+      rounds: 16
+    notes: DM+MDP, one MoFang-BC call per block.
+  - id: mofang_hash_768
+    name: "MoFang-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_mofang_hash
+    characteristics:
+      key_size_bits: 1728
+      block_size_bits: 576
+      output_size_bits: 768
+      rounds: 16
+    notes: MDPH, two MoFang-BC calls per block (Hirose DBL).
+  - id: mofang_hash_1024
+    name: "MoFang-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_mofang_hash
+    characteristics:
+      key_size_bits: 1728
+      block_size_bits: 576
+      output_size_bits: 1024
+      rounds: 16
+    notes: MDPH, two MoFang-BC calls per block (Hirose DBL).
 - id: mozi_hash
   name: "Mozi"
   construction_ids: []

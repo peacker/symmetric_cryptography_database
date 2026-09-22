@@ -28,6 +28,21 @@ mode_constructions:
     in the message, not just its chaining-value input.
 
     '
+- id: mdp
+  name: MDP (Merkle-Damgård with a terminal Permutation)
+  abbreviation: MDP
+  special_case_of: merkle_damgard
+  typical_primitive_types:
+  - hash_function
+  placeholder_family_names:
+  - MoFang
+  notes: 'Hirose, Park, and Yun''s Merkle-Damgard variant ("A Simple Variant of the Merkle-Damgard Scheme with
+    a Permutation," ASIACRYPT 2007): identical to plain Merkle-Damgard except that the final compression call
+    is replaced by F(pi(h_{n-1}), m_n) -- an unkeyed public permutation pi is applied to the chaining value
+    entering the last block-cipher call only, blocking length-extension without adding a second compression
+    call (unlike Hirose''s or Naito''s DBL constructions, which double the block-cipher work every block).
+
+    '
 - id: array_folding_iterated_hash
   name: Array-Folding Iterated Hash
   special_case_of: merkle_damgard

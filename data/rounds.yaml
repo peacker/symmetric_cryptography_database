@@ -6379,4 +6379,19 @@ rounds:
     - component_id: constant
       note: 'pC: SplitMix64-derived 64-bit constant XORed into one word only.'
   notes: Used by the Megascon Permutation.
+- id: mofang_bc_round
+  name: MoFang-BC Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: 'SubBytes: bitsliced 3-bit S-box, per-bit-slice across the 9 words.'
+    - component_id: field_matrix_mul
+      note: 'MixColumn: 3x3 MDS matrix over GF(2^3) (Duval-Leurent lightweight construction).'
+    - component_id: rotation_variable
+      note: 'ShiftRow: per-word rotation, one of two alternating constant sets by round parity.'
+    - component_id: xor
+      note: 'AddRoundKey: XOR with the round key (refreshed via a KeyExpansion reusing SubBytes/ShiftRow plus
+        a word transposition and round-constant XOR).'
+  notes: Used by MoFang-BC.
 

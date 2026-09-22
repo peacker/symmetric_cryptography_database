@@ -17430,3 +17430,63 @@ primitive_families:
       output_size_bits: 2048
       rounds: 16
     notes: Used by the feed-forward-sponge instances (Megascon-768/1024).
+- id: mofang_bc
+  name: MoFang-BC
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - mofang_bc_round
+  target_applications: []
+  characteristics:
+    block_size_bits: 576
+    components:
+    - id: sbox
+      params:
+        input_bits: 3
+        output_bits: 3
+    - id: field_matrix_mul
+    - id: rotation_variable
+  reference_ids:
+  - niccs_2026_mofang_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - inspired_by
+    note: '"The fundamental block cipher follows the AES permutation''s style... adopts a bit-sliced design
+      fashion" -- an SPN with SubBytes/MixColumn/ShiftRow/AddRoundKey layering in the AES pattern, but with an
+      entirely new S-box, MDS matrix, and rotation schedule (not literal AES component reuse).'
+  notes: 'A 576-bit, 16-round, 1152/1728-bit-key block cipher (AES-style SPN, 3x3x64-bit array) underlying
+    MoFang, a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Round: SubBytes
+    (bitsliced 3-bit S-box, y0=(x1 AND x2) XOR x0 etc.); MixColumn (3x3 MDS matrix over GF(2^3), taken from
+    Duval and Leurent''s lightweight-MDS-circuits paper, the same source cited for the same purpose by
+    Vedak''s co-submitter Wenling Wu''s uBlock cipher lineage); ShiftRow (per-word rotation, two alternating
+    constant sets by round parity); AddRoundKey. The 3-bit S-box: "we choose a 3-bit S-box same as [27]"
+    (Standaert et al.''s SEA cipher) -- not currently tracked as its own family here.'
+  instances:
+  - id: mofang_bc_576_1152
+    name: MoFang-BC (k=2n)
+    type: block_cipher
+    reference_ids:
+    - niccs_2026_mofang_hash
+    characteristics:
+      block_size_bits: 576
+      key_size_bits: 1152
+      rounds: 16
+    notes: Used by MoFang-256/512 (DM+MDP mode).
+  - id: mofang_bc_576_1728
+    name: MoFang-BC (k=3n)
+    type: block_cipher
+    reference_ids:
+    - niccs_2026_mofang_hash
+    characteristics:
+      block_size_bits: 576
+      key_size_bits: 1728
+      rounds: 16
+    notes: Used by MoFang-768/1024 (MDPH mode).
