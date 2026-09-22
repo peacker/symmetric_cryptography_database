@@ -16837,3 +16837,52 @@ primitive_families:
       output_size_bits: 1920
       rounds: 18
     notes: Used as f1 or f2 in Duet-768 and Duet-1024.
+- id: eijen_pi
+  name: Eijen Permutation (Pi)
+  construction_ids:
+  - arx_permutation_network
+  - fixed_rotation_arx
+  round_ids:
+  - eijen_pi_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 2048
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+    - id: word_permutation
+  reference_ids:
+  - niccs_2026_eijen
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: chacha
+    relations:
+    - inspired_by
+    - improvement_of
+    note: '"the only nonlinear layer employs an improved quarter-round (QR) function of ChaCha... The design
+      of MixQuad improves upon the QuarterRound (QR) of ChaCha by avoiding backward paths with a probability
+      of 1... Compared to the ChaCha round function, the proposed design introduces an additional operation
+      a<-ROTL64(a,pi4)^ci... as well as an operation c<-ROTL64(c,pi5)."'
+  notes: 'A 2048-bit, 16-round permutation (4x8 array of 64-bit words) underlying Eijen, a candidate in the
+    NICCS 2026 cryptographic hash algorithm competition (Round 1). Round: MixQuad (the only nonlinear layer,
+    a modified ChaCha quarter-round applied to each of 8 columns, with two extra rotate+XOR-constant steps
+    added to remove ChaCha''s probability-1 backward differential) then PosPerm (fixed 32-word position
+    permutation) then AMix4 (linear: each output word = XOR of the other three words in its column of four)
+    then PosPerm again.'
+  instances:
+  - id: eijen_pi_2048_16
+    name: Pi
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_eijen
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 2048
+      output_size_bits: 2048
+      rounds: 16

@@ -7265,11 +7265,20 @@ references:
 - id: niccs_2026_eijen
   kind: competition_submission
   title: "Eijen — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  authors:
+  - Keting Jia
+  - Qingliang Hou
+  - Guoxiao Liu
+  - Zhuoqing Peng
+  - Yantian Shen
+  - Xiaoen Lin
+  - Yukun Liu
   year: 2026
   organization: Institute of Commercial Cryptography Standards
   venue: NICCS Cryptographic Hash Algorithms, Round 1
   url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101539361927024640.html
-  notes: "Official NICCS candidate page; the attached submission package is Eijen.zip."
+  notes: "Official NICCS candidate page; the attached submission package is Eijen.zip.
+    Local copy: references/[2026][eijen_pi,eijen][spec][niccs_round1_en].pdf."
 - id: niccs_2026_feilian
   kind: competition_submission
   title: "FEILIAN — NICCS Cryptographic Hash Algorithms Round 1 submission"

@@ -15490,29 +15490,99 @@ mode_families:
     notes: Uses f-1920 (18 rounds). Rate 768, capacity 1152.
 - id: eijen
   name: "Eijen"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - eijen_pi_round
   target_applications: []
+  characteristics:
+    state_size_bits: 2048
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+    - id: word_permutation
   reference_ids:
   - niccs_2026_eijen
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    Eijen is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Keting Jia
+  - Qingliang Hou
+  - Guoxiao Liu
+  - Zhuoqing Peng
+  - Yantian Shen
+  - Xiaoen Lin
+  - Yukun Liu
+  year: 2026
+  underlying_primitive_ids:
+  - eijen_pi_2048_16
+  influences:
+  - source_family_id: eijen_pi
+    relations:
+    - used_by
+    note: All five Eijen instances iterate the Pi permutation via the Sponge-F feedforward sponge.
+  notes: 'Eijen is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Its mode
+    directly adopts "the feed-forward Sponge-F construction introduced in [1]" (Guo, Hu, Jiang, Fan, Fu,
+    Preneel, Wang, ePrint 2025/1006) -- the same feedforward_sponge construction tracked from AFS-TrEDM. c=h+64
+    for every instance.'
   instances:
-  - id: eijen_v1
-    name: "Eijen"
+  - id: eijen_256
+    name: "Eijen-256"
     type: hash
     reference_ids:
     - niccs_2026_eijen
-    characteristics: {}
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1728
+      output_size_bits: 256
+      rounds: 16
+    notes: Capacity 320, rate 1728.
+  - id: eijen_384
+    name: "Eijen-384"
+    type: hash
+    reference_ids:
+    - niccs_2026_eijen
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1600
+      output_size_bits: 384
+      rounds: 16
+    notes: Capacity 448, rate 1600.
+  - id: eijen_512
+    name: "Eijen-512"
+    type: hash
+    reference_ids:
+    - niccs_2026_eijen
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1472
+      output_size_bits: 512
+      rounds: 16
+    notes: Capacity 576, rate 1472.
+  - id: eijen_768
+    name: "Eijen-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_eijen
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1216
+      output_size_bits: 768
+      rounds: 16
+    notes: Capacity 832, rate 1216.
+  - id: eijen_1024
+    name: "Eijen-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_eijen
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 960
+      output_size_bits: 1024
+      rounds: 16
+    notes: Capacity 1088, rate 960.
 - id: feilian
   name: "FEILIAN"
   construction_ids: []

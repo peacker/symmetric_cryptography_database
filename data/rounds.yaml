@@ -6218,4 +6218,21 @@ rounds:
     - component_id: xor
       note: 'ML: the word XORed with both rotated copies of itself.'
   notes: Used by both f-960 and f-1920, the permutations underlying Duet.
+- id: eijen_pi_round
+  name: Eijen Permutation (Pi) Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      note: 'MixQuad: modular additions of the modified ChaCha quarter-round (a<-a+b; c<-c+d twice per column).'
+    - component_id: rotation_fixed
+      note: 'MixQuad: fixed rotations between additions/XORs (rotation sets differ between left/right column
+        halves).'
+    - component_id: xor
+      note: 'MixQuad: XOR steps of the quarter-round, plus AMix4''s three-way word XOR.'
+    - component_id: constant
+      note: 'MixQuad: round constant XORed into word a on one of the extra steps added versus plain ChaCha.'
+    - component_id: word_permutation
+      note: 'PosPerm: fixed 32-word position permutation, applied both before and after AMix4.'
+  notes: Used by Pi, the 2048-bit permutation underlying Eijen.
 
