@@ -1,0 +1,11 @@
+CryptHash_AlgorithmInstance.c: In function ‘CryptHash’:
+CryptHash_AlgorithmInstance.c:304:21: error: ‘DIGEST_LANE_NUM’ undeclared (first use in this function); did you mean ‘MSG_LANE_NUM’?
+  304 |     for (i = 0; i < DIGEST_LANE_NUM; i++) {
+      |                     ^~~~~~~~~~~~~~~
+      |                     MSG_LANE_NUM
+CryptHash_AlgorithmInstance.c:304:21: note: each undeclared identifier is reported only once for each function it appears in
+==== Running KAT (generate test vectors) ====
+[                                                  ] [  0%]  Doing:"KAT_2_12"   [############                                      ] [ 25%]  Doing:"KAT_2_23"   [#########################                         ] [ 50%]  Doing:"KAT_2_33"   [#####################################             ] [ 75%]  Doing:"KAT_Loop"   [##################################################] [100%]  SUCCESS!           
+Files have been saved in the 'output' folder within the working directory.
+Total duration: 254 s
+==== Done ====

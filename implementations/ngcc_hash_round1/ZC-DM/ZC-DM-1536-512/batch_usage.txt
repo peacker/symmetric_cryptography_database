@@ -1,0 +1,1 @@
+cc -O2 -std=c99 -I.. -I"../../../lib/common" -I"../../../lib/low/common" -I"../../../lib/low/ZuD-1536" -I"../../../lib/ZuD-1536/plain" KAT_CryptHash.c drng.c CryptHash_AlgorithmInstance.c ../../../lib/low/ZuD-1536/plain/ZuD1536-plain.c -o kat_crypt_hash && ./kat_crypt_hash

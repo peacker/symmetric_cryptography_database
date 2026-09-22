@@ -1,0 +1,21 @@
+AXIS-512 Reference Implementation
+
+This directory contains a clear ISO C reference implementation of AXIS-512
+following AXIS-Algorithm Description.pdf.
+
+Implemented clarifications:
+- The finalization phase uses 1024 beats.
+- ExL is (0, 12, 32, 96, 107, 125, 11).
+- UpL[0..5] is (66, 75, 90, 162, 178, 188); the document update
+  order uses UpL[2,1,0] and UpL[5,4,3].
+- The UpRes boundary S[j][192] is interpreted as S[j][0], i.e. circular shift.
+- UpdateFull updates registers sequentially from j = 0 to 7.
+- Message bit index X[0] is the rightmost bit; message processing consumes the padded stream from that rightmost end.
+- Pad10s+11(M) appends Binary64(len(M)) exactly once.
+
+The exported entry point is:
+
+int CryptHash(int digest_len_bits,
+              const unsigned char *msg,
+              unsigned long long msg_len_bits,
+              unsigned char *digest);

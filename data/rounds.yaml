@@ -6098,4 +6098,36 @@ rounds:
   notes: Xoofff reuses the standard Xoodoo round function (see the xoodoo family's own round definition,
     xoodoo_permutation_round), reduced to 6 of Xoodoo's rounds; no separate round definition is introduced here
     to avoid duplicating that definition.
+- id: afs_p_s6_round
+  name: AFS-p-S6 Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: 'Nonlinear layer: the AFS-64 S-box instance AFS64_t5_k2 (an 8-step ARX-Feistel construction over
+        two 32-bit halves, from Yan/Wei/Rodriguez-Aldama/Pasalic et al.''s AFS-64 large-state S-box family)
+        applied independently to each of the 25 64-bit lanes, replacing Keccak-p''s chi step.'
+    - component_id: add_mod
+      note: Modular-addition steps inside the AFS-64 S-box (4 of its 8 internal ARX-Feistel steps).
+    - component_id: rotation_fixed
+      note: Fixed rotations inside the AFS-64 S-box's internal ARX-Feistel steps.
+    - component_id: constant
+      note: Round-lane constant RC32(ir, l), derived via SplitMix64, XORed in during the S-box's internal steps.
+    - component_id: word_permutation
+      note: 'tau_dir: a 6-direction lane-coordinate rewiring, cycling every round, applied before and undone
+        (as its inverse) after the linear diffusion layer to avoid repeated single-layer alignment.'
+    - component_id: cauchy_matrix
+      note: 'M_col: bit-sliced GF(32) Cauchy MDS column mixing (branch number 6), the first step of the linear
+        diffusion layer L_P.'
+    - component_id: rotation_fixed
+      note: 'rho_AFS: fixed per-lane circular right rotation, applied after M_col.'
+    - component_id: word_permutation
+      note: 'pi_AFS: long-period lane permutation (x,y) -> ((x+y) mod 5, 3x mod 5), applied after rho_AFS.'
+    - component_id: xor
+      note: 'mu: per-lane ring diffusion X <- X xor ROTR64(X,17) xor ROTR64(X,32), the final step of L_P.'
+  notes: 'Used by AFS-p-S6[1600,nr] (AFS-TrEDM''s primitive-tier permutation). The spec explicitly states the
+    linear diffusion layer "does not follow the theta+rho+pi combination of Keccak-p[4]... instead it adopts
+    the six-direction rotating single-MDS structure," and that the nonlinear layer "replaces chi with a single
+    AFS-64 call" -- the 1600-bit, 5x5x64-lane state shape and naming convention mirror Keccak-p[1600,nr], but
+    the round function itself is a distinct, ARX-based design.'
 

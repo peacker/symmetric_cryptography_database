@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.11.4)
+project(CryptHash_QSH-1024 C)
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+# Reference build flags (NGCC self-assessment guideline 3.2.1)
+add_compile_options(-Wpedantic -Wall -Wextra -O2)
+add_executable(katgen drng.c KAT_CryptHash.c CryptHash_AlgorithmInstance.c)

@@ -7133,3 +7133,293 @@ references:
   notes: TriviA-ck's original CAESAR round-1 submission. Added alongside chakraborti_nandi_2015_trivia_ck_v2
     (which cites the full local version history and remains the primary/most-authoritative reference) specifically
     so the family's earliest-reference-year proxy reflects TriviA-ck's true 2014 debut rather than its 2015 revision.
+- id: niccs_2026_afs_tredm
+  kind: competition_submission
+  title: "AFS-TrEDM — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  authors:
+  - Wei Bohua
+  - Wei YongZhuang
+  - Li LingChen
+  - Ye Tao
+  - Yan ZhiGuang
+  - Fan Ting
+  - Zhang FengRong
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101541113569038336.html
+  notes: "Official NICCS candidate page; the attached submission package is AFS-TrEDM.zip.
+    Local copy: references/[2026][afs_p_s6,afs_tredm][spec][niccs_round1_en].pdf (AFS-TrEDM_S6_Specification_en.pdf
+    from the submission package)."
+- id: niccs_2026_axis_hash
+  kind: competition_submission
+  title: "AXIS — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101540899009417216.html
+  notes: "Official NICCS candidate page; the attached submission package is AXIS.zip."
+- id: niccs_2026_c_hash
+  kind: competition_submission
+  title: "C Hash — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101540728942972928.html
+  notes: "Official NICCS candidate page; the attached submission package is C Hash.zip."
+- id: niccs_2026_champ_hash
+  kind: competition_submission
+  title: "CHAMP — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101540375996485632.html
+  notes: "Official NICCS candidate page; the attached submission package is CHAMP.zip."
+- id: niccs_2026_uhash
+  kind: competition_submission
+  title: "uHash — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101540182026702848.html
+  notes: "Official NICCS candidate page; the attached submission package is uHash.zip."
+- id: niccs_2026_cuishen
+  kind: competition_submission
+  title: "Cuishen — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101539989910802432.html
+  notes: "Official NICCS candidate page; the attached submission package is Cuishen.zip."
+- id: niccs_2026_dragon_hash
+  kind: competition_submission
+  title: "Dragon Hash Family — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101539781751689216.html
+  notes: "Official NICCS candidate page; the attached submission package is Dragon.zip."
+- id: niccs_2026_duet_hash
+  kind: competition_submission
+  title: "Duet — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101539583977672704.html
+  notes: "Official NICCS candidate page; the attached submission package is Duet.zip."
+- id: niccs_2026_eijen
+  kind: competition_submission
+  title: "Eijen — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101539361927024640.html
+  notes: "Official NICCS candidate page; the attached submission package is Eijen.zip."
+- id: niccs_2026_feilian
+  kind: competition_submission
+  title: "FEILIAN — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101539111250251776.html
+  notes: "Official NICCS candidate page; the attached submission package is FEILIAN.zip."
+- id: niccs_2026_garnet_hash
+  kind: competition_submission
+  title: "Garnet — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101538925484527616.html
+  notes: "Official NICCS candidate page; the attached submission package is Garnet.zip."
+- id: niccs_2026_iphe
+  kind: competition_submission
+  title: "Iphe — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101538722543128576.html
+  notes: "Official NICCS candidate page; the attached submission package is Iphe.zip."
+- id: niccs_2026_juzihash
+  kind: competition_submission
+  title: "JuziHash — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101538489901862912.html
+  notes: "Official NICCS candidate page; the attached submission package is Juzi.zip."
+- id: niccs_2026_laurus_hash
+  kind: competition_submission
+  title: "Laurus — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101538290232020992.html
+  notes: "Official NICCS candidate page; the attached submission package is Laurus.zip."
+- id: niccs_2026_litchi
+  kind: competition_submission
+  title: "Litchi — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101538083238924288.html
+  notes: "Official NICCS candidate page; the attached submission package is Litchi.zip."
+- id: niccs_2026_llh
+  kind: competition_submission
+  title: "LLH — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101537750001471488.html
+  notes: "Official NICCS candidate page; the attached submission package is LLH.zip."
+- id: niccs_2026_mastercube
+  kind: competition_submission
+  title: "MasterCube — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101537586067099648.html
+  notes: "Official NICCS candidate page; the attached submission package is MasterCube.zip."
+- id: niccs_2026_megascon_hash
+  kind: competition_submission
+  title: "Megascon — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101537413073031168.html
+  notes: "Official NICCS candidate page; the attached submission package is Megascon.zip."
+- id: niccs_2026_mofang_hash
+  kind: competition_submission
+  title: "MoFang — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101537228439769088.html
+  notes: "Official NICCS candidate page; the attached submission package is MoFang.zip."
+- id: niccs_2026_mozi_hash
+  kind: competition_submission
+  title: "Mozi — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101537013422968832.html
+  notes: "Official NICCS candidate page; the attached submission package is Mozi.zip."
+- id: niccs_2026_neulaser
+  kind: competition_submission
+  title: "Neulaser — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101536800629149696.html
+  notes: "Official NICCS candidate page; the attached submission package is Neulaser.zip."
+- id: niccs_2026_pavelor
+  kind: competition_submission
+  title: "Pavelor — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101536571221692416.html
+  notes: "Official NICCS candidate page; the attached submission package is Pavelor.zip."
+- id: niccs_2026_qilin_hash
+  kind: competition_submission
+  title: "QILIN — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101536372126470144.html
+  notes: "Official NICCS candidate page; the attached submission package is QILIN.zip."
+- id: niccs_2026_quantasylva_hash
+  kind: competition_submission
+  title: "QuantaSylva Hash — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101536223673274368.html
+  notes: "Official NICCS candidate page; the attached submission package is QSH.zip."
+- id: niccs_2026_taichi_hash
+  kind: competition_submission
+  title: "TaiChi — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101536036577955840.html
+  notes: "Official NICCS candidate page; the attached submission package is TaiChi.zip."
+- id: niccs_2026_chime_hash
+  kind: competition_submission
+  title: "CHIME — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101535839617634304.html
+  notes: "Official NICCS candidate page; the attached submission package is CHIME.zip."
+- id: niccs_2026_vedak_hash
+  kind: competition_submission
+  title: "Vedak Hash Function Family — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101535609849466880.html
+  notes: "Official NICCS candidate page; the attached submission package is Vedak.zip."
+- id: niccs_2026_xrh_1
+  kind: competition_submission
+  title: "XRH-1 — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101535400742440960.html
+  notes: "Official NICCS candidate page; the attached submission package is XRH-1.zip."
+- id: niccs_2026_xrh_2
+  kind: competition_submission
+  title: "XRH-2 — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101534893223268352.html
+  notes: "Official NICCS candidate page; the attached submission package is XRH-2.zip."
+- id: niccs_2026_zc_dm_hash
+  kind: competition_submission
+  title: "ZC-DM — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101534683994607616.html
+  notes: "Official NICCS candidate page; the attached submission package is ZC-DM.zip."
+- id: niccs_2026_zc_dmc_hash
+  kind: competition_submission
+  title: "ZC-DMC — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101534457934204928.html
+  notes: "Official NICCS candidate page; the attached submission package is ZC-DMC.zip."
+- id: niccs_2026_zc_edmc_hash
+  kind: competition_submission
+  title: "ZC-EDMC — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101534201922277376.html
+  notes: "Official NICCS candidate page; the attached submission package is ZC-EDMC.zip."
+- id: niccs_2026_thunder_hash
+  kind: competition_submission
+  title: "Thunder Hash Family — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101533797931110400.html
+  notes: "Official NICCS candidate page; the attached submission package is Thunder.zip."
+- id: niccs_2026_wchain_hash
+  kind: competition_submission
+  title: "WChain — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101533578757754880.html
+  notes: "Official NICCS candidate page; the attached submission package is WChain.zip."
+- id: niccs_2026_wish_hash
+  kind: competition_submission
+  title: "Wish — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  year: 2026
+  organization: Institute of Commercial Cryptography Standards
+  venue: NICCS Cryptographic Hash Algorithms, Round 1
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101533368094642176.html
+  notes: "Official NICCS candidate page; the attached submission package is Wish.zip."

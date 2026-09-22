@@ -947,3 +947,51 @@ processes:
     label: Winner (2010)
     participants:
     - family_id: kalyna
+- id: niccs_hash_algorithms_2026
+  name: NICCS Cryptographic Hash Algorithms Competition
+  organizer: Institute of Commercial Cryptography Standards (NICCS)
+  start_year: 2026
+  url: https://niccs.org.cn/niccs/Round1Submissions4/pc/list.html
+  notes: >-
+    Chinese commercial-cryptography hash-algorithm evaluation process. NICCS
+    published 35 candidates for first-round evaluation on September 20, 2026.
+  stages:
+  - id: round_1
+    label: Round 1 (35 candidates, 2026)
+    kind: round
+    participants:
+    - family_id: afs_p_s6
+    - family_id: axis_hash
+    - family_id: c_hash
+    - family_id: champ_hash
+    - family_id: uhash
+    - family_id: cuishen
+    - family_id: dragon_hash
+    - family_id: duet_hash
+    - family_id: eijen
+    - family_id: feilian
+    - family_id: garnet_hash
+    - family_id: iphe
+    - family_id: juzihash
+    - family_id: laurus_hash
+    - family_id: litchi
+    - family_id: llh
+    - family_id: mastercube
+    - family_id: megascon_hash
+    - family_id: mofang_hash
+    - family_id: mozi_hash
+    - family_id: neulaser
+    - family_id: pavelor
+    - family_id: qilin_hash
+    - family_id: quantasylva_hash
+    - family_id: taichi_hash
+    - family_id: chime_hash
+    - family_id: vedak_hash
+    - family_id: xrh_1
+    - family_id: xrh_2
+    - family_id: zc_dm_hash
+    - family_id: zc_dmc_hash
+    - family_id: zc_edmc_hash
+    - family_id: thunder_hash
+    - family_id: wchain_hash
+    - family_id: wish_hash

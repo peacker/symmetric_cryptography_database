@@ -14908,3 +14908,936 @@ mode_families:
       256-bit key, 128-bit nonce, 128-bit tag. Opting for a 256-bit key was explicitly not a claim of 2^224-level
       security; the designers state it was chosen to blunt multi-target and quantum-search margin concerns while still
       only targeting a 2^128 single-key security level.'
+- id: afs_tredm
+  name: "AFS-TrEDM"
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - afs_p_s6_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 1600
+    components:
+    - id: sbox
+    - id: add_mod
+    - id: rotation_fixed
+    - id: constant
+    - id: word_permutation
+    - id: cauchy_matrix
+    - id: xor
+  reference_ids:
+  - niccs_2026_afs_tredm
+  process_participations: []
+  authors:
+  - Wei Bohua
+  - Wei YongZhuang
+  - Li LingChen
+  - Ye Tao
+  - Yan ZhiGuang
+  - Fan Ting
+  - Zhang FengRong
+  year: 2026
+  underlying_primitive_ids:
+  - afs_p_s6_12
+  - afs_p_s6_20
+  - afs_p_s6_24
+  influences:
+  - source_family_id: afs_p_s6
+    relations:
+    - used_by
+    note: AFS-TrEDM's Aligned-TrEDM absorb/squeeze mode is built directly on the AFS-p-S6[1600,nr] permutation,
+      splitting each call into g/h round-halves with an internal Davies-Meyer-style feed-forward of the capacity
+      at the midpoint (the mode-tier instance of the family's feedforward_sponge construction).
+  notes: 'AFS-TrEDM ("Aligned Truncated Encrypted Davies-Meyer sponge") is a candidate in the NICCS 2026
+    cryptographic hash algorithm competition (Round 1, announced 2026-09-20). Its mode inherits the standard
+    sponge''s absorb/squeeze skeleton but splits each permutation call into two round-halves g and h: the
+    pre-call capacity is saved, g is applied, the saved capacity is XORed back in (Davies-Meyer-style
+    feed-forward), then h is applied -- explicitly built on the g/h split of two 2025 papers, Sun et al.''s
+    Sponge-EDM and Guo et al.''s Sponge-F (see the feedforward_sponge construction). Padding is a fixed
+    128-bit metadata suffix encoding message length, digest size, rate, capacity, and a version number, rather
+    than a plain length field.'
+  instances:
+  - id: afs_tredm_512
+    name: "AFS-TrEDM-512"
+    type: hash
+    reference_ids:
+    - niccs_2026_afs_tredm
+    characteristics:
+      state_size_bits: 1600
+      block_size_bits: 1024
+      output_size_bits: 512
+      rounds: 12
+    notes: Mandatory instance. Rate 1024 bits, capacity 576 bits; g+h = 6+6 rounds per call.
+  - id: afs_tredm_768
+    name: "AFS-TrEDM-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_afs_tredm
+    characteristics:
+      state_size_bits: 1600
+      block_size_bits: 768
+      output_size_bits: 768
+      rounds: 20
+    notes: Optional instance. Rate 768 bits, capacity 832 bits; g+h = 10+10 rounds per call.
+  - id: afs_tredm_1024
+    name: "AFS-TrEDM-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_afs_tredm
+    characteristics:
+      state_size_bits: 1600
+      block_size_bits: 512
+      output_size_bits: 1024
+      rounds: 24
+    notes: Mandatory instance. Rate 512 bits, capacity 1088 bits; g+h = 12+12 rounds per call.
+- id: axis_hash
+  name: "AXIS"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_axis_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    AXIS is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: axis_hash_v1
+    name: "AXIS"
+    type: hash
+    reference_ids:
+    - niccs_2026_axis_hash
+    characteristics: {}
+- id: c_hash
+  name: "C Hash"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_c_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    C Hash is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: c_hash_v1
+    name: "C Hash"
+    type: hash
+    reference_ids:
+    - niccs_2026_c_hash
+    characteristics: {}
+- id: champ_hash
+  name: "CHAMP"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_champ_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    CHAMP is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: champ_hash_v1
+    name: "CHAMP"
+    type: hash
+    reference_ids:
+    - niccs_2026_champ_hash
+    characteristics: {}
+- id: uhash
+  name: "uHash"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_uhash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    uHash is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: uhash_v1
+    name: "uHash"
+    type: hash
+    reference_ids:
+    - niccs_2026_uhash
+    characteristics: {}
+- id: cuishen
+  name: "Cuishen"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_cuishen
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Cuishen is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: cuishen_v1
+    name: "Cuishen"
+    type: hash
+    reference_ids:
+    - niccs_2026_cuishen
+    characteristics: {}
+- id: dragon_hash
+  name: "Dragon Hash Family"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_dragon_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Dragon Hash Family is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: dragon_hash_v1
+    name: "Dragon Hash Family"
+    type: hash
+    reference_ids:
+    - niccs_2026_dragon_hash
+    characteristics: {}
+- id: duet_hash
+  name: "Duet"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_duet_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Duet is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: duet_hash_v1
+    name: "Duet"
+    type: hash
+    reference_ids:
+    - niccs_2026_duet_hash
+    characteristics: {}
+- id: eijen
+  name: "Eijen"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_eijen
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Eijen is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: eijen_v1
+    name: "Eijen"
+    type: hash
+    reference_ids:
+    - niccs_2026_eijen
+    characteristics: {}
+- id: feilian
+  name: "FEILIAN"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_feilian
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    FEILIAN is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: feilian_v1
+    name: "FEILIAN"
+    type: hash
+    reference_ids:
+    - niccs_2026_feilian
+    characteristics: {}
+- id: garnet_hash
+  name: "Garnet"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_garnet_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Garnet is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: garnet_hash_v1
+    name: "Garnet"
+    type: hash
+    reference_ids:
+    - niccs_2026_garnet_hash
+    characteristics: {}
+- id: iphe
+  name: "Iphe"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_iphe
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Iphe is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: iphe_v1
+    name: "Iphe"
+    type: hash
+    reference_ids:
+    - niccs_2026_iphe
+    characteristics: {}
+- id: juzihash
+  name: "JuziHash"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_juzihash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    JuziHash is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: juzihash_v1
+    name: "JuziHash"
+    type: hash
+    reference_ids:
+    - niccs_2026_juzihash
+    characteristics: {}
+- id: laurus_hash
+  name: "Laurus"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_laurus_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Laurus is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: laurus_hash_v1
+    name: "Laurus"
+    type: hash
+    reference_ids:
+    - niccs_2026_laurus_hash
+    characteristics: {}
+- id: litchi
+  name: "Litchi"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_litchi
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Litchi is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: litchi_v1
+    name: "Litchi"
+    type: hash
+    reference_ids:
+    - niccs_2026_litchi
+    characteristics: {}
+- id: llh
+  name: "LLH"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_llh
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    LLH is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: llh_v1
+    name: "LLH"
+    type: hash
+    reference_ids:
+    - niccs_2026_llh
+    characteristics: {}
+- id: mastercube
+  name: "MasterCube"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_mastercube
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    MasterCube is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: mastercube_v1
+    name: "MasterCube"
+    type: hash
+    reference_ids:
+    - niccs_2026_mastercube
+    characteristics: {}
+- id: megascon_hash
+  name: "Megascon"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_megascon_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Megascon is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: megascon_hash_v1
+    name: "Megascon"
+    type: hash
+    reference_ids:
+    - niccs_2026_megascon_hash
+    characteristics: {}
+- id: mofang_hash
+  name: "MoFang"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_mofang_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    MoFang is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: mofang_hash_v1
+    name: "MoFang"
+    type: hash
+    reference_ids:
+    - niccs_2026_mofang_hash
+    characteristics: {}
+- id: mozi_hash
+  name: "Mozi"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_mozi_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Mozi is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: mozi_hash_v1
+    name: "Mozi"
+    type: hash
+    reference_ids:
+    - niccs_2026_mozi_hash
+    characteristics: {}
+- id: neulaser
+  name: "Neulaser"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_neulaser
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Neulaser is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: neulaser_v1
+    name: "Neulaser"
+    type: hash
+    reference_ids:
+    - niccs_2026_neulaser
+    characteristics: {}
+- id: pavelor
+  name: "Pavelor"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_pavelor
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Pavelor is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: pavelor_v1
+    name: "Pavelor"
+    type: hash
+    reference_ids:
+    - niccs_2026_pavelor
+    characteristics: {}
+- id: qilin_hash
+  name: "QILIN"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_qilin_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    QILIN is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: qilin_hash_v1
+    name: "QILIN"
+    type: hash
+    reference_ids:
+    - niccs_2026_qilin_hash
+    characteristics: {}
+- id: quantasylva_hash
+  name: "QuantaSylva Hash"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_quantasylva_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    QuantaSylva Hash is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: quantasylva_hash_v1
+    name: "QuantaSylva Hash"
+    type: hash
+    reference_ids:
+    - niccs_2026_quantasylva_hash
+    characteristics: {}
+- id: taichi_hash
+  name: "TaiChi"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_taichi_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    TaiChi is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: taichi_hash_v1
+    name: "TaiChi"
+    type: hash
+    reference_ids:
+    - niccs_2026_taichi_hash
+    characteristics: {}
+- id: chime_hash
+  name: "CHIME"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_chime_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    CHIME is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: chime_hash_v1
+    name: "CHIME"
+    type: hash
+    reference_ids:
+    - niccs_2026_chime_hash
+    characteristics: {}
+- id: vedak_hash
+  name: "Vedak Hash Function Family"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_vedak_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Vedak Hash Function Family is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: vedak_hash_v1
+    name: "Vedak Hash Function Family"
+    type: hash
+    reference_ids:
+    - niccs_2026_vedak_hash
+    characteristics: {}
+- id: xrh_1
+  name: "XRH-1"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_xrh_1
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    XRH-1 is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: xrh_1_v1
+    name: "XRH-1"
+    type: hash
+    reference_ids:
+    - niccs_2026_xrh_1
+    characteristics: {}
+- id: xrh_2
+  name: "XRH-2"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_xrh_2
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    XRH-2 is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: xrh_2_v1
+    name: "XRH-2"
+    type: hash
+    reference_ids:
+    - niccs_2026_xrh_2
+    characteristics: {}
+- id: zc_dm_hash
+  name: "ZC-DM"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_zc_dm_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    ZC-DM is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: zc_dm_hash_v1
+    name: "ZC-DM"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dm_hash
+    characteristics: {}
+- id: zc_dmc_hash
+  name: "ZC-DMC"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_zc_dmc_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    ZC-DMC is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: zc_dmc_hash_v1
+    name: "ZC-DMC"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_dmc_hash
+    characteristics: {}
+- id: zc_edmc_hash
+  name: "ZC-EDMC"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_zc_edmc_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    ZC-EDMC is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: zc_edmc_hash_v1
+    name: "ZC-EDMC"
+    type: hash
+    reference_ids:
+    - niccs_2026_zc_edmc_hash
+    characteristics: {}
+- id: thunder_hash
+  name: "Thunder Hash Family"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_thunder_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Thunder Hash Family is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: thunder_hash_v1
+    name: "Thunder Hash Family"
+    type: hash
+    reference_ids:
+    - niccs_2026_thunder_hash
+    characteristics: {}
+- id: wchain_hash
+  name: "WChain"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_wchain_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    WChain is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: wchain_hash_v1
+    name: "WChain"
+    type: hash
+    reference_ids:
+    - niccs_2026_wchain_hash
+    characteristics: {}
+- id: wish_hash
+  name: "Wish"
+  construction_ids: []
+  target_applications: []
+  reference_ids:
+  - niccs_2026_wish_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: >-
+    Wish is one of the 35 cryptographic hash algorithms accepted for the
+    first-round evaluation announced by the Institute of Commercial Cryptography
+    Standards (NICCS) on September 20, 2026. This initial entry records the
+    candidate identity and process participation from the official listing;
+    structural metadata can be added after classifying the attached specification.
+  instances:
+  - id: wish_hash_v1
+    name: "Wish"
+    type: hash
+    reference_ids:
+    - niccs_2026_wish_hash
+    characteristics: {}

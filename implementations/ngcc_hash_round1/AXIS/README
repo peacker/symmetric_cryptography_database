@@ -1,0 +1,22 @@
+AXIS Reference Implementations
+
+Instances included:
+- AXIS-512
+- AXIS-768
+- AXIS-1024
+
+Each instance directory contains:
+- CryptHash_AlgorithmInstance.h/.c: ICCS API wrapper for that digest length.
+- axis_core.h/.c: ISO C AXIS reference implementation.
+- axis_zero32_expr_word_generated.h: generated 32-beat zero-message update
+  equations used by axis_core.c.
+- def.h: AXIS constants from AXIS-Algorithm Description.pdf.
+- drng.h/.c: ICCS deterministic random generator support code.
+- KAT_CryptHash.c: ICCS KAT generation driver.
+- Makefile: included build script for environments with make.
+- README: instance-specific notes.
+
+The reference implementation is intended for correctness auditing. It preserves
+the ICCS CryptHash interface and follows the bit-indexing convention described
+in AXIS-Algorithm Description.pdf. The optimized portable, AVX2, and
+best-available builds live under Optimized_Implementation.

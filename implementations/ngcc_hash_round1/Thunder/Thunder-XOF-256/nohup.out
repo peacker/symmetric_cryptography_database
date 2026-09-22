@@ -1,0 +1,5 @@
+==== Running KAT (generate test vectors) ====
+[                                                  ] [  0%]  Doing:"KAT_2_12"   [############                                      ] [ 25%]  Doing:"KAT_2_23"   [#########################                         ] [ 50%]  Doing:"KAT_2_33"   [#####################################             ] [ 75%]  Doing:"KAT_Loop"   [##################################################] [100%]  SUCCESS!           
+Files have been saved in the 'output' folder within the working directory.
+Total duration: 156 s
+==== Done ====
