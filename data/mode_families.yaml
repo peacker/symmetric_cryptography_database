@@ -5847,6 +5847,62 @@ mode_families:
       state_size_bits: 512
       rounds: 12
     notes: RFC 6986 Sect. 8. Uses an all-zero IV; full 512-bit chaining value is output directly.
+- id: sm3_hash
+  name: SM3
+  construction_ids:
+  - merkle_damgard
+  characteristics:
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: and
+    - id: or
+    - id: not
+    - id: constant
+  target_applications: []
+  authors:
+  - Xiao-Yun Wang
+  - Zheng Li
+  - Yong-Chuan Wang
+  - Hong-Bo Yu
+  - Yong-Quan Xie
+  - Chao Zhang
+  - Peng Luo
+  - Shu-Wang Lu
+  year: 2010
+  underlying_primitive_ids:
+  - sm3_compression
+  influences:
+  - source_family_id: sm3
+    relations:
+    - used_by
+    note: SM3 is the Merkle-Damgard iteration of the SM3 compression function over arbitrary-length, padded input.
+  process_participations: []
+  reference_ids:
+  - ietf_draft_sca_cfrg_sm3_02
+  - gmt_0004_2012_sm3
+  - gbt_32905_2016_sm3
+  round_ids:
+  - sm3_round
+  notes: SM3 is the Chinese national standard cryptographic hash function (GB/T 32905-2016), designed by
+    Xiao-Yun Wang et al. and first published by OSCCA in 2010. Fixed 256-bit output over 512-bit blocks; standard
+    Merkle-Damgard strengthening (single "1" bit plus zero padding to 448 mod 512, then a 64-bit big-endian bit
+    length field). Added to ISO/IEC 10118-3 in 2017. Widely used as a reference/benchmark point by other Chinese
+    hash-function designs, including several NICCS 2026 Round 1 candidates (e.g. FEILIAN's blanket acknowledgment
+    of "existing hash functions and symmetric-key primitives... SHA-2, BLAKE, KECCACK, SM3, AES and Chacha").
+  instances:
+  - id: sm3_v1
+    name: SM3
+    type: hash
+    reference_ids:
+    - ietf_draft_sca_cfrg_sm3_02
+    characteristics:
+      output_size_bits: 256
+      block_size_bits: 512
+      state_size_bits: 256
+      rounds: 64
+    notes: The only standardized output size; unlike SHA-2/Streebog, SM3 has no shorter-truncated sibling variant.
 - id: sha3
   name: SHA-3
   construction_ids:

@@ -950,6 +950,30 @@ rounds:
   notes: 'RC6 ARX-style round with data-dependent rotation and integer multiplication.
 
     '
+- id: sm3_round
+  name: SM3 Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      note: 'SS1, SS2, TT1, TT2 intermediate sums (SS1<-((A<<<12)+E+(T_j<<<(j mod 32)))<<<7; TT1<-FF_j(A,B,C)+D+SS2+W''_j;
+        TT2<-GG_j(E,F,G)+H+SS1+W_j).'
+    - component_id: rotation_fixed
+      note: A<<<12, B<<<9, F<<<19, and the P0/P1 permutation rotations (9/17 and 15/23).
+    - component_id: xor
+      note: SS2<-SS1 xor (A<<<12); P0(X)=X xor (X<<<9) xor (X<<<17) applied to TT2 to update E; rounds 0-15's
+        FF_j/GG_j (X xor Y xor Z).
+    - component_id: and
+      note: 'Rounds 16-63 only: FF_j=(X and Y) or (X and Z) or (Y and Z); GG_j=(X and Y) or (not(X) and Z).'
+    - component_id: or
+      note: 'Rounds 16-63 only: FF_j/GG_j OR-combination of the AND terms above.'
+    - component_id: not
+      note: 'Rounds 16-63 only: GG_j''s not(X) and Z term.'
+    - component_id: constant
+      note: Round constant T_j (0x79cc4519 for j=0..15, 0x7a879d8a for j=16..63), left-rotated by (j mod 32).
+  notes: SM3 compression-function round. Registers D<-C, C<-B<<<9, B<-A, A<-TT1, H<-G, G<-F<<<19, F<-E, E<-P0(TT2)
+    update every round for j=0..63; FF_j and GG_j are identical (XOR-only) for j=0..15 and switch to the
+    AND/OR/NOT forms above for j=16..63.
 - id: sm4_round
   name: SM4 Round
   kind: full_round

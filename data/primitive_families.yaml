@@ -2890,6 +2890,61 @@ primitive_families:
       key_size_bits: 256
       rounds: 20
       output_size_bits: 128
+- id: sm3
+  name: SM3 Compression Function
+  construction_ids:
+  - davies_meyer
+  round_ids:
+  - sm3_round
+  target_applications:
+  - software
+  - hardware
+  characteristics:
+    output_size_bits: 256
+    block_size_bits: 512
+    state_size_bits: 256
+    rounds: 64
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: and
+    - id: or
+    - id: not
+    - id: constant
+  reference_ids:
+  - ietf_draft_sca_cfrg_sm3_02
+  - gmt_0004_2012_sm3
+  - gbt_32905_2016_sm3
+  process_participations: []
+  influences: []
+  notes: 'SM3 is the fixed-length Davies-Meyer compression function underlying the SM3 hash function: a 512-bit
+    message block and 256-bit chaining value (eight 32-bit registers A-H) are combined over 64 rounds to produce
+    a new 256-bit chaining value. Rounds 0-15 use FF_j(X,Y,Z)=GG_j(X,Y,Z)=X xor Y xor Z; rounds 16-63 switch to
+    FF_j(X,Y,Z)=(X and Y) or (X and Z) or (Y and Z) and GG_j(X,Y,Z)=(X and Y) or (not(X) and Z). Permutation
+    functions P0(X)=X xor (X<<<9) xor (X<<<17) and P1(X)=X xor (X<<<15) xor (X<<<23) drive, respectively, the
+    per-round state update (P0) and the message-expansion step (P1) that produces 68+64 expanded words W/W'' from
+    each 16-word block. The draft''s own design-rationale section describes the compression function as "similar
+    in structure to that of SHA-256" and targeting performance that would "generally match or exceed" SHA-256''s
+    -- a paradigm-level/positioning statement without a stated concrete-component basis (different Boolean
+    functions, different permutations, different message schedule), so this is not recorded as an influence
+    edge per this database''s strict-lineage rule. Designed by Xiao-Yun Wang et al.; first published by OSCCA in
+    2010, industry-standardized as GM/T 0004-2012, and national-standardized as GB/T 32905-2016; added to
+    ISO/IEC 10118-3 in 2017. See sm3_hash for the iterated, variable-length hash function.'
+  instances:
+  - id: sm3_compression
+    name: SM3 Compression Function
+    type: unkeyed_function
+    reference_ids:
+    - ietf_draft_sca_cfrg_sm3_02
+    characteristics:
+      output_size_bits: 256
+      block_size_bits: 512
+      state_size_bits: 256
+      rounds: 64
+    notes: Fixed-length compression step mapping a 512-bit message block and 256-bit chaining value to a new
+      256-bit chaining value in 64 rounds, feeding forward via XOR against the input chaining value (Davies-Meyer).
+      Iterated by SM3 (see sm3_hash).
 - id: sm4
   name: SM4
   notes: SM4, originally named SMS4, is a 32-round, 128-bit unbalanced Feistel-like cipher with a 128-bit key. It was first
@@ -16968,12 +17023,12 @@ primitive_families:
   - source_family_id: aes
     relations:
     - inspired_by
-    note: &feilian_blanket_ack 'A single blanket acknowledgment covers this and four sibling designs (plus SM3,
-      not tracked as its own family here): "We thank the designers of existing hash functions and symmetric-key
-      primitives more generally, in particular SHA-2, BLAKE, KECCACK, SM3, AES and Chacha, which inspired the
-      design of FEILIAN hash family. In a high-level view, we did not reinvent the mode or the structural
-      components." No per-component attribution is given (which specific element came from which design), so
-      this is recorded generically rather than as independently-justified edges.'
+    note: &feilian_blanket_ack 'A single blanket acknowledgment covers this and five sibling designs: "We thank
+      the designers of existing hash functions and symmetric-key primitives more generally, in particular SHA-2,
+      BLAKE, KECCACK, SM3, AES and Chacha, which inspired the design of FEILIAN hash family. In a high-level
+      view, we did not reinvent the mode or the structural components." No per-component attribution is given
+      (which specific element came from which design), so this is recorded generically rather than as
+      independently-justified edges.'
   - source_family_id: sha2
     relations:
     - inspired_by
@@ -16987,6 +17042,10 @@ primitive_families:
     - inspired_by
     note: *feilian_blanket_ack
   - source_family_id: chacha
+    relations:
+    - inspired_by
+    note: *feilian_blanket_ack
+  - source_family_id: sm3
     relations:
     - inspired_by
     note: *feilian_blanket_ack

@@ -805,6 +805,49 @@ references:
   url: https://www.iso.org/standard/54531.html
   notes: Adds SM4 to the international block-cipher standard and assigns its ISO
     object identifier.
+- id: gbt_32905_2016_sm3
+  kind: standard
+  title: 'GB/T 32905-2016: SM3 Cryptographic Hash Algorithm'
+  authors: []
+  year: 2016
+  venue: Standardization Administration of China
+  organization: SAC
+  status: active
+  url: http://www.gb688.cn/bzgk/gb/newGbInfo?hcno=45B1A67F20BE1FCEA92809E962C5C121
+  notes: Chinese National Standard publication of SM3; the current authoritative
+    text. The full standard is not retained locally -- see ietf_draft_sca_cfrg_sm3_02
+    for a detailed technical description of the same algorithm.
+- id: gmt_0004_2012_sm3
+  kind: standard
+  title: 'GM/T 0004-2012: SM3 Cryptographic Hash Algorithm'
+  authors: []
+  year: 2012
+  venue: Office of State Commercial Cryptography Administration of China
+  organization: OSCCA
+  status: superseded
+  url: http://www.oscca.gov.cn/Column/Column_32.htm
+  notes: Industry cryptographic standard publication of SM3, superseded by GB/T
+    32905-2016. The full standard is not retained locally.
+- id: ietf_draft_sca_cfrg_sm3_02
+  kind: internet_draft
+  title: 'draft-sca-cfrg-sm3-02: The SM3 Cryptographic Hash Function'
+  authors:
+  - S. Shen
+  - X. Lee
+  - R. Tse
+  - W. Wong
+  - Y. Yang
+  year: 2018
+  venue: IETF Crypto Forum Research Group (CFRG)
+  organization: IETF
+  status: expired
+  url: https://www.ietf.org/archive/id/draft-sca-cfrg-sm3-02.txt
+  notes: "CFRG informational draft giving a full, implementation-level description of SM3 (GB/T 32905-2016) --
+    IV, round constants, Boolean functions FF_j/GG_j, permutation functions P0/P1, message expansion, compression
+    function, padding, design rationale, cryptanalysis survey, and a reference C implementation. Not itself a
+    normative standard (expired without RFC publication) but the most detailed English-language technical
+    description of the algorithm. Local copy (covers both the compression-function and hash-mode families):
+    references/[2010][sm3,sm3_hash][spec][ietf_draft_sca_cfrg_sm3_02].txt."
 - id: tse_wong_saarinen_2018_sm4_draft
   kind: internet_draft
   title: The SM4 Blockcipher Algorithm and Its Modes of Operations
