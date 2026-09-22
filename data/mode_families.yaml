@@ -16742,29 +16742,80 @@ mode_families:
     notes: Rate 1088, capacity 2048. Collision 512, preimage 1024.
 - id: quantasylva_hash
   name: "QuantaSylva Hash"
-  construction_ids: []
+  construction_ids:
+  - binary_tree_hash
+  round_ids:
+  - chacha_bahru_round
   target_applications: []
+  characteristics:
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: word_permutation
   reference_ids:
   - niccs_2026_quantasylva_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    QuantaSylva Hash is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Shiqi Hou
+  - Dongdai Lin
+  - Shichang Wang
+  year: 2026
+  underlying_primitive_ids:
+  - chacha_bahru_2048_10
+  - chacha_bahru_4096_19
+  influences:
+  - source_family_id: chacha_bahru
+    relations:
+    - used_by
+    note: QSH's chunk/parent compression function F_{3,w} iterates ChaCha Bahru.
+  - source_family_id: jh
+    relations:
+    - inspired_by
+    note: '"The compression function is adapted from JH''s compression function [50]" -- JH-style double
+      message injection (modular addition rather than XOR) into the two halves of the permutation call.'
+  notes: 'QuantaSylva Hash (QSH) is a candidate in the NICCS 2026 cryptographic hash algorithm competition
+    (Round 1). Its mode is a tree hash, not sponge or Merkle-Damgard/HAIFA: message chunks (rho=16 blocks
+    each) are hashed independently and serially via the JH-derived compression function F_{3,w} with
+    CHUNK_START/CHUNK_END/ROOT domain-separation flags, then combined via a BLAKE3-style balanced binary tree
+    ("left subtrees are full and big") with PARENT/ROOT flags -- "resembles a combination of JH... and sponge
+    (truncated output) constructions" but explicitly contrasted with "serial modes such as Merkle-Damgard...
+    or Sponge constructions." A structural resemblance to BLAKE3''s own tree-balancing rule is noted but not
+    claimed by the spec, so not recorded as an influence.'
   instances:
-  - id: quantasylva_hash_v1
-    name: "QuantaSylva Hash"
+  - id: quantasylva_hash_512
+    name: "QSH-512"
     type: hash
     reference_ids:
     - niccs_2026_quantasylva_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1024
+      output_size_bits: 512
+      rounds: 10
+    notes: w=32 (ChaCha Bahru-32). CV size 512.
+  - id: quantasylva_hash_768
+    name: "QSH-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_quantasylva_hash
+    characteristics:
+      state_size_bits: 4096
+      block_size_bits: 2048
+      output_size_bits: 768
+      rounds: 19
+    notes: w=64 (ChaCha Bahru-64), truncated from 1024-bit internal digest. CV size 1024.
+  - id: quantasylva_hash_1024
+    name: "QSH-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_quantasylva_hash
+    characteristics:
+      state_size_bits: 4096
+      block_size_bits: 2048
+      output_size_bits: 1024
+      rounds: 19
+    notes: w=64 (ChaCha Bahru-64). CV size 1024.
 - id: taichi_hash
   name: "TaiChi"
   construction_ids: []

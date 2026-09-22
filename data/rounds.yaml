@@ -6460,4 +6460,19 @@ rounds:
     - component_id: constant
       note: 'C: 15-bit LFSR-derived constant XORed into word x_{0,0} only.'
   notes: Used by Qilin-f.
+- id: chacha_bahru_round
+  name: ChaCha Bahru Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: add_mod
+      note: 'G quarter-word transform: modular additions (a+=b<<<sigma1, etc.), each adding a rotated
+        operand (unlike plain ChaCha).'
+    - component_id: xor
+      note: 'G: XOR steps between additions.'
+    - component_id: rotation_fixed
+      note: 'G: fixed rotations (sigma1..4, tau1..4).'
+    - component_id: word_permutation
+      note: 'P16: cyclic left-shift of row i by i positions in a 4x4 word slice (AES-ShiftRows-shaped).'
+  notes: Used by ChaCha Bahru.
 

@@ -17763,3 +17763,74 @@ primitive_families:
       output_size_bits: 3136
       rounds: 16
     notes: Used by Qilin-1024.
+- id: chacha_bahru
+  name: ChaCha Bahru
+  construction_ids:
+  - arx_permutation_network
+  - fixed_rotation_arx
+  round_ids:
+  - chacha_bahru_round
+  target_applications: []
+  characteristics:
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: word_permutation
+  reference_ids:
+  - niccs_2026_quantasylva_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: chacha
+    relations:
+    - inspired_by
+    - improvement_of
+    note: '"G is the extension and generalization on w-bit word of the quarter-round function of ChaCha [9]";
+      "For w=32 the tau-amounts (16,12,8,7) are exactly those of ChaCha20." G modifies ChaCha''s quarter-round
+      so every addition adds a *rotated* operand, "to remove probability-one differentials."'
+  - source_family_id: alzette
+    relations:
+    - related_to
+    note: '"the sigma-amounts (1,15,0,8) coincide with the inner rotations of the Alzette ARX-box [7]"
+      (reaffirmed: "coincide with those of Alzette [7] at w=32") -- a stated rotation-schedule coincidence,
+      not a claim that the ARX-box structure itself is reused.'
+  - source_family_id: aes
+    relations:
+    - related_to
+    note: 'The linear layer P16 ("permutes a 4x4 word slice by cyclically left-shifting row i by i
+      positions") is stated to be "equivalent to the ShiftRows of AES [20]" -- a structural-equivalence
+      observation by the authors, not explicit "based on"/"derived from" language about AES as a design.'
+  notes: 'A permutation family (E_{d,w}), instantiated at d=3, underlying QSH (QuantaSylva Hash), a candidate
+    in the NICCS 2026 cryptographic hash algorithm competition (Round 1): 2048 bits (w=32, 64 32-bit words,
+    10 total rounds) or 4096 bits (w=64, 64 64-bit words, 19 total rounds), arranged as a 4x4x4 cube of w-bit
+    words. Round R_{3,w} = 3 passes of 16 parallel G-calls: G along axis x0 (columns); couple (x0,x1) via a
+    P16-sandwich (apply P16, run G along x0 on the resulting diagonals, undo with P16^-1); couple (x1,x2) the
+    same way. The full permutation is n_r=3*(3w/32) full rounds plus one final column-only round (G-only, no
+    P16 passes).'
+  instances:
+  - id: chacha_bahru_2048_10
+    name: ChaCha Bahru-32
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_quantasylva_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 2048
+      output_size_bits: 2048
+      rounds: 10
+    notes: w=32 (9 full rounds + 1 final column-only round). Used by QSH-512.
+  - id: chacha_bahru_4096_19
+    name: ChaCha Bahru-64
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_quantasylva_hash
+    characteristics:
+      state_size_bits: 4096
+      block_size_bits: 4096
+      output_size_bits: 4096
+      rounds: 19
+    notes: w=64 (18 full rounds + 1 final column-only round). Used by QSH-768/1024.

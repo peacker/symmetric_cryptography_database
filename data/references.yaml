@@ -7515,11 +7515,16 @@ references:
 - id: niccs_2026_quantasylva_hash
   kind: competition_submission
   title: "QuantaSylva Hash — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  authors:
+  - Shiqi Hou
+  - Dongdai Lin
+  - Shichang Wang
   year: 2026
   organization: Institute of Commercial Cryptography Standards
   venue: NICCS Cryptographic Hash Algorithms, Round 1
   url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101536223673274368.html
-  notes: "Official NICCS candidate page; the attached submission package is QSH.zip."
+  notes: "Official NICCS candidate page; the attached submission package is QSH.zip.
+    Local copy: references/[2026][chacha_bahru,quantasylva_hash][spec][niccs_round1_en].pdf."
 - id: niccs_2026_taichi_hash
   kind: competition_submission
   title: "TaiChi — NICCS Cryptographic Hash Algorithms Round 1 submission"
