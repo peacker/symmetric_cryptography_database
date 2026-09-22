@@ -847,7 +847,8 @@ references:
     function, padding, design rationale, cryptanalysis survey, and a reference C implementation. Not itself a
     normative standard (expired without RFC publication) but the most detailed English-language technical
     description of the algorithm. Local copy (covers both the compression-function and hash-mode families):
-    references/[2010][sm3,sm3_hash][spec][ietf_draft_sca_cfrg_sm3_02].txt."
+    references/[2010][sm3,sm3_hash][spec][ietf_draft_sca_cfrg_sm3_02].pdf (rendered from the plain-text
+    Internet-Draft, the format it was originally published in)."
 - id: tse_wong_saarinen_2018_sm4_draft
   kind: internet_draft
   title: The SM4 Blockcipher Algorithm and Its Modes of Operations
