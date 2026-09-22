@@ -17078,3 +17078,56 @@ primitive_families:
       block_size_bits: 2048
       output_size_bits: 2048
       rounds: 25
+- id: juzihash_p
+  name: "P_2048 (JuziHash permutation)"
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - juzihash_p_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 2048
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+    - id: constant
+    - id: bit_permutation
+  reference_ids:
+  - niccs_2026_juzihash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - related_to
+    note: '"The linear layer uses the AES MixColumns matrix over F_28" -- the exact numeric MDS matrix is
+      taken from AES, applied to the first four and the last four of the eight 256-bit state words. The
+      author explicitly denies broader reuse: "The design is not an application of the AES block cipher, and
+      it does not use AES as a black-box component... does not rely on the AES block cipher as a component,"
+      so this edge is scoped to the single reused matrix, not the cipher as a whole.'
+  notes: 'A 2048-bit, 24-round permutation (4-D byte array T[a][b][c][d], 4x4x4x4=256 bytes, equivalently 8
+    words of 256 bits) underlying JuziHash, a candidate in the NICCS 2026 cryptographic hash algorithm
+    competition (Round 1), by sole author Hongjun Wu (NTU Singapore). Round: (1) if round index is a multiple
+    of 4, XOR a 2048-bit round constant (from digits of pi, updated each round by a 3-term rotate-XOR mix);
+    (2) SubBytes -- an 8-bit S-box, built as a 3-round Feistel network over a 4-bit S-box S4, applied to all
+    256 bytes; (3) the AES MixColumns matrix applied along 4-byte lines, with the active dimension cycling
+    each round; (4) a byte permutation whose pattern depends on round index mod 3.'
+  instances:
+  - id: juzihash_p_2048_24
+    name: "P_2048^(24)"
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_juzihash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 2048
+      output_size_bits: 2048
+      rounds: 24

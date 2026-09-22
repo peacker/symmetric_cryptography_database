@@ -15811,29 +15811,68 @@ mode_families:
     notes: Capacity 1088, rate 960.
 - id: juzihash
   name: "JuziHash"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  round_ids:
+  - juzihash_p_round
   target_applications: []
+  characteristics:
+    state_size_bits: 2048
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+    - id: constant
+    - id: bit_permutation
   reference_ids:
   - niccs_2026_juzihash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    JuziHash is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Hongjun Wu
+  year: 2026
+  underlying_primitive_ids:
+  - juzihash_p_2048_24
+  influences:
+  - source_family_id: juzihash_p
+    relations:
+    - used_by
+    note: JuziHash-512 uses P_2048^(24) as a sponge; JuziHash-1024 uses it in a bespoke full-state
+      Davies-Meyer-like wide-pipe feedforward mode -- two different mode-tier constructions over the same
+      permutation.
+  notes: 'JuziHash is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1), by
+    sole author Hongjun Wu. Two output-size instances use different mode-tier constructions over the same
+    permutation: JuziHash-512 is a classic sponge (rate 1024, capacity 1024); JuziHash-1024 keeps the full
+    2048-bit state between blocks and XORs the previous capacity branch into the new capacity branch after
+    permutation, publishing only the 1024-bit capacity projection -- self-described as "still similar in
+    spirit to a Davies-Meyer feed-forward construction" but not itself sponge or classic Merkle-Damgard/
+    Davies-Meyer; this bespoke mode is not tracked as a separate construction id here. Both share a common
+    1024-bit padding rule: zero-extend to a multiple of 1024 bits, then append one mandatory extra 1024-bit
+    block encoding the message bit-length.'
   instances:
-  - id: juzihash_v1
-    name: "JuziHash"
+  - id: juzihash_512
+    name: "JuziHash-512"
     type: hash
     reference_ids:
     - niccs_2026_juzihash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1024
+      output_size_bits: 512
+      rounds: 24
+    notes: Sponge construction. Rate 1024, capacity 1024.
+  - id: juzihash_1024
+    name: "JuziHash-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_juzihash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1024
+      output_size_bits: 1024
+      rounds: 24
+    notes: Bespoke full-state Davies-Meyer-like feedforward mode (not sponge).
 - id: laurus_hash
   name: "Laurus"
   construction_ids: []

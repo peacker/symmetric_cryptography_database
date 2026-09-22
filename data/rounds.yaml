@@ -6288,4 +6288,19 @@ rounds:
       note: 'WP: riffle-style even/odd word shuffle.'
   notes: Used by f, the 2048-bit permutation underlying Iphe. One "large round" is 5 of these small rounds;
     the full permutation is 5 large rounds (25 small rounds total).
+- id: juzihash_p_round
+  name: "P_2048 Round (JuziHash)"
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: constant
+      note: Every 4th round, XOR a 2048-bit round constant (from digits of pi) into the state.
+    - component_id: sbox
+      note: 'SubBytes: an 8-bit S-box (3-round Feistel over a 4-bit S-box) applied to all 256 bytes.'
+    - component_id: field_matrix_mul
+      note: The AES MixColumns matrix over F_2^8, applied along 4-byte lines; active dimension cycles by
+        round.
+    - component_id: bit_permutation
+      note: Byte permutation whose pattern depends on round index mod 3.
+  notes: Used by P_2048^(24), the permutation underlying JuziHash.
 
