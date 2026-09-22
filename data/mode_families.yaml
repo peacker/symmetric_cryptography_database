@@ -16411,29 +16411,115 @@ mode_families:
     notes: MDPH, two MoFang-BC calls per block (Hirose DBL).
 - id: mozi_hash
   name: "Mozi"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - mozi_p_round
   target_applications: []
+  characteristics:
+    state_size_bits: 2048
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: field_matrix_mul
+    - id: rotation_variable
+    - id: constant
   reference_ids:
   - niccs_2026_mozi_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    Mozi is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Wenquan Bi
+  - Patrick Derbez
+  - Xiaoyang Dong
+  - Pierre-Alain Fouque
+  - Keting Jia
+  - Lingyue Qin
+  - André Schrottenloher
+  - Liyuan Tang
+  - Boxin Zhao
+  year: 2026
+  underlying_primitive_ids:
+  - mozi_p_2048_20
+  - mozi_p_2048_24
+  influences:
+  - source_family_id: mozi_p
+    relations:
+    - used_by
+    note: MOZI-384/512 (and their XOFs) use a classic sponge; MOZI-768/1024 use the feedforward_sponge
+      construction "based on the feed-forward sponge methodology proposed by Guo et al. [11] and Sun et al.
+      [17]".
+  notes: 'Mozi is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1), submitted
+    by the same author team as Megascon. Two mode-tier constructions over the same permutation, mirroring
+    Megascon: classic sponge for MOZI-384/512 and their XOFs (20-round permutation); feedforward_sponge for
+    MOZI-768/1024 (24-round permutation), citing the same Guo et al./Sun et al. papers as AFS-TrEDM.'
   instances:
-  - id: mozi_hash_v1
-    name: "Mozi"
+  - id: mozi_hash_384
+    name: "MOZI-384"
     type: hash
     reference_ids:
     - niccs_2026_mozi_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1280
+      output_size_bits: 384
+      rounds: 20
+    notes: Sponge. Capacity 768, rate 1280.
+  - id: mozi_hash_512
+    name: "MOZI-512"
+    type: hash
+    reference_ids:
+    - niccs_2026_mozi_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1024
+      output_size_bits: 512
+      rounds: 20
+    notes: Sponge. Capacity 1024, rate 1024.
+  - id: mozi_hash_768
+    name: "MOZI-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_mozi_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1216
+      output_size_bits: 768
+      rounds: 24
+    notes: Feedforward sponge. Capacity 832, rate 1216. Message limited to <2^64 bits.
+  - id: mozi_hash_1024
+    name: "MOZI-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_mozi_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 960
+      output_size_bits: 1024
+      rounds: 24
+    notes: Feedforward sponge. Capacity 1088, rate 960. Message limited to <2^64 bits.
+  - id: mozi_hash_384_xof
+    name: "MOZI-384-XOF"
+    type: xof
+    reference_ids:
+    - niccs_2026_mozi_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1280
+      rounds: 20
+    notes: Sponge. Capacity 768, rate 1280. Arbitrary output length.
+  - id: mozi_hash_512_xof
+    name: "MOZI-512-XOF"
+    type: xof
+    reference_ids:
+    - niccs_2026_mozi_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1024
+      rounds: 20
+    notes: Sponge. Capacity 1024, rate 1024. Arbitrary output length.
 - id: neulaser
   name: "Neulaser"
   construction_ids: []

@@ -6394,4 +6394,18 @@ rounds:
       note: 'AddRoundKey: XOR with the round key (refreshed via a KeyExpansion reusing SubBytes/ShiftRow plus
         a word transposition and round-constant XOR).'
   notes: Used by MoFang-BC.
+- id: mozi_p_round
+  name: Mozi Permutation Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: Bitsliced 4-bit S-box layer, nibble-wise across the 128-bit rows.
+    - component_id: field_matrix_mul
+      note: 4x4 MDS matrix over GF(2^4), shared with Saturnin.
+    - component_id: rotation_variable
+      note: Row rotation by round/row-dependent constants (MILP-optimized).
+    - component_id: constant
+      note: 8-bit round constant (hex digits of pi) XORed into one lane only.
+  notes: Used by the Mozi Permutation.
 

@@ -17490,3 +17490,68 @@ primitive_families:
       key_size_bits: 1728
       rounds: 16
     notes: Used by MoFang-768/1024 (MDPH mode).
+- id: mozi_p
+  name: Mozi Permutation
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - mozi_p_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 2048
+    components:
+    - id: sbox
+      params:
+        input_bits: 4
+        output_bits: 4
+    - id: field_matrix_mul
+    - id: rotation_variable
+    - id: constant
+  reference_ids:
+  - niccs_2026_mozi_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: saturnin
+    relations:
+    - related_to
+    note: '"We used the MDS matrix over GF(2^4) from [9] which is also used in [6]" -- [9] is Duval and
+      Leurent''s lightweight-MDS-circuits paper, [6] is Canteaut et al.''s Saturnin (NIST LWC candidate),
+      i.e. the exact same MDS matrix is shared with Saturnin via a common source paper, not a direct claim
+      that Mozi is derived from Saturnin itself.'
+  notes: 'A 2048-bit AES-like SPN permutation (4x4 array of 128-bit lanes) underlying Mozi, a candidate in
+    the NICCS 2026 cryptographic hash algorithm competition (Round 1), submitted by the same author team as
+    Megascon. Round: bitsliced 4-bit S-box layer (nibble-wise across 128-bit rows); MixColumn (4x4 MDS matrix
+    over GF(2^4), mod x^4+x+1, from Duval and Leurent, shared with Saturnin); ShiftRow (row rotated per
+    round/row-dependent constants found by MILP search for optimal diffusion, full diffusion at 5 rounds);
+    AddConstant (8-bit constant from hex digits of pi, into one lane only). "AES-like" (spec''s own words):
+    "we design bit-slice and parallel friendly components in AES-like style" -- nibble/bitslice-oriented like
+    Saturnin rather than byte-oriented like AES itself.'
+  instances:
+  - id: mozi_p_2048_20
+    name: Mozi Permutation (p^a, 20 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_mozi_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 2048
+      output_size_bits: 2048
+      rounds: 20
+    notes: Used by MOZI-384/512 and their XOFs.
+  - id: mozi_p_2048_24
+    name: Mozi Permutation (p^b, 24 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_mozi_hash
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 2048
+      output_size_bits: 2048
+      rounds: 24
+    notes: Used by MOZI-768/1024.
