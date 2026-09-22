@@ -6444,4 +6444,20 @@ rounds:
     - component_id: constant
       note: Round constant (binary digits of pi) XORed into subblock 8 at position j=7 only.
   notes: Used by Paff.
+- id: qilin_f_round
+  name: Qilin-f Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+      note: 'L: MRM linear layer, 28 shifted-XOR operations per column.'
+    - component_id: rotation_fixed
+      note: 'rhoQ: row rotation by row index; rhoL: column rotation.'
+    - component_id: and
+      note: 'Q: AND term of the 7-bit S-box (cascade of two chi7-like maps).'
+    - component_id: not
+      note: 'Q: NOT term of the S-box.'
+    - component_id: constant
+      note: 'C: 15-bit LFSR-derived constant XORed into word x_{0,0} only.'
+  notes: Used by Qilin-f.
 

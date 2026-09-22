@@ -981,7 +981,7 @@ processes:
     - family_id: mozi_p
     - family_id: neulaser_nlsr
     - family_id: paff
-    - family_id: qilin_hash
+    - family_id: qilin_f
     - family_id: quantasylva_hash
     - family_id: taichi_hash
     - family_id: chime_p

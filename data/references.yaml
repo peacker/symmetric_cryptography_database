@@ -7499,11 +7499,19 @@ references:
 - id: niccs_2026_qilin_hash
   kind: competition_submission
   title: "QILIN — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  authors:
+  - Meicheng Liu
+  - Xiaobin Yu
+  - Zhongyi Zhang
+  - Jiangyu Chen
+  - Shichang Wang
+  - Dongdai Lin
   year: 2026
   organization: Institute of Commercial Cryptography Standards
   venue: NICCS Cryptographic Hash Algorithms, Round 1
   url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101536372126470144.html
-  notes: "Official NICCS candidate page; the attached submission package is QILIN.zip."
+  notes: "Official NICCS candidate page; the attached submission package is QILIN.zip.
+    Local copy (Chinese-language spec; no English version was published): references/[2026][qilin_f,qilin_hash][spec][niccs_round1_zh].pdf."
 - id: niccs_2026_quantasylva_hash
   kind: competition_submission
   title: "QuantaSylva Hash — NICCS Cryptographic Hash Algorithms Round 1 submission"

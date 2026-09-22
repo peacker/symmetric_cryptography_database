@@ -17682,3 +17682,84 @@ primitive_families:
       block_size_bits: 2560
       output_size_bits: 2560
       rounds: 24
+- id: qilin_f
+  name: Qilin-f
+  construction_ids:
+  - boolean_operator_network
+  round_ids:
+  - qilin_f_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 3136
+    components:
+    - id: and
+    - id: not
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+  reference_ids:
+  - niccs_2026_qilin_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: keccak
+    relations:
+    - related_to
+    note: 'S-box: "The S-box is constructed by cascading two same chi_n-like S-boxes," explicitly "the same
+      as SHA-3''s S-box chi." Implementation: "[BDP+12] introduces an implementation technique called the
+      lane complementing transform... In our design, we employ this technique" -- both the nonlinear layer''s
+      core map and a named Keccak-reference-implementation optimization are directly reused.'
+  - source_family_id: photon
+    relations:
+    - related_to
+    note: '"We use an IV of c/2 bits based on the proof in [NO14]... It is proved in [NO14] that PHOTON...
+      [is secure with] the length of the first message block... modified from r bits to r+c/2 bits.
+      Therefore, Qilin is secure even if the c/2-bit IV is under the control of the attacker" -- the
+      sponge-with-IV mode''s security argument is directly borrowed from PHOTON''s own indifferentiability
+      proof, not from PHOTON''s permutation itself.'
+  notes: 'A 3136-bit permutation (7x7 array of 64-bit words) underlying QILIN, a candidate in the NICCS 2026
+    cryptographic hash algorithm competition (Round 1). Round p = C.rhoL.Q.rhoQ.L: L (7 parallel "Multiple
+    Rows Mixers" (MRM) linear maps, one per column, each 28 shifted-XOR operations, refining the submitters''
+    own prior MRM paper [YL25] (Yu, Liu, IACR ToSC 2025/2; not tracked as its own family here) -- not itself
+    a reuse of a *cipher* design, so recorded in prose rather than an influences edge); rhoQ (row rotation by
+    row index); Q (448 parallel 7-bit S-boxes,
+    each a cascade of two chi7-like maps, with the lane-complementing implementation optimization); rhoL
+    (column rotation); C (a 15-bit LFSR-derived constant XORed into word x_{0,0} only). Rounds: 12
+    (Qilin-512), 14 (Qilin-768), 16 (Qilin-1024).'
+  instances:
+  - id: qilin_f_3136_12
+    name: Qilin-f (12 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_qilin_hash
+    characteristics:
+      state_size_bits: 3136
+      block_size_bits: 3136
+      output_size_bits: 3136
+      rounds: 12
+    notes: Used by Qilin-512.
+  - id: qilin_f_3136_14
+    name: Qilin-f (14 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_qilin_hash
+    characteristics:
+      state_size_bits: 3136
+      block_size_bits: 3136
+      output_size_bits: 3136
+      rounds: 14
+    notes: Used by Qilin-768.
+  - id: qilin_f_3136_16
+    name: Qilin-f (16 rounds)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_qilin_hash
+    characteristics:
+      state_size_bits: 3136
+      block_size_bits: 3136
+      output_size_bits: 3136
+      rounds: 16
+    notes: Used by Qilin-1024.
