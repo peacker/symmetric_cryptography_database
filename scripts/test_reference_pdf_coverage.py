@@ -18,7 +18,7 @@ from reference_pdfs import build_family_pdf_map
 
 KNOWN_MISSING = {
     # NICCS 2026 Round 1 hash submissions are published as online ZIP packages.
-    "axis_hash", "c_hash", "champ_hash", "chime_hash",
+    "axis_hash", "c_hash", "chime_hash",
     "cuishen", "dragon_hash", "duet_hash", "eijen", "feilian",
     "garnet_hash", "iphe", "juzihash", "laurus_hash", "litchi", "llh",
     "mastercube", "megascon_hash", "mofang_hash", "mozi_hash", "neulaser",

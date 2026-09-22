@@ -15043,8 +15043,13 @@ mode_families:
     characteristics: {}
 - id: champ_hash
   name: "CHAMP"
-  construction_ids: []
+  construction_ids:
+  - number_theoretic_hash_construction
+  - group_theoretic_hardness_hash
   target_applications: []
+  characteristics:
+    components:
+    - id: field_matrix_mul
   reference_ids:
   - niccs_2026_champ_hash
   process_participations:
@@ -15052,20 +15057,43 @@ mode_families:
     stage_ids:
     - round_1
     status: candidate
+  authors:
+  - Alexander Demin
+  - Alexey Ovchinnikov
+  - Vladimir Shpilrain
+  year: 2026
   influences: []
-  notes: >-
-    CHAMP is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  notes: 'CHAMP is a Cayley hash function: a candidate in the NICCS 2026 cryptographic hash algorithm competition
+    (Round 1) with no fixed-size primitive of its own. The hash state is a single 2x2 matrix over a prime field
+    F_p (p a 128- or 256-bit safe prime); for each message bit, the state is right-multiplied by one of two fixed
+    generator matrices A (bit 0) or B (bit 1), and the final matrix''s entries (inverted where nonzero) are
+    concatenated to give the digest -- so "rounds" is the message length in bits, not a fixed design parameter, and
+    there is no padding (the construction is explicitly designed to hash open-ended streams). This is the same
+    paradigm introduced by Zemor (EUROCRYPT 1991) and Tillich-Zemor (1994), whose specific generator-matrix pair
+    CHAMP explicitly declines to reuse (citing a known Gauss-elimination preimage weakness); neither is currently
+    tracked as its own family in this database, so that lineage is recorded here in prose rather than as an
+    influences edge. CHAMP''s own generator pair also differs from the pair proposed in Bromberg-Shpilrain-Vdovina
+    (a paper co-authored by CHAMP submitter Vladimir Shpilrain) for the same "too symmetric" reason -- a considered
+    and rejected alternative, not a reused one. CHAMP-1024 uses p = 2^256-36113 (1024-bit digest); CHAMP-512 uses
+    p = 2^128-15449 (512-bit digest); both use generator matrices A=[[-2,1],[4,-3]], B=[[-5,2],[-6,2]] (determinant
+    2, chosen against the same preimage attack).'
   instances:
-  - id: champ_hash_v1
-    name: "CHAMP"
+  - id: champ_hash_512
+    name: "CHAMP-512"
     type: hash
     reference_ids:
     - niccs_2026_champ_hash
-    characteristics: {}
+    characteristics:
+      output_size_bits: 512
+    notes: p = 2^128-15449 (largest 128-bit safe prime); state = 4 field elements of 128 bits each.
+  - id: champ_hash_1024
+    name: "CHAMP-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_champ_hash
+    characteristics:
+      output_size_bits: 1024
+    notes: p = 2^256-36113 (largest 256-bit safe prime); state = 4 field elements of 256 bits each.
 - id: uhash
   name: "uHash"
   construction_ids: []

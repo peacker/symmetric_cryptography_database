@@ -258,6 +258,19 @@ mode_constructions:
     shortest-vector-approximation-based one-way function), or via an intermediate problem shown reducible to it
     (AdHASH''s weighted subset-sum problem; the same paper notes both ultimately rest on the same underlying
     lattice hardness).
+- id: group_theoretic_hardness_hash
+  name: Group-Theoretic (Cayley Hash) Hardness Hash
+  special_case_of: number_theoretic_hash_construction
+  typical_primitive_types:
+  - hash
+  placeholder_family_names:
+  - CHAMP
+  notes: 'A Cayley hash function (Zemor 1991; Tillich-Zemor 1994): the message bits directly drive a left-to-right
+    product of two fixed generator matrices in a group (here SL2(F_p)), with the hash of a message being the
+    resulting group element (encoded back to a bitstring). Collision resistance reduces to the hardness of finding
+    short relations/collisions in the generators'' Cayley graph, not to a discrete-log or lattice problem, and
+    there is no separate fixed-size primitive (permutation or compression function) at all -- the group operation
+    itself is the only cryptographic step, applied once per input bit rather than once per fixed-size block.'
 - id: block_cipher_based
   name: Block-Cipher-Based Mode
   notes: 'A mode of operation whose confidentiality/authentication mechanism is built directly by invoking an underlying
