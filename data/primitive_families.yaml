@@ -17194,3 +17194,89 @@ primitive_families:
       block_size_bits: 1600
       output_size_bits: 1600
       rounds: 16
+- id: llh_p
+  name: "P (LLH permutation)"
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  round_ids:
+  - llh_p_round
+  target_applications: []
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 6
+        output_bits: 6
+    - id: binary_matrix_mul
+    - id: bit_permutation
+    - id: rotation_variable
+    - id: constant
+  reference_ids:
+  - niccs_2026_llh
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: keccak
+    relations:
+    - generalization_of
+    note: '"The 6-bit S-box S6... is a generalization of cyclic-circuit functions" (Theorem 2-1:
+      f(x)=x xor (x>>2) xor (x>>1).(x>>3) is a permutation over Z2^n for n=3k), with a direct property table
+      (Table 3-1) comparing it against "a 5-bit cyclic-circuit function chi of SHA-3" -- differential
+      uniformity 16 vs 8, nonlinearity 16 vs 8, branch number 3 vs 2. S6 is explicitly framed as a
+      degree-generalized member of the same cyclic-circuit family Keccak''s chi belongs to.'
+  notes: 'A 24xw-bit permutation (24 rows of w-bit words; w in {32,64,96,128}) underlying LLH, a candidate in
+    the NICCS 2026 cryptographic hash algorithm competition (Round 1). Round: SubColumn (w parallel 24-bit
+    "super S-boxes" S24 per column -- reshape into a 6x4 bit matrix, apply the 6-bit S-box S6 to each of the 4
+    columns, apply a fixed 24-element derangement, right-multiply each resulting 6-bit row by a fixed 4x4
+    binary matrix D of branch number 4); ShiftRows (each of the 24 w-bit rows left-rotated by an offset from a
+    permutation polynomial mod w); AddConstant (a w-bit constant from the binary expansion of e, XORed into
+    the last row, W23, only). Rounds scale with w: 16 (w=32), 24 (w=64), 32 (w=96), 40 (w=128).'
+  instances:
+  - id: llh_p_768_16
+    name: "P (w=32)"
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_llh
+    characteristics:
+      state_size_bits: 768
+      block_size_bits: 768
+      output_size_bits: 768
+      rounds: 16
+    notes: Used by LLH-256.
+  - id: llh_p_1536_24
+    name: "P (w=64)"
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_llh
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 1536
+      output_size_bits: 1536
+      rounds: 24
+    notes: Used by LLH-512.
+  - id: llh_p_2304_32
+    name: "P (w=96)"
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_llh
+    characteristics:
+      state_size_bits: 2304
+      block_size_bits: 2304
+      output_size_bits: 2304
+      rounds: 32
+    notes: Used by LLH-768.
+  - id: llh_p_3072_40
+    name: "P (w=128)"
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_llh
+    characteristics:
+      state_size_bits: 3072
+      block_size_bits: 3072
+      output_size_bits: 3072
+      rounds: 40
+    notes: Used by LLH-1024.

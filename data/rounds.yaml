@@ -6319,4 +6319,21 @@ rounds:
     - component_id: word_permutation
       note: 'pi: GF(5)-matrix lane transposition (order 24), pure wiring.'
   notes: Used by P, shared by Laurus and Litchi.
+- id: llh_p_round
+  name: "P Round (LLH)"
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: 'SubColumn: 6-bit S-box S6 applied to each of the 4 columns of a reshaped 6x4 bit matrix.'
+    - component_id: bit_permutation
+      note: 'SubColumn: a fixed 24-element derangement of the column''s bits.'
+    - component_id: binary_matrix_mul
+      note: 'SubColumn: 4x4 binary matrix D (branch number 4) right-multiplying each resulting 6-bit row.'
+    - component_id: rotation_variable
+      note: 'ShiftRows: each of the 24 w-bit rows left-rotated by an offset from a permutation polynomial
+        mod w.'
+    - component_id: constant
+      note: 'AddConstant: w-bit constant (from e) XORed into the last row (W23) only.'
+  notes: Used by P, the permutation underlying LLH (parameterized by word size w).
 

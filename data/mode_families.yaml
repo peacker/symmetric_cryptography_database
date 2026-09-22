@@ -16044,29 +16044,101 @@ mode_families:
     notes: Capacity 1024, domain-separated via a function-id bit. Arbitrary output length, less than 2^64 bits.
 - id: llh
   name: "LLH"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - llh_p_round
   target_applications: []
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 6
+        output_bits: 6
+    - id: binary_matrix_mul
+    - id: bit_permutation
+    - id: rotation_variable
+    - id: constant
   reference_ids:
   - niccs_2026_llh
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    LLH is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Xiutao Feng
+  - Xiangyong Zeng
+  - Zhangyi Wang
+  - Shengyuan Xu
+  - Zejun Xiang
+  - Huandong Wang
+  - Ming Tang
+  - Deng Tang
+  - Bo Qin
+  - Bo Gao
+  - WeiGuo Zhang
+  - Siwei Chen
+  year: 2026
+  underlying_primitive_ids:
+  - llh_p_768_16
+  - llh_p_1536_24
+  - llh_p_2304_32
+  - llh_p_3072_40
+  influences:
+  - source_family_id: llh_p
+    relations:
+    - used_by
+    note: LLH's feed-forward sponge XORs the previous state's capacity back in after each call to P, alongside
+      absorbing the new message block -- the same feedforward_sponge shape as AFS-TrEDM.
+  notes: 'LLH is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). It is
+    "a family of cryptographic hash algorithms based on a variant of the sponge construction," with two
+    deviations from the classical sponge: the initial state is not all-zero but encodes the message bit-length
+    in the capacity, and every absorbing call feeds the *previous* state''s capacity portion back in after
+    permutation (S^(i) = P(S^(i-1)) xor (M_i || S_{r:b-1}^(i-1))) -- the same feedforward_sponge shape tracked
+    from AFS-TrEDM. All four instances have c=2d (capacity twice the digest size).'
   instances:
-  - id: llh_v1
-    name: "LLH"
+  - id: llh_256
+    name: "LLH-256"
     type: hash
     reference_ids:
     - niccs_2026_llh
-    characteristics: {}
+    characteristics:
+      state_size_bits: 768
+      block_size_bits: 256
+      output_size_bits: 256
+      rounds: 16
+    notes: w=32. Rate 256, capacity 512.
+  - id: llh_512
+    name: "LLH-512"
+    type: hash
+    reference_ids:
+    - niccs_2026_llh
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 512
+      output_size_bits: 512
+      rounds: 24
+    notes: w=64. Rate 512, capacity 1024.
+  - id: llh_768
+    name: "LLH-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_llh
+    characteristics:
+      state_size_bits: 2304
+      block_size_bits: 768
+      output_size_bits: 768
+      rounds: 32
+    notes: w=96. Rate 768, capacity 1536.
+  - id: llh_1024
+    name: "LLH-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_llh
+    characteristics:
+      state_size_bits: 3072
+      block_size_bits: 1024
+      output_size_bits: 1024
+      rounds: 40
+    notes: w=128. Rate 1024, capacity 2048.
 - id: mastercube
   name: "MasterCube"
   construction_ids: []
