@@ -17622,3 +17622,63 @@ primitive_families:
     characteristics:
       state_size_bits: 2560
     notes: Used by Neulaser-1024.
+- id: paff
+  name: Paff
+  construction_ids:
+  - spn
+  round_ids:
+  - paff_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 2560
+    components:
+    - id: sbox
+      params:
+        input_bits: 8
+        output_bits: 8
+    - id: field_matrix_mul
+    - id: bit_permutation
+    - id: constant
+    - id: xor
+  reference_ids:
+  - niccs_2026_pavelor
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: aes
+    relations:
+    - inspired_by
+    note: 'A(X) = MixColumns(ShiftRows(SubBytes(X))), "one key-less AES round," is used verbatim as the local
+      per-subblock nonlinear/diffusion unit (AESENC(X,Y)=A(X) xor Y), with AES-NI/ARMv8-crypto instructions
+      cited as the implementation rationale.'
+  - source_family_id: aegis
+    relations:
+    - inspired_by
+    note: '"schemes such as AEGIS [39], Tiaoxin [29], and Rocca [32] demonstrate that multiple 128-bit state
+      words can be organized as an internally parallel state... The proposed permutation is inspired by this
+      line of designs" -- the two independent subblock-permutation routing (p1 on the AES-updated path, p2
+      on the raw-state coupling path, with the AESENC second-input slot itself used as the coupling XOR) is
+      explicitly modeled on this family of AES-round-based AEAD designs, rather than on classical SPN or
+      Feistel large-state permutations.'
+  notes: 'A 2560-bit, 24-round permutation (20 subblocks of 128 bits) underlying Pavelor, a candidate in the
+    NICCS 2026 cryptographic hash algorithm competition (Round 1), self-described as "neither SPN nor
+    Feistel-style": every round applies one keyless AES round to 19 of the 20 subblocks in parallel (position
+    7 instead XORs a round constant, from binary digits of pi, against subblock 8), routed by two independent
+    fixed subblock permutations p1 (feeding the AES-updated path) and p2 (feeding the raw-state coupling
+    path) -- there is no separate full-state linear layer; the AESENC "key" slot itself carries the
+    cross-subblock coupling. Invertibility is proven contingent on every cycle of p2 o p1^-1 containing a
+    constant-injection point.'
+  instances:
+  - id: paff_2560_24
+    name: Paff
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_pavelor
+    characteristics:
+      state_size_bits: 2560
+      block_size_bits: 2560
+      output_size_bits: 2560
+      rounds: 24

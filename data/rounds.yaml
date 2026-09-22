@@ -6427,4 +6427,21 @@ rounds:
       note: 'F: an inversion-based 8-bit S-box applied per byte after L1/L2.'
   notes: 'Used by the Coupled-NLSR PRNG underlying Neulaser. Not a fixed-count "round": 32 blank module
     updates run per PRNG invocation, plus one further update per 32-bit output word needed.'
+- id: paff_round
+  name: Paff Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: 'AESENC''s A(X)=MixColumns(ShiftRows(SubBytes(X))): a keyless AES round applied to 19 of the 20
+        subblocks.'
+    - component_id: field_matrix_mul
+      note: 'AESENC''s A(X): AES MixColumns.'
+    - component_id: bit_permutation
+      note: 'AESENC''s A(X): AES ShiftRows; also the two fixed subblock-routing permutations p1, p2.'
+    - component_id: xor
+      note: AESENC's feedforward (A(X) xor Y) doubling as cross-subblock coupling.
+    - component_id: constant
+      note: Round constant (binary digits of pi) XORed into subblock 8 at position j=7 only.
+  notes: Used by Paff.
 
