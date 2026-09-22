@@ -2925,10 +2925,24 @@ primitive_families:
     functions P0(X)=X xor (X<<<9) xor (X<<<17) and P1(X)=X xor (X<<<15) xor (X<<<23) drive, respectively, the
     per-round state update (P0) and the message-expansion step (P1) that produces 68+64 expanded words W/W'' from
     each 16-word block. The draft''s own design-rationale section describes the compression function as "similar
-    in structure to that of SHA-256" and targeting performance that would "generally match or exceed" SHA-256''s
-    -- a paradigm-level/positioning statement without a stated concrete-component basis (different Boolean
-    functions, different permutations, different message schedule), so this is not recorded as an influence
-    edge per this database''s strict-lineage rule. Designed by Xiao-Yun Wang et al.; first published by OSCCA in
+    in structure to that of SHA-256" and targeting performance that would "generally match or exceed" SHA-256''s.
+    Checked structurally against that claim rather than taken at face value: both share the generic MD4/SHA-family
+    shape (eight 32-bit words, 512-bit block, a shift-register-style per-round update, a linear message-schedule
+    expansion, XOR/add feedforward) common to the whole MD4/MD5/SHA-0/1/2 lineage, but every concrete component
+    differs and is independently derived. SM3''s Section 6.2.2-6.2.6 justifies each rotation/addition constant
+    from its own diffusion/avalanche/hardware criteria without referencing SHA-256''s values at any point; SM3''s
+    FF_j/GG_j (XOR-only for j<16, then (X and Y) or (X and Z) or (Y and Z) / (X and Y) or (not(X) and Z) for
+    j>=16) match neither SHA-256''s Ch/Maj (always-nonlinear, no round-dependent switch) nor its own closer
+    analogue SHA-1''s per-round function rotation (SHA-1 switches through Ch/Parity/Maj/Parity, not a 2-phase
+    XOR-then-AND/OR split); SM3''s message schedule (W_j=P1(W_{j-16} xor W_{j-9} xor (W_{j-3}<<<15)) xor
+    (W_{j-13}<<<7) xor W_{j-6}) shares SHA-1/SHA-2''s general "expand via a small recurrence over prior words"
+    idea but no formula, tap positions, or the add-vs-xor choice; and the rotation-constant sets do not
+    correspond (SHA-256''s Sigma/sigma functions use {2,13,22,6,11,25,7,18,3,17,19,10}, SM3''s P0/P1/register
+    rotations use {9,17,15,23,12,7,19} -- the small overlap (7,17,19) is on differently-shaped operations, not a
+    matching multi-constant sequence like e.g. ChaCha''s rotation quadruple reused verbatim elsewhere in this
+    database). No shared S-box, round constant, or message-schedule formula exists, so per this database''s
+    strict-lineage rule this remains a shared-paradigm case, not a recordable influence edge. Designed by
+    Xiao-Yun Wang et al.; first published by OSCCA in
     2010, industry-standardized as GM/T 0004-2012, and national-standardized as GB/T 32905-2016; added to
     ISO/IEC 10118-3 in 2017. See sm3_hash for the iterated, variable-length hash function.'
   instances:
