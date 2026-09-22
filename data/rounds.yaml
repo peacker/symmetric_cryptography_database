@@ -6270,4 +6270,22 @@ rounds:
       note: 'zeta (MixDiagonal): a second 4x4 MDS matrix T2 over a different GF(2^128) field, applied to
         each diagonal.'
   notes: Used by the Garnet Permutation.
+- id: iphe_f_round
+  name: "f Small Round (Iphe)"
+  kind: step
+  spec:
+    component_flow:
+    - component_id: constant
+      note: 'AC: constants from digits of pi, XORed into the first word of each group.'
+    - component_id: add_mod
+      note: 'GM: recursive treeSum, odd recursion levels combine via modular addition.'
+    - component_id: xor
+      note: 'GM: recursive treeSum even levels combine via XOR; result fed via a bit-reversal permutation
+        into a multiplicative writeback (fixed odd coefficients, implemented as shift+add).'
+    - component_id: rotation_fixed
+      note: 'WR: each word rotated left by an index-dependent offset.'
+    - component_id: word_permutation
+      note: 'WP: riffle-style even/odd word shuffle.'
+  notes: Used by f, the 2048-bit permutation underlying Iphe. One "large round" is 5 of these small rounds;
+    the full permutation is 5 large rounds (25 small rounds total).
 

@@ -15736,29 +15736,79 @@ mode_families:
     notes: Rate 896, capacity 1152; phases P^16/P^12/P^16/P^12.
 - id: iphe
   name: "Iphe"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - iphe_f_round
   target_applications: []
+  characteristics:
+    state_size_bits: 2048
+    components:
+    - id: add_mod
+    - id: xor
+    - id: rotation_fixed
+    - id: constant
+    - id: word_permutation
   reference_ids:
   - niccs_2026_iphe
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    Iphe is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Zhengrong Lu
+  - Xiaoen Lin
+  - Chongxu Ren
+  - Yantian Shen
+  - Guoxiao Liu
+  - Haorui Cui
+  - Keting Jia
+  year: 2026
+  underlying_primitive_ids:
+  - iphe_f_2048_25
+  influences:
+  - source_family_id: iphe_f
+    relations:
+    - used_by
+    note: All three Iphe instances iterate f via the Sponge-F feedforward sponge, squeezing digest bits from
+      the capacity.
+  notes: 'Iphe is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Its mode
+    "adopts the Sponge-F structure" of Guo, Hu, Fan, Fu, Wang (ePrint 2025) -- the same feedforward_sponge
+    construction tracked from AFS-TrEDM -- explicitly distinguished from a plain sponge (Keccak/Ascon-Hash/
+    Gimli-Hash) by saving the capacity before each permutation call and XORing it back afterward, and by
+    squeezing from the capacity rather than the rate.'
   instances:
-  - id: iphe_v1
-    name: "Iphe"
+  - id: iphe_512
+    name: "Iphe-512"
     type: hash
     reference_ids:
     - niccs_2026_iphe
-    characteristics: {}
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1472
+      output_size_bits: 512
+      rounds: 25
+    notes: Capacity 576, rate 1472.
+  - id: iphe_768
+    name: "Iphe-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_iphe
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 1216
+      output_size_bits: 768
+      rounds: 25
+    notes: Capacity 832, rate 1216.
+  - id: iphe_1024
+    name: "Iphe-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_iphe
+    characteristics:
+      state_size_bits: 2048
+      block_size_bits: 960
+      output_size_bits: 1024
+      rounds: 25
+    notes: Capacity 1088, rate 960.
 - id: juzihash
   name: "JuziHash"
   construction_ids: []
