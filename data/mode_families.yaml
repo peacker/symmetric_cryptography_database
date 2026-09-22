@@ -14993,8 +14993,19 @@ mode_families:
     notes: Mandatory instance. Rate 512 bits, capacity 1088 bits; g+h = 12+12 rounds per call.
 - id: axis_hash
   name: "AXIS"
-  construction_ids: []
+  construction_ids:
+  - native_register_hash
   target_applications: []
+  characteristics:
+    state_size_bits: 1536
+    components:
+    - id: nlfsr
+    - id: sbox
+      params:
+        input_bits: 6
+        output_bits: 1
+    - id: xor
+    - id: shift_register
   reference_ids:
   - niccs_2026_axis_hash
   process_participations:
@@ -15002,20 +15013,66 @@ mode_families:
     stage_ids:
     - round_1
     status: candidate
+  authors:
+  - Danping Shi
+  - Lei Hu
+  - Dingfeng Ye
+  - Qianqian Yang
+  - Qing Ling
+  - Haomeng Xu
+  - Jun Xu
+  - Guifang Huang
+  - Yijing Wang
+  - Zhiru Chen
+  - Wenfei Qian
+  - Xiaolong Zhang
+  - Pingjian Wang
+  - Yuan Ma
+  year: 2026
   influences: []
-  notes: >-
-    AXIS is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  notes: 'AXIS ("Advanced eXpandable Iterative Stream-based Hash") is a candidate in the NICCS 2026 cryptographic
+    hash algorithm competition (Round 1). It has no separable fixed-size primitive: the 1536-bit state is 8
+    circular NFSR-style registers of 192 bits each, and message bits are injected directly into each register''s
+    nonlinear feedback taps every "beat" (via UpFull), rather than XORed into a rate portion ahead of a public
+    permutation call -- the authors themselves describe it as "a stream-based hash construction with feedback
+    registers." After absorption, a fixed 1024-beat constant-driven finalization phase (ReUpFull, using the same
+    per-register update but constants in place of message bits) runs before digest-generation beats. The authors
+    explicitly contrast this with Merkle-Damgard (only a small state projection is ever output, "inherent...
+    resistance against length extension attacks") and separately cite SIMON only as the source of a differential
+    dependency-modeling *technique* they adapt for their own cryptanalysis -- not as a design borrowing -- so no
+    influences edge is recorded. No qualifying influence (component reuse or explicit lineage language toward a
+    named prior design) was found anywhere in the specification.'
   instances:
-  - id: axis_hash_v1
-    name: "AXIS"
+  - id: axis_hash_512
+    name: "AXIS-512"
     type: hash
     reference_ids:
     - niccs_2026_axis_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1536
+      output_size_bits: 512
+    notes: Absorbs 2 message bits/beat; 256 digest-generation beats; collision/preimage/2nd-preimage goals
+      256/512/512 bits.
+  - id: axis_hash_768
+    name: "AXIS-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_axis_hash
+    characteristics:
+      state_size_bits: 1536
+      output_size_bits: 768
+    notes: Absorbs a mixed 1-/2-bit-per-beat schedule (average 1.5 bits/beat); 512 digest-generation beats;
+      collision/preimage/2nd-preimage goals 384/768/768 bits.
+  - id: axis_hash_1024
+    name: "AXIS-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_axis_hash
+    characteristics:
+      state_size_bits: 1536
+      output_size_bits: 1024
+    notes: Absorbs 1 message bit/beat; 1024 digest-generation beats; collision/preimage/2nd-preimage goals
+      512/1024/1024 bits.
 - id: c_hash
   name: "C Hash"
   construction_ids: []

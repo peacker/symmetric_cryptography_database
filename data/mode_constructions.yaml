@@ -475,6 +475,21 @@ mode_constructions:
     trading a larger (reused, not one-time) hash key for cheaper per-word
     arithmetic on general-purpose CPUs. VMAC (Krovetz and Dai) is a
     related NH-based design not yet modeled separately in this database.
+- id: native_register_hash
+  name: Native Register Hash
+  typical_primitive_types:
+  - hash
+  placeholder_family_names:
+  - AXIS
+  notes: 'The hash-mode counterpart of native_keystream_generator below: a hash construction whose register/state-update
+    network is the only cryptographic mechanism, with no separable fixed-size permutation or compression function of
+    its own to model. Message bits are injected directly into the feedback taps of a (typically NFSR-based) register
+    network each "beat," rather than XORed into a rate portion of a state ahead of a public-permutation call; the
+    digest is read out over further beats of a constant-driven (not message-driven) "finalization" phase run over
+    the same network. Distinguished from native_keystream_generator by producing a fixed-length, non-invertible
+    digest from a bounded input rather than an unbounded keystream from a fixed key/nonce.
+
+    '
 - id: native_keystream_generator
   name: Native Keystream Generator
   notes: A stream cipher whose keystream is produced directly by its own internal state-update generator, with no separable

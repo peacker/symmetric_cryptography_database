@@ -7154,11 +7154,27 @@ references:
 - id: niccs_2026_axis_hash
   kind: competition_submission
   title: "AXIS — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  authors:
+  - Danping Shi
+  - Lei Hu
+  - Dingfeng Ye
+  - Qianqian Yang
+  - Qing Ling
+  - Haomeng Xu
+  - Jun Xu
+  - Guifang Huang
+  - Yijing Wang
+  - Zhiru Chen
+  - Wenfei Qian
+  - Xiaolong Zhang
+  - Pingjian Wang
+  - Yuan Ma
   year: 2026
   organization: Institute of Commercial Cryptography Standards
   venue: NICCS Cryptographic Hash Algorithms, Round 1
   url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101540899009417216.html
-  notes: "Official NICCS candidate page; the attached submission package is AXIS.zip."
+  notes: "Official NICCS candidate page; the attached submission package is AXIS.zip.
+    Local copy: references/[2026][axis_hash][spec][niccs_round1_en].pdf."
 - id: niccs_2026_c_hash
   kind: competition_submission
   title: "C Hash — NICCS Cryptographic Hash Algorithms Round 1 submission"
