@@ -967,7 +967,7 @@ processes:
     - family_id: uhash
     - family_id: octarx
     - family_id: dragon_p
-    - family_id: duet_hash
+    - family_id: duet_f
     - family_id: eijen
     - family_id: feilian
     - family_id: garnet_hash

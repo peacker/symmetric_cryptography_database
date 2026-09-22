@@ -6202,4 +6202,20 @@ rounds:
     - component_id: xor
       note: 'Update transform: XOR of the rotated word into the next word in sequence.'
   notes: Used by Dragon-p, the 1600-bit permutation underlying Dragon Hash Family.
+- id: duet_f_round
+  name: f-beta Round (Duet)
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: 'SC: 5-bit S-box applied to the 5 bits at each column/bit-position across the 5 rows.'
+    - component_id: binary_matrix_mul
+      note: 'MS: linear layer, a 5m x 5m block matrix over 64-bit-word blocks (m=3 for f-960, m=6 for f-1920).'
+    - component_id: constant
+      note: 'AC: round constant (from pi for f-960, e for f-1920) XORed into the first word only.'
+    - component_id: rotation_fixed
+      note: 'ML: two further rotations (offsets t+21, t+43, t=word''s linear index) of each word.'
+    - component_id: xor
+      note: 'ML: the word XORed with both rotated copies of itself.'
+  notes: Used by both f-960 and f-1920, the permutations underlying Duet.
 

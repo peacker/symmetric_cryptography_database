@@ -16779,3 +16779,61 @@ primitive_families:
       block_size_bits: 1600
       output_size_bits: 1600
       rounds: 16
+- id: duet_f
+  name: f-beta (Duet permutation family)
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  round_ids:
+  - duet_f_round
+  target_applications: []
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+    - id: binary_matrix_mul
+    - id: constant
+    - id: rotation_fixed
+    - id: xor
+  reference_ids:
+  - niccs_2026_duet_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: 'A Keccak-shaped (5xm lanes of 64-bit words) permutation family underlying Duet, a candidate in the
+    NICCS 2026 cryptographic hash algorithm competition (Round 1). Two sizes: f-960 (m=3, 12 rounds) and
+    f-1920 (m=6, 18 rounds), both used by Duet -- f1 and f2 share the round structure and differ only in
+    round constants. Round phi = ML.AC.MS.SC: SC (5-bit S-box, one per bit-position across the 5 rows of
+    each column); MS (linear layer, a 5m x 5m block matrix over 64-bit-word blocks); AC (round constant,
+    from pi for f-960 / e for f-1920, XORed into the first word only); ML (each 64-bit word XORed with two
+    further rotations of itself, offsets t, t+21, t+43 where t is the word''s linear index). The spec makes
+    no claim of resemblance to any specific named permutation, only general design-principle statements
+    (S-box confusion, linear diffusion, per-round constants against slide attacks).'
+  instances:
+  - id: duet_f_960_12
+    name: f-960
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_duet_hash
+    characteristics:
+      state_size_bits: 960
+      block_size_bits: 960
+      output_size_bits: 960
+      rounds: 12
+    notes: Used as f1 or f2 in Duet-512.
+  - id: duet_f_1920_18
+    name: f-1920
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_duet_hash
+    characteristics:
+      state_size_bits: 1920
+      block_size_bits: 1920
+      output_size_bits: 1920
+      rounds: 18
+    notes: Used as f1 or f2 in Duet-768 and Duet-1024.

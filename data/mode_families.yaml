@@ -15415,29 +15415,79 @@ mode_families:
     notes: Capacity 1088, rate 512, squeeze rate 1024. Arbitrary output; min(512,v) preimage.
 - id: duet_hash
   name: "Duet"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - duet_f_round
   target_applications: []
+  characteristics:
+    components:
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+    - id: binary_matrix_mul
+    - id: constant
+    - id: rotation_fixed
+    - id: xor
   reference_ids:
   - niccs_2026_duet_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    Duet is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Yaobin Shen
+  - Tingting Cui
+  - Ziyang Luo
+  - Yan He
+  - Feng Li
+  year: 2026
+  underlying_primitive_ids:
+  - duet_f_960_12
+  - duet_f_1920_18
+  influences:
+  - source_family_id: duet_f
+    relations:
+    - used_by
+    note: Each Duet call serially applies two permutation instances (f1 on branch A, f2 on branch B), both
+      sharing a single capacity chain with feed-forward.
+  notes: 'Duet is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Its mode
+    is a "dual-branch alternating sponge": two rate branches (A, B) share one capacity C, updated serially
+    per block (f1 updates A+C, then f2 updates B using the now-intermediate C), each stage applying a
+    truncated-Davies-Meyer-style capacity feed-forward (the same shape as this database''s feedforward_sponge
+    construction). Output is squeezed from the capacity branch only, never the rate -- blocking classical
+    length-extension even though the rate branches themselves are not literally hidden. The spec: "Duet adopts
+    the alternating two-branch schedule from our previous Alternating Sponge framework [12]... further
+    introduces capacity feed-forward updates and derives its output from the capacity branch" (ePrint 2026/707,
+    by overlapping authors Luo and Shen) -- that paper is not tracked as its own family here, so the lineage
+    is recorded in prose rather than as an influences edge.'
   instances:
-  - id: duet_hash_v1
-    name: "Duet"
+  - id: duet_hash_512
+    name: "Duet-512"
     type: hash
     reference_ids:
     - niccs_2026_duet_hash
-    characteristics: {}
+    characteristics:
+      output_size_bits: 512
+      rounds: 12
+    notes: Uses f-960 (12 rounds). Rate 384, capacity 576.
+  - id: duet_hash_768
+    name: "Duet-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_duet_hash
+    characteristics:
+      output_size_bits: 768
+      rounds: 18
+    notes: Uses f-1920 (18 rounds). Rate 1088, capacity 832.
+  - id: duet_hash_1024
+    name: "Duet-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_duet_hash
+    characteristics:
+      output_size_bits: 1024
+      rounds: 18
+    notes: Uses f-1920 (18 rounds). Rate 768, capacity 1152.
 - id: eijen
   name: "Eijen"
   construction_ids: []
