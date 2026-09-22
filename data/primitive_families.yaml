@@ -17834,3 +17834,70 @@ primitive_families:
       output_size_bits: 4096
       rounds: 19
     notes: w=64 (18 full rounds + 1 final column-only round). Used by QSH-768/1024.
+- id: taichi_p1920
+  name: P1920
+  construction_ids:
+  - spn
+  - partial_sbox_layer
+  round_ids:
+  - taichi_p1920_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 1920
+    components:
+    - id: power_map_sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+    - id: xor
+    - id: rotation_fixed
+    - id: word_permutation
+    - id: constant
+  reference_ids:
+  - niccs_2026_taichi_hash
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences:
+  - source_family_id: qilin_f
+    relations:
+    - related_to
+    note: 'The linear layer L is "in the spirit of multiple-rows-mixer designs [YL25]" -- the same MRM
+      construction technique (Yu, Liu, IACR ToSC 2025/2, not tracked as its own family here) that also
+      underlies QILIN''s linear layer; TaiChi and QILIN share two co-designers (Xiaobin Yu, Meicheng Liu) and
+      cite the same paper.'
+  notes: 'A 1920-bit, 12-round permutation (6x5 array of 64-bit lanes) underlying TaiChi, a candidate in the
+    NICCS 2026 cryptographic hash algorithm competition (Round 1), submitted by a team overlapping QILIN''s
+    (Zhongyi Zhang, Xiaobin Yu, Meicheng Liu). Round Rb,t = A_{b,t}.Pi10.Q.L: L (MRM linear diffusion, per
+    column); Q (384 parallel 5-bit S-boxes, row-wise; "an implementation-oriented affine representative of
+    the known degree-2 APN/AB Gold class"); Pi10 (a static lane permutation, two 15-cycles, deliberately with
+    *no* lane rotation unlike Keccak); A_{b,t} (five 64-bit constants from a 7-bit LFSR into row 0 only,
+    domain b selects between two disjoint 60-constant windows -- the only difference between the P1 and P2
+    calls of the mode''s Interleaved Feistel Sponge). Earlier (discarded) drafts of this permutation used
+    Keccak-named steps (theta/iota/chi5); the current version renamed and restructured them, so no influences
+    edge to Keccak is recorded for the shipped design.'
+  instances:
+  - id: taichi_p1920_p1
+    name: P1920 (P1, domain b=1)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_taichi_hash
+    characteristics:
+      state_size_bits: 1920
+      block_size_bits: 1920
+      output_size_bits: 1920
+      rounds: 12
+    notes: Uses constant window q=5t+j (b=1). Called first in each IFS Step.
+  - id: taichi_p1920_p2
+    name: P1920 (P2, domain b=2)
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_taichi_hash
+    characteristics:
+      state_size_bits: 1920
+      block_size_bits: 1920
+      output_size_bits: 1920
+      rounds: 12
+    notes: Uses constant window q=60+5t+j (b=2). Called second in each IFS Step.

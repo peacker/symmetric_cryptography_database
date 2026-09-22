@@ -16818,29 +16818,81 @@ mode_families:
     notes: w=64 (ChaCha Bahru-64). CV size 1024.
 - id: taichi_hash
   name: "TaiChi"
-  construction_ids: []
+  construction_ids:
+  - interleaved_feistel_sponge
+  round_ids:
+  - taichi_p1920_round
   target_applications: []
+  characteristics:
+    state_size_bits: 1920
+    components:
+    - id: power_map_sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+    - id: xor
+    - id: rotation_fixed
+    - id: word_permutation
+    - id: constant
   reference_ids:
   - niccs_2026_taichi_hash
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    TaiChi is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Zhongyi Zhang
+  - Xiaobin Yu
+  - Meicheng Liu
+  - Guoyan Zhang
+  - Shiyue Diao
+  - Peng Nie
+  year: 2026
+  underlying_primitive_ids:
+  - taichi_p1920_p1
+  - taichi_p1920_p2
+  influences:
+  - source_family_id: taichi_p1920
+    relations:
+    - used_by
+    note: Each IFS Step calls P1 then P2 (domain-separated instances of the same permutation), coupling
+      their capacity outputs Feistel-style.
+  notes: 'TaiChi is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Its
+    mode is an "Interleaved Feistel Sponge" (IFS): state (S,L,R) with rate S and two capacity branches L,R
+    (2c bits, never output); collision/preimage security is capped exactly at the capacity
+    (collision=min{2^(d/2),2^c}, preimage=min{2^d,2^c}), with c=d for every instance -- zero capacity margin
+    beyond the stated digest size, a tight parameterization the spec itself flags.'
   instances:
-  - id: taichi_hash_v1
-    name: "TaiChi"
+  - id: taichi_hash_512
+    name: "TaiChi-512"
     type: hash
     reference_ids:
     - niccs_2026_taichi_hash
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1920
+      block_size_bits: 1408
+      output_size_bits: 512
+      rounds: 12
+    notes: Rate 1408, capacity (per branch) 512.
+  - id: taichi_hash_768
+    name: "TaiChi-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_taichi_hash
+    characteristics:
+      state_size_bits: 1920
+      block_size_bits: 1152
+      output_size_bits: 768
+      rounds: 12
+    notes: Rate 1152, capacity (per branch) 768.
+  - id: taichi_hash_1024
+    name: "TaiChi-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_taichi_hash
+    characteristics:
+      state_size_bits: 1920
+      block_size_bits: 896
+      output_size_bits: 1024
+      rounds: 12
+    notes: Rate 896, capacity (per branch) 1024. Needs one extra squeeze step (d=r+128>r).
 - id: chime_hash
   name: "CHIME"
   construction_ids:

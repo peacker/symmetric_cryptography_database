@@ -6475,4 +6475,19 @@ rounds:
     - component_id: word_permutation
       note: 'P16: cyclic left-shift of row i by i positions in a 4x4 word slice (AES-ShiftRows-shaped).'
   notes: Used by ChaCha Bahru.
+- id: taichi_p1920_round
+  name: P1920 Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: xor
+      note: 'L: MRM linear diffusion layer, per column.'
+    - component_id: power_map_sbox
+      note: 'Q: 5-bit S-box, an affine representative of the degree-2 APN/AB Gold power-map class, row-wise.'
+    - component_id: word_permutation
+      note: 'Pi10: static lane permutation (two 15-cycles, no rotation).'
+    - component_id: constant
+      note: 'A_{b,t}: five 64-bit LFSR-derived constants into row 0 only; domain b selects the constant
+        window (the only difference between the P1 and P2 calls).'
+  notes: Used by P1920.
 

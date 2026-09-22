@@ -146,6 +146,24 @@ mode_constructions:
     a genuine third case, not a smaller copy of either.
 
     '
+- id: interleaved_feistel_sponge
+  name: Interleaved Feistel Sponge
+  abbreviation: IFS
+  typical_primitive_types:
+  - hash_function
+  placeholder_family_names:
+  - TaiChi
+  notes: 'A sponge-adjacent construction with a rate branch S and two capacity branches L, R (the hidden pair
+    K=(L,R) is never output), where each "Step" makes *two* permutation calls -- rather than one -- and their
+    capacity outputs are coupled Feistel-style rather than fed straight through (L_{i+1}=C_i, R_{i+1}=B_i xor
+    C_i for some per-call split (B,C) of a call''s output). Neither a sponge (one call per step, uncoupled
+    capacity) nor a classical Feistel network (no permutation calls, XOR-based round function only); the two
+    permutation calls are typically domain-separated instances of the same underlying permutation
+    (distinguished only by round-constant window) rather than two structurally different maps. TaiChi''s own
+    security analysis notes standard sponge indifferentiability results "do not transfer... without
+    qualification" to this shape.
+
+    '
 - id: duplex_construction
   name: Duplex Construction
   notes: 'A permutation-based mode that interleaves absorb and squeeze in a single call per operation, enabling stateful,
