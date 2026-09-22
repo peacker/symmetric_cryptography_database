@@ -1,14 +1,47 @@
 version: 1
 primitive_types:
+- id: unkeyed_permutation
+  name: Unkeyed Permutation
+  notes: >
+    A fixed-size, invertible transform with no secret-key input: P is a
+    permutation of {0,1}^n, the same map for everyone -- e.g. Keccak-f,
+    Ascon-p, ChaCha's core permutation. Used as a building block for a mode
+    rather than as a standalone cryptographic algorithm; the surrounding
+    mode (sponge, duplex, Even-Mansour, ...) is what supplies a key or
+    provides security, not the permutation in isolation.
+- id: unkeyed_function
+  name: Unkeyed Function
+  notes: >
+    A fixed-input-length, fixed-output-length transform with no secret-key
+    input that is not (and is not designed to be) invertible -- most
+    commonly a hash-mode compression function combining a chaining value
+    with a message block, e.g. h: {0,1}^n x {0,1}^b -> {0,1}^n, iterated by
+    Merkle-Damgard/HAIFA/binary-tree modes to hash arbitrary-length input.
+    Often built internally from a block cipher or permutation used in a
+    feedforward mode (Davies-Meyer and its variants), but the resulting
+    compression function itself takes no secret key: the message block
+    plays the role of "key" to the internal cipher, not a caller-supplied
+    secret.
 - id: block_cipher
-  name: Block Cipher
+  name: (Keyed) Block Cipher
   notes: >
     A keyed, invertible transform on fixed-size blocks: E_k is a permutation
     of {0,1}^n for each key k, with a corresponding decryption D_k = E_k^-1.
     Fixed-length by definition -- variable-length encryption is built on top
     of one via a mode of operation (see the primitive/mode split above).
+- id: block_function
+  name: (Keyed) Block Function
+  notes: >
+    A keyed, fixed-input-length, fixed-output-length transform that is not
+    (and is not designed to be) invertible -- e.g. a keyed PRF/state-update
+    step such as Salsa20/ChaCha's core update function (permutation plus
+    feedforward over key, nonce and counter) or a keyed compression-style
+    step in a stream cipher's internal state, as opposed to a block cipher's
+    encryption permutation. Used as a named intermediate step in a family's
+    own specification that a surrounding mode (e.g. an expansion/keystream
+    function) turns into a variable-length algorithm.
 - id: tweakable_block_cipher
-  name: Tweakable Block Cipher
+  name: (Keyed) Tweakable Block Cipher
   notes: >
     A block cipher taking a second, public "tweak" input T alongside the key:
     E_k(T, x) is a permutation of {0,1}^n for each (k, T) pair (Liskov,
@@ -16,32 +49,14 @@ primitive_types:
     single key produce many independent permutations cheaply (no per-tweak
     rekeying), used for disk-sector encryption, wide-block modes, and as the
     permutation inside dedicated AEAD/MAC constructions.
-- id: permutation
-  name: Permutation
+- id: tweakable_block_function
+  name: (Keyed) Tweakable Block Function
   notes: >
-    An unkeyed (or public-parameter-keyed), fixed-size invertible transform
-    used as a building block for a mode rather than as a standalone
-    cryptographic algorithm -- e.g. Keccak-f, Ascon-p, ChaCha's core
-    permutation. Distinguished from a block_cipher by having no secret key
-    of its own: the surrounding mode (sponge, duplex, Even-Mansour, ARX
-    stream construction, ...) is what supplies the key or provides security,
-    not the permutation in isolation.
-- id: compression_function
-  name: Compression Function
-  notes: >
-    A fixed-input-length, fixed-output-length transform combining a chaining
-    value with a message block, e.g. h: {0,1}^n x {0,1}^b -> {0,1}^n --
-    the fixed-size building block iterated by a hash mode (Merkle-Damgard,
-    HAIFA, binary tree) to hash arbitrary-length input. Often built as a
-    block cipher or permutation used in a feedforward mode (Davies-Meyer and
-    its variants) rather than designed from scratch.
-- id: update_function
-  name: Update Function
-  notes: >
-    A fixed-size state-to-state transform that is neither a keyed
-    block-cipher permutation nor an unkeyed public permutation in the usual
-    sense, but a named intermediate step in a family's own specification --
-    e.g. Salsa20's core update function, which a surrounding expansion/
-    encryption function (mode tier) turns into a keystream generator. Used
-    when a family's own paper names and specifies this fixed-size step
-    separately from the variable-length algorithm built on top of it.
+    A block function (keyed, fixed-size, not designed to be invertible)
+    that also takes a second, public tweak input alongside the key, the
+    non-bijective counterpart of a tweakable block cipher: E_k(T, x) is a
+    fixed-size but not necessarily invertible map for each (k, T) pair. No
+    confirmed instance is currently modeled in this database; the type is
+    defined for completeness alongside tweakable_block_cipher, in case a
+    future family's own specification names a fixed-size step with exactly
+    this shape.

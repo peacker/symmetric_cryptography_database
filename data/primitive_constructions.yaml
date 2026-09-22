@@ -61,7 +61,7 @@ primitive_constructions:
   special_case_of: spn
   typical_primitive_types:
   - block_cipher
-  - permutation
+  - unkeyed_permutation
   placeholder_family_names:
   - HadesMiMC
   - Poseidon
@@ -125,7 +125,7 @@ primitive_constructions:
   abbreviation: Bitslice SPN
   special_case_of: spn
   typical_primitive_types:
-  - permutation
+  - unkeyed_permutation
   - block_cipher
   placeholder_family_names:
   - Keccak
@@ -147,7 +147,7 @@ primitive_constructions:
   abbreviation: Huge Bool S-box
   special_case_of: spn
   typical_primitive_types:
-  - permutation
+  - unkeyed_permutation
   - block_cipher
   placeholder_family_names:
   - Gimli
@@ -417,7 +417,7 @@ primitive_constructions:
   abbreviation: EM
   typical_primitive_types:
   - block_cipher
-  - permutation
+  - unkeyed_permutation
   placeholder_family_names:
   - PRINCE
   - LED
@@ -428,7 +428,7 @@ primitive_constructions:
 - id: sbl_block_cipher_compression
   name: Classical Block-Cipher Single-Block-Length (SBL) Constructions
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   notes: 'Level-1 root for the classical PGV-style compression functions: an n-bit chaining variable and an m-bit message
     block are combined via a single keyed block-cipher call to produce an n-bit compressed output, with the cipher output
     fed forward (XORed) against part of the input to enforce one-wayness. Families are tagged with a leaf below.
@@ -439,7 +439,7 @@ primitive_constructions:
   abbreviation: DM
   special_case_of: sbl_block_cipher_compression
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - SHA-256
   - MD5
@@ -454,7 +454,7 @@ primitive_constructions:
   abbreviation: MMO
   special_case_of: sbl_block_cipher_compression
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - DES-based MMO (ISO 10126)
   notes: 'f(h_{i-1}, m_i) = E_{h_{i-1}}(m_i) XOR m_i. The previous chaining state dictates the block-cipher key schedule;
@@ -467,7 +467,7 @@ primitive_constructions:
   abbreviation: MP
   special_case_of: sbl_block_cipher_compression
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - WHIRLPOOL
   - Streebog
@@ -483,7 +483,7 @@ primitive_constructions:
 - id: dbl_block_cipher_compression
   name: Classical Block-Cipher Double-Block-Length (DBL) Constructions
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   notes: 'Level-1 root for DBL compression functions: multiple interleaved calls of an n-bit block cipher are combined
     to produce a larger, collision-resistant 2n-bit compressed output rather than a single n-bit one. Families are tagged
     with a leaf below.
@@ -493,7 +493,7 @@ primitive_constructions:
   name: Abreast-DM
   special_case_of: dbl_block_cipher_compression
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - Abreast-DM-AES-128
   notes: 'Two independent Davies-Meyer tracks run abreast (in parallel) over the same block cipher, where the second track''s
@@ -506,7 +506,7 @@ primitive_constructions:
   name: Tandem-DM
   special_case_of: dbl_block_cipher_compression
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - Tandem-DM-AES-256
   notes: 'A two-stage cascading architecture: the intermediate output of the first block-cipher layer feeds into and modifies
@@ -518,7 +518,7 @@ primitive_constructions:
   name: Hirose Construction
   special_case_of: dbl_block_cipher_compression
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - Hirose-DM-AES-256
   notes: 'An optimized DBL layout that runs two parallel block-cipher calls sharing the exact same key schedule (derived
@@ -532,7 +532,7 @@ primitive_constructions:
   abbreviation: MDC
   special_case_of: dbl_block_cipher_compression
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - MDC2-DES
   notes: 'Legacy IBM DBL designs that pass the message through multiple cross-interleaved block-cipher encryption steps
@@ -544,7 +544,7 @@ primitive_constructions:
 - id: permutation_based_feedforward_compression
   name: Permutation-Based Constructions (with Feed-Forward)
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   notes: 'Level-1 root for modern compression functions that use no separate key schedule and no keyed block cipher at
     all: the previous chaining state and message are formatted directly into a single unified internal state, mixed via
     an unkeyed public permutation, and forced one-way by a final feed-forward step binding the initial state to the
@@ -555,7 +555,7 @@ primitive_constructions:
   name: Davies-Meyer Style Feed-Forward Permutation
   special_case_of: permutation_based_feedforward_compression
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - BLAKE2b
   - BLAKE2s
@@ -570,7 +570,7 @@ primitive_constructions:
   name: Truncated Large-Permutation Layout
   special_case_of: permutation_based_feedforward_compression
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - MD6
   notes: 'The chaining state and message are appended together into a single massive public random permutation call, and
@@ -583,9 +583,9 @@ primitive_constructions:
   name: ARX Network
   abbreviation: ARX-PN
   typical_primitive_types:
-  - permutation
+  - unkeyed_permutation
   - block_cipher
-  - update_function
+  - block_function
   placeholder_family_names:
   - Salsa
   - ChaCha
@@ -606,9 +606,9 @@ primitive_constructions:
   name: Fixed-Rotation ARX
   special_case_of: arx_permutation_network
   typical_primitive_types:
-  - permutation
+  - unkeyed_permutation
   - block_cipher
-  - update_function
+  - block_function
   notes: 'Rotation amounts are compile-time constants, identical on every invocation regardless of the data -- the majority
     case among ARX designs, and thus a weak lineage signal on its own: treat derived edges on this leaf as lower-confidence
     than data_dependent_rotation_arx, whose rarity makes shared use a much stronger signal.
@@ -654,7 +654,7 @@ primitive_constructions:
   name: Boolean-Operator Network
   abbreviation: Bool-Op
   typical_primitive_types:
-  - permutation
+  - unkeyed_permutation
   - block_cipher
   - aead
   placeholder_family_names:
@@ -680,7 +680,7 @@ primitive_constructions:
   abbreviation: AND-RX
   special_case_of: boolean_operator_network
   typical_primitive_types:
-  - permutation
+  - unkeyed_permutation
   - block_cipher
   notes: 'A round-based structure built from bitwise AND (or NAND) as its only nonlinear operation, combined with XOR
     and fixed rotations only -- no OR, no NOT beyond incidental linear use, no plain (non-rotating) shifts, no modular
@@ -693,7 +693,7 @@ primitive_constructions:
   name: Stream State-Update Generator
   abbreviation: SSUG
   typical_primitive_types:
-  - update_function
+  - block_function
   placeholder_family_names:
   - RC4
   notes: 'A keystream design based on repeated state updates and output extraction, typically with separate key scheduling
@@ -705,7 +705,7 @@ primitive_constructions:
   abbreviation: LRN
   typical_primitive_types:
   - block_cipher
-  - update_function
+  - block_function
   placeholder_family_names:
   - KATAN
   - KTANTAN
@@ -744,7 +744,7 @@ primitive_constructions:
   abbreviation: DDPN
   typical_primitive_types:
   - block_cipher
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - ARMADILLO
   notes: 'Nonlinearity comes entirely from selecting, at each step, which one of a small fixed set of permutations of
@@ -816,7 +816,7 @@ primitive_constructions:
 - id: coupled_counter_system
   name: Coupled Counter System
   typical_primitive_types:
-  - update_function
+  - block_function
   notes: >
     A keystream generator whose registers are counters that update or clock
     each other (rather than being independently clocked and only combined
@@ -826,7 +826,7 @@ primitive_constructions:
 - id: filtered_fcsr
   name: Filtered FCSR
   typical_primitive_types:
-  - update_function
+  - block_function
   notes: >
     A single fcsr (Feedback with Carry Shift Register) whose output is
     passed through a nonlinear or linear filtering function of several
@@ -838,7 +838,7 @@ primitive_constructions:
 - id: filtered_lfsr
   name: Filtered LFSR
   typical_primitive_types:
-  - update_function
+  - block_function
   notes: >
     The classical LFSR-based keystream generator: a single (typically
     maximum-length) LFSR whose state is passed through a fixed nonlinear
@@ -850,7 +850,7 @@ primitive_constructions:
 - id: filtered_lfsr_with_decimation
   name: Filtered LFSR with Decimation
   typical_primitive_types:
-  - update_function
+  - block_function
   notes: >
     A filtered-LFSR variant that additionally decimates -- irregularly
     selects, discards, or re-clocks -- its output or a second register's
@@ -882,7 +882,7 @@ primitive_constructions:
 - id: irregular_clock_register_pair
   name: Irregular Clock Register Pair
   typical_primitive_types:
-  - update_function
+  - block_function
   notes: >
     A keystream generator built from two or more LFSRs/registers where one
     register's state (or a majority/threshold function of several
@@ -894,7 +894,7 @@ primitive_constructions:
 - id: lfsr_over_extension_field_with_memory
   name: LFSR over Extension Field with Memory
   typical_primitive_types:
-  - update_function
+  - block_function
   notes: >
     An LFSR defined over a finite extension field GF(2^n) (word-based
     rather than bit-based linear feedback) augmented with extra internal
@@ -905,7 +905,7 @@ primitive_constructions:
 - id: nlfsr_combiner
   name: NLFSR Combiner
   typical_primitive_types:
-  - update_function
+  - block_function
   notes: >
     A keystream generator combining the outputs of two or more distinct
     NLFSRs (nonlinear feedback shift registers) via a further nonlinear
@@ -916,7 +916,7 @@ primitive_constructions:
 - id: nlfsr_lfsr_filter
   name: NLFSR/LFSR Filter
   typical_primitive_types:
-  - update_function
+  - block_function
   notes: >
     A keystream generator combining at least one NLFSR and at least one
     LFSR, filtered through a joint nonlinear Boolean function of taps from
@@ -956,8 +956,8 @@ primitive_constructions:
 - id: t_function
   name: T-Function
   typical_primitive_types:
-  - update_function
-  - permutation
+  - block_function
+  - unkeyed_permutation
   placeholder_family_names:
   - VMPC
   notes: >
@@ -974,7 +974,7 @@ primitive_constructions:
 - id: table_driven_prf
   name: Table-Driven PRF
   typical_primitive_types:
-  - update_function
+  - block_function
   notes: >
     A pseudorandom function/generator whose nonlinearity comes from one or
     more large lookup tables built or keyed at setup time and indexed by
@@ -987,7 +987,7 @@ primitive_constructions:
 - id: table_update_stream
   name: Table-Update Stream
   typical_primitive_types:
-  - update_function
+  - block_function
   notes: >
     A stream cipher whose state is itself a large table/array that is
     continuously permuted/updated as keystream is produced (as in RC4's
@@ -997,7 +997,7 @@ primitive_constructions:
 - id: nlfsr_filtered
   name: NLFSR with Nonlinear Filter
   typical_primitive_types:
-  - update_function
+  - block_function
   notes: >
     An NLFSR (nonlinear feedback shift register) whose output is
     additionally passed through a further nonlinear Boolean filtering
@@ -1011,8 +1011,8 @@ primitive_constructions:
   abbreviation: MMN
   typical_primitive_types:
   - block_cipher
-  - compression_function
-  - update_function
+  - unkeyed_function
+  - block_function
   placeholder_family_names:
   - IDEA
   - MMB
@@ -1054,7 +1054,7 @@ primitive_constructions:
   special_case_of: modular_multiplication_network
   typical_primitive_types:
   - block_cipher
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - MSX
   - Nimbus
@@ -1141,7 +1141,7 @@ primitive_constructions:
   special_case_of: modular_multiplication_network
   typical_primitive_types:
   - block_cipher
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - MOE
   - MMB
@@ -1166,7 +1166,7 @@ primitive_constructions:
   abbreviation: GTDS
   typical_primitive_types:
   - block_cipher
-  - permutation
+  - unkeyed_permutation
   placeholder_family_names:
   - Arion
   notes: A round function over GF(p) combining a triangular system of univariate polynomial permutations (the "SPN part",
@@ -1180,8 +1180,8 @@ primitive_constructions:
   abbreviation: APF
   typical_primitive_types:
   - block_cipher
-  - permutation
-  - compression_function
+  - unkeyed_permutation
+  - unkeyed_function
   placeholder_family_names:
   - MiMC
   - LowMC
@@ -1204,7 +1204,7 @@ primitive_constructions:
   special_case_of: advanced_protocol_friendly_construction
   typical_primitive_types:
   - block_cipher
-  - permutation
+  - unkeyed_permutation
   placeholder_family_names:
   - LowMC
   notes: A one-way function purpose-built as the core primitive of an MPC-in-the-head-based post-quantum signature scheme
@@ -1217,7 +1217,7 @@ primitive_constructions:
   special_case_of: advanced_protocol_friendly_construction
   typical_primitive_types:
   - block_cipher
-  - permutation
+  - unkeyed_permutation
   placeholder_family_names:
   - MiMC
   - GMiMC
@@ -1231,7 +1231,7 @@ primitive_constructions:
   special_case_of: advanced_protocol_friendly_construction
   typical_primitive_types:
   - block_cipher
-  - permutation
+  - unkeyed_permutation
   placeholder_family_names:
   - Rescue
   - Vision
@@ -1246,7 +1246,7 @@ primitive_constructions:
   special_case_of: advanced_protocol_friendly_construction
   typical_primitive_types:
   - block_cipher
-  - permutation
+  - unkeyed_permutation
   notes: The nonlinear layer is a direct table lookup y = T[x] rather than an algebraic map -- very fast to evaluate in
     the clear and needing the fewest rounds of the three ZK-friendly types, but only proof-system-friendly once a
     dedicated lookup argument (e.g. Plookup-style protocols) is available in the target proof system, and constraint
@@ -1257,7 +1257,7 @@ primitive_constructions:
   special_case_of: advanced_protocol_friendly_construction
   typical_primitive_types:
   - block_cipher
-  - permutation
+  - unkeyed_permutation
   placeholder_family_names:
   - LowMC
   - MiMC
@@ -1274,7 +1274,7 @@ primitive_constructions:
   special_case_of: advanced_protocol_friendly_construction
   typical_primitive_types:
   - block_cipher
-  - permutation
+  - unkeyed_permutation
   notes: 'The S-box IS a full field element (typically ~64-256 bits, chosen for security against Groebner-basis/
     interpolation-style algebraic attacks rather than for a deliberate "non-tabulable width" design goal the way
     huge_boolean_sbox_layer below is) -- n well beyond the 3-8-bit S-boxes of the classical SPN tradition, "n-to-n-bit"
@@ -1305,7 +1305,7 @@ primitive_constructions:
   abbreviation: Group-exp hash
   special_case_of: advanced_protocol_friendly_construction
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   notes: Nonlinearity comes from a fixed-base scalar multiplication / exponentiation in a cryptographic group (e.g. an
     elliptic-curve group) rather than from an algebraic S-box, lookup table, or bitwise round function -- typically not
     preimage-resistant against an adversary able to solve the group's discrete-log problem (preimage resistance instead
@@ -1317,7 +1317,7 @@ primitive_constructions:
   abbreviation: Group hash
   special_case_of: advanced_protocol_friendly_construction
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   notes: 'A distinct mechanism from group_exponentiation_hash above: hashes a short input directly to a point on an
     elliptic curve (via a conventional hash to a field element, then a try-and-increment/decompression map to a curve
     point, then cofactor clearing), rather than computing a scalar-multiplication sum over the input''s bits/digits.
@@ -1331,7 +1331,7 @@ primitive_constructions:
   name: Number-Theoretic Construction
   abbreviation: NT construction
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - VSH
   notes: 'Level-1 root: nonlinearity/mixing in a fixed-size compression-style step comes from modular arithmetic
@@ -1352,7 +1352,7 @@ primitive_constructions:
   name: Factoring-Hardness Construction
   special_case_of: number_theoretic_construction
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   placeholder_family_names:
   - VSH
   notes: Collision resistance reduces to the hardness of integer factorization (directly, or via an intermediate
@@ -1361,14 +1361,14 @@ primitive_constructions:
   name: Discrete-Log-Hardness Construction
   special_case_of: number_theoretic_construction
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   notes: Collision resistance reduces to the hardness of the discrete logarithm problem in a group (a prime-order
     subgroup of Z_p^*, or, more generally, any group in which discrete log is assumed hard).
 - id: lattice_hardness_construction
   name: Lattice-Hardness Construction
   special_case_of: number_theoretic_construction
   typical_primitive_types:
-  - compression_function
+  - unkeyed_function
   notes: Collision resistance reduces to a lattice hardness assumption (typically the hardness of approximating
     the length of the shortest vector in a lattice, following Ajtai), directly or via an intermediate problem
     (e.g. the weighted subset-sum problem) shown reducible to it.
@@ -1399,7 +1399,7 @@ primitive_constructions:
   special_case_of: feistel
   typical_primitive_types:
   - block_cipher
-  - permutation
+  - unkeyed_permutation
   placeholder_family_names:
   - GRIFFIN
   notes: 'Extends the additive Feistel update (x,y) -> (y+F(x),x) with a multiplication: (x,y) -> (y*G(x)+F(x),x),
@@ -1415,7 +1415,7 @@ primitive_constructions:
   special_case_of: spn
   typical_primitive_types:
   - block_cipher
-  - permutation
+  - unkeyed_permutation
   placeholder_family_names:
   - Rescue
   - GRIFFIN

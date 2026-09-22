@@ -32,8 +32,9 @@ Every family in this database is either a **primitive** (`data/primitive_familie
 mirrored throughout the site (separate filter panels, separate construction/type catalogues,
 a dedicated toggle on the Timelines and Genealogy tabs):
 
-- **Primitive — fixed-length, not directly usable on its own.** A permutation, block cipher,
-  tweakable block cipher, compression function, or update function: something that transforms
+- **Primitive — fixed-length, not directly usable on its own.** An unkeyed permutation, unkeyed
+  function, (keyed) block cipher, (keyed) block function, (keyed) tweakable block cipher, or
+  (keyed) tweakable block function: something that transforms
   a *fixed*-size input to a *fixed*-size output (or state), with no standalone notion of
   "encrypt this arbitrary-length message" or "hash this file." Keccak-*f*, AES, and Salsa20's
   core update function are primitives.
@@ -85,13 +86,18 @@ enum, specifically so each type carries its own citable definition (`data/primit
 
 **Primitive types:**
 
+Partitioned along three axes: the interface (fixed-size input/output only, vs. also taking a
+tweak), whether the transform is a bijection or not, and — for the bijective/keyed axis —
+whether it takes a secret key at all.
+
 | Type | Definition |
 |---|---|
-| Block Cipher | A keyed, invertible transform on fixed-size blocks: `E_k` is a permutation of `{0,1}^n` for each key `k`, with a corresponding `D_k = E_k^-1`. |
-| Tweakable Block Cipher | A block cipher with a second, public "tweak" input: `E_k(T, x)` is a permutation of `{0,1}^n` for each `(k, T)` pair (Liskov, Rivest, Wagner, CRYPTO 2002). One key cheaply yields many independent permutations without rekeying. |
-| Permutation | An unkeyed (or public-parameter-keyed) fixed-size invertible transform used as a building block for a mode, not as a standalone algorithm — e.g. Keccak-*f*, Ascon-*p*. The surrounding mode supplies the key/security, not the permutation alone. |
-| Compression Function | A fixed-input, fixed-output transform combining a chaining value with a message block, `h: {0,1}^n x {0,1}^b -> {0,1}^n`, iterated by a hash mode to process arbitrary-length input. |
-| Update Function | A fixed-size state-to-state transform named and specified separately from the variable-length algorithm built on top of it — e.g. Salsa20's core update function, turned into a keystream generator by a mode-tier expansion function. |
+| Unkeyed Permutation | A fixed-size, invertible transform with no secret-key input — the same map for everyone: `P` is a permutation of `{0,1}^n`, used as a building block for a mode, not as a standalone algorithm — e.g. Keccak-*f*, Ascon-*p*, ChaCha's core permutation. The surrounding mode supplies the key/security, not the permutation alone. |
+| Unkeyed Function | A fixed-input, fixed-output transform with no secret-key input that is not (and isn't designed to be) invertible — most commonly a hash-mode compression function combining a chaining value with a message block, `h: {0,1}^n x {0,1}^b -> {0,1}^n`, iterated by Merkle-Damgard/HAIFA/binary-tree modes to process arbitrary-length input. Often built internally from a block cipher/permutation in a feedforward mode (Davies-Meyer and variants), but the resulting compression function itself takes no caller-supplied secret key. |
+| (Keyed) Block Cipher | A keyed, invertible transform on fixed-size blocks: `E_k` is a permutation of `{0,1}^n` for each key `k`, with a corresponding `D_k = E_k^-1`. |
+| (Keyed) Block Function | A keyed, fixed-size transform that is not (and isn't designed to be) invertible — e.g. Salsa20/ChaCha's core update function (permutation plus feedforward over key, nonce and counter), or a keyed PRF-style state-update step in a stream cipher. |
+| (Keyed) Tweakable Block Cipher | A block cipher with a second, public "tweak" input: `E_k(T, x)` is a permutation of `{0,1}^n` for each `(k, T)` pair (Liskov, Rivest, Wagner, CRYPTO 2002). One key cheaply yields many independent permutations without rekeying. |
+| (Keyed) Tweakable Block Function | The non-bijective counterpart of a tweakable block cipher: a keyed, fixed-size, tweak-taking transform not designed to be invertible. No confirmed instance is currently modeled; defined for completeness. |
 
 **Mode types:**
 

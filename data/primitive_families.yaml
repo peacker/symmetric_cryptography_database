@@ -111,7 +111,7 @@ primitive_families:
   instances:
   - id: sha0_compression
     name: SHA-0 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - nist_1993_fips180_sha0
     characteristics:
@@ -915,7 +915,7 @@ primitive_families:
   instances:
   - id: salsa20_8_block_function
     name: Salsa20/8 Expansion Function
-    type: update_function
+    type: block_function
     reference_ids:
     - bernstein_2005_salsa20_spec
     - bernstein_2007_salsa20_family
@@ -932,7 +932,7 @@ primitive_families:
       the (8-round) Salsa20 hash function/core permutation-plus-feedforward.
   - id: salsa20_12_block_function
     name: Salsa20/12 Expansion Function
-    type: update_function
+    type: block_function
     reference_ids:
     - bernstein_2005_salsa20_spec
     - bernstein_2007_salsa20_family
@@ -949,7 +949,7 @@ primitive_families:
       the (12-round) Salsa20 hash function/core permutation-plus-feedforward.
   - id: salsa20_20_block_function
     name: Salsa20/20 Expansion Function
-    type: update_function
+    type: block_function
     reference_ids:
     - bernstein_2005_salsa20_spec
     - bernstein_2007_salsa20_family
@@ -1011,7 +1011,7 @@ primitive_families:
   instances:
   - id: chacha8_block_function
     name: ChaCha8 Block Function
-    type: update_function
+    type: block_function
     reference_ids:
     - bernstein_2008_chacha
     characteristics:
@@ -1027,7 +1027,7 @@ primitive_families:
       Salsa20's layout, usable with a 128- or 256-bit key.
   - id: chacha14_block_function
     name: ChaCha14 Block Function
-    type: update_function
+    type: block_function
     reference_ids:
     - bernstein_2008_chacha
     - taylor_2014_calico_v8
@@ -1044,7 +1044,7 @@ primitive_families:
       own paper; adopted by the Calico AEAD family as its key-derivation and stream-generation primitive.
   - id: chacha12_block_function
     name: ChaCha12 Block Function
-    type: update_function
+    type: block_function
     reference_ids:
     - bernstein_2008_chacha
     characteristics:
@@ -1060,7 +1060,7 @@ primitive_families:
       Salsa20's layout, usable with a 128- or 256-bit key.
   - id: chacha20_block_function_orig
     name: ChaCha20 Block Function (original)
-    type: update_function
+    type: block_function
     reference_ids:
     - bernstein_2008_chacha
     characteristics:
@@ -1077,7 +1077,7 @@ primitive_families:
       which fixes the key to 256 bits and changes the nonce/counter split to 96/32 bits.
   - id: chacha20_block_function
     name: ChaCha20 Block Function
-    type: update_function
+    type: block_function
     reference_ids:
     - rfc_7539
     - rfc_8439
@@ -1187,7 +1187,7 @@ primitive_families:
   instances:
   - id: spongent_pi_88
     name: spongent-pi[88]
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - bogdanov_et_al_2011_spongent
     characteristics:
@@ -1197,7 +1197,7 @@ primitive_families:
       output_size_bits: 88
   - id: spongent_pi_160
     name: spongent-pi[160]
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - elephant_2019
     characteristics:
@@ -1208,7 +1208,7 @@ primitive_families:
     notes: Reused unmodified as the masked permutation in Elephant's Dumbo instance.
   - id: spongent_pi_176
     name: spongent-pi[176]
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - elephant_2019
     characteristics:
@@ -4493,7 +4493,7 @@ primitive_families:
   instances:
   - id: ascon_permutation_320
     name: Ascon-p Permutation (320-bit)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - ascon_caesar_submission_2016
     - ascon_nist_lwc_submission_2021
@@ -4547,7 +4547,7 @@ primitive_families:
   instances:
   - id: gaston_permutation_320
     name: Gaston Permutation (320-bit, 4-round Farfalle instance)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - el_hirch_et_al_2023_gaston
     characteristics:
@@ -4608,7 +4608,7 @@ primitive_families:
   instances:
   - id: photon_permutation_256
     name: PHOTON Permutation (256-bit)
-    type: permutation
+    type: unkeyed_permutation
     characteristics:
       state_size_bits: 256
       rounds: 12
@@ -4755,7 +4755,7 @@ primitive_families:
   instances:
   - id: sparkle_384
     name: SPARKLE-384
-    type: permutation
+    type: unkeyed_permutation
     characteristics:
       state_size_bits: 384
       rounds: 8
@@ -4809,7 +4809,7 @@ primitive_families:
   instances:
   - id: alzette_c
     name: Alzette
-    type: permutation
+    type: unkeyed_permutation
     characteristics:
       state_size_bits: 64
       rounds: 4
@@ -4972,7 +4972,7 @@ primitive_families:
   instances:
   - id: tinyjambu_128_state_update
     name: TinyJambu-128 State Update
-    type: update_function
+    type: block_function
     characteristics:
       state_size_bits: 128
       key_size_bits: 128
@@ -5037,7 +5037,7 @@ primitive_families:
   instances:
   - id: xoodoo_p6
     name: Xoodoo[6]
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - xoodoo_2018
     - daemen_et_al_2018_xoodoo_design
@@ -5050,7 +5050,7 @@ primitive_families:
       as pb=pc=pe in the differential-uniformity variant Xoofffie (which replaces pd with the identity function).
   - id: xoodoo_p12
     name: Xoodoo[12]
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - xoodoo_2018
     - daemen_2019_xoodyak
@@ -5180,7 +5180,7 @@ primitive_families:
   instances:
   - id: gimli_permutation_384
     name: Gimli Permutation (384-bit)
-    type: permutation
+    type: unkeyed_permutation
     characteristics:
       state_size_bits: 384
       rounds: 24
@@ -5235,7 +5235,7 @@ primitive_families:
   instances:
   - id: norx_permutation_512
     name: NORX32 Permutation (512-bit)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - aumasson_et_al_2016_norx
     characteristics:
@@ -5316,7 +5316,7 @@ primitive_families:
       Each clock emits 16 selected state bits.'
   - id: subterranean_permutation_2_0
     name: Subterranean 2.0 Permutation
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - daemen_2019_subterranean_v2
     characteristics:
@@ -5459,7 +5459,7 @@ primitive_families:
   instances:
   - id: sliscp_192
     name: sLiSCP-192
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - altawy_et_al_2017_sliscp
     characteristics:
@@ -5498,7 +5498,7 @@ primitive_families:
   instances:
   - id: sliscp_light_192
     name: sLiSCP-light-192
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - altawy_et_al_2018_sliscp_light
     characteristics:
@@ -5506,7 +5506,7 @@ primitive_families:
     notes: Partial-SPN successor to sLiSCP-192 with roughly 16% smaller hardware area.
   - id: sliscp_light_256
     name: sLiSCP-light-256
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - altawy_et_al_2018_sliscp_light
     characteristics:
@@ -5740,7 +5740,7 @@ primitive_families:
   instances:
   - id: gascon_c5
     name: GASCON-C5 Permutation (320-bit)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - drygascon_2019
     characteristics:
@@ -5752,7 +5752,7 @@ primitive_families:
       DryGASCON128 runs GASCON_C5 with Rounds=7 for AEAD/hash message processing and DRounds=11 for key diversification.
   - id: gascon_c9
     name: GASCON-C9 Permutation (576-bit)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - drygascon_2019
     characteristics:
@@ -5810,7 +5810,7 @@ primitive_families:
   instances:
   - id: sneik_f512
     name: SNEIK f512 Permutation (512-bit)
-    type: permutation
+    type: unkeyed_permutation
     characteristics:
       state_size_bits: 512
       block_size_bits: 512
@@ -5856,7 +5856,7 @@ primitive_families:
   instances:
   - id: sycon_permutation_320
     name: Sycon Permutation (320-bit)
-    type: permutation
+    type: unkeyed_permutation
     characteristics:
       state_size_bits: 320
       rounds: 14
@@ -5923,7 +5923,7 @@ primitive_families:
       and tweak.
   - id: shadow_512
     name: Shadow-512
-    type: permutation
+    type: unkeyed_permutation
     characteristics:
       state_size_bits: 512
       block_size_bits: 512
@@ -5973,7 +5973,7 @@ primitive_families:
   instances:
   - id: knot_permutation_256
     name: KNOT Permutation (256-bit)
-    type: permutation
+    type: unkeyed_permutation
     characteristics:
       state_size_bits: 256
       rounds: 52
@@ -6237,7 +6237,7 @@ primitive_families:
   instances:
   - id: ace_permutation_320
     name: ACE Permutation (320-bit)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - aagaard_et_al_2019_ace
     characteristics:
@@ -7180,7 +7180,7 @@ primitive_families:
   instances:
   - id: bleep64_core
     name: Bleep64 Core Cipher
-    type: update_function
+    type: block_function
     reference_ids:
     - driscoll_2019_bleep64
     characteristics:
@@ -7224,7 +7224,7 @@ primitive_families:
   instances:
   - id: siphash_2_4
     name: SipHash-2-4
-    type: permutation
+    type: block_function
     reference_ids:
     - aumasson_bernstein_2012_siphash
     characteristics:
@@ -7265,7 +7265,7 @@ primitive_families:
   instances:
   - id: chaskey_v1
     name: Chaskey-v1
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - chaskey_ref
     characteristics:
@@ -7324,7 +7324,7 @@ primitive_families:
   instances:
   - id: cilipadi_v1
     name: CiliPadi-v1
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - cilipadi_ref
     characteristics:
@@ -7473,7 +7473,7 @@ primitive_families:
   instances:
   - id: clae_core
     name: CLAE Core
-    type: update_function
+    type: block_function
     reference_ids:
     - liu_2019_clae
     characteristics:
@@ -8106,7 +8106,7 @@ primitive_families:
   instances:
   - id: fountain_core
     name: Fountain Core Cipher
-    type: update_function
+    type: block_function
     reference_ids:
     - zhang_2019_fountain
     characteristics:
@@ -8154,7 +8154,7 @@ primitive_families:
   instances:
   - id: rocca_core
     name: Rocca Core Update Function
-    type: update_function
+    type: block_function
     reference_ids:
     - sakamoto_et_al_2021_rocca
     characteristics:
@@ -8193,7 +8193,7 @@ primitive_families:
   instances:
   - id: gage_permutation_232
     name: GAGE Permutation (232-bit)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - gage_and_ingage_ref
     characteristics:
@@ -8425,7 +8425,7 @@ primitive_families:
   instances:
   - id: helix_block_function_v1
     name: Helix Block Function
-    type: update_function
+    type: block_function
     reference_ids:
     - ferguson_et_al_2003_helix
     characteristics:
@@ -8475,7 +8475,7 @@ primitive_families:
   instances:
   - id: phelix_block_function_v1
     name: Phelix Block Function
-    type: update_function
+    type: block_function
     reference_ids:
     - whiting_et_al_2005_phelix
     characteristics:
@@ -8931,7 +8931,7 @@ primitive_families:
   instances:
   - id: limdolen_permutation_128
     name: Limdolen Permutation (128-bit)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - mehner_2019_limdolen
     characteristics:
@@ -8943,7 +8943,7 @@ primitive_families:
       pentagonal numbers used as round constants. Uses AND instead of modular addition (AXR rather than ARX).
   - id: limdolen_permutation_256
     name: Limdolen Permutation (256-bit)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - mehner_2019_limdolen
     characteristics:
@@ -9774,7 +9774,7 @@ primitive_families:
   instances:
   - id: simp_256
     name: SimP-256
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - bhattacharjee_2019_oribatida
     characteristics:
@@ -9787,7 +9787,7 @@ primitive_families:
       for the secondary permutation calls.
   - id: simp_192
     name: SimP-192
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - bhattacharjee_2019_oribatida
     characteristics:
@@ -9951,7 +9951,7 @@ primitive_families:
   instances:
   - id: princev2_v1
     name: PRINCEv2
-    type: tweakable_block_cipher
+    type: block_cipher
     reference_ids:
     - princev2_ref
     characteristics:
@@ -10060,7 +10060,7 @@ primitive_families:
   instances:
   - id: quartet_core
     name: Quartet Core Cipher
-    type: update_function
+    type: block_function
     reference_ids:
     - zhang_2019_quartet
     characteristics:
@@ -10435,7 +10435,7 @@ primitive_families:
   instances:
   - id: shamash_permutation
     name: Shamash Permutation
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - penazzi_2019_shamash
     characteristics:
@@ -10589,7 +10589,7 @@ primitive_families:
   instances:
   - id: speckey_v1
     name: SPECKEY-v1
-    type: permutation
+    type: block_cipher
     reference_ids:
     - speckey_ref
     characteristics:
@@ -10940,7 +10940,7 @@ primitive_families:
   instances:
   - id: marx2_v1
     name: MARX-2
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - dinu_et_al_2016_sparx
     characteristics:
@@ -11173,7 +11173,7 @@ primitive_families:
   instances:
   - id: wage_v1
     name: WAGE-v1
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - wage_ref
     characteristics:
@@ -11264,7 +11264,7 @@ primitive_families:
   instances:
   - id: yarara_and_coral_permutation
     name: Yarará/Coral Permutation
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - montes_2019_yarara_and_coral
     characteristics:
@@ -11529,7 +11529,7 @@ primitive_families:
   instances:
   - id: snefru_hash512
     name: Snefru HASH512
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - merkle_1989_software_encryption_function
     characteristics:
@@ -11547,7 +11547,7 @@ primitive_families:
       omitted rather than guessed.'
   - id: snefru_hash256
     name: Snefru HASH256
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - merkle_1989_software_encryption_function
     characteristics:
@@ -11563,7 +11563,7 @@ primitive_families:
       value out to 512 bits". As for HASH512, the source recommends no pass count.'
   - id: snefru_hash128
     name: Snefru HASH128
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - merkle_1989_software_encryption_function
     characteristics:
@@ -11627,7 +11627,7 @@ primitive_families:
   instances:
   - id: haval_3pass_compression
     name: HAVAL (3-pass) Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - zheng_1992_haval
     characteristics:
@@ -11640,7 +11640,7 @@ primitive_families:
       is optionally folded to 128, 160, 192, or 224 bits.
   - id: haval_5pass_compression
     name: HAVAL (5-pass) Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - zheng_1992_haval
     characteristics:
@@ -11691,7 +11691,7 @@ primitive_families:
   instances:
   - id: md4_compression
     name: MD4 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - rivest_1990_md4
     characteristics:
@@ -11746,7 +11746,7 @@ primitive_families:
   instances:
   - id: md5_compression
     name: MD5 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - rivest_1992_md5
     characteristics:
@@ -11806,7 +11806,7 @@ primitive_families:
   instances:
   - id: ripemd_128_compression
     name: RIPEMD-128 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - dobbertin_1996_ripemd160
     characteristics:
@@ -11819,7 +11819,7 @@ primitive_families:
       variable. Iterated by RIPEMD-128 (see ripemd_hash).
   - id: ripemd_160_compression
     name: RIPEMD-160 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - dobbertin_1996_ripemd160
     characteristics:
@@ -11875,7 +11875,7 @@ primitive_families:
   instances:
   - id: n_hash_compression
     name: N-Hash Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - biham_shamir_1991_feal_nhash
     characteristics:
@@ -11952,7 +11952,7 @@ primitive_families:
   instances:
   - id: sha1_compression
     name: SHA-1 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - nist_2002_fips180_2
     characteristics:
@@ -12017,7 +12017,7 @@ primitive_families:
   instances:
   - id: sha256_compression
     name: SHA-256 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - nist_2002_fips180_2
     characteristics:
@@ -12029,7 +12029,7 @@ primitive_families:
       value in 64 rounds. Iterated by SHA-256, and reused with alternate IVs by SHA-224 (see sha2_hash).
   - id: sha512_compression
     name: SHA-512 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - nist_2002_fips180_2
     characteristics:
@@ -12078,7 +12078,7 @@ primitive_families:
   instances:
   - id: streebog_compression_v1
     name: Streebog Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - streebog_ref
     characteristics:
@@ -12151,7 +12151,7 @@ primitive_families:
   instances:
   - id: keccak_f1600
     name: Keccak-f[1600]
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - bertoni_2011_keccak
     characteristics:
@@ -12161,7 +12161,7 @@ primitive_families:
       rounds: 24
   - id: keccak_p400
     name: Keccak-p[400]
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - isap_2019
     characteristics:
@@ -12173,7 +12173,7 @@ primitive_families:
       alongside it in FIPS 202 and reused unmodified by ISAP-K and by Ketje Sr.
   - id: keccak_f200
     name: Keccak-f[200]
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - elephant_2019
     characteristics:
@@ -12185,7 +12185,7 @@ primitive_families:
       permutation in Elephant's Delirium AEAD instance.
   - id: keccak_p1600_12
     name: Keccak-p[1600,12]
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - bertoni_et_al_2016_keyak_v2_2
     characteristics:
@@ -12197,7 +12197,7 @@ primitive_families:
       Keyak (Bertoni, Daemen, Peeters, Van Assche, Van Keer's CAESAR submission Keyak).
   - id: keccak_p1600_6
     name: Keccak-p[1600,6]
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - bertoni_et_al_2017_farfalle
     characteristics:
@@ -12260,7 +12260,7 @@ primitive_families:
   instances:
   - id: blake_256_compression
     name: BLAKE-256 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - aumasson_2010_blake
     characteristics:
@@ -12272,7 +12272,7 @@ primitive_families:
       rounds. Iterated by BLAKE-256/BLAKE-224 (see blake_hash).
   - id: blake_512_compression
     name: BLAKE-512 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - aumasson_2010_blake
     characteristics:
@@ -12327,7 +12327,7 @@ primitive_families:
   instances:
   - id: blake2b_compression
     name: BLAKE2b Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - aumasson_et_al_2013_blake2
     - rfc_7693_blake2
@@ -12339,7 +12339,7 @@ primitive_families:
     notes: ARX G-function compression step over eight 64-bit words (512-bit state), 12 rounds, no per-round constants.
   - id: blake2s_compression
     name: BLAKE2s Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - aumasson_et_al_2013_blake2
     - rfc_7693_blake2
@@ -12395,7 +12395,7 @@ primitive_families:
   instances:
   - id: blake3_compression
     name: BLAKE3 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - oconnor_et_al_2020_blake3
     characteristics:
@@ -12460,7 +12460,7 @@ primitive_families:
   instances:
   - id: groestl_256_compression
     name: Grøstl-256 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - gauravaram_2009_groestl
     characteristics:
@@ -12472,7 +12472,7 @@ primitive_families:
       XOR h_{i-1}), 10 rounds. Iterated by Grøstl-256 (see groestl_hash).
   - id: groestl_512_compression
     name: Grøstl-512 Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - gauravaram_2009_groestl
     characteristics:
@@ -12547,7 +12547,7 @@ primitive_families:
   instances:
   - id: tiger_compression
     name: Tiger Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - anderson_1995_tiger
     characteristics:
@@ -12611,7 +12611,7 @@ primitive_families:
   instances:
   - id: whirlpool_compression
     name: Whirlpool Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - barreto_2003_whirlpool
     characteristics:
@@ -12649,7 +12649,7 @@ primitive_families:
   instances:
   - id: damgard_factoring_blob
     name: Damgård Factoring-Based Claw-Free Family (practical variant)
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - damgard_1987_collision_free_hash
     characteristics: {}
@@ -12662,7 +12662,7 @@ primitive_families:
       knowledge of a factor of n for any choice of A, only for a randomly-chosen one.'
   - id: damgard_factoring_general
     name: Damgård Factoring-Based Claw-Free Family (general/injective-set variant)
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - damgard_1987_collision_free_hash
     characteristics: {}
@@ -12674,7 +12674,7 @@ primitive_families:
       prime factors is weaker against factoring methods like Lenstra''s elliptic-curve method.'
   - id: damgard_dl
     name: Damgård Discrete-Log-Based Claw-Free Family
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - damgard_1987_collision_free_hash
     characteristics: {}
@@ -12713,7 +12713,7 @@ primitive_families:
   instances:
   - id: ajtai_ggh_v1
     name: Ajtai-GGH Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - ajtai_1996_lattice_hard_instances
     - ggh_1996_collision_free_lattice_hash
@@ -12752,7 +12752,7 @@ primitive_families:
   instances:
   - id: pedersen_commitment_v1
     name: Pedersen Commitment
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - pedersen_1991_vss
     characteristics: {}
@@ -12796,7 +12796,7 @@ primitive_families:
   instances:
   - id: vsh_basic
     name: VSH
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - contini_lenstra_steinfeld_2005_vsh
     characteristics:
@@ -12811,7 +12811,7 @@ primitive_families:
       neither the security proof nor the modulus size needed for a given security level.'
   - id: vsh_dl
     name: VSH-DL
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - contini_lenstra_steinfeld_2005_vsh
     characteristics:
@@ -12871,7 +12871,7 @@ primitive_families:
   instances:
   - id: whirlwind_compression
     name: Whirlwind Compression Function
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - barreto_et_al_2010_whirlwind
     characteristics:
@@ -14534,7 +14534,7 @@ primitive_families:
   instances:
   - id: poseidon2_default
     name: Poseidon2
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - grassi_khovratovich_schofnegger_2023_poseidon2
     characteristics: {}
@@ -14573,7 +14573,7 @@ primitive_families:
   instances:
   - id: poseidon2b_default
     name: Poseidon(2)b
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - grassi_et_al_2026_poseidon2b
     characteristics: {}
@@ -14617,7 +14617,7 @@ primitive_families:
   instances:
   - id: neptune_default
     name: Neptune
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - grassi_onofri_pedicini_sozzi_2022_neptune
     characteristics: {}
@@ -14658,7 +14658,7 @@ primitive_families:
   instances:
   - id: grendel_default
     name: Grendel
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - szepieniec_2021_grendel
     characteristics: {}
@@ -14703,14 +14703,14 @@ primitive_families:
   instances:
   - id: griffin_default
     name: GRIFFIN
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - grassi_et_al_2023_griffin
     characteristics: {}
     notes: Parameters not confirmed from the sources read for this database.
   - id: griffin_compression
     name: GRIFFIN-Compression
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - grassi_et_al_2023_griffin
     characteristics: {}
@@ -14755,7 +14755,7 @@ primitive_families:
   instances:
   - id: anemoi_default
     name: ANEMOI
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - bouvier_et_al_2023_anemoi
     characteristics: {}
@@ -14794,7 +14794,7 @@ primitive_families:
   instances:
   - id: reinforced_concrete_default
     name: Reinforced Concrete
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - grassi_et_al_2022_reinforced_concrete
     characteristics:
@@ -14842,7 +14842,7 @@ primitive_families:
   instances:
   - id: tip5_default
     name: Tip5
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - szepieniec_et_al_2023_tip5
     characteristics:
@@ -14852,7 +14852,7 @@ primitive_families:
       security (chosen for Triton VM).
   - id: tip4
     name: Tip4
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - salen_2023_tip4_tip4prime
     characteristics:
@@ -14862,7 +14862,7 @@ primitive_families:
       security. Can perform 3-to-1 sponge compression or 4-to-1 compression in Jive mode.
   - id: tip4_prime
     name: Tip4'
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - salen_2023_tip4_tip4prime
     characteristics:
@@ -14914,7 +14914,7 @@ primitive_families:
   instances:
   - id: monolith_goldilocks
     name: Monolith (Goldilocks)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - grassi_et_al_2024_monolith
     characteristics:
@@ -14922,7 +14922,7 @@ primitive_families:
     notes: Over p = 2^64 - 2^32 + 1 (Goldilocks), state width t in {8, 12}.
   - id: monolith_mersenne
     name: Monolith (Mersenne-31)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - grassi_et_al_2024_monolith
     characteristics:
@@ -14981,7 +14981,7 @@ primitive_families:
   instances:
   - id: skyscraper_default
     name: Skyscraper
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - bouvier_et_al_2025_skyscraper
     characteristics:
@@ -14990,7 +14990,7 @@ primitive_families:
       BLS12-381-scalar-field elements, per the original TCHES-published version.
   - id: skyscraper_v2
     name: Skyscraper-v2
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - bouvier_et_al_2025_skyscraper_v2
     characteristics:
@@ -15030,7 +15030,7 @@ primitive_families:
   instances:
   - id: polocolo_default
     name: Polocolo
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - ha_et_al_2025_polocolo
     characteristics:
@@ -15067,14 +15067,14 @@ primitive_families:
   instances:
   - id: ciminion_p_c
     name: Ciminion p_C
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - dobraunig_et_al_2021_ciminion
     characteristics: {}
     notes: The setup/absorbing permutation, N rounds; derives a secret intermediate state from a nonce and key.
   - id: ciminion_p_e
     name: Ciminion p_E
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - dobraunig_et_al_2021_ciminion
     characteristics: {}
@@ -15109,7 +15109,7 @@ primitive_families:
   instances:
   - id: cryptodarkmatter_construction_3_1
     name: Crypto Dark Matter Construction 3.1 (basic Mod-2/Mod-3 weak PRF)
-    type: update_function
+    type: block_function
     reference_ids:
     - boneh_et_al_2018_cryptodarkmatter
     characteristics: {}
@@ -15117,7 +15117,7 @@ primitive_families:
       mod-3 linear map, depth-2 ACC0[2,3]. Remark 3.2 generalizes this to arbitrary primes p != q.'
   - id: cryptodarkmatter_construction_6_3
     name: Crypto Dark Matter Construction 6.3 (alternative weak PRF)
-    type: update_function
+    type: block_function
     reference_ids:
     - boneh_et_al_2018_cryptodarkmatter
     characteristics: {}
@@ -15125,7 +15125,7 @@ primitive_families:
       two-party garbled-circuit efficiency; a special case of LWR with constant composite modulus.'
   - id: cryptodarkmatter_construction_7_9
     name: Crypto Dark Matter Construction 7.9 (depth-3 strong PRF)
-    type: update_function
+    type: block_function
     reference_ids:
     - boneh_et_al_2018_cryptodarkmatter
     characteristics: {}
@@ -15169,7 +15169,7 @@ primitive_families:
   instances:
   - id: legendre_prf_v1
     name: Legendre PRF
-    type: update_function
+    type: block_function
     reference_ids:
     - grassi_et_al_2016_mpc_friendly
     characteristics: {}
@@ -15282,7 +15282,7 @@ primitive_families:
   instances:
   - id: sinsemilla_orchard
     name: SinsemillaHash (Zcash Orchard)
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - zcash_protocol_specification_2026
     characteristics: {}
@@ -15320,7 +15320,7 @@ primitive_families:
   instances:
   - id: pedersen_hash_sapling
     name: PedersenHash (Zcash Sapling)
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - zcash_protocol_specification_2026
     characteristics: {}
@@ -15360,7 +15360,7 @@ primitive_families:
   instances:
   - id: pasta_3
     name: Pasta-3
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - dobraunig_et_al_2023_pasta
     characteristics:
@@ -15368,7 +15368,7 @@ primitive_families:
     notes: 256 key words, 128 plain/cipher words, targets 128-bit security, SHAKE128 as XOF.
   - id: pasta_4
     name: Pasta-4
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - dobraunig_et_al_2023_pasta
     characteristics:
@@ -15443,7 +15443,7 @@ primitive_families:
   instances:
   - id: armadillo_default
     name: ARMADILLO
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - badel_et_al_2010_armadillo
     characteristics: {}
@@ -15486,7 +15486,7 @@ primitive_families:
   instances:
   - id: dasta_default
     name: Dasta
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - hebborn_leander_2020_dasta
     characteristics: {}
@@ -15617,7 +15617,7 @@ primitive_families:
   instances:
   - id: rescue_prime_default
     name: Rescue-Prime
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - szepieniec_ashur_dhooghe_2020_rescue_prime
     characteristics: {}
@@ -15652,14 +15652,14 @@ primitive_families:
   instances:
   - id: diversify_hash_sapling
     name: DiversifyHashSapling
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - zcash_electric_coin_company_diversifyhash
     characteristics: {}
     notes: Maps an 88-bit diversifier to a point on the Jubjub curve, for Sapling diversified payment addresses.
   - id: diversify_hash_orchard
     name: DiversifyHashOrchard
-    type: compression_function
+    type: unkeyed_function
     reference_ids:
     - zcash_electric_coin_company_diversifyhash
     characteristics: {}
@@ -15885,7 +15885,7 @@ primitive_families:
   instances:
   - id: icepole_p12
     name: ICEPOLE P12
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - morawiecki_et_al_2015_icepole_v2
     characteristics:
@@ -15927,7 +15927,7 @@ primitive_families:
   instances:
   - id: minalpher_p
     name: Minalpher-P
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - sasaki_et_al_2015_minalpher_v1_1
     characteristics:
@@ -15977,7 +15977,7 @@ primitive_families:
   instances:
   - id: aesq_permutation
     name: AESQ
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - biryukov_khovratovich_2014_paeq_v1
     characteristics:
@@ -16021,7 +16021,7 @@ primitive_families:
   instances:
   - id: primate_200
     name: PRIMATE-200
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - andreeva_et_al_2014_primates_v1_02
     characteristics:
@@ -16031,7 +16031,7 @@ primitive_families:
     notes: 80-bit security target; PRIMATEs also defines a 280-bit-state sibling for a 120-bit security target.
   - id: primate_280
     name: PRIMATE-280
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - andreeva_et_al_2014_primates_v1_02
     characteristics:
@@ -16186,7 +16186,7 @@ primitive_families:
   instances:
   - id: proest_128
     name: Prøst-128
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - kavun_et_al_2014_proest_v1_1
     characteristics:
@@ -16196,7 +16196,7 @@ primitive_families:
       rounds: 16
   - id: proest_256
     name: Prøst-256
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - kavun_et_al_2014_proest_v1_1
     characteristics:
@@ -16249,7 +16249,7 @@ primitive_families:
   instances:
   - id: artemia_512
     name: Artemia-512
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - alizadeh_et_al_2014_artemia_v1_1
     characteristics:
@@ -16259,7 +16259,7 @@ primitive_families:
       rounds: 6
   - id: artemia_256
     name: Artemia-256
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - alizadeh_et_al_2014_artemia_v1_1
     characteristics:
@@ -16347,7 +16347,7 @@ primitive_families:
   instances:
   - id: stribob_pi_512
     name: STRIBOBr2 pi
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - saarinen_brumley_2015_stribob_r2
     characteristics:
@@ -16380,7 +16380,7 @@ primitive_families:
   instances:
   - id: cbeam_pi_256
     name: pi = mx^6
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - saarinen_2014_cbeam_r1
     characteristics:
@@ -16416,7 +16416,7 @@ primitive_families:
   instances:
   - id: pi_function_512
     name: pi function (32-bit words)
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - gligoroski_et_al_2015_pi_cipher_v2_0
     characteristics:
@@ -16452,7 +16452,7 @@ primitive_families:
   instances:
   - id: wheesht_fullround_512
     name: Wheesht FullRound
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - maxwell_2014_wheesht_v03
     characteristics:
@@ -16488,7 +16488,7 @@ primitive_families:
   instances:
   - id: panda_round_func_448
     name: PANDA RoundFunc
-    type: permutation
+    type: unkeyed_permutation
     reference_ids:
     - ye_et_al_2014_panda_v1
     characteristics:

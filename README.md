@@ -8,8 +8,9 @@ A structured, version-controlled database of symmetric-cryptography designs — 
 
 ## Scope
 
-Every entry is either a **primitive** (fixed-size building block: block cipher, tweakable
-block cipher, permutation, compression function, update function) or a **mode** (variable-size
+Every entry is either a **primitive** (fixed-size building block: unkeyed permutation, unkeyed
+function, (keyed) block cipher, (keyed) block function, (keyed) tweakable block cipher, (keyed)
+tweakable block function) or a **mode** (variable-size
 algorithm built on primitives: stream cipher, AEAD, hash, MAC, KDF, PBKDF, XOF, PRNG, key wrap,
 ...). See [GLOSSARY.md § Tiers](GLOSSARY.md#tiers-primitive-vs-mode) for the full split and
 [§ Family vs. instance](GLOSSARY.md#family-vs-instance) for how a design (e.g. AES) relates to
