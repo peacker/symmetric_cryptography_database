@@ -6336,4 +6336,29 @@ rounds:
     - component_id: constant
       note: 'AddConstant: w-bit constant (from e) XORed into the last row (W23) only.'
   notes: Used by P, the permutation underlying LLH (parameterized by word size w).
+- id: cube_p_round
+  name: Cube-p Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: binary_matrix_mul
+      note: 'CrossMixs: involutory 6x6 cyclic GF(2) matrix mixing two 6-cell vectors on a sheet (applied
+        twice per round).'
+    - component_id: bit_permutation
+      note: 'SwapRows: fixed row-pair swaps within a sheet (applied twice per round).'
+    - component_id: and
+      note: 'MAndRX: the AND term of the AND-RX Feistel operation (6 sub-rounds per lane).'
+    - component_id: xor
+      note: 'MAndRX: the XOR term of the AND-RX Feistel operation.'
+    - component_id: rotation_fixed
+      note: 'MAndRX: independent rotation triples per sub-round.'
+    - component_id: binary_matrix_mul
+      note: 'MixColumns: non-cyclic 3x3 GF(2) matrix on two sheet sub-triples.'
+    - component_id: bit_permutation
+      note: 'ShiftRows: cyclic row shift, opposite directions for the two slices; MixRows: 8x8 cyclic
+        involutory matrix mixing cells within a row.'
+    - component_id: constant
+      note: Round constant (hex digits of pi) XORed into the first row of one slice only.
+  notes: Used by Cube-p, and (via the ZIP construction, forward + inverse) by Cube-f, both underlying
+    MasterCube.
 

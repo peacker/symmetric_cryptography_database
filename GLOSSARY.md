@@ -247,6 +247,7 @@ family in this database is tagged with the leaf-worthy variant yet):
 | Root | Definition |
 |---|---|
 | Lai–Massey Scheme (`lai_massey`) | A two-branch structure where the same mixing function perturbs both halves symmetrically (IDEA). |
+| ZIP Construction (`zip_construction`) | Florez-Gutierrez et al. (ASIACRYPT 2024): split a permutation's rounds into two halves, XOR the forward evaluation of one half with the *inverse* evaluation of the other on the same input — non-invertible without a separate compression-style feed-forward step, reusing the same round function (and its cryptanalysis) as the underlying permutation (MasterCube). |
 | Even–Mansour Construction (`even_mansour`) | A key-alternating construction built around one or more public permutations with key addition before and after each call. |
 | Stream State-Update Generator (`stream_state_update_generator`) | A keystream design based on repeated state updates and output extraction, typically with separate key-scheduling and generation phases. |
 | LFSR/NLFSR Register Network (`lfsr_nlfsr_register_network`) | A bit-oriented structure driven by linear/nonlinear feedback-shift-register state transitions and Boolean mixing. |

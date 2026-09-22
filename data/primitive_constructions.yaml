@@ -566,6 +566,22 @@ primitive_constructions:
     permuted state. Families are tagged with a leaf below.
 
     '
+- id: zip_construction
+  name: ZIP Construction
+  typical_primitive_types:
+  - unkeyed_function
+  placeholder_family_names:
+  - MasterCube
+  notes: 'Florez-Gutierrez et al.''s method (ASIACRYPT 2024) for building a non-invertible fixed-size transformation
+    out of an invertible permutation P without a separate compression-style feed-forward: split P''s r rounds into two
+    r/2-round halves; run the forward half''s round function on the input (Pr) and, in parallel, the *inverse* round
+    function of the other half on the same input (P-ir, built by reversing operation order and inverting each step);
+    XOR the two r/2-round outputs together. The result is non-invertible (recovering the input from the XOR of a
+    forward and a backward partial evaluation is intractable) while reusing the exact same round function -- and hence
+    the exact same cryptanalysis -- as the underlying permutation, at the cost of a doubled number of round
+    evaluations per output.
+
+    '
 - id: davies_meyer_style_permutation_feedforward
   name: Davies-Meyer Style Feed-Forward Permutation
   special_case_of: permutation_based_feedforward_compression

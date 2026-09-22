@@ -975,7 +975,7 @@ processes:
     - family_id: juzihash_p
     - family_id: xingtang_p
     - family_id: llh_p
-    - family_id: mastercube
+    - family_id: cube_p
     - family_id: megascon_hash
     - family_id: mofang_hash
     - family_id: mozi_hash

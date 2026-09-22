@@ -16141,29 +16141,77 @@ mode_families:
     notes: w=128. Rate 1024, capacity 2048.
 - id: mastercube
   name: "MasterCube"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - standard_sponge
+  round_ids:
+  - cube_p_round
   target_applications: []
+  characteristics:
+    state_size_bits: 1536
   reference_ids:
   - niccs_2026_mastercube
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    MasterCube is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Zheng Gong
+  - Dachao Wang
+  - Yufeng Tang
+  - Di Li
+  - Liangju Zhao
+  year: 2026
+  underlying_primitive_ids:
+  - cube_f_1536
+  influences:
+  - source_family_id: cube_f
+    relations:
+    - used_by
+    note: MasterCube is a classic sponge whose per-call function is Cube-f (the non-invertible ZIP-construction
+      transformation) rather than a bare permutation.
+  - source_family_id: keccak
+    relations:
+    - inspired_by
+    note: '"We adopt the same padding rule as Keccak [14]" (pad10*1) and "we follow the same philosophy as
+      Keccak, namely the hermetic sponge strategy" -- concrete padding-rule reuse and an explicit
+      design-philosophy statement, though the permutation/transformation itself is original.'
+  notes: 'MasterCube is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1).
+    Unusually, its sponge is built on a non-invertible transformation (Cube-f) rather than a permutation --
+    the spec frames this as reducing the workload asymmetry between construction and cryptanalysis that a
+    permutation-based sponge would otherwise have at this state size. Three instances all share the same
+    1536-bit state and Cube-f; c=n+64 for each.'
   instances:
-  - id: mastercube_v1
-    name: "MasterCube"
+  - id: mastercube_512
+    name: "MasterCube-512"
     type: hash
     reference_ids:
     - niccs_2026_mastercube
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 960
+      output_size_bits: 512
+      rounds: 18
+    notes: Rate 960, capacity 576.
+  - id: mastercube_768
+    name: "MasterCube-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_mastercube
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 704
+      output_size_bits: 768
+      rounds: 18
+    notes: Rate 704, capacity 832.
+  - id: mastercube_1024
+    name: "MasterCube-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_mastercube
+    characteristics:
+      state_size_bits: 1536
+      block_size_bits: 448
+      output_size_bits: 1024
+      rounds: 18
+    notes: Rate 448, capacity 1088.
 - id: megascon_hash
   name: "Megascon"
   construction_ids: []
