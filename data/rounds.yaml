@@ -6556,4 +6556,24 @@ rounds:
       note: 'AddConsts (applied twice per Step): LFSR-derived round constant (Skinny/Deoxys-style) into
         lane L0 only.'
   notes: Used by Wish-P-tau.
+- id: xrh_p_round
+  name: XRH-p Round
+  kind: full_round
+  spec:
+    component_flow:
+    - component_id: sbox
+      note: 'Super S-box: 5-bit AB S-box applied to 4 nibbles of a 20-bit column chunk (first pass).'
+    - component_id: field_matrix_mul
+      note: 'Super S-box: 4x4 MDS matrix over GF(2^5) mixing the 4 nibbles.'
+    - component_id: sbox
+      note: 'Super S-box: the same 5-bit S-box again (second pass).'
+    - component_id: bit_permutation
+      note: 'Super Mixcolumn: one of three cyclic shift-row variants (chosen by round mod 3).'
+    - component_id: field_matrix_mul
+      note: 'Super Mixcolumn: the MDS matrix applied per column.'
+    - component_id: bit_permutation
+      note: 'Super Mixcolumn: the inverse of the same shift-row variant.'
+    - component_id: constant
+      note: 64-bit round constant (from pi) XORed into row 0.
+  notes: Used by XRH-p.
 

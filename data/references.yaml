@@ -7571,19 +7571,43 @@ references:
 - id: niccs_2026_xrh_1
   kind: competition_submission
   title: "XRH-1 — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  authors:
+  - Siwei Sun
+  - Zhiyu Zhang
+  - Shun Li
+  - Fangyu Zheng
+  - Yong Liu
+  - Guozhen Liu
+  - Jianhua Wang
+  - Ruixi Lv
+  - Zhen Qin
   year: 2026
   organization: Institute of Commercial Cryptography Standards
   venue: NICCS Cryptographic Hash Algorithms, Round 1
   url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101535400742440960.html
-  notes: "Official NICCS candidate page; the attached submission package is XRH-1.zip."
+  notes: "Official NICCS candidate page; the attached submission package is XRH-1.zip.
+    Local copy (Chinese-language spec; no English version was published): references/[2026][xrh_p,xrh_1][spec][niccs_round1_zh].pdf.
+    XRH-1 and XRH-2 (same submitters) specify the identical XRH-p permutation; this document is used as the
+    primary source for the shared xrh_p primitive entry."
 - id: niccs_2026_xrh_2
   kind: competition_submission
   title: "XRH-2 — NICCS Cryptographic Hash Algorithms Round 1 submission"
+  authors:
+  - Siwei Sun
+  - Zhiyu Zhang
+  - Shun Li
+  - Fangyu Zheng
+  - Yong Liu
+  - Guozhen Liu
+  - Jianhua Wang
+  - Ruixi Lv
+  - Zhen Qin
   year: 2026
   organization: Institute of Commercial Cryptography Standards
   venue: NICCS Cryptographic Hash Algorithms, Round 1
   url: https://niccs.org.cn/niccs/Round1Submissions4/pc/content/content_2101534893223268352.html
-  notes: "Official NICCS candidate page; the attached submission package is XRH-2.zip."
+  notes: "Official NICCS candidate page; the attached submission package is XRH-2.zip.
+    Local copy (Chinese-language spec; no English version was published): references/[2026][xrh_2][spec][niccs_round1_zh].pdf."
 - id: niccs_2026_zc_dm_hash
   kind: competition_submission
   title: "ZC-DM — NICCS Cryptographic Hash Algorithms Round 1 submission"

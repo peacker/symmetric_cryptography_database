@@ -18141,3 +18141,52 @@ primitive_families:
       output_size_bits: 2048
       rounds: 24
     notes: 12 steps = 24 AES rounds. Used by Wish-1024.
+- id: xrh_p
+  name: XRH-p
+  construction_ids:
+  - spn
+  - full_sbox_layer
+  - mds_linear_layer
+  round_ids:
+  - xrh_p_round
+  target_applications: []
+  characteristics:
+    state_size_bits: 1280
+    components:
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+    - id: field_matrix_mul
+    - id: bit_permutation
+    - id: constant
+  reference_ids:
+  - niccs_2026_xrh_1
+  - niccs_2026_xrh_2
+  process_participations:
+  - process_id: niccs_hash_algorithms_2026
+    stage_ids:
+    - round_1
+    status: candidate
+  influences: []
+  notes: 'A 1280-bit, 18-round permutation (20-row x 64-column matrix over GF(2)) shared verbatim between two
+    NICCS 2026 cryptographic hash algorithm competition (Round 1) candidates by the same UCAS team (Siwei
+    Sun et al.): XRH-1 and XRH-2. Round: a "Super S-box" per 20-bit column chunk (5-bit Almost Bent S-box on
+    4 nibbles, DU=2, max linear bias 4 -> 4x4 MDS matrix over GF(2^5) -> the S-box again); a "Super
+    Mixcolumn" (one of three cyclic shift-row variants, chosen by round mod 3 -> the MDS matrix per column ->
+    the inverse of the same shift-row variant); a 64-bit round constant (from pi) XORed into row 0. The spec
+    states this "adopts the wide trail strategy" (Daemen and Rijmen) and claims to be "the first extension of
+    the wide trail strategy to large states exceeding 1024 bits" -- a methodology citation, not concrete
+    component reuse of AES itself, so no influences edge to AES is recorded.'
+  instances:
+  - id: xrh_p_1280_18
+    name: XRH-p
+    type: unkeyed_permutation
+    reference_ids:
+    - niccs_2026_xrh_1
+    - niccs_2026_xrh_2
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 1280
+      output_size_bits: 1280
+      rounds: 18

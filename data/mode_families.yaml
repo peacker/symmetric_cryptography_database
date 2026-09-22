@@ -17031,54 +17031,167 @@ mode_families:
     notes: Rate 512, capacity 2048. Collision 2^512, preimage 2^1024.
 - id: xrh_1
   name: "XRH-1"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - xrh_p_round
   target_applications: []
+  characteristics:
+    state_size_bits: 1280
+    components:
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+    - id: field_matrix_mul
+    - id: bit_permutation
+    - id: constant
   reference_ids:
   - niccs_2026_xrh_1
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    XRH-1 is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Siwei Sun
+  - Zhiyu Zhang
+  - Shun Li
+  - Fangyu Zheng
+  - Yong Liu
+  - Guozhen Liu
+  - Jianhua Wang
+  - Ruixi Lv
+  - Zhen Qin
+  year: 2026
+  underlying_primitive_ids:
+  - xrh_p_1280_18
+  influences:
+  - source_family_id: xrh_p
+    relations:
+    - used_by
+    note: XRH-1 splits XRH-p into two 9-round halves g=Pi[0,9), h=Pi[9,18) and absorbs via an "Encrypted
+      Davies-Meyer" (EDM) one-way transform F(x)=h(g(x) xor floor(x)^(c)).
+  - source_family_id: sha3
+    relations:
+    - related_to
+    note: '"the degree of n-round XRH-p is at most 2^n... which is the same as SHA-3" -- a degree-bound
+      parity comparison, not structural reuse.'
+  notes: 'XRH-1 is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Its
+    mode, SPONGE-EDM^c, is explicitly "based on the SPONGE-EDM^c construction [1], to appear at CRYPTO 2026"
+    (Sun, Li, Zhang, Lefevre, Mennink, Qin, Feng, ePrint 2025/963 -- 4 of the paper''s 7 authors are XRH-1
+    submitters). Absorption restricts the Davies-Meyer feedforward to the capacity (hence "Encrypted" DM);
+    squeezing is classical sponge. Shares the same XRH-p permutation as XRH-2, which instead uses the
+    sibling SPONGE-DM (full-state feedforward) mode from the same paper.'
   instances:
-  - id: xrh_1_v1
-    name: "XRH-1"
+  - id: xrh_1_512
+    name: "XRH-1-512"
     type: hash
     reference_ids:
     - niccs_2026_xrh_1
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 704
+      output_size_bits: 512
+      rounds: 18
+    notes: Rate 704, capacity 576.
+  - id: xrh_1_768
+    name: "XRH-1-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_xrh_1
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 448
+      output_size_bits: 768
+      rounds: 18
+    notes: Rate 448, capacity 832.
+  - id: xrh_1_1024
+    name: "XRH-1-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_xrh_1
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 192
+      output_size_bits: 1024
+      rounds: 18
+    notes: Rate 192, capacity 1088.
 - id: xrh_2
   name: "XRH-2"
-  construction_ids: []
+  construction_ids:
+  - sponge_construction
+  - feedforward_sponge
+  round_ids:
+  - xrh_p_round
   target_applications: []
+  characteristics:
+    state_size_bits: 1280
+    components:
+    - id: sbox
+      params:
+        input_bits: 5
+        output_bits: 5
+    - id: field_matrix_mul
+    - id: bit_permutation
+    - id: constant
   reference_ids:
   - niccs_2026_xrh_2
-  process_participations:
-  - process_id: niccs_hash_algorithms_2026
-    stage_ids:
-    - round_1
-    status: candidate
-  influences: []
-  notes: >-
-    XRH-2 is one of the 35 cryptographic hash algorithms accepted for the
-    first-round evaluation announced by the Institute of Commercial Cryptography
-    Standards (NICCS) on September 20, 2026. This initial entry records the
-    candidate identity and process participation from the official listing;
-    structural metadata can be added after classifying the attached specification.
+  process_participations: []
+  authors:
+  - Siwei Sun
+  - Zhiyu Zhang
+  - Shun Li
+  - Fangyu Zheng
+  - Yong Liu
+  - Guozhen Liu
+  - Jianhua Wang
+  - Ruixi Lv
+  - Zhen Qin
+  year: 2026
+  underlying_primitive_ids:
+  - xrh_p_1280_18
+  influences:
+  - source_family_id: xrh_p
+    relations:
+    - used_by
+    note: XRH-2's absorption applies XRH-p to the full state with a plain Davies-Meyer feedforward,
+      F(x)=f(x) xor x, rather than XRH-1's capacity-restricted EDM.
+  notes: 'XRH-2 is a candidate in the NICCS 2026 cryptographic hash algorithm competition (Round 1). Its
+    mode, SPONGE-DM, is "based on the SPONGE-DM construction [1], to appear at CRYPTO 2026" -- the same
+    ePrint 2025/963 paper as XRH-1''s SPONGE-EDM^c, of which SPONGE-DM is a sibling, full-state-feedforward
+    member ("a member of the SPONGE-EDM family [1]"). Shares the same XRH-p permutation as XRH-1.'
   instances:
-  - id: xrh_2_v1
-    name: "XRH-2"
+  - id: xrh_2_512
+    name: "XRH-2-512"
     type: hash
     reference_ids:
     - niccs_2026_xrh_2
-    characteristics: {}
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 704
+      output_size_bits: 512
+      rounds: 18
+    notes: Rate 704, capacity 576.
+  - id: xrh_2_768
+    name: "XRH-2-768"
+    type: hash
+    reference_ids:
+    - niccs_2026_xrh_2
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 448
+      output_size_bits: 768
+      rounds: 18
+    notes: Rate 448, capacity 832.
+  - id: xrh_2_1024
+    name: "XRH-2-1024"
+    type: hash
+    reference_ids:
+    - niccs_2026_xrh_2
+    characteristics:
+      state_size_bits: 1280
+      block_size_bits: 192
+      output_size_bits: 1024
+      rounds: 18
+    notes: Rate 192, capacity 1088.
 - id: zc_dm_hash
   name: "ZC-DM"
   construction_ids: []
