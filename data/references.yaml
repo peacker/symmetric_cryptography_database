@@ -2483,7 +2483,7 @@ references:
   title: 'PRIDE: A Lightweight Symmetric Encryption Design'
   year: 2014
   venue: CRYPTO 2014
-  url: https://eprint.iacr.org/2014/591.pdf
+  url: https://eprint.iacr.org/2014/453
   notes: '64-bit lightweight block cipher with ARX round function. Local copy: references/[2014][pride][][].pdf.'
 - id: princev2_ref
   kind: paper
