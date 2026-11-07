@@ -2480,11 +2480,11 @@ references:
   url: https://link.springer.com/chapter/10.1007/978-3-642-37288-9_5
 - id: pride_ref
   kind: paper
-  title: 'PRIDE: A Lightweight Symmetric Encryption Design'
+  title: 'Block Ciphers - Focus On The Linear Layer (feat. PRIDE): Full Version'
   year: 2014
   venue: CRYPTO 2014
   url: https://eprint.iacr.org/2014/453
-  notes: '64-bit lightweight block cipher with ARX round function. Local copy: references/[2014][pride][][].pdf.'
+  notes: '64-bit SPN block cipher with a 128-bit key. Local copy: references/[2014][pride][][].pdf.'
 - id: princev2_ref
   kind: paper
   title: 'PRINCEv2: More Security for (Almost) No Overhead'
